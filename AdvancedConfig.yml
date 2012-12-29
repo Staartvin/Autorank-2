@@ -1,0 +1,72 @@
+#############################################################################
+#                                                                           #
+#                   Autorank 2 Advanced Config                              #
+#                                                                           #
+#   Please use the SimpleConfig unless you know what you are doing and      #
+#   need functionality that the SimpleConfig doesn't provide.               #
+#                                                                           #
+#############################################################################
+
+use advanced config: false
+# all other advanced settings are ignored if this is set to false
+
+leaderboard layout: '&r | &p - &d day(s), &h hour(s) and &m minute(s).'
+leaderboard length: 10
+# changes the appearance of the /ar leaderboard command
+# &r : Ranking in the leaderboard
+# &p : Player name
+# &m : Minutes (with full days and full hours not counted)
+# &h : Hours (with full days not counted)
+# &d : Days
+# &tm : Total amount of minutes
+# &th : Total amount of hours
+
+ranks:
+    guest:
+        requirements:
+            time: 1h
+        results:
+            rank change: member
+            message: 'Congratulations, you are now a member.'
+    member:
+        requirements:
+            time: 5d
+        results:
+            rank change: vip
+            message: 'Congratulations, you are now a vip.'
+            
+# new requirements and results can be added by other plugins that hook into the Autorank API
+# these are the ones that are included in the main plugin:
+# 
+#   requirements:
+#       time: 1d 1h 1m
+#       exp: 20 (level)
+#       money: 2000 (requires vault ! Player has to have at least this amount of money)
+#       world: world_nether (player has to be in this world to get ranked)
+#       gamemode: 1 (player has to have a certain gamemode, 0 = Survival mode, 1 = Creative mode, 2 = Adventure mode)
+#       spoutcraft: true (requires spoutplugin ! When set to true only spoutcraft users will be ranked, when false non-spoutcraft players will be ranked)
+#       has item: id(:data) (checks the players inventory for the item)
+#       command regex: 'some command', 'regex' (for advanced users, will check the result of a console command against the given regular expression. &p will be replaced by the player name)
+# 
+#   results:
+#       rank change: rank
+#       world rank change: rank, world (only works for permissions plugins that support this)
+#       message: 'You got ranked up'
+#       command: 'eco give &p 100' (executes a console command. &p will be replaced by the player name)
+
+sql:
+    enabled: false
+    hostname: localhost:3306
+    username: root
+    password: ''
+    database: minecraft
+    table: autorank
+
+#    
+#    
+#    
+    
+    
+    
+    
+    
