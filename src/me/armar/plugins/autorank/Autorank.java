@@ -52,7 +52,7 @@ public class Autorank extends JavaPlugin {
 	
 	playerChecker.initialiseFromConfigs(this);
 
-	Autorank.logMessage("Enabled");
+	Autorank.logMessage("Autorank has been enabled!");
     }
 
 
@@ -71,7 +71,7 @@ public class Autorank extends JavaPlugin {
 	
 	setAdvancedConfig(null);
 	
-	Autorank.logMessage("Disabled");
+	Autorank.logMessage("Autorank has been disabled!");
     }
 
     public void reload() {

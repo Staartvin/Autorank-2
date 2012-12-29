@@ -8,6 +8,7 @@ import java.util.Set;
 import me.armar.plugins.autorank.playerchecker.RankChange;
 import me.armar.plugins.autorank.playerchecker.additionalrequirement.AdditionalRequirement;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -21,9 +22,16 @@ public class Commands implements CommandExecutor {
 	this.plugin = plugin;
     }
 
-    private void noPerm(CommandSender sender) {
-	AutorankTools.sendColoredMessage(sender, "You do not have permission to do this.");
+    private boolean hasPermission(String permission, CommandSender sender) {
+    	if (!sender.hasPermission(permission)) {
+    		sender.sendMessage(ChatColor.RED + "You need to have (" + permission + ") to do this!");
+    		return false;
+    	}
+    	return true;
     }
+/*    private void noPerm(CommandSender sender) {
+	AutorankTools.sendColoredMessage(sender, "You do not have permission to do this.");
+    } */
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -45,8 +53,7 @@ public class Commands implements CommandExecutor {
 	} else if (action.equalsIgnoreCase("check")) {
 	    if (args.length > 1) {
 
-		if (!sender.hasPermission("autorank.checkothers")) {
-		    noPerm(sender);
+		if (!hasPermission("autorank.checkothers", sender)) {
 		    return true;
 		}
 
@@ -57,8 +64,7 @@ public class Commands implements CommandExecutor {
 		    check(sender, player);
 		}
 	    } else if (sender instanceof Player) {
-		if (!sender.hasPermission("autorank.check")) {
-		    noPerm(sender);
+		if (!hasPermission("autorank.check", sender)) {
 		    return true;
 		}
 		Player player = (Player) sender;
@@ -68,16 +74,14 @@ public class Commands implements CommandExecutor {
 	    }
 	    return true;
 	} else if (action.equalsIgnoreCase("leaderboard")) {
-	    if (!sender.hasPermission("autorank.leaderboard")) {
-		noPerm(sender);
+	    if (!hasPermission("autorank.leaderboard", sender)) {
 		return true;
 	    }
 	    plugin.getLeaderboard().sendLeaderboard(sender);
 	    return true;
 	} else if (action.equalsIgnoreCase("set")) {
 
-	    if (!sender.hasPermission("autorank.set")) {
-		noPerm(sender);
+	    if (!hasPermission("autorank.set", sender)) {
 		return true;
 	    }
 
@@ -98,8 +102,7 @@ public class Commands implements CommandExecutor {
 	    return true;
 	} else if (action.equalsIgnoreCase("add")) {
 
-	    if (!sender.hasPermission("autorank.add")) {
-		noPerm(sender);
+	    if (!hasPermission("autorank.add", sender)) {
 		return true;
 	    }
 
@@ -121,8 +124,7 @@ public class Commands implements CommandExecutor {
 	    return true;
 	} else if (action.equalsIgnoreCase("remove")) {
 
-	    if (!sender.hasPermission("autorank.remove")) {
-		noPerm(sender);
+	    if (!hasPermission("autorank.remove", sender)) {
 		return true;
 	    }
 
@@ -144,8 +146,7 @@ public class Commands implements CommandExecutor {
 	    return true;
 	} else if (action.equalsIgnoreCase("debug")) {
 
-	    if (!sender.hasPermission("autorank.debug")) {
-		noPerm(sender);
+	    if (!hasPermission("autorank.debug", sender)) {
 		return true;
 	    }
 
@@ -159,8 +160,7 @@ public class Commands implements CommandExecutor {
 	    return true;
 	} else if (action.equalsIgnoreCase("reload")) {
 
-	    if (!sender.hasPermission("autorank.reload")) {
-		noPerm(sender);
+	    if (!hasPermission("autorank.reload", sender)) {
 		return true;
 	    }
 
