@@ -2,8 +2,8 @@ package me.armar.plugins.autorank.permissions;
 
 import org.bukkit.entity.Player;
 
-import ru.tehkode.permissions.PermissionManager;
-import ru.tehkode.permissions.bukkit.PermissionsEx;
+//import ru.tehkode.permissions.PermissionManager;
+//import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 public class PermissionsEXHandler implements PermissionsPluginHandler {
 

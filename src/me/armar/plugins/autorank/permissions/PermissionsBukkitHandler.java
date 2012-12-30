@@ -7,12 +7,37 @@ import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 
-import com.platymuus.bukkit.permissions.Group;
-import com.platymuus.bukkit.permissions.PermissionsPlugin;
+//import com.platymuus.bukkit.permissions.Group;
+//import com.platymuus.bukkit.permissions.PermissionsPlugin;
 
 public class PermissionsBukkitHandler implements PermissionsPluginHandler{
+
+	@Override
+	public String[] getPlayerGroups(Player player) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean replaceGroup(Player player, String world, String oldGroup,
+			String newGroup) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean removeGroup(Player player, String world, String group) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean addGroup(Player player, String world, String group) {
+		// TODO Auto-generated method stub
+		return false;
+	}
     
-    private PermissionsPlugin plugin;
+/*    private PermissionsPlugin plugin;
     private Server server;
 
     public PermissionsBukkitHandler(PermissionsPlugin x) {
@@ -47,5 +72,5 @@ public class PermissionsBukkitHandler implements PermissionsPluginHandler{
 	server.dispatchCommand(server.getConsoleSender(), "permissions player addgroup " + group);
 	return true;
     }
-
+*/
 }
