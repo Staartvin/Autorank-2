@@ -76,6 +76,5 @@ public class SimpleYamlConfiguration extends YamlConfiguration {
 		} catch (InvalidConfigurationException e) {
 			e.printStackTrace();
 		}
-}
-
+	}
 }
