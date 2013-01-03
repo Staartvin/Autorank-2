@@ -71,6 +71,9 @@ public class Autorank extends JavaPlugin {
 	
 	setAdvancedConfig(null);
 	
+	// Make sure all tasks are cancelled after shutdown. This seems obvious, but when a player /reloads, the server creates an instance of the plugin which causes duplicate tasks to run. 
+	getServer().getScheduler().cancelAllTasks();
+	
 	Autorank.logMessage("Autorank has been disabled!");
     }
 
