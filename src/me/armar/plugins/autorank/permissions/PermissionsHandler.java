@@ -3,37 +3,43 @@ package me.armar.plugins.autorank.permissions;
 import me.armar.plugins.autorank.Autorank;
 import net.milkbowl.vault.Vault;
 
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.java.JavaPlugin;
 
 //import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 //import com.platymuus.bukkit.permissions.PermissionsPlugin;
 
-public class PermissionsHandler implements PermissionsPluginHandler {
+public class PermissionsHandler {
 
-    private PermissionsPluginHandler permissionPlugin;
+    @SuppressWarnings("unused")
+	private Autorank plugin;
+    private VaultPermissionsHandler vPermHandler;
 
-    public PermissionsHandler(JavaPlugin plugin) {
-/*	if(findPermissionsEX(plugin)){
-	    Autorank.logMessage("Using PermissionsEx.");
-	}else if(findPermissionsBukkit(plugin)){
-	    Autorank.logMessage("Using PermissionsBukkit.");
-	} */ if(findVault(plugin)){
+    public PermissionsHandler(Autorank plugin) {
+    	if(findVault(plugin)){
 	    Autorank.logMessage("Vault Hooked!");
 	}else{
-	    Autorank.logMessage("WARNING No permissions plugin was found !");
+	    Autorank.logMessage("WARNING No permissions plugin was found!");
+	    this.plugin = plugin;
 	}
+    	setPermHandler(new VaultPermissionsHandler(plugin));
     }
 
-    private boolean findVault(JavaPlugin plugin) {
+    private boolean findVault(Autorank plugin) {
 	Plugin x = plugin.getServer().getPluginManager().getPlugin("Vault");
 	if (x != null & x instanceof Vault) {
 	    return true;
 	}
 	return false;
     }
+
+	public VaultPermissionsHandler getPermHandler() {
+		return vPermHandler;
+	}
+
+	public void setPermHandler(VaultPermissionsHandler vPermHandler) {
+		this.vPermHandler = vPermHandler;
+	}
     
  /*   private boolean findPermissionsBukkit(JavaPlugin plugin) {
 	Plugin x = plugin.getServer().getPluginManager().getPlugin("PermissionsBukkit");
@@ -52,41 +58,5 @@ public class PermissionsHandler implements PermissionsPluginHandler {
 	}
 	return false;
     } */
-
-    @Override
-    public String[] getPlayerGroups(Player player) {
-	if (permissionPlugin != null) {
-	    return permissionPlugin.getPlayerGroups(player);
-	} else {
-	    return null;
-	}
-    }
-
-    @Override
-    public boolean replaceGroup(Player player, String world, String oldGroup, String newGroup) {
-	if (permissionPlugin != null) {
-	    return permissionPlugin.replaceGroup(player, world, oldGroup, newGroup);
-	} else {
-	    return false;
-	}
-    }
-
-    @Override
-    public boolean removeGroup(Player player, String world, String group) {
-	if (permissionPlugin != null) {
-	    return permissionPlugin.removeGroup(player, world, group);
-	} else {
-	    return false;
-	}
-    }
-
-    @Override
-    public boolean addGroup(Player player, String world, String group) {
-	if (permissionPlugin != null) {
-	    return permissionPlugin.addGroup(player, world, group);
-	} else {
-	    return false;
-	}
-    }
 
 }

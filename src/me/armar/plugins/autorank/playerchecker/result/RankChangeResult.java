@@ -19,7 +19,7 @@ public class RankChangeResult extends Result {
 
     @Override
     public boolean applyResult(Player player) {
-	return this.getAutorank().getPermissionsHandler().replaceGroup(player, null, from, to);
+	return this.getAutorank().getPermissionsHandler().getPermHandler().replaceGroup(player, null, from, to);
     }
 
 }

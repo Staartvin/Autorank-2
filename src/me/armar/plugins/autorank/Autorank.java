@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
 import me.armar.plugins.autorank.leaderboard.Leaderboard;
 import me.armar.plugins.autorank.permissions.PermissionsHandler;
+import me.armar.plugins.autorank.permissions.VaultPermissionsHandler;
 import me.armar.plugins.autorank.playerchecker.*;
 import me.armar.plugins.autorank.playerchecker.additionalrequirement.*;
 import me.armar.plugins.autorank.playerchecker.builders.*;
@@ -23,9 +24,11 @@ public class Autorank extends JavaPlugin {
     private PlayerChecker playerChecker;
     private SimpleYamlConfiguration simpleConfig;
     private SimpleYamlConfiguration advancedConfig;
+    private VaultPermissionsHandler vaultPermHandler;
     private static Logger log = Bukkit.getLogger();
 
     public void onEnable() {
+    
 	getCommand("ar").setExecutor(new Commands(this));
 
 	setSimpleConfig(new SimpleYamlConfiguration(this, "SimpleConfig.yml", null, "Simple config"));
@@ -35,6 +38,7 @@ public class Autorank extends JavaPlugin {
 	setPlaytimes(new Playtimes(this));
 	setLeaderboard(new Leaderboard(this));
 	setPlayerChecker(new PlayerChecker(this));
+	setVaultPermHandler(new VaultPermissionsHandler(this));
 	
 	AdditionalRequirementBuilder req = this.getPlayerChecker().getBuilder().getRequirementBuilder();
 	ResultBuilder res = this.getPlayerChecker().getBuilder().getResultBuilder();
@@ -78,8 +82,8 @@ public class Autorank extends JavaPlugin {
     }
 
     public void reload() {
-	onDisable();
-	onEnable();
+	getServer().getPluginManager().disablePlugin(this);
+	getServer().getPluginManager().enablePlugin(this);
     }
 
     public int getTime(String player) {
@@ -153,5 +157,13 @@ public class Autorank extends JavaPlugin {
     private void setPlayerChecker(PlayerChecker playerChecker) {
 	this.playerChecker = playerChecker;
     }
+
+	public VaultPermissionsHandler getVaultPermHandler() {
+		return vaultPermHandler;
+	}
+
+	public void setVaultPermHandler(VaultPermissionsHandler vaultPermHandler) {
+		this.vaultPermHandler = vaultPermHandler;
+	}
     
 }

@@ -56,7 +56,7 @@ public class PlayerChecker{
     public boolean checkPlayer(Player player){
 	boolean result = false;
 	
-	String[] groups = permissions.getPlayerGroups(player);
+	String[] groups = permissions.getPermHandler().getPlayerGroups(player);
 	
 	for(String group : groups){
 	    	List<RankChange> changes = rankChanges.get(group);
@@ -75,7 +75,7 @@ public class PlayerChecker{
     public Map<RankChange, List<AdditionalRequirement>> getFailedRequirementsForApplicableGroup(Player player){
 	Map<RankChange, List<AdditionalRequirement>> result = new HashMap<RankChange, List<AdditionalRequirement>>();
 	
-	String[] groups = permissions.getPlayerGroups(player);
+	String[] groups = permissions.getPermHandler().getPlayerGroups(player);
 	
 	for(String group : groups){
 	    	List<RankChange> changes = rankChanges.get(group);

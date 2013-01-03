@@ -52,7 +52,7 @@ public class Commands implements CommandExecutor {
 	    AutorankTools.sendColoredMessage(sender, "/ar leaderboard - Show the leaderboard");
 	    AutorankTools.sendColoredMessage(sender, "/ar set [player] [value] - Set [player]'s time to [value]");
 	    AutorankTools.sendColoredMessage(sender, "/ar add [player] [value] - Add [value] to [player]'s time");
-	    AutorankTools.sendColoredMessage(sender, "/ar rem [player] [value] - Remove [value] from [player]'s time");
+	    AutorankTools.sendColoredMessage(sender, "/ar remove [player] [value] - Remove [value] from [player]'s time");
 	    AutorankTools.sendColoredMessage(sender, "/ar debug - Shows debug information");
 	    AutorankTools.sendColoredMessage(sender, "/ar reload - Reload the plugin");
 
@@ -147,7 +147,7 @@ public class Commands implements CommandExecutor {
 		plugin.setTime(args[1], value);
 		AutorankTools.sendColoredMessage(sender, "Changed playtime of " + args[1] + " to " + value + ".");
 	    } else {
-		AutorankTools.sendColoredMessage(sender, "Invalid format, use /ar rem [player] [value]");
+		AutorankTools.sendColoredMessage(sender, "Invalid format, use /ar remove [player] [value]");
 	    }
 
 	    return true;
@@ -186,10 +186,10 @@ public class Commands implements CommandExecutor {
 	Set<RankChange> keySet = failed.keySet();
 	String playername = player.getName();
 
-	String[] groups = plugin.getPermissionsHandler().getPlayerGroups(player);
+	String[] groups = plugin.getPermissionsHandler().getPermHandler().getPlayerGroups(player);
 	StringBuilder stringBuilder = new StringBuilder();
 	stringBuilder.append(playername + " has played for " + plugin.getTime(playername) + " minutes, ");
-	stringBuilder.append(" is in ");
+	stringBuilder.append("is in ");
 	if (groups.length == 0)
 	    stringBuilder.append("no groups.");
 	else if (groups.length == 1)
@@ -220,7 +220,7 @@ public class Commands implements CommandExecutor {
 			    + " and will now be ranked up.");
 		    plugin.getPlayerChecker().checkPlayer(player);
 		} else {
-		    AutorankTools.sendColoredMessage(sender, "and doesn't meet these requirements for rank " + rank.getRank() + ":");
+		    AutorankTools.sendColoredMessage(sender, "and doesn't meet the requirements for rank " + rank.getRank() + ":");
 
 		    for (AdditionalRequirement req : reqs) {
 			if (req != null)
