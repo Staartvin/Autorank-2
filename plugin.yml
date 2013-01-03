@@ -9,7 +9,7 @@ url: http://wyverncreativeserver.enjin.com/
 version: '2.0'
 commands:
     ar:
-        description: Autorank
+        description: Master command of AutoRank
         usage: /ar [action] (playername)
         aliases: [autorank]
 permissions:

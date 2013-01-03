@@ -21,7 +21,7 @@ public class PermissionsHandler implements PermissionsPluginHandler {
 	}else if(findPermissionsBukkit(plugin)){
 	    Autorank.logMessage("Using PermissionsBukkit.");
 	} */ if(findVault(plugin)){
-	    Autorank.logMessage("Using Vault.");
+	    Autorank.logMessage("Vault Hooked!");
 	}else{
 	    Autorank.logMessage("WARNING No permissions plugin was found !");
 	}

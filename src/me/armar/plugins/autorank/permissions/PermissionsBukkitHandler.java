@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 //import com.platymuus.bukkit.permissions.Group;
 //import com.platymuus.bukkit.permissions.PermissionsPlugin;
 
+@SuppressWarnings("unused")
 public class PermissionsBukkitHandler implements PermissionsPluginHandler{
 
 	@Override
