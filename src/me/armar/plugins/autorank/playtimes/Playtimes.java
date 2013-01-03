@@ -38,9 +38,9 @@ public class Playtimes implements Runnable{
 	    setupTable();
 	}
 	
-	plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, save, 12000, 12000);
-	plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, save, 600, 600);
-	plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, update, INTERVAL_MINUTES * 20 * 60, INTERVAL_MINUTES * 20 * 60);
+	plugin.getServer().getScheduler().runTaskTimer(plugin, save, 12000, 12000);
+	plugin.getServer().getScheduler().runTaskTimer(plugin, save, 600, 600);
+	plugin.getServer().getScheduler().runTaskTimer(plugin, update, INTERVAL_MINUTES * 20 * 60, INTERVAL_MINUTES * 20 * 60);
 	//plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, update, INTERVAL_MINUTES * 20 * 4, INTERVAL_MINUTES * 20 * 4);
 
     }
