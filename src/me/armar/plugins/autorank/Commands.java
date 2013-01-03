@@ -35,8 +35,15 @@ public class Commands implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+	if (args.length == 0) {
+		sender.sendMessage(ChatColor.BLUE + "-----------------------------------------------------");
+		sender.sendMessage(ChatColor.GOLD + "Developed by: " + ChatColor.GRAY + plugin.getDescription().getAuthors());
+		sender.sendMessage(ChatColor.GOLD + "Version: " + ChatColor.GRAY + plugin.getDescription().getVersion());
+		sender.sendMessage(ChatColor.YELLOW + "Type /ar help for a list of commands.");
+		return true;
+	}
+	
 	String action = args[0];
-
 	if (action.equalsIgnoreCase("help")) {
 
 	    AutorankTools.sendColoredMessage(sender, "-- Autorank Commands --");
@@ -73,7 +80,7 @@ public class Commands implements CommandExecutor {
 		AutorankTools.sendColoredMessage(sender, "Can't check for console.");
 	    }
 	    return true;
-	} else if (action.equalsIgnoreCase("leaderboard")) {
+	} else if (action.equalsIgnoreCase("leaderboard") || action.equalsIgnoreCase("leaderboards")) {
 	    if (!hasPermission("autorank.leaderboard", sender)) {
 		return true;
 	    }

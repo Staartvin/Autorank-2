@@ -1,4 +1,3 @@
-author: Armar
 database: false
 main: me.armar.plugins.autorank.Autorank
 name: Autorank
@@ -7,6 +6,7 @@ softdepend: [Essentials, GroupManager]
 depend: [Vault]
 url: http://wyverncreativeserver.enjin.com/
 version: '2.0'
+authors: [Idrrp, Armarr, Staartvin]
 commands:
     ar:
         description: Master command of AutoRank
