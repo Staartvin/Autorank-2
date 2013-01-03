@@ -1,5 +1,7 @@
 package me.armar.plugins.autorank.playtimes;
 
+import me.armar.plugins.autorank.Autorank;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -8,7 +10,7 @@ import com.earth2me.essentials.Essentials;
 
 public class PlaytimesUpdate implements Runnable {
 
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private Essentials ess;
     private Playtimes playtimes;
 
@@ -18,8 +20,9 @@ public class PlaytimesUpdate implements Runnable {
 	Plugin x = Bukkit.getServer().getPluginManager().getPlugin("Essentials");
 	if (x != null & x instanceof Essentials) {
 	    ess = (Essentials) x;
+	    Autorank.logMessage("Essentials was found! AFK integration can be used.");
 	} else {
-	    // Autorank.logMessage("Essentials was NOT found! Disabling AFK integration.");
+	  Autorank.logMessage("Essentials was NOT found! Disabling AFK integration.");
 	}
 
     }
