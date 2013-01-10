@@ -14,6 +14,13 @@ import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
 
 import org.bukkit.command.CommandSender;
 
+/*
+ * Leaderboard stores how when the last update was and if someone wants to 
+ * display it and it it outdated (set to 30 seconds right now for debugging) 
+ * it will generate a new leaderboard.
+ * 
+ */
+
 public class Leaderboard {
 
     private String[] messages;

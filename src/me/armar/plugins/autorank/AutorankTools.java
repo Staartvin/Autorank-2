@@ -2,8 +2,13 @@ package me.armar.plugins.autorank;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.bukkit.command.CommandSender;
+
+/*
+ * AutorankTools is a bunch of static methods, I put sendColoredMessage 
+ * there so that if I ever wanted to change the message formatting I can just do that here.
+ *
+ */
 
 public class AutorankTools {
     
