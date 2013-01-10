@@ -9,8 +9,14 @@ import org.bukkit.plugin.Plugin;
 
 //import com.platymuus.bukkit.permissions.PermissionsPlugin;
 
+/*
+ * PermissionsHandler takes care of the communications with the permissions 
+ * plugin.
+ * 
+ */
 public class PermissionsHandler {
 
+	
     @SuppressWarnings("unused")
 	private Autorank plugin;
     private VaultPermissionsHandler vPermHandler;
