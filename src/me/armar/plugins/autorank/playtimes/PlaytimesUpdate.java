@@ -8,6 +8,11 @@ import org.bukkit.plugin.Plugin;
 
 import com.earth2me.essentials.Essentials;
 
+/*
+ * PlaytimesUpdate does an update on all online players 
+ * every 5 minutes (set lower atm for debugging).
+ * 
+ */
 public class PlaytimesUpdate implements Runnable {
 
 	@SuppressWarnings("unused")

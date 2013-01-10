@@ -8,6 +8,13 @@ import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.Autorank;
 
+/*
+ * PlayerCheckerTrigger stores what players it recently checked for a 
+ * promotion and makes PlayerChecker check a new player every 1-250 
+ * seconds (depending on the amount of online players).
+ * 
+ */
+
 public class PlayerCheckerTrigger implements Runnable {
 
     private Autorank plugin;
