@@ -3,5 +3,8 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="lib" path="API Libs"/>
+	<classpathentry kind="lib" path="API Libs/bukkit-1.4.6-R0.4-20130102.060147-2.jar"/>
+	<classpathentry kind="lib" path="API Libs/Essentials-2.9.6.jar"/>
+	<classpathentry kind="lib" path="API Libs/Vault-1.2.22.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
