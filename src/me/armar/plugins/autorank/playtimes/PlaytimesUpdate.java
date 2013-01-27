@@ -45,7 +45,6 @@ public class PlaytimesUpdate implements Runnable {
 				updateMinutesPlayed(players[i]);
 			}
 		}
-		System.out.print("CHECK!!!");
 	}
 
 	private void updateMinutesPlayed(Player player) {
