@@ -7,39 +7,43 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 public class VaultPermissionsHandler {
-    
-    private static Permission permission = null;
-    
-    public VaultPermissionsHandler(Autorank plugin) {
-	if(!setupPermissions(plugin)){
-	    Autorank.logMessage("Vault not found, Autorank will not work!");
-	    plugin.getPluginLoader().disablePlugin(plugin);
+
+	private static Permission permission = null;
+
+	public VaultPermissionsHandler(Autorank plugin) {
+		if (!setupPermissions(plugin)) {
+			Autorank.logMessage("Vault not found, Autorank will not work!");
+			plugin.getPluginLoader().disablePlugin(plugin);
+		}
 	}
-    }
 
-    private Boolean setupPermissions(Autorank plugin) {
-	RegisteredServiceProvider<Permission> permissionProvider = plugin.getServer().getServicesManager()
-		.getRegistration(net.milkbowl.vault.permission.Permission.class);
-	if (permissionProvider != null) {
-	    permission = permissionProvider.getProvider();
+	private Boolean setupPermissions(Autorank plugin) {
+		RegisteredServiceProvider<Permission> permissionProvider = plugin
+				.getServer()
+				.getServicesManager()
+				.getRegistration(net.milkbowl.vault.permission.Permission.class);
+		if (permissionProvider != null) {
+			permission = permissionProvider.getProvider();
+		}
+		return (permission != null);
 	}
-	return (permission != null);
-    }
-    
-    public String[] getPlayerGroups(Player player) {
-	return permission.getPlayerGroups(player);
-    }
 
-    public boolean replaceGroup(Player player, String world, String oldGroup, String newGroup) {
-	return (addGroup(player, world, newGroup) && removeGroup(player, world, oldGroup));
-    }
+	public String[] getPlayerGroups(Player player) {
+		return permission.getPlayerGroups(player);
+	}
 
-    public boolean removeGroup(Player player, String world, String group) {
-	return permission.playerRemoveGroup(world, player.getName(), group);
-    }
+	public boolean replaceGroup(Player player, String world, String oldGroup,
+			String newGroup) {
+		return (addGroup(player, world, newGroup) && removeGroup(player, world,
+				oldGroup));
+	}
 
-    public boolean addGroup(Player player, String world, String group) {
-	return permission.playerAddGroup(world, player.getName(), group);
-    }
+	public boolean removeGroup(Player player, String world, String group) {
+		return permission.playerRemoveGroup(world, player.getName(), group);
+	}
+
+	public boolean addGroup(Player player, String world, String group) {
+		return permission.playerAddGroup(world, player.getName(), group);
+	}
 
 }

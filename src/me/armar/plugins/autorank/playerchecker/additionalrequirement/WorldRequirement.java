@@ -2,25 +2,25 @@ package me.armar.plugins.autorank.playerchecker.additionalrequirement;
 
 import org.bukkit.entity.Player;
 
-public class WorldRequirement extends AdditionalRequirement{
+public class WorldRequirement extends AdditionalRequirement {
 
-    String world = null;
-    
-    @Override
-    public boolean setOptions(String[] options) {
-	if(options.length>0)
-	this.world = options[0];
-	return (world != null);
-    }
+	String world = null;
 
-    @Override
-    public boolean meetsRequirement(Player player) {
-	return world != null && world.equals(player.getWorld().getName());
-    }
+	@Override
+	public boolean setOptions(String[] options) {
+		if (options.length > 0)
+			this.world = options[0];
+		return (world != null);
+	}
 
-    @Override
-    public String getDescription() {
-	return "Need to be in world " + world + ".";
-    }
+	@Override
+	public boolean meetsRequirement(Player player) {
+		return world != null && world.equals(player.getWorld().getName());
+	}
+
+	@Override
+	public String getDescription() {
+		return "Need to be in world " + world + ".";
+	}
 
 }

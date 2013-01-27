@@ -16,28 +16,27 @@ import org.bukkit.plugin.Plugin;
  */
 public class PermissionsHandler {
 
-	
-    @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private Autorank plugin;
-    private VaultPermissionsHandler vPermHandler;
+	private VaultPermissionsHandler vPermHandler;
 
-    public PermissionsHandler(Autorank plugin) {
-    	if(findVault(plugin)){
-	    Autorank.logMessage("Vault Hooked!");
-	}else{
-	    Autorank.logMessage("WARNING No permissions plugin was found!");
-	    this.plugin = plugin;
+	public PermissionsHandler(Autorank plugin) {
+		if (findVault(plugin)) {
+			Autorank.logMessage("Vault Hooked!");
+		} else {
+			Autorank.logMessage("WARNING No permissions plugin was found!");
+			this.plugin = plugin;
+		}
+		setPermHandler(new VaultPermissionsHandler(plugin));
 	}
-    	setPermHandler(new VaultPermissionsHandler(plugin));
-    }
 
-    private boolean findVault(Autorank plugin) {
-	Plugin x = plugin.getServer().getPluginManager().getPlugin("Vault");
-	if (x != null & x instanceof Vault) {
-	    return true;
+	private boolean findVault(Autorank plugin) {
+		Plugin x = plugin.getServer().getPluginManager().getPlugin("Vault");
+		if (x != null & x instanceof Vault) {
+			return true;
+		}
+		return false;
 	}
-	return false;
-    }
 
 	public VaultPermissionsHandler getPermHandler() {
 		return vPermHandler;
@@ -46,23 +45,23 @@ public class PermissionsHandler {
 	public void setPermHandler(VaultPermissionsHandler vPermHandler) {
 		this.vPermHandler = vPermHandler;
 	}
-    
- /*   private boolean findPermissionsBukkit(JavaPlugin plugin) {
+
+	/*   private boolean findPermissionsBukkit(JavaPlugin plugin) {
 	Plugin x = plugin.getServer().getPluginManager().getPlugin("PermissionsBukkit");
 	if (x != null & x instanceof PermissionsPlugin) {
 	    permissionPlugin = new PermissionsBukkitHandler((PermissionsPlugin) x);
 	    return true;
 	}
 	return false;
-    }
+	   }
 
-    private boolean findPermissionsEX(JavaPlugin plugin) {
+	   private boolean findPermissionsEX(JavaPlugin plugin) {
 	Plugin x = plugin.getServer().getPluginManager().getPlugin("PermissionsEx");
 	if (x != null & x instanceof PermissionsEx) {
 	    permissionPlugin = new PermissionsEXHandler();
 	    return true;
 	}
 	return false;
-    } */
+	   } */
 
 }
