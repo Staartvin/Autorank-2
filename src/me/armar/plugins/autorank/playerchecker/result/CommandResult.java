@@ -18,7 +18,7 @@ public class CommandResult extends Result{
     @Override
     public boolean applyResult(Player player) {
 	if (server != null){
-	    String cmd = command.replace("%p", player.getName());
+	    String cmd = command.replace("&p", player.getName());
 	    server.dispatchCommand(server.getConsoleSender(), cmd);
 	}
 	return server != null;
