@@ -48,7 +48,7 @@ public class Autorank extends JavaPlugin {
 	req.registerAdditionalRequirement("time", TimeRequirement.class);
 	req.registerAdditionalRequirement("gamemode", GamemodeRequirement.class);
 	req.registerAdditionalRequirement("has item", HasItemRequirement.class);
-	req.registerAdditionalRequirement("world", TimeRequirement.class);
+	req.registerAdditionalRequirement("world", WorldRequirement.class);
 	
 	res.registerResult("command", CommandResult.class);
 	res.registerResult("message", MessageResult.class);
