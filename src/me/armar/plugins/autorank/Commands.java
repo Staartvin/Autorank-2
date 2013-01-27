@@ -188,7 +188,7 @@ public class Commands implements CommandExecutor {
 
 	String[] groups = plugin.getPermissionsHandler().getPermHandler().getPlayerGroups(player);
 	StringBuilder stringBuilder = new StringBuilder();
-	stringBuilder.append(playername + " has played for " + plugin.getTime(playername) + " minutes, ");
+	stringBuilder.append(playername + " has played for " + AutorankTools.minutesToString(plugin.getTime(playername)) + ", ");
 	stringBuilder.append("is in ");
 	if (groups.length == 0)
 	    stringBuilder.append("no groups.");

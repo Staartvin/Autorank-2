@@ -32,6 +32,43 @@ public class AutorankTools {
 	return res;
     }
     
+    public static String minutesToString(int minutes){
+        StringBuilder b = new StringBuilder();
+        
+        int days = minutes/1440;
+        minutes -= days * 1440;
+        int hours = minutes/60;
+        minutes -= hours * 60;
+        
+        if(days != 0){
+            b.append(days);
+            b.append(" day");
+            if(days != 1)
+               b.append("s");
+            if(hours != 0 || minutes != 0)
+            b.append(" ");
+        }
+        
+        if(hours != 0){
+            b.append(hours);
+            b.append(" hour");
+            if(hours != 1)
+                b.append("s");
+            if(minutes != 0)
+            b.append(" ");
+        }
+        
+        if(minutes != 0 || (hours == 0 && days == 0)){
+            b.append(minutes);
+            b.append(" minute");
+            if(minutes != 1)
+                b.append("s");
+        }
+        
+        return b.toString();
+    }
+
+    
     public static double stringtoDouble(String string) throws NumberFormatException{
 	double res = 0;
 	
@@ -51,7 +88,7 @@ public class AutorankTools {
 	
 	return res;
     }
-    
+        
     public static void sendColoredMessage(CommandSender sender, String msg){
 	sender.sendMessage("\u00A72" + msg);
     }

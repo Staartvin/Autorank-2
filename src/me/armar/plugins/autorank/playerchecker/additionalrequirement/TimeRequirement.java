@@ -23,7 +23,7 @@ public class TimeRequirement extends AdditionalRequirement{
 
     @Override
     public String getDescription() {
-	return "Playtime needs to be " + time + " or higher.";
+	return "Playtime needs to be " + AutorankTools.minutesToString(time) + " or higher.";
     }
 
 }
