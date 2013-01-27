@@ -27,12 +27,18 @@ ranks:
             time: 1h
         results:
             rank change: guest; member
+            command: 'say &p just got a promotion'
             message: 'Congratulations, you are now a member.'
     member:
         requirements:
             time: 5d
+            exp: 10
+            world: world_nether
+            gamemode: 0
+            has item: 50
         results:
             rank change: member; vip
+            command: 'say &p just got a promotion'
             message: 'Congratulations, you are now a vip.'
             
 # new requirements and results can be added by other plugins that hook into the Autorank API
@@ -44,9 +50,7 @@ ranks:
 #       money: 2000 (requires vault ! Player has to have at least this amount of money)
 #       world: world_nether (player has to be in this world to get ranked)
 #       gamemode: 1 (player has to have a certain gamemode, 0 = Survival mode, 1 = Creative mode, 2 = Adventure mode)
-#       spoutcraft: true (requires spoutplugin ! When set to true only spoutcraft users will be ranked, when false non-spoutcraft players will be ranked)
 #       has item: id(:data) (checks the players inventory for the item)
-#       command regex: 'some command'; 'regex' (for advanced users, will check the result of a console command against the given regular expression. &p will be replaced by the player name)
 # 
 #   results:
 #       rank change: old-rank; new-rank
@@ -63,5 +67,10 @@ sql:
     table: autorank
 
 #    
+#    SQL not working yet
 #    
-#    
+    
+    
+    
+    
+    
