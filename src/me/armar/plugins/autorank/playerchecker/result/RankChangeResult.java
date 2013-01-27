@@ -7,6 +7,7 @@ public class RankChangeResult extends Result {
     
     String from = null;
     String to = null;
+    String world = null;
 
     @Override
     public boolean setOptions(String[] options) {
@@ -14,12 +15,15 @@ public class RankChangeResult extends Result {
 	    from = options[0].trim();
 	    to = options[1].trim();
 	}
+        if(options.length>2){
+            world = options[2].trim();
+        }
 	return from != null && to != null;
     }
 
     @Override
     public boolean applyResult(Player player) {
-	return this.getAutorank().getPermissionsHandler().getPermHandler().replaceGroup(player, null, from, to);
+	return this.getAutorank().getPermissionsHandler().getPermHandler().replaceGroup(player, world, from, to);
     }
 
 }
