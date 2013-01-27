@@ -203,6 +203,7 @@ public class Commands implements CommandExecutor {
 		stringBuilder.append(", ");
 	    }
 	    stringBuilder.append(group);
+            first = false;
 	}
 
 	AutorankTools.sendColoredMessage(sender, stringBuilder.toString());
