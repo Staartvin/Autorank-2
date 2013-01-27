@@ -29,9 +29,6 @@ public class Commands implements CommandExecutor {
     	}
     	return true;
     }
-/*    private void noPerm(CommandSender sender) {
-	AutorankTools.sendColoredMessage(sender, "You do not have permission to do this.");
-    } */
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
