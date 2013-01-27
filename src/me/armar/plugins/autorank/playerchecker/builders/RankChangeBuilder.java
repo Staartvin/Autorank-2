@@ -37,6 +37,12 @@ public class RankChangeBuilder {
 	    String value = (String) config.get(rank);
 
 	    String[] options = value.split(" after ");
+	    
+	    if (options.length <= 0) {
+	    	System.out.print("[AutoRank] Config is not configured correctly!");
+	    	autorank.getServer().getPluginManager().disablePlugin(autorank);
+	    	return null;
+	    }
 
 	    List<AdditionalRequirement> req = new ArrayList<AdditionalRequirement>();
 	    AdditionalRequirement timeReq = new TimeRequirement();
