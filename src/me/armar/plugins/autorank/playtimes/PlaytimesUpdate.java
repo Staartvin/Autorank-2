@@ -39,7 +39,7 @@ public class PlaytimesUpdate implements Runnable {
     }
 
     private void updateMinutesPlayed(Player[] players) {
-	for (int i = 0; i > players.length; i++) {
+	for (int i = 0; i < players.length; i++) {
 	    if (players[i] != null) {
 		updateMinutesPlayed(players[i]);
 	    }
