@@ -25,7 +25,7 @@ public class MoneyRequirement extends AdditionalRequirement{
 
     @Override
     public String getDescription() {
-	return "You need a minimum amount of money of " + minMoney + ".";
+	return "Need a minimum amount of money of " + minMoney + ".";
     }
 
 }

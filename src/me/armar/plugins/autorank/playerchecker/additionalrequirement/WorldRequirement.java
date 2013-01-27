@@ -20,7 +20,7 @@ public class WorldRequirement extends AdditionalRequirement{
 
     @Override
     public String getDescription() {
-	return "Player needs to be in world " + world + ".";
+	return "Need to be in world " + world + ".";
     }
 
 }

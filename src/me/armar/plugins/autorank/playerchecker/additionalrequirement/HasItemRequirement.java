@@ -33,7 +33,7 @@ public class HasItemRequirement extends AdditionalRequirement{
 
     @Override
     public String getDescription() {
-	return "Player needs to have " + item.getAmount() + " " + item.getType().toString() + ".";
+	return "Need to have " + item.getAmount() + " " + item.getType().toString() + ".";
     }
 
 }

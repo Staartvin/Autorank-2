@@ -22,7 +22,7 @@ public class GamemodeRequirement extends AdditionalRequirement{
 
     @Override
     public String getDescription() {
-	return "Player needs to be in gamemode " + gamemode + ".";
+	return "Need to be in gamemode " + gamemode + ".";
     }
 
 }
