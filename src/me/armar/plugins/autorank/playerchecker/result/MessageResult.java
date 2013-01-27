@@ -15,6 +15,9 @@ public class MessageResult extends Result{
 
     @Override
     public boolean applyResult(Player player) {
+    	if (player == null) {
+    		return false;
+    	}
 	player.sendMessage(msg.replaceAll("(&([a-f0-9]))", "\u00A7$2"));
 	return msg != null;
     }
