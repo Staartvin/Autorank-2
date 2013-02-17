@@ -48,7 +48,7 @@ public class PlaytimesUpdate implements Runnable {
 	}
 
 	private void updateMinutesPlayed(Player player) {
-		if (!player.hasPermission("autorank.timeexclude")) {
+		if (!player.hasPermission("autorank.timeexclude") || !player.hasPermission("autorank.exclude")) {
 			String playerName = player.getName().toLowerCase();
 			if (!playtimes.getKeys().contains(playerName)) {
 				playtimes.setTime(playerName, 0);
