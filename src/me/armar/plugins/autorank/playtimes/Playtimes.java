@@ -32,7 +32,7 @@ public class Playtimes implements Runnable {
 		this.data = new SimpleYamlConfiguration(plugin, "Data.yml", null,
 				"Data");
 		this.save = new PlaytimesSave(this);
-		this.update = new PlaytimesUpdate(this);
+		this.update = new PlaytimesUpdate(this, plugin);
 
 		sqlSetup(plugin.getAdvancedConfig());
 		if (sql != null) {
