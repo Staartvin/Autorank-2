@@ -15,21 +15,16 @@ import com.earth2me.essentials.Essentials;
  */
 public class PlaytimesUpdate implements Runnable {
 
-	@SuppressWarnings("unused")
 	private Essentials ess;
 	private Playtimes playtimes;
 
-	public PlaytimesUpdate(Playtimes playtimes) {
+	public PlaytimesUpdate(Playtimes playtimes, Autorank plugin) {
 		this.playtimes = playtimes;
-
-		Plugin x = Bukkit.getServer().getPluginManager()
-				.getPlugin("Essentials");
-		if (x != null & x instanceof Essentials) {
-			ess = (Essentials) x;
-			Autorank.logMessage("Essentials was found! AFK integration can be used.");
-		} else {
-			Autorank.logMessage("Essentials was NOT found! Disabling AFK integration.");
-		}
+                
+                if(plugin.getAdvancedConfig().getBoolean("use advanced config")
+                        && plugin.getAdvancedConfig().getBoolean("afk integration")){
+        setupEssentials();
+                }
 
 	}
 
@@ -48,7 +43,8 @@ public class PlaytimesUpdate implements Runnable {
 	}
 
 	private void updateMinutesPlayed(Player player) {
-		if (!player.hasPermission("autorank.timeexclude")) {
+		if (!player.hasPermission("autorank.timeexclude")
+                        && (ess == null || !ess.getUser(player).isAfk())) {
 			String playerName = player.getName().toLowerCase();
 			if (!playtimes.getKeys().contains(playerName)) {
 				playtimes.setTime(playerName, 0);
@@ -56,5 +52,16 @@ public class PlaytimesUpdate implements Runnable {
 			playtimes.modifyTime(playerName, Playtimes.INTERVAL_MINUTES);
 		}
 	}
+
+    private void setupEssentials() {
+        Plugin x = Bukkit.getServer().getPluginManager()
+                        .getPlugin("Essentials");
+        if (x != null & x instanceof Essentials) {
+                ess = (Essentials) x;
+                Autorank.logMessage("Essentials was found! AFK integration can be used.");
+        } else {
+                Autorank.logMessage("Essentials was NOT found! Disabling AFK integration.");
+        }
+    }
 
 }

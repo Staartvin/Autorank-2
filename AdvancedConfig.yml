@@ -10,6 +10,11 @@
 use advanced config: true
 # all other advanced settings are ignored if this is set to false
 
+afk integration: true
+# If a compatible AFK plugin is found autorank will not count online time for AFK players
+# This option is always on when using the SimpleConfig
+# Currently supports: Essentials
+
 leaderboard layout: '&r | &p - &d day(s), &h hour(s) and &m minute(s).'
 leaderboard length: 5
 # changes the appearance of the /ar leaderboard command
