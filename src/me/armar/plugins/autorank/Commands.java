@@ -211,7 +211,7 @@ public class Commands implements CommandExecutor {
 		Set<RankChange> keySet = failed.keySet();
 		String playername = player.getName();
 
-		String[] groups = plugin.getPermissionsHandler().getPermHandler()
+		String[] groups = plugin.getPermPlugHandler()
 				.getPlayerGroups(player);
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(playername + " has played for "

@@ -5,7 +5,7 @@ import java.util.logging.Logger;
 import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
 import me.armar.plugins.autorank.leaderboard.Leaderboard;
 import me.armar.plugins.autorank.permissions.PermissionsHandler;
-import me.armar.plugins.autorank.permissions.VaultPermissionsHandler;
+import me.armar.plugins.autorank.permissions.PermissionsPluginHandler;
 import me.armar.plugins.autorank.playerchecker.*;
 import me.armar.plugins.autorank.playerchecker.additionalrequirement.*;
 import me.armar.plugins.autorank.playerchecker.builders.*;
@@ -24,7 +24,7 @@ public class Autorank extends JavaPlugin {
 	private PlayerChecker playerChecker;
 	private SimpleYamlConfiguration simpleConfig;
 	private SimpleYamlConfiguration advancedConfig;
-	private VaultPermissionsHandler vaultPermHandler;
+	private PermissionsPluginHandler permPlugHandler;
 	private static Logger log = Bukkit.getLogger();
 
 	public void onEnable() {
@@ -40,7 +40,8 @@ public class Autorank extends JavaPlugin {
 		setPlaytimes(new Playtimes(this));
 		setLeaderboard(new Leaderboard(this));
 		setPlayerChecker(new PlayerChecker(this));
-		setVaultPermHandler(new VaultPermissionsHandler(this));
+		setPermPlugHandler(new PermissionsPluginHandler(this));
+		
 
 		AdditionalRequirementBuilder req = this.getPlayerChecker().getBuilder()
 				.getRequirementBuilder();
@@ -164,12 +165,20 @@ public class Autorank extends JavaPlugin {
 		this.playerChecker = playerChecker;
 	}
 
-	public VaultPermissionsHandler getVaultPermHandler() {
+	/*public VaultPermissionsHandler getVaultPermHandler() {
 		return vaultPermHandler;
 	}
 
 	public void setVaultPermHandler(VaultPermissionsHandler vaultPermHandler) {
 		this.vaultPermHandler = vaultPermHandler;
+	} */
+
+	public PermissionsPluginHandler getPermPlugHandler() {
+		return permPlugHandler;
+	}
+
+	public void setPermPlugHandler(PermissionsPluginHandler permPlugHandler) {
+		this.permPlugHandler = permPlugHandler;
 	}
 
 }
