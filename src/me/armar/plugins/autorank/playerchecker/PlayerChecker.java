@@ -7,7 +7,6 @@ import java.util.Map;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
-import me.armar.plugins.autorank.permissions.PermissionsHandler;
 import me.armar.plugins.autorank.playerchecker.additionalrequirement.AdditionalRequirement;
 import me.armar.plugins.autorank.playerchecker.builders.RankChangeBuilder;
 
@@ -26,15 +25,16 @@ import org.bukkit.entity.Player;
  */
 public class PlayerChecker {
 
-	private PermissionsHandler permissions;
 	private PlayerCheckerTrigger trigger;
 	private Map<String, List<RankChange>> rankChanges = new HashMap<String, List<RankChange>>();
 	private RankChangeBuilder builder;
+	private Autorank plugin;
 
 	public PlayerChecker(Autorank plugin) {
-		permissions = plugin.getPermissionsHandler();
+		plugin.getPermissionsHandler();
 		setTrigger(new PlayerCheckerTrigger(plugin, this));
 		setBuilder(new RankChangeBuilder(plugin));
+		this.plugin = plugin;
 	}
 
 	public void initialiseFromConfigs(Autorank plugin) {
@@ -67,7 +67,7 @@ public class PlayerChecker {
 	public boolean checkPlayer(Player player) {
 		boolean result = false;
 
-		String[] groups = permissions.getPermHandler().getPlayerGroups(player);
+		String[] groups = plugin.getPermPlugHandler().getPlayerGroups(player);
 
 		for (String group : groups) {
 			List<RankChange> changes = rankChanges.get(group);
@@ -87,7 +87,7 @@ public class PlayerChecker {
 			Player player) {
 		Map<RankChange, List<AdditionalRequirement>> result = new HashMap<RankChange, List<AdditionalRequirement>>();
 
-		String[] groups = permissions.getPermHandler().getPlayerGroups(player);
+		String[] groups = plugin.getPermPlugHandler().getPlayerGroups(player);
 
 		for (String group : groups) {
 			List<RankChange> changes = rankChanges.get(group);
