@@ -12,6 +12,10 @@ import org.bukkit.plugin.PluginManager;
 
 import me.armar.plugins.autorank.Autorank;
 
+/**
+ * @author Staartvin
+ *	This file handles all work done with GroupManager.
+ */
 public class GroupManagerHandler {
 
 	private Autorank plugin;

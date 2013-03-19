@@ -10,10 +10,7 @@ import org.bukkit.entity.Player;
  * PermissionsPluginHandler sort the tasks of removing/adding a player to a group depending
  * on the permissions plugin. 
  * For now it supports Vault and explicit GroupManager.
- * 
- * 
- * 
- * 
+ *  
  */
 
 public class PermissionsPluginHandler {

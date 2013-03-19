@@ -6,6 +6,11 @@ import net.milkbowl.vault.permission.Permission;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
+/**
+ * @author Staartvin
+ * VaultPermissionsHandler tackles all work that has to be done with Vault. (Most of the permissions plugins
+ * are supported with Vault)
+ */
 public class VaultPermissionsHandler {
 
 	private static Permission permission = null;
