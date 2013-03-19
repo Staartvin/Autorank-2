@@ -5,6 +5,20 @@
 	<classpathentry kind="lib" path="API Libs"/>
 	<classpathentry kind="lib" path="API Libs/bukkit-1.4.6-R0.4-20130102.060147-2.jar"/>
 	<classpathentry kind="lib" path="API Libs/Essentials-2.9.6.jar"/>
-	<classpathentry kind="lib" path="API Libs/Vault-1.2.22.jar"/>
+	<classpathentry kind="lib" path="API Libs/Vault-1.2.22.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://mythcraft.dyndns.org/javadoc/vault/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="API Libs/EssentialsGroupBridge.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://ci.ess3.net/guestAuth/repository/download/bt10/.lastSuccessful/JavaDocs/EssentialsGroupManager/dist/javadoc/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="API Libs/EssentialsGroupManager.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://ci.ess3.net/guestAuth/repository/download/bt10/.lastSuccessful/JavaDocs/EssentialsGroupManager/dist/javadoc/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
