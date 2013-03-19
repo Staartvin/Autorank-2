@@ -16,34 +16,33 @@ import org.bukkit.plugin.Plugin;
  */
 public class PermissionsHandler {
 
-	@SuppressWarnings("unused")
-	private Autorank plugin;
-	private VaultPermissionsHandler vPermHandler;
+	//private Autorank plugin;
+	//private VaultPermissionsHandler vPermHandler;
 
 	public PermissionsHandler(Autorank plugin) {
 		if (findVault(plugin)) {
 			Autorank.logMessage("Vault Hooked!");
 		} else {
-			Autorank.logMessage("WARNING No permissions plugin was found!");
-			this.plugin = plugin;
+			Autorank.logMessage("WARNING Vault was not found!");
+			//this.plugin = plugin;
 		}
-		setPermHandler(new VaultPermissionsHandler(plugin));
+		//vPermHandler = new VaultPermissionsHandler(plugin);
 	}
 
-	private boolean findVault(Autorank plugin) {
+	protected boolean findVault(Autorank plugin) {
 		Plugin x = plugin.getServer().getPluginManager().getPlugin("Vault");
 		if (x != null & x instanceof Vault) {
 			return true;
 		}
 		return false;
 	}
-
-	public VaultPermissionsHandler getPermHandler() {
-		return vPermHandler;
-	}
-
-	public void setPermHandler(VaultPermissionsHandler vPermHandler) {
-		this.vPermHandler = vPermHandler;
+	
+	protected boolean findGroupManager(Autorank plugin) {
+		Plugin x = plugin.getServer().getPluginManager().getPlugin("GroupManager");
+		if (x != null) {
+			return true;
+		}
+		return false;
 	}
 
 	/*   private boolean findPermissionsBukkit(JavaPlugin plugin) {
