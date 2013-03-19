@@ -4,7 +4,6 @@ import java.util.List;
 
 import me.armar.plugins.autorank.Autorank;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 /*
@@ -46,13 +45,6 @@ public class PermissionsPluginHandler {
 
 	public boolean replaceGroup(Player player, String world, String oldGroup,
 			String newGroup) {
-		// There is no GroupManager method for that yet.
-		Bukkit.getLogger().info("Player: " + player);
-		Bukkit.getLogger().info("World: " + world);
-		Bukkit.getLogger().info("OldGroup: " + oldGroup);
-		Bukkit.getLogger().info("NewGroup: " + newGroup);
-		Bukkit.getLogger().info("vPermissionsHandler: " + vPermissionsHandler);
-		
 		if (plugin.getPermissionsHandler().findGroupManager(plugin))  {
 			return groupManagerHandler.addPlayerToGroup(player, newGroup);
 		} else {
