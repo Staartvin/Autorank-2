@@ -150,7 +150,7 @@ public class Commands implements CommandExecutor {
 			}
 
 			return true;
-		} else if (action.equalsIgnoreCase("remove")) {
+		} else if (action.equalsIgnoreCase("remove") || action.equalsIgnoreCase("rem")) {
 
 			if (!hasPermission("autorank.remove", sender)) {
 				return true;
