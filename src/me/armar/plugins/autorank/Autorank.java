@@ -47,7 +47,8 @@ public class Autorank extends JavaPlugin {
 				.getRequirementBuilder();
 		ResultBuilder res = this.getPlayerChecker().getBuilder()
 				.getResultBuilder();
-
+		
+		// Register additional requirements
 		req.registerAdditionalRequirement("exp", ExpRequirement.class);
 		req.registerAdditionalRequirement("money", MoneyRequirement.class);
 		req.registerAdditionalRequirement("time", TimeRequirement.class);
@@ -55,6 +56,7 @@ public class Autorank extends JavaPlugin {
 		req.registerAdditionalRequirement("has item", HasItemRequirement.class);
 		req.registerAdditionalRequirement("world", WorldRequirement.class);
 
+		// Register 'main' results
 		res.registerResult("command", CommandResult.class);
 		res.registerResult("message", MessageResult.class);
 		res.registerResult("rank change", RankChangeResult.class);
