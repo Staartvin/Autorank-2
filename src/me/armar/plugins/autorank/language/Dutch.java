@@ -17,6 +17,10 @@ public class Dutch extends Language {
 	private String noGroups;
 	private String oneGroup;
 	private String multipleGroups;
+	private String noNextRankup;
+	private String meetsRequirements;
+	private String rankedUpNow;
+	private String doesntMeetRequirements;
 	
 	public Dutch(Autorank autorank) {
 		setAutorank(autorank);
@@ -31,6 +35,10 @@ public class Dutch extends Language {
 		noGroups = "geen groep.";
 		oneGroup = "groep ";
 		multipleGroups = "de groepen ";
+		noNextRankup = "en heeft geen volgende promotie.";
+		meetsRequirements = "voldoet aan alle voorwaarden voor rang ";
+		rankedUpNow = " en zal nu gepromoveerd worden.";
+		doesntMeetRequirements = "en voldoet niet aan alle voorwaarden voor rang ";
 	}
 	
 	@Override
@@ -115,5 +123,29 @@ public class Dutch extends Language {
 	public String getMultipleGroups() {
 		// TODO Auto-generated method stub
 		return multipleGroups;
+	}
+
+	@Override
+	public String getNoNextRankup() {
+		// TODO Auto-generated method stub
+		return noNextRankup;
+	}
+
+	@Override
+	public String getMeetsRequirements() {
+		// TODO Auto-generated method stub
+		return meetsRequirements;
+	}
+
+	@Override
+	public String getRankedUpNow() {
+		// TODO Auto-generated method stub
+		return rankedUpNow;
+	}
+
+	@Override
+	public String getDoesntMeetRequirements() {
+		// TODO Auto-generated method stub
+		return doesntMeetRequirements;
 	}
 }

@@ -22,6 +22,10 @@ public class English extends Language {
 	private String noGroups;
 	private String oneGroup;
 	private String multipleGroups;
+	private String noNextRankup;
+	private String meetsRequirements;
+	private String rankedUpNow;
+	private String doesntMeetRequirements;
 	
 	public English(Autorank autorank) {
 		setAutorank(autorank);
@@ -36,6 +40,10 @@ public class English extends Language {
 		noGroups = "no groups.";
 		oneGroup = "group ";
 		multipleGroups = "groups ";
+		noNextRankup = "and doesn't have a next rankup.";
+		meetsRequirements = "meets all the requirements for rank ";
+		rankedUpNow = " and will now be ranked up.";
+		doesntMeetRequirements = "and doesn't meet the requirements for rank ";
 	}
 	
 	@Override
@@ -119,5 +127,29 @@ public class English extends Language {
 	public String getMultipleGroups() {
 		// TODO Auto-generated method stub
 		return multipleGroups;
+	}
+
+	@Override
+	public String getNoNextRankup() {
+		// TODO Auto-generated method stub
+		return noNextRankup;
+	}
+
+	@Override
+	public String getMeetsRequirements() {
+		// TODO Auto-generated method stub
+		return meetsRequirements;
+	}
+
+	@Override
+	public String getRankedUpNow() {
+		// TODO Auto-generated method stub
+		return rankedUpNow;
+	}
+
+	@Override
+	public String getDoesntMeetRequirements() {
+		// TODO Auto-generated method stub
+		return doesntMeetRequirements;
 	}
 }
