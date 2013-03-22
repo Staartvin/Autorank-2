@@ -46,18 +46,21 @@ public class RankChangeBuilder {
 				return null;
 			}
 
+			// Time requirement
 			List<AdditionalRequirement> req = new ArrayList<AdditionalRequirement>();
 			AdditionalRequirement timeReq = new TimeRequirement();
 			timeReq.setOptions(new String[] { options[1] });
 			timeReq.setAutorank(autorank);
 			req.add(timeReq);
 
+			// Change the rank
 			List<Result> res = new ArrayList<Result>();
 			Result change = new RankChangeResult();
 			change.setOptions(new String[] { rank, options[0] });
 			change.setAutorank(autorank);
 			res.add(change);
 
+			// Change the message
 			Result message = new MessageResult();
 			message.setOptions(new String[] { "&2You got ranked to "
 					+ options[0] });

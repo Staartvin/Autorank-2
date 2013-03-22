@@ -12,13 +12,14 @@ public class ResultBuilder {
 	public Result create(String type) {
 		Result res = null;
 		Class<? extends Result> c = results.get(type);
-		if (c != null)
+		if (c != null) {
 			try {
 				res = c.newInstance();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		}
 		return res;
 	}
 
