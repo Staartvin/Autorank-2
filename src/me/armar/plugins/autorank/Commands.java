@@ -51,28 +51,18 @@ public class Commands implements CommandExecutor {
 
 		String action = args[0];
 		if (action.equalsIgnoreCase("help")) {
-
-			AutorankTools.sendColoredMessage(sender, "-- Autorank Commands --");
-			AutorankTools.sendColoredMessage(sender,
-					"/ar check - Check your own status");
-			AutorankTools.sendColoredMessage(sender,
-					"/ar check [player] - Check [player]'s status");
-			AutorankTools.sendColoredMessage(sender,
-					"/ar leaderboard - Show the leaderboard");
-			AutorankTools
-					.sendColoredMessage(sender,
-							"/ar set [player] [value] - Set [player]'s time to [value]");
-			AutorankTools
-					.sendColoredMessage(sender,
-							"/ar add [player] [value] - Add [value] to [player]'s time");
-			AutorankTools
-					.sendColoredMessage(sender,
-							"/ar remove [player] [value] - Remove [value] from [player]'s time");
-			AutorankTools.sendColoredMessage(sender,
-					"/ar debug - Shows debug information");
-			AutorankTools.sendColoredMessage(sender,
-					"/ar reload - Reload the plugin");
-
+			if (args.length == 1) {
+				showHelpPages(sender, 1);	
+			} else {
+				int page = 1;
+				try {
+					page = Integer.parseInt(args[1]);
+				} catch (Exception e) {
+					sender.sendMessage(ChatColor.RED + "'" + args[1] + "' is not a valid page number!");
+					return true;
+				}
+				showHelpPages(sender, page);
+			}
 			return true;
 		} else if (action.equalsIgnoreCase("check")) {
 			if (args.length > 1) {
@@ -199,8 +189,7 @@ public class Commands implements CommandExecutor {
 			plugin.reload();
 
 			return true;
-		}
-
+		} 
 		return false;
 	}
 
@@ -240,7 +229,7 @@ public class Commands implements CommandExecutor {
 
 		if (keySet.size() == 0) {
 			AutorankTools.sendColoredMessage(sender,
-					"and doesn't have a next rankup.");
+					language.getNoNextRankup());
 		} else {
 			Iterator<RankChange> it = keySet.iterator();
 			while (it.hasNext()) {
@@ -250,13 +239,13 @@ public class Commands implements CommandExecutor {
 				if (reqs.size() == 0) {
 					AutorankTools.sendColoredMessage(
 							sender,
-							"meets all the requirements for rank "
+							language.getMeetsRequirements()
 									+ rank.getRank()
-									+ " and will now be ranked up.");
+									+ language.getRankedUpNow());
 					plugin.getPlayerChecker().checkPlayer(player);
 				} else {
 					AutorankTools.sendColoredMessage(sender,
-							"and doesn't meet the requirements for rank "
+							language.getDoesntMeetRequirements()
 									+ rank.getRank() + ":");
 
 					for (AdditionalRequirement req : reqs) {
@@ -267,6 +256,32 @@ public class Commands implements CommandExecutor {
 				}
 
 			}
+		}
+	}
+	
+	private void showHelpPages(CommandSender sender, int page) {
+		int maxPages = 2;
+		if (page == 2) {
+			sender.sendMessage(ChatColor.GREEN + "-- Autorank Commands --");
+			sender.sendMessage(ChatColor.AQUA + "/ar help <page> " + ChatColor.GRAY + "- Show a list of commands");
+			sender.sendMessage(ChatColor.AQUA + "/ar reload " + ChatColor.GRAY + "- Reload the plugin");
+			sender.sendMessage(ChatColor.BLUE + "Page 2 of " + maxPages);
+		} else {
+			sender.sendMessage(ChatColor.GREEN + "-- Autorank Commands --");
+			sender.sendMessage(ChatColor.AQUA + "/ar check " + ChatColor.GRAY + "- Check your own status");
+			sender.sendMessage(ChatColor.AQUA + 
+					"/ar check [player] " + ChatColor.GRAY + "- Check [player]'s status");
+			sender.sendMessage(ChatColor.AQUA + 
+					"/ar leaderboard " + ChatColor.GRAY + "- Show the leaderboard");
+			sender.sendMessage(ChatColor.AQUA + 
+							"/ar set [player] [value] " + ChatColor.GRAY + "- Set [player]'s time to [value]");
+			sender.sendMessage(ChatColor.AQUA + 
+							"/ar add [player] [value] " + ChatColor.GRAY + "- Add [value] to [player]'s time");
+			sender.sendMessage(ChatColor.AQUA + 
+							"/ar remove [player] [value] " + ChatColor.GRAY + "- Remove [value] from [player]'s time");
+			sender.sendMessage(ChatColor.AQUA + 
+					"/ar debug " + ChatColor.GRAY + "- Shows debug information");
+			sender.sendMessage(ChatColor.BLUE + "Page 1 of " + maxPages);
 		}
 	}
 
