@@ -31,8 +31,8 @@ ranks:
         requirements:
             time: 1h
         results:
-            rank change: guest; member
-            command: 'say &p just got a promotion'
+            rank change: guest;member
+            command: 'say &p just got a promotion;broadcast &p has just been promoted to Member!'
             message: 'Congratulations, you are now a member.'
     member:
         requirements:
@@ -42,8 +42,8 @@ ranks:
             gamemode: 0
             has item: 50
         results:
-            rank change: member; vip
-            command: 'say &p just got a promotion'
+            rank change: member;vip
+            command: 'say &p just got a promotion;broadcast &p has just been promoted to VIP!'
             message: 'Congratulations, you are now a vip.'
             
 # new requirements and results can be added by other plugins that hook into the Autorank API
@@ -61,7 +61,10 @@ ranks:
 #       rank change: old-rank; new-rank
 #       rank change: old-rank; new-rank; world (only works for permissions plugins that support this)
 #       message: 'You got ranked up'
-#       command: 'eco give &p 100' (executes a console command. &p will be replaced by the player name)
+#       commands: 
+#       - 'eco give &p 100' (executes a console command. &p will be replaced by the player name)
+#       You can perform more commands with the ';' sign. If you would want to say 'hi' and 'give &p 1 100', you would do:
+#       command: 'say &p hi;give &p 1 100'
 
 sql:
     enabled: false
