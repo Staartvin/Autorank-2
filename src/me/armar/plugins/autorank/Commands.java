@@ -124,7 +124,7 @@ public class Commands implements CommandExecutor {
 				AutorankTools.sendColoredMessage(sender, language.getPlayTimeChanged(args[1], value));
 			} else {
 				AutorankTools.sendColoredMessage(sender,
-						"Invalid format, use /ar set [player] [value]");
+						language.getInvalidFormat("/ar set [player] [value]"));
 			}
 
 			return true;
@@ -144,11 +144,10 @@ public class Commands implements CommandExecutor {
 
 			if (value >= 0 && sender instanceof Player) {
 				plugin.setTime(args[1], value);
-				AutorankTools.sendColoredMessage(sender, "Changed playtime of "
-						+ args[1] + " to " + value + ".");
+				AutorankTools.sendColoredMessage(sender, language.getPlayTimeChanged(args[1], value));
 			} else {
 				AutorankTools.sendColoredMessage(sender,
-						"Invalid format, use /ar add [player] [value]");
+						language.getInvalidFormat("/ar add [player] [value]"));
 			}
 
 			return true;
@@ -169,11 +168,10 @@ public class Commands implements CommandExecutor {
 
 			if (value >= 0 && sender instanceof Player) {
 				plugin.setTime(args[1], value);
-				AutorankTools.sendColoredMessage(sender, "Changed playtime of "
-						+ args[1] + " to " + value + ".");
+				AutorankTools.sendColoredMessage(sender, language.getPlayTimeChanged(args[1], value));
 			} else {
 				AutorankTools.sendColoredMessage(sender,
-						"Invalid format, use /ar remove [player] [value]");
+						language.getInvalidFormat("/ar remove [player] [value]"));
 			}
 
 			return true;
@@ -184,7 +182,7 @@ public class Commands implements CommandExecutor {
 			}
 
 			AutorankTools.sendColoredMessage(sender, "-- Autorank Debug --");
-			AutorankTools.sendColoredMessage(sender, "RankChanges");
+			AutorankTools.sendColoredMessage(sender, "Rank Changes");
 			for (String change : plugin.getPlayerChecker().toStringArray()) {
 				AutorankTools.sendColoredMessage(sender, change);
 			}
@@ -197,7 +195,7 @@ public class Commands implements CommandExecutor {
 				return true;
 			}
 
-			AutorankTools.sendColoredMessage(sender, "Reloaded Autorank");
+			AutorankTools.sendColoredMessage(sender, language.getAutorankReloaded());
 			plugin.reload();
 
 			return true;
@@ -216,16 +214,18 @@ public class Commands implements CommandExecutor {
 
 		String[] groups = plugin.getPermPlugHandler().getPlayerGroups(player);
 		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append(playername + " has played for "
+		// has played for
+		stringBuilder.append(playername + language.getHasPlayedFor()
 				+ AutorankTools.minutesToString(plugin.getTime(playername))
 				+ ", ");
-		stringBuilder.append("is in ");
+		// is in
+		stringBuilder.append(language.getIsIn());
 		if (groups.length == 0)
-			stringBuilder.append("no groups.");
+			stringBuilder.append(language.getNoGroups()); // No groups.
 		else if (groups.length == 1)
-			stringBuilder.append("group ");
+			stringBuilder.append(language.getOneGroup()); // One group
 		else
-			stringBuilder.append("groups ");
+			stringBuilder.append(language.getMultipleGroups()); // Multiple groups
 
 		boolean first = true;
 		for (String group : groups) {

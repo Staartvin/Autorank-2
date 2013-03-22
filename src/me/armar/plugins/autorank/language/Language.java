@@ -25,4 +25,18 @@ public abstract class Language {
 	public abstract String getCannotCheckConsole();
 	
 	public abstract String getPlayTimeChanged(String playerName, int value);
+	
+	public abstract String getInvalidFormat(String format);
+	
+	public abstract String getAutorankReloaded();
+	
+	public abstract String getHasPlayedFor();
+	
+	public abstract String getIsIn();
+	
+	public abstract String getNoGroups();
+	
+	public abstract String getOneGroup();
+	
+	public abstract String getMultipleGroups();
 }

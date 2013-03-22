@@ -10,14 +10,27 @@ public class Dutch extends Language {
 	private String noPermission;
 	private String cannotCheckConsole;
 	private String playTimeChanged;
-	
+	private String invalidFormat;
+	private String autorankReloaded;
+	private String hasPlayedFor;
+	private String isIn;
+	private String noGroups;
+	private String oneGroup;
+	private String multipleGroups;
 	
 	public Dutch(Autorank autorank) {
 		setAutorank(autorank);
 		playerNotOnline = "%player% is niet online!";
 		noPermission = "Je hebt (%permission%) nodig om deze handeling uit te voeren!";
 		cannotCheckConsole = "Kan niet de tijd bekijken voor de console.";
-		playTimeChanged = "Je hebt de speeltijd voor %player% veranderd naar %value%";
+		playTimeChanged = "Je hebt de speeltijd van %player% veranderd naar %value%";
+		invalidFormat = "Ongeldig formaat, gebruik %format%";
+		autorankReloaded = "Autorank is herladen!";
+		hasPlayedFor = " heeft gespeeld voor ";
+		isIn = "zit in ";
+		noGroups = "geen groep.";
+		oneGroup = "groep ";
+		multipleGroups = "de groepen ";
 	}
 	
 	@Override
@@ -60,5 +73,47 @@ public class Dutch extends Language {
 	public String getPlayTimeChanged(String playerName, int value) {
 		// TODO Auto-generated method stub
 		return playTimeChanged.replace("%player%", playerName).replace("%value%", value + "");
+	}
+
+	@Override
+	public String getInvalidFormat(String format) {
+		// TODO Auto-generated method stub
+		return invalidFormat.replace("%format%", format);
+	}
+
+	@Override
+	public String getAutorankReloaded() {
+		// TODO Auto-generated method stub
+		return autorankReloaded;
+	}
+
+	@Override
+	public String getHasPlayedFor() {
+		// TODO Auto-generated method stub
+		return hasPlayedFor;
+	}
+
+	@Override
+	public String getIsIn() {
+		// TODO Auto-generated method stub
+		return isIn;
+	}
+
+	@Override
+	public String getNoGroups() {
+		// TODO Auto-generated method stub
+		return noGroups;
+	}
+
+	@Override
+	public String getOneGroup() {
+		// TODO Auto-generated method stub
+		return oneGroup;
+	}
+
+	@Override
+	public String getMultipleGroups() {
+		// TODO Auto-generated method stub
+		return multipleGroups;
 	}
 }
