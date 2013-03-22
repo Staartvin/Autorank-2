@@ -3,13 +3,24 @@ package me.armar.plugins.autorank;
 import java.util.logging.Logger;
 
 import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
+import me.armar.plugins.autorank.language.LanguageHandler;
 import me.armar.plugins.autorank.leaderboard.Leaderboard;
 import me.armar.plugins.autorank.permissions.PermissionsHandler;
 import me.armar.plugins.autorank.permissions.PermissionsPluginHandler;
-import me.armar.plugins.autorank.playerchecker.*;
-import me.armar.plugins.autorank.playerchecker.additionalrequirement.*;
-import me.armar.plugins.autorank.playerchecker.builders.*;
-import me.armar.plugins.autorank.playerchecker.result.*;
+import me.armar.plugins.autorank.playerchecker.PlayerChecker;
+import me.armar.plugins.autorank.playerchecker.additionalrequirement.AdditionalRequirement;
+import me.armar.plugins.autorank.playerchecker.additionalrequirement.ExpRequirement;
+import me.armar.plugins.autorank.playerchecker.additionalrequirement.GamemodeRequirement;
+import me.armar.plugins.autorank.playerchecker.additionalrequirement.HasItemRequirement;
+import me.armar.plugins.autorank.playerchecker.additionalrequirement.MoneyRequirement;
+import me.armar.plugins.autorank.playerchecker.additionalrequirement.TimeRequirement;
+import me.armar.plugins.autorank.playerchecker.additionalrequirement.WorldRequirement;
+import me.armar.plugins.autorank.playerchecker.builders.AdditionalRequirementBuilder;
+import me.armar.plugins.autorank.playerchecker.builders.ResultBuilder;
+import me.armar.plugins.autorank.playerchecker.result.CommandResult;
+import me.armar.plugins.autorank.playerchecker.result.MessageResult;
+import me.armar.plugins.autorank.playerchecker.result.RankChangeResult;
+import me.armar.plugins.autorank.playerchecker.result.Result;
 import me.armar.plugins.autorank.playtimes.Playtimes;
 
 import org.bukkit.Bukkit;
@@ -25,21 +36,33 @@ public class Autorank extends JavaPlugin {
 	private SimpleYamlConfiguration simpleConfig;
 	private SimpleYamlConfiguration advancedConfig;
 	private PermissionsPluginHandler permPlugHandler;
+	private LanguageHandler languageHandler;
 	private static Logger log = Bukkit.getLogger();
 
 	public void onEnable() {
 
-		getCommand("ar").setExecutor(new Commands(this));
-
+		// Register configs
 		setSimpleConfig(new SimpleYamlConfiguration(this, "SimpleConfig.yml",
 				null, "Simple config"));
 		setAdvancedConfig(new SimpleYamlConfiguration(this,
 				"AdvancedConfig.yml", null, "Advanced config"));
-
+		
+		// Create language classes
+		setLanguageHandler(new LanguageHandler(this));
+		
+		// Create permission handler
 		setPermissionsHandler(new PermissionsHandler(this));
+		
+		// Create playtime class
 		setPlaytimes(new Playtimes(this));
+		
+		// Create leaderboard class
 		setLeaderboard(new Leaderboard(this));
+		
+		// Create player check class
 		setPlayerChecker(new PlayerChecker(this));
+		
+		// Create permission plugin handler class
 		setPermPlugHandler(new PermissionsPluginHandler(this));
 		
 
@@ -62,6 +85,10 @@ public class Autorank extends JavaPlugin {
 		res.registerResult("rank change", RankChangeResult.class);
 
 		playerChecker.initialiseFromConfigs(this);
+		
+		// Register command
+		
+		getCommand("ar").setExecutor(new Commands(this));
 
 		Autorank.logMessage(String.format("Autorank %s has been enabled!", getDescription().getVersion()));
 	}
@@ -84,6 +111,14 @@ public class Autorank extends JavaPlugin {
 		getServer().getScheduler().cancelAllTasks();
 
 		Autorank.logMessage(String.format("Autorank %s has been disabled!", getDescription().getVersion()));
+	}
+	
+	public LanguageHandler getLanguageHandler() {
+		return languageHandler;
+	}
+	
+	private void setLanguageHandler(LanguageHandler lHandler) {
+		this.languageHandler = lHandler;
 	}
 
 	public void reload() {

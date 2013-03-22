@@ -26,6 +26,10 @@ leaderboard length: 5
 # &tm : Total amount of minutes
 # &th : Total amount of hours
 
+language: english
+# Languages available: English, Dutch
+
+
 ranks:
     guest:
         requirements:

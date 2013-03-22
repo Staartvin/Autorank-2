@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import me.armar.plugins.autorank.language.Language;
 import me.armar.plugins.autorank.playerchecker.RankChange;
 import me.armar.plugins.autorank.playerchecker.additionalrequirement.AdditionalRequirement;
 
@@ -17,15 +18,17 @@ import org.bukkit.entity.Player;
 public class Commands implements CommandExecutor {
 
 	private Autorank plugin;
+	private Language language;
 
 	public Commands(Autorank plugin) {
 		this.plugin = plugin;
+		this.language = plugin.getLanguageHandler().getLanguage();
 	}
 
 	private boolean hasPermission(String permission, CommandSender sender) {
 		if (!sender.hasPermission(permission)) {
-			sender.sendMessage(ChatColor.RED + "You need to have ("
-					+ permission + ") to do this!");
+			sender.sendMessage(ChatColor.RED
+					+ language.getNoPermission(permission));
 			return false;
 		}
 		return true;
@@ -80,8 +83,8 @@ public class Commands implements CommandExecutor {
 
 				Player player = plugin.getServer().getPlayer(args[1]);
 				if (player == null) {
-					AutorankTools.sendColoredMessage(sender, "Player "
-							+ args[1] + " is not online.");
+					AutorankTools.sendColoredMessage(sender,
+							language.getPlayerNotOnline(args[1]));
 				} else {
 					check(sender, player);
 				}
@@ -93,7 +96,7 @@ public class Commands implements CommandExecutor {
 				check(sender, player);
 			} else {
 				AutorankTools.sendColoredMessage(sender,
-						"Can't check for console.");
+						language.getCannotCheckConsole());
 			}
 			return true;
 		} else if (action.equalsIgnoreCase("leaderboard")
@@ -118,8 +121,7 @@ public class Commands implements CommandExecutor {
 
 			if (value >= 0) {
 				plugin.setTime(args[1], value);
-				AutorankTools.sendColoredMessage(sender, "Changed playtime of "
-						+ args[1] + " to " + value + ".");
+				AutorankTools.sendColoredMessage(sender, language.getPlayTimeChanged(args[1], value));
 			} else {
 				AutorankTools.sendColoredMessage(sender,
 						"Invalid format, use /ar set [player] [value]");
@@ -150,7 +152,8 @@ public class Commands implements CommandExecutor {
 			}
 
 			return true;
-		} else if (action.equalsIgnoreCase("remove") || action.equalsIgnoreCase("rem")) {
+		} else if (action.equalsIgnoreCase("remove")
+				|| action.equalsIgnoreCase("rem")) {
 
 			if (!hasPermission("autorank.remove", sender)) {
 				return true;
@@ -211,8 +214,7 @@ public class Commands implements CommandExecutor {
 		Set<RankChange> keySet = failed.keySet();
 		String playername = player.getName();
 
-		String[] groups = plugin.getPermPlugHandler()
-				.getPlayerGroups(player);
+		String[] groups = plugin.getPermPlugHandler().getPlayerGroups(player);
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(playername + " has played for "
 				+ AutorankTools.minutesToString(plugin.getTime(playername))
