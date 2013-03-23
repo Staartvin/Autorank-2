@@ -240,13 +240,13 @@ public class Commands implements CommandExecutor {
 					AutorankTools.sendColoredMessage(
 							sender,
 							language.getMeetsRequirements()
-									+ rank.getRank()
+									+ rank.getRankTo()
 									+ language.getRankedUpNow());
 					plugin.getPlayerChecker().checkPlayer(player);
 				} else {
 					AutorankTools.sendColoredMessage(sender,
 							language.getDoesntMeetRequirements()
-									+ rank.getRank() + ":");
+									+ rank.getRankTo() + ":");
 
 					for (AdditionalRequirement req : reqs) {
 						if (req != null)

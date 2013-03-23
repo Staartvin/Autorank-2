@@ -13,12 +13,14 @@ public class RankChange {
 	private String rank;
 	private List<AdditionalRequirement> req;
 	private List<Result> res;
+	private String rankTo;
 
-	public RankChange(String rank, List<AdditionalRequirement> req,
+	public RankChange(String rank, String rankTo, List<AdditionalRequirement> req,
 			List<Result> res) {
 		this.rank = rank;
 		this.req = req;
 		this.res = res;
+		this.rankTo = rankTo;
 	}
 
 	public String getRank() {
@@ -31,6 +33,10 @@ public class RankChange {
 
 	public List<Result> getRes() {
 		return res;
+	}
+	
+	public String getRankTo() {
+		return rankTo;
 	}
 
 	public boolean checkRequirements(Player player) {

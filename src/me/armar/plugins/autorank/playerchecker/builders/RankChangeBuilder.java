@@ -41,7 +41,7 @@ public class RankChangeBuilder {
 
 			if (options.length <= 0) {
 				System.out
-						.print("[AutoRank] Config is not configured correctly!");
+						.print("[AutoRank] Simple Config is not configured correctly!");
 				autorank.getServer().getPluginManager().disablePlugin(autorank);
 				return null;
 			}
@@ -67,7 +67,7 @@ public class RankChangeBuilder {
 			message.setAutorank(autorank);
 			res.add(message);
 
-			result.add(new RankChange(rank, req, res));
+			result.add(new RankChange(rank, options[0], req, res));
 		}
 
 		return result;
@@ -104,8 +104,17 @@ public class RankChangeBuilder {
 					res.add(createResult(resu, (String) resList.get(resu)));
 				}
 			}
+			String[] rankChange = section.getString(group + ".results.rank change").split(";");
+			
+			if (rankChange.length <= 0) {
+				System.out
+						.print("[AutoRank] Advanced Config is not configured correctly!");
+				autorank.getServer().getPluginManager().disablePlugin(autorank);
+				return null;
+			}
 
-			result.add(new RankChange(group, req, res));
+			String rankTo = rankChange[1];
+			result.add(new RankChange(group, rankTo, req, res));
 		}
 
 		return result;
