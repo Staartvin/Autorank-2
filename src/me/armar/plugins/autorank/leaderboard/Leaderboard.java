@@ -63,14 +63,14 @@ public class Leaderboard {
 		List<String> stringList = new ArrayList<String>();
 		stringList.add("-------- Autorank Leaderboard --------");
 
-		for (int i = leaderboardLength; i > 0 && itr.hasNext(); i--) {
+		for (int i = 0; i < leaderboardLength && itr.hasNext(); i++) {
 			Entry<String, Integer> entry = (Entry<String, Integer>) itr.next();
 			String name = entry.getKey();
 			Integer time = entry.getValue().intValue();
 
 			String message = layout.replaceAll("&p", name);
-
-			message = message.replaceAll("&r", Integer.toString(11 - i));
+			
+			message = message.replaceAll("&r", Integer.toString(i + 1));
 			message = message.replaceAll("&tm", Integer.toString(time));
 			message = message.replaceAll("&th", Integer.toString(time / 60));
 			message = message.replaceAll("&d", Integer.toString(time / 1440));
