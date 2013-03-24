@@ -28,7 +28,7 @@ public class Leaderboard {
 	private Date date = new Date();
 	private Autorank plugin;
 	private int leaderboardLength = 10;
-	private String layout = "&r | &p - &d day(s), &h hour(s) and &m minute(s).";
+	private String layout = "§6&r | §b&p - §7&d day(s), &h hour(s) and &m minute(s).";
 
 	public Leaderboard(Autorank plugin) {
 		this.plugin = plugin;
