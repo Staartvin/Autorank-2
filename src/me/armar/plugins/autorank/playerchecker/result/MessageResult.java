@@ -18,7 +18,7 @@ public class MessageResult extends Result {
 		if (player == null) {
 			return false;
 		}
-		player.sendMessage(msg.replaceAll("(&([a-f0-9]))", "\u00A7$2"));
+		player.sendMessage(msg.replaceAll("(&([a-z0-9]))", "\u00A7$2"));
 		return msg != null;
 	}
 
