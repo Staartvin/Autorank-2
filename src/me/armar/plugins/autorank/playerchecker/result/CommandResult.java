@@ -16,7 +16,7 @@ public class CommandResult extends Result {
 		this.server = this.getAutorank().getServer();
 		List<String> replace = new ArrayList<String>();
 		for (String command:commands) {
-			replace.add(command);
+			replace.add(command.trim());
 		}
 		this.commands = replace;
 		return true;
