@@ -1,16 +1,20 @@
 package me.armar.plugins.autorank.permissions;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
+import me.armar.plugins.autorank.Autorank;
+
 import org.anjocaido.groupmanager.GroupManager;
+import org.anjocaido.groupmanager.data.Group;
 import org.anjocaido.groupmanager.dataholder.OverloadedWorldHolder;
 import org.anjocaido.groupmanager.permissions.AnjoPermissionsHandler;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
-
-import me.armar.plugins.autorank.Autorank;
 
 /**
  * @author Staartvin
@@ -58,7 +62,7 @@ public class GroupManagerHandler {
 		return true;
 	}
  
-	public List<String> getGroups( Player player)
+	public List<String> getPlayerGroups(Player player)
 	{
 		AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldPermissions(player);
 		if (handler == null)
@@ -78,7 +82,7 @@ public class GroupManagerHandler {
 		return handler.getUserPrefix(player.getName());
 	}
  
-	public String getSuffix( Player player)
+	public String getSuffix(Player player)
 	{
 		AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldPermissions(player);
 		if (handler == null)
@@ -101,5 +105,25 @@ public class GroupManagerHandler {
 	public boolean addPlayerToGroup(Player player, String groupName) {
 		return setGroup(player, groupName);
 		
+	}
+	
+	public String[] getGroups() {
+		List<String> groups = new ArrayList<String>();
+		
+		for (World world:plugin.getServer().getWorlds()) {
+			String worldName = world.getName();
+			Collection<Group> worldGroup = groupManager.getWorldsHolder().getWorldData(worldName).getGroupList();
+			List<Group> list  = new ArrayList<Group>(worldGroup);
+			for (Group group:list) {
+				groups.add(group.getName());
+			}
+		}
+		String[] groupArray = new String[groups.size()];
+		
+		// Repopulate the empty array.
+		for (int i=0;i<groups.size();i++) {
+			groupArray[i] = groups.get(i);
+		}
+		return groupArray;
 	}
 }

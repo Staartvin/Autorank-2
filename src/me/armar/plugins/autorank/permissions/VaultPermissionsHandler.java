@@ -43,12 +43,33 @@ public class VaultPermissionsHandler {
 				oldGroup));
 	}
 
+	/**
+	 * Remove a player from a group
+	 * @param player Player to remove
+	 * @param world On a specific world
+	 * @param group Group to remove the player from
+	 * @return true if done, false if failed
+	 */
 	public boolean removeGroup(Player player, String world, String group) {
 		return permission.playerRemoveGroup(world, player.getName(), group);
 	}
 
+	/**
+	 * Add a player to group
+	 * @param player Player to add
+	 * @param world On a specific world
+	 * @param group Group to add the player to
+	 * @return true if done, false if failed
+	 */
 	public boolean addGroup(Player player, String world, String group) {
 		return permission.playerAddGroup(world, player.getName(), group);
 	}
 
+	/**
+	 * Get all known groups
+	 * @return an array of strings containing all setup groups of the permissions plugin.
+	 */
+	public String[] getGroups() {
+		return permission.getGroups();
+	}
 }
