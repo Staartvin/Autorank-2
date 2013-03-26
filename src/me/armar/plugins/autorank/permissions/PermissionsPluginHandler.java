@@ -28,7 +28,7 @@ public class PermissionsPluginHandler {
 			if (groupManagerHandler == null) {
 				groupManagerHandler = new GroupManagerHandler(plugin);	
 			}
-			List<String> groups = groupManagerHandler.getGroups(player);
+			List<String> groups = groupManagerHandler.getPlayerGroups(player);
 			String[] array = (String[]) groups.toArray();
 			return array;
 		}
@@ -43,9 +43,29 @@ public class PermissionsPluginHandler {
 	public boolean replaceGroup(Player player, String world, String oldGroup,
 			String newGroup) {
 		if (plugin.getPermissionsHandler().findGroupManager(plugin))  {
+			if (groupManagerHandler == null) {
+				groupManagerHandler = new GroupManagerHandler(plugin);	
+			}
 			return groupManagerHandler.addPlayerToGroup(player, newGroup);
 		} else {
+			if (vPermissionsHandler == null) {
+				vPermissionsHandler =  new VaultPermissionsHandler(plugin);	
+			}
 			return vPermissionsHandler.replaceGroup(player, world, oldGroup, newGroup);
+		}
+	}
+	
+	public String[] getGroups() {
+		if (plugin.getPermissionsHandler().findGroupManager(plugin))  {
+			if (groupManagerHandler == null) {
+				groupManagerHandler = new GroupManagerHandler(plugin);	
+			}
+			return groupManagerHandler.getGroups();
+		} else {
+			if (vPermissionsHandler == null) {
+				vPermissionsHandler =  new VaultPermissionsHandler(plugin);	
+			}
+			return vPermissionsHandler.getGroups();
 		}
 	}
 
