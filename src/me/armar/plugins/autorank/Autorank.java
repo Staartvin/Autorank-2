@@ -22,6 +22,7 @@ import me.armar.plugins.autorank.playerchecker.result.MessageResult;
 import me.armar.plugins.autorank.playerchecker.result.RankChangeResult;
 import me.armar.plugins.autorank.playerchecker.result.Result;
 import me.armar.plugins.autorank.playtimes.Playtimes;
+import me.armar.plugins.autorank.validations.ValidateHandler;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -37,6 +38,7 @@ public class Autorank extends JavaPlugin {
 	private SimpleYamlConfiguration advancedConfig;
 	private PermissionsPluginHandler permPlugHandler;
 	private LanguageHandler languageHandler;
+	private ValidateHandler validateHandler;
 	private static Logger log = Bukkit.getLogger();
 
 	public void onEnable() {
@@ -65,6 +67,9 @@ public class Autorank extends JavaPlugin {
 		// Create permission plugin handler class
 		setPermPlugHandler(new PermissionsPluginHandler(this));
 		
+		// Create validate handler
+		setValidateHandler(new ValidateHandler(this));
+		
 
 		AdditionalRequirementBuilder req = this.getPlayerChecker().getBuilder()
 				.getRequirementBuilder();
@@ -89,6 +94,11 @@ public class Autorank extends JavaPlugin {
 		// Register command
 		
 		getCommand("ar").setExecutor(new Commands(this));
+		
+		if (getValidateHandler().validateConfigGroups(getAdvancedConfig()) == false) {
+			getServer().getPluginManager().disablePlugin(this);
+			return;
+		}
 
 		Autorank.logMessage(String.format("Autorank %s has been enabled!", getDescription().getVersion()));
 	}
@@ -108,7 +118,7 @@ public class Autorank extends JavaPlugin {
 		setAdvancedConfig(null);
 
 		// Make sure all tasks are cancelled after shutdown. This seems obvious, but when a player /reloads, the server creates an instance of the plugin which causes duplicate tasks to run. 
-		getServer().getScheduler().cancelAllTasks();
+		getServer().getScheduler().cancelTasks(this);
 
 		Autorank.logMessage(String.format("Autorank %s has been disabled!", getDescription().getVersion()));
 	}
@@ -216,6 +226,14 @@ public class Autorank extends JavaPlugin {
 
 	public void setPermPlugHandler(PermissionsPluginHandler permPlugHandler) {
 		this.permPlugHandler = permPlugHandler;
+	}
+
+	public ValidateHandler getValidateHandler() {
+		return validateHandler;
+	}
+
+	public void setValidateHandler(ValidateHandler validateHandler) {
+		this.validateHandler = validateHandler;
 	}
 
 }
