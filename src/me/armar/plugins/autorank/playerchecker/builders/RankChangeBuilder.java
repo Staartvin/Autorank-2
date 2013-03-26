@@ -112,8 +112,8 @@ public class RankChangeBuilder {
 				autorank.getServer().getPluginManager().disablePlugin(autorank);
 				return null;
 			}
-
-			String rankTo = rankChange[1];
+			
+			String rankTo = rankChange[1].trim();
 			result.add(new RankChange(group, rankTo, req, res));
 		}
 

@@ -18,7 +18,7 @@ public class RankChangeResult extends Result {
 			world = options[2].trim();
 		}
 		return from != null && to != null;
-	}
+	} 
 
 	@Override
 	public boolean applyResult(Player player) {
