@@ -47,7 +47,7 @@ ranks:
             has item: 50
         results:
             rank change: member;vip
-            command: 'say &p has just been promoted to VIP!; give &p 1 100;tell &p You have just earned 100 stone!'
+            command: 'say &p has just been promoted to VIP!; give &p 1 100; tell &p You have just earned 100 stone!'
             message: 'Congratulations, you are now a vip.'
             
 # new requirements and results can be added by other plugins that hook into the Autorank API
