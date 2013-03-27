@@ -42,8 +42,7 @@ public class Leaderboard {
 	}
 
 	public void sendLeaderboard(CommandSender sender) {
-		// TODO if (date.getTime() - lastUpdatedTime > 600000) {
-		if (date.getTime() - lastUpdatedTime > 30000) {
+		if (date.getTime() - lastUpdatedTime > 600000) {
 			// update leaderboard is last updated longer than 10 minutes ago
 			updateLeaderboard();
 		}
