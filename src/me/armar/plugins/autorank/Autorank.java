@@ -18,6 +18,7 @@ import me.armar.plugins.autorank.playerchecker.requirement.MoneyRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.TimeRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.WorldRequirement;
 import me.armar.plugins.autorank.playerchecker.result.CommandResult;
+import me.armar.plugins.autorank.playerchecker.result.EffectResult;
 import me.armar.plugins.autorank.playerchecker.result.MessageResult;
 import me.armar.plugins.autorank.playerchecker.result.RankChangeResult;
 import me.armar.plugins.autorank.playerchecker.result.Result;
@@ -86,6 +87,7 @@ public class Autorank extends JavaPlugin {
 
 		// Register 'main' results
 		res.registerResult("command", CommandResult.class);
+		res.registerResult("effect", EffectResult.class);
 		res.registerResult("message", MessageResult.class);
 		res.registerResult("rank change", RankChangeResult.class);
 
