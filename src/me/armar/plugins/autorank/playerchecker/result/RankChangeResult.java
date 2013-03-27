@@ -1,5 +1,7 @@
 package me.armar.plugins.autorank.playerchecker.result;
 
+import me.armar.plugins.autorank.Autorank;
+
 import org.bukkit.entity.Player;
 
 public class RankChangeResult extends Result {
@@ -11,8 +13,8 @@ public class RankChangeResult extends Result {
 	@Override
 	public boolean setOptions(String[] options) {
 		//1 arg -> from group that the rank is being applied for to arg 0
-		if (options.length == 2) {
-			to = options[1].trim();
+		if (options.length == 1) {
+			to = options[0].trim();
 		}
 		//2 args -> from arg 0 to arg 1
 		if (options.length == 2) {
@@ -38,6 +40,8 @@ public class RankChangeResult extends Result {
 		}else{
 			oldrank = from;
 		}
+		
+		Autorank.logMessage(oldrank + " -> " + to);
 		
 		return this.getAutorank().getPermPlugHandler()
 				.replaceGroup(player, world, oldrank, to);
