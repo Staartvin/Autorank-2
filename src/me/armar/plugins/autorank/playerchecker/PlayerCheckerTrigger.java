@@ -37,7 +37,7 @@ public class PlayerCheckerTrigger implements Runnable {
 		if (playersToBeChecked.size() != 0) {
 			Player player = playersToBeChecked.get(0);
 
-			if (!player.hasPermission("autorank.exclude"))
+			if (!player.hasPermission("autorank.exclude") || player.hasPermission("autorank.rsefrxsgtse"))//dummy permission to check for OP
 				checker.checkPlayer(player);
 
 			playersToBeChecked.remove(player);
