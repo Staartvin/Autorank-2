@@ -113,7 +113,13 @@ public class RankChangeBuilder {
 				return null;
 			}
 			
-			String rankTo = rankChange[1].trim();
+			String rankTo = null;
+			if(rankChange.length == 1){
+				rankTo = rankChange[0].trim();
+			}else{
+				rankTo = rankChange[1].trim();
+			}
+			
 			result.add(new RankChange(group, rankTo, req, res));
 		}
 
