@@ -7,7 +7,7 @@
 #                                                                           #
 #############################################################################
 
-use advanced config: true
+use advanced config: false
 # all other advanced settings are ignored if this is set to false
 
 afk integration: true
