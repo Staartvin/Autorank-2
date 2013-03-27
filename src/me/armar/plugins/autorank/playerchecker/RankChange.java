@@ -104,7 +104,12 @@ public class RankChange {
 			if (!first)
 				b.append(", ");
 			first = false;
-			b.append(r.toString());
+			if(r!= null){
+				b.append(r.toString());
+			}else{
+				b.append("NULL");
+			}
+			
 		}
 		return b.toString();
 	}
