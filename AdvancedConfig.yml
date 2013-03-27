@@ -62,6 +62,7 @@ ranks:
 #       has item: id(:data) (checks the players inventory for the item)
 # 
 #   results:
+#       rank change: new-rank
 #       rank change: old-rank; new-rank
 #       rank change: old-rank; new-rank; world (only works for permissions plugins that support this)
 #       message: 'You got ranked up'

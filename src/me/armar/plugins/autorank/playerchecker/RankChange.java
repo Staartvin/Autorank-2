@@ -67,13 +67,13 @@ public class RankChange {
 		return failed;
 	}
 
-	public boolean applyChange(Player player) {
+	public boolean applyChange(Player player, String group) {
 		boolean result = true;
 
 		if (checkRequirements(player)) {
 			for (Result r : res) {
 				if (r != null)
-					if (!r.applyResult(player))
+					if (!r.applyResult(player, group))
 						result = false;
 			}
 

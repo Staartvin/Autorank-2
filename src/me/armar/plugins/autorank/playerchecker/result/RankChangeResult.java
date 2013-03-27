@@ -10,20 +10,43 @@ public class RankChangeResult extends Result {
 
 	@Override
 	public boolean setOptions(String[] options) {
-		if (options.length > 1) {
+		//1 arg -> from group that the rank is being applied for to arg 0
+		if (options.length == 2) {
+			to = options[1].trim();
+		}
+		//2 args -> from arg 0 to arg 1
+		if (options.length == 2) {
 			from = options[0].trim();
 			to = options[1].trim();
 		}
-		if (options.length > 2) {
+		//3 args -> from arg 0 to arg 1 in world arg 2
+		if (options.length == 3) {
+			from = options[0].trim();
+			to = options[1].trim();
 			world = options[2].trim();
 		}
-		return from != null && to != null;
-	} 
+		
+		
+		return to != null;
+	}
+	
+	@Override
+	public boolean applyResult(Player player, String group){
+		String oldrank = null;
+		if(from == null){
+			oldrank = group;
+		}else{
+			oldrank = from;
+		}
+		
+		return this.getAutorank().getPermPlugHandler()
+				.replaceGroup(player, world, oldrank, to);
+	}
 
 	@Override
 	public boolean applyResult(Player player) {
 		return this.getAutorank().getPermPlugHandler()
 				.replaceGroup(player, world, from, to);
-	}
+		}
 
 }

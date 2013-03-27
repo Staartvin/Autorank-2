@@ -19,6 +19,10 @@ public abstract class Result {
 	public abstract boolean setOptions(String[] options);
 
 	public abstract boolean applyResult(Player player);
+	
+	public boolean applyResult(Player player, String group){
+		return applyResult(player);
+	}
 
 	public String toString() {
 		return this.getClass().getSimpleName();
