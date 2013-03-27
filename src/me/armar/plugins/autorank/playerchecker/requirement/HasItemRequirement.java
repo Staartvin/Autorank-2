@@ -1,4 +1,4 @@
-package me.armar.plugins.autorank.playerchecker.additionalrequirement;
+package me.armar.plugins.autorank.playerchecker.requirement;
 
 import me.armar.plugins.autorank.AutorankTools;
 
@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
-public class HasItemRequirement extends AdditionalRequirement {
+public class HasItemRequirement extends Requirement {
 
 	ItemStack item = null;
 

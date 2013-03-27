@@ -1,10 +1,10 @@
-package me.armar.plugins.autorank.playerchecker.additionalrequirement;
+package me.armar.plugins.autorank.playerchecker.requirement;
 
 import me.armar.plugins.autorank.AutorankTools;
 
 import org.bukkit.entity.Player;
 
-public class TimeRequirement extends AdditionalRequirement {
+public class TimeRequirement extends Requirement {
 
 	int time = -1;
 

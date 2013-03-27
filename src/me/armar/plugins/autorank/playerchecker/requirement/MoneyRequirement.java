@@ -1,8 +1,8 @@
-package me.armar.plugins.autorank.playerchecker.additionalrequirement;
+package me.armar.plugins.autorank.playerchecker.requirement;
 
 import org.bukkit.entity.Player;
 
-public class MoneyRequirement extends AdditionalRequirement {
+public class MoneyRequirement extends Requirement {
 
 	private double minMoney = 999999999;
 

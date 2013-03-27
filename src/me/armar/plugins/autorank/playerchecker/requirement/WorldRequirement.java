@@ -1,8 +1,8 @@
-package me.armar.plugins.autorank.playerchecker.additionalrequirement;
+package me.armar.plugins.autorank.playerchecker.requirement;
 
 import org.bukkit.entity.Player;
 
-public class WorldRequirement extends AdditionalRequirement {
+public class WorldRequirement extends Requirement {
 
 	String world = null;
 

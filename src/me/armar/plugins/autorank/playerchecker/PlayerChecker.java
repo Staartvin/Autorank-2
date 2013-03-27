@@ -7,8 +7,8 @@ import java.util.Map;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
-import me.armar.plugins.autorank.playerchecker.additionalrequirement.AdditionalRequirement;
 import me.armar.plugins.autorank.playerchecker.builders.RankChangeBuilder;
+import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 
 import org.bukkit.entity.Player;
 
@@ -83,9 +83,9 @@ public class PlayerChecker {
 		return result;
 	}
 
-	public Map<RankChange, List<AdditionalRequirement>> getFailedRequirementsForApplicableGroup(
+	public Map<RankChange, List<Requirement>> getFailedRequirementsForApplicableGroup(
 			Player player) {
-		Map<RankChange, List<AdditionalRequirement>> result = new HashMap<RankChange, List<AdditionalRequirement>>();
+		Map<RankChange, List<Requirement>> result = new HashMap<RankChange, List<Requirement>>();
 
 		String[] groups = plugin.getPermPlugHandler().getPlayerGroups(player);
 

@@ -1,10 +1,10 @@
-package me.armar.plugins.autorank.playerchecker.additionalrequirement;
+package me.armar.plugins.autorank.playerchecker.requirement;
 
 import me.armar.plugins.autorank.AutorankTools;
 
 import org.bukkit.entity.Player;
 
-public class GamemodeRequirement extends AdditionalRequirement {
+public class GamemodeRequirement extends Requirement {
 
 	int gamemode = -1;
 

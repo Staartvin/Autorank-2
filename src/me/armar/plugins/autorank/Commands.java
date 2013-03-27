@@ -7,7 +7,7 @@ import java.util.Set;
 
 import me.armar.plugins.autorank.language.Language;
 import me.armar.plugins.autorank.playerchecker.RankChange;
-import me.armar.plugins.autorank.playerchecker.additionalrequirement.AdditionalRequirement;
+import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -194,7 +194,7 @@ public class Commands implements CommandExecutor {
 	}
 
 	private void check(CommandSender sender, Player player) {
-		Map<RankChange, List<AdditionalRequirement>> failed = plugin
+		Map<RankChange, List<Requirement>> failed = plugin
 				.getPlayerChecker().getFailedRequirementsForApplicableGroup(
 						player);
 
@@ -234,7 +234,7 @@ public class Commands implements CommandExecutor {
 			Iterator<RankChange> it = keySet.iterator();
 			while (it.hasNext()) {
 				RankChange rank = it.next();
-				List<AdditionalRequirement> reqs = failed.get(rank);
+				List<Requirement> reqs = failed.get(rank);
 
 				if (reqs.size() == 0) {
 					AutorankTools.sendColoredMessage(
@@ -248,7 +248,7 @@ public class Commands implements CommandExecutor {
 							language.getDoesntMeetRequirements()
 									+ rank.getRankTo() + ":");
 
-					for (AdditionalRequirement req : reqs) {
+					for (Requirement req : reqs) {
 						if (req != null)
 							AutorankTools.sendColoredMessage(sender, "     - "
 									+ req.getDescription());

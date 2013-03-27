@@ -1,10 +1,10 @@
-package me.armar.plugins.autorank.playerchecker.additionalrequirement;
+package me.armar.plugins.autorank.playerchecker.requirement;
 
 import me.armar.plugins.autorank.AutorankTools;
 
 import org.bukkit.entity.Player;
 
-public class ExpRequirement extends AdditionalRequirement {
+public class ExpRequirement extends Requirement {
 
 	private int minExp = 999999999;
 

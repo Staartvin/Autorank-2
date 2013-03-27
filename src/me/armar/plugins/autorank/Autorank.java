@@ -8,15 +8,15 @@ import me.armar.plugins.autorank.leaderboard.Leaderboard;
 import me.armar.plugins.autorank.permissions.PermissionsHandler;
 import me.armar.plugins.autorank.permissions.PermissionsPluginHandler;
 import me.armar.plugins.autorank.playerchecker.PlayerChecker;
-import me.armar.plugins.autorank.playerchecker.additionalrequirement.AdditionalRequirement;
-import me.armar.plugins.autorank.playerchecker.additionalrequirement.ExpRequirement;
-import me.armar.plugins.autorank.playerchecker.additionalrequirement.GamemodeRequirement;
-import me.armar.plugins.autorank.playerchecker.additionalrequirement.HasItemRequirement;
-import me.armar.plugins.autorank.playerchecker.additionalrequirement.MoneyRequirement;
-import me.armar.plugins.autorank.playerchecker.additionalrequirement.TimeRequirement;
-import me.armar.plugins.autorank.playerchecker.additionalrequirement.WorldRequirement;
-import me.armar.plugins.autorank.playerchecker.builders.AdditionalRequirementBuilder;
+import me.armar.plugins.autorank.playerchecker.builders.RequirementBuilder;
 import me.armar.plugins.autorank.playerchecker.builders.ResultBuilder;
+import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
+import me.armar.plugins.autorank.playerchecker.requirement.ExpRequirement;
+import me.armar.plugins.autorank.playerchecker.requirement.GamemodeRequirement;
+import me.armar.plugins.autorank.playerchecker.requirement.HasItemRequirement;
+import me.armar.plugins.autorank.playerchecker.requirement.MoneyRequirement;
+import me.armar.plugins.autorank.playerchecker.requirement.TimeRequirement;
+import me.armar.plugins.autorank.playerchecker.requirement.WorldRequirement;
 import me.armar.plugins.autorank.playerchecker.result.CommandResult;
 import me.armar.plugins.autorank.playerchecker.result.MessageResult;
 import me.armar.plugins.autorank.playerchecker.result.RankChangeResult;
@@ -71,18 +71,18 @@ public class Autorank extends JavaPlugin {
 		setValidateHandler(new ValidateHandler(this));
 		
 
-		AdditionalRequirementBuilder req = this.getPlayerChecker().getBuilder()
+		RequirementBuilder req = this.getPlayerChecker().getBuilder()
 				.getRequirementBuilder();
 		ResultBuilder res = this.getPlayerChecker().getBuilder()
 				.getResultBuilder();
 		
-		// Register additional requirements
-		req.registerAdditionalRequirement("exp", ExpRequirement.class);
-		req.registerAdditionalRequirement("money", MoneyRequirement.class);
-		req.registerAdditionalRequirement("time", TimeRequirement.class);
-		req.registerAdditionalRequirement("gamemode", GamemodeRequirement.class);
-		req.registerAdditionalRequirement("has item", HasItemRequirement.class);
-		req.registerAdditionalRequirement("world", WorldRequirement.class);
+		// Register 'main' requirements
+		req.registerRequirement("exp", ExpRequirement.class);
+		req.registerRequirement("money", MoneyRequirement.class);
+		req.registerRequirement("time", TimeRequirement.class);
+		req.registerRequirement("gamemode", GamemodeRequirement.class);
+		req.registerRequirement("has item", HasItemRequirement.class);
+		req.registerRequirement("world", WorldRequirement.class);
 
 		// Register 'main' results
 		res.registerResult("command", CommandResult.class);
@@ -148,13 +148,13 @@ public class Autorank extends JavaPlugin {
 		playerChecker.checkPlayer(player);
 	}
 
-	public void registerAdditionalRequirement(String name,
-			Class<? extends AdditionalRequirement> requirement) {
+	public void registerRequirement(String name,
+			Class<? extends Requirement> requirement) {
 		playerChecker.getBuilder().getRequirementBuilder()
-				.registerAdditionalRequirement(name, requirement);
+				.registerRequirement(name, requirement);
 	}
 
-	public void registerAdditionalResult(String name,
+	public void registerResult(String name,
 			Class<? extends Result> result) {
 		playerChecker.getBuilder().getResultBuilder()
 				.registerResult(name, result);

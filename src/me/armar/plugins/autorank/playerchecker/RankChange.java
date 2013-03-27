@@ -5,17 +5,17 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.bukkit.entity.Player;
 
-import me.armar.plugins.autorank.playerchecker.additionalrequirement.AdditionalRequirement;
+import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 import me.armar.plugins.autorank.playerchecker.result.Result;
 
 public class RankChange {
 
 	private String rank;
-	private List<AdditionalRequirement> req;
+	private List<Requirement> req;
 	private List<Result> res;
 	private String rankTo;
 
-	public RankChange(String rank, String rankTo, List<AdditionalRequirement> req,
+	public RankChange(String rank, String rankTo, List<Requirement> req,
 			List<Result> res) {
 		this.rank = rank;
 		this.req = req;
@@ -27,7 +27,7 @@ public class RankChange {
 		return rank;
 	}
 
-	public List<AdditionalRequirement> getReq() {
+	public List<Requirement> getReq() {
 		return req;
 	}
 
@@ -42,7 +42,7 @@ public class RankChange {
 	public boolean checkRequirements(Player player) {
 		boolean result = true;
 
-		for (AdditionalRequirement r : req) {
+		for (Requirement r : req) {
 			if (r != null)
 				if (!r.meetsRequirement(player)) {
 					result = false;
@@ -53,11 +53,11 @@ public class RankChange {
 		return result;
 	}
 
-	public List<AdditionalRequirement> getFailedRequirements(Player player) {
-		List<AdditionalRequirement> failed = new CopyOnWriteArrayList<AdditionalRequirement>();
+	public List<Requirement> getFailedRequirements(Player player) {
+		List<Requirement> failed = new CopyOnWriteArrayList<Requirement>();
 		failed.addAll(req);
 
-		for (AdditionalRequirement r : failed) {
+		for (Requirement r : failed) {
 			if (r != null)
 				if (r.meetsRequirement(player)) {
 					failed.remove(r);
@@ -90,7 +90,7 @@ public class RankChange {
 		b.append(": ");
 
 		boolean first = true;
-		for (AdditionalRequirement r : req) {
+		for (Requirement r : req) {
 			if (!first)
 				b.append(", ");
 			first = false;

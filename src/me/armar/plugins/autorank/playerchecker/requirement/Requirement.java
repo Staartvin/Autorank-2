@@ -1,10 +1,10 @@
-package me.armar.plugins.autorank.playerchecker.additionalrequirement;
+package me.armar.plugins.autorank.playerchecker.requirement;
 
 import me.armar.plugins.autorank.Autorank;
 
 import org.bukkit.entity.Player;
 
-public abstract class AdditionalRequirement {
+public abstract class Requirement {
 
 	private Autorank autorank;
 

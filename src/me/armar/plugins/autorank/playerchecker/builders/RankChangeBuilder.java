@@ -10,19 +10,19 @@ import org.bukkit.configuration.ConfigurationSection;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
 import me.armar.plugins.autorank.playerchecker.RankChange;
-import me.armar.plugins.autorank.playerchecker.additionalrequirement.*;
+import me.armar.plugins.autorank.playerchecker.requirement.*;
 import me.armar.plugins.autorank.playerchecker.result.*;
 
 public class RankChangeBuilder {
 
 	private ResultBuilder resultBuilder;
-	private AdditionalRequirementBuilder requirementBuilder;
+	private RequirementBuilder requirementBuilder;
 	private Autorank autorank;
 
 	public RankChangeBuilder(Autorank autorank) {
 		this.autorank = autorank;
 		setResultBuilder(new ResultBuilder());
-		setRequirementBuilder(new AdditionalRequirementBuilder());
+		setRequirementBuilder(new RequirementBuilder());
 	}
 
 	public List<RankChange> createFromSimpleConfig(
@@ -47,8 +47,8 @@ public class RankChangeBuilder {
 			}
 
 			// Time requirement
-			List<AdditionalRequirement> req = new ArrayList<AdditionalRequirement>();
-			AdditionalRequirement timeReq = new TimeRequirement();
+			List<Requirement> req = new ArrayList<Requirement>();
+			Requirement timeReq = new TimeRequirement();
 			timeReq.setOptions(new String[] { options[1] });
 			timeReq.setAutorank(autorank);
 			req.add(timeReq);
@@ -80,7 +80,7 @@ public class RankChangeBuilder {
 		ConfigurationSection section = config.getConfigurationSection("ranks");
 		for (String group : section.getKeys(false)) {
 
-			List<AdditionalRequirement> req = new ArrayList<AdditionalRequirement>();
+			List<Requirement> req = new ArrayList<Requirement>();
 			List<Result> res = new ArrayList<Result>();
 			ConfigurationSection groupSection = section
 					.getConfigurationSection(group);
@@ -131,8 +131,8 @@ public class RankChangeBuilder {
 		return res;
 	}
 
-	private AdditionalRequirement createRequirement(String type, String arg) {
-		AdditionalRequirement res = requirementBuilder.create(type);
+	private Requirement createRequirement(String type, String arg) {
+		Requirement res = requirementBuilder.create(type);
 
 		if (res != null) {
 			res.setAutorank(autorank);
@@ -150,12 +150,12 @@ public class RankChangeBuilder {
 		this.resultBuilder = resultBuilder;
 	}
 
-	public AdditionalRequirementBuilder getRequirementBuilder() {
+	public RequirementBuilder getRequirementBuilder() {
 		return requirementBuilder;
 	}
 
 	private void setRequirementBuilder(
-			AdditionalRequirementBuilder requirementBuilder) {
+			RequirementBuilder requirementBuilder) {
 		this.requirementBuilder = requirementBuilder;
 	}
 
