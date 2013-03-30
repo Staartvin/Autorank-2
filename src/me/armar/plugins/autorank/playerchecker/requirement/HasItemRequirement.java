@@ -13,15 +13,19 @@ public class HasItemRequirement extends Requirement {
 	@Override
 	public boolean setOptions(String[] options) {
 		int id = 0;
+		int amount = 1;
 		byte data = 0;
 
+		
 		if (options.length > 0)
 			id = AutorankTools.stringtoInt(options[0]);
 		if (options.length > 1)
-			data = (byte) AutorankTools.stringtoInt(options[1]);
+			amount = AutorankTools.stringtoInt(options[1]);
+		if (options.length > 1)
+		    data = (byte) AutorankTools.stringtoInt(options[2]);
 
 		//item = new ItemStack(id, 1, (short) 0, data);
-		item = (new MaterialData(id, (byte) data)).toItemStack(1);
+		item = (new MaterialData(id, (byte) data)).toItemStack(amount);
 
 		return item != null;
 	}

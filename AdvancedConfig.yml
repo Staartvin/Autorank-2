@@ -59,18 +59,15 @@ ranks:
 #       money: 2000 (requires vault ! Player has to have at least this amount of money)
 #       world: world_nether (player has to be in this world to get ranked)
 #       gamemode: 1 (player has to have a certain gamemode, 0 = Survival mode, 1 = Creative mode, 2 = Adventure mode)
-#       has item: id(:data) (checks the players inventory for the item)
+#       has item: id(;amount;data) (checks the players inventory for the item)
 # 
 #   results:
 #       rank change: new-rank
 #       rank change: old-rank; new-rank
 #       rank change: old-rank; new-rank; world (only works for permissions plugins that support this)
 #       message: 'You got ranked up'
-#       commands: 
-#       - 'eco give &p 100' (executes a console command. &p will be replaced by the player name)
-#       You can perform more commands with the ';' sign. If you would want to say 'hi' and 'give &p 1 100', you would do:
-#       command: 'say &p hi;give &p 1 100'
-#       effect: STEP_SOUND;8 (first arguement is the effect name, second is the effect data. For a list of possible effects go to http://jd.bukkit.org/rb/doxygen/d8/db9/enumorg_1_1bukkit_1_1Effect.html)
+#       command: 'say &p hi; give &p 1 100'(executes a console command. &p will be replaced by the player name) You can perform more commands with the ';' sign.
+#       effect: STEP_SOUND;8 (first argument is the effect name, second is the effect data. For a list of possible effects go to http://jd.bukkit.org/rb/doxygen/d8/db9/enumorg_1_1bukkit_1_1Effect.html)
 
 sql:
     enabled: false
