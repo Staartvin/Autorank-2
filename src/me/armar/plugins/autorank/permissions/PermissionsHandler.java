@@ -1,9 +1,6 @@
 package me.armar.plugins.autorank.permissions;
 
-import me.armar.plugins.autorank.Autorank;
-import net.milkbowl.vault.Vault;
-
-import org.bukkit.plugin.Plugin;
+import org.bukkit.entity.Player;
 
 //import ru.tehkode.permissions.bukkit.PermissionsEx;
 
@@ -14,53 +11,15 @@ import org.bukkit.plugin.Plugin;
  * plugin.
  * 
  */
-public class PermissionsHandler {
+public interface PermissionsHandler {
 
-	//private Autorank plugin;
-	//private VaultPermissionsHandler vPermHandler;
 
-	public PermissionsHandler(Autorank plugin) {
-		if (findVault(plugin)) {
-			Autorank.logMessage("Vault Hooked!");
-		} else {
-			Autorank.logMessage("WARNING Vault was not found!");
-			//this.plugin = plugin;
-		}
-		//vPermHandler = new VaultPermissionsHandler(plugin);
-	}
-
-	protected boolean findVault(Autorank plugin) {
-		Plugin x = plugin.getServer().getPluginManager().getPlugin("Vault");
-		if (x != null & x instanceof Vault) {
-			return true;
-		}
-		return false;
-	}
+	public String[] getPlayerGroups(Player player);
 	
-	protected boolean findGroupManager(Autorank plugin) {
-		Plugin x = plugin.getServer().getPluginManager().getPlugin("GroupManager");
-		if (x != null) {
-			return true;
-		}
-		return false;
-	}
-
-	/*   private boolean findPermissionsBukkit(JavaPlugin plugin) {
-	Plugin x = plugin.getServer().getPluginManager().getPlugin("PermissionsBukkit");
-	if (x != null & x instanceof PermissionsPlugin) {
-	    permissionPlugin = new PermissionsBukkitHandler((PermissionsPlugin) x);
-	    return true;
-	}
-	return false;
-	   }
-
-	   private boolean findPermissionsEX(JavaPlugin plugin) {
-	Plugin x = plugin.getServer().getPluginManager().getPlugin("PermissionsEx");
-	if (x != null & x instanceof PermissionsEx) {
-	    permissionPlugin = new PermissionsEXHandler();
-	    return true;
-	}
-	return false;
-	   } */
+	public boolean removeGroup(Player player, String world, String group);
+	
+	public boolean addGroup(Player player, String world, String group);
+	
+	public String[] getGroups();
 
 }

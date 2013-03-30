@@ -5,7 +5,6 @@ import java.util.logging.Logger;
 import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
 import me.armar.plugins.autorank.language.LanguageHandler;
 import me.armar.plugins.autorank.leaderboard.Leaderboard;
-import me.armar.plugins.autorank.permissions.PermissionsHandler;
 import me.armar.plugins.autorank.permissions.PermissionsPluginHandler;
 import me.armar.plugins.autorank.playerchecker.PlayerChecker;
 import me.armar.plugins.autorank.playerchecker.builders.RequirementBuilder;
@@ -33,7 +32,6 @@ public class Autorank extends JavaPlugin {
 
 	private Leaderboard leaderboard;
 	private Playtimes playtimes;
-	private PermissionsHandler permissions;
 	private PlayerChecker playerChecker;
 	private SimpleYamlConfiguration simpleConfig;
 	private SimpleYamlConfiguration advancedConfig;
@@ -52,9 +50,6 @@ public class Autorank extends JavaPlugin {
 		
 		// Create language classes
 		setLanguageHandler(new LanguageHandler(this));
-		
-		// Create permission handler
-		setPermissionsHandler(new PermissionsHandler(this));
 		
 		// Create playtime class
 		setPlaytimes(new Playtimes(this));
@@ -164,14 +159,6 @@ public class Autorank extends JavaPlugin {
 
 	public static void logMessage(String message) {
 		log.info("[Autorank] " + message);
-	}
-
-	public PermissionsHandler getPermissionsHandler() {
-		return permissions;
-	}
-
-	private void setPermissionsHandler(PermissionsHandler permissions) {
-		this.permissions = permissions;
 	}
 
 	public Leaderboard getLeaderboard() {

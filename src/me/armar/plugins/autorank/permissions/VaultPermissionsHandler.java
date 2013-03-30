@@ -11,7 +11,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
  * VaultPermissionsHandler tackles all work that has to be done with Vault. (Most of the permissions plugins
  * are supported with Vault)
  */
-public class VaultPermissionsHandler {
+public class VaultPermissionsHandler implements PermissionsHandler {
 
 	private static Permission permission = null;
 

@@ -20,7 +20,7 @@ import org.bukkit.plugin.PluginManager;
  * @author Staartvin
  *	This file handles all work done with GroupManager.
  */
-public class GroupManagerHandler {
+public class GroupManagerHandler implements PermissionsHandler {
 
 	private Autorank plugin;
 	private GroupManager groupManager;
@@ -62,14 +62,17 @@ public class GroupManagerHandler {
 		return true;
 	}
  
-	public List<String> getPlayerGroups(Player player)
+	public String[] getPlayerGroups(Player player)
 	{
 		AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldPermissions(player);
 		if (handler == null)
 		{
 			return null;
 		}
-		return Arrays.asList(handler.getPrimaryGroup(player.getName()));
+		List<String> groups = Arrays.asList(handler.getPrimaryGroup(player.getName()));
+		String[] array = (String[]) groups.toArray();
+		
+		return array;
 	}
  
 	public String getPrefix(Player player)
@@ -125,5 +128,17 @@ public class GroupManagerHandler {
 			groupArray[i] = groups.get(i);
 		}
 		return groupArray;
+	}
+
+	@Override
+	public boolean removeGroup(Player player, String world, String group) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean addGroup(Player player, String world, String group) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

@@ -31,7 +31,6 @@ public class PlayerChecker {
 	private Autorank plugin;
 
 	public PlayerChecker(Autorank plugin) {
-		plugin.getPermissionsHandler();
 		setTrigger(new PlayerCheckerTrigger(plugin, this));
 		setBuilder(new RankChangeBuilder(plugin));
 		this.plugin = plugin;
