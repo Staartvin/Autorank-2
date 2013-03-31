@@ -10,7 +10,7 @@ public class TeleportResult extends Result{
 	
 	@Override
 	public boolean setOptions(String[] options) {
-		// x;y;z;world;yaw:pitch
+		// x;y;z;world;yaw;pitch
 		
 		if (options.length < 4) return false;
 		
@@ -27,7 +27,7 @@ public class TeleportResult extends Result{
 		if (player == null) return false;
 		
 		player.teleport(location);
-		return false;
+		return location != null;
 	}
 
 }
