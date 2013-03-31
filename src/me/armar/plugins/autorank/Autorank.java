@@ -108,8 +108,6 @@ public class Autorank extends JavaPlugin {
 
 		setPlayerChecker(null);
 
-		setPlayerChecker(null);
-
 		setSimpleConfig(null);
 
 		setAdvancedConfig(null);
