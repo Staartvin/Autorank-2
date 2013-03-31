@@ -26,6 +26,7 @@ public class English extends Language {
 	private String meetsRequirements;
 	private String rankedUpNow;
 	private String doesntMeetRequirements;
+	private String dataImported;
 	
 	public English(Autorank autorank) {
 		setAutorank(autorank);
@@ -44,6 +45,7 @@ public class English extends Language {
 		meetsRequirements = "meets all the requirements for rank ";
 		rankedUpNow = " and will now be ranked up.";
 		doesntMeetRequirements = "and doesn't meet the requirements for rank ";
+		dataImported = "New data has been imported!";
 	}
 	
 	@Override
@@ -151,5 +153,11 @@ public class English extends Language {
 	public String getDoesntMeetRequirements() {
 		// TODO Auto-generated method stub
 		return doesntMeetRequirements;
+	}
+	
+	@Override
+	public String getDataImported() {
+		// TODO Auto-generated method stub
+		return dataImported;
 	}
 }
