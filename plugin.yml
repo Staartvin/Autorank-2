@@ -44,3 +44,6 @@ permissions:
     autorank.reload:
         description: Allows reloading the config.
         default: op
+    autorank.import:
+        description: Allows importing old data.
+        default: op
