@@ -68,6 +68,7 @@ ranks:
 #       message: 'You got ranked up'
 #       command: 'say &p hi; give &p 1 100'(executes a console command. &p will be replaced by the player name) You can perform more commands with the ';' sign.
 #       effect: STEP_SOUND;8 (first argument is the effect name, second is the effect data. For a list of possible effects go to http://jd.bukkit.org/rb/doxygen/d8/db9/enumorg_1_1bukkit_1_1Effect.html)
+#       tp: x;y;z;world;yaw;pitch (tp: 0;0;0;world_nether;1.0;2.0)
 
 sql:
     enabled: false

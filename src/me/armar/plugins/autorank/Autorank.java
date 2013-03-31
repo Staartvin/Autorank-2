@@ -9,11 +9,11 @@ import me.armar.plugins.autorank.permissions.PermissionsPluginHandler;
 import me.armar.plugins.autorank.playerchecker.PlayerChecker;
 import me.armar.plugins.autorank.playerchecker.builders.RequirementBuilder;
 import me.armar.plugins.autorank.playerchecker.builders.ResultBuilder;
-import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 import me.armar.plugins.autorank.playerchecker.requirement.ExpRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.GamemodeRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.HasItemRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.MoneyRequirement;
+import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 import me.armar.plugins.autorank.playerchecker.requirement.TimeRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.WorldRequirement;
 import me.armar.plugins.autorank.playerchecker.result.CommandResult;
@@ -21,6 +21,7 @@ import me.armar.plugins.autorank.playerchecker.result.EffectResult;
 import me.armar.plugins.autorank.playerchecker.result.MessageResult;
 import me.armar.plugins.autorank.playerchecker.result.RankChangeResult;
 import me.armar.plugins.autorank.playerchecker.result.Result;
+import me.armar.plugins.autorank.playerchecker.result.TeleportResult;
 import me.armar.plugins.autorank.playtimes.Playtimes;
 import me.armar.plugins.autorank.validations.ValidateHandler;
 
@@ -85,6 +86,7 @@ public class Autorank extends JavaPlugin {
 		res.registerResult("effect", EffectResult.class);
 		res.registerResult("message", MessageResult.class);
 		res.registerResult("rank change", RankChangeResult.class);
+		res.registerResult("tp", TeleportResult.class);
 
 		playerChecker.initialiseFromConfigs(this);
 		
