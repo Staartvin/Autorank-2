@@ -19,6 +19,8 @@ public class PermissionGroupValidation {
 		
 		if (config == null) return false;
 		
+		if (!config.getBoolean("use advanced config")) return true;
+		
 		ConfigurationSection section = config.getConfigurationSection("ranks");
 		
 		Set<String> ranks = section.getKeys(false);
