@@ -5,12 +5,12 @@ import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Set;
 
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.scheduler.BukkitScheduler;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.data.SQLDataStorage;
 import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
+
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.scheduler.BukkitScheduler;
 
 public class Playtimes implements Runnable {
 
@@ -81,6 +81,10 @@ public class Playtimes implements Runnable {
 
 	public int getTime(String name) {
 		return data.getInt(name.toLowerCase());
+	}
+
+	public void importData() {
+		data.reload();
 	}
 
 	public void setTime(String name, int time) {

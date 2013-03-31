@@ -80,4 +80,9 @@ public class SimpleYamlConfiguration extends YamlConfiguration {
 			e.printStackTrace();
 		}
 	}
+	
+	public void reload() {
+		load();
+		save();
+	}
 }
