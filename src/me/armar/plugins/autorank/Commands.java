@@ -73,8 +73,8 @@ public class Commands implements CommandExecutor {
 
 				Player player = plugin.getServer().getPlayer(args[1]);
 				if (player == null) {
-					AutorankTools.sendColoredMessage(sender,
-							language.getPlayerNotOnline(args[1]));
+					AutorankTools.sendColoredMessage(sender,  args[1] + language.getHasPlayedFor()
+							+ AutorankTools.minutesToString(plugin.getTime(args[1])));
 				} else {
 					check(sender, player);
 				}
@@ -132,7 +132,7 @@ public class Commands implements CommandExecutor {
 				} catch (NumberFormatException e) {
 				}
 
-			if (value >= 0 && sender instanceof Player) {
+			if (value >= 0) {
 				plugin.setTime(args[1], value);
 				AutorankTools.sendColoredMessage(sender, language.getPlayTimeChanged(args[1], value));
 			} else {
@@ -156,7 +156,7 @@ public class Commands implements CommandExecutor {
 				} catch (NumberFormatException e) {
 				}
 
-			if (value >= 0 && sender instanceof Player) {
+			if (value >= 0) {
 				plugin.setTime(args[1], value);
 				AutorankTools.sendColoredMessage(sender, language.getPlayTimeChanged(args[1], value));
 			} else {
