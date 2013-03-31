@@ -189,7 +189,17 @@ public class Commands implements CommandExecutor {
 			plugin.reload();
 
 			return true;
-		} 
+		} else if (action.equalsIgnoreCase("import")) {
+
+			if (!hasPermission("autorank.import", sender)) {
+				return true;
+			}
+
+			AutorankTools.sendColoredMessage(sender, language.getDataImported());
+			plugin.getPlaytimes().importData();
+
+			return true;
+		}
 		return false;
 	}
 
@@ -265,6 +275,7 @@ public class Commands implements CommandExecutor {
 			sender.sendMessage(ChatColor.GREEN + "-- Autorank Commands --");
 			sender.sendMessage(ChatColor.AQUA + "/ar help <page> " + ChatColor.GRAY + "- Show a list of commands");
 			sender.sendMessage(ChatColor.AQUA + "/ar reload " + ChatColor.GRAY + "- Reload the plugin");
+			sender.sendMessage(ChatColor.AQUA + "/ar import " + ChatColor.GRAY + "- Import old data");
 			sender.sendMessage(ChatColor.BLUE + "Page 2 of " + maxPages);
 		} else {
 			sender.sendMessage(ChatColor.GREEN + "-- Autorank Commands --");
