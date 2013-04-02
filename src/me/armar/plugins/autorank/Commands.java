@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import me.armar.plugins.autorank.language.Language;
+import me.armar.plugins.autorank.language.LanguageHandler;
 import me.armar.plugins.autorank.playerchecker.RankChange;
 import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 
@@ -22,7 +23,7 @@ public class Commands implements CommandExecutor {
 
 	public Commands(Autorank plugin) {
 		this.plugin = plugin;
-		this.language = plugin.getLanguageHandler().getLanguage();
+		this.language = LanguageHandler.getLanguage();
 	}
 
 	private boolean hasPermission(String permission, CommandSender sender) {
