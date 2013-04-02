@@ -1,5 +1,7 @@
 package me.armar.plugins.autorank.playerchecker.requirement;
 
+import me.armar.plugins.autorank.language.LanguageHandler;
+
 import org.bukkit.entity.Player;
 
 public class WorldRequirement extends Requirement {
@@ -20,7 +22,7 @@ public class WorldRequirement extends Requirement {
 
 	@Override
 	public String getDescription() {
-		return "Need to be in world " + world + ".";
+		return LanguageHandler.getLanguage().getWorldRequirement(world);
 	}
 
 }

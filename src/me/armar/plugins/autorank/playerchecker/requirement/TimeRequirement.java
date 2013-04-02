@@ -1,6 +1,7 @@
 package me.armar.plugins.autorank.playerchecker.requirement;
 
 import me.armar.plugins.autorank.AutorankTools;
+import me.armar.plugins.autorank.language.LanguageHandler;
 
 import org.bukkit.entity.Player;
 
@@ -24,8 +25,7 @@ public class TimeRequirement extends Requirement {
 
 	@Override
 	public String getDescription() {
-		return "Playtime needs to be " + AutorankTools.minutesToString(time)
-				+ " or higher.";
+		return LanguageHandler.getLanguage().getTimeRequirement(AutorankTools.minutesToString(time));
 	}
 
 }

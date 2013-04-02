@@ -8,19 +8,19 @@ import me.armar.plugins.autorank.Autorank;
  */
 public class LanguageHandler {
 
-	private Autorank autorank;
-	private English english;
-	private Dutch dutch;
+	private static Autorank autorank;
+	private static English english;
+	private static Dutch dutch;
 	
 	public LanguageHandler(Autorank autorank) {
-		this.autorank = autorank;
+		LanguageHandler.autorank = autorank;
 		english = new English(autorank);
 		dutch = new Dutch(autorank);
 		
 		autorank.getLogger().info("Languages files loaded: Using " + getLanguage().getLanguage());
 	}
 	
-	public Language getLanguage() {
+	public static Language getLanguage() {
 		String language = autorank.getAdvancedConfig().getString("language", "english");
 		
 		if (language.equalsIgnoreCase("english")) {

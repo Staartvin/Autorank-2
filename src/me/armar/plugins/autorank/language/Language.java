@@ -11,7 +11,7 @@ public abstract class Language {
 
 	// Messages
 	public enum messages {
-		playerNotOnline, noPermission, cannotCheckConsole, playTimeChanged, invalidFormat, autorankReloaded, hasPlayedFor, isIn, noGroups, oneGroup, multipleGroups, noNextRankup, meetsRequirements, rankedUpNow, doesntMeetRequirements, dataImported
+		playerNotOnline, noPermission, cannotCheckConsole, playTimeChanged, invalidFormat, autorankReloaded, hasPlayedFor, isIn, noGroups, oneGroup, multipleGroups, noNextRankup, meetsRequirements, rankedUpNow, doesntMeetRequirements, dataImported, timeRequirement
 	};
 
 	public abstract void setAutorank(Autorank autorank);
@@ -51,4 +51,8 @@ public abstract class Language {
 	public abstract String getDoesntMeetRequirements();
 	
 	public abstract String getDataImported();
+	
+	public abstract String getTimeRequirement(String time);
+	
+	public abstract String getWorldRequirement(String world);
 }
