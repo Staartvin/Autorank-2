@@ -1,7 +1,6 @@
 package me.armar.plugins.autorank.leaderboard;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -16,7 +15,7 @@ import org.bukkit.command.CommandSender;
 
 /*
  * Leaderboard stores how when the last update was and if someone wants to 
- * display it and it it outdated (set to 30 seconds right now for debugging) 
+ * display it and it it outdated (set to 10 minutes) 
  * it will generate a new leaderboard.
  * 
  */
@@ -25,7 +24,6 @@ public class Leaderboard {
 
 	private String[] messages;
 	private long lastUpdatedTime;
-	private Date date = new Date();
 	private Autorank plugin;
 	private int leaderboardLength = 10;
 	private String layout = "§6&r | §b&p - §7&d day(s), &h hour(s) and &m minute(s).";
@@ -42,18 +40,17 @@ public class Leaderboard {
 	}
 
 	public void sendLeaderboard(CommandSender sender) {
-		if (date.getTime() - lastUpdatedTime > 600000) {
+		if (System.currentTimeMillis() - lastUpdatedTime > 600000) {
 			// update leaderboard is last updated longer than 10 minutes ago
 			updateLeaderboard();
 		}
-
 		for (String msg : messages) {
 			AutorankTools.sendColoredMessage(sender, msg);
 		}
 	}
 
 	private void updateLeaderboard() {
-		lastUpdatedTime = date.getTime();
+		lastUpdatedTime = System.currentTimeMillis();
 
 		TreeMap<String, Integer> sortedPlaytimes = getSortedPlaytimes();
 		Iterator<Entry<String, Integer>> itr = sortedPlaytimes.entrySet()
