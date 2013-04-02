@@ -3,33 +3,29 @@ package me.armar.plugins.autorank.language;
 import me.armar.plugins.autorank.Autorank;
 
 /**
- * @author Vincent
- * Return the language being used.
+ * @author Vincent Return the language being used.
  */
 public class LanguageHandler {
 
-	private static Autorank autorank;
-	private static English english;
-	private static Dutch dutch;
-	
+	private static Language language;
+
 	public LanguageHandler(Autorank autorank) {
-		LanguageHandler.autorank = autorank;
-		english = new English(autorank);
-		dutch = new Dutch(autorank);
-		
-		autorank.getLogger().info("Languages files loaded: Using " + getLanguage().getLanguage());
-	}
-	
-	public static Language getLanguage() {
-		String language = autorank.getAdvancedConfig().getString("language", "english");
-		
-		if (language.equalsIgnoreCase("english")) {
-			return english;
-		}
-		else if (language.equalsIgnoreCase("dutch")) {
-			return dutch;
+		String configLanguage = autorank.getAdvancedConfig().getString(
+				"language", "english");
+
+		if (configLanguage.equalsIgnoreCase("english")) {
+			language = new English(autorank);
+		} else if (configLanguage.equalsIgnoreCase("dutch")) {
+			language = new Dutch(autorank);
 		} else {
-			return english;
+			language = new English(autorank);
 		}
+
+		autorank.getLogger().info(
+				"Languages files loaded: Using " + getLanguage().getLanguage());
+	}
+
+	public static Language getLanguage() {
+		return language;
 	}
 }
