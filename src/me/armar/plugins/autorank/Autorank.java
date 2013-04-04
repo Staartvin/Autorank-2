@@ -58,16 +58,15 @@ public class Autorank extends JavaPlugin {
 		// Create leaderboard class
 		setLeaderboard(new Leaderboard(this));
 		
-		// Create player check class
-		setPlayerChecker(new PlayerChecker(this));
-		
 		// Create permission plugin handler class
 		setPermPlugHandler(new PermissionsPluginHandler(this));
+		
+		// Create player check class
+		setPlayerChecker(new PlayerChecker(this));
 		
 		// Create validate handler
 		setValidateHandler(new ValidateHandler(this));
 		
-
 		RequirementBuilder req = this.getPlayerChecker().getBuilder()
 				.getRequirementBuilder();
 		ResultBuilder res = this.getPlayerChecker().getBuilder()
@@ -91,7 +90,6 @@ public class Autorank extends JavaPlugin {
 		playerChecker.initialiseFromConfigs(this);
 		
 		// Register command
-		
 		getCommand("ar").setExecutor(new Commands(this));
 		
 		if (getValidateHandler().validateConfigGroups(getAdvancedConfig()) == false) {

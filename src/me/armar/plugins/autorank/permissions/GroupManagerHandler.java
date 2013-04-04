@@ -105,8 +105,8 @@ public class GroupManagerHandler implements PermissionsHandler {
 		return handler.has(player, node);
 	}
 	
-	public boolean addPlayerToGroup(Player player, String groupName) {
-		return setGroup(player, groupName);
+	public boolean replaceGroup(Player player, String world, String groupFrom, String groupTo) {
+		return setGroup(player, groupFrom);
 		
 	}
 	
@@ -128,17 +128,5 @@ public class GroupManagerHandler implements PermissionsHandler {
 			groupArray[i] = groups.get(i);
 		}
 		return groupArray;
-	}
-
-	@Override
-	public boolean removeGroup(Player player, String world, String group) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean addGroup(Player player, String world, String group) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 }

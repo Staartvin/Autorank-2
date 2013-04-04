@@ -25,7 +25,7 @@ public class PermissionGroupValidation {
 		
 		Set<String> ranks = section.getKeys(false);
 		boolean isMissing = false;
-		String[] groups = autorank.getPermPlugHandler().getGroups();
+		String[] groups = autorank.getPermPlugHandler().getPermissionPlugin().getGroups();
 		
 		for (String rank:ranks) {
 			for (int i=0;i<groups.length;i++) {

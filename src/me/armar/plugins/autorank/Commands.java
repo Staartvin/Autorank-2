@@ -212,7 +212,7 @@ public class Commands implements CommandExecutor {
 		Set<RankChange> keySet = failed.keySet();
 		String playername = player.getName();
 
-		String[] groups = plugin.getPermPlugHandler().getPlayerGroups(player);
+		String[] groups = plugin.getPermPlugHandler().getPermissionPlugin().getPlayerGroups(player);
 		StringBuilder stringBuilder = new StringBuilder();
 		// has played for
 		stringBuilder.append(playername + language.getHasPlayedFor()

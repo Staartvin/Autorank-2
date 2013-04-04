@@ -2,8 +2,6 @@ package me.armar.plugins.autorank.permissions;
 
 import me.armar.plugins.autorank.Autorank;
 import net.milkbowl.vault.Vault;
-
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 /*
@@ -16,8 +14,7 @@ import org.bukkit.plugin.Plugin;
 public class PermissionsPluginHandler {
 
 	private Autorank plugin;
-	private GroupManagerHandler groupManagerHandler;
-	private VaultPermissionsHandler vPermissionsHandler;
+	private PermissionsHandler permissionPlugin;
 	
 	public PermissionsPluginHandler(Autorank plugin) {
 		this.plugin = plugin;
@@ -25,52 +22,22 @@ public class PermissionsPluginHandler {
 			Autorank.logMessage("Vault Hooked!");
 		} else {
 			Autorank.logMessage("WARNING Vault was not found!");
-			//this.plugin = plugin;
 		}
+		searchPermPlugin();
 	}
-	public String[] getPlayerGroups(Player player) {
-		if (findGroupManager(plugin))  {
-			
-			if (groupManagerHandler == null) {
-				groupManagerHandler = new GroupManagerHandler(plugin);	
-			}
-			return groupManagerHandler.getPlayerGroups(player);
-		}
-		else {
-			if (vPermissionsHandler == null) {
-				vPermissionsHandler =  new VaultPermissionsHandler(plugin);	
-			}
-			return vPermissionsHandler.getPlayerGroups(player);
-		}
-	}
-
-	public boolean replaceGroup(Player player, String world, String oldGroup,
-			String newGroup) {
-		if (findGroupManager(plugin))  {
-			if (groupManagerHandler == null) {
-				groupManagerHandler = new GroupManagerHandler(plugin);	
-			}
-			return groupManagerHandler.addPlayerToGroup(player, newGroup);
+	
+	private void searchPermPlugin() {
+		if (findGroupManager(plugin)) {
+			// use Groupmanager
+			permissionPlugin = new GroupManagerHandler(plugin);
 		} else {
-			if (vPermissionsHandler == null) {
-				vPermissionsHandler =  new VaultPermissionsHandler(plugin);	
-			}
-			return vPermissionsHandler.replaceGroup(player, world, oldGroup, newGroup);
+			permissionPlugin = new VaultPermissionsHandler(plugin);
+			// use Vault
 		}
 	}
 	
-	public String[] getGroups() {
-		if (findGroupManager(plugin))  {
-			if (groupManagerHandler == null) {
-				groupManagerHandler = new GroupManagerHandler(plugin);	
-			}
-			return groupManagerHandler.getGroups();
-		} else {
-			if (vPermissionsHandler == null) {
-				vPermissionsHandler =  new VaultPermissionsHandler(plugin);	
-			}
-			return vPermissionsHandler.getGroups();
-		}
+	public PermissionsHandler getPermissionPlugin() {
+		return permissionPlugin;
 	}
 	
 	protected boolean findVault(Autorank plugin) {
@@ -88,14 +55,4 @@ public class PermissionsPluginHandler {
 		}
 		return false;
 	}
-	
-/*	public boolean removeGroup(Player player, String world, String group) {
-		return vPermissionsHandler.removeGroup(player, world, group);
-	}
-
-	public boolean addGroup(Player player, String world, String group) {
-		return vPermissionsHandler.addGroup(player, world, group);
-	} */
-	
-
 }

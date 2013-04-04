@@ -16,9 +16,7 @@ public interface PermissionsHandler {
 
 	public String[] getPlayerGroups(Player player);
 	
-	public boolean removeGroup(Player player, String world, String group);
-	
-	public boolean addGroup(Player player, String world, String group);
+	public boolean replaceGroup(Player player, String world, String groupFrom, String groupTo);
 	
 	public String[] getGroups();
 

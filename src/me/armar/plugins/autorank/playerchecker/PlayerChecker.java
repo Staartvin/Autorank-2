@@ -66,7 +66,7 @@ public class PlayerChecker {
 	public boolean checkPlayer(Player player) {
 		boolean result = false;
 
-		String[] groups = plugin.getPermPlugHandler().getPlayerGroups(player);
+		String[] groups = plugin.getPermPlugHandler().getPermissionPlugin().getPlayerGroups(player);
 
 		for (String group : groups) {
 			List<RankChange> changes = rankChanges.get(group);
@@ -86,7 +86,7 @@ public class PlayerChecker {
 			Player player) {
 		Map<RankChange, List<Requirement>> result = new HashMap<RankChange, List<Requirement>>();
 
-		String[] groups = plugin.getPermPlugHandler().getPlayerGroups(player);
+		String[] groups = plugin.getPermPlugHandler().getPermissionPlugin().getPlayerGroups(player);
 
 		for (String group : groups) {
 			List<RankChange> changes = rankChanges.get(group);

@@ -27,30 +27,29 @@ public class RankChangeResult extends Result {
 			to = options[1].trim();
 			world = options[2].trim();
 		}
-		
-		
+
 		return to != null;
 	}
-	
+
 	@Override
-	public boolean applyResult(Player player, String group){
+	public boolean applyResult(Player player, String group) {
 		String oldrank = null;
-		if(from == null){
+		if (from == null) {
 			oldrank = group;
-		}else{
+		} else {
 			oldrank = from;
 		}
-		
+
 		Autorank.logMessage(oldrank + " -> " + to);
-		
-		return this.getAutorank().getPermPlugHandler()
+
+		return this.getAutorank().getPermPlugHandler().getPermissionPlugin()
 				.replaceGroup(player, world, oldrank, to);
 	}
 
 	@Override
 	public boolean applyResult(Player player) {
-		return this.getAutorank().getPermPlugHandler()
+		return this.getAutorank().getPermPlugHandler().getPermissionPlugin()
 				.replaceGroup(player, world, from, to);
-		}
+	}
 
 }
