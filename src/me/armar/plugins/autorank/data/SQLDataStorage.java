@@ -15,6 +15,13 @@ public class SQLDataStorage {
 
 	private Connection conn = null;
 
+	/**
+	 * Create a new MySQL Connection
+	 * @param hostname Hostname (Ex. 127.0.0.1:3306)
+	 * @param username Username
+	 * @param password Password
+	 * @param database Database
+	 */
 	public SQLDataStorage(String hostname, String username, String password,
 			String database) {
 		this.hostname = hostname;
@@ -22,7 +29,12 @@ public class SQLDataStorage {
 		this.password = password;
 		this.database = database;
 	}
-
+	
+	/**
+	 * Execute a query. Query cannot be null.
+	 * This query doesn't return anything. (Good for updating tables)
+	 * @param query Query to execute
+	 */
 	public void execute(String sql) {
 		Statement stmt = null;
 
@@ -52,6 +64,11 @@ public class SQLDataStorage {
 
 	}
 
+	/**
+	 * Execute a query and returns a ResultSet. Query cannot be null.
+	 * @param query Query to execute
+	 * @return ResultSet if successfully performed, null if an error occured.
+	 */
 	public ResultSet executeQuery(String sql) {
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -92,6 +109,10 @@ public class SQLDataStorage {
 		return rs;
 	}
 
+	/**
+	 * Open a new MySQL connection
+	 * @return true if connection was successfully set up. 
+	 */
 	public boolean connect() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
