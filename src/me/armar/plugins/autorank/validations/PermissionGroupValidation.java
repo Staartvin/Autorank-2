@@ -19,13 +19,20 @@ public class PermissionGroupValidation {
 		
 		if (config == null) return false;
 		
-		if (!config.getBoolean("use advanced config")) return true;
-		
-		ConfigurationSection section = config.getConfigurationSection("ranks");
-		
-		Set<String> ranks = section.getKeys(false);
 		boolean isMissing = false;
 		String[] groups = autorank.getPermPlugHandler().getPermissionPlugin().getGroups();
+		Set<String> ranks;
+		
+		// Check for advanced config.
+		if (config.getBoolean("use advanced config")) { 
+		
+		ConfigurationSection section = config.getConfigurationSection("ranks");
+		ranks = section.getKeys(false);
+		
+		} // Check for simple config
+		else {
+			ranks = config.getKeys(false);
+		}
 		
 		for (String rank:ranks) {
 			for (int i=0;i<groups.length;i++) {

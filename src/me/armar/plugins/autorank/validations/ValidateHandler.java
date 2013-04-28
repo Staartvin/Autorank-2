@@ -21,6 +21,8 @@ public class ValidateHandler {
 			autorank.getLogger().severe("Check your config!");
 			return false;
 		} else {
+			autorank.getLogger().info(
+					"Config files have been correctly setup!");
 			return true;
 		}
 	}
