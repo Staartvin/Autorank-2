@@ -39,6 +39,9 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 
 	public boolean replaceGroup(Player player, String world, String oldGroup,
 			String newGroup) {
+		if (world == null) {
+			world = player.getWorld().getName();
+		}
 		return (addGroup(player, world, newGroup) && removeGroup(player, world,
 				oldGroup));
 	}
