@@ -92,10 +92,18 @@ public class Autorank extends JavaPlugin {
 		// Register command
 		getCommand("ar").setExecutor(new Commands(this));
 		
-		if (getValidateHandler().validateConfigGroups(getAdvancedConfig()) == false) {
-			getServer().getPluginManager().disablePlugin(this);
-			return;
+		if (getAdvancedConfig().getBoolean("use advanced config")) {
+			if (getValidateHandler().validateConfigGroups(getAdvancedConfig()) == false) {
+				getServer().getPluginManager().disablePlugin(this);
+				return;
+			}
+		} else {
+			if (getValidateHandler().validateConfigGroups(getSimpleConfig()) == false) {
+				getServer().getPluginManager().disablePlugin(this);
+				return;
+			}
 		}
+		
 
 		Autorank.logMessage(String.format("Autorank %s has been enabled!", getDescription().getVersion()));
 	}
