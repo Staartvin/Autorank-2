@@ -39,8 +39,12 @@ public class RankChangeResult extends Result {
 		} else {
 			oldrank = from;
 		}
-
-		Autorank.logMessage(oldrank + " -> " + to);
+		if (world != null) {
+			Autorank.logMessage(oldrank + " -> " + to + " on world " + world);
+		} else {
+			Autorank.logMessage(oldrank + " -> " + to + " on global");
+		}
+		
 
 		return this.getAutorank().getPermPlugHandler().getPermissionPlugin()
 				.replaceGroup(player, world, oldrank, to);
