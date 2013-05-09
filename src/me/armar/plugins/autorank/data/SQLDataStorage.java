@@ -84,7 +84,10 @@ public class SQLDataStorage {
 				System.out.println("SQLException: " + ex.getMessage());
 				System.out.println("SQLState: " + ex.getSQLState());
 				System.out.println("VendorError: " + ex.getErrorCode());
-			} finally {
+				
+			} 
+			// Removed this because the ResultSet would always be null on return.
+			/*finally {
 
 				if (rs != null) {
 					try {
@@ -103,7 +106,7 @@ public class SQLDataStorage {
 
 					stmt = null;
 				}
-			}
+			} */
 		}
 
 		return rs;
