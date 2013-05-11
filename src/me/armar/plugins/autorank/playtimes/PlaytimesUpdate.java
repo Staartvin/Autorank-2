@@ -44,7 +44,7 @@ public class PlaytimesUpdate implements Runnable {
 
 	private void updateMinutesPlayed(Player player) {
 		if ((!player.hasPermission("autorank.timeexclude") || player.hasPermission("autorank.rsefrxsgtse"))//dummy permission to check for OP
-                        && (ess == null || !ess.getUser(player).isAfk())) {
+                        && (ess == null || !ess.getUser(player).isAfk() || !ess.getUser(player).isJailed())) {
 			String playerName = player.getName().toLowerCase();
 			if (!playtimes.getKeys().contains(playerName)) {
 				playtimes.setTime(playerName, 0);
