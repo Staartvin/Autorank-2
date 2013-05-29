@@ -9,6 +9,7 @@ import me.armar.plugins.autorank.permissions.PermissionsPluginHandler;
 import me.armar.plugins.autorank.playerchecker.PlayerChecker;
 import me.armar.plugins.autorank.playerchecker.builders.RequirementBuilder;
 import me.armar.plugins.autorank.playerchecker.builders.ResultBuilder;
+import me.armar.plugins.autorank.playerchecker.requirement.BlocksBrokenRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.ExpRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.GamemodeRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.HasItemRequirement;
@@ -23,6 +24,7 @@ import me.armar.plugins.autorank.playerchecker.result.RankChangeResult;
 import me.armar.plugins.autorank.playerchecker.result.Result;
 import me.armar.plugins.autorank.playerchecker.result.TeleportResult;
 import me.armar.plugins.autorank.playtimes.Playtimes;
+import me.armar.plugins.autorank.statsapi.StatsHandler;
 import me.armar.plugins.autorank.validations.ValidateHandler;
 
 import org.bukkit.Bukkit;
@@ -39,6 +41,7 @@ public class Autorank extends JavaPlugin {
 	private PermissionsPluginHandler permPlugHandler;
 	private LanguageHandler languageHandler;
 	private ValidateHandler validateHandler;
+	private StatsHandler statsHandler;
 	private static Logger log = Bukkit.getLogger();
 
 	public void onEnable() {
@@ -67,6 +70,13 @@ public class Autorank extends JavaPlugin {
 		// Create validate handler
 		setValidateHandler(new ValidateHandler(this));
 		
+		// Create stats handler
+		setStatsHandler(new StatsHandler(this));
+		
+		if (statsHandler.setupStatsAPI()) {
+			getLogger().info("Hooked into Stats! Extra requirements can be used.");
+		}
+		
 		RequirementBuilder req = this.getPlayerChecker().getBuilder()
 				.getRequirementBuilder();
 		ResultBuilder res = this.getPlayerChecker().getBuilder()
@@ -79,6 +89,7 @@ public class Autorank extends JavaPlugin {
 		req.registerRequirement("gamemode", GamemodeRequirement.class);
 		req.registerRequirement("has item", HasItemRequirement.class);
 		req.registerRequirement("world", WorldRequirement.class);
+		req.registerRequirement("blocks broken", BlocksBrokenRequirement.class);
 
 		// Register 'main' results
 		res.registerResult("command", CommandResult.class);
@@ -229,6 +240,14 @@ public class Autorank extends JavaPlugin {
 
 	public void setValidateHandler(ValidateHandler validateHandler) {
 		this.validateHandler = validateHandler;
+	}
+	
+	public StatsHandler getStatsHandler() {
+		return statsHandler;
+	}
+
+	public void setStatsHandler(StatsHandler statsHandler) {
+		this.statsHandler = statsHandler;
 	}
 
 }
