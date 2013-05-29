@@ -72,7 +72,6 @@ public class StatsHandler {
 		for(Object[] vars : voteStat.getAllVariables()){
             value += voteStat.getValue(vars);
         }
-		System.out.print("Votes: " + value);
 		return value;
 	}
 }
