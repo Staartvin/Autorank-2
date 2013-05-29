@@ -90,6 +90,7 @@ public class Autorank extends JavaPlugin {
 		req.registerRequirement("has item", HasItemRequirement.class);
 		req.registerRequirement("world", WorldRequirement.class);
 		req.registerRequirement("blocks broken", BlocksBrokenRequirement.class);
+		req.registerRequirement("blocks placed", BlocksBrokenRequirement.class);
 
 		// Register 'main' results
 		res.registerResult("command", CommandResult.class);
