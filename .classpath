@@ -24,5 +24,6 @@
 			<attribute name="javadoc_location" value="http://ci.ess3.net/guestAuth/repository/download/bt10/.lastSuccessful/JavaDocs/EssentialsGroupManager/dist/javadoc/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="API Libs/Stats.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
