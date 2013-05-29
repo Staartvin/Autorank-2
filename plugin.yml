@@ -2,7 +2,7 @@ database: false
 main: me.armar.plugins.autorank.Autorank
 name: Autorank
 startup: postworld
-softdepend: [Essentials, GroupManager]
+softdepend: [Essentials, GroupManager, Stats]
 depend: [Vault]
 url: http://wyverncreativeserver.enjin.com/
 version: 'Beta 2.3.1'
