@@ -63,4 +63,15 @@ public class StatsHandler {
 	public boolean isEnabled() {
 		return (statsAPI != null);
 	}
+	
+	public int getTotalTimesVoted(String player) {
+		Stat voteStat = getStatType(StatType.VOTES, player);
+		
+		int value = 0;
+		
+		for(Object[] vars : voteStat.getAllVariables()){
+            value += voteStat.getValue(vars);
+        }
+		return value;
+	}
 }
