@@ -10,12 +10,14 @@ import me.armar.plugins.autorank.playerchecker.PlayerChecker;
 import me.armar.plugins.autorank.playerchecker.builders.RequirementBuilder;
 import me.armar.plugins.autorank.playerchecker.builders.ResultBuilder;
 import me.armar.plugins.autorank.playerchecker.requirement.BlocksBrokenRequirement;
+import me.armar.plugins.autorank.playerchecker.requirement.BlocksPlacedRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.ExpRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.GamemodeRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.HasItemRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.MoneyRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 import me.armar.plugins.autorank.playerchecker.requirement.TimeRequirement;
+import me.armar.plugins.autorank.playerchecker.requirement.TotalVotesRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.WorldRequirement;
 import me.armar.plugins.autorank.playerchecker.result.CommandResult;
 import me.armar.plugins.autorank.playerchecker.result.EffectResult;
@@ -90,7 +92,8 @@ public class Autorank extends JavaPlugin {
 		req.registerRequirement("has item", HasItemRequirement.class);
 		req.registerRequirement("world", WorldRequirement.class);
 		req.registerRequirement("blocks broken", BlocksBrokenRequirement.class);
-		req.registerRequirement("blocks placed", BlocksBrokenRequirement.class);
+		req.registerRequirement("blocks placed", BlocksPlacedRequirement.class);
+		req.registerRequirement("voted", TotalVotesRequirement.class);
 
 		// Register 'main' results
 		res.registerResult("command", CommandResult.class);
