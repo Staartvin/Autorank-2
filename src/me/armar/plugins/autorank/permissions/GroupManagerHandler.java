@@ -51,9 +51,15 @@ public class GroupManagerHandler implements PermissionsHandler {
 		return handler.getGroup(player.getName());
 	}
 	
-	public boolean setGroup(Player player, String group)
+	public boolean setGroup(Player player, String group, String world)
 	{
-		OverloadedWorldHolder handler = groupManager.getWorldsHolder().getWorldData(player);
+		OverloadedWorldHolder handler;
+		
+		if (world != null) {
+			handler = groupManager.getWorldsHolder().getWorldData(world);
+		} else {
+			handler = groupManager.getWorldsHolder().getWorldData(player);
+		}
 		if (handler == null)
 		{
 			return false;
@@ -106,7 +112,7 @@ public class GroupManagerHandler implements PermissionsHandler {
 	}
 	
 	public boolean replaceGroup(Player player, String world, String groupFrom, String groupTo) {
-		return setGroup(player, groupTo);
+		return setGroup(player, groupTo, world);
 		
 	}
 	
