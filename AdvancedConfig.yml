@@ -62,7 +62,7 @@ ranks:
 #       has item: id(;amount;data) (checks the players inventory for the item)
 #       blocks broken: 100 (a player has to have 100 blocks or more broken) (Requires Stats)
 #       blocks placed: 100 (a player has to have 100 blocks or more placed) (Requires Stats)
-#       votes: 10 (player has to have voted at least 10 times) (Requires Stats)
+#       votes: 10 (player has to have voted at least 10 times) (Requires Stats and Votifier)
 #   results:
 #       rank change: new-rank
 #       rank change: old-rank; new-rank
