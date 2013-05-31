@@ -120,8 +120,8 @@ public class SQLDataStorage {
 		try {
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 
-			System.out.println("jdbc:mysql://" + hostname + "/" + database
-					+ "?" + "user=" + username + "&password=" + password);
+			//System.out.println("jdbc:mysql://" + hostname + "/" + database
+				//	+ "?" + "user=" + username + "&password=" + password);
 
 			conn = DriverManager.getConnection("jdbc:mysql://" + hostname + "/"
 					+ database + "?" + "user=" + username + "&password="
