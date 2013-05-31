@@ -64,10 +64,13 @@ public class Playtimes implements Runnable {
 
 			this.sql = new SQLDataStorage(hostname, username, password,
 					database);
-			if (!sql.connect())
+			if (!sql.connect()) {
 				this.sql = null;
-			System.out.println(sql);
-
+				plugin.getLogger().severe("Could not connect to "  + hostname);
+			} else {
+				plugin.getLogger().info("Successfully established connection to " + hostname);
+			}
+				
 		}
 
 	}
@@ -80,7 +83,8 @@ public class Playtimes implements Runnable {
 	}
 
 	public int getTime(String name) {
-		return data.getInt(name.toLowerCase());
+		int time = data.getInt(name.toLowerCase());
+		return time;
 	}
 
 	public void importData() {
