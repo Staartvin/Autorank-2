@@ -60,7 +60,9 @@ ranks:
 #       world: world_nether (player has to be in this world to get ranked)
 #       gamemode: 1 (player has to have a certain gamemode, 0 = Survival mode, 1 = Creative mode, 2 = Adventure mode)
 #       has item: id(;amount;data) (checks the players inventory for the item)
-# 
+#       blocks broken: 100 (a player has to have 100 blocks or more broken) (Requires Stats)
+#       blocks placed: 100 (a player has to have 100 blocks or more placed) (Requires Stats)
+#       votes: 10 (player has to have voted at least 10 times) (Requires Stats)
 #   results:
 #       rank change: new-rank
 #       rank change: old-rank; new-rank
