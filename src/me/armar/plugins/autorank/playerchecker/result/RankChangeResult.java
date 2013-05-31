@@ -40,9 +40,9 @@ public class RankChangeResult extends Result {
 			oldrank = from;
 		}
 		if (world != null) {
-			Autorank.logMessage(oldrank + " -> " + to + " on world " + world);
+			Autorank.logMessage("Promote " + player.getName() + " on world " + world + " from " + oldrank + " to " + to);
 		} else {
-			Autorank.logMessage(oldrank + " -> " + to + " on global");
+			Autorank.logMessage("Promote " + player.getName() + " globally from " + oldrank + " to " + to);
 		}
 		
 
