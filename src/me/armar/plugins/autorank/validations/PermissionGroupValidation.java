@@ -52,6 +52,7 @@ public class PermissionGroupValidation {
 			}
 		}
 		
+		// If all is okay, then do nothing. Else, disable AR.
 		if (isMissing == false) return true;
 		else return false;
 	}
