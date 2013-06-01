@@ -40,7 +40,7 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 	public boolean replaceGroup(Player player, String world, String oldGroup,
 			String newGroup) {
 		// Temporary fix for bPermissions
-		if (world == null && permission.getName().contains("bpermissions")) {
+		if (world == null && permission.getName().toLowerCase().contains("bpermissions")) {
 			world = player.getWorld().getName();
 		}
 		return (addGroup(player, world, newGroup) && removeGroup(player, world,
