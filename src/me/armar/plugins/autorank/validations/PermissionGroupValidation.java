@@ -38,6 +38,12 @@ public class PermissionGroupValidation {
 			for (int i=0;i<groups.length;i++) {
 				String group = groups[i];
 				if (rank.equals(group)) break;
+				
+				if (rank.equalsIgnoreCase(group)) {
+					autorank.getLogger().severe("Permissions group '" + rank + "' should be '" + group + "'");
+					isMissing = true;
+					break;
+				}
 				// If this is the last group and is not equal to the rank defined in the config:
 				if ((i == (groups.length - 1)) && !rank.equals(group)) {
 					autorank.getLogger().severe("Permissions group is not defined: " + rank);
