@@ -1,6 +1,8 @@
 package me.armar.plugins.autorank.playerchecker.requirement;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.language.LanguageHandler;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -33,7 +35,7 @@ public class TotalVotesRequirement extends Requirement {
 
 	@Override
 	public String getDescription() {
-		return "Need a minimum of " + totalVotes + " votes.";
+		return LanguageHandler.getLanguage().getVoteRequirement(totalVotes);
 	}
 
 }

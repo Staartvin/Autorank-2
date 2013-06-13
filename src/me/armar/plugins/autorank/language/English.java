@@ -29,6 +29,8 @@ public class English extends Language {
 	private String dataImported;
 	private String timeRequirement;
 	private String worldRequirement;
+	private String voteRequirement;
+	private String moneyRequirement;
 	
 	public English(Autorank autorank) {
 		setAutorank(autorank);
@@ -50,6 +52,8 @@ public class English extends Language {
 		dataImported = "New data has been imported!";
 		timeRequirement = "Playtime needs to be %time% or higher.";
 		worldRequirement = "Need to be in world %world%.";
+		voteRequirement = "Need to have voted at least %votes% times.";
+		moneyRequirement = "Need to have at least %money%.";
 	}
 	
 	@Override
@@ -175,5 +179,17 @@ public class English extends Language {
 	public String getWorldRequirement(String world) {
 		// TODO Auto-generated method stub
 		return worldRequirement.replace("%world%", world);
+	}
+	
+	@Override
+	public String getVoteRequirement(int votes) {
+		// TODO Auto-generated method stub
+		return voteRequirement.replace("%votes%", votes + "");
+	}
+	
+	@Override
+	public String getMoneyRequirement(int money) {
+		// TODO Auto-generated method stub
+		return moneyRequirement.replace("%money%", money + "");
 	}
 }

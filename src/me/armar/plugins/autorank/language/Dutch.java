@@ -24,6 +24,8 @@ public class Dutch extends Language {
 	private String dataImported;
 	private String timeRequirement;
 	private String worldRequirement;
+	private String voteRequirement;
+	private String moneyRequirement;
 	
 	public Dutch(Autorank autorank) {
 		setAutorank(autorank);
@@ -45,6 +47,8 @@ public class Dutch extends Language {
 		dataImported = "Nieuwe data is geïmporteerd!";
 		timeRequirement = "Speeltijd moet hoger zijn dan %time%.";
 		worldRequirement = "Moet in wereld %world% zijn.";
+		voteRequirement = "Moet %votes% keer gestemd hebben.";
+		moneyRequirement = "Moet minimaal %money% op de bank hebben.";
 	}
 	
 	@Override
@@ -171,5 +175,17 @@ public class Dutch extends Language {
 	public String getWorldRequirement(String world) {
 		// TODO Auto-generated method stub
 		return worldRequirement.replace("%world%", world);
+	}
+	
+	@Override
+	public String getVoteRequirement(int votes) {
+		// TODO Auto-generated method stub
+		return voteRequirement.replace("%votes%", votes + "");
+	}
+	
+	@Override
+	public String getMoneyRequirement(int money) {
+		// TODO Auto-generated method stub
+		return moneyRequirement.replace("%money%", money + "");
 	}
 }

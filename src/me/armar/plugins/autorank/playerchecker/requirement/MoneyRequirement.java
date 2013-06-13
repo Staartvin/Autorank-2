@@ -1,5 +1,6 @@
 package me.armar.plugins.autorank.playerchecker.requirement;
 
+import me.armar.plugins.autorank.language.LanguageHandler;
 import net.milkbowl.vault.economy.Economy;
 
 import org.bukkit.Bukkit;
@@ -45,7 +46,7 @@ public class MoneyRequirement extends Requirement {
 
 	@Override
 	public String getDescription() {
-		return "Need a minimum amount of money of " + minMoney + ".";
+		return LanguageHandler.getLanguage().getMoneyRequirement((int) minMoney);
 	}
 
 }
