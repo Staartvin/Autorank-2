@@ -163,7 +163,6 @@ public class Playtimes implements Runnable {
 		ResultSet rs = sql.executeQuery(statement);
 		if (rs != null) {
 			try {
-				System.out.print("RS: " + rs);
 				if (rs.isClosed() || !rs.first())  {
 					setDBTime();
 					return;
