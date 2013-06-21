@@ -200,8 +200,38 @@ public class Commands implements CommandExecutor {
 			plugin.getPlaytimes().importData();
 
 			return true;
+		} else if (action.equalsIgnoreCase("archive")) {
+			
+			if (!hasPermission("autorank.archive", sender)) {
+				return true;
+			}
+			
+			int rate = -1;
+			
+			if (args.length != 2) {
+				sender.sendMessage(ChatColor.RED + "You need to give a number!");
+				return true;
+			}
+			
+			try {
+				rate = Integer.parseInt(args[1]);
+			} catch (Exception e) {
+				sender.sendMessage(ChatColor.RED + "'" + args[1] + "' is not a number!");
+				return true;
+			}
+			
+			if (rate <= 0) {
+				sender.sendMessage(ChatColor.RED + "Value cannot be lower or equal to 0.");
+				return true;
+			}
+			
+			sender.sendMessage(ChatColor.GREEN + "Removed " + ChatColor.YELLOW + plugin.getPlaytimes().archive(rate) + "" + ChatColor.GREEN + " records.");
+			return true;
 		}
-		return false;
+			
+		sender.sendMessage(ChatColor.RED + "Command not recognised!");
+		sender.sendMessage(ChatColor.YELLOW + "Use '/ar help' for a list of commands.");
+		return true;
 	}
 
 	private void check(CommandSender sender, Player player) {
@@ -277,6 +307,7 @@ public class Commands implements CommandExecutor {
 			sender.sendMessage(ChatColor.AQUA + "/ar help <page> " + ChatColor.GRAY + "- Show a list of commands");
 			sender.sendMessage(ChatColor.AQUA + "/ar reload " + ChatColor.GRAY + "- Reload the plugin");
 			sender.sendMessage(ChatColor.AQUA + "/ar import " + ChatColor.GRAY + "- Import old data");
+			sender.sendMessage(ChatColor.AQUA + "/ar archive <minimum> " + ChatColor.GRAY + "- Archive data with a minimum");
 			sender.sendMessage(ChatColor.BLUE + "Page 2 of " + maxPages);
 		} else {
 			sender.sendMessage(ChatColor.GREEN + "-- Autorank Commands --");
