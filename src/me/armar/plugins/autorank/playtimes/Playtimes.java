@@ -96,7 +96,7 @@ public class Playtimes implements Runnable {
 
 	public void setTime(String name, int time) {
 		if (sql != null) {
-			this.syncingName = name;
+			this.syncingName = name.toLowerCase();
 			this.syncingTime = time;
 			this.scheduler.runTaskAsynchronously(plugin, this);
 		}
@@ -162,10 +162,15 @@ public class Playtimes implements Runnable {
 				+ syncingName + "'";
 		ResultSet rs = sql.executeQuery(statement);
 		if (rs != null) {
-
 			try {
-				if (rs.getDate("modified") == null
-						|| rs.getDate("modified").before(
+				System.out.print("RS: " + rs);
+				if (rs.isClosed() || !rs.first())  {
+					setDBTime();
+					return;
+				}
+				
+				if (rs.getDate(3) == null
+						|| rs.getDate(3).before(
 								Calendar.getInstance().getTime())) {
 					//database is out of date
 					setDBTime();
