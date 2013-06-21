@@ -2,7 +2,9 @@ package me.armar.plugins.autorank.playtimes;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Set;
 
 import me.armar.plugins.autorank.Autorank;
@@ -117,6 +119,41 @@ public class Playtimes implements Runnable {
 
 	public void save() {
 		data.save();
+	}
+	
+	
+	/** 
+	 * Archive old records. Records below the minimum will be removed because they are 'inactive'.
+	 * @param minimum Lowest threshold to check for
+	 * @return Amount of records removed
+	 */
+	public int archive(int minimum) {
+		Object[] objectArray = getKeys().toArray();
+		List<String> records = new ArrayList<String>();
+		
+		// Convert ObjectArray to List of Strings
+		for (Object object:objectArray) {
+			String record = (String) object;
+			
+			records.add(record);
+		}
+		// Keep a counter of archived items
+		int counter = 0;
+		
+		for (String record: records) {
+			int time = getTime(record);
+			
+			// Found a record to be archived
+			if (time < minimum) {
+				counter++;
+				
+				// Remove record
+				data.set(record, null);
+			}
+		}
+		
+		save();
+		return counter;
 	}
 
 	@Override
