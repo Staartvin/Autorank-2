@@ -77,10 +77,19 @@ public class Commands implements CommandExecutor {
 					AutorankTools.sendColoredMessage(sender,  args[1] + language.getHasPlayedFor()
 							+ AutorankTools.minutesToString(plugin.getTime(args[1])));
 				} else {
+					if (player.hasPermission("autorank.exclude")) {
+						sender.sendMessage(ChatColor.RED + args[1] + " is excluded from ranking!");
+						return true;
+					}
 					check(sender, player);
 				}
 			} else if (sender instanceof Player) {
 				if (!hasPermission("autorank.check", sender)) {
+					return true;
+				}
+				
+				if (sender.hasPermission("autorank.exclude")) {
+					sender.sendMessage(ChatColor.RED + "You are excluded from ranking!");
 					return true;
 				}
 				Player player = (Player) sender;
