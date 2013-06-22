@@ -53,13 +53,14 @@ public class Commands implements CommandExecutor {
 		String action = args[0];
 		if (action.equalsIgnoreCase("help")) {
 			if (args.length == 1) {
-				showHelpPages(sender, 1);	
+				showHelpPages(sender, 1);
 			} else {
 				int page = 1;
 				try {
 					page = Integer.parseInt(args[1]);
 				} catch (Exception e) {
-					sender.sendMessage(ChatColor.RED + "'" + args[1] + "' is not a valid page number!");
+					sender.sendMessage(ChatColor.RED + "'" + args[1]
+							+ "' is not a valid page number!");
 					return true;
 				}
 				showHelpPages(sender, page);
@@ -74,11 +75,16 @@ public class Commands implements CommandExecutor {
 
 				Player player = plugin.getServer().getPlayer(args[1]);
 				if (player == null) {
-					AutorankTools.sendColoredMessage(sender,  args[1] + language.getHasPlayedFor()
-							+ AutorankTools.minutesToString(plugin.getTime(args[1])));
+					AutorankTools.sendColoredMessage(
+							sender,
+							args[1]
+									+ language.getHasPlayedFor()
+									+ AutorankTools.minutesToString(plugin
+											.getTime(args[1])));
 				} else {
 					if (player.hasPermission("autorank.exclude")) {
-						sender.sendMessage(ChatColor.RED + args[1] + " is excluded from ranking!");
+						sender.sendMessage(ChatColor.RED + args[1]
+								+ " is excluded from ranking!");
 						return true;
 					}
 					check(sender, player);
@@ -87,9 +93,10 @@ public class Commands implements CommandExecutor {
 				if (!hasPermission("autorank.check", sender)) {
 					return true;
 				}
-				
+
 				if (sender.hasPermission("autorank.exclude")) {
-					sender.sendMessage(ChatColor.RED + "You are excluded from ranking!");
+					sender.sendMessage(ChatColor.RED
+							+ "You are excluded from ranking!");
 					return true;
 				}
 				Player player = (Player) sender;
@@ -121,7 +128,8 @@ public class Commands implements CommandExecutor {
 
 			if (value >= 0) {
 				plugin.setTime(args[1], value);
-				AutorankTools.sendColoredMessage(sender, language.getPlayTimeChanged(args[1], value));
+				AutorankTools.sendColoredMessage(sender,
+						language.getPlayTimeChanged(args[1], value));
 			} else {
 				AutorankTools.sendColoredMessage(sender,
 						language.getInvalidFormat("/ar set [player] [value]"));
@@ -144,7 +152,8 @@ public class Commands implements CommandExecutor {
 
 			if (value >= 0) {
 				plugin.setTime(args[1], value);
-				AutorankTools.sendColoredMessage(sender, language.getPlayTimeChanged(args[1], value));
+				AutorankTools.sendColoredMessage(sender,
+						language.getPlayTimeChanged(args[1], value));
 			} else {
 				AutorankTools.sendColoredMessage(sender,
 						language.getInvalidFormat("/ar add [player] [value]"));
@@ -168,10 +177,11 @@ public class Commands implements CommandExecutor {
 
 			if (value >= 0) {
 				plugin.setTime(args[1], value);
-				AutorankTools.sendColoredMessage(sender, language.getPlayTimeChanged(args[1], value));
-			} else {
 				AutorankTools.sendColoredMessage(sender,
-						language.getInvalidFormat("/ar remove [player] [value]"));
+						language.getPlayTimeChanged(args[1], value));
+			} else {
+				AutorankTools.sendColoredMessage(sender, language
+						.getInvalidFormat("/ar remove [player] [value]"));
 			}
 
 			return true;
@@ -195,7 +205,8 @@ public class Commands implements CommandExecutor {
 				return true;
 			}
 
-			AutorankTools.sendColoredMessage(sender, language.getAutorankReloaded());
+			AutorankTools.sendColoredMessage(sender,
+					language.getAutorankReloaded());
 			plugin.reload();
 
 			return true;
@@ -205,53 +216,54 @@ public class Commands implements CommandExecutor {
 				return true;
 			}
 
-			AutorankTools.sendColoredMessage(sender, language.getDataImported());
+			AutorankTools
+					.sendColoredMessage(sender, language.getDataImported());
 			plugin.getPlaytimes().importData();
 
 			return true;
 		} else if (action.equalsIgnoreCase("archive")) {
-			
+
 			if (!hasPermission("autorank.archive", sender)) {
 				return true;
 			}
-			
+
 			int rate = -1;
-			
+
 			if (args.length != 2) {
-				sender.sendMessage(ChatColor.RED + "You need to give a number!");
+				sender.sendMessage(ChatColor.RED + "You need to specify a time!");
 				return true;
 			}
 			
-			try {
-				rate = Integer.parseInt(args[1]);
-			} catch (Exception e) {
-				sender.sendMessage(ChatColor.RED + "'" + args[1] + "' is not a number!");
-				return true;
-			}
+			rate = AutorankTools.stringToMinutes(args[1]);
 			
 			if (rate <= 0) {
-				sender.sendMessage(ChatColor.RED + "Value cannot be lower or equal to 0.");
+				sender.sendMessage(ChatColor.RED
+						+ "Time is not correctly formatted!");
+				sender.sendMessage(ChatColor.YELLOW + "Example: /ar archive 10d/10h/10m");
 				return true;
 			}
-			
-			sender.sendMessage(ChatColor.GREEN + "Removed " + ChatColor.YELLOW + plugin.getPlaytimes().archive(rate) + "" + ChatColor.GREEN + " records.");
+
+			sender.sendMessage(ChatColor.GREEN + "Removed " + ChatColor.YELLOW
+					+ plugin.getPlaytimes().archive(rate) + ""
+					+ ChatColor.GREEN + " records below " + ChatColor.YELLOW + AutorankTools.minutesToString(rate) + ChatColor.GREEN + ".");
 			return true;
 		}
-			
+
 		sender.sendMessage(ChatColor.RED + "Command not recognised!");
-		sender.sendMessage(ChatColor.YELLOW + "Use '/ar help' for a list of commands.");
+		sender.sendMessage(ChatColor.YELLOW
+				+ "Use '/ar help' for a list of commands.");
 		return true;
 	}
 
 	private void check(CommandSender sender, Player player) {
-		Map<RankChange, List<Requirement>> failed = plugin
-				.getPlayerChecker().getFailedRequirementsForApplicableGroup(
-						player);
+		Map<RankChange, List<Requirement>> failed = plugin.getPlayerChecker()
+				.getFailedRequirementsForApplicableGroup(player);
 
 		Set<RankChange> keySet = failed.keySet();
 		String playername = player.getName();
 
-		String[] groups = plugin.getPermPlugHandler().getPermissionPlugin().getPlayerGroups(player);
+		String[] groups = plugin.getPermPlugHandler().getPermissionPlugin()
+				.getPlayerGroups(player);
 		StringBuilder stringBuilder = new StringBuilder();
 		// has played for
 		stringBuilder.append(playername + language.getHasPlayedFor()
@@ -278,8 +290,8 @@ public class Commands implements CommandExecutor {
 		AutorankTools.sendColoredMessage(sender, stringBuilder.toString());
 
 		if (keySet.size() == 0) {
-			AutorankTools.sendColoredMessage(sender,
-					language.getNoNextRankup());
+			AutorankTools
+					.sendColoredMessage(sender, language.getNoNextRankup());
 		} else {
 			Iterator<RankChange> it = keySet.iterator();
 			while (it.hasNext()) {
@@ -287,14 +299,13 @@ public class Commands implements CommandExecutor {
 				List<Requirement> reqs = failed.get(rank);
 
 				if (reqs.size() == 0) {
-					AutorankTools.sendColoredMessage(
-							sender,
-							language.getMeetsRequirements()
-									+ rank.getRankTo()
+					AutorankTools.sendColoredMessage(sender,
+							language.getMeetsRequirements() + rank.getRankTo()
 									+ language.getRankedUpNow());
 					plugin.getPlayerChecker().checkPlayer(player);
 				} else {
-					AutorankTools.sendColoredMessage(sender,
+					AutorankTools.sendColoredMessage(
+							sender,
 							language.getDoesntMeetRequirements()
 									+ rank.getRankTo() + ":");
 
@@ -308,33 +319,37 @@ public class Commands implements CommandExecutor {
 			}
 		}
 	}
-	
+
 	private void showHelpPages(CommandSender sender, int page) {
 		int maxPages = 2;
 		if (page == 2) {
 			sender.sendMessage(ChatColor.GREEN + "-- Autorank Commands --");
-			sender.sendMessage(ChatColor.AQUA + "/ar help <page> " + ChatColor.GRAY + "- Show a list of commands");
-			sender.sendMessage(ChatColor.AQUA + "/ar reload " + ChatColor.GRAY + "- Reload the plugin");
-			sender.sendMessage(ChatColor.AQUA + "/ar import " + ChatColor.GRAY + "- Import old data");
-			sender.sendMessage(ChatColor.AQUA + "/ar archive <minimum> " + ChatColor.GRAY + "- Archive data with a minimum");
+			sender.sendMessage(ChatColor.AQUA + "/ar help <page> "
+					+ ChatColor.GRAY + "- Show a list of commands");
+			sender.sendMessage(ChatColor.AQUA + "/ar reload " + ChatColor.GRAY
+					+ "- Reload the plugin");
+			sender.sendMessage(ChatColor.AQUA + "/ar import " + ChatColor.GRAY
+					+ "- Import old data");
+			sender.sendMessage(ChatColor.AQUA + "/ar archive <minimum> "
+					+ ChatColor.GRAY + "- Archive data with a minimum");
 			sender.sendMessage(ChatColor.BLUE + "Page 2 of " + maxPages);
 		} else {
 			sender.sendMessage(ChatColor.GREEN + "-- Autorank Commands --");
-			sender.sendMessage(ChatColor.AQUA + "/ar check " + ChatColor.GRAY + "- Check your own status");
-			sender.sendMessage(ChatColor.AQUA + 
-					"/ar check [player] " + ChatColor.GRAY + "- Check [player]'s status");
-			sender.sendMessage(ChatColor.AQUA + 
-					"/ar leaderboard " + ChatColor.GRAY + "- Show the leaderboard");
-			sender.sendMessage(ChatColor.AQUA + 
-							"/ar set [player] [value] " + ChatColor.GRAY + "- Set [player]'s time to [value]");
-			sender.sendMessage(ChatColor.AQUA + 
-							"/ar add [player] [value] " + ChatColor.GRAY + "- Add [value] to [player]'s time");
-			sender.sendMessage(ChatColor.AQUA + 
-							"/ar remove [player] [value] " + ChatColor.GRAY + "- Remove [value] from [player]'s time");
-			sender.sendMessage(ChatColor.AQUA + 
-					"/ar debug " + ChatColor.GRAY + "- Shows debug information");
+			sender.sendMessage(ChatColor.AQUA + "/ar check " + ChatColor.GRAY
+					+ "- Check your own status");
+			sender.sendMessage(ChatColor.AQUA + "/ar check [player] "
+					+ ChatColor.GRAY + "- Check [player]'s status");
+			sender.sendMessage(ChatColor.AQUA + "/ar leaderboard "
+					+ ChatColor.GRAY + "- Show the leaderboard");
+			sender.sendMessage(ChatColor.AQUA + "/ar set [player] [value] "
+					+ ChatColor.GRAY + "- Set [player]'s time to [value]");
+			sender.sendMessage(ChatColor.AQUA + "/ar add [player] [value] "
+					+ ChatColor.GRAY + "- Add [value] to [player]'s time");
+			sender.sendMessage(ChatColor.AQUA + "/ar remove [player] [value] "
+					+ ChatColor.GRAY + "- Remove [value] from [player]'s time");
+			sender.sendMessage(ChatColor.AQUA + "/ar debug " + ChatColor.GRAY
+					+ "- Shows debug information");
 			sender.sendMessage(ChatColor.BLUE + "Page 1 of " + maxPages);
 		}
 	}
-
 }
