@@ -47,3 +47,6 @@ permissions:
     autorank.import:
         description: Allows importing old data.
         default: op
+    autorank.archive:
+        description: Allows a player to archive old data.
+        default: op
