@@ -222,14 +222,6 @@ public class Autorank extends JavaPlugin {
 		this.playerChecker = playerChecker;
 	}
 
-	/*public VaultPermissionsHandler getVaultPermHandler() {
-		return vaultPermHandler;
-	}
-
-	public void setVaultPermHandler(VaultPermissionsHandler vaultPermHandler) {
-		this.vaultPermHandler = vaultPermHandler;
-	} */
-
 	public PermissionsPluginHandler getPermPlugHandler() {
 		return permPlugHandler;
 	}
