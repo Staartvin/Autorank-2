@@ -37,7 +37,7 @@ public class Dutch extends Language {
 		autorankReloaded = "Autorank is herladen!";
 		hasPlayedFor = " heeft gespeeld voor ";
 		isIn = "zit in ";
-		noGroups = "geen groep.";
+		noGroups = "geen groep";
 		oneGroup = "groep ";
 		multipleGroups = "de groepen ";
 		noNextRankup = "en heeft geen volgende promotie.";

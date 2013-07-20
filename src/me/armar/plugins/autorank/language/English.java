@@ -42,7 +42,7 @@ public class English extends Language {
 		autorankReloaded = "Reloaded Autorank!";
 		hasPlayedFor = " has played for ";
 		isIn = "is in ";
-		noGroups = "no groups.";
+		noGroups = "no groups";
 		oneGroup = "group ";
 		multipleGroups = "groups ";
 		noNextRankup = "and doesn't have a next rankup.";
