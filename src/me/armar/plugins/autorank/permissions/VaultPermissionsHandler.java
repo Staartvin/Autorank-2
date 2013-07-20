@@ -34,9 +34,6 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 	}
 
 	public String[] getPlayerGroups(Player player) {
-		for (String group: permission.getPlayerGroups(player)) {
-			System.out.print("Group " + group);
-		}
 		return permission.getPlayerGroups(player);
 	}
 
@@ -77,9 +74,6 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 	 * @return an array of strings containing all setup groups of the permissions plugin.
 	 */
 	public String[] getGroups() {
-		for (String group: permission.getGroups()) {
-			System.out.print("Groups " + group);
-		}
 		return permission.getGroups();
 	}
 }
