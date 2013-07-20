@@ -20,11 +20,11 @@ public class PlaytimesUpdate implements Runnable {
 
 	public PlaytimesUpdate(Playtimes playtimes, Autorank plugin) {
 		this.playtimes = playtimes;
-                
-                if(plugin.getAdvancedConfig().getBoolean("use advanced config")
-                        && plugin.getAdvancedConfig().getBoolean("afk integration")){
-        setupEssentials();
-                }
+
+		if (plugin.getAdvancedConfig().getBoolean("use advanced config")
+				&& plugin.getAdvancedConfig().getBoolean("afk integration")) {
+			setupEssentials();
+		}
 
 	}
 
@@ -44,9 +44,12 @@ public class PlaytimesUpdate implements Runnable {
 
 	private void updateMinutesPlayed(Player player) {
 		// Changed this so it is readable ;)
-		if (player.hasPermission("autorank.rsefrxsgtse") || !player.hasPermission("autorank.timeexclude")) {
+		if (player.hasPermission("autorank.rsefrxsgtse")
+				|| !player.hasPermission("autorank.timeexclude")) {
 			if (ess != null) {
-				if (ess.getUser(player).isAfk() || ess.getUser(player).isJailed()) return;
+				if (ess.getUser(player).isAfk()
+						|| ess.getUser(player).isJailed())
+					return;
 			}
 			String playerName = player.getName().toLowerCase();
 			if (!playtimes.getKeys().contains(playerName)) {
@@ -56,15 +59,15 @@ public class PlaytimesUpdate implements Runnable {
 		}
 	}
 
-    private void setupEssentials() {
-        Plugin x = Bukkit.getServer().getPluginManager()
-                        .getPlugin("Essentials");
-        if (x != null & x instanceof Essentials) {
-                ess = (Essentials) x;
-                Autorank.logMessage("Essentials was found! AFK integration can be used.");
-        } else {
-                Autorank.logMessage("Essentials was NOT found! Disabling AFK integration.");
-        }
-    }
+	private void setupEssentials() {
+		Plugin x = Bukkit.getServer().getPluginManager()
+				.getPlugin("Essentials");
+		if (x != null & x instanceof Essentials) {
+			ess = (Essentials) x;
+			Autorank.logMessage("Essentials was found! AFK integration can be used.");
+		} else {
+			Autorank.logMessage("Essentials was NOT found! Disabling AFK integration.");
+		}
+	}
 
 }
