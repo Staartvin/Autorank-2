@@ -97,7 +97,6 @@ public class Playtimes implements Runnable {
 	}
 
 	public int getTime(String name) {
-		System.out.print("Get time of: " + name);
 		// This is done on purpose, for future work
 		int time = data.getInt(name.toLowerCase());
 		
