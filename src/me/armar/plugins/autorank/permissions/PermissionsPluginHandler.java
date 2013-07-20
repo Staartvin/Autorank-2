@@ -30,9 +30,12 @@ public class PermissionsPluginHandler {
 		if (findGroupManager(plugin)) {
 			// use Groupmanager
 			permissionPlugin = new GroupManagerHandler(plugin);
+		} else if (findPermissionsBukkit(plugin)) {
+			// Use PermissionsBukkit
+			permissionPlugin = new PermissionsBukkitPermissionsHandler(plugin);
 		} else {
-			permissionPlugin = new VaultPermissionsHandler(plugin);
 			// use Vault
+			permissionPlugin = new VaultPermissionsHandler(plugin);
 		}
 	}
 	
@@ -50,6 +53,14 @@ public class PermissionsPluginHandler {
 	
 	protected boolean findGroupManager(Autorank plugin) {
 		Plugin x = plugin.getServer().getPluginManager().getPlugin("GroupManager");
+		if (x != null) {
+			return true;
+		}
+		return false;
+	}
+	
+	protected boolean findPermissionsBukkit(Autorank plugin) {
+		Plugin x = plugin.getServer().getPluginManager().getPlugin("PermissionsBukkit");
 		if (x != null) {
 			return true;
 		}
