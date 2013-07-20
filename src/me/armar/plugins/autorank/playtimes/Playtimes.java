@@ -27,6 +27,7 @@ public class Playtimes implements Runnable {
 	private BukkitScheduler scheduler;
 	private String syncingName;
 	private int syncingTime;
+	private boolean saveToDatabase, readFromDatabase = false;
 
 	public Playtimes(Autorank plugin) {
 		this.plugin = plugin;
@@ -40,7 +41,7 @@ public class Playtimes implements Runnable {
 		if (sql != null) {
 			setupTable();
 		}
-
+		
 		plugin.getServer().getScheduler()
 				.runTaskTimer(plugin, save, 12000, 12000);
 		plugin.getServer().getScheduler().runTaskTimer(plugin, save, 600, 600);
@@ -63,6 +64,17 @@ public class Playtimes implements Runnable {
 			String password = s.getString("password");
 			String database = s.getString("database");
 			this.table = s.getString("table");
+			
+			// Get method
+			String method = s.getString("method", "save");
+			
+			if (method.equalsIgnoreCase("save")) {
+				saveToDatabase = true;
+				plugin.getLogger().info("Only saving data to database!");
+			} else if (method.equalsIgnoreCase("read")) {
+				readFromDatabase = true;
+				plugin.getLogger().info("Only reading data from database!");
+			}
 
 			this.sql = new SQLDataStorage(hostname, username, password,
 					database);
@@ -85,8 +97,16 @@ public class Playtimes implements Runnable {
 	}
 
 	public int getTime(String name) {
+		System.out.print("Get time of: " + name);
 		// This is done on purpose, for future work
 		int time = data.getInt(name.toLowerCase());
+		
+		if (readFromDatabase) {
+			this.syncingName = name;
+			String statement = "SELECT * FROM " + table + " WHERE name='"
+					+ syncingName + "'";
+			time = getDBTime(sql.executeQuery(statement));
+		}
 		return time;
 	}
 
@@ -95,11 +115,14 @@ public class Playtimes implements Runnable {
 	}
 
 	public void setTime(String name, int time) {
-		if (sql != null) {
-			this.syncingName = name.toLowerCase();
-			this.syncingTime = time;
-			this.scheduler.runTaskAsynchronously(plugin, this);
+		if (saveToDatabase) {
+			if (sql != null) {
+				this.syncingName = name.toLowerCase();
+				this.syncingTime = time;
+				this.scheduler.runTaskAsynchronously(plugin, this);
+			}
 		}
+		
 		data.set(name.toLowerCase(), time);
 	}
 
@@ -193,8 +216,17 @@ public class Playtimes implements Runnable {
 	private int getDBTime(ResultSet rs) {
 		Integer result = null;
 
+		if (rs == null) {
+			return 0;
+		}
+		
 		try {
-			result = rs.getInt(2);
+			if (rs.next()) {
+				result = rs.getInt(2);
+			} else {
+				result = null;
+			}
+			
 		} catch (SQLException e) {
 			System.out.println("Playtimes.getDBTime");
 			System.out.println("SQLException: " + e.getMessage());
