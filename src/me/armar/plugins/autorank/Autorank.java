@@ -46,7 +46,6 @@ public class Autorank extends JavaPlugin {
 	private StatsHandler statsHandler;
 	private static Logger log = Bukkit.getLogger();
 
-	// TC build test 2
 	public void onEnable() {
 
 		// Register configs
