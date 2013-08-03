@@ -79,14 +79,6 @@ sql:
     password: ''
     database: minecraft
     table: autorank
-    
-    # You can customise what Autorank will do with the database.
-    # 'save' will only save data TO the database but won't read from it.
-    # 'read' will only read data FROM the database but won't save to it.
-    # If you want to have seperate servers where time is saved globally,
-    # you can set 'save' on one server and 'read' on all the others.
-    method: save
-
 #   
 #   
 #    
