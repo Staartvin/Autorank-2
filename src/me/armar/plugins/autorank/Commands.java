@@ -67,6 +67,7 @@ public class Commands implements CommandExecutor {
 			}
 			return true;
 		} else if (action.equalsIgnoreCase("check")) {
+			// This is a local check. It will not show you the database numbers
 			if (args.length > 1) {
 
 				if (!hasPermission("autorank.checkothers", sender)) {
@@ -80,7 +81,7 @@ public class Commands implements CommandExecutor {
 							args[1]
 									+ language.getHasPlayedFor()
 									+ AutorankTools.minutesToString(plugin
-											.getTime(args[1])));
+											.getLocalTime(args[1])));
 				} else {
 					if (player.hasPermission("autorank.exclude")) {
 						sender.sendMessage(ChatColor.RED + args[1]
@@ -127,7 +128,7 @@ public class Commands implements CommandExecutor {
 				}
 
 			if (value >= 0) {
-				plugin.setTime(args[1], value);
+				plugin.setLocalTime(args[1], value);
 				AutorankTools.sendColoredMessage(sender,
 						language.getPlayTimeChanged(args[1], value));
 			} else {
@@ -146,12 +147,12 @@ public class Commands implements CommandExecutor {
 			if (args.length > 2)
 				try {
 					value = AutorankTools.stringtoInt(args[2]);
-					value += plugin.getTime(args[1]);
+					value += plugin.getLocalTime(args[1]);
 				} catch (NumberFormatException e) {
 				}
 
 			if (value >= 0) {
-				plugin.setTime(args[1], value);
+				plugin.setLocalTime(args[1], value);
 				AutorankTools.sendColoredMessage(sender,
 						language.getPlayTimeChanged(args[1], value));
 			} else {
@@ -171,12 +172,12 @@ public class Commands implements CommandExecutor {
 			if (args.length > 2)
 				try {
 					value = -AutorankTools.stringtoInt(args[2]);
-					value += plugin.getTime(args[1]);
+					value += plugin.getLocalTime(args[1]);
 				} catch (NumberFormatException e) {
 				}
 
 			if (value >= 0) {
-				plugin.setTime(args[1], value);
+				plugin.setLocalTime(args[1], value);
 				AutorankTools.sendColoredMessage(sender,
 						language.getPlayTimeChanged(args[1], value));
 			} else {
@@ -230,22 +231,79 @@ public class Commands implements CommandExecutor {
 			int rate = -1;
 
 			if (args.length != 2) {
-				sender.sendMessage(ChatColor.RED + "You need to specify a time!");
+				sender.sendMessage(ChatColor.RED
+						+ "You need to specify a time!");
 				return true;
 			}
-			
+
 			rate = AutorankTools.stringToMinutes(args[1]);
-			
+
 			if (rate <= 0) {
 				sender.sendMessage(ChatColor.RED
 						+ "Time is not correctly formatted!");
-				sender.sendMessage(ChatColor.YELLOW + "Example: /ar archive 10d/10h/10m");
+				sender.sendMessage(ChatColor.YELLOW
+						+ "Example: /ar archive 10d/10h/10m");
 				return true;
 			}
 
 			sender.sendMessage(ChatColor.GREEN + "Removed " + ChatColor.YELLOW
 					+ plugin.getPlaytimes().archive(rate) + ""
-					+ ChatColor.GREEN + " records below " + ChatColor.YELLOW + AutorankTools.minutesToString(rate) + ChatColor.GREEN + ".");
+					+ ChatColor.GREEN + " records below " + ChatColor.YELLOW
+					+ AutorankTools.minutesToString(rate) + ChatColor.GREEN
+					+ ".");
+			return true;
+		} else if (action.equalsIgnoreCase("gcheck")) {
+			// This is a global check. It will not show you the database numbers
+			if (!plugin.getMySQLWrapper().isMySQLEnabled()) {
+				sender.sendMessage(ChatColor.RED + "MySQL is not enabled and therefore global time does not exist!");
+				return true;
+			}
+			
+			if (args.length > 1) {
+
+				if (!hasPermission("autorank.checkothers", sender)) {
+					return true;
+				}
+
+				Player player = plugin.getServer().getPlayer(args[1]);
+				if (player == null) {
+					AutorankTools.sendColoredMessage(
+							sender,
+							args[1]
+									+ language.getHasPlayedFor()
+									+ AutorankTools.minutesToString(plugin
+											.getGlobalTime(args[1])) + " across all servers.");
+				} else {
+					if (player.hasPermission("autorank.exclude")) {
+						sender.sendMessage(ChatColor.RED + args[1]
+								+ " is excluded from ranking!");
+						return true;
+					}
+
+					// Do no check. Players can't be checked on global times (at the moment)
+					//check(sender, player);
+				}
+			} else if (sender instanceof Player) {
+				if (!hasPermission("autorank.check", sender)) {
+					return true;
+				}
+
+				if (sender.hasPermission("autorank.exclude")) {
+					sender.sendMessage(ChatColor.RED
+							+ "You are excluded from ranking!");
+					return true;
+				}
+				Player player = (Player) sender;
+				AutorankTools.sendColoredMessage(
+						sender,
+						"You have played for "
+								+ AutorankTools.minutesToString(plugin
+										.getGlobalTime(player.getName())) + " across all servers.");
+
+			} else {
+				AutorankTools.sendColoredMessage(sender,
+						language.getCannotCheckConsole());
+			}
 			return true;
 		}
 
@@ -266,9 +324,11 @@ public class Commands implements CommandExecutor {
 				.getPlayerGroups(player);
 		StringBuilder stringBuilder = new StringBuilder();
 		// has played for
-		stringBuilder.append(playername + language.getHasPlayedFor()
-				+ AutorankTools.minutesToString(plugin.getTime(playername))
-				+ ", ");
+		stringBuilder
+				.append(playername
+						+ language.getHasPlayedFor()
+						+ AutorankTools.minutesToString(plugin
+								.getLocalTime(playername)) + ", ");
 		// is in
 		stringBuilder.append(language.getIsIn());
 		if (groups.length == 0)
@@ -332,6 +392,8 @@ public class Commands implements CommandExecutor {
 					+ "- Import old data");
 			sender.sendMessage(ChatColor.AQUA + "/ar archive <minimum> "
 					+ ChatColor.GRAY + "- Archive data with a minimum");
+			sender.sendMessage(ChatColor.AQUA + "/ar debug " + ChatColor.GRAY
+					+ "- Shows debug information");
 			sender.sendMessage(ChatColor.BLUE + "Page 2 of " + maxPages);
 		} else {
 			sender.sendMessage(ChatColor.GREEN + "-- Autorank Commands --");
@@ -347,8 +409,8 @@ public class Commands implements CommandExecutor {
 					+ ChatColor.GRAY + "- Add [value] to [player]'s time");
 			sender.sendMessage(ChatColor.AQUA + "/ar remove [player] [value] "
 					+ ChatColor.GRAY + "- Remove [value] from [player]'s time");
-			sender.sendMessage(ChatColor.AQUA + "/ar debug " + ChatColor.GRAY
-					+ "- Shows debug information");
+			sender.sendMessage(ChatColor.AQUA + "/ar gcheck [player] "
+					+ ChatColor.GRAY + "- Check [player]'s global playtime");
 			sender.sendMessage(ChatColor.BLUE + "Page 1 of " + maxPages);
 		}
 	}
