@@ -137,5 +137,19 @@ public class SQLDataStorage {
 		}
 		return conn != null;
 	}
+	
+	/**
+	 * Returns state of MySQL connection
+	 * @return true if closed, false if open
+	 */
+	public boolean isClosed() {
+		try {
+			return conn.isClosed();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return true;
+		}
+	}
 
 }
