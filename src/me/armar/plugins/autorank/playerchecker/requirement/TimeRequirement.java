@@ -19,7 +19,7 @@ public class TimeRequirement extends Requirement {
 	@Override
 	public boolean meetsRequirement(Player player) {
 		double playtime = this.getAutorank().getPlaytimes()
-				.getTime(player.getName());
+				.getLocalTime(player.getName());
 		return time != -1 && time <= playtime;
 	}
 

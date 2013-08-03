@@ -91,7 +91,7 @@ public class Leaderboard {
 		TreeMap<String, Integer> sorted_map = new TreeMap<String, Integer>(bvc);
 
 		for (String playername : plugin.getPlaytimes().getKeys()) {
-			map.put(playername, plugin.getPlaytimes().getTime(playername));
+			map.put(playername, plugin.getPlaytimes().getLocalTime(playername));
 		}
 
 		sorted_map.putAll(map);
