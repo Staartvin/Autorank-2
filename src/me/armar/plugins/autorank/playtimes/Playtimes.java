@@ -10,7 +10,7 @@ import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
 
 public class Playtimes {
 
-	public static int INTERVAL_MINUTES = 2;
+	public static int INTERVAL_MINUTES = 5;
 
 	private SimpleYamlConfiguration data;
 	private PlaytimesSave save;
