@@ -1,10 +1,12 @@
 package me.armar.plugins.autorank;
 
+import java.sql.SQLException;
 import java.util.logging.Logger;
 
 import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
 import me.armar.plugins.autorank.language.LanguageHandler;
 import me.armar.plugins.autorank.leaderboard.Leaderboard;
+import me.armar.plugins.autorank.mysql.wrapper.MySQLWrapper;
 import me.armar.plugins.autorank.permissions.PermissionsPluginHandler;
 import me.armar.plugins.autorank.playerchecker.PlayerChecker;
 import me.armar.plugins.autorank.playerchecker.builders.RequirementBuilder;
@@ -44,6 +46,7 @@ public class Autorank extends JavaPlugin {
 	private LanguageHandler languageHandler;
 	private ValidateHandler validateHandler;
 	private StatsHandler statsHandler;
+	private MySQLWrapper mysqlWrapper;
 	private static Logger log = Bukkit.getLogger();
 
 	public void onEnable() {
@@ -56,6 +59,9 @@ public class Autorank extends JavaPlugin {
 		
 		// Create language classes
 		setLanguageHandler(new LanguageHandler(this));
+		
+		// Create MySQL Wrapper
+		setMySQLWrapper(new MySQLWrapper(this));
 		
 		// Create playtime class
 		setPlaytimes(new Playtimes(this));
@@ -154,12 +160,20 @@ public class Autorank extends JavaPlugin {
 		getServer().getPluginManager().enablePlugin(this);
 	}
 
-	public int getTime(String player) {
-		return playtimes.getTime(player);
+	public int getLocalTime(String player) {
+		return playtimes.getLocalTime(player);
+	}
+	
+	public int getGlobalTime(String player) {
+		return playtimes.getGlobalTime(player);
 	}
 
-	public void setTime(String player, int time) {
-		playtimes.setTime(player, time);
+	public void setLocalTime(String player, int time) {
+		playtimes.setLocalTime(player, time);
+	}
+	
+	public void setGlobalTime(String player, int time) throws SQLException {
+		playtimes.setGlobalTime(player, time);
 	}
 
 	public void checkAndChangeRank(Player player) {
@@ -244,6 +258,14 @@ public class Autorank extends JavaPlugin {
 
 	public void setStatsHandler(StatsHandler statsHandler) {
 		this.statsHandler = statsHandler;
+	}
+
+	public MySQLWrapper getMySQLWrapper() {
+		return mysqlWrapper;
+	}
+
+	public void setMySQLWrapper(MySQLWrapper mysqlWrapper) {
+		this.mysqlWrapper = mysqlWrapper;
 	}
 
 }
