@@ -7,7 +7,7 @@ depend: [Vault]
 url: http://wyverncreativeserver.enjin.com/
 version: '2.5 Beta'
 authors: [Idrrp, Armarr, Staartvin]
-description: Reward players ranks based upon their played time.
+description: Reward players based on their stats.
 commands:
     ar:
         description: Master command of AutoRank
