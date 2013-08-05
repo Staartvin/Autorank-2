@@ -50,7 +50,7 @@ public class Autorank extends JavaPlugin {
 	private static Logger log = Bukkit.getLogger();
 
 	public void onEnable() {
-
+		
 		// Register configs
 		setSimpleConfig(new SimpleYamlConfiguration(this, "SimpleConfig.yml",
 				null, "Simple config"));
