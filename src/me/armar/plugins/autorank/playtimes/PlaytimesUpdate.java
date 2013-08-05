@@ -55,13 +55,11 @@ public class PlaytimesUpdate implements Runnable {
 			if (!playtimes.getKeys().contains(playerName)) {
 				playtimes.setLocalTime(playerName, 0);
 			}
-			System.out.print("CHECK!");
 			// Modify local time
 			playtimes.modifyLocalTime(playerName, Playtimes.INTERVAL_MINUTES);
 			
 			// Modify global time
 			if (playtimes.isMySQLEnabled()) {
-				System.out.print("Updating MySQL time!");
 				playtimes.modifyGlobalTime(playerName, Playtimes.INTERVAL_MINUTES);
 			}
 		}
