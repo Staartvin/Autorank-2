@@ -1,6 +1,7 @@
 package me.armar.plugins.autorank.api.events;
 
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
  
@@ -9,7 +10,7 @@ import org.bukkit.event.HandlerList;
  * @author Staartvin
  *
  */
-public class PlayerPromoteEvent extends Event {
+public class PlayerPromoteEvent extends Event implements Cancellable{
     private static final HandlerList handlers = new HandlerList();
     
     private Player player;
@@ -70,7 +71,8 @@ public class PlayerPromoteEvent extends Event {
 		return isCancelled;
 	}
 	
-	public void isCancelled(boolean state) {
-		isCancelled = state;
+	@Override
+	public void setCancelled(boolean cancel) {
+		isCancelled = cancel;	
 	}
 }

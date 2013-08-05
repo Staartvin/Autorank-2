@@ -3,12 +3,10 @@ package me.armar.plugins.autorank;
 import java.sql.SQLException;
 import java.util.logging.Logger;
 
-import me.armar.plugins.autorank.api.events.EventHandler;
 import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
 import me.armar.plugins.autorank.language.LanguageHandler;
 import me.armar.plugins.autorank.leaderboard.Leaderboard;
 import me.armar.plugins.autorank.listeners.PlayerJoinListener;
-import me.armar.plugins.autorank.listeners.PlayerPromoteListener;
 import me.armar.plugins.autorank.mysql.wrapper.MySQLWrapper;
 import me.armar.plugins.autorank.permissions.PermissionsPluginHandler;
 import me.armar.plugins.autorank.playerchecker.PlayerChecker;
@@ -54,7 +52,6 @@ public class Autorank extends JavaPlugin {
 	private MySQLWrapper mysqlWrapper;
 	private static Logger log = Bukkit.getLogger();
 	private UpdateHandler updateHandler;
-	private EventHandler eventHandler;
 
 	public void onEnable() {
 		
@@ -68,12 +65,8 @@ public class Autorank extends JavaPlugin {
 		// Create update handler
 		setUpdateHandler(new UpdateHandler(this));
 		
-		// Create EventHandler
-		setEventHandler(new EventHandler(this));
-		
 		// Register listeners
 		getServer().getPluginManager().registerEvents(new PlayerJoinListener(this), this);
-		getServer().getPluginManager().registerEvents(new PlayerPromoteListener(this), this);
 		
 		// Create language classes
 		setLanguageHandler(new LanguageHandler(this));
@@ -308,13 +301,5 @@ public class Autorank extends JavaPlugin {
 
 	public void setUpdateHandler(UpdateHandler updateHandler) {
 		this.updateHandler = updateHandler;
-	}
-
-	public EventHandler getEventHandler() {
-		return eventHandler;
-	}
-
-	public void setEventHandler(EventHandler eventHandler) {
-		this.eventHandler = eventHandler;
 	}
 }
