@@ -39,6 +39,10 @@ public class API {
 		return LanguageHandler.getLanguage(); 
 	}
 	
+	/**
+	 * Gets the database name Autorank stores its global times in.
+	 * @return name of database
+	 */
 	public String getMySQLDatabase() {
 		return plugin.getMySQLWrapper().getDatabaseName();
 	}
