@@ -5,7 +5,7 @@ startup: postworld
 softdepend: [Essentials, GroupManager, Stats]
 depend: [Vault]
 url: http://wyverncreativeserver.enjin.com/
-version: 'Beta 2.5'
+version: '2.4 Beta'
 authors: [Idrrp, Armarr, Staartvin]
 description: Reward players ranks based upon their played time.
 commands:
@@ -49,4 +49,7 @@ permissions:
         default: op
     autorank.archive:
         description: Allows a player to archive old data.
+        default: op
+    autorank.noticeonupdate:
+        description: When a new update is available, Autorank will tell all players with this permission that a new version is available.
         default: op
