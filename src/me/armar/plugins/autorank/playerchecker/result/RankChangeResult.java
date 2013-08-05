@@ -1,7 +1,10 @@
 package me.armar.plugins.autorank.playerchecker.result;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.api.events.EventHandler;
+import me.armar.plugins.autorank.api.events.PlayerPromoteEvent;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public class RankChangeResult extends Result {
@@ -45,7 +48,18 @@ public class RankChangeResult extends Result {
 			Autorank.logMessage("Promote " + player.getName() + " globally from " + oldrank + " to " + to);
 		}
 		
-
+		// Call PlayerPromoteEvent
+		
+		// Create the event here
+		PlayerPromoteEvent event = new PlayerPromoteEvent(player, world, oldrank, to);
+		// Call the event
+		Bukkit.getServer().getPluginManager().callEvent(event);
+		
+		// Check if some plugin cancelled the event
+		if (EventHandler.doNotPromote) {
+			return false;
+		}
+		
 		return this.getAutorank().getPermPlugHandler().getPermissionPlugin()
 				.replaceGroup(player, world, oldrank, to);
 	}
