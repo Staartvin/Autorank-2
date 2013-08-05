@@ -5,7 +5,7 @@ startup: postworld
 softdepend: [Essentials, GroupManager, Stats]
 depend: [Vault]
 url: http://wyverncreativeserver.enjin.com/
-version: '2.4 Beta'
+version: '2.5 Beta'
 authors: [Idrrp, Armarr, Staartvin]
 description: Reward players ranks based upon their played time.
 commands:
