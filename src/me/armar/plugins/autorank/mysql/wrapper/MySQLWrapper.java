@@ -136,4 +136,8 @@ public class MySQLWrapper {
 	public boolean isMySQLEnabled() {
 		return mysql != null;
 	}
+	
+	public String getDatabaseName() {
+		return database;
+	}
 }

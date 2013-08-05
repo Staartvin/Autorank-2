@@ -7,6 +7,13 @@ import me.armar.plugins.autorank.Autorank;
  *         Abstract class that will be extended by language classes.
  * 
  */
+/**
+ * Language class only holds message methods. 
+ * An enum {@link messages} holds all messages.  
+ * 
+ * @author Staartvin
+ *
+ */
 public abstract class Language {
 
 	// Messages
