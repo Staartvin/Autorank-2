@@ -291,8 +291,6 @@ public class Autorank extends JavaPlugin {
 		Updater updater = new Updater(this, "autorank", this.getFile(), Updater.UpdateType.NO_DOWNLOAD, false);
 		updateHandler.setUpdater(updater);
 		
-		System.out.print(updater.getResult());
-		
 		return (updater.getResult().equals(Updater.UpdateResult.UPDATE_AVAILABLE));
 		
 	}

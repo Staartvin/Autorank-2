@@ -30,10 +30,8 @@ public class PlayerJoinListener implements Listener {
 		// Player isn't allowed to see messages.
 		if (!player.hasPermission("autorank.noticeonupdate")) return;
 	
-		System.out.print("Check for update");
 		// No update was available
 		if (!plugin.getUpdateHandler().isUpdateAvailable()) {
-			System.out.print("No update!");
 			return;
 		}
 		
