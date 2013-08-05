@@ -81,9 +81,13 @@ sql:
     table: autorank
 #   
 #   
-#    
+
+auto-updater:
+
+#   When check-for-new-versions is true, Autorank will tell you when a new version is available.
+    check-for-new-versions: true
     
-    
-    
-    
-    
+#   When auto-download is true, Autorank will automatically download the most recent version    
+    auto-download: false    
+
+#   
