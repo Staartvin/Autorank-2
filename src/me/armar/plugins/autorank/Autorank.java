@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
 import me.armar.plugins.autorank.language.LanguageHandler;
 import me.armar.plugins.autorank.leaderboard.Leaderboard;
+import me.armar.plugins.autorank.listeners.PlayerJoinListener;
 import me.armar.plugins.autorank.mysql.wrapper.MySQLWrapper;
 import me.armar.plugins.autorank.permissions.PermissionsPluginHandler;
 import me.armar.plugins.autorank.playerchecker.PlayerChecker;
@@ -29,6 +30,8 @@ import me.armar.plugins.autorank.playerchecker.result.Result;
 import me.armar.plugins.autorank.playerchecker.result.TeleportResult;
 import me.armar.plugins.autorank.playtimes.Playtimes;
 import me.armar.plugins.autorank.statsapi.StatsHandler;
+import me.armar.plugins.autorank.updater.UpdateHandler;
+import me.armar.plugins.autorank.updater.Updater;
 import me.armar.plugins.autorank.validations.ValidateHandler;
 
 import org.bukkit.Bukkit;
@@ -48,6 +51,7 @@ public class Autorank extends JavaPlugin {
 	private StatsHandler statsHandler;
 	private MySQLWrapper mysqlWrapper;
 	private static Logger log = Bukkit.getLogger();
+	private UpdateHandler updateHandler;
 
 	public void onEnable() {
 		
@@ -56,6 +60,13 @@ public class Autorank extends JavaPlugin {
 				null, "Simple config"));
 		setAdvancedConfig(new SimpleYamlConfiguration(this,
 				"AdvancedConfig.yml", null, "Advanced config"));
+		
+		
+		// Create update handler
+		setUpdateHandler(new UpdateHandler(this));
+		
+		// Register listeners
+		getServer().getPluginManager().registerEvents(new PlayerJoinListener(this), this);
 		
 		// Create language classes
 		setLanguageHandler(new LanguageHandler(this));
@@ -267,5 +278,30 @@ public class Autorank extends JavaPlugin {
 	public void setMySQLWrapper(MySQLWrapper mysqlWrapper) {
 		this.mysqlWrapper = mysqlWrapper;
 	}
+	
+	/**
+	 * This method can only be performed from the main class as it tries to do {@link #getFile()}
+	 * @return Whether an update is available
+	 */
+	public boolean checkForUpdate() {
+		
+		// We are not allowed to check for new versions. 
+		if (!updateHandler.doCheckForNewVersion()) return false;
+		
+		Updater updater = new Updater(this, "autorank", this.getFile(), Updater.UpdateType.NO_DOWNLOAD, false);
+		updateHandler.setUpdater(updater);
+		
+		System.out.print(updater.getResult());
+		
+		return (updater.getResult().equals(Updater.UpdateResult.UPDATE_AVAILABLE));
+		
+	}
+	
+	public UpdateHandler getUpdateHandler() {
+		return updateHandler;
+	}
 
+	public void setUpdateHandler(UpdateHandler updateHandler) {
+		this.updateHandler = updateHandler;
+	}
 }
