@@ -68,7 +68,6 @@ public class PlayerChecker {
 		
 		// Do not rank a player when he is excluded
 		if (player.hasPermission("autorank.exclude")) {
-			//System.out.print(player.getName() + " is excluded!");
 			return result;
 		}
 
