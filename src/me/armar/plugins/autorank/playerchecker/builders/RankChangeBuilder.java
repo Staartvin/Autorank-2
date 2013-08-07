@@ -88,20 +88,19 @@ public class RankChangeBuilder {
 
 			for (String requirement : configHandler.getRequirements(group)) {
 				// Implement optional option logic
-				System.out.print("requirement "
-						+ requirement
-						+ " optional: "
+				System.out.print("requirement " + requirement + " optional: "
 						+ configHandler.isOptional(requirement, group));
-				
-				req.add(createRequirement(requirement, configHandler.getRequirement(requirement, group), configHandler.isOptional(requirement, group)));
+
+				req.add(createRequirement(requirement,
+						configHandler.getRequirement(requirement, group),
+						configHandler.isOptional(requirement, group)));
 
 			}
 
-				for (String resu : configHandler.getResults(group)) {
-					res.add(createResult(resu, configHandler.getResult(resu, group)));
-				}
+			for (String resu : configHandler.getResults(group)) {
+				res.add(createResult(resu, configHandler.getResult(resu, group)));
+			}
 
-				
 			String[] rankChange = configHandler.getRankChange(group).split(";");
 
 			if (rankChange.length <= 0) {
@@ -122,28 +121,26 @@ public class RankChangeBuilder {
 		}
 
 		return result;
-	}
+	} 
 
-	private Result createResult(String type, Object object) {
+	private Result createResult(String type, String object) {
 		Result res = resultBuilder.create(type);
-		object = object.toString();
 
 		if (res != null) {
 			res.setAutorank(autorank);
-			res.setOptions(((String) object).split(";"));
+			res.setOptions(object.split(";"));
 		}
 
 		return res;
 	}
 
-	private Requirement createRequirement(String type, Object arg,
+	private Requirement createRequirement(String type, String arg,
 			boolean optional) {
-		arg = arg.toString();
 		Requirement res = requirementBuilder.create(type);
 
 		if (res != null) {
 			res.setAutorank(autorank);
-			res.setOptions(((String) arg).split(";"), optional);
+			res.setOptions(arg.split(";"), optional);
 		}
 
 		return res;
