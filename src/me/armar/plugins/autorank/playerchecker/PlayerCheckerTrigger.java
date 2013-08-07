@@ -10,8 +10,8 @@ import me.armar.plugins.autorank.Autorank;
 
 /*
  * PlayerCheckerTrigger stores what players it recently checked for a 
- * promotion and makes PlayerChecker check a new player every 1-250 
- * seconds (depending on the amount of online players).
+ * promotion and makes PlayerChecker check a new player every 1-5
+ * minutes (depending on the amount of online players).
  * 
  */
 
@@ -48,7 +48,8 @@ public class PlayerCheckerTrigger implements Runnable {
 		if (players.length > 0) {
 			nextCheck = nextCheck / players.length;
 			
-			// When check time is lower than 1 minute, change it to 1 minute 
+			// When check time is lower than 1 minute, change it to 1 minute
+			// Decreases load on server
 			if (nextCheck < 1200) {
 				nextCheck = 1200;
 			}

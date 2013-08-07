@@ -44,6 +44,9 @@ public class RankChange {
 
 		for (Requirement r : req) {
 			if (r != null)
+				// When optional, always true
+				if (r.isOptional()) continue;
+			
 				if (!r.meetsRequirement(player)) {
 					result = false;
 					break;
