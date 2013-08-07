@@ -255,10 +255,11 @@ public class Commands implements CommandExecutor {
 		} else if (action.equalsIgnoreCase("gcheck")) {
 			// This is a global check. It will not show you the database numbers
 			if (!plugin.getMySQLWrapper().isMySQLEnabled()) {
-				sender.sendMessage(ChatColor.RED + "MySQL is not enabled and therefore global time does not exist!");
+				sender.sendMessage(ChatColor.RED
+						+ "MySQL is not enabled and therefore global time does not exist!");
 				return true;
 			}
-			
+
 			if (args.length > 1) {
 
 				if (!hasPermission("autorank.checkothers", sender)) {
@@ -272,7 +273,8 @@ public class Commands implements CommandExecutor {
 							args[1]
 									+ language.getHasPlayedFor()
 									+ AutorankTools.minutesToString(plugin
-											.getGlobalTime(args[1])) + " across all servers.");
+											.getGlobalTime(args[1]))
+									+ " across all servers.");
 				} else {
 					if (player.hasPermission("autorank.exclude")) {
 						sender.sendMessage(ChatColor.RED + args[1]
@@ -298,7 +300,8 @@ public class Commands implements CommandExecutor {
 						sender,
 						"You have played for "
 								+ AutorankTools.minutesToString(plugin
-										.getGlobalTime(player.getName())) + " across all servers.");
+										.getGlobalTime(player.getName()))
+								+ " across all servers.");
 
 			} else {
 				AutorankTools.sendColoredMessage(sender,
@@ -358,7 +361,16 @@ public class Commands implements CommandExecutor {
 				RankChange rank = it.next();
 				List<Requirement> reqs = failed.get(rank);
 
-				if (reqs.size() == 0) {
+				boolean onlyOptional = true;
+
+				for (Requirement req : reqs) {
+					if (!req.isOptional())
+						onlyOptional = false;
+					else
+						continue;
+				}
+
+				if (reqs.size() == 0 || onlyOptional) {
 					AutorankTools.sendColoredMessage(sender,
 							language.getMeetsRequirements() + rank.getRankTo()
 									+ language.getRankedUpNow());
@@ -369,10 +381,18 @@ public class Commands implements CommandExecutor {
 							language.getDoesntMeetRequirements()
 									+ rank.getRankTo() + ":");
 
-					for (Requirement req : reqs) {
-						if (req != null)
-							AutorankTools.sendColoredMessage(sender, "     - "
-									+ req.getDescription());
+					for (int i=0; i<reqs.size();i++) {
+						Requirement req = reqs.get(i);
+						
+						if (req != null) {
+							StringBuilder message = new StringBuilder("     " + ChatColor.GOLD + (i + 1) + ". " + ChatColor.GREEN  + req.getDescription());
+
+							if (req.isOptional()) {
+								message.append(ChatColor.AQUA + " (Optional)");
+							}
+							AutorankTools.sendColoredMessage(sender, message.toString());
+
+						}
 					}
 				}
 
