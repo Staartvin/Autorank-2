@@ -10,6 +10,7 @@ public class TotalVotesRequirement extends Requirement {
 
 	private int totalVotes = 0;
 	private Autorank plugin;
+	private boolean optional = false;
 
 	public TotalVotesRequirement() {
 		super();
@@ -17,7 +18,9 @@ public class TotalVotesRequirement extends Requirement {
 	}
 	
 	@Override
-	public boolean setOptions(String[] options) {
+	public boolean setOptions(String[] options, boolean optional) {
+		this.optional = optional;
+		
 		try {
 			totalVotes = Integer.parseInt(options[0]);
 			return true;
@@ -36,6 +39,11 @@ public class TotalVotesRequirement extends Requirement {
 	@Override
 	public String getDescription() {
 		return LanguageHandler.getLanguage().getVoteRequirement(totalVotes);
+	}
+
+	@Override
+	public boolean isOptional() {
+		return optional;
 	}
 
 }

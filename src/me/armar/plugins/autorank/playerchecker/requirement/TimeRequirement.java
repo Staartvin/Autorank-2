@@ -8,9 +8,12 @@ import org.bukkit.entity.Player;
 public class TimeRequirement extends Requirement {
 
 	int time = -1;
+	private boolean optional = false;
 
 	@Override
-	public boolean setOptions(String[] options) {
+	public boolean setOptions(String[] options, boolean optional) {
+		this.optional = optional;
+		
 		if (options.length > 0)
 			this.time = AutorankTools.stringToMinutes(options[0]);
 		return (time != -1);
@@ -26,6 +29,11 @@ public class TimeRequirement extends Requirement {
 	@Override
 	public String getDescription() {
 		return LanguageHandler.getLanguage().getTimeRequirement(AutorankTools.minutesToString(time));
+	}
+
+	@Override
+	public boolean isOptional() {
+		return optional;
 	}
 
 }

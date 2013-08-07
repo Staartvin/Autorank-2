@@ -7,9 +7,12 @@ import org.bukkit.entity.Player;
 public class ExpRequirement extends Requirement {
 
 	private int minExp = 999999999;
+	private boolean optional = false;
 
 	@Override
-	public boolean setOptions(String[] options) {
+	public boolean setOptions(String[] options, boolean optional) {
+		this.optional = optional;
+		
 		try {
 			minExp = AutorankTools.stringtoInt(options[0]);
 		} catch (Exception e) {
@@ -26,6 +29,11 @@ public class ExpRequirement extends Requirement {
 	@Override
 	public String getDescription() {
 		return "Need a minimum level of " + minExp + ".";
+	}
+
+	@Override
+	public boolean isOptional() {
+		return optional;
 	}
 
 }

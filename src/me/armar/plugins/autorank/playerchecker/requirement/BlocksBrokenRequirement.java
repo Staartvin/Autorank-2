@@ -8,6 +8,7 @@ public class BlocksBrokenRequirement extends Requirement {
 
 	private int blocksBroken = 0;
 	private Autorank plugin;
+	private boolean optional = false;
 
 	public BlocksBrokenRequirement() {
 		super();
@@ -15,7 +16,9 @@ public class BlocksBrokenRequirement extends Requirement {
 	}
 	
 	@Override
-	public boolean setOptions(String[] options) {
+	public boolean setOptions(String[] options, boolean optional) {
+		this.optional = optional;
+		
 		try {
 			blocksBroken = Integer.parseInt(options[0]);
 			return true;
@@ -34,6 +37,11 @@ public class BlocksBrokenRequirement extends Requirement {
 	@Override
 	public String getDescription() {
 		return "Need a minimum of " + blocksBroken + " blocks broken.";
+	}
+
+	@Override
+	public boolean isOptional() {
+		return optional;
 	}
 
 }

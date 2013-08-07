@@ -9,13 +9,15 @@ import org.bukkit.material.MaterialData;
 public class HasItemRequirement extends Requirement {
 
 	ItemStack item = null;
+	private boolean optional = false;
 
 	@Override
-	public boolean setOptions(String[] options) {
+	public boolean setOptions(String[] options, boolean optional) {
 		int id = 0;
 		int amount = 1;
 		byte data = 0;
 
+		this.optional = optional;
 		
 		if (options.length > 0)
 			id = AutorankTools.stringtoInt(options[0]);
@@ -39,6 +41,11 @@ public class HasItemRequirement extends Requirement {
 	public String getDescription() {
 		return "Need to have " + item.getAmount() + " "
 				+ item.getType().toString() + ".";
+	}
+
+	@Override
+	public boolean isOptional() {
+		return optional;
 	}
 
 }

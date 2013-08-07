@@ -49,7 +49,7 @@ public class RankChangeBuilder {
 			// Time requirement
 			List<Requirement> req = new ArrayList<Requirement>();
 			Requirement timeReq = new TimeRequirement();
-			timeReq.setOptions(new String[] { options[1] });
+			timeReq.setOptions(new String[] { options[1] }, false);
 			timeReq.setAutorank(autorank);
 			req.add(timeReq);
 
@@ -90,8 +90,10 @@ public class RankChangeBuilder {
 						.getConfigurationSection("requirements");
 
 				for (String requirement : reqList.getKeys(false)) {
+					// Implement optional option logic
 					req.add(createRequirement(requirement,
-							reqList.get(requirement).toString()));
+							reqList.get(requirement).toString(), reqList.getBoolean("." + requirement + ".options.optional", false)));
+
 				}
 
 			}
@@ -104,22 +106,23 @@ public class RankChangeBuilder {
 					res.add(createResult(resu, (String) resList.get(resu)));
 				}
 			}
-			String[] rankChange = section.getString(group + ".results.rank change").split(";");
-			
+			String[] rankChange = section.getString(
+					group + ".results.rank change").split(";");
+
 			if (rankChange.length <= 0) {
 				System.out
 						.print("[AutoRank] Advanced Config is not configured correctly!");
 				autorank.getServer().getPluginManager().disablePlugin(autorank);
 				return null;
 			}
-			
+
 			String rankTo = null;
-			if(rankChange.length == 1){
+			if (rankChange.length == 1) {
 				rankTo = rankChange[0].trim();
-			}else{
+			} else {
 				rankTo = rankChange[1].trim();
 			}
-			
+
 			result.add(new RankChange(group, rankTo, req, res));
 		}
 
@@ -137,12 +140,13 @@ public class RankChangeBuilder {
 		return res;
 	}
 
-	private Requirement createRequirement(String type, String arg) {
+	private Requirement createRequirement(String type, String arg,
+			boolean optional) {
 		Requirement res = requirementBuilder.create(type);
 
 		if (res != null) {
 			res.setAutorank(autorank);
-			res.setOptions(arg.split(";"));
+			res.setOptions(arg.split(";"), optional);
 		}
 
 		return res;
@@ -160,8 +164,7 @@ public class RankChangeBuilder {
 		return requirementBuilder;
 	}
 
-	private void setRequirementBuilder(
-			RequirementBuilder requirementBuilder) {
+	private void setRequirementBuilder(RequirementBuilder requirementBuilder) {
 		this.requirementBuilder = requirementBuilder;
 	}
 

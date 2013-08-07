@@ -11,6 +11,7 @@ public class MoneyRequirement extends Requirement {
 
 	private double minMoney = 999999999;
 	public static Economy economy = null;
+	private boolean optional = false;
 
 	public MoneyRequirement() {
 		super();
@@ -28,7 +29,8 @@ public class MoneyRequirement extends Requirement {
     }
 	
 	@Override
-	public boolean setOptions(String[] options) {
+	public boolean setOptions(String[] options, boolean optional) {
+		this.optional = optional;
 		try {
 			minMoney = Integer.parseInt(options[0]);
 			return true;
@@ -47,6 +49,11 @@ public class MoneyRequirement extends Requirement {
 	@Override
 	public String getDescription() {
 		return LanguageHandler.getLanguage().getMoneyRequirement((int) minMoney);
+	}
+
+	@Override
+	public boolean isOptional() {
+		return optional;
 	}
 
 }
