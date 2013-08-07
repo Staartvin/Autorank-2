@@ -2,6 +2,8 @@ package me.armar.plugins.autorank;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 /*
@@ -90,7 +92,7 @@ public class AutorankTools {
 	}
 
 	public static void sendColoredMessage(CommandSender sender, String msg) {
-		sender.sendMessage("\u00A72" + msg);
+		sender.sendMessage(ChatColor.translateAlternateColorCodes('&', ChatColor.GREEN + msg));
 	}
 
 }
