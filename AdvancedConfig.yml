@@ -33,18 +33,24 @@ language: english
 ranks:
     guest:
         requirements:
-            time: 1h
+            time:
+                value: 10h
         results:
             rank change: guest;member
             command: 'say &p just got a promotion; broadcast &p has just been promoted to Member!'
             message: 'Congratulations, you are now a member.'
     member:
         requirements:
-            time: 5d
-            exp: 10
-            world: world_nether
-            gamemode: 0
-            has item: 50
+            time:
+                value: 5d
+            exp:
+                value: 10
+            world:
+                value: world_nether
+            gamemode:
+                value: 0
+            has item:
+                value: 50
         results:
             rank change: member;vip
             command: 'say &p has just been promoted to VIP!; give &p 1 100; tell &p You have just earned 100 stone!'

@@ -5,13 +5,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.bukkit.configuration.ConfigurationSection;
-
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.config.ConfigHandler;
 import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
 import me.armar.plugins.autorank.playerchecker.RankChange;
-import me.armar.plugins.autorank.playerchecker.requirement.*;
-import me.armar.plugins.autorank.playerchecker.result.*;
+import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
+import me.armar.plugins.autorank.playerchecker.requirement.TimeRequirement;
+import me.armar.plugins.autorank.playerchecker.result.MessageResult;
+import me.armar.plugins.autorank.playerchecker.result.RankChangeResult;
+import me.armar.plugins.autorank.playerchecker.result.Result;
 
 public class RankChangeBuilder {
 
@@ -76,38 +78,31 @@ public class RankChangeBuilder {
 	public List<RankChange> createFromAdvancedConfig(
 			SimpleYamlConfiguration config) {
 		List<RankChange> result = new ArrayList<RankChange>();
+		ConfigHandler configHandler = autorank.getConfigHandler();
 
-		ConfigurationSection section = config.getConfigurationSection("ranks");
-		for (String group : section.getKeys(false)) {
+		//ConfigurationSection section = config.getConfigurationSection("ranks");
+		for (String group : configHandler.getRanks()) {
 
 			List<Requirement> req = new ArrayList<Requirement>();
 			List<Result> res = new ArrayList<Result>();
-			ConfigurationSection groupSection = section
-					.getConfigurationSection(group);
 
-			if (groupSection.get("requirements") != null) {
-				ConfigurationSection reqList = groupSection
-						.getConfigurationSection("requirements");
-
-				for (String requirement : reqList.getKeys(false)) {
-					// Implement optional option logic
-					req.add(createRequirement(requirement,
-							reqList.get(requirement).toString(), reqList.getBoolean("." + requirement + ".options.optional", false)));
-
-				}
+			for (String requirement : configHandler.getRequirements(group)) {
+				// Implement optional option logic
+				System.out.print("requirement "
+						+ requirement
+						+ " optional: "
+						+ configHandler.isOptional(requirement, group));
+				
+				req.add(createRequirement(requirement, configHandler.getRequirement(requirement, group), configHandler.isOptional(requirement, group)));
 
 			}
 
-			if (groupSection.get("results") != null) {
-				ConfigurationSection resList = groupSection
-						.getConfigurationSection("results");
-
-				for (String resu : resList.getKeys(false)) {
-					res.add(createResult(resu, (String) resList.get(resu)));
+				for (String resu : configHandler.getResults(group)) {
+					res.add(createResult(resu, configHandler.getResult(resu, group)));
 				}
-			}
-			String[] rankChange = section.getString(
-					group + ".results.rank change").split(";");
+
+				
+			String[] rankChange = configHandler.getRankChange(group).split(";");
 
 			if (rankChange.length <= 0) {
 				System.out
@@ -129,24 +124,26 @@ public class RankChangeBuilder {
 		return result;
 	}
 
-	private Result createResult(String type, String arg) {
+	private Result createResult(String type, Object object) {
 		Result res = resultBuilder.create(type);
+		object = object.toString();
 
 		if (res != null) {
 			res.setAutorank(autorank);
-			res.setOptions(arg.split(";"));
+			res.setOptions(((String) object).split(";"));
 		}
 
 		return res;
 	}
 
-	private Requirement createRequirement(String type, String arg,
+	private Requirement createRequirement(String type, Object arg,
 			boolean optional) {
+		arg = arg.toString();
 		Requirement res = requirementBuilder.create(type);
 
 		if (res != null) {
 			res.setAutorank(autorank);
-			res.setOptions(arg.split(";"), optional);
+			res.setOptions(((String) arg).split(";"), optional);
 		}
 
 		return res;

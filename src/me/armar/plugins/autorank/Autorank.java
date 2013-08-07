@@ -3,6 +3,7 @@ package me.armar.plugins.autorank;
 import java.sql.SQLException;
 import java.util.logging.Logger;
 
+import me.armar.plugins.autorank.config.ConfigHandler;
 import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
 import me.armar.plugins.autorank.language.LanguageHandler;
 import me.armar.plugins.autorank.leaderboard.Leaderboard;
@@ -52,6 +53,7 @@ public class Autorank extends JavaPlugin {
 	private MySQLWrapper mysqlWrapper;
 	private static Logger log = Bukkit.getLogger();
 	private UpdateHandler updateHandler;
+	private ConfigHandler configHandler;
 
 	public void onEnable() {
 		
@@ -60,6 +62,9 @@ public class Autorank extends JavaPlugin {
 				null, "Simple config"));
 		setAdvancedConfig(new SimpleYamlConfiguration(this,
 				"AdvancedConfig.yml", null, "Advanced config"));
+		
+		// Create config handler
+		setConfigHandler(new ConfigHandler(this));
 		
 		
 		// Create update handler
@@ -301,5 +306,13 @@ public class Autorank extends JavaPlugin {
 
 	public void setUpdateHandler(UpdateHandler updateHandler) {
 		this.updateHandler = updateHandler;
+	}
+
+	public ConfigHandler getConfigHandler() {
+		return configHandler;
+	}
+
+	public void setConfigHandler(ConfigHandler configHandler) {
+		this.configHandler = configHandler;
 	}
 }
