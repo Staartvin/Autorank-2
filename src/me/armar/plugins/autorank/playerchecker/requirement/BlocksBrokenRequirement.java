@@ -36,7 +36,7 @@ public class BlocksBrokenRequirement extends Requirement {
 
 	@Override
 	public String getDescription() {
-		return "Need a minimum of " + blocksBroken + " blocks broken.";
+		return "Break at least " + blocksBroken + " blocks.";
 	}
 
 	@Override

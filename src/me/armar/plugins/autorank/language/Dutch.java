@@ -45,10 +45,10 @@ public class Dutch extends Language {
 		rankedUpNow = " en zal nu gepromoveerd worden.";
 		doesntMeetRequirements = "en voldoet niet aan alle voorwaarden voor rang ";
 		dataImported = "Nieuwe data is geïmporteerd!";
-		timeRequirement = "Speeltijd moet hoger zijn dan %time%.";
-		worldRequirement = "Moet in wereld %world% zijn.";
-		voteRequirement = "Moet %votes% keer gestemd hebben.";
-		moneyRequirement = "Moet minimaal %money% op de bank hebben.";
+		timeRequirement = "Speel voor %time%.";
+		worldRequirement = "Wees in %world% zijn.";
+		voteRequirement = "Stem minimaal %votes% keer.";
+		moneyRequirement = "Heb %money% op de bank hebben.";
 	}
 	
 	@Override

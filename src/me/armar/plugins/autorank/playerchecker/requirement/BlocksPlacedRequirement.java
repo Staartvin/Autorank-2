@@ -35,7 +35,7 @@ public class BlocksPlacedRequirement extends Requirement {
 
 	@Override
 	public String getDescription() {
-		return "Need a minimum of " + blocksPlaced + " blocks placed.";
+		return "Place at least " + blocksPlaced + " blocks.";
 	}
 
 	@Override

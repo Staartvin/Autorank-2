@@ -28,7 +28,7 @@ public class ExpRequirement extends Requirement {
 
 	@Override
 	public String getDescription() {
-		return "Need a minimum level of " + minExp + ".";
+		return "Have at least level " + minExp + " in exp.";
 	}
 
 	@Override

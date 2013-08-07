@@ -39,7 +39,7 @@ public class HasItemRequirement extends Requirement {
 
 	@Override
 	public String getDescription() {
-		return "Need to have " + item.getAmount() + " "
+		return "Obtain " + item.getAmount() + " "
 				+ item.getType().toString() + ".";
 	}
 

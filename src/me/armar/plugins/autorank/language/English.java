@@ -50,10 +50,10 @@ public class English extends Language {
 		rankedUpNow = " and will now be ranked up.";
 		doesntMeetRequirements = "and doesn't meet the requirements for rank ";
 		dataImported = "New data has been imported!";
-		timeRequirement = "Playtime needs to be %time% or higher.";
-		worldRequirement = "Need to be in world %world%.";
-		voteRequirement = "Need to have voted at least %votes% times.";
-		moneyRequirement = "Need to have at least %money%.";
+		timeRequirement = "Play for at least %time% or higher.";
+		worldRequirement = "Be in %world%.";
+		voteRequirement = "Vote at least %votes% times.";
+		moneyRequirement = "Have at least %money% money.";
 	}
 	
 	@Override

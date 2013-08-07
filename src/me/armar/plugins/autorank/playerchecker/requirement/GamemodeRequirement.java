@@ -25,7 +25,7 @@ public class GamemodeRequirement extends Requirement {
 
 	@Override
 	public String getDescription() {
-		return "Need to be in gamemode " + gamemode + ".";
+		return "Be in " + gamemode + ".";
 	}
 
 	@Override
