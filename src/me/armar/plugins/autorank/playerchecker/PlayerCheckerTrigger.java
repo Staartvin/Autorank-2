@@ -43,11 +43,14 @@ public class PlayerCheckerTrigger implements Runnable {
 			playersToBeChecked.remove(player);
 		}
 
-		int nextCheck = 5000;
+		// Check every 5 minutes
+		int nextCheck = 6000;
 		if (players.length > 0) {
 			nextCheck = nextCheck / players.length;
-			if (nextCheck < 20) {
-				nextCheck = 20;
+			
+			// When check time is lower than 1 minute, change it to 1 minute 
+			if (nextCheck < 1200) {
+				nextCheck = 1200;
 			}
 		}
 
