@@ -385,7 +385,7 @@ public class Commands implements CommandExecutor {
 						Requirement req = reqs.get(i);
 						
 						if (req != null) {
-							StringBuilder message = new StringBuilder("     " + ChatColor.GOLD + (i + 1) + ". " + ChatColor.GREEN  + req.getDescription());
+							StringBuilder message = new StringBuilder("     " + ChatColor.GOLD + (i + 1) + ". " + ChatColor.RED  + req.getDescription());
 
 							if (req.isOptional()) {
 								message.append(ChatColor.AQUA + " (Optional)");
