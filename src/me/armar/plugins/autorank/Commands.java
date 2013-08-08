@@ -311,6 +311,8 @@ public class Commands implements CommandExecutor {
 			}
 			return true;
 		} else if (action.equalsIgnoreCase("complete")) {
+			
+			// Implemented /ar complete #
 			if (args.length != 2) {
 				sender.sendMessage(ChatColor.RED + "Incorrect command usage!");
 				sender.sendMessage(ChatColor.YELLOW + "Usage: /ar complete #");
@@ -572,6 +574,8 @@ public class Commands implements CommandExecutor {
 					+ ChatColor.GRAY + "- Archive data with a minimum");
 			sender.sendMessage(ChatColor.AQUA + "/ar debug " + ChatColor.GRAY
 					+ "- Shows debug information");
+			sender.sendMessage(ChatColor.AQUA + "/ar complete #" + ChatColor.GRAY
+					+ "- Complete a requirement at this moment");
 			sender.sendMessage(ChatColor.BLUE + "Page 2 of " + maxPages);
 		} else {
 			sender.sendMessage(ChatColor.GREEN + "-- Autorank Commands --");
