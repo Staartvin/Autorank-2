@@ -94,4 +94,8 @@ public class ConfigHandler {
 	public boolean usePartialCompletion() {
 		return config.getBoolean("use partial completion", false);
 	}
+	
+	public boolean useMySQL() {
+		return config.getBoolean("sql.enabled");
+	}
 }
