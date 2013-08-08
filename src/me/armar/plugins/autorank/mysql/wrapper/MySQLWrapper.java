@@ -1,8 +1,5 @@
 package me.armar.plugins.autorank.mysql.wrapper;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 import org.bukkit.configuration.ConfigurationSection;
 
 import me.armar.plugins.autorank.Autorank;
@@ -25,11 +22,12 @@ public class MySQLWrapper {
 
 	private Autorank plugin;
 	private SQLDataStorage mysql;
-	String hostname;
-	String username;
-	String password;
-	String database;
-	String table;
+	String hostname, username, password, database, table;
+	// Database time
+	int databaseTime = 0;
+	// This thread will be used to check if the database time has been retrieved.
+	Thread timeThread;
+	
 
 	public MySQLWrapper(Autorank instance) {
 		plugin = instance;
@@ -59,6 +57,21 @@ public class MySQLWrapper {
 		});
 		
 
+	}
+	
+	/**
+	 * Because the MySQL queries are done async, we need to wait for the result. Otherwise it would be cached and out of date.
+	 * This waits for the thread to die and then it will continue
+	 * Use this whenever you do an async MySQL thread.
+	 */
+	private void waitForThread(Thread thread) {
+		if(thread.isAlive()) {
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
 	}
 
 	public void sqlSetup(SimpleYamlConfiguration config) {
@@ -97,33 +110,14 @@ public class MySQLWrapper {
 		if (mysql.isClosed()) {
 			mysql.connect();
 		}
-
-		int time = -1;
-
-		if (mysql != null) {
-
-			String statement = "SELECT * FROM " + table + " WHERE name='"
-					+ name + "'";
-			ResultSet rs = mysql.executeQuery(statement);
-
-			if (rs == null)
-				time = -1;
-
-			try {
-				if (rs.next()) {
-					time = rs.getInt(2);
-				} else {
-					time = -1;
-				}
-
-			} catch (SQLException e) {
-				System.out.println("Playtimes.getDBTime");
-				System.out.println("SQLException: " + e.getMessage());
-				System.out.println("SQLState: " + e.getSQLState());
-				System.out.println("VendorError: " + e.getErrorCode());
-			}
-		}
-		return time;
+		// Retrieve database time
+		timeThread = new Thread(new TimeRunnable(this, mysql, name, table));
+		timeThread.start();
+		
+		// Wait for thread to finish
+		waitForThread(timeThread);
+		
+		return databaseTime;
 	} 
 
 	/**
