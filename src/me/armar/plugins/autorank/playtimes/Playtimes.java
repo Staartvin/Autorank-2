@@ -31,7 +31,6 @@ public class Playtimes {
 				.getScheduler()
 				.runTaskTimer(plugin, update, INTERVAL_MINUTES * 20 * 60,
 						INTERVAL_MINUTES * 20 * 60);
-		//plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, update, INTERVAL_MINUTES * 20 * 4, INTERVAL_MINUTES * 20 * 4);
 
 	}
 
