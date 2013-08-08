@@ -15,6 +15,10 @@ afk integration: true
 # This option is always on when using the SimpleConfig
 # Currently supports: Essentials
 
+use partial completion: true
+# When this is true, players can use /ar complete # to complete a requirement at any moment they like.
+# When this is false, players will only be able to /ar check and check for all requirements at one time. They would need to have all requirements at that moment.
+
 leaderboard layout: '&6&r | &b&p - &7&d day(s), &h hour(s) and &m minute(s).'
 leaderboard length: 5
 # changes the appearance of the /ar leaderboard command
@@ -28,6 +32,7 @@ leaderboard length: 5
 
 language: english
 # Languages available: English, Dutch
+
 
 
 ranks:

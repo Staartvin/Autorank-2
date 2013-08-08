@@ -357,6 +357,12 @@ public class Commands implements CommandExecutor {
 			String latestKnownGroup = plugin.getRequirementHandler()
 					.getLastKnownGroup(player.getName());
 
+			if (latestKnownGroup == null) {
+				plugin.getRequirementHandler().setLastKnownGroup(player.getName(), currentGroup);
+				
+				latestKnownGroup = currentGroup;
+			}
+			
 			if (!latestKnownGroup.equalsIgnoreCase(currentGroup)) {
 				// Reset progress and update latest known group
 				plugin.getRequirementHandler().setPlayerProgress(
@@ -487,6 +493,11 @@ public class Commands implements CommandExecutor {
 		String latestKnownGroup = plugin.getRequirementHandler()
 				.getLastKnownGroup(player.getName());
 
+		if (latestKnownGroup == null) {
+			plugin.getRequirementHandler().setLastKnownGroup(player.getName(), currentGroup);
+			
+			latestKnownGroup = currentGroup;
+		}
 		if (!latestKnownGroup.equalsIgnoreCase(currentGroup)) {
 			// Reset progress and update latest known group
 			plugin.getRequirementHandler().setPlayerProgress(player.getName(),
