@@ -90,6 +90,8 @@ public class StatsHandler {
 	 * @return amount player placed of a block
 	 */
 	public int getBlocksPlaced(String player, int id, int damageValue) {
+		if (!isEnabled()) return 0;
+		
 		Stat blockStat = getStatType(StatType.BLOCK_PLACE, player);
 		boolean checkDamageValue = false;
 		
@@ -124,6 +126,8 @@ public class StatsHandler {
 	 * @return amount player broke of a block
 	 */
 	public int getBlocksBroken(String player, int id, int damageValue) {
+		if (!isEnabled()) return 0;
+		
 		Stat blockStat = getStatType(StatType.BLOCK_BREAK, player);
 		boolean checkDamageValue = false;
 		
