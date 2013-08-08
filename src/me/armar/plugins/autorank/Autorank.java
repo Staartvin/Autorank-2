@@ -59,6 +59,8 @@ public class Autorank extends JavaPlugin {
 
 	public void onEnable() {
 
+		// TODO: Add our own Stats logger which keeps track of (a lot of) things
+		
 		// Register configs
 		setSimpleConfig(new SimpleYamlConfiguration(this, "SimpleConfig.yml",
 				null, "Simple config"));
