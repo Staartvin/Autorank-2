@@ -34,7 +34,7 @@ public class RankChange {
 	public List<Result> getRes() {
 		return res;
 	}
-	
+
 	public String getRankTo() {
 		return rankTo;
 	}
@@ -45,12 +45,25 @@ public class RankChange {
 		for (Requirement r : req) {
 			if (r != null)
 				// When optional, always true
-				if (r.isOptional()) continue;
-			
-				if (!r.meetsRequirement(player)) {
-					result = false;
-					break;
+				if (r.isOptional())
+					continue;
+
+			if (!r.meetsRequirement(player)) {
+				result = false;
+				break;
+			} else {
+				// Player meets requirement, thus perform results of requirement
+				// Perform results of a requirement as well
+				List<Result> results = r.getResults();
+				
+				boolean noErrors = true;
+				for (Result realResult: results) {
+					if (!realResult.applyResult(player)) {
+						noErrors = false;
+					}
 				}
+				result = noErrors;
+			}
 		}
 
 		return result;
@@ -79,7 +92,6 @@ public class RankChange {
 					if (!r.applyResult(player, group))
 						result = false;
 			}
-
 		} else {
 			result = false;
 		}
@@ -107,12 +119,12 @@ public class RankChange {
 			if (!first)
 				b.append(", ");
 			first = false;
-			if(r!= null){
+			if (r != null) {
 				b.append(r.toString());
-			}else{
+			} else {
 				b.append("NULL");
 			}
-			
+
 		}
 		return b.toString();
 	}

@@ -1,6 +1,10 @@
 package me.armar.plugins.autorank.config;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+
+import com.google.common.collect.Lists;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
@@ -73,5 +77,21 @@ public class ConfigHandler {
 
 	public String getRankChange(String group) {
 		return config.getString("ranks." + group + ".results.rank change");
+	}
+
+	public List<String> getResultsOfRequirement(String requirement, String group) {
+		Set<String> results = new HashSet<String>();
+		
+		results = (Set<String>) ((config.getConfigurationSection("ranks." + group + ".requirements." + requirement + ".results") != null) ? config.getConfigurationSection("ranks." + group + ".requirements." + requirement + ".results").getKeys(false): new HashSet<String>());
+		
+		return Lists.newArrayList(results);
+	}
+	
+	public String getResultOfRequirement(String requirement, String group, String result) {
+		return config.get("ranks." + group + ".requirements." + requirement + ".results." + result).toString();
+	}
+	
+	public boolean usePartialCompletion() {
+		return config.getBoolean("use partial completion", false);
 	}
 }

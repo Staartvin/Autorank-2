@@ -51,7 +51,8 @@ public class RankChangeBuilder {
 			// Time requirement
 			List<Requirement> req = new ArrayList<Requirement>();
 			Requirement timeReq = new TimeRequirement();
-			timeReq.setOptions(new String[] { options[1] }, false);
+			timeReq.setOptions(new String[] { options[1] }, false,
+					new ArrayList<Result>());
 			timeReq.setAutorank(autorank);
 			req.add(timeReq);
 
@@ -88,12 +89,21 @@ public class RankChangeBuilder {
 
 			for (String requirement : configHandler.getRequirements(group)) {
 				// Implement optional option logic
-				System.out.print("requirement " + requirement + " optional: "
-						+ configHandler.isOptional(requirement, group));
+				boolean optional = configHandler.isOptional(requirement, group);
+				// Result for requirement
+				List<String> results = configHandler.getResultsOfRequirement(
+						requirement, group);
+				
+				// Create a new result List that will get all result when a requirement is met.
+				List<Result> realResults = new ArrayList<Result>();
+				
+				for (String resultString: results) {
+					realResults.add(createResult(resultString, configHandler.getResultOfRequirement(requirement, group, resultString)));
+				}
 
 				req.add(createRequirement(requirement,
 						configHandler.getRequirement(requirement, group),
-						configHandler.isOptional(requirement, group)));
+						optional, realResults));
 
 			}
 
@@ -121,7 +131,7 @@ public class RankChangeBuilder {
 		}
 
 		return result;
-	} 
+	}
 
 	private Result createResult(String type, String object) {
 		Result res = resultBuilder.create(type);
@@ -135,12 +145,12 @@ public class RankChangeBuilder {
 	}
 
 	private Requirement createRequirement(String type, String arg,
-			boolean optional) {
+			boolean optional, List<Result> results) {
 		Requirement res = requirementBuilder.create(type);
 
 		if (res != null) {
 			res.setAutorank(autorank);
-			res.setOptions(arg.split(";"), optional);
+			res.setOptions(arg.split(";"), optional, results);
 		}
 
 		return res;

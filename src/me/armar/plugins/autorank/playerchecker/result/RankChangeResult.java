@@ -1,5 +1,7 @@
 package me.armar.plugins.autorank.playerchecker.result;
 
+import java.util.ArrayList;
+
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.api.events.PlayerPromoteEvent;
 
@@ -56,6 +58,11 @@ public class RankChangeResult extends Result {
 		
 		// Check if event is cancelled.
 		if (event.isCancelled()) return false;
+		
+		// When rank is changed: reset progress and update last known group
+		getAutorank().getRequirementHandler().setPlayerProgress(player.getName(), new ArrayList<Integer>());
+		
+		getAutorank().getRequirementHandler().setLastKnownGroup(player.getName(), to);
 		
 		return this.getAutorank().getPermPlugHandler().getPermissionPlugin()
 				.replaceGroup(player, world, oldrank, to);

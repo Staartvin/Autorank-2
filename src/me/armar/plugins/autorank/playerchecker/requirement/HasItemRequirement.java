@@ -1,6 +1,10 @@
 package me.armar.plugins.autorank.playerchecker.requirement;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import me.armar.plugins.autorank.AutorankTools;
+import me.armar.plugins.autorank.playerchecker.result.Result;
 
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -10,14 +14,16 @@ public class HasItemRequirement extends Requirement {
 
 	ItemStack item = null;
 	private boolean optional = false;
+	List<Result> results = new ArrayList<Result>();
 
 	@Override
-	public boolean setOptions(String[] options, boolean optional) {
+	public boolean setOptions(String[] options, boolean optional, List<Result> results) {
 		int id = 0;
 		int amount = 1;
 		byte data = 0;
 
 		this.optional = optional;
+		this.results = results;
 		
 		if (options.length > 0)
 			id = AutorankTools.stringtoInt(options[0]);
@@ -34,6 +40,10 @@ public class HasItemRequirement extends Requirement {
 
 	@Override
 	public boolean meetsRequirement(Player player) {
+		if (isCompleted(getReqID(this.getClass(), player), player.getName())) {
+			return true;
+		}
+		
 		return item != null && player.getInventory().contains(item);
 	}
 
@@ -46,6 +56,11 @@ public class HasItemRequirement extends Requirement {
 	@Override
 	public boolean isOptional() {
 		return optional;
+	}
+
+	@Override
+	public List<Result> getResults() {
+		return results;
 	}
 
 }

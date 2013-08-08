@@ -30,6 +30,7 @@ import me.armar.plugins.autorank.playerchecker.result.RankChangeResult;
 import me.armar.plugins.autorank.playerchecker.result.Result;
 import me.armar.plugins.autorank.playerchecker.result.TeleportResult;
 import me.armar.plugins.autorank.playtimes.Playtimes;
+import me.armar.plugins.autorank.requirementhandler.RequirementHandler;
 import me.armar.plugins.autorank.statsapi.StatsHandler;
 import me.armar.plugins.autorank.updater.UpdateHandler;
 import me.armar.plugins.autorank.updater.Updater;
@@ -54,58 +55,66 @@ public class Autorank extends JavaPlugin {
 	private static Logger log = Bukkit.getLogger();
 	private UpdateHandler updateHandler;
 	private ConfigHandler configHandler;
+	private RequirementHandler requirementHandler;
 
 	public void onEnable() {
-		
+
 		// Register configs
 		setSimpleConfig(new SimpleYamlConfiguration(this, "SimpleConfig.yml",
 				null, "Simple config"));
 		setAdvancedConfig(new SimpleYamlConfiguration(this,
 				"AdvancedConfig.yml", null, "Advanced config"));
-		
+
+		// Create requirement handler
+		setRequirementHandler(new RequirementHandler(this));
+
+		// Create files
+		requirementHandler.createNewFile();
+
 		// Create config handler
 		setConfigHandler(new ConfigHandler(this));
-		
-		
+
 		// Create update handler
 		setUpdateHandler(new UpdateHandler(this));
-		
+
 		// Register listeners
-		getServer().getPluginManager().registerEvents(new PlayerJoinListener(this), this);
-		
+		getServer().getPluginManager().registerEvents(
+				new PlayerJoinListener(this), this);
+
 		// Create language classes
 		setLanguageHandler(new LanguageHandler(this));
-		
+
 		// Create MySQL Wrapper
 		setMySQLWrapper(new MySQLWrapper(this));
-		
+
 		// Create playtime class
 		setPlaytimes(new Playtimes(this));
-		
+
 		// Create leaderboard class
 		setLeaderboard(new Leaderboard(this));
-		
+
 		// Create permission plugin handler class
 		setPermPlugHandler(new PermissionsPluginHandler(this));
-		
+
 		// Create player check class
 		setPlayerChecker(new PlayerChecker(this));
-		
+
 		// Create validate handler
 		setValidateHandler(new ValidateHandler(this));
-		
+
 		// Create stats handler
 		setStatsHandler(new StatsHandler(this));
-		
+
 		if (statsHandler.setupStatsAPI()) {
-			getLogger().info("Hooked into Stats! Extra requirements can be used.");
+			getLogger().info(
+					"Hooked into Stats! Extra requirements can be used.");
 		}
-		
+
 		RequirementBuilder req = this.getPlayerChecker().getBuilder()
 				.getRequirementBuilder();
 		ResultBuilder res = this.getPlayerChecker().getBuilder()
 				.getResultBuilder();
-		
+
 		// Register 'main' requirements
 		req.registerRequirement("exp", ExpRequirement.class);
 		req.registerRequirement("money", MoneyRequirement.class);
@@ -125,10 +134,10 @@ public class Autorank extends JavaPlugin {
 		res.registerResult("tp", TeleportResult.class);
 
 		playerChecker.initialiseFromConfigs(this);
-		
+
 		// Register command
 		getCommand("ar").setExecutor(new Commands(this));
-		
+
 		if (getAdvancedConfig().getBoolean("use advanced config")) {
 			if (getValidateHandler().validateConfigGroups(getAdvancedConfig()) == false) {
 				getServer().getPluginManager().disablePlugin(this);
@@ -140,9 +149,9 @@ public class Autorank extends JavaPlugin {
 				return;
 			}
 		}
-		
 
-		Autorank.logMessage(String.format("Autorank %s has been enabled!", getDescription().getVersion()));
+		Autorank.logMessage(String.format("Autorank %s has been enabled!",
+				getDescription().getVersion()));
 	}
 
 	public void onDisable() {
@@ -160,13 +169,14 @@ public class Autorank extends JavaPlugin {
 		// Make sure all tasks are cancelled after shutdown. This seems obvious, but when a player /reloads, the server creates an instance of the plugin which causes duplicate tasks to run. 
 		getServer().getScheduler().cancelTasks(this);
 
-		Autorank.logMessage(String.format("Autorank %s has been disabled!", getDescription().getVersion()));
+		Autorank.logMessage(String.format("Autorank %s has been disabled!",
+				getDescription().getVersion()));
 	}
-	
+
 	public LanguageHandler getLanguageHandler() {
 		return languageHandler;
 	}
-	
+
 	private void setLanguageHandler(LanguageHandler lHandler) {
 		this.languageHandler = lHandler;
 	}
@@ -179,7 +189,7 @@ public class Autorank extends JavaPlugin {
 	public int getLocalTime(String player) {
 		return playtimes.getLocalTime(player);
 	}
-	
+
 	public int getGlobalTime(String player) {
 		return playtimes.getGlobalTime(player);
 	}
@@ -187,7 +197,7 @@ public class Autorank extends JavaPlugin {
 	public void setLocalTime(String player, int time) {
 		playtimes.setLocalTime(player, time);
 	}
-	
+
 	public void setGlobalTime(String player, int time) throws SQLException {
 		playtimes.setGlobalTime(player, time);
 	}
@@ -202,8 +212,7 @@ public class Autorank extends JavaPlugin {
 				.registerRequirement(name, requirement);
 	}
 
-	public void registerResult(String name,
-			Class<? extends Result> result) {
+	public void registerResult(String name, Class<? extends Result> result) {
 		playerChecker.getBuilder().getResultBuilder()
 				.registerResult(name, result);
 	}
@@ -267,7 +276,7 @@ public class Autorank extends JavaPlugin {
 	public void setValidateHandler(ValidateHandler validateHandler) {
 		this.validateHandler = validateHandler;
 	}
-	
+
 	public StatsHandler getStatsHandler() {
 		return statsHandler;
 	}
@@ -283,23 +292,28 @@ public class Autorank extends JavaPlugin {
 	public void setMySQLWrapper(MySQLWrapper mysqlWrapper) {
 		this.mysqlWrapper = mysqlWrapper;
 	}
-	
+
 	/**
-	 * This method can only be performed from the main class as it tries to do {@link #getFile()}
+	 * This method can only be performed from the main class as it tries to do
+	 * {@link #getFile()}
+	 * 
 	 * @return Whether an update is available
 	 */
 	public boolean checkForUpdate() {
-		
+
 		// We are not allowed to check for new versions. 
-		if (!updateHandler.doCheckForNewVersion()) return false;
-		
-		Updater updater = new Updater(this, "autorank", this.getFile(), Updater.UpdateType.NO_DOWNLOAD, false);
+		if (!updateHandler.doCheckForNewVersion())
+			return false;
+
+		Updater updater = new Updater(this, "autorank", this.getFile(),
+				Updater.UpdateType.NO_DOWNLOAD, false);
 		updateHandler.setUpdater(updater);
-		
-		return (updater.getResult().equals(Updater.UpdateResult.UPDATE_AVAILABLE));
-		
+
+		return (updater.getResult()
+				.equals(Updater.UpdateResult.UPDATE_AVAILABLE));
+
 	}
-	
+
 	public UpdateHandler getUpdateHandler() {
 		return updateHandler;
 	}
@@ -314,5 +328,13 @@ public class Autorank extends JavaPlugin {
 
 	public void setConfigHandler(ConfigHandler configHandler) {
 		this.configHandler = configHandler;
+	}
+
+	public RequirementHandler getRequirementHandler() {
+		return requirementHandler;
+	}
+
+	public void setRequirementHandler(RequirementHandler requirementHandler) {
+		this.requirementHandler = requirementHandler;
 	}
 }

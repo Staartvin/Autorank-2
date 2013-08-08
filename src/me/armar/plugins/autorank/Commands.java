@@ -1,5 +1,6 @@
 package me.armar.plugins.autorank;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,7 @@ import me.armar.plugins.autorank.language.Language;
 import me.armar.plugins.autorank.language.LanguageHandler;
 import me.armar.plugins.autorank.playerchecker.RankChange;
 import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
+import me.armar.plugins.autorank.playerchecker.result.Result;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -308,6 +310,129 @@ public class Commands implements CommandExecutor {
 						language.getCannotCheckConsole());
 			}
 			return true;
+		} else if (action.equalsIgnoreCase("complete")) {
+			if (args.length != 2) {
+				sender.sendMessage(ChatColor.RED + "Incorrect command usage!");
+				sender.sendMessage(ChatColor.YELLOW + "Usage: /ar complete #");
+				return true;
+			}
+
+			if (!(sender instanceof Player)) {
+				sender.sendMessage(ChatColor.RED
+						+ "You are a robot! You can't rank up, silly..");
+				return true;
+			}
+
+			if (!plugin.getConfigHandler().usePartialCompletion()) {
+				sender.sendMessage(ChatColor.RED
+						+ "You cannot use this command as this server has not enabled partial completion!");
+				return true;
+			}
+
+			if (!hasPermission("autorank.complete", sender))
+				return true;
+
+			Player player = (Player) sender;
+
+			int completionID = 0;
+
+			try {
+				completionID = Integer.parseInt(args[1]);
+
+				if (completionID < 1) {
+					completionID = 1;
+				}
+			} catch (Exception e) {
+				player.sendMessage(ChatColor.RED + "'" + args[1]
+						+ "' is not a valid id!");
+				return true;
+			}
+
+			// Check if the latest known group is the current group. Otherwise, reset progress
+			String currentGroup = plugin.getPermPlugHandler()
+					.getPermissionPlugin().getPlayerGroups(player)[0];
+			String latestKnownGroup = plugin.getRequirementHandler()
+					.getLastKnownGroup(player.getName());
+
+			if (!latestKnownGroup.equalsIgnoreCase(currentGroup)) {
+				// Reset progress and update latest known group
+				plugin.getRequirementHandler().setPlayerProgress(
+						player.getName(), new ArrayList<Integer>());
+				plugin.getRequirementHandler().setLastKnownGroup(
+						player.getName(), currentGroup);
+			}
+
+			Map<RankChange, List<Requirement>> failed = plugin
+					.getPlayerChecker().getAllRequirements(player);
+			Set<RankChange> keySet = failed.keySet();
+
+			if (keySet.size() == 0) {
+				player.sendMessage(ChatColor.RED
+						+ "You don't have a next rank up!");
+				return true;
+			}
+
+			List<Requirement> requirements;
+			for (Iterator<RankChange> it = keySet.iterator(); it.hasNext();) {
+				RankChange rank = it.next();
+				requirements = failed.get(rank);
+
+				// Rank player as he has fulfilled all requirements
+				if (requirements.size() == 0) {
+					player.sendMessage(ChatColor.GREEN
+							+ "You don't have any requirements left and you are ranked now!");
+					plugin.getPlayerChecker().checkPlayer(player);
+				} else {
+					// Get the specified requirement
+					if (completionID > requirements.size()) {
+						completionID = requirements.size();
+					}
+
+					// Human logic = first number is 1 not 0.
+					Requirement req = requirements.get((completionID - 1));
+
+					if (plugin.getRequirementHandler().hasCompletedRequirement(
+							(completionID - 1), player.getName())) {
+						player.sendMessage(ChatColor.RED
+								+ "You have already completed this requirement!");
+						return true;
+					}
+
+					if (req.meetsRequirement(player)) {
+						// Player meets requirement
+						player.sendMessage(ChatColor.GREEN
+								+ "You have successfully completed requirement "
+								+ ChatColor.GOLD + completionID
+								+ ChatColor.GREEN + ":");
+						player.sendMessage(ChatColor.AQUA
+								+ req.getDescription());
+
+						List<Result> results = req.getResults();
+
+						// Apply results of that requirement
+						for (Result realResult : results) {
+							if (realResult.applyResult(player))
+								;
+						}
+
+						// Log that a player has passed this requirement
+						plugin.getRequirementHandler().addPlayerProgress(
+								player.getName(), (completionID - 1));
+
+					} else {
+						// player does not meet requirements
+						player.sendMessage(ChatColor.RED
+								+ "You do not meet requirements for #"
+								+ ChatColor.GOLD + completionID + ChatColor.RED
+								+ ":");
+						player.sendMessage(ChatColor.AQUA
+								+ req.getDescription());
+					}
+
+					return true;
+				}
+
+			}
 		}
 
 		sender.sendMessage(ChatColor.RED + "Command not recognised!");
@@ -317,8 +442,24 @@ public class Commands implements CommandExecutor {
 	}
 
 	private void check(CommandSender sender, Player player) {
+
+		// Check if the latest known group is the current group. Otherwise, reset progress
+		String currentGroup = plugin.getPermPlugHandler().getPermissionPlugin()
+				.getPlayerGroups(player)[0];
+		String latestKnownGroup = plugin.getRequirementHandler()
+				.getLastKnownGroup(player.getName());
+
+		if (!latestKnownGroup.equalsIgnoreCase(currentGroup)) {
+			// Reset progress and update latest known group
+			plugin.getRequirementHandler().setPlayerProgress(player.getName(),
+					new ArrayList<Integer>());
+			plugin.getRequirementHandler().setLastKnownGroup(player.getName(),
+					currentGroup);
+		}
+
+		// Change the way requirements are shown. When a player has completed a requirement, it will be green, otherwise it will be red.
 		Map<RankChange, List<Requirement>> failed = plugin.getPlayerChecker()
-				.getFailedRequirementsForApplicableGroup(player);
+				.getAllRequirements(player);
 
 		Set<RankChange> keySet = failed.keySet();
 		String playername = player.getName();
@@ -362,6 +503,7 @@ public class Commands implements CommandExecutor {
 				List<Requirement> reqs = failed.get(rank);
 
 				boolean onlyOptional = true;
+				boolean meetsAllRequirements = true;
 
 				for (Requirement req : reqs) {
 					if (!req.isOptional())
@@ -370,7 +512,13 @@ public class Commands implements CommandExecutor {
 						continue;
 				}
 
-				if (reqs.size() == 0 || onlyOptional) {
+				for (Requirement req : reqs) {
+					if (!req.meetsRequirement(player)) {
+						meetsAllRequirements = false;
+					}
+				}
+
+				if (meetsAllRequirements || onlyOptional) {
 					AutorankTools.sendColoredMessage(sender,
 							language.getMeetsRequirements() + rank.getRankTo()
 									+ language.getRankedUpNow());
@@ -381,16 +529,26 @@ public class Commands implements CommandExecutor {
 							language.getDoesntMeetRequirements()
 									+ rank.getRankTo() + ":");
 
-					for (int i=0; i<reqs.size();i++) {
+					for (int i = 0; i < reqs.size(); i++) {
 						Requirement req = reqs.get(i);
-						
+
 						if (req != null) {
-							StringBuilder message = new StringBuilder("     " + ChatColor.GOLD + (i + 1) + ". " + ChatColor.RED  + req.getDescription());
+							StringBuilder message = new StringBuilder("     "
+									+ ChatColor.GOLD + (i + 1) + ". ");
+							if (req.meetsRequirement(player)) {
+								message.append(ChatColor.RED
+										+ req.getDescription() + ChatColor.BLUE
+										+ " (Done)");
+							} else {
+								message.append(ChatColor.RED
+										+ req.getDescription());
+							}
 
 							if (req.isOptional()) {
 								message.append(ChatColor.AQUA + " (Optional)");
 							}
-							AutorankTools.sendColoredMessage(sender, message.toString());
+							AutorankTools.sendColoredMessage(sender,
+									message.toString());
 
 						}
 					}

@@ -104,6 +104,23 @@ public class PlayerChecker {
 
 		return result;
 	}
+	
+	public Map<RankChange, List<Requirement>> getAllRequirements(Player player) {
+		Map<RankChange, List<Requirement>> result = new HashMap<RankChange, List<Requirement>>();
+
+		String[] groups = plugin.getPermPlugHandler().getPermissionPlugin().getPlayerGroups(player);
+		
+		for (String group : groups) {
+			List<RankChange> changes = rankChanges.get(group);
+			if (changes != null) {
+				for (RankChange change : changes) {
+					result.put(change, change.getReq());
+				}
+			}
+		}
+		
+		return result;
+	}
 
 	public PlayerCheckerTrigger getTrigger() {
 		return trigger;
