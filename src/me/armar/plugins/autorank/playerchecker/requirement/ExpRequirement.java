@@ -51,4 +51,11 @@ public class ExpRequirement extends Requirement {
 		return results;
 	}
 
+	@Override
+	public String getProgress(Player player) {
+		String progress = "";
+		progress = progress.concat(player.getLevel() + "/" + minExp);
+		return progress;
+	}
+
 }

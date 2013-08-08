@@ -82,4 +82,11 @@ public abstract class Requirement {
 	public final boolean isCompleted(int reqID, String playerName) {
 		return autorank.getRequirementHandler().hasCompletedRequirement(reqID, playerName);
 	}
+	
+	/**
+	 * Gets the current progress of a player on a certain requirement.
+	 * @param player Player to check for
+	 * @return String containing the progress
+	 */
+	public abstract String getProgress(Player player);
 }

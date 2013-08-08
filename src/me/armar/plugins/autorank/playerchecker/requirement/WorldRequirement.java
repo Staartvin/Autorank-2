@@ -49,4 +49,11 @@ public class WorldRequirement extends Requirement {
 		return results;
 	}
 
+	@Override
+	public String getProgress(Player player) {
+		String progress = "";
+		progress = progress.concat(player.getWorld().getName() + "/" + world);
+		return progress;
+	}
+
 }

@@ -71,4 +71,10 @@ public class MoneyRequirement extends Requirement {
 		return results;
 	}
 
+	@Override
+	public String getProgress(Player player) {
+		String progress = "";
+		progress = progress.concat(economy.getBalance(player.getName()) + "/" + minMoney);
+		return progress;
+	}
 }

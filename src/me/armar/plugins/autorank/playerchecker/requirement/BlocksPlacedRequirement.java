@@ -8,10 +8,14 @@ import me.armar.plugins.autorank.playerchecker.result.Result;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 public class BlocksPlacedRequirement extends Requirement {
 
 	private int blocksPlaced = 0;
+	private int blockID = -1;
+	private int damageValue = -1;
+	
 	private Autorank plugin;
 	private boolean optional = false;
 	List<Result> results = new ArrayList<Result>();
@@ -27,27 +31,66 @@ public class BlocksPlacedRequirement extends Requirement {
 		this.results = results;
 		
 		try {
-			blocksPlaced = Integer.parseInt(options[0]);
-			return true;
+			if (options.length > 0) {
+				blocksPlaced = Integer.parseInt(options[0].trim());
+			}
+			if (options.length > 1) {
+				blockID = Integer.parseInt(options[0].trim());
+				blocksPlaced = Integer.parseInt(options[1].trim());
+			}
+			if (options.length > 2) {
+				damageValue = Integer.parseInt(options[2].trim());
+			}
 		} catch (Exception e) {
 			blocksPlaced = 0;
 			return false;
 		}
+
+		return true;
 	}
 
 	@Override
 	public boolean meetsRequirement(Player player) {
 		// TODO Auto-generated method stub
+		//System.out.print("(PLACED) Check for id: " + blockID + ", dv: " + damageValue
+		//		+ ", value: " + blocksPlaced);
+
+		boolean enabled = plugin.getStatsHandler().isEnabled();
+
+		boolean sufficient = false;
+		if (blockID > 0) {
+			sufficient = plugin.getStatsHandler().getBlocksPlaced(
+					player.getName(), blockID, damageValue) >= blocksPlaced;
+		} else {
+			sufficient = plugin.getStatsHandler().getTotalBlocksPlaced(
+					player.getName()) >= blocksPlaced;
+		}
+
 		if (isCompleted(getReqID(this.getClass(), player), player.getName())) {
 			return true;
 		}
 		
-		return plugin.getStatsHandler().isEnabled() && plugin.getStatsHandler().getTotalBlocksPlaced(player.getName()) >= blocksPlaced;
+		return enabled && sufficient;
 	}
 
 	@Override
 	public String getDescription() {
-		return "Place at least " + blocksPlaced + " blocks.";
+		String message = "Place at least " + blocksPlaced + " ";
+
+		if (blockID > 0 && damageValue >= 0) {
+			ItemStack item = new ItemStack(blockID, 1, (short) damageValue);
+
+			message = message.concat(item.getType().name().replace("_", "")
+					.toLowerCase() + " ");
+		} else if (blockID > 0) {
+			ItemStack item = new ItemStack(blockID, 1);
+
+			message = message.concat(item.getType().name().replace("_", "")
+					.toLowerCase() + " ");
+		}
+
+		message = message.concat("blocks.");
+		return message;
 	}
 
 	@Override
@@ -58,6 +101,13 @@ public class BlocksPlacedRequirement extends Requirement {
 	@Override
 	public List<Result> getResults() {
 		return results;
+	}
+
+	@Override
+	public String getProgress(Player player) {
+		String progress = "";
+		progress = progress.concat(getAutorank().getStatsHandler().getBlocksPlaced(player.getName(), blockID, damageValue) + "/" + blocksPlaced);
+		return progress;
 	}
 
 }

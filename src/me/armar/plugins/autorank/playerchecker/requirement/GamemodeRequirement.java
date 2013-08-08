@@ -48,4 +48,11 @@ public class GamemodeRequirement extends Requirement {
 		return results;
 	}
 
+	@Override
+	public String getProgress(Player player) {
+		String progress = "";
+		progress = progress.concat(player.getGameMode().name() + "/" + gamemode);
+		return progress;
+	}
+
 }

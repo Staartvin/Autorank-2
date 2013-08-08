@@ -63,4 +63,10 @@ public class HasItemRequirement extends Requirement {
 		return results;
 	}
 
+	@Override
+	public String getProgress(Player player) {
+		String progress = "";
+		progress = progress.concat("");
+		return progress;
+	}
 }

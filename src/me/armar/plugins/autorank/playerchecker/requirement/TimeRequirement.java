@@ -51,4 +51,11 @@ public class TimeRequirement extends Requirement {
 		return results;
 	}
 
+	@Override
+	public String getProgress(Player player) {
+		String progress = "";
+		progress = progress.concat(getAutorank().getPlaytimes().getLocalTime(player.getName()) + "/" + time);
+		return progress;
+	}
+
 }

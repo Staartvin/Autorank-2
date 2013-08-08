@@ -61,4 +61,11 @@ public class TotalVotesRequirement extends Requirement {
 		return results;
 	}
 
+	@Override
+	public String getProgress(Player player) {
+		String progress = "";
+		progress = progress.concat(getAutorank().getStatsHandler().getTotalTimesVoted(player.getName()) + "/" + totalVotes);
+		return progress;
+	}
+
 }
