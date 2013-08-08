@@ -101,7 +101,7 @@ public class RankChangeBuilder {
 					realResults.add(createResult(resultString, configHandler.getResultOfRequirement(requirement, group, resultString)));
 				}
 
-				req.add(createRequirement(requirement,
+				req.add(createRequirement(getCorrectName(requirement),
 						configHandler.getRequirement(requirement, group),
 						optional, realResults));
 
@@ -131,6 +131,19 @@ public class RankChangeBuilder {
 		}
 
 		return result;
+	}
+	
+	private String getCorrectName(String oldName) {
+		if (oldName.contains("time")) return "time";
+		else if (oldName.contains("exp")) return "exp";
+		else if (oldName.contains("money")) return "money";
+		else if (oldName.contains("world")) return "world";
+		else if (oldName.contains("gamemode")) return "gamemode";
+		else if (oldName.contains("item")) return "has item";
+		else if (oldName.contains("broken")) return "blocks broken";
+		else if (oldName.contains("placed")) return "blocks placed";
+		else if (oldName.contains("votes")) return "votes";
+		else return oldName;
 	}
 
 	private Result createResult(String type, String object) {
