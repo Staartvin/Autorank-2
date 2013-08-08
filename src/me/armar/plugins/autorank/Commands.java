@@ -429,6 +429,7 @@ public class Commands implements CommandExecutor {
 								+ ":");
 						player.sendMessage(ChatColor.AQUA
 								+ req.getDescription());
+						player.sendMessage(ChatColor.GREEN + "Current: " + ChatColor.GOLD + req.getProgress(player));
 					}
 
 					return true;
