@@ -81,4 +81,72 @@ public class StatsHandler {
 		}
 		return value;
 	}
+	
+	/**
+	 * Gets the total blocks of a certain id and damage value placed
+	 * @param player Player to check for
+	 * @param id Item ID to check for
+	 * @param damageValue Damage value to check for. (negative number to not skip check)
+	 * @return amount player placed of a block
+	 */
+	public int getBlocksPlaced(String player, int id, int damageValue) {
+		Stat blockStat = getStatType(StatType.BLOCK_PLACE, player);
+		boolean checkDamageValue = false;
+		
+		
+		if (damageValue > 0) {
+			checkDamageValue = true;
+		}
+		
+		int value = 0;
+
+		for (Object[] vars : blockStat.getAllVariables()) {
+			
+			if (checkDamageValue) {
+				// VAR 0 = blockID, VAR 1 = damageValue, VAR 2 = (1 = break, 0 = place)
+				if ((Integer) vars[0] == id && (Byte) vars[1] == damageValue) {
+					value += blockStat.getValue(vars);
+				}
+			} else {
+				if ((Integer) vars[0] == id) {
+					value += blockStat.getValue(vars);
+				}
+			}
+		}
+		return value;
+	}
+	
+	/**
+	 * Gets the total blocks of a certain id and damage value broken
+	 * @param player Player to check for
+	 * @param id Item ID to check for
+	 * @param damageValue Damage value to check for. (negative number to not skip check)
+	 * @return amount player broke of a block
+	 */
+	public int getBlocksBroken(String player, int id, int damageValue) {
+		Stat blockStat = getStatType(StatType.BLOCK_BREAK, player);
+		boolean checkDamageValue = false;
+		
+		
+		if (damageValue > 0) {
+			checkDamageValue = true;
+		}
+		
+		int value = 0;
+
+		for (Object[] vars : blockStat.getAllVariables()) {
+			
+			if (checkDamageValue) {
+				// VAR 0 = blockID, VAR 1 = damageValue, VAR 2 = (1 = break, 0 = place)
+				if ((Integer) vars[0] == id && (Byte) vars[1] == damageValue) {
+					value += blockStat.getValue(vars);
+				}
+			} else {
+				if ((Integer) vars[0] == id) {
+					value += blockStat.getValue(vars);
+				}
+			}
+		}
+		return value;
+	}
 }
