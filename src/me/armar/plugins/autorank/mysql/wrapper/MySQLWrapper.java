@@ -46,12 +46,18 @@ public class MySQLWrapper {
 			mysql.connect();
 		}
 
-		String statement = "CREATE TABLE  IF NOT EXISTS " + table + " "
+		final String statement = "CREATE TABLE  IF NOT EXISTS " + table + " "
 				+ "(name VARCHAR(16) not NULL, " + " time INTEGER not NULL, "
 				+ " modified TIMESTAMP not NULL, " + " PRIMARY KEY ( name ))";
 
-		// TODO Auto-generated method stub
-		mysql.execute(statement);
+		// Run async to prevent load issues.
+		plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+			
+			public void run() {
+				mysql.execute(statement);
+			}
+		});
+		
 
 	}
 
@@ -78,8 +84,16 @@ public class MySQLWrapper {
 		}
 	}
 
+	/**
+	 * Gets the database time of player
+	 * Run this ASYNC!
+	 * @param name Playername to get the time of
+	 * @return time player has played across all servers
+	 */
 	public int getDatabaseTime(final String name) {
 		// Check if connection is still alive
+		// TODO: make this run async. (When I try to, it doesn't get the fresh result.)
+		// I need to make it wait for the task.
 		if (mysql.isClosed()) {
 			mysql.connect();
 		}
@@ -110,7 +124,7 @@ public class MySQLWrapper {
 			}
 		}
 		return time;
-	}
+	} 
 
 	/**
 	 * Sets the time of a player
@@ -124,13 +138,18 @@ public class MySQLWrapper {
 			mysql.connect();
 		}
 
-		String statement = "INSERT INTO " + table + " VALUES ('" + playerName
+		final String statement = "INSERT INTO " + table + " VALUES ('" + playerName
 				+ "', " + time + ", CURRENT_TIMESTAMP) "
 				+ "ON DUPLICATE KEY UPDATE " + "time=" + time;
 
-		// TODO Auto-generated method stub
-		mysql.execute(statement);
-
+		// Run async to prevent load issues.
+		plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+			
+			public void run() {
+				// TODO Auto-generated method stub
+				mysql.execute(statement);
+			}
+		});
 	}
 
 	public boolean isMySQLEnabled() {
