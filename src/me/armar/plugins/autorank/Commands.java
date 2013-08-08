@@ -1,5 +1,6 @@
 package me.armar.plugins.autorank;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -38,7 +39,7 @@ public class Commands implements CommandExecutor {
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String label,
+	public boolean onCommand(final CommandSender sender, Command cmd, String label,
 			String[] args) {
 		if (args.length == 0) {
 			sender.sendMessage(ChatColor.BLUE
@@ -436,6 +437,40 @@ public class Commands implements CommandExecutor {
 				}
 
 			}
+		} else if (action.equalsIgnoreCase("sync")) {
+			if (!hasPermission("autorank.sync", sender)) return true;
+			
+			if (!plugin.getConfigHandler().useMySQL()) {
+				sender.sendMessage(ChatColor.RED + "MySQL is not being used!");
+				return true;
+			}
+			
+			sender.sendMessage(ChatColor.RED + "You do not have to use this command regularly. Use this only one time per server.");
+			
+			// Do this async as we are accessing mysql database.
+			plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+
+				@Override
+				public void run() {
+					// Update all mysql records
+					for (String player: plugin.getPlaytimes().getKeys()) {
+						if (plugin.getPlaytimes().getLocalTime(player) <= 0) continue;
+						
+						int localTime = plugin.getPlaytimes().getLocalTime(player);
+						int globalTime = plugin.getPlaytimes().getGlobalTime(player);
+						
+						// Update record
+						try {
+							plugin.getPlaytimes().setGlobalTime(player, localTime + globalTime);
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+					sender.sendMessage(ChatColor.GREEN + "Successfully updated MySQL records!");
+				}
+			});
+			return true;
 		}
 
 		sender.sendMessage(ChatColor.RED + "Command not recognised!");
@@ -556,7 +591,6 @@ public class Commands implements CommandExecutor {
 						}
 					}
 				}
-
 			}
 		}
 	}
@@ -577,6 +611,8 @@ public class Commands implements CommandExecutor {
 					+ "- Shows debug information");
 			sender.sendMessage(ChatColor.AQUA + "/ar complete #" + ChatColor.GRAY
 					+ "- Complete a requirement at this moment");
+			sender.sendMessage(ChatColor.AQUA + "/ar sync" + ChatColor.GRAY
+					+ "- Sync MySQL database with server. (Use only one time per server)");
 			sender.sendMessage(ChatColor.BLUE + "Page 2 of " + maxPages);
 		} else {
 			sender.sendMessage(ChatColor.GREEN + "-- Autorank Commands --");
