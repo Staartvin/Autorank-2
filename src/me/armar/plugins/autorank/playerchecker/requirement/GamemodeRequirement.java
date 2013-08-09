@@ -13,14 +13,17 @@ public class GamemodeRequirement extends Requirement {
 	int gamemode = -1;
 	private boolean optional = false;
 	private boolean autoComplete = false;
+	private int reqId;
 	List<Result> results = new ArrayList<Result>();
 
 	@Override
-	public boolean setOptions(String[] options, boolean optional, List<Result> results, boolean autoComplete) {
+	public boolean setOptions(String[] options, boolean optional,
+			List<Result> results, boolean autoComplete, int reqId) {
 		this.optional = optional;
 		this.results = results;
 		this.autoComplete = autoComplete;
-		
+		this.reqId = reqId;
+
 		if (options.length > 0)
 			this.gamemode = AutorankTools.stringtoInt(options[0]);
 		return (gamemode != -1);
@@ -28,10 +31,10 @@ public class GamemodeRequirement extends Requirement {
 
 	@Override
 	public boolean meetsRequirement(Player player) {
-		if (isCompleted(getReqID(this.getClass(), player), player.getName())) {
+		if (isCompleted(getReqId(), player.getName())) {
 			return true;
 		}
-		
+
 		return gamemode != -1 && gamemode == player.getGameMode().getValue();
 	}
 
@@ -53,12 +56,18 @@ public class GamemodeRequirement extends Requirement {
 	@Override
 	public String getProgress(Player player) {
 		String progress = "";
-		progress = progress.concat(player.getGameMode().name() + "/" + gamemode);
+		progress = progress
+				.concat(player.getGameMode().name() + "/" + gamemode);
 		return progress;
 	}
 
 	@Override
 	public boolean useAutoCompletion() {
 		return autoComplete;
+	}
+	
+	@Override
+	public int getReqId() {
+		return reqId;
 	}
 }

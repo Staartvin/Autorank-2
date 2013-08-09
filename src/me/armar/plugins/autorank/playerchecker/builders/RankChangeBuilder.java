@@ -52,7 +52,7 @@ public class RankChangeBuilder {
 			List<Requirement> req = new ArrayList<Requirement>();
 			Requirement timeReq = new TimeRequirement();
 			timeReq.setOptions(new String[] { options[1] }, false,
-					new ArrayList<Result>(), true);
+					new ArrayList<Result>(), true, 0);
 			timeReq.setAutorank(autorank);
 			req.add(timeReq);
 
@@ -93,17 +93,33 @@ public class RankChangeBuilder {
 				// Result for requirement
 				List<String> results = configHandler.getResultsOfRequirement(
 						requirement, group);
-				
+
 				// Create a new result List that will get all result when a requirement is met.
 				List<Result> realResults = new ArrayList<Result>();
-				
-				for (String resultString: results) {
-					realResults.add(createResult(resultString, configHandler.getResultOfRequirement(requirement, group, resultString)));
-				}
 
+				for (String resultString : results) {
+					realResults.add(createResult(resultString, configHandler
+							.getResultOfRequirement(requirement, group,
+									resultString)));
+				}
+				int reqId = configHandler.getReqId(requirement, group);
+				
+				//System.out.print("REQ ID of " + requirement + " for group " + group + ": " + reqId);
+				
+				if (reqId < 0) {
+					try {
+						throw new Exception("REQ ID COULDN'T BE FOUND! REPORT TO AUTHOR!" +
+								" GROUP: " + group + ", REQUIREMENT: " + requirement);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						autorank.getLogger().severe(e.getCause().getMessage());
+						return result;
+					}
+				}
 				req.add(createRequirement(getCorrectName(requirement),
 						configHandler.getRequirement(requirement, group),
-						optional, realResults, configHandler.useAutoCompletion(group, requirement)));
+						optional, realResults,
+						configHandler.useAutoCompletion(group, requirement), reqId));
 
 			}
 
@@ -132,18 +148,28 @@ public class RankChangeBuilder {
 
 		return result;
 	}
-	
+
 	private String getCorrectName(String oldName) {
-		if (oldName.contains("time")) return "time";
-		else if (oldName.contains("exp")) return "exp";
-		else if (oldName.contains("money")) return "money";
-		else if (oldName.contains("world")) return "world";
-		else if (oldName.contains("gamemode")) return "gamemode";
-		else if (oldName.contains("item")) return "has item";
-		else if (oldName.contains("broken")) return "blocks broken";
-		else if (oldName.contains("placed")) return "blocks placed";
-		else if (oldName.contains("votes")) return "votes";
-		else return oldName;
+		if (oldName.contains("time"))
+			return "time";
+		else if (oldName.contains("exp"))
+			return "exp";
+		else if (oldName.contains("money"))
+			return "money";
+		else if (oldName.contains("world"))
+			return "world";
+		else if (oldName.contains("gamemode"))
+			return "gamemode";
+		else if (oldName.contains("item"))
+			return "has item";
+		else if (oldName.contains("broken"))
+			return "blocks broken";
+		else if (oldName.contains("placed"))
+			return "blocks placed";
+		else if (oldName.contains("votes"))
+			return "votes";
+		else
+			return oldName;
 	}
 
 	private Result createResult(String type, String object) {
@@ -158,12 +184,14 @@ public class RankChangeBuilder {
 	}
 
 	private Requirement createRequirement(String type, String arg,
-			boolean optional, List<Result> results, boolean autoComplete) {
+			boolean optional, List<Result> results, boolean autoComplete,
+			int reqId) {
 		Requirement res = requirementBuilder.create(type);
 
 		if (res != null) {
 			res.setAutorank(autorank);
-			res.setOptions(arg.split(";"), optional, results, autoComplete);
+			res.setOptions(arg.split(";"), optional, results, autoComplete,
+					reqId);
 		}
 
 		return res;

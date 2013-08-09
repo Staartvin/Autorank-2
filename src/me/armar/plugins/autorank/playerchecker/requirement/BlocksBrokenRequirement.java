@@ -15,6 +15,8 @@ public class BlocksBrokenRequirement extends Requirement {
 	private int blocksBroken = 0;
 	private int blockID = -1;
 	private int damageValue = -1;
+	
+	private int reqId;
 
 	private Autorank plugin;
 	private boolean optional = false;
@@ -28,10 +30,11 @@ public class BlocksBrokenRequirement extends Requirement {
 
 	@Override
 	public boolean setOptions(String[] options, boolean optional,
-			List<Result> results, boolean autoComplete) {
+			List<Result> results, boolean autoComplete, int reqId) {
 		this.optional = optional;
 		this.results = results;
 		this.autoComplete = autoComplete;
+		this.reqId = reqId;
 
 		try {
 			if (options.length > 0) {
@@ -70,7 +73,7 @@ public class BlocksBrokenRequirement extends Requirement {
 					player.getName()) >= blocksBroken;
 		}
 
-		if (isCompleted(getReqID(this.getClass(), player), player.getName())) {
+		if (isCompleted(getReqId(), player.getName())) {
 			return true;
 		}
 		return enabled && sufficient;
@@ -116,5 +119,10 @@ public class BlocksBrokenRequirement extends Requirement {
 	@Override
 	public boolean useAutoCompletion() {
 		return autoComplete;
+	}
+
+	@Override
+	public int getReqId() {
+		return reqId;
 	}
 }

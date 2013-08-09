@@ -124,4 +124,24 @@ public class ConfigHandler {
 			}
 		}
 	}
+	
+	/**
+	 * Gets the requirement's id.
+	 * @param requirement Requirement name exactly as it is in the config
+	 * @param group Group the requirement is from
+	 * @return requirement id, -1 if nothing found
+	 */
+	public int getReqId(String requirement, String group) {
+		Object[] reqs = getRequirements(group).toArray();
+		
+		for (int i=0;i<reqs.length;i++) {
+			String req2 = (String) reqs[i];
+			
+			if (requirement.equalsIgnoreCase(req2)) {
+				return i;
+			}
+		}
+		
+		return -1;
+	}
 }

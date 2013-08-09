@@ -566,7 +566,7 @@ public class Commands implements CommandExecutor {
 				}
 
 				for (Requirement req : reqs) {
-					int reqID = req.getReqID(req.getClass(), player);
+					int reqID = req.getReqId();
 
 					if (req.useAutoCompletion()) {
 						// Do auto complete
@@ -624,7 +624,7 @@ public class Commands implements CommandExecutor {
 
 					for (int i = 0; i < reqs.size(); i++) {
 						Requirement req = reqs.get(i);
-						int reqID = req.getReqID(req.getClass(), player);
+						int reqID = req.getReqId();
 
 						if (req != null) {
 							StringBuilder message = new StringBuilder("     "

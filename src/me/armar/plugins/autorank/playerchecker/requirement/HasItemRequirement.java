@@ -15,24 +15,27 @@ public class HasItemRequirement extends Requirement {
 	ItemStack item = null;
 	private boolean optional = false;
 	private boolean autoComplete = false;
+	private int reqId;
 	List<Result> results = new ArrayList<Result>();
 
 	@Override
-	public boolean setOptions(String[] options, boolean optional, List<Result> results, boolean autoComplete) {
+	public boolean setOptions(String[] options, boolean optional,
+			List<Result> results, boolean autoComplete, int reqId) {
 		int id = 0;
 		int amount = 1;
 		byte data = 0;
+		this.reqId = reqId;
 
 		this.optional = optional;
 		this.results = results;
 		this.autoComplete = autoComplete;
-		
+
 		if (options.length > 0)
 			id = AutorankTools.stringtoInt(options[0]);
 		if (options.length > 1)
 			amount = AutorankTools.stringtoInt(options[1]);
-		if (options.length > 1)
-		    data = (byte) AutorankTools.stringtoInt(options[2]);
+		if (options.length > 2)
+			data = (byte) AutorankTools.stringtoInt(options[2]);
 
 		//item = new ItemStack(id, 1, (short) 0, data);
 		item = (new MaterialData(id, (byte) data)).toItemStack(amount);
@@ -42,17 +45,17 @@ public class HasItemRequirement extends Requirement {
 
 	@Override
 	public boolean meetsRequirement(Player player) {
-		if (isCompleted(getReqID(this.getClass(), player), player.getName())) {
+		if (isCompleted(getReqId(), player.getName())) {
 			return true;
 		}
-		
+
 		return item != null && player.getInventory().contains(item);
 	}
 
 	@Override
 	public String getDescription() {
-		return "Obtain " + item.getAmount() + " "
-				+ item.getType().toString() + ".";
+		return "Obtain " + item.getAmount() + " " + item.getType().toString()
+				+ ".";
 	}
 
 	@Override
@@ -71,9 +74,14 @@ public class HasItemRequirement extends Requirement {
 		progress = progress.concat("");
 		return progress;
 	}
-	
+
 	@Override
 	public boolean useAutoCompletion() {
 		return autoComplete;
+	}
+	
+	@Override
+	public int getReqId() {
+		return reqId;
 	}
 }

@@ -49,7 +49,7 @@ public class RankChange {
 			if (r == null)
 				return false;
 
-			int reqID = r.getReqID(r.getClass(), player);
+			int reqID = r.getReqId();
 			
 			// When optional, always true
 			if (r.isOptional())

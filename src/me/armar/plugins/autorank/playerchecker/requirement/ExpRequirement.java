@@ -13,14 +13,17 @@ public class ExpRequirement extends Requirement {
 	private int minExp = 999999999;
 	private boolean optional = false;
 	private boolean autoComplete = false;
+	private int reqId;
 	List<Result> results = new ArrayList<Result>();
 
 	@Override
-	public boolean setOptions(String[] options, boolean optional, List<Result> results, boolean autoComplete) {
+	public boolean setOptions(String[] options, boolean optional,
+			List<Result> results, boolean autoComplete, int reqId) {
 		this.optional = optional;
 		this.results = results;
 		this.autoComplete = autoComplete;
-		
+		this.reqId = reqId;
+
 		try {
 			minExp = AutorankTools.stringtoInt(options[0]);
 		} catch (Exception e) {
@@ -31,10 +34,10 @@ public class ExpRequirement extends Requirement {
 
 	@Override
 	public boolean meetsRequirement(Player player) {
-		if (isCompleted(getReqID(this.getClass(), player), player.getName())) {
+		if (isCompleted(getReqId(), player.getName())) {
 			return true;
 		}
-		
+
 		return player.getLevel() >= minExp;
 	}
 
@@ -63,5 +66,10 @@ public class ExpRequirement extends Requirement {
 	@Override
 	public boolean useAutoCompletion() {
 		return autoComplete;
+	}
+	
+	@Override
+	public int getReqId() {
+		return reqId;
 	}
 }

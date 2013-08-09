@@ -1,12 +1,8 @@
 package me.armar.plugins.autorank.playerchecker.requirement;
 
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.playerchecker.RankChange;
 import me.armar.plugins.autorank.playerchecker.result.Result;
 
 import org.bukkit.entity.Player;
@@ -31,7 +27,7 @@ public abstract class Requirement {
 	 * @param autoComplete Will this auto complete?
 	 * @return
 	 */
-	public abstract boolean setOptions(String[] options, boolean optional, List<Result> results, boolean autoComplete);
+	public abstract boolean setOptions(String[] options, boolean optional, List<Result> results, boolean autoComplete, int reqId);
 
 	/**
 	 * Does it meet the requirements?
@@ -69,7 +65,7 @@ public abstract class Requirement {
 		return this.getClass().getSimpleName();
 	}
 	
-	public final int getReqID(Class<? extends Requirement> req, Player player) {
+	/*public final int getReqID(Class<? extends Requirement> req, Player player) {
 		Map<RankChange, List<Requirement>> requirements = autorank.getPlayerChecker()
 				.getAllRequirements(player);
 		Set<RankChange> keySet = requirements.keySet();
@@ -81,17 +77,27 @@ public abstract class Requirement {
 			RankChange rank = it.next();
 			realReq = requirements.get(rank);
 			
+			System.out.print("Requirement size: " + realReq.size()); 
 			for (int i=0;i<realReq.size();i++) {
 				Requirement req2 = realReq.get(i);
+				
+				
 				if (req2.getClass().equals(req)) {
+					
+					System.out.print("--------------------------------");
+					System.out.print("REQ for " + req.getName() + ": " + req.hashCode());
+					System.out.print("REQ2 for " + req2.getClass().getName() + ": " + req2.hashCode());
 					id = i;
+					break;
 				}
 			}
+			
+			System.out.print("--- [END] ---");
 		}
 		
 		//System.out.print("REQ ID for " + req.toString() + ": " + id);
 		return id;
-	}
+	} */
 	
 	public final boolean isCompleted(int reqID, String playerName) {
 		return autorank.getRequirementHandler().hasCompletedRequirement(reqID, playerName);
@@ -103,4 +109,6 @@ public abstract class Requirement {
 	 * @return String containing the progress
 	 */
 	public abstract String getProgress(Player player);
+	
+	public abstract int getReqId();
 }

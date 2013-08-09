@@ -16,19 +16,22 @@ public class TotalVotesRequirement extends Requirement {
 	private Autorank plugin;
 	private boolean optional = false;
 	private boolean autoComplete = false;
+	private int reqId;
 	List<Result> results = new ArrayList<Result>();
 
 	public TotalVotesRequirement() {
 		super();
 		plugin = (Autorank) Bukkit.getPluginManager().getPlugin("Autorank");
 	}
-	
+
 	@Override
-	public boolean setOptions(String[] options, boolean optional, List<Result> results, boolean autoComplete) {
+	public boolean setOptions(String[] options, boolean optional,
+			List<Result> results, boolean autoComplete, int reqId) {
 		this.optional = optional;
 		this.results = results;
 		this.autoComplete = autoComplete;
-		
+		this.reqId = reqId;
+
 		try {
 			totalVotes = Integer.parseInt(options[0]);
 			return true;
@@ -40,12 +43,14 @@ public class TotalVotesRequirement extends Requirement {
 
 	@Override
 	public boolean meetsRequirement(Player player) {
-		if (isCompleted(getReqID(this.getClass(), player), player.getName())) {
+		if (isCompleted(getReqId(), player.getName())) {
 			return true;
 		}
-		
+
 		// TODO Auto-generated method stub
-		return plugin.getStatsHandler().isEnabled() && plugin.getStatsHandler().getTotalTimesVoted(player.getName()) >= totalVotes;
+		return plugin.getStatsHandler().isEnabled()
+				&& plugin.getStatsHandler()
+						.getTotalTimesVoted(player.getName()) >= totalVotes;
 	}
 
 	@Override
@@ -66,13 +71,18 @@ public class TotalVotesRequirement extends Requirement {
 	@Override
 	public String getProgress(Player player) {
 		String progress = "";
-		progress = progress.concat(getAutorank().getStatsHandler().getTotalTimesVoted(player.getName()) + "/" + totalVotes);
+		progress = progress.concat(getAutorank().getStatsHandler()
+				.getTotalTimesVoted(player.getName()) + "/" + totalVotes);
 		return progress;
 	}
-	
+
 	@Override
 	public boolean useAutoCompletion() {
 		return autoComplete;
 	}
 
+	@Override
+	public int getReqId() {
+		return reqId;
+	}
 }

@@ -14,14 +14,17 @@ public class TimeRequirement extends Requirement {
 	int time = -1;
 	private boolean optional = false;
 	private boolean autoComplete = false;
+	private int reqId;
 	List<Result> results = new ArrayList<Result>();
 
 	@Override
-	public boolean setOptions(String[] options, boolean optional, List<Result> results, boolean autoComplete) {
+	public boolean setOptions(String[] options, boolean optional,
+			List<Result> results, boolean autoComplete, int reqId) {
 		this.optional = optional;
 		this.results = results;
 		this.autoComplete = autoComplete;
-		
+		this.reqId = reqId;
+
 		if (options.length > 0)
 			this.time = AutorankTools.stringToMinutes(options[0]);
 		return (time != -1);
@@ -29,10 +32,10 @@ public class TimeRequirement extends Requirement {
 
 	@Override
 	public boolean meetsRequirement(Player player) {
-		if (isCompleted(getReqID(this.getClass(), player), player.getName())) {
+		if (isCompleted(getReqId(), player.getName())) {
 			return true;
 		}
-		
+
 		double playtime = this.getAutorank().getPlaytimes()
 				.getLocalTime(player.getName());
 		return time != -1 && time <= playtime;
@@ -40,7 +43,8 @@ public class TimeRequirement extends Requirement {
 
 	@Override
 	public String getDescription() {
-		return LanguageHandler.getLanguage().getTimeRequirement(AutorankTools.minutesToString(time));
+		return LanguageHandler.getLanguage().getTimeRequirement(
+				AutorankTools.minutesToString(time));
 	}
 
 	@Override
@@ -56,13 +60,20 @@ public class TimeRequirement extends Requirement {
 	@Override
 	public String getProgress(Player player) {
 		String progress = "";
-		progress = progress.concat(getAutorank().getPlaytimes().getLocalTime(player.getName()) + "/" + time);
+		progress = progress.concat(getAutorank().getPlaytimes().getLocalTime(
+				player.getName())
+				+ "/" + time);
 		return progress;
 	}
-	
+
 	@Override
 	public boolean useAutoCompletion() {
 		return autoComplete;
+	}
+	
+	@Override
+	public int getReqId() {
+		return reqId;
 	}
 
 }

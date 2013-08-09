@@ -17,6 +17,7 @@ public class MoneyRequirement extends Requirement {
 	public static Economy economy = null;
 	private boolean optional = false;
 	private boolean autoComplete = false;
+	private int reqId;
 	List<Result> results = new ArrayList<Result>();
 
 	public MoneyRequirement() {
@@ -35,10 +36,11 @@ public class MoneyRequirement extends Requirement {
     }
 	
 	@Override
-	public boolean setOptions(String[] options, boolean optional, List<Result> results, boolean autoComplete) {
+	public boolean setOptions(String[] options, boolean optional, List<Result> results, boolean autoComplete, int reqId) {
 		this.optional = optional;
 		this.results = results;
 		this.autoComplete = autoComplete;
+		this.reqId = reqId;
 		
 		try {
 			minMoney = Integer.parseInt(options[0]);
@@ -52,7 +54,7 @@ public class MoneyRequirement extends Requirement {
 	@Override
 	public boolean meetsRequirement(Player player) {
 		// TODO Auto-generated method stub
-		if (isCompleted(getReqID(this.getClass(), player), player.getName())) {
+		if (isCompleted(getReqId(), player.getName())) {
 			return true;
 		}
 		
@@ -84,5 +86,10 @@ public class MoneyRequirement extends Requirement {
 	@Override
 	public boolean useAutoCompletion() {
 		return autoComplete;
+	}
+	
+	@Override
+	public int getReqId() {
+		return reqId;
 	}
 }

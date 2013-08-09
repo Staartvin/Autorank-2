@@ -15,7 +15,9 @@ public class BlocksPlacedRequirement extends Requirement {
 	private int blocksPlaced = 0;
 	private int blockID = -1;
 	private int damageValue = -1;
-	
+
+	private int reqId;
+
 	private Autorank plugin;
 	private boolean optional = false;
 	private boolean autoComplete = false;
@@ -25,13 +27,15 @@ public class BlocksPlacedRequirement extends Requirement {
 		super();
 		plugin = (Autorank) Bukkit.getPluginManager().getPlugin("Autorank");
 	}
-	
+
 	@Override
-	public boolean setOptions(String[] options, boolean optional, List<Result> results, boolean autoComplete) {
+	public boolean setOptions(String[] options, boolean optional,
+			List<Result> results, boolean autoComplete, int reqId) {
 		this.optional = optional;
 		this.results = results;
 		this.autoComplete = autoComplete;
-		
+		this.reqId = reqId;
+
 		try {
 			if (options.length > 0) {
 				blocksPlaced = Integer.parseInt(options[0].trim());
@@ -68,10 +72,10 @@ public class BlocksPlacedRequirement extends Requirement {
 					player.getName()) >= blocksPlaced;
 		}
 
-		if (isCompleted(getReqID(this.getClass(), player), player.getName())) {
+		if (isCompleted(getReqId(), player.getName())) {
 			return true;
 		}
-		
+
 		return enabled && sufficient;
 	}
 
@@ -83,12 +87,14 @@ public class BlocksPlacedRequirement extends Requirement {
 			ItemStack item = new ItemStack(blockID, 1, (short) damageValue);
 
 			message = message.concat(item.getType().name().replace("_", "")
-					.toLowerCase() + " ");
+					.toLowerCase()
+					+ " ");
 		} else if (blockID > 0) {
 			ItemStack item = new ItemStack(blockID, 1);
 
 			message = message.concat(item.getType().name().replace("_", "")
-					.toLowerCase() + " ");
+					.toLowerCase()
+					+ " ");
 		}
 
 		message = message.concat("blocks.");
@@ -108,13 +114,21 @@ public class BlocksPlacedRequirement extends Requirement {
 	@Override
 	public String getProgress(Player player) {
 		String progress = "";
-		progress = progress.concat(getAutorank().getStatsHandler().getBlocksPlaced(player.getName(), blockID, damageValue) + "/" + blocksPlaced);
+		progress = progress.concat(getAutorank().getStatsHandler()
+				.getBlocksPlaced(player.getName(), blockID, damageValue)
+				+ "/"
+				+ blocksPlaced);
 		return progress;
 	}
-	
+
 	@Override
 	public boolean useAutoCompletion() {
 		return autoComplete;
+	}
+	
+	@Override
+	public int getReqId() {
+		return reqId;
 	}
 
 }
