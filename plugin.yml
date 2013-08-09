@@ -53,3 +53,9 @@ permissions:
     autorank.noticeonupdate:
         description: When a new update is available, Autorank will tell all players with this permission that a new version is available.
         default: op
+    autorank.sync:
+        description: Allows a player to do /ar sync
+        default: op
+    autorank.complete:
+        description: Allows a player to do /ar complete
+        default: op    
