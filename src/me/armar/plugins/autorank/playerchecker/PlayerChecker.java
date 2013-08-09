@@ -65,7 +65,6 @@ public class PlayerChecker {
 
 	public boolean checkPlayer(Player player) {
 		
-		System.out.print("CHECK PLAYER");
 		boolean result = false;
 		
 		// Do not rank a player when he is excluded

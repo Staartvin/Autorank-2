@@ -57,7 +57,6 @@ public class RankChange {
 
 			if (!r.useAutoCompletion() && !plugin.getRequirementHandler().hasCompletedRequirement(reqID, player.getName())) {
 				result = false;
-				System.out.print("Use no auto completion and player hasn't completed it -> return false");
 				break;
 			}
 			
