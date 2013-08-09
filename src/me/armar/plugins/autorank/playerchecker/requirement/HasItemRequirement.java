@@ -14,16 +14,18 @@ public class HasItemRequirement extends Requirement {
 
 	ItemStack item = null;
 	private boolean optional = false;
+	private boolean autoComplete = false;
 	List<Result> results = new ArrayList<Result>();
 
 	@Override
-	public boolean setOptions(String[] options, boolean optional, List<Result> results) {
+	public boolean setOptions(String[] options, boolean optional, List<Result> results, boolean autoComplete) {
 		int id = 0;
 		int amount = 1;
 		byte data = 0;
 
 		this.optional = optional;
 		this.results = results;
+		this.autoComplete = autoComplete;
 		
 		if (options.length > 0)
 			id = AutorankTools.stringtoInt(options[0]);
@@ -68,5 +70,10 @@ public class HasItemRequirement extends Requirement {
 		String progress = "";
 		progress = progress.concat("");
 		return progress;
+	}
+	
+	@Override
+	public boolean useAutoCompletion() {
+		return autoComplete;
 	}
 }

@@ -12,12 +12,14 @@ public class ExpRequirement extends Requirement {
 
 	private int minExp = 999999999;
 	private boolean optional = false;
+	private boolean autoComplete = false;
 	List<Result> results = new ArrayList<Result>();
 
 	@Override
-	public boolean setOptions(String[] options, boolean optional, List<Result> results) {
+	public boolean setOptions(String[] options, boolean optional, List<Result> results, boolean autoComplete) {
 		this.optional = optional;
 		this.results = results;
+		this.autoComplete = autoComplete;
 		
 		try {
 			minExp = AutorankTools.stringtoInt(options[0]);
@@ -58,4 +60,8 @@ public class ExpRequirement extends Requirement {
 		return progress;
 	}
 
+	@Override
+	public boolean useAutoCompletion() {
+		return autoComplete;
+	}
 }

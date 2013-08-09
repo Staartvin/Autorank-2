@@ -3,10 +3,11 @@ package me.armar.plugins.autorank.playerchecker;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.bukkit.entity.Player;
-
+import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 import me.armar.plugins.autorank.playerchecker.result.Result;
+
+import org.bukkit.entity.Player;
 
 public class RankChange {
 
@@ -14,13 +15,15 @@ public class RankChange {
 	private List<Requirement> req;
 	private List<Result> res;
 	private String rankTo;
+	private Autorank plugin; //TODO: Fix it all 
 
-	public RankChange(String rank, String rankTo, List<Requirement> req,
-			List<Result> res) {
+	public RankChange(Autorank plugin, String rank, String rankTo,
+			List<Requirement> req, List<Result> res) {
 		this.rank = rank;
 		this.req = req;
 		this.res = res;
 		this.rankTo = rankTo;
+		this.plugin = plugin;
 	}
 
 	public String getRank() {
@@ -43,27 +46,53 @@ public class RankChange {
 		boolean result = true;
 
 		for (Requirement r : req) {
-			if (r != null)
-				// When optional, always true
-				if (r.isOptional())
-					continue;
+			if (r == null)
+				return false;
 
-			if (!r.meetsRequirement(player)) {
+			int reqID = r.getReqID(r.getClass(), player);
+			
+			// When optional, always true
+			if (r.isOptional())
+				continue;
+
+			if (!r.useAutoCompletion() && !plugin.getRequirementHandler().hasCompletedRequirement(reqID, player.getName())) {
 				result = false;
+				System.out.print("Use no auto completion and player hasn't completed it -> return false");
 				break;
-			} else {
-				// Player meets requirement, thus perform results of requirement
-				// Perform results of a requirement as well
-				List<Result> results = r.getResults();
-				
-				boolean noErrors = true;
-				for (Result realResult: results) {
-					if (!realResult.applyResult(player)) {
-						noErrors = false;
-					}
-				}
-				result = noErrors;
 			}
+			
+				if (!r.meetsRequirement(player)) {
+					
+					// Player does not meet requirement, but has completed it already
+					if (plugin.getRequirementHandler().hasCompletedRequirement(reqID, player.getName())) {
+						continue;
+					}
+					result = false;
+					break;
+				} else {
+					// Player meets requirement, thus perform results of requirement
+					// Perform results of a requirement as well
+					List<Result> results = r.getResults();
+
+					// Player has not completed this requirement -> perform results
+					if (!plugin.getRequirementHandler()
+							.hasCompletedRequirement(reqID, player.getName())) {
+						plugin.getRequirementHandler().addPlayerProgress(
+								player.getName(), reqID);
+					} else {
+						// Player already completed this -> do nothing
+						continue;
+					}
+
+					boolean noErrors = true;
+					for (Result realResult : results) {
+
+						if (!realResult.applyResult(player)) {
+							noErrors = false;
+						}
+					}
+					result = noErrors;
+				}
 		}
 
 		return result;

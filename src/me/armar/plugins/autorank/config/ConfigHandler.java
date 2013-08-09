@@ -98,4 +98,30 @@ public class ConfigHandler {
 	public boolean useMySQL() {
 		return config.getBoolean("sql.enabled");
 	}
+	
+	public boolean useAutoCompletion(String group, String requirement) {
+		boolean optional = isOptional(requirement, group);
+		
+		if (optional) {
+			// Not defined (Optional + not defined = false)
+			if (config.get("ranks." + group + ".requirements." + requirement + ".options.auto complete") == null) {
+				//System.out.print("Return false for " + group + " requirement " + requirement);
+				return false;
+			} else {
+				// Defined (Optional + defined = defined)
+				//System.out.print("Return defined for " + group + " requirement " + requirement);
+				return config.getBoolean("ranks." + group + ".requirements." + requirement + ".options.auto complete");
+			}
+		} else {
+			// Not defined (Not optional + not defined = true)
+			if (config.get("ranks." + group + ".requirements." + requirement + ".options.auto complete") == null) {
+				//System.out.print("Return true for " + group + " requirement " + requirement);
+				return true;
+			} else {
+				// Defined (Not optional + defined = defined)
+				//System.out.print("Return defined for " + group + " requirement " + requirement);
+				return config.getBoolean("ranks." + group + ".requirements." + requirement + ".options.auto complete");
+			}
+		}
+	}
 }

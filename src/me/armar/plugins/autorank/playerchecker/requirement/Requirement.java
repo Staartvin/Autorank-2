@@ -23,7 +23,15 @@ public abstract class Requirement {
 		return autorank;
 	}
 
-	public abstract boolean setOptions(String[] options, boolean optional, List<Result> results);
+	/**
+	 * Setup requirement specific objects
+	 * @param options String[] containing values
+	 * @param optional Is this an optional requirement?
+	 * @param results List<Result> containing results
+	 * @param autoComplete Will this auto complete?
+	 * @return
+	 */
+	public abstract boolean setOptions(String[] options, boolean optional, List<Result> results, boolean autoComplete);
 
 	/**
 	 * Does it meet the requirements?
@@ -50,6 +58,12 @@ public abstract class Requirement {
 	 * @return A list of results that has to be done.
 	 */
 	public abstract List<Result> getResults();
+	
+	/**
+	 * Use auto completion for this?
+	 * @return true when auto complete; false otherwise
+	 */
+	public abstract boolean useAutoCompletion();
 
 	public String toString() {
 		return this.getClass().getSimpleName();

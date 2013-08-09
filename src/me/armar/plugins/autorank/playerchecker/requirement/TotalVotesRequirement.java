@@ -15,6 +15,7 @@ public class TotalVotesRequirement extends Requirement {
 	private int totalVotes = 0;
 	private Autorank plugin;
 	private boolean optional = false;
+	private boolean autoComplete = false;
 	List<Result> results = new ArrayList<Result>();
 
 	public TotalVotesRequirement() {
@@ -23,9 +24,10 @@ public class TotalVotesRequirement extends Requirement {
 	}
 	
 	@Override
-	public boolean setOptions(String[] options, boolean optional, List<Result> results) {
+	public boolean setOptions(String[] options, boolean optional, List<Result> results, boolean autoComplete) {
 		this.optional = optional;
 		this.results = results;
+		this.autoComplete = autoComplete;
 		
 		try {
 			totalVotes = Integer.parseInt(options[0]);
@@ -66,6 +68,11 @@ public class TotalVotesRequirement extends Requirement {
 		String progress = "";
 		progress = progress.concat(getAutorank().getStatsHandler().getTotalTimesVoted(player.getName()) + "/" + totalVotes);
 		return progress;
+	}
+	
+	@Override
+	public boolean useAutoCompletion() {
+		return autoComplete;
 	}
 
 }

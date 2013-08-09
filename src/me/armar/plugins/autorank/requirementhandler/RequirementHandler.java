@@ -8,9 +8,12 @@ import java.util.List;
 import java.util.logging.Level;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
+import me.armar.plugins.autorank.playerchecker.result.Result;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 
 /**
  * RequirementHandler will keep track of the latest known group and progress a player made (via /ar complete)
@@ -117,5 +120,14 @@ public class RequirementHandler {
 		List<Integer> progress = getProgress(playerName);
 		
 		return progress.contains(reqID);
+	}
+	
+	public void runResults(Requirement req, Player player) {
+		List<Result> results = req.getResults();
+		
+		// Apply result
+		for (Result realResult : results) {
+			realResult.applyResult(player);
+		}
 	}
 }

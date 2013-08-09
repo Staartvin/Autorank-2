@@ -11,7 +11,6 @@ import me.armar.plugins.autorank.language.Language;
 import me.armar.plugins.autorank.language.LanguageHandler;
 import me.armar.plugins.autorank.playerchecker.RankChange;
 import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
-import me.armar.plugins.autorank.playerchecker.result.Result;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -39,8 +38,8 @@ public class Commands implements CommandExecutor {
 	}
 
 	@Override
-	public boolean onCommand(final CommandSender sender, Command cmd, String label,
-			String[] args) {
+	public boolean onCommand(final CommandSender sender, Command cmd,
+			String label, String[] args) {
 		if (args.length == 0) {
 			sender.sendMessage(ChatColor.BLUE
 					+ "-----------------------------------------------------");
@@ -312,7 +311,7 @@ public class Commands implements CommandExecutor {
 			}
 			return true;
 		} else if (action.equalsIgnoreCase("complete")) {
-			
+
 			// Implemented /ar complete #
 			if (args.length != 2) {
 				sender.sendMessage(ChatColor.RED + "Incorrect command usage!");
@@ -358,11 +357,12 @@ public class Commands implements CommandExecutor {
 					.getLastKnownGroup(player.getName());
 
 			if (latestKnownGroup == null) {
-				plugin.getRequirementHandler().setLastKnownGroup(player.getName(), currentGroup);
-				
+				plugin.getRequirementHandler().setLastKnownGroup(
+						player.getName(), currentGroup);
+
 				latestKnownGroup = currentGroup;
 			}
-			
+
 			if (!latestKnownGroup.equalsIgnoreCase(currentGroup)) {
 				// Reset progress and update latest known group
 				plugin.getRequirementHandler().setPlayerProgress(
@@ -389,8 +389,8 @@ public class Commands implements CommandExecutor {
 				// Rank player as he has fulfilled all requirements
 				if (requirements.size() == 0) {
 					player.sendMessage(ChatColor.GREEN
-							+ "You don't have any requirements left and you are ranked now!");
-					plugin.getPlayerChecker().checkPlayer(player);
+							+ "You don't have any requirements left.");
+					return true;
 				} else {
 					// Get the specified requirement
 					if (completionID > requirements.size()) {
@@ -416,13 +416,8 @@ public class Commands implements CommandExecutor {
 						player.sendMessage(ChatColor.AQUA
 								+ req.getDescription());
 
-						List<Result> results = req.getResults();
-
-						// Apply results of that requirement
-						for (Result realResult : results) {
-							if (realResult.applyResult(player))
-								;
-						}
+						// Run results
+						plugin.getRequirementHandler().runResults(req, player);
 
 						// Log that a player has passed this requirement
 						plugin.getRequirementHandler().addPlayerProgress(
@@ -436,7 +431,8 @@ public class Commands implements CommandExecutor {
 								+ ":");
 						player.sendMessage(ChatColor.AQUA
 								+ req.getDescription());
-						player.sendMessage(ChatColor.GREEN + "Current: " + ChatColor.GOLD + req.getProgress(player));
+						player.sendMessage(ChatColor.GREEN + "Current: "
+								+ ChatColor.GOLD + req.getProgress(player));
 					}
 
 					return true;
@@ -444,38 +440,46 @@ public class Commands implements CommandExecutor {
 
 			}
 		} else if (action.equalsIgnoreCase("sync")) {
-			if (!hasPermission("autorank.sync", sender)) return true;
-			
+			if (!hasPermission("autorank.sync", sender))
+				return true;
+
 			if (!plugin.getConfigHandler().useMySQL()) {
 				sender.sendMessage(ChatColor.RED + "MySQL is not being used!");
 				return true;
 			}
-			
-			sender.sendMessage(ChatColor.RED + "You do not have to use this command regularly. Use this only one time per server.");
-			
-			// Do this async as we are accessing mysql database.
-			plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
 
-				@Override
-				public void run() {
-					// Update all mysql records
-					for (String player: plugin.getPlaytimes().getKeys()) {
-						if (plugin.getPlaytimes().getLocalTime(player) <= 0) continue;
-						
-						int localTime = plugin.getPlaytimes().getLocalTime(player);
-						int globalTime = plugin.getPlaytimes().getGlobalTime(player);
-						
-						// Update record
-						try {
-							plugin.getPlaytimes().setGlobalTime(player, localTime + globalTime);
-						} catch (SQLException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+			sender.sendMessage(ChatColor.RED
+					+ "You do not have to use this command regularly. Use this only one time per server.");
+
+			// Do this async as we are accessing mysql database.
+			plugin.getServer().getScheduler()
+					.runTaskAsynchronously(plugin, new Runnable() {
+
+						@Override
+						public void run() {
+							// Update all mysql records
+							for (String player : plugin.getPlaytimes()
+									.getKeys()) {
+								if (plugin.getPlaytimes().getLocalTime(player) <= 0)
+									continue;
+
+								int localTime = plugin.getPlaytimes()
+										.getLocalTime(player);
+								int globalTime = plugin.getPlaytimes()
+										.getGlobalTime(player);
+
+								// Update record
+								try {
+									plugin.getPlaytimes().setGlobalTime(player,
+											localTime + globalTime);
+								} catch (SQLException e) {
+									e.printStackTrace();
+								}
+							}
+							sender.sendMessage(ChatColor.GREEN
+									+ "Successfully updated MySQL records!");
 						}
-					}
-					sender.sendMessage(ChatColor.GREEN + "Successfully updated MySQL records!");
-				}
-			});
+					});
 			return true;
 		}
 
@@ -494,8 +498,9 @@ public class Commands implements CommandExecutor {
 				.getLastKnownGroup(player.getName());
 
 		if (latestKnownGroup == null) {
-			plugin.getRequirementHandler().setLastKnownGroup(player.getName(), currentGroup);
-			
+			plugin.getRequirementHandler().setLastKnownGroup(player.getName(),
+					currentGroup);
+
 			latestKnownGroup = currentGroup;
 		}
 		if (!latestKnownGroup.equalsIgnoreCase(currentGroup)) {
@@ -553,21 +558,61 @@ public class Commands implements CommandExecutor {
 
 				boolean onlyOptional = true;
 				boolean meetsAllRequirements = true;
+				List<Integer> metRequirements = new ArrayList<Integer>();
 
 				for (Requirement req : reqs) {
 					if (!req.isOptional())
 						onlyOptional = false;
-					else
-						continue;
 				}
 
 				for (Requirement req : reqs) {
-					if (!req.meetsRequirement(player)) {
-						meetsAllRequirements = false;
+					int reqID = req.getReqID(req.getClass(), player);
+
+					if (req.useAutoCompletion()) {
+						// Do auto complete
+						if (req.meetsRequirement(player)) {
+							// Player meets the requirement -> give him results
+							
+							if (!plugin.getRequirementHandler()
+									.hasCompletedRequirement(reqID,
+											player.getName())) {
+								plugin.getRequirementHandler().addPlayerProgress(player.getName(), reqID);
+								
+								// Run results
+								plugin.getRequirementHandler().runResults(req, player);
+							}
+							metRequirements.add(reqID);
+							continue;
+						} else {
+							// Player does not meet requirements, but has done this already
+							if (plugin.getRequirementHandler()
+									.hasCompletedRequirement(reqID,
+											player.getName())) {
+								metRequirements.add(reqID);
+								continue;
+							}
+							
+							// Player does not meet requirements -> do nothing
+							meetsAllRequirements = false;
+							continue;
+						}
+					} else {
+						// Do not auto complete
+						if (plugin.getRequirementHandler()
+								.hasCompletedRequirement(reqID,
+										player.getName())) {
+							// Player has completed requirement
+							metRequirements.add(reqID);
+							continue;
+						} else {
+							meetsAllRequirements = false;
+							continue;
+						}
 					}
 				}
 
 				if (meetsAllRequirements || onlyOptional) {
+
 					AutorankTools.sendColoredMessage(sender,
 							language.getMeetsRequirements() + rank.getRankTo()
 									+ language.getRankedUpNow());
@@ -575,16 +620,16 @@ public class Commands implements CommandExecutor {
 				} else {
 					AutorankTools.sendColoredMessage(
 							sender,
-							language.getDoesntMeetRequirements()
-									+ rank.getRankTo() + ":");
+							language.getDoesntMeetRequirements());
 
 					for (int i = 0; i < reqs.size(); i++) {
 						Requirement req = reqs.get(i);
+						int reqID = req.getReqID(req.getClass(), player);
 
 						if (req != null) {
 							StringBuilder message = new StringBuilder("     "
 									+ ChatColor.GOLD + (i + 1) + ". ");
-							if (req.meetsRequirement(player)) {
+							if (metRequirements.contains(reqID)) {
 								message.append(ChatColor.RED
 										+ req.getDescription() + ChatColor.BLUE
 										+ " (Done)");
@@ -620,9 +665,12 @@ public class Commands implements CommandExecutor {
 					+ ChatColor.GRAY + "- Archive data with a minimum");
 			sender.sendMessage(ChatColor.AQUA + "/ar debug " + ChatColor.GRAY
 					+ "- Shows debug information");
-			sender.sendMessage(ChatColor.AQUA + "/ar complete #" + ChatColor.GRAY
+			sender.sendMessage(ChatColor.AQUA + "/ar complete #"
+					+ ChatColor.GRAY
 					+ "- Complete a requirement at this moment");
-			sender.sendMessage(ChatColor.AQUA + "/ar sync" + ChatColor.GRAY
+			sender.sendMessage(ChatColor.AQUA
+					+ "/ar sync"
+					+ ChatColor.GRAY
 					+ "- Sync MySQL database with server. (Use only one time per server)");
 			sender.sendMessage(ChatColor.BLUE + "Page 2 of " + maxPages);
 		} else {

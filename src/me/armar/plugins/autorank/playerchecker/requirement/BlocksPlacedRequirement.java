@@ -18,6 +18,7 @@ public class BlocksPlacedRequirement extends Requirement {
 	
 	private Autorank plugin;
 	private boolean optional = false;
+	private boolean autoComplete = false;
 	List<Result> results = new ArrayList<Result>();
 
 	public BlocksPlacedRequirement() {
@@ -26,9 +27,10 @@ public class BlocksPlacedRequirement extends Requirement {
 	}
 	
 	@Override
-	public boolean setOptions(String[] options, boolean optional, List<Result> results) {
+	public boolean setOptions(String[] options, boolean optional, List<Result> results, boolean autoComplete) {
 		this.optional = optional;
 		this.results = results;
+		this.autoComplete = autoComplete;
 		
 		try {
 			if (options.length > 0) {
@@ -108,6 +110,11 @@ public class BlocksPlacedRequirement extends Requirement {
 		String progress = "";
 		progress = progress.concat(getAutorank().getStatsHandler().getBlocksPlaced(player.getName(), blockID, damageValue) + "/" + blocksPlaced);
 		return progress;
+	}
+	
+	@Override
+	public boolean useAutoCompletion() {
+		return autoComplete;
 	}
 
 }

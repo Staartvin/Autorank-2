@@ -12,12 +12,14 @@ public class WorldRequirement extends Requirement {
 
 	String world = null;
 	private boolean optional = false;
+	private boolean autoComplete = false;
 	List<Result> results = new ArrayList<Result>();
 
 	@Override
-	public boolean setOptions(String[] options, boolean optional, List<Result> results) {
+	public boolean setOptions(String[] options, boolean optional, List<Result> results, boolean autoComplete) {
 		this.optional = optional;
 		this.results = results;
+		this.autoComplete = autoComplete;
 		
 		if (options.length > 0)
 			this.world = options[0];
@@ -54,6 +56,11 @@ public class WorldRequirement extends Requirement {
 		String progress = "";
 		progress = progress.concat(player.getWorld().getName() + "/" + world);
 		return progress;
+	}
+	
+	@Override
+	public boolean useAutoCompletion() {
+		return autoComplete;
 	}
 
 }

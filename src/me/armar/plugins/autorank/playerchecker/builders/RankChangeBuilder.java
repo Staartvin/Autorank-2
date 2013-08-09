@@ -52,7 +52,7 @@ public class RankChangeBuilder {
 			List<Requirement> req = new ArrayList<Requirement>();
 			Requirement timeReq = new TimeRequirement();
 			timeReq.setOptions(new String[] { options[1] }, false,
-					new ArrayList<Result>());
+					new ArrayList<Result>(), true);
 			timeReq.setAutorank(autorank);
 			req.add(timeReq);
 
@@ -70,7 +70,7 @@ public class RankChangeBuilder {
 			message.setAutorank(autorank);
 			res.add(message);
 
-			result.add(new RankChange(rank, options[0], req, res));
+			result.add(new RankChange(autorank, rank, options[0], req, res));
 		}
 
 		return result;
@@ -103,7 +103,7 @@ public class RankChangeBuilder {
 
 				req.add(createRequirement(getCorrectName(requirement),
 						configHandler.getRequirement(requirement, group),
-						optional, realResults));
+						optional, realResults, configHandler.useAutoCompletion(group, requirement)));
 
 			}
 
@@ -127,7 +127,7 @@ public class RankChangeBuilder {
 				rankTo = rankChange[1].trim();
 			}
 
-			result.add(new RankChange(group, rankTo, req, res));
+			result.add(new RankChange(autorank, group, rankTo, req, res));
 		}
 
 		return result;
@@ -158,12 +158,12 @@ public class RankChangeBuilder {
 	}
 
 	private Requirement createRequirement(String type, String arg,
-			boolean optional, List<Result> results) {
+			boolean optional, List<Result> results, boolean autoComplete) {
 		Requirement res = requirementBuilder.create(type);
 
 		if (res != null) {
 			res.setAutorank(autorank);
-			res.setOptions(arg.split(";"), optional, results);
+			res.setOptions(arg.split(";"), optional, results, autoComplete);
 		}
 
 		return res;

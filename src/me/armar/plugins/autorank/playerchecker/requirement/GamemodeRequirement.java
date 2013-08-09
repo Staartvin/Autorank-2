@@ -12,12 +12,14 @@ public class GamemodeRequirement extends Requirement {
 
 	int gamemode = -1;
 	private boolean optional = false;
+	private boolean autoComplete = false;
 	List<Result> results = new ArrayList<Result>();
 
 	@Override
-	public boolean setOptions(String[] options, boolean optional, List<Result> results) {
+	public boolean setOptions(String[] options, boolean optional, List<Result> results, boolean autoComplete) {
 		this.optional = optional;
 		this.results = results;
+		this.autoComplete = autoComplete;
 		
 		if (options.length > 0)
 			this.gamemode = AutorankTools.stringtoInt(options[0]);
@@ -55,4 +57,8 @@ public class GamemodeRequirement extends Requirement {
 		return progress;
 	}
 
+	@Override
+	public boolean useAutoCompletion() {
+		return autoComplete;
+	}
 }

@@ -16,6 +16,7 @@ public class MoneyRequirement extends Requirement {
 	private double minMoney = 999999999;
 	public static Economy economy = null;
 	private boolean optional = false;
+	private boolean autoComplete = false;
 	List<Result> results = new ArrayList<Result>();
 
 	public MoneyRequirement() {
@@ -34,9 +35,11 @@ public class MoneyRequirement extends Requirement {
     }
 	
 	@Override
-	public boolean setOptions(String[] options, boolean optional, List<Result> results) {
+	public boolean setOptions(String[] options, boolean optional, List<Result> results, boolean autoComplete) {
 		this.optional = optional;
 		this.results = results;
+		this.autoComplete = autoComplete;
+		
 		try {
 			minMoney = Integer.parseInt(options[0]);
 			return true;
@@ -76,5 +79,10 @@ public class MoneyRequirement extends Requirement {
 		String progress = "";
 		progress = progress.concat(economy.getBalance(player.getName()) + "/" + minMoney);
 		return progress;
+	}
+
+	@Override
+	public boolean useAutoCompletion() {
+		return autoComplete;
 	}
 }

@@ -48,7 +48,7 @@ public class English extends Language {
 		noNextRankup = "and doesn't have a next rankup.";
 		meetsRequirements = "meets all the requirements for rank ";
 		rankedUpNow = " and will now be ranked up.";
-		doesntMeetRequirements = "and doesn't meet the requirements for rank ";
+		doesntMeetRequirements = ". Requirements needed to completed to rank up: ";
 		dataImported = "New data has been imported!";
 		timeRequirement = "Play for at least %time% or higher.";
 		worldRequirement = "Be in %world%.";
