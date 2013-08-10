@@ -46,7 +46,6 @@ public class TimeRunnable implements Runnable{
 				}
 
 			} catch (SQLException e) {
-				System.out.println("Playtimes.getDBTime");
 				System.out.println("SQLException: " + e.getMessage());
 				System.out.println("SQLState: " + e.getSQLState());
 				System.out.println("VendorError: " + e.getErrorCode());
