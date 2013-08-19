@@ -7,6 +7,7 @@ import java.util.List;
 import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.AutorankTools;
 
 /*
  * PlayerCheckerTrigger stores what players it recently checked for a 
@@ -38,7 +39,7 @@ public class PlayerCheckerTrigger implements Runnable {
 			Player player = playersToBeChecked.get(0);
 
 			// TODO: Player would not be ranked up if one of the requirement is not auto complete
-			if (!player.hasPermission("autorank.exclude") || !player.hasPermission("autorank.rsefrxsgtse"))//dummy permission to check for OP
+			if (!AutorankTools.isExcluded(player))
 				checker.checkPlayer(player);
 
 			playersToBeChecked.remove(player);

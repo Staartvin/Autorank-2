@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.AutorankTools;
 import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
 import me.armar.plugins.autorank.playerchecker.builders.RankChangeBuilder;
 import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
@@ -68,9 +69,7 @@ public class PlayerChecker {
 		boolean result = false;
 		
 		// Do not rank a player when he is excluded
-		if (player.hasPermission("autorank.exclude")) {
-			return result;
-		}
+		if (AutorankTools.isExcluded(player)) return result;
 
 		String[] groups = plugin.getPermPlugHandler().getPermissionPlugin().getPlayerGroups(player);
 

@@ -82,7 +82,7 @@ public class Commands implements CommandExecutor {
 									+ AutorankTools.minutesToString(plugin
 											.getLocalTime(args[1])));
 				} else {
-					if (player.hasPermission("autorank.exclude")) {
+					if (AutorankTools.isExcluded(player)) {
 						sender.sendMessage(ChatColor.RED + args[1]
 								+ " is excluded from ranking!");
 						return true;
@@ -94,7 +94,7 @@ public class Commands implements CommandExecutor {
 					return true;
 				}
 
-				if (sender.hasPermission("autorank.exclude")) {
+				if (AutorankTools.isExcluded((Player) sender)) {
 					sender.sendMessage(ChatColor.RED
 							+ "You are excluded from ranking!");
 					return true;
