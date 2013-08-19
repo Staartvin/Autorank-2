@@ -1,8 +1,6 @@
 package me.armar.plugins.autorank.api;
 
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.language.Language;
-import me.armar.plugins.autorank.language.LanguageHandler;
 
 /**
  * <b>Autorank's API class:</b>
@@ -29,14 +27,6 @@ public class API {
 	 */
 	public int getLocalPlayTime(String playerName) {
 		return plugin.getLocalTime(playerName);
-	}
-	
-	/** 
-	 * Gets the selected language
-	 * @return language as {@link me.armar.plugins.language.Language} 
-	 */
-	public Language getSelectedLanguage() {
-		return LanguageHandler.getLanguage(); 
 	}
 	
 	/**
