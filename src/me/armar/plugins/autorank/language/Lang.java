@@ -37,7 +37,7 @@ public enum Lang {
     PLACED_BLOCKS_REQUIREMENT("placed-blocks-requirement", "Place at least {0}."),
     EXP_REQUIREMENT("exp-requirement", "Have at least level {0} in exp."),
     GAMEMODE_REQUIREMENT("gamemode-requirement", "Be in gamemode {0}."),
-    ITEM_REQUIREMENT("Obtain {0}.", "item-requirement");
+    ITEM_REQUIREMENT("item-requirement", "Obtain {0}.");
 
  
     private String path, def;
