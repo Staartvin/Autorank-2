@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.playerchecker.result.Result;
 
 import org.bukkit.Bukkit;
@@ -81,7 +82,7 @@ public class BlocksPlacedRequirement extends Requirement {
 
 	@Override
 	public String getDescription() {
-		String message = "Place at least " + blocksPlaced + " ";
+		String message = blocksPlaced + " ";
 
 		if (blockID > 0 && damageValue >= 0) {
 			ItemStack item = new ItemStack(blockID, 1, (short) damageValue);
@@ -98,7 +99,7 @@ public class BlocksPlacedRequirement extends Requirement {
 		}
 
 		message = message.concat("blocks.");
-		return message;
+		return Lang.PLACED_BLOCKS_REQUIREMENT.getConfigValue(new String[] {message});
 	}
 
 	@Override

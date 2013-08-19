@@ -55,7 +55,6 @@ public class TotalVotesRequirement extends Requirement {
 
 	@Override
 	public String getDescription() {
-		//return LanguageHandler.getLanguage().getVoteRequirement(totalVotes);
 		return Lang.VOTE_REQUIREMENT.getConfigValue(new String[] {totalVotes + ""});
 	}
 

@@ -43,9 +43,6 @@ public class TimeRequirement extends Requirement {
 
 	@Override
 	public String getDescription() {
-		//TODO pass time
-		//return LanguageHandler.getLanguage().getTimeRequirement(
-			//	AutorankTools.minutesToString(time));
 		return Lang.TIME_REQUIREMENT.getConfigValue(new String[] {AutorankTools.minutesToString(time)});
 	}
 

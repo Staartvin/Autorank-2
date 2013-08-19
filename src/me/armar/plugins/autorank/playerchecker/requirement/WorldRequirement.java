@@ -40,7 +40,6 @@ public class WorldRequirement extends Requirement {
 
 	@Override
 	public String getDescription() {
-		//return LanguageHandler.getLanguage().getWorldRequirement(world);
 		return Lang.WORLD_REQUIREMENT.getConfigValue(new String[] {world});
 	}
 

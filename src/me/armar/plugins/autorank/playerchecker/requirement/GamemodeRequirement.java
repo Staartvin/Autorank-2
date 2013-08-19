@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.armar.plugins.autorank.AutorankTools;
+import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.playerchecker.result.Result;
 
 import org.bukkit.entity.Player;
@@ -40,7 +41,7 @@ public class GamemodeRequirement extends Requirement {
 
 	@Override
 	public String getDescription() {
-		return "Be in " + gamemode + ".";
+		return Lang.GAMEMODE_REQUIREMENT.getConfigValue(new String[] {gamemode + ""});
 	}
 
 	@Override

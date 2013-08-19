@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.armar.plugins.autorank.AutorankTools;
+import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.playerchecker.result.Result;
 
 import org.bukkit.entity.Player;
@@ -54,8 +55,8 @@ public class HasItemRequirement extends Requirement {
 
 	@Override
 	public String getDescription() {
-		return "Obtain " + item.getAmount() + " " + item.getType().toString()
-				+ ".";
+		String arg = item.getAmount() + " " + item.getType().toString();
+		return Lang.ITEM_REQUIREMENT.getConfigValue(new String[] { arg });
 	}
 
 	@Override
@@ -79,7 +80,7 @@ public class HasItemRequirement extends Requirement {
 	public boolean useAutoCompletion() {
 		return autoComplete;
 	}
-	
+
 	@Override
 	public int getReqId() {
 		return reqId;

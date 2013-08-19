@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.armar.plugins.autorank.AutorankTools;
+import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.playerchecker.result.Result;
 
 import org.bukkit.entity.Player;
@@ -43,7 +44,7 @@ public class ExpRequirement extends Requirement {
 
 	@Override
 	public String getDescription() {
-		return "Have at least level " + minExp + " in exp.";
+		return Lang.EXP_REQUIREMENT.getConfigValue(new String[] {minExp + ""});
 	}
 
 	@Override

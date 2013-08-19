@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.playerchecker.result.Result;
 
 import org.bukkit.Bukkit;
@@ -58,9 +59,6 @@ public class BlocksBrokenRequirement extends Requirement {
 
 	@Override
 	public boolean meetsRequirement(Player player) {
-		// TODO Auto-generated method stub
-		//System.out.print("(BROKEN) Check for id: " + blockID + ", dv: " + damageValue
-		//		+ ", value: " + blocksBroken);
 
 		boolean enabled = plugin.getStatsHandler().isEnabled();
 
@@ -81,22 +79,22 @@ public class BlocksBrokenRequirement extends Requirement {
 
 	@Override
 	public String getDescription() {
-		String message = "Break at least " + blocksBroken + " ";
+		String argument = blocksBroken + " ";
 
 		if (blockID > 0 && damageValue >= 0) {
 			ItemStack item = new ItemStack(blockID, 1, (short) damageValue);
 
-			message = message.concat(item.getType().name().replace("_", "")
+			argument = argument.concat(item.getType().name().replace("_", "")
 					.toLowerCase() + " ");
 		} else if (blockID > 0) {
 			ItemStack item = new ItemStack(blockID, 1);
 
-			message = message.concat(item.getType().name().replace("_", "")
+			argument = argument.concat(item.getType().name().replace("_", "")
 					.toLowerCase() + " ");
 		}
 
-		message = message.concat("blocks.");
-		return message;
+		argument = argument.concat("blocks.");
+		return Lang.BROKEN_BLOCKS_REQUIREMENT.getConfigValue(new String[] {argument});
 	}
 
 	@Override
