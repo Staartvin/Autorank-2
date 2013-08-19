@@ -1,5 +1,13 @@
 package me.armar.plugins.autorank.language;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.logging.Level;
+
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+
 import me.armar.plugins.autorank.Autorank;
 
 /**
@@ -7,25 +15,70 @@ import me.armar.plugins.autorank.Autorank;
  */
 public class LanguageHandler {
 
-	private static Language language;
+	private FileConfiguration languageConfig;
+	private File languageConfigFile;
+	private Autorank plugin;
 
 	public LanguageHandler(Autorank autorank) {
-		String configLanguage = autorank.getAdvancedConfig().getString(
-				"language", "english");
-
-		if (configLanguage.equalsIgnoreCase("english")) {
-			language = new English(autorank);
-		} else if (configLanguage.equalsIgnoreCase("dutch")) {
-			language = new Dutch(autorank);
-		} else {
-			language = new English(autorank);
+		plugin = autorank;
+	}
+	
+	public void createNewFile() {
+		reloadConfig();
+		saveConfig();
+		
+		Lang.setFile(languageConfig);
+		
+		loadConfig();
+		
+		plugin.getLogger().info("Language file loaded: using lang.yml");
+	}
+	
+	public void reloadConfig() {
+		if (languageConfigFile == null) {
+			languageConfigFile = new File(plugin.getDataFolder() + "/lang",
+					"lang.yml");
 		}
+		languageConfig = YamlConfiguration.loadConfiguration(languageConfigFile);
 
-		autorank.getLogger().info(
-				"Languages files loaded: Using " + getLanguage().getLanguage());
+		// Look for defaults in the jar
+		InputStream defConfigStream = plugin.getResource("lang.yml");
+		if (defConfigStream != null) {
+			YamlConfiguration defConfig = YamlConfiguration
+					.loadConfiguration(defConfigStream);
+			languageConfig.setDefaults(defConfig);
+		}
 	}
 
-	public static Language getLanguage() {
-		return language;
+	public FileConfiguration getConfig() {
+		if (languageConfig == null) {
+			this.reloadConfig();
+		}
+		return languageConfig;
+	}
+
+	public void saveConfig() {
+		if (languageConfig == null || languageConfigFile == null) {
+			return;
+		}
+		try {
+			getConfig().save(languageConfigFile);
+		} catch (IOException ex) {
+			plugin.getLogger().log(Level.SEVERE,
+					"Could not save config to " + languageConfigFile, ex);
+		}
+	}
+
+	public void loadConfig() {
+
+		languageConfig.options().header("Language file");
+		
+		
+		for (Lang value: Lang.values()) {			
+			languageConfig.addDefault(value.getPath(), value.getDefault());
+		}
+
+		languageConfig.options().copyDefaults(true);
+		saveConfig();
 	}
 }
