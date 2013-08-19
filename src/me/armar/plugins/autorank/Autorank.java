@@ -3,6 +3,7 @@ package me.armar.plugins.autorank;
 import java.sql.SQLException;
 import java.util.logging.Logger;
 
+import me.armar.plugins.autorank.api.API;
 import me.armar.plugins.autorank.config.ConfigHandler;
 import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
 import me.armar.plugins.autorank.language.LanguageHandler;
@@ -341,5 +342,9 @@ public class Autorank extends JavaPlugin {
 
 	public void setRequirementHandler(RequirementHandler requirementHandler) {
 		this.requirementHandler = requirementHandler;
+	}
+	
+	public API getAPI() {
+		return new API(this);
 	}
 }
