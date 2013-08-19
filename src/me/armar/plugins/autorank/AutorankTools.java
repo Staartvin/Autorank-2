@@ -5,6 +5,7 @@ import java.util.regex.Pattern;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 /*
  * AutorankTools is a bunch of static methods, I put sendColoredMessage 
@@ -93,6 +94,34 @@ public class AutorankTools {
 
 	public static void sendColoredMessage(CommandSender sender, String msg) {
 		sender.sendMessage(ChatColor.translateAlternateColorCodes('&', ChatColor.GREEN + msg));
+	}
+	
+	/**
+	 * Elaborate method to check whether a player is excluded from ranking.
+	 * 
+	 * When a player has a wildcard permission but is an OP, it will return false;
+	 * When a player has a wildcard permission but is not an OP, it will return true;
+	 * When a player only has autorank.exclude, it will return true;
+	 * 
+	 * @param player Player to check for
+	 * @return whether a player is excluded from ranking or not.
+	 */
+	public static boolean isExcluded(Player player) {
+		if (player.hasPermission("autorank.askdjaslkdj")) {
+			// Op's have all permissions, but if he is a OP, he isn't excluded
+			if (player.isOp()) {
+				return false;
+			}
+			
+			// Player uses wildcard permission, so excluded
+			return true;
+		}
+		
+		if (player.hasPermission("autorank.exclude")) {
+			return true;
+		}
+		
+		return false;	
 	}
 
 }
