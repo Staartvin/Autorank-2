@@ -86,9 +86,6 @@ public class Autorank extends JavaPlugin {
 		// Create language classes
 		setLanguageHandler(new LanguageHandler(this));
 
-		// Create MySQL Wrapper
-		setMySQLWrapper(new MySQLWrapper(this));
-
 		// Create playtime class
 		setPlaytimes(new Playtimes(this));
 
@@ -151,6 +148,12 @@ public class Autorank extends JavaPlugin {
 				return;
 			}
 		}
+		
+		// Setup language file
+		languageHandler.createNewFile();
+		
+		// Create MySQL Wrapper
+		setMySQLWrapper(new MySQLWrapper(this));
 
 		Autorank.logMessage(String.format("Autorank %s has been enabled!",
 				getDescription().getVersion()));

@@ -7,8 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import me.armar.plugins.autorank.language.Language;
-import me.armar.plugins.autorank.language.LanguageHandler;
+import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.playerchecker.RankChange;
 import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 
@@ -21,17 +20,15 @@ import org.bukkit.entity.Player;
 public class Commands implements CommandExecutor {
 
 	private Autorank plugin;
-	private Language language;
 
 	public Commands(Autorank plugin) {
 		this.plugin = plugin;
-		this.language = LanguageHandler.getLanguage();
 	}
 
 	private boolean hasPermission(String permission, CommandSender sender) {
 		if (!sender.hasPermission(permission)) {
 			sender.sendMessage(ChatColor.RED
-					+ language.getNoPermission(permission));
+					+ Lang.NO_PERMISSION.getConfigValue(new String[] {permission}));
 			return false;
 		}
 		return true;
@@ -81,7 +78,7 @@ public class Commands implements CommandExecutor {
 					AutorankTools.sendColoredMessage(
 							sender,
 							args[1]
-									+ language.getHasPlayedFor()
+									+ Lang.HAS_PLAYED_FOR.getConfigValue(null)
 									+ AutorankTools.minutesToString(plugin
 											.getLocalTime(args[1])));
 				} else {
@@ -106,7 +103,7 @@ public class Commands implements CommandExecutor {
 				check(sender, player);
 			} else {
 				AutorankTools.sendColoredMessage(sender,
-						language.getCannotCheckConsole());
+						Lang.CANNOT_CHECK_CONSOLE.getConfigValue(null));
 			}
 			return true;
 		} else if (action.equalsIgnoreCase("leaderboard")
@@ -132,10 +129,10 @@ public class Commands implements CommandExecutor {
 			if (value >= 0) {
 				plugin.setLocalTime(args[1], value);
 				AutorankTools.sendColoredMessage(sender,
-						language.getPlayTimeChanged(args[1], value));
+						Lang.PLAYTIME_CHANGED.getConfigValue(new String[] {args[1], value + ""}));
 			} else {
 				AutorankTools.sendColoredMessage(sender,
-						language.getInvalidFormat("/ar set [player] [value]"));
+						Lang.INVALID_FORMAT.getConfigValue(new String[] {"/ar set [player] [value]"}));
 			}
 
 			return true;
@@ -156,10 +153,10 @@ public class Commands implements CommandExecutor {
 			if (value >= 0) {
 				plugin.setLocalTime(args[1], value);
 				AutorankTools.sendColoredMessage(sender,
-						language.getPlayTimeChanged(args[1], value));
+						Lang.PLAYTIME_CHANGED.getConfigValue(new String[] {args[1], value + ""}));
 			} else {
 				AutorankTools.sendColoredMessage(sender,
-						language.getInvalidFormat("/ar add [player] [value]"));
+						Lang.INVALID_FORMAT.getConfigValue(new String[] {"/ar add [player] [value]"}));
 			}
 
 			return true;
@@ -181,10 +178,10 @@ public class Commands implements CommandExecutor {
 			if (value >= 0) {
 				plugin.setLocalTime(args[1], value);
 				AutorankTools.sendColoredMessage(sender,
-						language.getPlayTimeChanged(args[1], value));
+						Lang.PLAYTIME_CHANGED.getConfigValue(new String[] {args[1], value + ""}));
 			} else {
-				AutorankTools.sendColoredMessage(sender, language
-						.getInvalidFormat("/ar remove [player] [value]"));
+				AutorankTools.sendColoredMessage(sender,
+						Lang.INVALID_FORMAT.getConfigValue(new String[] {"/ar remove [player] [value]"}));
 			}
 
 			return true;
@@ -209,7 +206,7 @@ public class Commands implements CommandExecutor {
 			}
 
 			AutorankTools.sendColoredMessage(sender,
-					language.getAutorankReloaded());
+					Lang.AUTORANK_RELOADED.getConfigValue(null));
 			plugin.reload();
 
 			return true;
@@ -220,7 +217,7 @@ public class Commands implements CommandExecutor {
 			}
 
 			AutorankTools
-					.sendColoredMessage(sender, language.getDataImported());
+					.sendColoredMessage(sender, Lang.DATA_IMPORTED.getConfigValue(null));
 			plugin.getPlaytimes().importData();
 
 			return true;
@@ -273,7 +270,7 @@ public class Commands implements CommandExecutor {
 					AutorankTools.sendColoredMessage(
 							sender,
 							args[1]
-									+ language.getHasPlayedFor()
+									+ Lang.HAS_PLAYED_FOR.getConfigValue(null)
 									+ AutorankTools.minutesToString(plugin
 											.getGlobalTime(args[1]))
 									+ " across all servers.");
@@ -307,7 +304,7 @@ public class Commands implements CommandExecutor {
 
 			} else {
 				AutorankTools.sendColoredMessage(sender,
-						language.getCannotCheckConsole());
+						Lang.CANNOT_CHECK_CONSOLE.getConfigValue(null));
 			}
 			return true;
 		} else if (action.equalsIgnoreCase("complete")) {
@@ -524,17 +521,17 @@ public class Commands implements CommandExecutor {
 		// has played for
 		stringBuilder
 				.append(playername
-						+ language.getHasPlayedFor()
+						+ Lang.HAS_PLAYED_FOR.getConfigValue(null)
 						+ AutorankTools.minutesToString(plugin
 								.getLocalTime(playername)) + ", ");
 		// is in
-		stringBuilder.append(language.getIsIn());
+		stringBuilder.append(Lang.IS_IN.getConfigValue(null));
 		if (groups.length == 0)
-			stringBuilder.append(language.getNoGroups()); // No groups.
+			stringBuilder.append(Lang.NO_GROUPS.getConfigValue(null)); // No groups.
 		else if (groups.length == 1)
-			stringBuilder.append(language.getOneGroup()); // One group
+			stringBuilder.append(Lang.ONE_GROUP.getConfigValue(null)); // One group
 		else
-			stringBuilder.append(language.getMultipleGroups()); // Multiple groups
+			stringBuilder.append(Lang.MULTIPLE_GROUPS.getConfigValue(null)); // Multiple groups
 
 		boolean first = true;
 		for (String group : groups) {
@@ -549,7 +546,7 @@ public class Commands implements CommandExecutor {
 
 		if (keySet.size() == 0) {
 			AutorankTools
-					.sendColoredMessage(sender, language.getNoNextRankup());
+					.sendColoredMessage(sender, Lang.NO_NEXT_RANK.getConfigValue(null));
 		} else {
 			Iterator<RankChange> it = keySet.iterator();
 			while (it.hasNext()) {
@@ -572,14 +569,17 @@ public class Commands implements CommandExecutor {
 						// Do auto complete
 						if (req.meetsRequirement(player)) {
 							// Player meets the requirement -> give him results
-							
+
 							if (!plugin.getRequirementHandler()
 									.hasCompletedRequirement(reqID,
 											player.getName())) {
-								plugin.getRequirementHandler().addPlayerProgress(player.getName(), reqID);
-								
+								plugin.getRequirementHandler()
+										.addPlayerProgress(player.getName(),
+												reqID);
+
 								// Run results
-								plugin.getRequirementHandler().runResults(req, player);
+								plugin.getRequirementHandler().runResults(req,
+										player);
 							}
 							metRequirements.add(reqID);
 							continue;
@@ -591,7 +591,7 @@ public class Commands implements CommandExecutor {
 								metRequirements.add(reqID);
 								continue;
 							}
-							
+
 							// Player does not meet requirements -> do nothing
 							meetsAllRequirements = false;
 							continue;
@@ -614,13 +614,12 @@ public class Commands implements CommandExecutor {
 				if (meetsAllRequirements || onlyOptional) {
 
 					AutorankTools.sendColoredMessage(sender,
-							language.getMeetsRequirements() + rank.getRankTo()
-									+ language.getRankedUpNow());
+							Lang.MEETS_ALL_REQUIREMENTS.getConfigValue(new String[] {rank.getRankTo()})
+									+ Lang.RANKED_UP_NOW.getConfigValue(null));
 					plugin.getPlayerChecker().checkPlayer(player);
 				} else {
-					AutorankTools.sendColoredMessage(
-							sender,
-							language.getDoesntMeetRequirements());
+					AutorankTools.sendColoredMessage(sender,
+							Lang.REQUIREMENTS_TO_RANK.getConfigValue(null));
 
 					for (int i = 0; i < reqs.size(); i++) {
 						Requirement req = reqs.get(i);

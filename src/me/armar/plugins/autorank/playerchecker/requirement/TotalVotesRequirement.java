@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.language.LanguageHandler;
+import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.playerchecker.result.Result;
 
 import org.bukkit.Bukkit;
@@ -55,7 +55,8 @@ public class TotalVotesRequirement extends Requirement {
 
 	@Override
 	public String getDescription() {
-		return LanguageHandler.getLanguage().getVoteRequirement(totalVotes);
+		//return LanguageHandler.getLanguage().getVoteRequirement(totalVotes);
+		return Lang.VOTE_REQUIREMENT.getConfigValue(new String[] {totalVotes + ""});
 	}
 
 	@Override

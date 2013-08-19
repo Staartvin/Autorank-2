@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.armar.plugins.autorank.AutorankTools;
-import me.armar.plugins.autorank.language.LanguageHandler;
+import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.playerchecker.result.Result;
 
 import org.bukkit.entity.Player;
@@ -43,8 +43,10 @@ public class TimeRequirement extends Requirement {
 
 	@Override
 	public String getDescription() {
-		return LanguageHandler.getLanguage().getTimeRequirement(
-				AutorankTools.minutesToString(time));
+		//TODO pass time
+		//return LanguageHandler.getLanguage().getTimeRequirement(
+			//	AutorankTools.minutesToString(time));
+		return Lang.TIME_REQUIREMENT.getConfigValue(new String[] {AutorankTools.minutesToString(time)});
 	}
 
 	@Override

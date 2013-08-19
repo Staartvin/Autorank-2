@@ -3,7 +3,7 @@ package me.armar.plugins.autorank.playerchecker.requirement;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.armar.plugins.autorank.language.LanguageHandler;
+import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.playerchecker.result.Result;
 import net.milkbowl.vault.economy.Economy;
 
@@ -63,7 +63,7 @@ public class MoneyRequirement extends Requirement {
 
 	@Override
 	public String getDescription() {
-		return LanguageHandler.getLanguage().getMoneyRequirement((int) minMoney);
+		return Lang.MONEY_REQUIREMENT.getConfigValue(new String[] {minMoney + ""});
 	}
 
 	@Override

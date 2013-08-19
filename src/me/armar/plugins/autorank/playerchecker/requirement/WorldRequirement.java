@@ -3,7 +3,7 @@ package me.armar.plugins.autorank.playerchecker.requirement;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.armar.plugins.autorank.language.LanguageHandler;
+import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.playerchecker.result.Result;
 
 import org.bukkit.entity.Player;
@@ -40,7 +40,8 @@ public class WorldRequirement extends Requirement {
 
 	@Override
 	public String getDescription() {
-		return LanguageHandler.getLanguage().getWorldRequirement(world);
+		//return LanguageHandler.getLanguage().getWorldRequirement(world);
+		return Lang.WORLD_REQUIREMENT.getConfigValue(new String[] {world});
 	}
 
 	@Override
