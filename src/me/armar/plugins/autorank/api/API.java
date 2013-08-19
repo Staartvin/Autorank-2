@@ -37,4 +37,13 @@ public class API {
 		return plugin.getMySQLWrapper().getDatabaseName();
 	}
 	
+	/**
+	 * Gets the global play time (playtime across all servers with the same MySQL database linked) of a player.
+	 * <p>
+	 * @param playername player to check for.
+	 * @return play time of a player. -1 if no entry was found.
+	 */
+	public int getGlobalPlayTime(String playerName) {
+		return plugin.getGlobalTime(playerName);
+	}
 }
