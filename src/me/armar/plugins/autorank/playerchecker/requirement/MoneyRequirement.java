@@ -63,7 +63,7 @@ public class MoneyRequirement extends Requirement {
 
 	@Override
 	public String getDescription() {
-		return Lang.MONEY_REQUIREMENT.getConfigValue(new String[] {minMoney + ""});
+		return Lang.MONEY_REQUIREMENT.getConfigValue(new String[] {minMoney + economy.currencyNamePlural()});
 	}
 
 	@Override
