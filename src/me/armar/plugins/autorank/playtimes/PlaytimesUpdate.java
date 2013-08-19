@@ -44,6 +44,9 @@ public class PlaytimesUpdate implements Runnable {
 
 	private void updateMinutesPlayed(Player player) {
 		// Changed this so it is readable ;)
+		// OP's should also get time added. 
+		// When a player has a wildcard permission ('*') it should still update.
+
 		if (player.hasPermission("autorank.rsefrxsgtse")
 				|| !player.hasPermission("autorank.timeexclude")) {
 			if (ess != null) {
