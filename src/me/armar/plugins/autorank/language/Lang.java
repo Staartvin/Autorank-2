@@ -32,7 +32,13 @@ public enum Lang {
     TIME_REQUIREMENT("time-requirement", "Play for at least {0} or higher."),
     WORLD_REQUIREMENT("world-requirement", "Be in {0}."),
     VOTE_REQUIREMENT("vote-requirement", "Vote at least {0} times."),
-    MONEY_REQUIREMENT("money-requirement", "Have at least {0} money.");
+    MONEY_REQUIREMENT("money-requirement", "Have at least {0}."),
+    BROKEN_BLOCKS_REQUIREMENT("broken-blocks-requirement", "Break at least {0}."),
+    PLACED_BLOCKS_REQUIREMENT("placed-blocks-requirement", "Place at least {0}."),
+    EXP_REQUIREMENT("exp-requirement", "Have at least level {0} in exp."),
+    GAMEMODE_REQUIREMENT("gamemode-requirement", "Be in gamemode {0}."),
+    ITEM_REQUIREMENT("Obtain {0}.", "item-requirement");
+
  
     private String path, def;
     private static FileConfiguration LANG;
