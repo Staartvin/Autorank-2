@@ -11,7 +11,7 @@ description: Reward players based on their stats.
 commands:
     ar:
         description: Master command of AutoRank
-        usage: /ar [action] <playername>
+        usage: Autorank is disabled. Check your server.log!
         aliases: [autorank]
 permissions:
     autorank.check:
