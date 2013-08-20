@@ -1,10 +1,8 @@
-database: false
 main: me.armar.plugins.autorank.Autorank
 name: Autorank
-startup: postworld
 softdepend: [Essentials, GroupManager, Stats]
 depend: [Vault]
-url: http://wyverncreativeserver.enjin.com/
+url: http://dev.bukkit.org/bukkit-plugins/autorank/
 version: '2.6 Beta'
 authors: [Idrrp, Armarr, Staartvin]
 description: Reward players based on their stats.
