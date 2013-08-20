@@ -37,7 +37,14 @@ public enum Lang {
     PLACED_BLOCKS_REQUIREMENT("placed-blocks-requirement", "Place at least {0}."),
     EXP_REQUIREMENT("exp-requirement", "Have at least level {0} in exp."),
     GAMEMODE_REQUIREMENT("gamemode-requirement", "Be in gamemode {0}."),
-    ITEM_REQUIREMENT("item-requirement", "Obtain {0}.");
+    ITEM_REQUIREMENT("item-requirement", "Obtain {0}."),
+    MINUTE_SINGULAR("minute-singular", "minute"),
+    MINUTE_PLURAL("minute-plural", "minutes"),
+    HOUR_SINGULAR("hour-singular", "hour"),
+    HOUR_PLURAL("hour-plural", "hours"),
+    DAY_SINGULAR("day-singular", "day"),
+    DAY_PLURAL("day-plural", "days"),
+    ;
 
  
     private String path, def;

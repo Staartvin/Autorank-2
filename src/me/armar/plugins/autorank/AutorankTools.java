@@ -3,6 +3,8 @@ package me.armar.plugins.autorank;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import me.armar.plugins.autorank.language.Lang;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -45,27 +47,35 @@ public class AutorankTools {
 
 		if (days != 0) {
 			b.append(days);
-			b.append(" day");
+			b.append(" ");
 			if (days != 1)
-				b.append("s");
+				b.append(Lang.DAY_PLURAL.getConfigValue(null));
+			else
+				b.append(Lang.DAY_SINGULAR.getConfigValue(null));
+			
 			if (hours != 0 || minutes != 0)
 				b.append(" ");
 		}
 
 		if (hours != 0) {
 			b.append(hours);
-			b.append(" hour");
+			b.append(" ");
 			if (hours != 1)
-				b.append("s");
+				b.append(Lang.HOUR_PLURAL.getConfigValue(null));
+			else
+				b.append(Lang.HOUR_SINGULAR.getConfigValue(null));
+			
 			if (minutes != 0)
 				b.append(" ");
 		}
 
 		if (minutes != 0 || (hours == 0 && days == 0)) {
 			b.append(minutes);
-			b.append(" minute");
+			b.append(" ");
 			if (minutes != 1)
-				b.append("s");
+				b.append(Lang.MINUTE_PLURAL.getConfigValue(null));
+			else
+				b.append(Lang.MINUTE_SINGULAR.getConfigValue(null));
 		}
 
 		return b.toString();
