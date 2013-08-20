@@ -44,6 +44,14 @@ public enum Lang {
     HOUR_PLURAL("hour-plural", "hours"),
     DAY_SINGULAR("day-singular", "day"),
     DAY_PLURAL("day-plural", "days"),
+    INVALID_NUMBER("invalid-number", "{0} is not a valid number!"),
+    PLAYER_IS_EXCLUDED("player-is-excluded", "{0} is excluded from ranking!"),
+    MYSQL_IS_NOT_ENABLED("mysql-is-not-enabled", "MySQL is not enabled and therefore global time does not exist!"),
+    ALREADY_COMPLETED_REQUIREMENT("already-completed-requirement", "You have already completed this requirement!"),
+    SUCCESSFULLY_COMPLETED_REQUIREMENT("successfully-completed-requirement", "You have successfully completed requirement &6{0}&a:"),
+    DO_NOT_MEET_REQUIREMENTS_FOR("do-not-meet-requirements-for", "You do not meet requirements for #&6{0}&c:"),
+    DONE_MARKER("done-marker", "Done"),
+    OPTIONAL_MARKER("optional-marker", "Optional")
     ;
 
  

@@ -28,7 +28,8 @@ public class Commands implements CommandExecutor {
 	private boolean hasPermission(String permission, CommandSender sender) {
 		if (!sender.hasPermission(permission)) {
 			sender.sendMessage(ChatColor.RED
-					+ Lang.NO_PERMISSION.getConfigValue(new String[] {permission}));
+					+ Lang.NO_PERMISSION
+							.getConfigValue(new String[] { permission }));
 			return false;
 		}
 		return true;
@@ -58,8 +59,9 @@ public class Commands implements CommandExecutor {
 				try {
 					page = Integer.parseInt(args[1]);
 				} catch (Exception e) {
-					sender.sendMessage(ChatColor.RED + "'" + args[1]
-							+ "' is not a valid page number!");
+					sender.sendMessage(ChatColor.RED
+							+ Lang.INVALID_NUMBER
+									.getConfigValue(new String[] { args[1] }));
 					return true;
 				}
 				showHelpPages(sender, page);
@@ -83,8 +85,9 @@ public class Commands implements CommandExecutor {
 											.getLocalTime(args[1])));
 				} else {
 					if (AutorankTools.isExcluded(player)) {
-						sender.sendMessage(ChatColor.RED + args[1]
-								+ " is excluded from ranking!");
+						sender.sendMessage(ChatColor.RED
+								+ Lang.PLAYER_IS_EXCLUDED
+										.getConfigValue(new String[] { args[1] }));
 						return true;
 					}
 					check(sender, player);
@@ -96,7 +99,9 @@ public class Commands implements CommandExecutor {
 
 				if (AutorankTools.isExcluded((Player) sender)) {
 					sender.sendMessage(ChatColor.RED
-							+ "You are excluded from ranking!");
+							+ Lang.PLAYER_IS_EXCLUDED
+									.getConfigValue(new String[] { sender
+											.getName() }));
 					return true;
 				}
 				Player player = (Player) sender;
@@ -128,11 +133,16 @@ public class Commands implements CommandExecutor {
 
 			if (value >= 0) {
 				plugin.setLocalTime(args[1], value);
-				AutorankTools.sendColoredMessage(sender,
-						Lang.PLAYTIME_CHANGED.getConfigValue(new String[] {args[1], value + ""}));
+				AutorankTools.sendColoredMessage(
+						sender,
+						Lang.PLAYTIME_CHANGED.getConfigValue(new String[] {
+								args[1], value + "" }));
 			} else {
-				AutorankTools.sendColoredMessage(sender,
-						Lang.INVALID_FORMAT.getConfigValue(new String[] {"/ar set [player] [value]"}));
+				AutorankTools
+						.sendColoredMessage(
+								sender,
+								Lang.INVALID_FORMAT
+										.getConfigValue(new String[] { "/ar set [player] [value]" }));
 			}
 
 			return true;
@@ -152,11 +162,16 @@ public class Commands implements CommandExecutor {
 
 			if (value >= 0) {
 				plugin.setLocalTime(args[1], value);
-				AutorankTools.sendColoredMessage(sender,
-						Lang.PLAYTIME_CHANGED.getConfigValue(new String[] {args[1], value + ""}));
+				AutorankTools.sendColoredMessage(
+						sender,
+						Lang.PLAYTIME_CHANGED.getConfigValue(new String[] {
+								args[1], value + "" }));
 			} else {
-				AutorankTools.sendColoredMessage(sender,
-						Lang.INVALID_FORMAT.getConfigValue(new String[] {"/ar add [player] [value]"}));
+				AutorankTools
+						.sendColoredMessage(
+								sender,
+								Lang.INVALID_FORMAT
+										.getConfigValue(new String[] { "/ar add [player] [value]" }));
 			}
 
 			return true;
@@ -177,11 +192,16 @@ public class Commands implements CommandExecutor {
 
 			if (value >= 0) {
 				plugin.setLocalTime(args[1], value);
-				AutorankTools.sendColoredMessage(sender,
-						Lang.PLAYTIME_CHANGED.getConfigValue(new String[] {args[1], value + ""}));
+				AutorankTools.sendColoredMessage(
+						sender,
+						Lang.PLAYTIME_CHANGED.getConfigValue(new String[] {
+								args[1], value + "" }));
 			} else {
-				AutorankTools.sendColoredMessage(sender,
-						Lang.INVALID_FORMAT.getConfigValue(new String[] {"/ar remove [player] [value]"}));
+				AutorankTools
+						.sendColoredMessage(
+								sender,
+								Lang.INVALID_FORMAT
+										.getConfigValue(new String[] { "/ar remove [player] [value]" }));
 			}
 
 			return true;
@@ -216,8 +236,8 @@ public class Commands implements CommandExecutor {
 				return true;
 			}
 
-			AutorankTools
-					.sendColoredMessage(sender, Lang.DATA_IMPORTED.getConfigValue(null));
+			AutorankTools.sendColoredMessage(sender,
+					Lang.DATA_IMPORTED.getConfigValue(null));
 			plugin.getPlaytimes().importData();
 
 			return true;
@@ -239,9 +259,8 @@ public class Commands implements CommandExecutor {
 
 			if (rate <= 0) {
 				sender.sendMessage(ChatColor.RED
-						+ "Time is not correctly formatted!");
-				sender.sendMessage(ChatColor.YELLOW
-						+ "Example: /ar archive 10d/10h/10m");
+						+ Lang.INVALID_FORMAT
+								.getConfigValue(new String[] { "/ar archive 10d/10h/10m" }));
 				return true;
 			}
 
@@ -255,7 +274,7 @@ public class Commands implements CommandExecutor {
 			// This is a global check. It will not show you the database numbers
 			if (!plugin.getMySQLWrapper().isMySQLEnabled()) {
 				sender.sendMessage(ChatColor.RED
-						+ "MySQL is not enabled and therefore global time does not exist!");
+						+ Lang.MYSQL_IS_NOT_ENABLED.getConfigValue(null));
 				return true;
 			}
 
@@ -276,8 +295,9 @@ public class Commands implements CommandExecutor {
 									+ " across all servers.");
 				} else {
 					if (player.hasPermission("autorank.exclude")) {
-						sender.sendMessage(ChatColor.RED + args[1]
-								+ " is excluded from ranking!");
+						sender.sendMessage(ChatColor.RED
+								+ Lang.PLAYER_IS_EXCLUDED
+										.getConfigValue(new String[] { args[1] }));
 						return true;
 					}
 
@@ -291,7 +311,9 @@ public class Commands implements CommandExecutor {
 
 				if (sender.hasPermission("autorank.exclude")) {
 					sender.sendMessage(ChatColor.RED
-							+ "You are excluded from ranking!");
+							+ Lang.PLAYER_IS_EXCLUDED
+									.getConfigValue(new String[] { sender
+											.getName() }));
 					return true;
 				}
 				Player player = (Player) sender;
@@ -342,8 +364,9 @@ public class Commands implements CommandExecutor {
 					completionID = 1;
 				}
 			} catch (Exception e) {
-				player.sendMessage(ChatColor.RED + "'" + args[1]
-						+ "' is not a valid id!");
+				player.sendMessage(ChatColor.RED
+						+ Lang.INVALID_NUMBER
+								.getConfigValue(new String[] { args[1] }));
 				return true;
 			}
 
@@ -400,16 +423,14 @@ public class Commands implements CommandExecutor {
 					if (plugin.getRequirementHandler().hasCompletedRequirement(
 							(completionID - 1), player.getName())) {
 						player.sendMessage(ChatColor.RED
-								+ "You have already completed this requirement!");
+								+ Lang.ALREADY_COMPLETED_REQUIREMENT.getConfigValue(null));
 						return true;
 					}
 
 					if (req.meetsRequirement(player)) {
 						// Player meets requirement
 						player.sendMessage(ChatColor.GREEN
-								+ "You have successfully completed requirement "
-								+ ChatColor.GOLD + completionID
-								+ ChatColor.GREEN + ":");
+								+ Lang.SUCCESSFULLY_COMPLETED_REQUIREMENT.getConfigValue(new String[] {completionID + ""}));
 						player.sendMessage(ChatColor.AQUA
 								+ req.getDescription());
 
@@ -423,9 +444,7 @@ public class Commands implements CommandExecutor {
 					} else {
 						// player does not meet requirements
 						player.sendMessage(ChatColor.RED
-								+ "You do not meet requirements for #"
-								+ ChatColor.GOLD + completionID + ChatColor.RED
-								+ ":");
+								+ Lang.DO_NOT_MEET_REQUIREMENTS_FOR.getConfigValue(new String[] {completionID + ""}));
 						player.sendMessage(ChatColor.AQUA
 								+ req.getDescription());
 						player.sendMessage(ChatColor.GREEN + "Current: "
@@ -545,8 +564,8 @@ public class Commands implements CommandExecutor {
 		AutorankTools.sendColoredMessage(sender, stringBuilder.toString());
 
 		if (keySet.size() == 0) {
-			AutorankTools
-					.sendColoredMessage(sender, Lang.NO_NEXT_RANK.getConfigValue(null));
+			AutorankTools.sendColoredMessage(sender,
+					Lang.NO_NEXT_RANK.getConfigValue(null));
 		} else {
 			Iterator<RankChange> it = keySet.iterator();
 			while (it.hasNext()) {
@@ -613,8 +632,11 @@ public class Commands implements CommandExecutor {
 
 				if (meetsAllRequirements || onlyOptional) {
 
-					AutorankTools.sendColoredMessage(sender,
-							Lang.MEETS_ALL_REQUIREMENTS.getConfigValue(new String[] {rank.getRankTo()})
+					AutorankTools.sendColoredMessage(
+							sender,
+							Lang.MEETS_ALL_REQUIREMENTS
+									.getConfigValue(new String[] { rank
+											.getRankTo() })
 									+ Lang.RANKED_UP_NOW.getConfigValue(null));
 					plugin.getPlayerChecker().checkPlayer(player);
 				} else {
@@ -631,14 +653,14 @@ public class Commands implements CommandExecutor {
 							if (metRequirements.contains(reqID)) {
 								message.append(ChatColor.RED
 										+ req.getDescription() + ChatColor.BLUE
-										+ " (Done)");
+										+ " (" + Lang.DONE_MARKER.getConfigValue(null) + ")");
 							} else {
 								message.append(ChatColor.RED
 										+ req.getDescription());
 							}
 
 							if (req.isOptional()) {
-								message.append(ChatColor.AQUA + " (Optional)");
+								message.append(ChatColor.AQUA + " (" + Lang.OPTIONAL_MARKER.getConfigValue(null) + ")");
 							}
 							AutorankTools.sendColoredMessage(sender,
 									message.toString());
