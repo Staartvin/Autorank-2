@@ -25,6 +25,10 @@ public class ConfigHandler {
 		plugin = instance;
 		this.config = plugin.getAdvancedConfig();
 	}
+	
+	public boolean useAdvancedConfig() {
+		return plugin.getAdvancedConfig().getBoolean("use advanced config");
+	}
 
 	/**
 	 * Gets whether a requirement is optional for a certain group
