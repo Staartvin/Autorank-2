@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 import me.armar.plugins.autorank.api.API;
 import me.armar.plugins.autorank.config.ConfigHandler;
 import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
+import me.armar.plugins.autorank.debugger.Debugger;
 import me.armar.plugins.autorank.language.LanguageHandler;
 import me.armar.plugins.autorank.leaderboard.Leaderboard;
 import me.armar.plugins.autorank.listeners.PlayerJoinListener;
@@ -57,6 +58,7 @@ public class Autorank extends JavaPlugin {
 	private UpdateHandler updateHandler;
 	private ConfigHandler configHandler;
 	private RequirementHandler requirementHandler;
+	private Debugger debugger;
 
 	public void onEnable() {
 
@@ -138,7 +140,7 @@ public class Autorank extends JavaPlugin {
 		// Register command
 		getCommand("ar").setExecutor(new Commands(this));
 
-		if (getAdvancedConfig().getBoolean("use advanced config")) {
+		if (configHandler.useAdvancedConfig()) {
 			if (getValidateHandler().validateConfigGroups(getAdvancedConfig()) == false) {
 				getServer().getPluginManager().disablePlugin(this);
 				return;
@@ -155,6 +157,9 @@ public class Autorank extends JavaPlugin {
 		
 		// Create MySQL Wrapper
 		setMySQLWrapper(new MySQLWrapper(this));
+		
+		// Set debugger
+		setDebugger(new Debugger(this));
 
 		Autorank.logMessage(String.format("Autorank %s has been enabled!",
 				getDescription().getVersion()));
@@ -346,5 +351,13 @@ public class Autorank extends JavaPlugin {
 	
 	public API getAPI() {
 		return new API(this);
+	}
+
+	public Debugger getDebugger() {
+		return debugger;
+	}
+
+	public void setDebugger(Debugger debugger) {
+		this.debugger = debugger;
 	}
 }

@@ -20,7 +20,6 @@ import org.bukkit.entity.Player;
 public class Commands implements CommandExecutor {
 
 	private Autorank plugin;
-
 	public Commands(Autorank plugin) {
 		this.plugin = plugin;
 	}
@@ -207,16 +206,19 @@ public class Commands implements CommandExecutor {
 			return true;
 		} else if (action.equalsIgnoreCase("debug")) {
 
+			// This will create a 'debug.txt' file containing a lot of information about the plugin
 			if (!hasPermission("autorank.debug", sender)) {
 				return true;
 			}
 
-			AutorankTools.sendColoredMessage(sender, "-- Autorank Debug --");
-			AutorankTools.sendColoredMessage(sender, "Rank Changes");
-			for (String change : plugin.getPlayerChecker().toStringArray()) {
-				AutorankTools.sendColoredMessage(sender, change);
-			}
-			AutorankTools.sendColoredMessage(sender, "--------------------");
+			plugin.getServer().getScheduler()
+					.runTaskAsynchronously(plugin, new Runnable() {
+						public void run() {
+							String fileName = plugin.getDebugger().createDebugFile();
+							
+							sender.sendMessage(ChatColor.GREEN + "Debug file '" + fileName + "' created!");
+						}
+					});
 
 			return true;
 		} else if (action.equalsIgnoreCase("reload")) {
@@ -423,14 +425,17 @@ public class Commands implements CommandExecutor {
 					if (plugin.getRequirementHandler().hasCompletedRequirement(
 							(completionID - 1), player.getName())) {
 						player.sendMessage(ChatColor.RED
-								+ Lang.ALREADY_COMPLETED_REQUIREMENT.getConfigValue(null));
+								+ Lang.ALREADY_COMPLETED_REQUIREMENT
+										.getConfigValue(null));
 						return true;
 					}
 
 					if (req.meetsRequirement(player)) {
 						// Player meets requirement
 						player.sendMessage(ChatColor.GREEN
-								+ Lang.SUCCESSFULLY_COMPLETED_REQUIREMENT.getConfigValue(new String[] {completionID + ""}));
+								+ Lang.SUCCESSFULLY_COMPLETED_REQUIREMENT
+										.getConfigValue(new String[] { completionID
+												+ "" }));
 						player.sendMessage(ChatColor.AQUA
 								+ req.getDescription());
 
@@ -444,7 +449,9 @@ public class Commands implements CommandExecutor {
 					} else {
 						// player does not meet requirements
 						player.sendMessage(ChatColor.RED
-								+ Lang.DO_NOT_MEET_REQUIREMENTS_FOR.getConfigValue(new String[] {completionID + ""}));
+								+ Lang.DO_NOT_MEET_REQUIREMENTS_FOR
+										.getConfigValue(new String[] { completionID
+												+ "" }));
 						player.sendMessage(ChatColor.AQUA
 								+ req.getDescription());
 						player.sendMessage(ChatColor.GREEN + "Current: "
@@ -653,14 +660,19 @@ public class Commands implements CommandExecutor {
 							if (metRequirements.contains(reqID)) {
 								message.append(ChatColor.RED
 										+ req.getDescription() + ChatColor.BLUE
-										+ " (" + Lang.DONE_MARKER.getConfigValue(null) + ")");
+										+ " ("
+										+ Lang.DONE_MARKER.getConfigValue(null)
+										+ ")");
 							} else {
 								message.append(ChatColor.RED
 										+ req.getDescription());
 							}
 
 							if (req.isOptional()) {
-								message.append(ChatColor.AQUA + " (" + Lang.OPTIONAL_MARKER.getConfigValue(null) + ")");
+								message.append(ChatColor.AQUA
+										+ " ("
+										+ Lang.OPTIONAL_MARKER
+												.getConfigValue(null) + ")");
 							}
 							AutorankTools.sendColoredMessage(sender,
 									message.toString());
