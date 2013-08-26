@@ -118,11 +118,7 @@ public class Commands implements CommandExecutor {
 			plugin.getLeaderboard().sendLeaderboard(sender);
 			return true;
 		} else if (action.equalsIgnoreCase("set")) {
-
-			if (!hasPermission("autorank.set", sender)) {
-				return true;
-			}
-
+			
 			int value = -1;
 			if (args.length > 2)
 				try {
@@ -131,6 +127,17 @@ public class Commands implements CommandExecutor {
 				}
 
 			if (value >= 0) {
+				
+				if (args[1].equalsIgnoreCase(sender.getName())) {
+					if (!hasPermission("autorank.set.self", sender)) {
+						return true;
+					}
+				} else {
+					if (!hasPermission("autorank.set.other", sender)) {
+						return true;
+					}
+				}
+				
 				plugin.setLocalTime(args[1], value);
 				AutorankTools.sendColoredMessage(
 						sender,
