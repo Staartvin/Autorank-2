@@ -5,7 +5,7 @@
 #############################################################################
 
 # The format for rank changes is
-#   rank1: rank2 1d 1h 1m
+#   rank1: rank2 after 1d 1h 1m
 # where rank1 is the player's current rank
 # and rank2 is the rank the player will get after the set time
 # 1d = 1 day
