@@ -27,8 +27,11 @@ permissions:
     autorank.timeexclude:
         description: Excludes groups or users from the playtime updates.
         default: false
-    autorank.set:
-        description: Allows changing playtimes.
+    autorank.set.self:
+        description: Allows changing own playtime.
+        default: op
+    autorank.set.other:
+        description: Allows changing others playtime.
         default: op
     autorank.add:
         description: Allows adding to playtimes.
