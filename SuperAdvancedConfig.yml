@@ -1,0 +1,79 @@
+#############################################################################
+#                                                                           #
+#                   Autorank 2 Super Advanced Config                        #
+#                                                                           #
+#   Please use the SimpleConfig unless you know what you are doing and      #
+#   need functionality that the SimpleConfig doesn't provide.               #
+#   This is basically the same as an advanced config but uses Autorank's    #
+#   limits to reach the ultimate goal you want. There is no special file    #
+#   called super advanced config, because this is just the advanced config  #
+#   used in a "harder" way. Be careful, you might cry trying to set this up #
+#                                                                           #
+#############################################################################
+
+
+# This is just to demonstrate how powerful Autorank is. This file is never used locally or in any file system.
+
+ranks:
+    Guest:
+        requirements:
+            time:
+                value: 1h
+        results:
+            rank change: Guest;Member
+            command: 'say Welcome our new member, &p!'
+            message: 'Congratulations, you are now a Member.'
+    Member:
+        requirements:
+            time:
+                value: 5d
+                results:
+                    message: 'You have played for 5 days. Here is a reward for your work!'
+                    command: 'eco give &p 100'
+                options:
+                    optional: false
+                    auto complete: true
+            exp:
+                value: 60
+                results:
+                    message: 'You have got a lot of experience! You are now a experience manager.'
+                    rank change: Member;ExpManager
+                    command:  'xp set &p 0'
+                options:
+                    optional: true
+                    auto complete: false
+            world:
+                value: world_nether
+                results:
+                    message: 'You visited the nether for the first time. Good job!'
+                    command: 'say &p has visited the Nether for the first time.'
+            gamemode:
+                value: 0
+            has item:
+                value: 50
+        results:
+            rank change: member;veteran
+            command: 'say &p has just been promoted to Veteran!; give &p 1 100; tell &p You have just earned 100 stone!'
+            message: 'Congratulations, you are now a Veteran.'        
+# new requirements and results can be added by other plugins that hook into the Autorank API
+# these are the ones that are included in the main plugin:
+# 
+#   requirements:
+#       time: 1d 1h 1m
+#       exp: 20 (level)
+#       money: 2000 (requires vault ! Player has to have at least this amount of money)
+#       world: world_nether (player has to be in this world to get ranked)
+#       gamemode: 1 (player has to have a certain gamemode, 0 = Survival mode, 1 = Creative mode, 2 = Adventure mode)
+#       has item: id(;amount;data) (checks the players inventory for the item)
+#       blocks broken: id(;amount;data) (a player has to have broken x amount blocks of item id and data) (Requires Stats) (when no data or amount is given, it will check total blocks)
+#       Example: break 10 magenta wool would be: 'blocks broken: 35;10;2' 35 = itemid, 10 = amount, 2 = damagevalue
+#       blocks placed: id(;amount;data) (a player has to have placed x amount blocks of item id and data) (Requires Stats) (when no data or amount is given, it will check total blocks)
+#       votes: 10 (player has to have voted at least 10 times) (Requires Stats and Votifier)
+#   results:
+#       rank change: new-rank
+#       rank change: old-rank; new-rank
+#       rank change: old-rank; new-rank; world (only works for permissions plugins that support this)
+#       message: 'You got ranked up'
+#       command: 'say &p hi; give &p 1 100'(executes a console command. &p will be replaced by the player name) You can perform more commands with the ';' sign.
+#       effect: STEP_SOUND;8 (first argument is the effect name, second is the effect data. For a list of possible effects go to http://jd.bukkit.org/rb/doxygen/d8/db9/enumorg_1_1bukkit_1_1Effect.html)
+#       tp: x;y;z;world;yaw;pitch (tp: 0;0;0;world_nether;1.0;2.0)
