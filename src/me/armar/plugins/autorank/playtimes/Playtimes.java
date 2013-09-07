@@ -19,6 +19,10 @@ public class Playtimes {
 
 	public Playtimes(Autorank plugin) {
 		this.plugin = plugin;
+		
+		INTERVAL_MINUTES = plugin.getAdvancedConfig().getInt("interval check", 5);
+		plugin.getLogger().info("Interval check every " + INTERVAL_MINUTES + " minutes.");
+		
 		this.data = new SimpleYamlConfiguration(plugin, "Data.yml", null,
 				"Data");
 		this.save = new PlaytimesSave(this);
