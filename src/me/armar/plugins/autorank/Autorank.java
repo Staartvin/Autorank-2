@@ -17,6 +17,7 @@ import me.armar.plugins.autorank.playerchecker.builders.RequirementBuilder;
 import me.armar.plugins.autorank.playerchecker.builders.ResultBuilder;
 import me.armar.plugins.autorank.playerchecker.requirement.BlocksBrokenRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.BlocksPlacedRequirement;
+import me.armar.plugins.autorank.playerchecker.requirement.DamageTakenRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.ExpRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.GamemodeRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.HasItemRequirement;
@@ -127,6 +128,7 @@ public class Autorank extends JavaPlugin {
 		req.registerRequirement("blocks broken", BlocksBrokenRequirement.class);
 		req.registerRequirement("blocks placed", BlocksPlacedRequirement.class);
 		req.registerRequirement("votes", TotalVotesRequirement.class);
+		req.registerRequirement("damage taken", DamageTakenRequirement.class);
 
 		// Register 'main' results
 		res.registerResult("command", CommandResult.class);

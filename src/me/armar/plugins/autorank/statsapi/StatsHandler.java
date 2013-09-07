@@ -82,6 +82,17 @@ public class StatsHandler {
 		return value;
 	}
 	
+	public int getDamageTaken(String player) {
+		Stat stat = getStatType(StatType.DAMAGE_TAKEN, player);
+
+		int value = 0;
+
+		for (Object[] vars : stat.getAllVariables()) {
+			value += stat.getValue(vars);
+		}
+		return value;
+	}
+	
 	/**
 	 * Gets the total blocks of a certain id and damage value placed
 	 * @param player Player to check for

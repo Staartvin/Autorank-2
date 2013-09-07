@@ -51,7 +51,8 @@ public enum Lang {
     SUCCESSFULLY_COMPLETED_REQUIREMENT("successfully-completed-requirement", "You have successfully completed requirement &6{0}&a:"),
     DO_NOT_MEET_REQUIREMENTS_FOR("do-not-meet-requirements-for", "You do not meet requirements for #&6{0}&c:"),
     DONE_MARKER("done-marker", "Done"),
-    OPTIONAL_MARKER("optional-marker", "Optional")
+    OPTIONAL_MARKER("optional-marker", "Optional"),
+    DAMAGE_TAKEN_REQUIREMENT("damage-taken-requirement", "Take at least {0} damage.")
     ;
 
  
