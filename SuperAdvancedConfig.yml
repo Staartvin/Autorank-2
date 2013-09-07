@@ -47,6 +47,11 @@ ranks:
                 results:
                     message: 'You visited the nether for the first time. Good job!'
                     command: 'say &p has visited the Nether for the first time.'
+            world2:
+                value: world_the_end
+                results:
+                    message: 'You visited the end for the first time. Good job!'
+                    command: 'say &p has visited the End for the first time.'        
             gamemode:
                 value: 0
             has item:
