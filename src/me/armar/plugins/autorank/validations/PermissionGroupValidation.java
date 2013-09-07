@@ -50,9 +50,70 @@ public class PermissionGroupValidation {
 					isMissing = true;
 				}
 			}
+			
+			if (!isValidChange(rank)) {
+				autorank.getLogger().severe("Rank change of rank '" + rank + "' is invalid. (Do the groups used exist?)");
+				isMissing = true;
+			}
 		}
 		
 		// If all is okay, then do nothing. Else, disable AR.
-		return (isMissing == false);
+		return (!isMissing);
+	}
+	
+	/**
+	 * Checks whether the @group variable is the same as rankFrom group.
+	 * It also checks whether the rankTo group is defined as a group in the permission plugin
+	 * @param group
+	 * @return true if (rankFrom.equals(group) && rankTo is defined in the config); false otherwise
+	 */
+	public boolean isValidChange(String group) {
+		String rankChange = autorank.getAdvancedConfig().getString("ranks." + group + ".results.rank change", null);
+		String[] groups = autorank.getPermPlugHandler().getPermissionPlugin().getGroups();
+		
+		if (rankChange == null) return false;
+		
+		if (rankChange.trim().equals("")) return false;
+		
+		if (!rankChange.contains(";")) {
+			boolean isMissing = true;
+			
+			for (String group1: groups) {
+				if (group1.equals(rankChange.trim())) {
+					isMissing = false;
+				}
+			}
+			
+			return !isMissing;
+		}
+		
+		String[] array = rankChange.split(";");
+		
+		String rankFrom = null, rankTo = null;
+		
+		if (array.length >= 2) {
+			rankFrom = array[0].trim();
+			rankTo = array[1].trim();
+		}
+
+		if (rankTo == null || rankFrom == null) return false;
+		
+		boolean isMissingRankTo = true, isMissingRankFrom = true;
+		
+		// Check whether the rankTo exists
+		for (String group1: groups) {
+			if (group1.equals(rankTo.trim())) {
+				isMissingRankTo = false;
+			}
+		}
+		
+		// Check whether the rankFrom exists
+		for (String group1: groups) {
+			if (group1.equals(rankFrom.trim())) {
+				isMissingRankFrom = false;
+			}
+		}
+		
+		return (rankFrom.equals(group) && !isMissingRankTo && !isMissingRankFrom);
 	}
 }
