@@ -141,12 +141,12 @@ public class Autorank extends JavaPlugin {
 		getCommand("ar").setExecutor(new Commands(this));
 
 		if (configHandler.useAdvancedConfig()) {
-			if (getValidateHandler().validateConfigGroups(getAdvancedConfig()) == false) {
+			if (!getValidateHandler().validateConfigGroups(getAdvancedConfig())) {
 				getServer().getPluginManager().disablePlugin(this);
 				return;
 			}
 		} else {
-			if (getValidateHandler().validateConfigGroups(getSimpleConfig()) == false) {
+			if (!getValidateHandler().validateConfigGroups(getSimpleConfig())) {
 				getServer().getPluginManager().disablePlugin(this);
 				return;
 			}
