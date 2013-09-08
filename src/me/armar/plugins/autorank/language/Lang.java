@@ -53,7 +53,8 @@ public enum Lang {
     DO_NOT_MEET_REQUIREMENTS_FOR("do-not-meet-requirements-for", "You do not meet requirements for #&6{0}&c:"),
     DONE_MARKER("done-marker", "Done"),
     OPTIONAL_MARKER("optional-marker", "Optional"),
-    DAMAGE_TAKEN_REQUIREMENT("damage-taken-requirement", "Take at least {0} damage.")
+    DAMAGE_TAKEN_REQUIREMENT("damage-taken-requirement", "Take at least {0} damage."),
+    TOTAL_MOBS_KILLED_REQUIREMENT("total-mobs-killed-requirement", "Kill at least {0}"),
     ;
 
  
