@@ -6,6 +6,7 @@ import nl.lolmewn.stats.api.StatsAPI;
 import nl.lolmewn.stats.player.Stat;
 import nl.lolmewn.stats.player.StatsPlayer;
 
+import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
@@ -127,6 +128,44 @@ public class StatsHandler {
 			}
 		}
 		return value;
+	}
+	
+	public int getTotalMobsKilled(String player, String mobName) {
+		if (!isEnabled()) return 0;
+		
+		Stat blockStat = getStatType(StatType.KILL, player);
+		
+		EntityType mob = getEntityType(mobName);
+		
+		boolean checkEntityType = false;
+		
+		if (mob != null) {
+			checkEntityType = true;
+		}
+		
+		int value = 0;
+
+		for (Object[] vars : blockStat.getAllVariables()) {
+			
+			// var 0 is mob type
+			
+				if (checkEntityType) {
+					if (getEntityType(vars[0].toString()) != null && getEntityType(vars[0].toString()).equals(mob)) {
+						value += blockStat.getValue(vars);
+					}
+				} else {
+					value += blockStat.getValue(vars);
+				}
+		}
+		return value;
+	}
+	
+	public EntityType getEntityType(String entityName) {
+		try {
+			return EntityType.valueOf(entityName.toUpperCase());	
+		} catch (Exception e) {
+			return null;
+		}
 	}
 	
 	/**
