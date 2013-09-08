@@ -127,6 +127,7 @@ public class RankChangeBuilder {
 				res.add(createResult(resu, configHandler.getResult(resu, group)));
 			}
 
+			if (configHandler.getRankChange(group) != null) {
 			String[] rankChange = configHandler.getRankChange(group).split(";");
 
 			if (rankChange.length <= 0) {
@@ -144,6 +145,7 @@ public class RankChangeBuilder {
 			}
 
 			result.add(new RankChange(autorank, group, rankTo, req, res));
+			}
 		}
 
 		return result;
