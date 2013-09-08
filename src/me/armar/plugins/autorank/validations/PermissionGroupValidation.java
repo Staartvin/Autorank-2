@@ -71,7 +71,7 @@ public class PermissionGroupValidation {
 		String rankChange = autorank.getAdvancedConfig().getString("ranks." + group + ".results.rank change", null);
 		String[] groups = autorank.getPermPlugHandler().getPermissionPlugin().getGroups();
 		
-		if (rankChange == null) return false;
+		if (rankChange == null) return true;
 		
 		if (rankChange.trim().equals("")) return false;
 		

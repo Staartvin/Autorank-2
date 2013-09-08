@@ -108,4 +108,16 @@ public class PermissionsBukkitPermissionsHandler implements PermissionsHandler {
 		
 		return newGroups;
 	}
+
+	@Override
+	public String[] getWorldGroups(Player player, String world) {
+		List<Group> groups = permissionsBukkit.getGroups(player.getName());
+		String[] arrayGroups = new String[groups.size()];
+		
+		for (int i=0;i<groups.size(); i++) {
+			arrayGroups[i] = groups.get(i).getName();
+		}
+		
+		return arrayGroups;
+	}
 }

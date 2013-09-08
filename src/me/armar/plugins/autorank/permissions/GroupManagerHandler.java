@@ -135,4 +135,9 @@ public class GroupManagerHandler implements PermissionsHandler {
 		}
 		return groupArray;
 	}
+
+	@Override
+	public String[] getWorldGroups(Player player, String world) {
+		return groupManager.getWorldsHolder().getWorldPermissions(world).getGroups(player.getName());
+	}
 }

@@ -41,6 +41,10 @@ public class RankChange {
 	public String getRankTo() {
 		return rankTo;
 	}
+	
+	public boolean hasRankUp() {
+		return rankTo != null;
+	}
 
 	public boolean checkRequirements(Player player) {
 		boolean result = true;

@@ -103,13 +103,15 @@ public class RankChangeBuilder {
 									resultString)));
 				}
 				int reqId = configHandler.getReqId(requirement, group);
-				
+
 				//System.out.print("REQ ID of " + requirement + " for group " + group + ": " + reqId);
-				
+
 				if (reqId < 0) {
 					try {
-						throw new Exception("REQ ID COULDN'T BE FOUND! REPORT TO AUTHOR!" +
-								" GROUP: " + group + ", REQUIREMENT: " + requirement);
+						throw new Exception(
+								"REQ ID COULDN'T BE FOUND! REPORT TO AUTHOR!"
+										+ " GROUP: " + group
+										+ ", REQUIREMENT: " + requirement);
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						autorank.getLogger().severe(e.getCause().getMessage());
@@ -119,7 +121,8 @@ public class RankChangeBuilder {
 				req.add(createRequirement(getCorrectName(requirement),
 						configHandler.getRequirement(requirement, group),
 						optional, realResults,
-						configHandler.useAutoCompletion(group, requirement), reqId));
+						configHandler.useAutoCompletion(group, requirement),
+						reqId));
 
 			}
 
@@ -127,25 +130,28 @@ public class RankChangeBuilder {
 				res.add(createResult(resu, configHandler.getResult(resu, group)));
 			}
 
-			if (configHandler.getRankChange(group) != null) {
-			String[] rankChange = configHandler.getRankChange(group).split(";");
-
-			if (rankChange.length <= 0) {
-				System.out
-						.print("[AutoRank] Advanced Config is not configured correctly!");
-				autorank.getServer().getPluginManager().disablePlugin(autorank);
-				return null;
-			}
-
 			String rankTo = null;
-			if (rankChange.length == 1) {
-				rankTo = rankChange[0].trim();
-			} else {
-				rankTo = rankChange[1].trim();
+
+			if (configHandler.getRankChange(group) != null) {
+				String[] rankChange = configHandler.getRankChange(group).split(
+						";");
+
+				if (rankChange.length <= 0) {
+					System.out
+							.print("[AutoRank] Advanced Config is not configured correctly!");
+					autorank.getServer().getPluginManager()
+							.disablePlugin(autorank);
+					return null;
+				}
+
+				if (rankChange.length == 1) {
+					rankTo = rankChange[0].trim();
+				} else {
+					rankTo = rankChange[1].trim();
+				}
 			}
 
 			result.add(new RankChange(autorank, group, rankTo, req, res));
-			}
 		}
 
 		return result;

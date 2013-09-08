@@ -20,6 +20,7 @@ import org.bukkit.entity.Player;
 public class Commands implements CommandExecutor {
 
 	private Autorank plugin;
+
 	public Commands(Autorank plugin) {
 		this.plugin = plugin;
 	}
@@ -118,7 +119,7 @@ public class Commands implements CommandExecutor {
 			plugin.getLeaderboard().sendLeaderboard(sender);
 			return true;
 		} else if (action.equalsIgnoreCase("set")) {
-			
+
 			int value = -1;
 			if (args.length > 2)
 				try {
@@ -127,7 +128,7 @@ public class Commands implements CommandExecutor {
 				}
 
 			if (value >= 0) {
-				
+
 				if (args[1].equalsIgnoreCase(sender.getName())) {
 					if (!hasPermission("autorank.set.self", sender)) {
 						return true;
@@ -137,7 +138,7 @@ public class Commands implements CommandExecutor {
 						return true;
 					}
 				}
-				
+
 				plugin.setLocalTime(args[1], value);
 				AutorankTools.sendColoredMessage(
 						sender,
@@ -221,9 +222,11 @@ public class Commands implements CommandExecutor {
 			plugin.getServer().getScheduler()
 					.runTaskAsynchronously(plugin, new Runnable() {
 						public void run() {
-							String fileName = plugin.getDebugger().createDebugFile();
-							
-							sender.sendMessage(ChatColor.GREEN + "Debug file '" + fileName + "' created!");
+							String fileName = plugin.getDebugger()
+									.createDebugFile();
+
+							sender.sendMessage(ChatColor.GREEN + "Debug file '"
+									+ fileName + "' created!");
 						}
 					});
 
@@ -523,7 +526,7 @@ public class Commands implements CommandExecutor {
 
 		// Check if the latest known group is the current group. Otherwise, reset progress
 		String currentGroup = plugin.getPermPlugHandler().getPermissionPlugin()
-				.getPlayerGroups(player)[0];
+				.getWorldGroups(player, player.getWorld().getName())[0];
 		String latestKnownGroup = plugin.getRequirementHandler()
 				.getLastKnownGroup(player.getName());
 
@@ -643,15 +646,14 @@ public class Commands implements CommandExecutor {
 						}
 					}
 				}
+				String reqMessage = rank.getRankTo() == null ? Lang.MEETS_ALL_REQUIREMENTS_WITHOUT_RANK_UP
+						.getConfigValue(null) : Lang.MEETS_ALL_REQUIREMENTS
+						.getConfigValue(new String[] { rank.getRankTo() });
 
 				if (meetsAllRequirements || onlyOptional) {
 
-					AutorankTools.sendColoredMessage(
-							sender,
-							Lang.MEETS_ALL_REQUIREMENTS
-									.getConfigValue(new String[] { rank
-											.getRankTo() })
-									+ Lang.RANKED_UP_NOW.getConfigValue(null));
+					AutorankTools.sendColoredMessage(sender, reqMessage
+							+ Lang.RANKED_UP_NOW.getConfigValue(null));
 					plugin.getPlayerChecker().checkPlayer(player);
 				} else {
 					AutorankTools.sendColoredMessage(sender,

@@ -26,6 +26,7 @@ public enum Lang {
     MULTIPLE_GROUPS("multiple-groups", "groups "),
     NO_NEXT_RANK("no-next-rankup", "and does not have a next rankup"),
     MEETS_ALL_REQUIREMENTS("meets-all-requirements", "meets all the requirements for rank {0}"),
+    MEETS_ALL_REQUIREMENTS_WITHOUT_RANK_UP("meets-all-requirements-without-rank-up", "meets all the requirements"),
     RANKED_UP_NOW("ranked-up-now", " and will now be ranked up."),
     REQUIREMENTS_TO_RANK("requirements-to-rank", "Requirements to be ranked up: "),
     DATA_IMPORTED("data-imported", "New data has been imported!"),
