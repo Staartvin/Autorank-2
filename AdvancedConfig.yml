@@ -74,6 +74,9 @@ ranks:
 #       Example: break 10 magenta wool would be: 'blocks broken: 35;10;2' 35 = itemid, 10 = amount, 2 = damagevalue
 #       blocks placed: id(;amount;data) (a player has to have placed x amount blocks of item id and data) (Requires Stats) (when no data or amount is given, it will check total blocks)
 #       votes: 10 (player has to have voted at least 10 times) (Requires Stats and Votifier)
+#       damage taken: 10 (player has to have taken 10 damage) (damage is not counted in hearts) (Requires Stats)
+#       mobs killed: 5;spider (player has to have killed 5 spiders) (if no entity is specified, then any kill counts) (Requires Stats) (for a list of entities: http://jd.bukkit.org/rb/apidocs/org/bukkit/entity/EntityType.html)
+#
 #   results:
 #       rank change: new-rank
 #       rank change: old-rank; new-rank
