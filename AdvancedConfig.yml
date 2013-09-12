@@ -76,6 +76,7 @@ ranks:
 #       votes: 10 (player has to have voted at least 10 times) (Requires Stats and Votifier)
 #       damage taken: 10 (player has to have taken 10 damage) (damage is not counted in hearts) (Requires Stats)
 #       mobs killed: 5;spider (player has to have killed 5 spiders) (if no entity is specified, then any kill counts) (Requires Stats) (for a list of entities: http://jd.bukkit.org/rb/apidocs/org/bukkit/entity/EntityType.html)
+#       location: x;y;z;world;radius (player has to be in a location or within its radius)
 #
 #   results:
 #       rank change: new-rank
