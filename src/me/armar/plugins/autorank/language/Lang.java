@@ -54,7 +54,8 @@ public enum Lang {
     DONE_MARKER("done-marker", "Done"),
     OPTIONAL_MARKER("optional-marker", "Optional"),
     DAMAGE_TAKEN_REQUIREMENT("damage-taken-requirement", "Take at least {0} damage."),
-    TOTAL_MOBS_KILLED_REQUIREMENT("total-mobs-killed-requirement", "Kill at least {0}"),
+    TOTAL_MOBS_KILLED_REQUIREMENT("total-mobs-killed-requirement", "Kill at least {0}."),
+    LOCATION_REQUIREMENT("location-requirement", "Be at {0}.");
     ;
 
  
