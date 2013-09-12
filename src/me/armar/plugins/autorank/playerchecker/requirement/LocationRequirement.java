@@ -86,7 +86,7 @@ public class LocationRequirement extends Requirement {
 		// Player is not in the correct world
 		if (!realWorld.getName().equals(pLocation.getWorld().getName())) return false; 
 
-		// TODO Check if a player is within the radius
+		// Check if a player is within the radius
 		if (pLocation.getBlockX() >= xRadiusN && pLocation.getBlockX() <= xRadiusP) {
 			if (pLocation.getBlockY() >= yRadiusN && pLocation.getBlockY() <= yRadiusP) {
 				if (pLocation.getBlockZ() >= zRadiusN && pLocation.getBlockZ() <= zRadiusP) {
