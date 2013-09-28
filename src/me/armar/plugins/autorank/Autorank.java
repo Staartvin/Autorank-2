@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.logging.Logger;
 
 import me.armar.plugins.autorank.api.API;
+import me.armar.plugins.autorank.commands.CommandsHandler;
 import me.armar.plugins.autorank.config.ConfigHandler;
 import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
 import me.armar.plugins.autorank.debugger.Debugger;
@@ -144,7 +145,7 @@ public class Autorank extends JavaPlugin {
 		playerChecker.initialiseFromConfigs(this);
 
 		// Register command
-		getCommand("ar").setExecutor(new Commands(this));
+		getCommand("ar").setExecutor(new CommandsHandler(this));
 
 		if (configHandler.useAdvancedConfig()) {
 			if (!getValidateHandler().validateConfigGroups(getAdvancedConfig())) {

@@ -1,4 +1,4 @@
-package me.armar.plugins.autorank;
+package me.armar.plugins.autorank.commands;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.AutorankTools;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.playerchecker.RankChange;
 import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
@@ -17,11 +19,11 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class Commands implements CommandExecutor {
+public class CommandsHandler implements CommandExecutor {
 
 	private Autorank plugin;
 
-	public Commands(Autorank plugin) {
+	public CommandsHandler(Autorank plugin) {
 		this.plugin = plugin;
 	}
 
@@ -513,6 +515,41 @@ public class Commands implements CommandExecutor {
 									+ "Successfully updated MySQL records!");
 						}
 					});
+			return true;
+		} else if (action.equalsIgnoreCase("syncstats")) {
+			if (!hasPermission("autorank.syncstats", sender))
+				return true;
+			
+			if (!plugin.getStatsHandler().isEnabled()) {
+				sender.sendMessage(ChatColor.RED + "Stats is not enabled!");
+				return true;
+			}
+			
+			int count = 0;
+			
+			// Sync playtime of every player
+			for (String entry: plugin.getPlaytimes().getKeys()) {
+				
+				// Time is stored in seconds
+				int statsPlayTime = plugin.getStatsHandler().getStatsAPI().getPlaytime(entry);
+				
+				if (statsPlayTime <= 0) {
+					System.out.print("LOW");
+					continue;
+				}
+				
+				// Check to see if the time actually changed.
+				if ((statsPlayTime / 60) != plugin.getPlaytimes().getLocalTime(entry)) {
+					
+					// Update time
+					plugin.getPlaytimes().setLocalTime(entry, statsPlayTime);
+					
+					// Increment count
+					count++;
+				}
+			}
+			
+			sender.sendMessage(ChatColor.GREEN + (count + " entries have been updated!"));
 			return true;
 		}
 
