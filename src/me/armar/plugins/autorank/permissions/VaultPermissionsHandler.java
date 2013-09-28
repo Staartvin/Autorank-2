@@ -2,6 +2,7 @@ package me.armar.plugins.autorank.permissions;
 
 import me.armar.plugins.autorank.Autorank;
 import net.milkbowl.vault.permission.Permission;
+
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 

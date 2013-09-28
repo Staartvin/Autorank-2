@@ -3,10 +3,10 @@ package me.armar.plugins.autorank.playerchecker;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.entity.Player;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.AutorankTools;
+
+import org.bukkit.entity.Player;
 
 /*
  * PlayerCheckerTrigger stores what players it recently checked for a 

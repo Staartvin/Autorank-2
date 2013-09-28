@@ -2,6 +2,7 @@ package me.armar.plugins.autorank.permissions;
 
 import me.armar.plugins.autorank.Autorank;
 import net.milkbowl.vault.Vault;
+
 import org.bukkit.plugin.Plugin;
 
 /*

@@ -1,10 +1,10 @@
 package me.armar.plugins.autorank.mysql.wrapper;
 
-import org.bukkit.configuration.ConfigurationSection;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.data.SQLDataStorage;
 import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
+
+import org.bukkit.configuration.ConfigurationSection;
 
 /**
  * This class keeps all incoming and outgoing under control.

@@ -8,6 +8,7 @@ import me.armar.plugins.autorank.commands.CommandsHandler;
 import me.armar.plugins.autorank.config.ConfigHandler;
 import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
 import me.armar.plugins.autorank.debugger.Debugger;
+import me.armar.plugins.autorank.factionapi.FactionsHandler;
 import me.armar.plugins.autorank.language.LanguageHandler;
 import me.armar.plugins.autorank.leaderboard.Leaderboard;
 import me.armar.plugins.autorank.listeners.PlayerJoinListener;
@@ -20,6 +21,7 @@ import me.armar.plugins.autorank.playerchecker.requirement.BlocksBrokenRequireme
 import me.armar.plugins.autorank.playerchecker.requirement.BlocksPlacedRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.DamageTakenRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.ExpRequirement;
+import me.armar.plugins.autorank.playerchecker.requirement.FactionPowerRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.GamemodeRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.HasItemRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.LocationRequirement;
@@ -63,6 +65,7 @@ public class Autorank extends JavaPlugin {
 	private ConfigHandler configHandler;
 	private RequirementHandler requirementHandler;
 	private Debugger debugger;
+	private FactionsHandler factionsHandler;
 
 	public void onEnable() {
 
@@ -110,10 +113,17 @@ public class Autorank extends JavaPlugin {
 
 		// Create stats handler
 		setStatsHandler(new StatsHandler(this));
+		
+		// Create faction handler
+		setFactionsHandler(new FactionsHandler(this));
 
 		if (statsHandler.setupStatsAPI()) {
 			getLogger().info(
-					"Hooked into Stats! Extra requirements can be used.");
+					"Hooked into Stats! Stats requirements can be used.");
+		}
+		
+		if (factionsHandler.setupFactions()) {
+			getLogger().info("Hooked into Factions! Faction requirements can be used.");
 		}
 
 		RequirementBuilder req = this.getPlayerChecker().getBuilder()
@@ -134,6 +144,7 @@ public class Autorank extends JavaPlugin {
 		req.registerRequirement("damage taken", DamageTakenRequirement.class);
 		req.registerRequirement("mobs killed", MobKillsRequirement.class);
 		req.registerRequirement("location", LocationRequirement.class);
+		req.registerRequirement("faction power", FactionPowerRequirement.class);
 
 		// Register 'main' results
 		res.registerResult("command", CommandResult.class);
@@ -366,5 +377,13 @@ public class Autorank extends JavaPlugin {
 
 	public void setDebugger(Debugger debugger) {
 		this.debugger = debugger;
+	}
+
+	public FactionsHandler getFactionsHandler() {
+		return factionsHandler;
+	}
+
+	public void setFactionsHandler(FactionsHandler factionsHandler) {
+		this.factionsHandler = factionsHandler;
 	}
 }
