@@ -1,7 +1,6 @@
 package me.armar.plugins.autorank.playerchecker;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.entity.Player;
