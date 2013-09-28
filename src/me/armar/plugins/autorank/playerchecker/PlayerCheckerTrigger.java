@@ -30,26 +30,24 @@ public class PlayerCheckerTrigger implements Runnable {
 	}
 
 	public void run() {
-		Player[] players = plugin.getServer().getOnlinePlayers();
 
-		if (playersToBeChecked.size() == 0)
-			playersToBeChecked.addAll(Arrays.asList(players));
+		// Instead of checking one player at the time, check every player at once.
+		if (plugin.getServer().getOnlinePlayers().length > 0) {
 
-		if (playersToBeChecked.size() != 0) {
-			Player player = playersToBeChecked.get(0);
+			for (Player player : plugin.getServer().getOnlinePlayers()) {
+				// TODO: Player would not be ranked up if one of the requirement is not auto complete
+				if (!AutorankTools.isExcluded(player))
+					checker.checkPlayer(player);
+				playersToBeChecked.remove(player);
+			}
 
-			// TODO: Player would not be ranked up if one of the requirement is not auto complete
-			if (!AutorankTools.isExcluded(player))
-				checker.checkPlayer(player);
-
-			playersToBeChecked.remove(player);
 		}
 
 		// Check every 5 minutes
 		int nextCheck = 6000;
-		if (players.length > 0) {
-			nextCheck = nextCheck / players.length;
-			
+		if (plugin.getServer().getOnlinePlayers().length > 0) {
+			nextCheck = nextCheck / plugin.getServer().getOnlinePlayers().length;
+
 			// When check time is lower than 1 minute, change it to 1 minute
 			// Decreases load on server
 			if (nextCheck < 1200) {
