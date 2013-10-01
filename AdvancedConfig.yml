@@ -77,6 +77,7 @@ ranks:
 #       damage taken: 10 (player has to have taken 10 damage) (damage is not counted in hearts) (Requires Stats)
 #       mobs killed: 5;spider (player has to have killed 5 spiders) (if no entity is specified, then any kill counts) (Requires Stats) (for a list of entities: http://jd.bukkit.org/rb/apidocs/org/bukkit/entity/EntityType.html)
 #       location: x;y;z;world;radius (player has to be in a location or within its radius)
+#       faction power: 10 (Amount of power a faction has to have) (Requires Factions)
 #
 #   results:
 #       rank change: new-rank
