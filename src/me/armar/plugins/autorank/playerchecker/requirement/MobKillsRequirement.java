@@ -6,8 +6,6 @@ import java.util.List;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.playerchecker.result.Result;
-
-import org.bukkit.Bukkit;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
@@ -23,7 +21,7 @@ public class MobKillsRequirement extends Requirement {
 
 	public MobKillsRequirement() {
 		super();
-		plugin = (Autorank) Bukkit.getPluginManager().getPlugin("Autorank");
+		plugin = this.getAutorank();
 	}
 
 	@Override
