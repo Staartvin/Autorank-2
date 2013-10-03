@@ -551,6 +551,35 @@ public class CommandsHandler implements CommandExecutor {
 			
 			sender.sendMessage(ChatColor.GREEN + (count + " entries have been updated!"));
 			return true;
+		} else if (action.equalsIgnoreCase("forcecheck")) {
+			if (!hasPermission("autorank.forcecheck", sender)) return true;
+			
+			if (args.length != 2) {
+				sender.sendMessage(ChatColor.RED + "Incorrect command usage!");
+				sender.sendMessage(ChatColor.YELLOW + "Usage: /ar forcecheck <player>");
+				return true;
+			}
+			
+			String target = args[1];
+			Player targetPlayer = plugin.getServer().getPlayer(target);
+			
+			if (targetPlayer == null) {
+				sender.sendMessage(ChatColor.RED + "Player " + target + " could not be found!");
+				return true;
+			}
+			
+			if (AutorankTools.isExcluded(targetPlayer)) {
+				sender.sendMessage(ChatColor.RED + "This player is excluded from ranking!");
+				return true;
+			}
+			
+			// Check the player
+			plugin.getPlayerChecker().checkPlayer(targetPlayer);
+			
+			// Let checker know that we checked.
+			sender.sendMessage(ChatColor.GREEN + targetPlayer.getName() + " checked!");
+			
+			return true;
 		}
 
 		sender.sendMessage(ChatColor.RED + "Command not recognised!");
