@@ -56,7 +56,8 @@ public enum Lang {
     DAMAGE_TAKEN_REQUIREMENT("damage-taken-requirement", "Take at least {0} damage."),
     TOTAL_MOBS_KILLED_REQUIREMENT("total-mobs-killed-requirement", "Kill at least {0}."),
     LOCATION_REQUIREMENT("location-requirement", "Be at {0}."),
-    FACTIONS_POWER_REQUIREMENT("factions-power-requirement", "Have at least {0} power in your faction.")
+    FACTIONS_POWER_REQUIREMENT("factions-power-requirement", "Have at least {0} power in your faction."),
+    PLAYER_KILLS_REQUIREMENT("player-kills-requirement", "Kill at least {0} player(s).")
     ;
 
  
