@@ -26,7 +26,7 @@
 			<attribute name="javadoc_location" value="http://mythcraft.dyndns.org/javadoc/vault/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Vincent/Java Projects/workspace/Autorank2/API Libs/Factions 2.2.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Vincent/Java Projects/workspace/Autorank2/API Libs/mcore 6.8.1.jar"/>
+	<classpathentry kind="lib" path="API Libs/Factions 2.2.1.jar"/>
+	<classpathentry kind="lib" path="API Libs/mcore 6.8.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
