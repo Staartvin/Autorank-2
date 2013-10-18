@@ -133,5 +133,43 @@ public class AutorankTools {
 		
 		return false;	
 	}
+	
+	/** This will return the correct type of the requirement.
+	 * As players might want to use multiple requirements of the same type, they only have to specify the name of it with a unique identifier.
+	 * @param oldName Name of the requirement to search for.
+	 * @return correct requirement name or old name if none was found.
+	 */
+	public static String getCorrectName(String oldName) {
+		if (oldName.contains("time"))
+			return "time";
+		else if (oldName.contains("exp"))
+			return "exp";
+		else if (oldName.contains("money"))
+			return "money";
+		else if (oldName.contains("world"))
+			return "world";
+		else if (oldName.contains("gamemode"))
+			return "gamemode";
+		else if (oldName.contains("item"))
+			return "has item";
+		else if (oldName.contains("broken"))
+			return "blocks broken";
+		else if (oldName.contains("placed"))
+			return "blocks placed";
+		else if (oldName.contains("votes"))
+			return "votes";
+		else if (oldName.contains("damage taken"))
+			return "damage taken";
+		else if (oldName.contains("mobs killed"))
+			return "mobs killed";
+		else if (oldName.contains("location"))
+			return "location";
+		else if (oldName.contains("faction power"))
+			return "faction power";
+		else if (oldName.contains("players killed"))
+			return "players killed";
+		else
+			return oldName;
+	}
 
 }

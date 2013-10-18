@@ -660,6 +660,7 @@ public class CommandsHandler implements CommandExecutor {
 				List<Integer> metRequirements = new ArrayList<Integer>();
 
 				for (Requirement req : reqs) {
+					System.out.print("REQ: " + req);
 					if (!req.isOptional())
 						onlyOptional = false;
 				}

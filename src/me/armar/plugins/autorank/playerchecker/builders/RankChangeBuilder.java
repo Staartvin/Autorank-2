@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.AutorankTools;
 import me.armar.plugins.autorank.config.ConfigHandler;
 import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
 import me.armar.plugins.autorank.playerchecker.RankChange;
@@ -118,7 +119,7 @@ public class RankChangeBuilder {
 						return result;
 					}
 				}
-				req.add(createRequirement(getCorrectName(requirement),
+				req.add(createRequirement(AutorankTools.getCorrectName(requirement),
 						configHandler.getRequirement(requirement, group),
 						optional, realResults,
 						configHandler.useAutoCompletion(group, requirement),
@@ -157,29 +158,6 @@ public class RankChangeBuilder {
 		return result;
 	}
 
-	private String getCorrectName(String oldName) {
-		if (oldName.contains("time"))
-			return "time";
-		else if (oldName.contains("exp"))
-			return "exp";
-		else if (oldName.contains("money"))
-			return "money";
-		else if (oldName.contains("world"))
-			return "world";
-		else if (oldName.contains("gamemode"))
-			return "gamemode";
-		else if (oldName.contains("item"))
-			return "has item";
-		else if (oldName.contains("broken"))
-			return "blocks broken";
-		else if (oldName.contains("placed"))
-			return "blocks placed";
-		else if (oldName.contains("votes"))
-			return "votes";
-		else
-			return oldName;
-	}
-
 	private Result createResult(String type, String object) {
 		Result res = resultBuilder.create(type);
 
@@ -201,7 +179,6 @@ public class RankChangeBuilder {
 			res.setOptions(arg.split(";"), optional, results, autoComplete,
 					reqId);
 		}
-
 		return res;
 	}
 
