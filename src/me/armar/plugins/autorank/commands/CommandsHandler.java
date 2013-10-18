@@ -773,11 +773,11 @@ public class CommandsHandler implements CommandExecutor {
 					+ ChatColor.GRAY + "- Archive data with a minimum");
 			sender.sendMessage(ChatColor.AQUA + "/ar debug " + ChatColor.GRAY
 					+ "- Shows debug information");
-			sender.sendMessage(ChatColor.AQUA + "/ar complete #"
+			sender.sendMessage(ChatColor.AQUA + "/ar complete # "
 					+ ChatColor.GRAY
 					+ "- Complete a requirement at this moment");
 			sender.sendMessage(ChatColor.AQUA
-					+ "/ar sync"
+					+ "/ar sync "
 					+ ChatColor.GRAY
 					+ "- Sync MySQL database with server. (Use only one time per server)");
 			sender.sendMessage(ChatColor.BLUE + "Page 2 of " + maxPages);
