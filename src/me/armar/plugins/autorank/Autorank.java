@@ -148,6 +148,8 @@ public class Autorank extends JavaPlugin {
 		req.registerRequirement("faction power", FactionPowerRequirement.class);
 		req.registerRequirement("players killed", PlayerKillsRequirement.class);
 
+		// REGISTER PLURALS IN AUTORANKTOOLS AS WELL!
+		
 		// Register 'main' results
 		res.registerResult("command", CommandResult.class);
 		res.registerResult("effect", EffectResult.class);
