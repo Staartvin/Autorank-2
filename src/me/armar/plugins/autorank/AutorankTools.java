@@ -1,5 +1,7 @@
 package me.armar.plugins.autorank;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,6 +18,8 @@ import org.bukkit.entity.Player;
  */
 
 public class AutorankTools {
+	
+	static List<String> reqTypes = new ArrayList<String>();
 
 	public static int stringToMinutes(String string) {
 		int res = 0;
@@ -140,7 +144,15 @@ public class AutorankTools {
 	 * @return correct requirement name or old name if none was found.
 	 */
 	public static String getCorrectName(String oldName) {
-		if (oldName.contains("time"))
+		
+		for (String type: reqTypes) {
+			if (oldName.contains(type)) {
+				return type;
+			}
+		}
+		
+		return oldName;
+		/*if (oldName.contains("time"))
 			return "time";
 		else if (oldName.contains("exp"))
 			return "exp";
@@ -169,7 +181,13 @@ public class AutorankTools {
 		else if (oldName.contains("players killed"))
 			return "players killed";
 		else
-			return oldName;
+			return oldName;*/
+	}
+	
+	public static void registerRequirement(String type) {
+		if (!reqTypes.contains(type)) {
+			reqTypes.add(type);
+		}
 	}
 
 }

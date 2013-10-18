@@ -3,6 +3,7 @@ package me.armar.plugins.autorank.playerchecker.builders;
 import java.util.HashMap;
 import java.util.Map;
 
+import me.armar.plugins.autorank.AutorankTools;
 import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 
 public class RequirementBuilder {
@@ -24,7 +25,12 @@ public class RequirementBuilder {
 
 	public void registerRequirement(String type,
 			Class<? extends Requirement> requirement) {
+		// Add type to the list
 		reqs.put(type, requirement);
+		
+		// Add type to the list of AutorankTools so it can use the correct name.
+		AutorankTools.registerRequirement(type);
+		
 	}
 
 }
