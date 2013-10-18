@@ -152,36 +152,6 @@ public class AutorankTools {
 		}
 		
 		return oldName;
-		/*if (oldName.contains("time"))
-			return "time";
-		else if (oldName.contains("exp"))
-			return "exp";
-		else if (oldName.contains("money"))
-			return "money";
-		else if (oldName.contains("world"))
-			return "world";
-		else if (oldName.contains("gamemode"))
-			return "gamemode";
-		else if (oldName.contains("item"))
-			return "has item";
-		else if (oldName.contains("broken"))
-			return "blocks broken";
-		else if (oldName.contains("placed"))
-			return "blocks placed";
-		else if (oldName.contains("votes"))
-			return "votes";
-		else if (oldName.contains("damage taken"))
-			return "damage taken";
-		else if (oldName.contains("mobs killed"))
-			return "mobs killed";
-		else if (oldName.contains("location"))
-			return "location";
-		else if (oldName.contains("faction power"))
-			return "faction power";
-		else if (oldName.contains("players killed"))
-			return "players killed";
-		else
-			return oldName;*/
 	}
 	
 	public static void registerRequirement(String type) {
