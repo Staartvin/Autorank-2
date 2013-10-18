@@ -2,8 +2,6 @@ package me.armar.plugins.autorank.playerchecker.requirement;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.playerchecker.result.Result;
 import org.bukkit.entity.EntityType;
@@ -12,7 +10,6 @@ import org.bukkit.entity.Player;
 public class MobKillsRequirement extends Requirement {
 
 	private int totalMobsKilled = 0;
-	private Autorank plugin;
 	private boolean optional = false;
 	private boolean autoComplete = false;
 	private int reqId;
@@ -21,7 +18,6 @@ public class MobKillsRequirement extends Requirement {
 
 	public MobKillsRequirement() {
 		super();
-		plugin = this.getAutorank();
 	}
 
 	@Override
@@ -53,8 +49,8 @@ public class MobKillsRequirement extends Requirement {
 		}
 
 		// TODO Auto-generated method stub
-		return plugin.getStatsHandler().isEnabled()
-				&& plugin.getStatsHandler()
+		return this.getAutorank().getStatsHandler().isEnabled()
+				&& this.getAutorank().getStatsHandler()
 						.getTotalMobsKilled(player.getName(), mobType) >= totalMobsKilled;
 	}
 

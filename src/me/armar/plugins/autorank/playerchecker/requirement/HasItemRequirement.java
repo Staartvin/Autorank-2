@@ -19,6 +19,7 @@ public class HasItemRequirement extends Requirement {
 	private int reqId;
 	List<Result> results = new ArrayList<Result>();
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean setOptions(String[] options, boolean optional,
 			List<Result> results, boolean autoComplete, int reqId) {

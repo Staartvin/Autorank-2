@@ -77,6 +77,7 @@ public class BlocksBrokenRequirement extends Requirement {
 		return enabled && sufficient;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public String getDescription() {
 		String argument = blocksBroken + " ";

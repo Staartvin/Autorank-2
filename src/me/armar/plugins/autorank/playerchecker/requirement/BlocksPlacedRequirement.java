@@ -80,6 +80,7 @@ public class BlocksPlacedRequirement extends Requirement {
 		return enabled && sufficient;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public String getDescription() {
 		String message = blocksPlaced + " ";
