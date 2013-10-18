@@ -338,7 +338,7 @@ public class Autorank extends JavaPlugin {
 		if (!updateHandler.doCheckForNewVersion())
 			return false;
 
-		Updater updater = new Updater(this, "autorank", this.getFile(),
+		Updater updater = new Updater(this, 34447, this.getFile(),
 				Updater.UpdateType.NO_DOWNLOAD, false);
 		updateHandler.setUpdater(updater);
 

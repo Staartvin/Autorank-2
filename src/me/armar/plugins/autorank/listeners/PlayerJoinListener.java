@@ -42,7 +42,8 @@ public class PlayerJoinListener implements Listener {
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				player.sendMessage(ChatColor.GREEN + plugin.getUpdateHandler().getUpdater().getLatestVersionString() + ChatColor.GOLD + " is now available for download!");
+				player.sendMessage(ChatColor.GREEN + plugin.getUpdateHandler().getUpdater().getLatestName() + ChatColor.GOLD + " is now available for download!");
+				player.sendMessage(ChatColor.GREEN + "Available at: " + ChatColor.GOLD + plugin.getUpdateHandler().getUpdater().getLatestFileLink());
 				//player.sendMessage(ChatColor.GOLD + "Type " + ChatColor.GREEN + "'/ar update'" + ChatColor.GOLD + " to update Autorank.");	
 			}
 			
