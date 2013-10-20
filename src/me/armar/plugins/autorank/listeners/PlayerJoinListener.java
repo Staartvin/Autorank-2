@@ -10,7 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 /**
- * This listener will listen to players joining and send them a message when an update is available
+ * This listener will listen to players joining and send them a message when an update is available or an error has been found
  * 
  * @author Staartvin
  *
