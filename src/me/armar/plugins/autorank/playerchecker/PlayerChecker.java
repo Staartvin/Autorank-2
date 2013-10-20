@@ -87,7 +87,7 @@ public class PlayerChecker {
 		return result;
 	}
 
-	public Map<RankChange, List<Requirement>> getFailedRequirementsForApplicableGroup(
+	public Map<RankChange, List<Requirement>> getFailedRequirements(
 			Player player) {
 		Map<RankChange, List<Requirement>> result = new HashMap<RankChange, List<Requirement>>();
 
