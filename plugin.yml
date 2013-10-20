@@ -63,3 +63,6 @@ permissions:
     autorank.forcecheck:
         description: Allows a player to forcecheck another player
         default: op
+    autorank.warning.notice:
+        description: Allows a player to see warnings when problems occur with Autorank.
+        default: op
