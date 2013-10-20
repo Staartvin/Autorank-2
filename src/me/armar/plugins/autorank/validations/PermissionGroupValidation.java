@@ -40,19 +40,20 @@ public class PermissionGroupValidation {
 				if (rank.equals(group)) break;
 				
 				if (rank.equalsIgnoreCase(group)) {
-					autorank.getLogger().severe("Permissions group '" + rank + "' should be '" + group + "'");
+					// Do not log but register warning
+					autorank.getWarningManager().registerWarning("Permissions group '" + rank + "' should be '" + group + "'", 10);
 					isMissing = true;
 					break;
 				}
 				// If this is the last group and is not equal to the rank defined in the config:
 				if ((i == (groups.length - 1)) && !rank.equals(group)) {
-					autorank.getLogger().severe("Permissions group is not defined: " + rank);
+					autorank.getWarningManager().registerWarning("Permissions group is not defined: " + rank, 10);
 					isMissing = true;
 				}
 			}
 			
 			if (!isValidChange(rank)) {
-				autorank.getLogger().severe("Rank change of rank '" + rank + "' is invalid. (Do the groups used exist?)");
+				autorank.getWarningManager().registerWarning("Rank change of rank '" + rank + "' is invalid. (Do the groups used exist?)", 10);
 				isMissing = true;
 			}
 		}

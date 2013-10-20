@@ -138,10 +138,7 @@ public class RankChangeBuilder {
 						";");
 
 				if (rankChange.length <= 0) {
-					System.out
-							.print("[AutoRank] Advanced Config is not configured correctly!");
-					autorank.getServer().getPluginManager()
-							.disablePlugin(autorank);
+					autorank.getWarningManager().registerWarning("Rank change of " + group + " is invalid!", 10);
 					return null;
 				}
 

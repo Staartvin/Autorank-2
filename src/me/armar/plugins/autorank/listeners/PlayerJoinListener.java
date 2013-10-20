@@ -28,26 +28,43 @@ public class PlayerJoinListener implements Listener {
 		final Player player = event.getPlayer();
 		
 		// Player isn't allowed to see messages.
-		if (!player.hasPermission("autorank.noticeonupdate")) return;
+		if (player.hasPermission("autorank.noticeonupdate")) {
+			// No update was available
+			if (plugin.getUpdateHandler().isUpdateAvailable()) {
+				// Schedule it later so it will appear at the bottom
+				plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
+
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						player.sendMessage(ChatColor.GREEN + plugin.getUpdateHandler().getUpdater().getLatestName() + ChatColor.GOLD + " is now available for download!");
+						player.sendMessage(ChatColor.GREEN + "Available at: " + ChatColor.GOLD + plugin.getUpdateHandler().getUpdater().getLatestFileLink());
+						//player.sendMessage(ChatColor.GOLD + "Type " + ChatColor.GREEN + "'/ar update'" + ChatColor.GOLD + " to update Autorank.");	
+					}
+					
+				}, 10L);
+			}
+		}
 	
-		// No update was available
-		if (!plugin.getUpdateHandler().isUpdateAvailable()) {
-			return;
+		// If player has notice on warning permission
+		if (player.hasPermission("autorank.warning.notice")) {
+			
+			if (plugin.getWarningManager().getHighestWarning() != null) {
+				
+				
+				// Schedule it later so it will appear at the bottom
+				plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
+
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						player.sendMessage(ChatColor.BLUE + "<AUTORANK> " + ChatColor.RED + "Warning: " + ChatColor.GREEN + plugin.getWarningManager().getHighestWarning());
+					}
+					
+				}, 10L);
+			}
 		}
 		
-		
-		// Schedule it later so it will appear at the bottom
-		plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
-
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				player.sendMessage(ChatColor.GREEN + plugin.getUpdateHandler().getUpdater().getLatestName() + ChatColor.GOLD + " is now available for download!");
-				player.sendMessage(ChatColor.GREEN + "Available at: " + ChatColor.GOLD + plugin.getUpdateHandler().getUpdater().getLatestFileLink());
-				//player.sendMessage(ChatColor.GOLD + "Type " + ChatColor.GREEN + "'/ar update'" + ChatColor.GOLD + " to update Autorank.");	
-			}
-			
-		}, 10L);
 		
 	}
 }

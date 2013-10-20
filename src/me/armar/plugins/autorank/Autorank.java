@@ -44,6 +44,7 @@ import me.armar.plugins.autorank.statsapi.StatsHandler;
 import me.armar.plugins.autorank.updater.UpdateHandler;
 import me.armar.plugins.autorank.updater.Updater;
 import me.armar.plugins.autorank.validations.ValidateHandler;
+import me.armar.plugins.autorank.warningmanager.WarningManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -67,16 +68,20 @@ public class Autorank extends JavaPlugin {
 	private RequirementHandler requirementHandler;
 	private Debugger debugger;
 	private FactionsHandler factionsHandler;
+	private WarningManager warningManager;
 
 	public void onEnable() {
 
 		// TODO: Add our own Stats logger which keeps track of (a lot of) things
-		
+
 		// Register configs
 		setSimpleConfig(new SimpleYamlConfiguration(this, "SimpleConfig.yml",
 				null, "Simple config"));
 		setAdvancedConfig(new SimpleYamlConfiguration(this,
 				"AdvancedConfig.yml", null, "Advanced config"));
+
+		// Create warning manager
+		setWarningManager(new WarningManager());
 
 		// Create requirement handler
 		setRequirementHandler(new RequirementHandler(this));
@@ -114,7 +119,7 @@ public class Autorank extends JavaPlugin {
 
 		// Create stats handler
 		setStatsHandler(new StatsHandler(this));
-		
+
 		// Create faction handler
 		setFactionsHandler(new FactionsHandler(this));
 
@@ -122,9 +127,10 @@ public class Autorank extends JavaPlugin {
 			getLogger().info(
 					"Hooked into Stats! Stats requirements can be used.");
 		}
-		
+
 		if (factionsHandler.setupFactions()) {
-			getLogger().info("Hooked into Factions! Faction requirements can be used.");
+			getLogger().info(
+					"Hooked into Factions! Faction requirements can be used.");
 		}
 
 		RequirementBuilder req = this.getPlayerChecker().getBuilder()
@@ -149,7 +155,7 @@ public class Autorank extends JavaPlugin {
 		req.registerRequirement("players killed", PlayerKillsRequirement.class);
 
 		// REGISTER PLURALS IN AUTORANKTOOLS AS WELL!
-		
+
 		// Register 'main' results
 		res.registerResult("command", CommandResult.class);
 		res.registerResult("effect", EffectResult.class);
@@ -163,23 +169,18 @@ public class Autorank extends JavaPlugin {
 		getCommand("ar").setExecutor(new CommandsHandler(this));
 
 		if (configHandler.useAdvancedConfig()) {
-			if (!getValidateHandler().validateConfigGroups(getAdvancedConfig())) {
-				getServer().getPluginManager().disablePlugin(this);
-				return;
-			}
+			getValidateHandler().validateConfigGroups(getAdvancedConfig());
 		} else {
-			if (!getValidateHandler().validateConfigGroups(getSimpleConfig())) {
-				getServer().getPluginManager().disablePlugin(this);
-				return;
-			}
+			getValidateHandler().validateConfigGroups(getSimpleConfig());
+
 		}
-		
+
 		// Setup language file
 		languageHandler.createNewFile();
-		
+
 		// Create MySQL Wrapper
 		setMySQLWrapper(new MySQLWrapper(this));
-		
+
 		// Set debugger
 		setDebugger(new Debugger(this));
 
@@ -198,6 +199,8 @@ public class Autorank extends JavaPlugin {
 		setSimpleConfig(null);
 
 		setAdvancedConfig(null);
+
+		setWarningManager(null);
 
 		// Make sure all tasks are cancelled after shutdown. This seems obvious, but when a player /reloads, the server creates an instance of the plugin which causes duplicate tasks to run. 
 		getServer().getScheduler().cancelTasks(this);
@@ -370,7 +373,7 @@ public class Autorank extends JavaPlugin {
 	public void setRequirementHandler(RequirementHandler requirementHandler) {
 		this.requirementHandler = requirementHandler;
 	}
-	
+
 	public API getAPI() {
 		return new API(this);
 	}
@@ -389,5 +392,13 @@ public class Autorank extends JavaPlugin {
 
 	public void setFactionsHandler(FactionsHandler factionsHandler) {
 		this.factionsHandler = factionsHandler;
+	}
+
+	public WarningManager getWarningManager() {
+		return warningManager;
+	}
+
+	public void setWarningManager(WarningManager warningManager) {
+		this.warningManager = warningManager;
 	}
 }
