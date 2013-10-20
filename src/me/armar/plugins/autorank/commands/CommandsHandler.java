@@ -519,66 +519,73 @@ public class CommandsHandler implements CommandExecutor {
 		} else if (action.equalsIgnoreCase("syncstats")) {
 			if (!hasPermission("autorank.syncstats", sender))
 				return true;
-			
+
 			if (!plugin.getStatsHandler().isEnabled()) {
 				sender.sendMessage(ChatColor.RED + "Stats is not enabled!");
 				return true;
 			}
-			
+
 			int count = 0;
-			
+
 			// Sync playtime of every player
-			for (String entry: plugin.getPlaytimes().getKeys()) {
-				
+			for (String entry : plugin.getPlaytimes().getKeys()) {
+
 				// Time is stored in seconds
-				int statsPlayTime = plugin.getStatsHandler().getStatsAPI().getPlaytime(entry);
-				
+				int statsPlayTime = plugin.getStatsHandler().getStatsAPI()
+						.getPlaytime(entry);
+
 				if (statsPlayTime <= 0) {
-					System.out.print("LOW");
 					continue;
 				}
-				
+
 				// Check to see if the time actually changed.
-				if ((statsPlayTime / 60) != plugin.getPlaytimes().getLocalTime(entry)) {
-					
+				if ((statsPlayTime / 60) != plugin.getPlaytimes().getLocalTime(
+						entry)) {
+
 					// Update time
 					plugin.getPlaytimes().setLocalTime(entry, statsPlayTime);
-					
+
 					// Increment count
 					count++;
 				}
 			}
-			
-			sender.sendMessage(ChatColor.GREEN + (count + " entries have been updated!"));
+
+			sender.sendMessage(ChatColor.GREEN
+					+ (count + " entries have been updated!"));
 			return true;
 		} else if (action.equalsIgnoreCase("forcecheck")) {
-			if (!hasPermission("autorank.forcecheck", sender)) return true;
-			
+			if (!hasPermission("autorank.forcecheck", sender))
+				return true;
+
 			if (args.length != 2) {
 				sender.sendMessage(ChatColor.RED + "Incorrect command usage!");
-				sender.sendMessage(ChatColor.YELLOW + "Usage: /ar forcecheck <player>");
+				sender.sendMessage(ChatColor.YELLOW
+						+ "Usage: /ar forcecheck <player>");
 				return true;
 			}
-			
+
 			String target = args[1];
 			Player targetPlayer = plugin.getServer().getPlayer(target);
-			
+
 			if (targetPlayer == null) {
-				sender.sendMessage(ChatColor.RED + "Player " + target + " could not be found!");
+				sender.sendMessage(ChatColor.RED + "Player " + target
+						+ " could not be found!");
 				return true;
 			}
-			
+
 			if (AutorankTools.isExcluded(targetPlayer)) {
-				sender.sendMessage(ChatColor.RED + "This player is excluded from ranking!");
+				sender.sendMessage(ChatColor.RED
+						+ "This player is excluded from ranking!");
 				return true;
 			}
-			
+
 			// Check the player
 			plugin.getPlayerChecker().checkPlayer(targetPlayer);
-			
+
 			// Let checker know that we checked.
-			sender.sendMessage(ChatColor.GREEN + targetPlayer.getName() + " checked!");
-			
+			sender.sendMessage(ChatColor.GREEN + targetPlayer.getName()
+					+ " checked!");
+
 			return true;
 		}
 
@@ -760,7 +767,7 @@ public class CommandsHandler implements CommandExecutor {
 	}
 
 	private void showHelpPages(CommandSender sender, int page) {
-		int maxPages = 2;
+		int maxPages = 3;
 		if (page == 2) {
 			sender.sendMessage(ChatColor.GREEN + "-- Autorank Commands --");
 			sender.sendMessage(ChatColor.AQUA + "/ar help <page> "
@@ -781,6 +788,13 @@ public class CommandsHandler implements CommandExecutor {
 					+ ChatColor.GRAY
 					+ "- Sync MySQL database with server. (Use only one time per server)");
 			sender.sendMessage(ChatColor.BLUE + "Page 2 of " + maxPages);
+		} else if (page == 3) {
+			sender.sendMessage(ChatColor.GREEN + "-- Autorank Commands --");
+			sender.sendMessage(ChatColor.AQUA + "/ar syncstats"
+					+ ChatColor.GRAY + "- Sync Autorank's time to Stats' time");
+			sender.sendMessage(ChatColor.AQUA + "/ar forcecheck <player>"
+					+ ChatColor.GRAY + "- Do a manual silent check.");
+			sender.sendMessage(ChatColor.BLUE + "Page 3 of " + maxPages);
 		} else {
 			sender.sendMessage(ChatColor.GREEN + "-- Autorank Commands --");
 			sender.sendMessage(ChatColor.AQUA + "/ar check " + ChatColor.GRAY
