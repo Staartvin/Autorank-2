@@ -60,8 +60,8 @@ public class TimeRequirement extends Requirement {
 	public String getProgress(Player player) {
 		String progress = "";
 		progress = progress.concat(getAutorank().getPlaytimes().getLocalTime(
-				player.getName())
-				+ "/" + time);
+				player.getName()) + " min" 
+				+ "/" + time + " min");
 		return progress;
 	}
 
