@@ -7,6 +7,20 @@ import me.armar.plugins.autorank.playerchecker.result.Result;
 
 import org.bukkit.entity.Player;
 
+/**
+ * Whenever you want to create a new requirement, you'll have to extend this class.
+ * Every requirement needs the following:
+ * 
+ * <p>
+ * - Option to check if the requirement is optional.
+ * <p>
+ * - Results that will be performed when the requirement is completed. These results have to be one of the results registered in Autorank.
+ * <p>
+ * - Option to check if the requirement will auto complete.
+ * 
+ * @author Staartvin
+ *
+ */
 public abstract class Requirement {
 
 	private Autorank autorank;
@@ -20,17 +34,30 @@ public abstract class Requirement {
 	}
 
 	/**
-	 * Setup requirement specific objects
-	 * @param options String[] containing values
+	 * Setup requirement specific objects.
+	 * 
+	 * This method is called when Autorank sets up its config.
+	 * The requirement id, auto completion and optional values are assigned automatically.
+	 * 
+	 * @param options String[] containing values of the config
 	 * @param optional Is this an optional requirement?
 	 * @param results List<Result> containing results
 	 * @param autoComplete Will this auto complete?
+	 * @param reqId id of the requirement
 	 * @return
 	 */
 	public abstract boolean setOptions(String[] options, boolean optional, List<Result> results, boolean autoComplete, int reqId);
 
 	/**
 	 * Does it meet the requirements?
+	 * This method gets called when someone does /ar check or /ar complete.
+	 * It should always contain the following line:
+	 * 
+	 * <p>
+	 * if (isCompleted(getReqId(), player.getName())) {
+			return true;
+		}
+		
 	 * @param player Player to check for
 	 * @return true if it meets the requirements; false otherwise
 	 */
@@ -38,6 +65,7 @@ public abstract class Requirement {
 
 	/**
 	 * Gets the description of the requirement
+	 * Make sure this is always a translatable message.
 	 * @return string containing description (in locale language)
 	 */
 	public abstract String getDescription();
@@ -65,40 +93,12 @@ public abstract class Requirement {
 		return this.getClass().getSimpleName();
 	}
 	
-	/*public final int getReqID(Class<? extends Requirement> req, Player player) {
-		Map<RankChange, List<Requirement>> requirements = autorank.getPlayerChecker()
-				.getAllRequirements(player);
-		Set<RankChange> keySet = requirements.keySet();
-		
-		List<Requirement> realReq;
-		int id = 0;
-		
-		for (Iterator<RankChange> it = keySet.iterator(); it.hasNext();) {
-			RankChange rank = it.next();
-			realReq = requirements.get(rank);
-			
-			System.out.print("Requirement size: " + realReq.size()); 
-			for (int i=0;i<realReq.size();i++) {
-				Requirement req2 = realReq.get(i);
-				
-				
-				if (req2.getClass().equals(req)) {
-					
-					System.out.print("--------------------------------");
-					System.out.print("REQ for " + req.getName() + ": " + req.hashCode());
-					System.out.print("REQ2 for " + req2.getClass().getName() + ": " + req2.hashCode());
-					id = i;
-					break;
-				}
-			}
-			
-			System.out.print("--- [END] ---");
-		}
-		
-		//System.out.print("REQ ID for " + req.toString() + ": " + id);
-		return id;
-	} */
-	
+	/**
+	 * Check if the requirement is completed already.
+	 * @param reqID Requirement id.
+	 * @param playerName Player to check for
+	 * @return true if completed, false otherwise.
+	 */
 	public final boolean isCompleted(int reqID, String playerName) {
 		return autorank.getRequirementHandler().hasCompletedRequirement(reqID, playerName);
 	}
@@ -110,5 +110,11 @@ public abstract class Requirement {
 	 */
 	public abstract String getProgress(Player player);
 	
+	/**
+	 * Get the id of this requirement.
+	 * This should get assigned automatically at setOptions().
+	 * The id should always be dynamic.
+	 * @return id
+	 */
 	public abstract int getReqId();
 }
