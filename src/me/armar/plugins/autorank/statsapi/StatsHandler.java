@@ -1,9 +1,9 @@
 package me.armar.plugins.autorank.statsapi;
 
 import me.armar.plugins.autorank.Autorank;
-import nl.lolmewn.stats.StatType;
+import nl.lolmewn.stats.api.Stat;
 import nl.lolmewn.stats.api.StatsAPI;
-import nl.lolmewn.stats.player.Stat;
+import nl.lolmewn.stats.player.StatData;
 import nl.lolmewn.stats.player.StatsPlayer;
 
 import org.bukkit.entity.EntityType;
@@ -40,11 +40,11 @@ public class StatsHandler {
 	}
 
 	public int getTotalBlocksBroken(String player) {
-		return statsAPI.getTotalBlocksBroken(player);
+		return (int) statsAPI.getTotalBlocksBroken(player);
 	}
 
 	public int getTotalBlocksPlaced(String player) {
-		return statsAPI.getTotalBlocksPlaced(player);
+		return (int) statsAPI.getTotalBlocksPlaced(player);
 	}
 
 	public StatsPlayer getStats(String player) {
@@ -59,9 +59,9 @@ public class StatsHandler {
 	 * @param player Player to get the stats of.
 	 * @return Requested stat of the player
 	 */
-	public Stat getStatType(StatType statType, String player) {
+	public StatData getStatType(Stat statType, String player) {
 		StatsPlayer sPlayer = getStats(player);
-		return sPlayer.getStat(statType, true);
+		return sPlayer.getStatData(statType, false);
 	}
 
 	public StatsAPI getStatsAPI() {
@@ -72,19 +72,21 @@ public class StatsHandler {
 		return (statsAPI != null);
 	}
 
-	public int getTotalTimesVoted(String player) {
-		Stat voteStat = getStatType(StatType.VOTES, player);
+	public int getTotalTimesVoted(String playerName) {
+		StatsPlayer player = getStats(playerName);
+		StatData stat = player.getStatData(statsAPI.getStat("Votes"), false);
 
 		int value = 0;
 
-		for (Object[] vars : voteStat.getAllVariables()) {
-			value += voteStat.getValue(vars);
+		for (Object[] vars : stat.getAllVariables()) {
+			value += stat.getValue(vars);
 		}
 		return value;
 	}
 	
-	public int getDamageTaken(String player) {
-		Stat stat = getStatType(StatType.DAMAGE_TAKEN, player);
+	public int getDamageTaken(String playerName) {
+		StatsPlayer player = getStats(playerName);
+		StatData stat = player.getStatData(statsAPI.getStat("Damage taken"), false);
 
 		int value = 0;
 
@@ -101,10 +103,11 @@ public class StatsHandler {
 	 * @param damageValue Damage value to check for. (negative number to not skip check)
 	 * @return amount player placed of a block
 	 */
-	public int getBlocksPlaced(String player, int id, int damageValue) {
+	public int getBlocksPlaced(String playerName, int id, int damageValue) {
 		if (!isEnabled()) return 0;
 		
-		Stat blockStat = getStatType(StatType.BLOCK_PLACE, player);
+		StatsPlayer player = getStats(playerName);
+		StatData blockStat = player.getStatData(statsAPI.getStat("Block place"), false);
 		boolean checkDamageValue = false;
 		
 		
@@ -130,10 +133,11 @@ public class StatsHandler {
 		return value;
 	}
 	
-	public int getTotalMobsKilled(String player, String mobName) {
+	public int getTotalMobsKilled(String playerName, String mobName) {
 		if (!isEnabled()) return 0;
 		
-		Stat blockStat = getStatType(StatType.KILL, player);
+		StatsPlayer player = getStats(playerName);
+		StatData blockStat = player.getStatData(statsAPI.getStat("Kill"), false);
 		
 		EntityType mob = getEntityType(mobName);
 		
@@ -175,10 +179,11 @@ public class StatsHandler {
 	 * @param damageValue Damage value to check for. (negative number to not skip check)
 	 * @return amount player broke of a block
 	 */
-	public int getBlocksBroken(String player, int id, int damageValue) {
+	public int getBlocksBroken(String playerName, int id, int damageValue) {
 		if (!isEnabled()) return 0;
 		
-		Stat blockStat = getStatType(StatType.BLOCK_BREAK, player);
+		StatsPlayer player = getStats(playerName);
+		StatData blockStat = player.getStatData(statsAPI.getStat("Block break"), false);
 		boolean checkDamageValue = false;
 		
 		

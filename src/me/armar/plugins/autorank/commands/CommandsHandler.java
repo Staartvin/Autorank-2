@@ -531,7 +531,7 @@ public class CommandsHandler implements CommandExecutor {
 			for (String entry : plugin.getPlaytimes().getKeys()) {
 
 				// Time is stored in seconds
-				int statsPlayTime = plugin.getStatsHandler().getStatsAPI()
+				int statsPlayTime = (int) plugin.getStatsHandler().getStatsAPI()
 						.getPlaytime(entry);
 
 				if (statsPlayTime <= 0) {

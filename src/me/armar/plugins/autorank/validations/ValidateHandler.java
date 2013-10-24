@@ -7,15 +7,17 @@ public class ValidateHandler {
 
 	private Autorank autorank;
 	private PermissionGroupValidation permGroupValidate;
+	private StatsRequirementValidation statsValidate;
 
 	public ValidateHandler(Autorank instance) {
 		this.autorank = instance;
 		permGroupValidate = new PermissionGroupValidation(instance);
+		statsValidate = new StatsRequirementValidation(instance);
 	}
 
 	public boolean validateConfigGroups(SimpleYamlConfiguration config) {
 
-		if (permGroupValidate.validateGroups(config) == false) {
+		if (!permGroupValidate.validateGroups(config)) {
 			autorank.getLogger().severe(
 					"There are invalid groups defined in the config!");
 			autorank.getLogger().severe("Check your config!");
@@ -23,7 +25,13 @@ public class ValidateHandler {
 		} else {
 			autorank.getLogger().info(
 					"Config files have been correctly setup!");
-			return true;
 		}
+		
+		// Check for Stats required requirements
+		if (!statsValidate.validateRequirements(config)) {
+			return false;
+		}
+		
+		return true;
 	}
 }
