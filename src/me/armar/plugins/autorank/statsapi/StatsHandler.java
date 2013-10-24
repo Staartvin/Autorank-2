@@ -71,22 +71,10 @@ public class StatsHandler {
 	public boolean isEnabled() {
 		return (statsAPI != null);
 	}
-
-	public int getTotalTimesVoted(String playerName) {
-		StatsPlayer player = getStats(playerName);
-		StatData stat = player.getStatData(statsAPI.getStat("Votes"), false);
-
-		int value = 0;
-
-		for (Object[] vars : stat.getAllVariables()) {
-			value += stat.getValue(vars);
-		}
-		return value;
-	}
 	
-	public int getDamageTaken(String playerName) {
+	public int getNormalStat(String playerName, String statName) {
 		StatsPlayer player = getStats(playerName);
-		StatData stat = player.getStatData(statsAPI.getStat("Damage taken"), false);
+		StatData stat = player.getStatData(statsAPI.getStat(statName), true);
 
 		int value = 0;
 
@@ -107,7 +95,7 @@ public class StatsHandler {
 		if (!isEnabled()) return 0;
 		
 		StatsPlayer player = getStats(playerName);
-		StatData blockStat = player.getStatData(statsAPI.getStat("Block place"), false);
+		StatData blockStat = player.getStatData(statsAPI.getStatExact("Block place"), true);
 		boolean checkDamageValue = false;
 		
 		
@@ -137,7 +125,10 @@ public class StatsHandler {
 		if (!isEnabled()) return 0;
 		
 		StatsPlayer player = getStats(playerName);
-		StatData blockStat = player.getStatData(statsAPI.getStat("Kill"), false);
+		
+		StatData blockStat = player.getStatData(statsAPI.getStatExact("Kill"), true);
+		
+		
 		
 		EntityType mob = getEntityType(mobName);
 		
@@ -183,7 +174,7 @@ public class StatsHandler {
 		if (!isEnabled()) return 0;
 		
 		StatsPlayer player = getStats(playerName);
-		StatData blockStat = player.getStatData(statsAPI.getStat("Block break"), false);
+		StatData blockStat = player.getStatData(statsAPI.getStatExact("Block break"), true);
 		boolean checkDamageValue = false;
 		
 		
