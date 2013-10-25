@@ -20,9 +20,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="API Libs/Stats.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/Autorank2/API%20Libs/Stats.jar!/nl"/>
-		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="API Libs/PermissionsBukkit-2.1.jar"/>
 	<classpathentry kind="lib" path="API Libs/Vault-1.2.26.jar">
