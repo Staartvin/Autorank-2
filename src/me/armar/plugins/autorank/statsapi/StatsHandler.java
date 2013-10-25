@@ -6,6 +6,7 @@ import nl.lolmewn.stats.api.StatsAPI;
 import nl.lolmewn.stats.player.StatData;
 import nl.lolmewn.stats.player.StatsPlayer;
 
+import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -71,132 +72,176 @@ public class StatsHandler {
 	public boolean isEnabled() {
 		return (statsAPI != null);
 	}
-	
-	public int getNormalStat(String playerName, String statName) {
+
+	public int getNormalStat(String playerName, String statName, World world) {
 		StatsPlayer player = getStats(playerName);
-		StatData stat = player.getStatData(statsAPI.getStat(statName), true);
+		StatData stat;
 
 		int value = 0;
 
-		for (Object[] vars : stat.getAllVariables()) {
-			value += stat.getValue(vars);
-		}
-		return value;
-	}
-	
-	/**
-	 * Gets the total blocks of a certain id and damage value placed
-	 * @param player Player to check for
-	 * @param id Item ID to check for
-	 * @param damageValue Damage value to check for. (negative number to not skip check)
-	 * @return amount player placed of a block
-	 */
-	public int getBlocksPlaced(String playerName, int id, int damageValue) {
-		if (!isEnabled()) return 0;
-		
-		StatsPlayer player = getStats(playerName);
-		StatData blockStat = player.getStatData(statsAPI.getStatExact("Block place"), true);
-		boolean checkDamageValue = false;
-		
-		
-		if (damageValue > 0) {
-			checkDamageValue = true;
-		}
-		
-		int value = 0;
+		if (world != null) {
+			stat = player.getStatData(statsAPI.getStat(statName),
+					world.getName(), true);
 
-		for (Object[] vars : blockStat.getAllVariables()) {
-			
-			if (checkDamageValue) {
-				// VAR 0 = blockID, VAR 1 = damageValue, VAR 2 = (1 = break, 0 = place)
-				if ((Integer) vars[0] == id && (Byte) vars[1] == damageValue) {
-					value += blockStat.getValue(vars);
-				}
-			} else {
-				if ((Integer) vars[0] == id) {
-					value += blockStat.getValue(vars);
+			for (Object[] vars : stat.getAllVariables()) {
+				value += stat.getValue(vars);
+			}
+
+		} else {
+			// We want global (no specific world) so we loop over every world.
+
+			for (World serverWorld : plugin.getServer().getWorlds()) {
+
+				stat = player.getStatData(statsAPI.getStat(statName),
+						serverWorld.getName(), true);
+
+				for (Object[] vars : stat.getAllVariables()) {
+					value += stat.getValue(vars);
 				}
 			}
 		}
+
 		return value;
 	}
-	
-	public int getTotalMobsKilled(String playerName, String mobName) {
-		if (!isEnabled()) return 0;
-		
+
+	/**
+	 * Gets the total blocks of a certain id and damage value placed/broken
+	 * 
+	 * @param player Player to check for
+	 * @param id Item ID to check for
+	 * @param damageValue Damage value to check for. (negative number to not
+	 *            skip check)
+	 * @param world World to check in. Null for global.
+	 * @param statType Either "Block break" or "Block place"
+	 * @return amount player placed/broke of a block
+	 */
+	public int getBlocksStat(String playerName, int id, int damageValue,
+			World world, String statType) {
+		if (!isEnabled())
+			return 0;
+
 		StatsPlayer player = getStats(playerName);
-		
-		StatData blockStat = player.getStatData(statsAPI.getStatExact("Kill"), true);
-		
-		
-		
+		StatData blockStat;
+		int value = 0;
+		boolean checkDamageValue = false;
+
+		if (damageValue > 0) {
+			checkDamageValue = true;
+		}
+
+		// Implement world logic
+
+		if (world != null) {
+			blockStat = player
+					.getStatData(statsAPI.getStatExact(statType),
+							world.getName(), true);
+
+			for (Object[] vars : blockStat.getAllVariables()) {
+
+				if (checkDamageValue) {
+					// VAR 0 = blockID, VAR 1 = damageValue, VAR 2 = (1 = break, 0 = place)
+					if ((Integer) vars[0] == id
+							&& (Byte) vars[1] == damageValue) {
+						value += blockStat.getValue(vars);
+					}
+				} else {
+					if ((Integer) vars[0] == id) {
+						value += blockStat.getValue(vars);
+					}
+				}
+			}
+		} else {
+			// We want global (no specific world) so we loop over every world.
+			for (World serverWorld : plugin.getServer().getWorlds()) {
+				blockStat = player.getStatData(
+						statsAPI.getStatExact(statType),
+						serverWorld.getName(), true);
+
+				for (Object[] vars : blockStat.getAllVariables()) {
+
+					if (checkDamageValue) {
+						// VAR 0 = blockID, VAR 1 = damageValue, VAR 2 = (1 = break, 0 = place)
+						if ((Integer) vars[0] == id
+								&& (Byte) vars[1] == damageValue) {
+							value += blockStat.getValue(vars);
+						}
+					} else {
+						if ((Integer) vars[0] == id) {
+							value += blockStat.getValue(vars);
+						}
+					}
+				}
+			}
+		}
+
+		return value;
+	}
+
+	public int getTotalMobsKilled(String playerName, String mobName, World world) {
+		if (!isEnabled())
+			return 0;
+
+		StatsPlayer player = getStats(playerName);
+
+		StatData blockStat;
 		EntityType mob = getEntityType(mobName);
-		
 		boolean checkEntityType = false;
-		
+		int value = 0;
+
 		if (mob != null) {
 			checkEntityType = true;
 		}
-		
-		int value = 0;
 
-		for (Object[] vars : blockStat.getAllVariables()) {
-			
-			// var 0 is mob type
-			
+		// Implement world logic
+		
+		if (world != null) {
+			blockStat = player.getStatData(statsAPI.getStatExact("Kill"),
+					world.getName(), true);
+
+			for (Object[] vars : blockStat.getAllVariables()) {
+
+				// var 0 is mob type
+
 				if (checkEntityType) {
-					if (getEntityType(vars[0].toString()) != null && getEntityType(vars[0].toString()).equals(mob)) {
+					if (getEntityType(vars[0].toString()) != null
+							&& getEntityType(vars[0].toString()).equals(mob)) {
 						value += blockStat.getValue(vars);
 					}
 				} else {
 					value += blockStat.getValue(vars);
 				}
-		}
-		return value;
-	}
-	
-	public EntityType getEntityType(String entityName) {
-		try {
-			return EntityType.valueOf(entityName.toUpperCase());	
-		} catch (Exception e) {
-			return null;
-		}
-	}
-	
-	/**
-	 * Gets the total blocks of a certain id and damage value broken
-	 * @param player Player to check for
-	 * @param id Item ID to check for
-	 * @param damageValue Damage value to check for. (negative number to not skip check)
-	 * @return amount player broke of a block
-	 */
-	public int getBlocksBroken(String playerName, int id, int damageValue) {
-		if (!isEnabled()) return 0;
-		
-		StatsPlayer player = getStats(playerName);
-		StatData blockStat = player.getStatData(statsAPI.getStatExact("Block break"), true);
-		boolean checkDamageValue = false;
-		
-		
-		if (damageValue > 0) {
-			checkDamageValue = true;
-		}
-		
-		int value = 0;
+			}
+		} else {
+			// We want global (no specific world) so we loop over every world.
+			for (World serverWorld : plugin.getServer().getWorlds()) {
+				blockStat = player.getStatData(statsAPI.getStatExact("Kill"),
+						serverWorld.getName(), true);
 
-		for (Object[] vars : blockStat.getAllVariables()) {
-			
-			if (checkDamageValue) {
-				// VAR 0 = blockID, VAR 1 = damageValue, VAR 2 = (1 = break, 0 = place)
-				if ((Integer) vars[0] == id && (Byte) vars[1] == damageValue) {
-					value += blockStat.getValue(vars);
-				}
-			} else {
-				if ((Integer) vars[0] == id) {
-					value += blockStat.getValue(vars);
+				for (Object[] vars : blockStat.getAllVariables()) {
+
+					// var 0 is mob type
+
+					if (checkEntityType) {
+						if (getEntityType(vars[0].toString()) != null
+								&& getEntityType(vars[0].toString())
+										.equals(mob)) {
+							value += blockStat.getValue(vars);
+						}
+					} else {
+						value += blockStat.getValue(vars);
+					}
 				}
 			}
 		}
+
 		return value;
+	}
+
+	public EntityType getEntityType(String entityName) {
+		try {
+			return EntityType.valueOf(entityName.toUpperCase());
+		} catch (Exception e) {
+			return null;
+		}
 	}
 }
