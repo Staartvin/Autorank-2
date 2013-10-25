@@ -66,8 +66,8 @@ public class BlocksPlacedRequirement extends Requirement {
 
 		boolean sufficient = false;
 		if (blockID > 0) {
-			sufficient = plugin.getStatsHandler().getBlocksPlaced(
-					player.getName(), blockID, damageValue) >= blocksPlaced;
+			sufficient = plugin.getStatsHandler().getBlocksStat(
+					player.getName(), blockID, damageValue, null, "Block place") >= blocksPlaced;
 		} else {
 			sufficient = plugin.getStatsHandler().getTotalBlocksPlaced(
 					player.getName()) >= blocksPlaced;
@@ -117,7 +117,7 @@ public class BlocksPlacedRequirement extends Requirement {
 	public String getProgress(Player player) {
 		String progress = "";
 		progress = progress.concat(getAutorank().getStatsHandler()
-				.getBlocksPlaced(player.getName(), blockID, damageValue)
+				.getBlocksStat(player.getName(), blockID, damageValue, null, "Block place")
 				+ "/"
 				+ blocksPlaced);
 		return progress;

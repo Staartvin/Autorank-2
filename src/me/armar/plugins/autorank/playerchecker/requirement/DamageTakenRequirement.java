@@ -49,7 +49,7 @@ public class DamageTakenRequirement extends Requirement {
 		// TODO Auto-generated method stub
 		return plugin.getStatsHandler().isEnabled()
 				&& plugin.getStatsHandler()
-						.getNormalStat(player.getName(), "Damage taken") >= damageTaken;
+						.getNormalStat(player.getName(), "Damage taken", null) >= damageTaken;
 	}
 
 	@Override
@@ -71,7 +71,7 @@ public class DamageTakenRequirement extends Requirement {
 	public String getProgress(Player player) {
 		String progress = "";
 		progress = progress.concat(getAutorank().getStatsHandler()
-				.getNormalStat(player.getName(), "Damage taken") + "/" + damageTaken);
+				.getNormalStat(player.getName(), "Damage taken", null) + "/" + damageTaken);
 		return progress;
 	}
 

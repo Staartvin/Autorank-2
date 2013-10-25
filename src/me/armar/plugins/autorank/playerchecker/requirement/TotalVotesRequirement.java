@@ -50,7 +50,7 @@ public class TotalVotesRequirement extends Requirement {
 		// TODO Auto-generated method stub
 		return plugin.getStatsHandler().isEnabled()
 				&& plugin.getStatsHandler()
-						.getNormalStat(player.getName(), "Votes") >= totalVotes;
+						.getNormalStat(player.getName(), "Votes", null) >= totalVotes;
 	}
 
 	@Override
@@ -72,7 +72,7 @@ public class TotalVotesRequirement extends Requirement {
 	public String getProgress(Player player) {
 		String progress = "";
 		progress = progress.concat(getAutorank().getStatsHandler()
-				.getNormalStat(player.getName(), "Votes") + "/" + totalVotes);
+				.getNormalStat(player.getName(), "Votes", null) + "/" + totalVotes);
 		return progress;
 	}
 

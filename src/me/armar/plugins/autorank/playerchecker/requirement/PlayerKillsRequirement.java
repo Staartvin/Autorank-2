@@ -46,7 +46,7 @@ public class PlayerKillsRequirement extends Requirement {
 		// TODO Auto-generated method stub
 		return this.getAutorank().getStatsHandler().isEnabled()
 				&& this.getAutorank().getStatsHandler().getTotalMobsKilled(
-						player.getName(), "player") >= totalPlayersKilled;
+						player.getName(), "player", null) >= totalPlayersKilled;
 	}
 
 	@Override
@@ -69,7 +69,7 @@ public class PlayerKillsRequirement extends Requirement {
 	public String getProgress(Player player) {
 		String progress = "";
 		progress = progress.concat(getAutorank().getStatsHandler()
-				.getTotalMobsKilled(player.getName(), "player")
+				.getTotalMobsKilled(player.getName(), "player", null)
 				+ "/"
 				+ totalPlayersKilled);
 		return progress;

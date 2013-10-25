@@ -64,8 +64,8 @@ public class BlocksBrokenRequirement extends Requirement {
 
 		boolean sufficient = false;
 		if (blockID > 0) {
-			sufficient = plugin.getStatsHandler().getBlocksBroken(
-					player.getName(), blockID, damageValue) >= blocksBroken;
+			sufficient = plugin.getStatsHandler().getBlocksStat(
+					player.getName(), blockID, damageValue, null, "Block break") >= blocksBroken;
 		} else {
 			sufficient = plugin.getStatsHandler().getTotalBlocksBroken(
 					player.getName()) >= blocksBroken;
@@ -111,7 +111,7 @@ public class BlocksBrokenRequirement extends Requirement {
 	@Override
 	public String getProgress(Player player) {
 		String progress = "";
-		progress = progress.concat(getAutorank().getStatsHandler().getBlocksBroken(player.getName(), blockID, damageValue) + "/" + blocksBroken);
+		progress = progress.concat(getAutorank().getStatsHandler().getBlocksStat(player.getName(), blockID, damageValue, null, "Block break") + "/" + blocksBroken);
 		return progress;
 	}
 	
