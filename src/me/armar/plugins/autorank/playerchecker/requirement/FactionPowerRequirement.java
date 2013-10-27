@@ -1,10 +1,12 @@
 package me.armar.plugins.autorank.playerchecker.requirement;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.playerchecker.result.Result;
+
 import org.bukkit.entity.Player;
 
 public class FactionPowerRequirement extends Requirement {
@@ -63,7 +65,10 @@ public class FactionPowerRequirement extends Requirement {
 	@Override
 	public String getProgress(Player player) {
 		String progress = "";
-		progress = progress.concat(this.getAutorank().getFactionsHandler().getFactionPower(player) + "/" + factionPower);
+		DecimalFormat df = new DecimalFormat("#.##");
+		String doubleRounded = df.format(getAutorank().getFactionsHandler().getFactionPower(player));
+		
+		progress = progress.concat(doubleRounded + "/" + factionPower);
 		return progress;
 	}
 
