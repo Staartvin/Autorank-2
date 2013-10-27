@@ -569,7 +569,7 @@ public class CommandsHandler implements CommandExecutor {
 
 			if (targetPlayer == null) {
 				sender.sendMessage(ChatColor.RED + "Player " + target
-						+ " could not be found!");
+						+ " is not online!");
 				return true;
 			}
 
