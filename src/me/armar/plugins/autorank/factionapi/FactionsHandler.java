@@ -34,6 +34,10 @@ public class FactionsHandler {
 	public double getFactionPower(Player player) {
 		UPlayer uPlayer = UPlayer.get(player);
 		
+		if (!uPlayer.hasFaction()) {
+			return 0.0d;
+		}
+		
 		return uPlayer.getFaction().getPower();
 	}
 }
