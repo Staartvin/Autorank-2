@@ -26,6 +26,8 @@ public class FactionsHandler {
 		
 		if (factionPlugin == null) return false;
 		
+		if (!factionPlugin.getDescription().getAuthors().contains("Brettflan")) return false;
+		
 		factions = (Factions) factionPlugin;
 		
 		return factions != null;
