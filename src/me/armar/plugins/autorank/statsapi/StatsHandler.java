@@ -107,7 +107,7 @@ public class StatsHandler {
 	/**
 	 * Gets the total blocks of a certain id and damage value placed/broken
 	 * 
-	 * @param player Player to check for
+	 * @param playerName Player to check for
 	 * @param id Item ID to check for
 	 * @param damageValue Damage value to check for. (negative number to not
 	 *            skip check)

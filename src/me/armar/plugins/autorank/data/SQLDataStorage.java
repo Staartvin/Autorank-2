@@ -33,7 +33,7 @@ public class SQLDataStorage {
 	/**
 	 * Execute a query. Query cannot be null.
 	 * This query doesn't return anything. (Good for updating tables)
-	 * @param query Query to execute
+	 * @param sql Query to execute
 	 */
 	public void execute(String sql) {
 		Statement stmt = null;
@@ -66,7 +66,7 @@ public class SQLDataStorage {
 
 	/**
 	 * Execute a query and returns a ResultSet. Query cannot be null.
-	 * @param query Query to execute
+	 * @param sql Query to execute
 	 * @return ResultSet if successfully performed, null if an error occured.
 	 */
 	public ResultSet executeQuery(String sql) {

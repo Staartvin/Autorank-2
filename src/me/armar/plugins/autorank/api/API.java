@@ -55,7 +55,7 @@ public class API {
 	 * MySQL database linked) of a player.
 	 * <p>
 	 * 
-	 * @param playername player to check for.
+	 * @param playerName player to check for.
 	 * @return play time of a player. -1 if no entry was found.
 	 */
 	public int getGlobalPlayTime(String playerName) {
