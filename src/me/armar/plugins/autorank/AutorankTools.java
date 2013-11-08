@@ -156,6 +156,11 @@ public class AutorankTools {
 		return oldName;
 	}
 	
+	/**
+	 * Register requirement name so it can be used to get the correct name.
+	 * If a requirement is not passed through this method, it will not show up in {@link #getCorrectName(String)}.
+	 * @param type Requirement name
+	 */
 	public static void registerRequirement(String type) {
 		if (!reqTypes.contains(type)) {
 			reqTypes.add(type);
