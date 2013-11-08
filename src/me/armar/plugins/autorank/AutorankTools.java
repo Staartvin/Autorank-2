@@ -138,8 +138,10 @@ public class AutorankTools {
 		return false;	
 	}
 	
-	/** This will return the correct type of the requirement.
+	/** 
+	 * This will return the correct type of the requirement.
 	 * As players might want to use multiple requirements of the same type, they only have to specify the name of it with a unique identifier.
+	 * E.g. time1, time2 or exp1, exp2, etc.
 	 * @param oldName Name of the requirement to search for.
 	 * @return correct requirement name or old name if none was found.
 	 */
