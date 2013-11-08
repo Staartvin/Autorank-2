@@ -401,4 +401,5 @@ public class Autorank extends JavaPlugin {
 	public void setWarningManager(WarningManager warningManager) {
 		this.warningManager = warningManager;
 	}
+	
 }
