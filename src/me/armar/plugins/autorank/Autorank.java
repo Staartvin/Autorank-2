@@ -103,6 +103,9 @@ public class Autorank extends JavaPlugin {
 		// Create language classes
 		setLanguageHandler(new LanguageHandler(this));
 
+		// Create MySQL Wrapper
+		setMySQLWrapper(new MySQLWrapper(this));
+
 		// Create playtime class
 		setPlaytimes(new Playtimes(this));
 
@@ -178,9 +181,6 @@ public class Autorank extends JavaPlugin {
 
 		// Setup language file
 		languageHandler.createNewFile();
-
-		// Create MySQL Wrapper
-		setMySQLWrapper(new MySQLWrapper(this));
 
 		// Set debugger
 		setDebugger(new Debugger(this));
@@ -402,5 +402,5 @@ public class Autorank extends JavaPlugin {
 	public void setWarningManager(WarningManager warningManager) {
 		this.warningManager = warningManager;
 	}
-	
+
 }
