@@ -27,6 +27,5 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="API Libs/Factions-2.2.2.jar"/>
 	<classpathentry kind="lib" path="API Libs/mcore-6.9.1.jar"/>
-	<classpathentry kind="lib" path="D:/Users/Vincent/Java Projects/workspace/Autorank2/API Libs"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
