@@ -15,6 +15,11 @@ public class PermissionGroupValidation {
 		this.autorank = instance;
 	}
 	
+	/**
+	 * This will check if the groups defined in the advanced config are correct.
+	 * @param config
+	 * @return true if correct; false otherwise
+	 */
 	public boolean validateGroups(SimpleYamlConfiguration config) {
 		
 		if (config == null) return false;
@@ -24,14 +29,16 @@ public class PermissionGroupValidation {
 		Set<String> ranks;
 		
 		// Check for advanced config.
-		if (config.getBoolean("use advanced config")) { 
+		if (config.getBoolean("use advanced config")) {
 		
 		ConfigurationSection section = config.getConfigurationSection("ranks");
 		ranks = section.getKeys(false);
 		
 		} // Check for simple config
 		else {
-			ranks = config.getKeys(false);
+			return true;
+			// TODO make a seperate method for simple config
+			//ranks = config.getKeys(false);
 		}
 		
 		for (String rank:ranks) {
@@ -53,7 +60,7 @@ public class PermissionGroupValidation {
 			}
 			
 			if (!isValidChange(rank)) {
-				autorank.getWarningManager().registerWarning("Rank change of rank '" + rank + "' is invalid. (Do the groups used exist?)", 10);
+				//autorank.getWarningManager().registerWarning("Rank change of rank '" + rank + "' is invalid. (Do the groups used exist?)", 10);
 				isMissing = true;
 			}
 		}
@@ -97,7 +104,15 @@ public class PermissionGroupValidation {
 			rankTo = array[1].trim();
 		}
 
-		if (rankTo == null || rankFrom == null) return false;
+		if (rankTo == null) {
+			autorank.getWarningManager().registerWarning("Rank change of rank '" + group + "' is invalid. There is no rank given to promote to!", 10);
+			return false;
+		}
+		
+		if (rankFrom == null) {
+			autorank.getWarningManager().registerWarning("Rank change of rank '" + group + "' is invalid. There is no rank given to promote from!", 10);
+			return false;
+		}
 		
 		boolean isMissingRankTo = true, isMissingRankFrom = true;
 		
@@ -113,6 +128,16 @@ public class PermissionGroupValidation {
 			if (group1.equals(rankFrom.trim())) {
 				isMissingRankFrom = false;
 			}
+		}
+		
+		if (isMissingRankTo) {
+			autorank.getWarningManager().registerWarning("Rank change of rank '" + group + "' is invalid. The rank to promote to doesn't exist in the perm file.", 10);
+			return false;
+		}
+		
+		if (isMissingRankFrom) {
+			autorank.getWarningManager().registerWarning("Rank change of rank '" + group + "' is invalid. The rank to promote from doesn't exist in the perm file.", 10);
+			return false;
 		}
 		
 		return (rankFrom.equals(group) && !isMissingRankTo && !isMissingRankFrom);
