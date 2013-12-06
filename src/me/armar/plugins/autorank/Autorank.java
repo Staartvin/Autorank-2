@@ -176,7 +176,6 @@ public class Autorank extends JavaPlugin {
 			getValidateHandler().validateConfigGroups(getAdvancedConfig());
 		} else {
 			getValidateHandler().validateConfigGroups(getSimpleConfig());
-
 		}
 
 		// Setup language file
