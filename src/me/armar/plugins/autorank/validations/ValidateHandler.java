@@ -17,7 +17,16 @@ public class ValidateHandler {
 
 	public boolean validateConfigGroups(SimpleYamlConfiguration config) {
 
-		if (!permGroupValidate.validateGroups(config)) {
+		boolean correctSetup = false;
+		
+		// Simple logic to find out what config to check for.
+		if (autorank.getConfigHandler().useAdvancedConfig()) {
+			correctSetup = permGroupValidate.validateAdvancedGroups(config);
+		} else {
+			correctSetup = permGroupValidate.validateSimpleGroups(config);
+		}
+		
+		if (!correctSetup) {
 			autorank.getLogger().severe(
 					"There are invalid groups defined in the config!");
 			autorank.getLogger().severe("Check your config!");
