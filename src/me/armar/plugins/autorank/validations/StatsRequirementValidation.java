@@ -38,6 +38,11 @@ public class StatsRequirementValidation {
 						plugin.getWarningManager().registerWarning("You need to install Stats because you have Stats-required requirements listed in your config.", 5);
 						return false;
 					}
+					
+					if (!plugin.getStatsHandler().areBetaFunctionsEnabled()) {
+						plugin.getWarningManager().registerWarning("You have to enable beta features in the config of Stats!", 5);
+						return false;
+					}
 				}
 			}
 			
