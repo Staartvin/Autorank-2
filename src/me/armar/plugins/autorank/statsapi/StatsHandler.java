@@ -15,6 +15,8 @@ public class StatsHandler {
 
 	private Autorank plugin;
 	private StatsAPI statsAPI;
+	
+	private String[] compatibleVersions = {"1.37"};
 
 	public StatsHandler(Autorank instance) {
 		plugin = instance;
@@ -38,6 +40,21 @@ public class StatsHandler {
 			statsAPI = stats.getProvider();
 		}
 		return (statsAPI != null);
+	}
+	
+	/**
+	 * Check whether the given version of Stats is compatible with Autorank
+	 * @param version version of Stats that is running on this system.
+	 * @return true if compatible; false otherwise
+	 */
+	public boolean compatibleStatsVersion(String version) {
+		for (String v: compatibleVersions) {
+			if (version.contains(v)) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 
 	public int getTotalBlocksBroken(String player) {
