@@ -180,7 +180,7 @@ public class StatsHandler {
 	public int getTotalMobsKilled(String playerName, String mobName, World world) {
 		if (!isEnabled())
 			return 0;
-
+		
 		StatsPlayer player = getStats(playerName);
 
 		StatData blockStat;
@@ -243,5 +243,12 @@ public class StatsHandler {
 		} catch (Exception e) {
 			return null;
 		}
+	}
+	
+	public boolean areBetaFunctionsEnabled() {
+		if (statsAPI != null) {
+			return statsAPI.isUsingBetaFunctions();
+		}
+		return false;
 	}
 }
