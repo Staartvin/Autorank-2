@@ -1,23 +1,33 @@
 package me.armar.plugins.autorank.permissions;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.permissions.handlers.GroupManagerHandler;
+import me.armar.plugins.autorank.permissions.handlers.PermissionsBukkitHandler;
+import me.armar.plugins.autorank.permissions.handlers.VaultPermissionsHandler;
 import net.milkbowl.vault.Vault;
 
 import org.bukkit.plugin.Plugin;
 
 /*
- * PermissionsPluginHandler sort the tasks of removing/adding a player to a group depending
+ * PermissionsPluginManager sort the tasks of removing/adding a player to a group depending
  * on the permissions plugin. 
  * For now it supports Vault and explicit GroupManager.
  *  
  */
 
-public class PermissionsPluginHandler {
+/**
+ * PermissionsPluginManager manages what permission handler should be given. It just does basic checks of availability and calculates what permissions plugin suits best.
+ * 
+ * It can choose from GroupManager, PermissionsBukkit and Vault.
+ * @author Staartvin
+ *
+ */
+public class PermissionsPluginManager {
 
 	private Autorank plugin;
 	private PermissionsHandler permissionPlugin;
 	
-	public PermissionsPluginHandler(Autorank plugin) {
+	public PermissionsPluginManager(Autorank plugin) {
 		this.plugin = plugin;
 		if (findVault(plugin)) {
 			Autorank.logMessage("Vault Hooked!");
@@ -33,7 +43,7 @@ public class PermissionsPluginHandler {
 			permissionPlugin = new GroupManagerHandler(plugin);
 		} else if (findPermissionsBukkit(plugin)) {
 			// Use PermissionsBukkit
-			permissionPlugin = new PermissionsBukkitPermissionsHandler(plugin);
+			permissionPlugin = new PermissionsBukkitHandler(plugin);
 		} else {
 			// use Vault
 			permissionPlugin = new VaultPermissionsHandler(plugin);

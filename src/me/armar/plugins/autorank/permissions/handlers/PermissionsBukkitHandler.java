@@ -1,8 +1,9 @@
-package me.armar.plugins.autorank.permissions;
+package me.armar.plugins.autorank.permissions.handlers;
 
 import java.util.List;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.permissions.PermissionsHandler;
 
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -16,12 +17,12 @@ import com.platymuus.bukkit.permissions.PermissionsPlugin;
  *         This is a special permission handler that handles all work from
  *         PermissionsBukkit
  */
-public class PermissionsBukkitPermissionsHandler implements PermissionsHandler {
+public class PermissionsBukkitHandler implements PermissionsHandler {
 
 	private PermissionsPlugin permissionsBukkit;
 	private Autorank plugin;
 
-	public PermissionsBukkitPermissionsHandler(Autorank plugin) {
+	public PermissionsBukkitHandler(Autorank plugin) {
 		this.plugin = plugin;
 		setupPermissionsBukkit();
 	}

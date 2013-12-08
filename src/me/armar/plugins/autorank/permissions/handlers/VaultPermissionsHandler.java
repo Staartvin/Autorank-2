@@ -1,6 +1,7 @@
-package me.armar.plugins.autorank.permissions;
+package me.armar.plugins.autorank.permissions.handlers;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.permissions.PermissionsHandler;
 import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.entity.Player;
