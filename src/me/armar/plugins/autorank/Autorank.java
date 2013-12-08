@@ -13,7 +13,7 @@ import me.armar.plugins.autorank.language.LanguageHandler;
 import me.armar.plugins.autorank.leaderboard.Leaderboard;
 import me.armar.plugins.autorank.listeners.PlayerJoinListener;
 import me.armar.plugins.autorank.mysql.wrapper.MySQLWrapper;
-import me.armar.plugins.autorank.permissions.PermissionsPluginHandler;
+import me.armar.plugins.autorank.permissions.PermissionsPluginManager;
 import me.armar.plugins.autorank.playerchecker.PlayerChecker;
 import me.armar.plugins.autorank.playerchecker.builders.RequirementBuilder;
 import me.armar.plugins.autorank.playerchecker.builders.ResultBuilder;
@@ -58,7 +58,7 @@ public class Autorank extends JavaPlugin {
 	private PlayerChecker playerChecker;
 	private SimpleYamlConfiguration simpleConfig;
 	private SimpleYamlConfiguration advancedConfig;
-	private PermissionsPluginHandler permPlugHandler;
+	private PermissionsPluginManager permPlugHandler;
 	private LanguageHandler languageHandler;
 	private ValidateHandler validateHandler;
 	private StatsHandler statsHandler;
@@ -113,7 +113,7 @@ public class Autorank extends JavaPlugin {
 		setLeaderboard(new Leaderboard(this));
 
 		// Create permission plugin handler class
-		setPermPlugHandler(new PermissionsPluginHandler(this));
+		setPermPlugHandler(new PermissionsPluginManager(this));
 
 		// Create player check class
 		setPlayerChecker(new PlayerChecker(this));
@@ -297,11 +297,11 @@ public class Autorank extends JavaPlugin {
 		this.playerChecker = playerChecker;
 	}
 
-	public PermissionsPluginHandler getPermPlugHandler() {
+	public PermissionsPluginManager getPermPlugHandler() {
 		return permPlugHandler;
 	}
 
-	public void setPermPlugHandler(PermissionsPluginHandler permPlugHandler) {
+	public void setPermPlugHandler(PermissionsPluginManager permPlugHandler) {
 		this.permPlugHandler = permPlugHandler;
 	}
 
