@@ -2,6 +2,7 @@ me.armar.plugins.autorank
 me.armar.plugins.autorank.api
 me.armar.plugins.autorank.api.events
 me.armar.plugins.autorank.commands
+me.armar.plugins.autorank.commands.manager
 me.armar.plugins.autorank.config
 me.armar.plugins.autorank.data
 me.armar.plugins.autorank.debugger
@@ -11,6 +12,7 @@ me.armar.plugins.autorank.leaderboard
 me.armar.plugins.autorank.listeners
 me.armar.plugins.autorank.mysql.wrapper
 me.armar.plugins.autorank.permissions
+me.armar.plugins.autorank.permissions.handlers
 me.armar.plugins.autorank.playerchecker
 me.armar.plugins.autorank.playerchecker.builders
 me.armar.plugins.autorank.playerchecker.requirement
