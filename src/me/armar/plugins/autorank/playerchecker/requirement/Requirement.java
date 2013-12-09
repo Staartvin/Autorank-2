@@ -44,7 +44,7 @@ public abstract class Requirement {
 	 * @param results List<Result> containing results
 	 * @param autoComplete Will this auto complete?
 	 * @param reqId id of the requirement
-	 * @return
+	 * @return true if everything was setup correctly; false otherwise
 	 */
 	public abstract boolean setOptions(String[] options, boolean optional, List<Result> results, boolean autoComplete, int reqId);
 
