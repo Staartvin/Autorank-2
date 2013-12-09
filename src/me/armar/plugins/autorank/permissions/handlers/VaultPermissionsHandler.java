@@ -50,18 +50,18 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 				&& permission.getName().toLowerCase().contains("bpermissions")) {
 			world = player.getWorld().getName();
 		}
-		System.out.print("Group To: " + newGroup);
+		/*System.out.print("Group To: " + newGroup);
 		System.out.print("Group From: " + oldGroup);
 		System.out.print("World: " + world);
-		System.out.print("Player: " + player);
+		System.out.print("Player: " + player);*/
 
 		boolean worked1 = addGroup(player, world, newGroup);
 		boolean worked2 = removeGroup(player, world, oldGroup);
 
-		System.out.print("Worked1: " + worked1);
-		System.out.print("Worked2: " + worked2);
+		//System.out.print("Worked1: " + worked1);
+		//System.out.print("Worked2: " + worked2);
 
-		System.out.print("In group: " + permission.playerInGroup(world, player.getName(), newGroup));
+		//System.out.print("In group: " + permission.playerInGroup(world, player.getName(), newGroup));
 		return worked1 && worked2;
 	}
 
@@ -86,7 +86,6 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 	 * @return true if done, false if failed
 	 */
 	public boolean addGroup(Player player, String world, String group) {
-		System.out.print("ADD GROUP: " + world);
 		return permission.playerAddGroup(world, player.getName(), group);
 	}
 
