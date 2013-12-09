@@ -22,11 +22,12 @@ public class RequirementCompleteEvent extends Event implements Cancellable {
 	private Requirement requirement;
 	private boolean isCancelled;
 
+
 	/**
-	 * @param player Player
-	 * @param worldName World
-	 * @param groupFrom GroupFrom
-	 * @param groupTo GroupTo
+	 * Create a new RequirementCompleteEvent.
+	 * This event represents a requirement that is completed by a player.
+	 * @param player Player that completed the requirement
+	 * @param req Requirement that was completed
 	 */
 	public RequirementCompleteEvent(Player player, Requirement req) {
 		this.player = player;
