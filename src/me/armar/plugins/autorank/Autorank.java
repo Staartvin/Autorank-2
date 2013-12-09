@@ -4,7 +4,7 @@ import java.sql.SQLException;
 import java.util.logging.Logger;
 
 import me.armar.plugins.autorank.api.API;
-import me.armar.plugins.autorank.commands.CommandsHandler;
+import me.armar.plugins.autorank.commands.manager.CommandsManager;
 import me.armar.plugins.autorank.config.ConfigHandler;
 import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
 import me.armar.plugins.autorank.debugger.Debugger;
@@ -70,6 +70,7 @@ public class Autorank extends JavaPlugin {
 	private Debugger debugger;
 	private FactionsHandler factionsHandler;
 	private WarningManager warningManager;
+	private CommandsManager commandsManager;
 
 	public void onEnable() {
 
@@ -126,6 +127,9 @@ public class Autorank extends JavaPlugin {
 
 		// Create faction handler
 		setFactionsHandler(new FactionsHandler(this));
+		
+		// Create commands manager
+		setCommandsManager(new CommandsManager(this));
 
 		if (statsHandler.setupStatsAPI()) {
 			getLogger().info(
@@ -170,7 +174,7 @@ public class Autorank extends JavaPlugin {
 		playerChecker.initialiseFromConfigs(this);
 
 		// Register command
-		getCommand("ar").setExecutor(new CommandsHandler(this));
+		getCommand("ar").setExecutor(getCommandsManager());
 
 		if (configHandler.useAdvancedConfig()) {
 			getValidateHandler().validateConfigGroups(getAdvancedConfig());
@@ -400,6 +404,14 @@ public class Autorank extends JavaPlugin {
 
 	public void setWarningManager(WarningManager warningManager) {
 		this.warningManager = warningManager;
+	}
+
+	public CommandsManager getCommandsManager() {
+		return commandsManager;
+	}
+
+	public void setCommandsManager(CommandsManager commandsManager) {
+		this.commandsManager = commandsManager;
 	}
 
 }
