@@ -64,6 +64,37 @@ public class StatsHandler {
 	public int getTotalBlocksPlaced(String player) {
 		return (int) statsAPI.getTotalBlocksPlaced(player);
 	}
+	
+	public int getTotalPlayTime(String playerName, String world) {
+		StatsPlayer player = getStats(playerName);
+		StatData stat;
+		
+		int value = 0;
+		
+		if (world != null) {
+			// Do check for one world
+			stat = player
+					.getStatData(statsAPI.getStat("Playtime"),
+							world, true);
+
+			for (Object[] vars : stat.getAllVariables()) {
+				value += stat.getValue(vars);
+			}
+		} else {
+			// Do global check
+			for (World w: plugin.getServer().getWorlds()) {
+				stat = player
+						.getStatData(statsAPI.getStat("Playtime"),
+								w.getName(), true);
+				
+				for (Object[] vars : stat.getAllVariables()) {
+					value += stat.getValue(vars);
+				}
+			}	
+		}
+		
+		return value;
+	}
 
 	public StatsPlayer getStats(String player) {
 		return statsAPI.getStatsPlayer(player);
