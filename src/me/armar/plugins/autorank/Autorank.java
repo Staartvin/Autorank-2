@@ -45,6 +45,7 @@ import me.armar.plugins.autorank.updater.UpdateHandler;
 import me.armar.plugins.autorank.updater.Updater;
 import me.armar.plugins.autorank.validations.ValidateHandler;
 import me.armar.plugins.autorank.warningmanager.WarningManager;
+import me.armar.plugins.autorank.warningmanager.WarningNoticeTask;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -190,6 +191,9 @@ public class Autorank extends JavaPlugin {
 
 		Autorank.logMessage(String.format("Autorank %s has been enabled!",
 				getDescription().getVersion()));
+		
+		// Create a new task that runs every 30 seconds (will show a warning every 30 seconds)
+		getServer().getScheduler().runTaskTimer(this, new WarningNoticeTask(this), 5 * 20, 30 * 20);
 	}
 
 	public void onDisable() {
