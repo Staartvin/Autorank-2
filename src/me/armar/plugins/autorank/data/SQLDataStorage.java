@@ -8,34 +8,36 @@ import java.sql.Statement;
 
 public class SQLDataStorage {
 
-	private String hostname;
-	private String username;
-	private String password;
-	private String database;
+	private final String hostname;
+	private final String username;
+	private final String password;
+	private final String database;
 
 	private Connection conn = null;
 
 	/**
 	 * Create a new MySQL Connection
+	 * 
 	 * @param hostname Hostname (Ex. 127.0.0.1:3306)
 	 * @param username Username
 	 * @param password Password
 	 * @param database Database
 	 */
-	public SQLDataStorage(String hostname, String username, String password,
-			String database) {
+	public SQLDataStorage(final String hostname, final String username,
+			final String password, final String database) {
 		this.hostname = hostname;
 		this.username = username;
 		this.password = password;
 		this.database = database;
 	}
-	
+
 	/**
 	 * Execute a query. Query cannot be null.
 	 * This query doesn't return anything. (Good for updating tables)
+	 * 
 	 * @param sql Query to execute
 	 */
-	public void execute(String sql) {
+	public void execute(final String sql) {
 		Statement stmt = null;
 
 		if (conn != null) {
@@ -44,7 +46,7 @@ public class SQLDataStorage {
 				stmt = conn.createStatement();
 				stmt.execute(sql);
 
-			} catch (SQLException ex) {
+			} catch (final SQLException ex) {
 				System.out.println("SQLDataStorage.execute");
 				System.out.println("SQLException: " + ex.getMessage());
 				System.out.println("SQLState: " + ex.getSQLState());
@@ -54,7 +56,7 @@ public class SQLDataStorage {
 				if (stmt != null) {
 					try {
 						stmt.close();
-					} catch (SQLException sqlEx) {
+					} catch (final SQLException sqlEx) {
 					}
 
 					stmt = null;
@@ -66,10 +68,11 @@ public class SQLDataStorage {
 
 	/**
 	 * Execute a query and returns a ResultSet. Query cannot be null.
+	 * 
 	 * @param sql Query to execute
 	 * @return ResultSet if successfully performed, null if an error occured.
 	 */
-	public ResultSet executeQuery(String sql) {
+	public ResultSet executeQuery(final String sql) {
 		Statement stmt = null;
 		ResultSet rs = null;
 
@@ -79,13 +82,13 @@ public class SQLDataStorage {
 				stmt = conn.createStatement();
 				rs = stmt.executeQuery(sql);
 
-			} catch (SQLException ex) {
+			} catch (final SQLException ex) {
 				System.out.println("SQLDataStorage.executeQuery");
 				System.out.println("SQLException: " + ex.getMessage());
 				System.out.println("SQLState: " + ex.getSQLState());
 				System.out.println("VendorError: " + ex.getErrorCode());
-				
-			} 
+
+			}
 			// Removed this because the ResultSet would always be null on return.
 			/*finally {
 
@@ -113,39 +116,41 @@ public class SQLDataStorage {
 
 	/**
 	 * Open a new MySQL connection
-	 * @return true if connection was successfully set up. 
+	 * 
+	 * @return true if connection was successfully set up.
 	 */
 	public boolean connect() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 
 			//System.out.println("jdbc:mysql://" + hostname + "/" + database
-				//	+ "?" + "user=" + username + "&password=" + password);
+			//	+ "?" + "user=" + username + "&password=" + password);
 
 			conn = DriverManager.getConnection("jdbc:mysql://" + hostname + "/"
 					+ database + "?" + "user=" + username + "&password="
 					+ password);
 
-		} catch (SQLException ex) {
+		} catch (final SQLException ex) {
 			System.out.println("SQLDataStorage.connect");
 			System.out.println("SQLException: " + ex.getMessage());
 			System.out.println("SQLState: " + ex.getSQLState());
 			System.out.println("VendorError: " + ex.getErrorCode());
-		} catch (Exception e) {
+		} catch (final Exception e) {
 
 			e.printStackTrace();
 		}
 		return conn != null;
 	}
-	
+
 	/**
 	 * Returns state of MySQL connection
+	 * 
 	 * @return true if closed, false if open
 	 */
 	public boolean isClosed() {
 		try {
 			return conn.isClosed();
-		} catch (SQLException e) {
+		} catch (final SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return true;

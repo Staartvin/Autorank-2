@@ -73,6 +73,7 @@ public class Autorank extends JavaPlugin {
 	private WarningManager warningManager;
 	private CommandsManager commandsManager;
 
+	@Override
 	public void onEnable() {
 
 		// TODO: Add our own Stats logger which keeps track of (a lot of) things
@@ -128,7 +129,7 @@ public class Autorank extends JavaPlugin {
 
 		// Create faction handler
 		setFactionsHandler(new FactionsHandler(this));
-		
+
 		// Create commands manager
 		setCommandsManager(new CommandsManager(this));
 
@@ -142,9 +143,9 @@ public class Autorank extends JavaPlugin {
 					"Hooked into Factions! Faction requirements can be used.");
 		}
 
-		RequirementBuilder req = this.getPlayerChecker().getBuilder()
+		final RequirementBuilder req = this.getPlayerChecker().getBuilder()
 				.getRequirementBuilder();
-		ResultBuilder res = this.getPlayerChecker().getBuilder()
+		final ResultBuilder res = this.getPlayerChecker().getBuilder()
 				.getResultBuilder();
 
 		// Register 'main' requirements
@@ -191,11 +192,13 @@ public class Autorank extends JavaPlugin {
 
 		Autorank.logMessage(String.format("Autorank %s has been enabled!",
 				getDescription().getVersion()));
-		
+
 		// Create a new task that runs every 30 seconds (will show a warning every 30 seconds)
-		getServer().getScheduler().runTaskTimer(this, new WarningNoticeTask(this), 5 * 20, 30 * 20);
+		getServer().getScheduler().runTaskTimer(this,
+				new WarningNoticeTask(this), 5 * 20, 30 * 20);
 	}
 
+	@Override
 	public void onDisable() {
 		setLeaderboard(null);
 
@@ -221,7 +224,7 @@ public class Autorank extends JavaPlugin {
 		return languageHandler;
 	}
 
-	private void setLanguageHandler(LanguageHandler lHandler) {
+	private void setLanguageHandler(final LanguageHandler lHandler) {
 		this.languageHandler = lHandler;
 	}
 
@@ -230,38 +233,40 @@ public class Autorank extends JavaPlugin {
 		getServer().getPluginManager().enablePlugin(this);
 	}
 
-	public int getLocalTime(String player) {
+	public int getLocalTime(final String player) {
 		return playtimes.getLocalTime(player);
 	}
 
-	public int getGlobalTime(String player) {
+	public int getGlobalTime(final String player) {
 		return playtimes.getGlobalTime(player);
 	}
 
-	public void setLocalTime(String player, int time) {
+	public void setLocalTime(final String player, final int time) {
 		playtimes.setLocalTime(player, time);
 	}
 
-	public void setGlobalTime(String player, int time) throws SQLException {
+	public void setGlobalTime(final String player, final int time)
+			throws SQLException {
 		playtimes.setGlobalTime(player, time);
 	}
 
-	public void checkAndChangeRank(Player player) {
+	public void checkAndChangeRank(final Player player) {
 		playerChecker.checkPlayer(player);
 	}
 
-	public void registerRequirement(String name,
-			Class<? extends Requirement> requirement) {
+	public void registerRequirement(final String name,
+			final Class<? extends Requirement> requirement) {
 		playerChecker.getBuilder().getRequirementBuilder()
 				.registerRequirement(name, requirement);
 	}
 
-	public void registerResult(String name, Class<? extends Result> result) {
+	public void registerResult(final String name,
+			final Class<? extends Result> result) {
 		playerChecker.getBuilder().getResultBuilder()
 				.registerResult(name, result);
 	}
 
-	public static void logMessage(String message) {
+	public static void logMessage(final String message) {
 		log.info("[Autorank] " + message);
 	}
 
@@ -269,7 +274,7 @@ public class Autorank extends JavaPlugin {
 		return leaderboard;
 	}
 
-	private void setLeaderboard(Leaderboard leaderboard) {
+	private void setLeaderboard(final Leaderboard leaderboard) {
 		this.leaderboard = leaderboard;
 	}
 
@@ -277,7 +282,7 @@ public class Autorank extends JavaPlugin {
 		return playtimes;
 	}
 
-	private void setPlaytimes(Playtimes playtimes) {
+	private void setPlaytimes(final Playtimes playtimes) {
 		this.playtimes = playtimes;
 	}
 
@@ -285,7 +290,7 @@ public class Autorank extends JavaPlugin {
 		return simpleConfig;
 	}
 
-	private void setSimpleConfig(SimpleYamlConfiguration simpleConfig) {
+	private void setSimpleConfig(final SimpleYamlConfiguration simpleConfig) {
 		this.simpleConfig = simpleConfig;
 	}
 
@@ -293,7 +298,7 @@ public class Autorank extends JavaPlugin {
 		return advancedConfig;
 	}
 
-	private void setAdvancedConfig(SimpleYamlConfiguration advancedConfig) {
+	private void setAdvancedConfig(final SimpleYamlConfiguration advancedConfig) {
 		this.advancedConfig = advancedConfig;
 	}
 
@@ -301,7 +306,7 @@ public class Autorank extends JavaPlugin {
 		return playerChecker;
 	}
 
-	private void setPlayerChecker(PlayerChecker playerChecker) {
+	private void setPlayerChecker(final PlayerChecker playerChecker) {
 		this.playerChecker = playerChecker;
 	}
 
@@ -309,7 +314,8 @@ public class Autorank extends JavaPlugin {
 		return permPlugHandler;
 	}
 
-	public void setPermPlugHandler(PermissionsPluginManager permPlugHandler) {
+	public void setPermPlugHandler(
+			final PermissionsPluginManager permPlugHandler) {
 		this.permPlugHandler = permPlugHandler;
 	}
 
@@ -317,7 +323,7 @@ public class Autorank extends JavaPlugin {
 		return validateHandler;
 	}
 
-	public void setValidateHandler(ValidateHandler validateHandler) {
+	public void setValidateHandler(final ValidateHandler validateHandler) {
 		this.validateHandler = validateHandler;
 	}
 
@@ -325,7 +331,7 @@ public class Autorank extends JavaPlugin {
 		return statsHandler;
 	}
 
-	public void setStatsHandler(StatsHandler statsHandler) {
+	public void setStatsHandler(final StatsHandler statsHandler) {
 		this.statsHandler = statsHandler;
 	}
 
@@ -333,7 +339,7 @@ public class Autorank extends JavaPlugin {
 		return mysqlWrapper;
 	}
 
-	public void setMySQLWrapper(MySQLWrapper mysqlWrapper) {
+	public void setMySQLWrapper(final MySQLWrapper mysqlWrapper) {
 		this.mysqlWrapper = mysqlWrapper;
 	}
 
@@ -349,7 +355,7 @@ public class Autorank extends JavaPlugin {
 		if (!updateHandler.doCheckForNewVersion())
 			return false;
 
-		Updater updater = new Updater(this, 34447, this.getFile(),
+		final Updater updater = new Updater(this, 34447, this.getFile(),
 				Updater.UpdateType.NO_DOWNLOAD, false);
 		updateHandler.setUpdater(updater);
 
@@ -362,7 +368,7 @@ public class Autorank extends JavaPlugin {
 		return updateHandler;
 	}
 
-	public void setUpdateHandler(UpdateHandler updateHandler) {
+	public void setUpdateHandler(final UpdateHandler updateHandler) {
 		this.updateHandler = updateHandler;
 	}
 
@@ -370,7 +376,7 @@ public class Autorank extends JavaPlugin {
 		return configHandler;
 	}
 
-	public void setConfigHandler(ConfigHandler configHandler) {
+	public void setConfigHandler(final ConfigHandler configHandler) {
 		this.configHandler = configHandler;
 	}
 
@@ -378,7 +384,8 @@ public class Autorank extends JavaPlugin {
 		return requirementHandler;
 	}
 
-	public void setRequirementHandler(RequirementHandler requirementHandler) {
+	public void setRequirementHandler(
+			final RequirementHandler requirementHandler) {
 		this.requirementHandler = requirementHandler;
 	}
 
@@ -390,7 +397,7 @@ public class Autorank extends JavaPlugin {
 		return debugger;
 	}
 
-	public void setDebugger(Debugger debugger) {
+	public void setDebugger(final Debugger debugger) {
 		this.debugger = debugger;
 	}
 
@@ -398,7 +405,7 @@ public class Autorank extends JavaPlugin {
 		return factionsHandler;
 	}
 
-	public void setFactionsHandler(FactionsHandler factionsHandler) {
+	public void setFactionsHandler(final FactionsHandler factionsHandler) {
 		this.factionsHandler = factionsHandler;
 	}
 
@@ -406,7 +413,7 @@ public class Autorank extends JavaPlugin {
 		return warningManager;
 	}
 
-	public void setWarningManager(WarningManager warningManager) {
+	public void setWarningManager(final WarningManager warningManager) {
 		this.warningManager = warningManager;
 	}
 
@@ -414,7 +421,7 @@ public class Autorank extends JavaPlugin {
 		return commandsManager;
 	}
 
-	public void setCommandsManager(CommandsManager commandsManager) {
+	public void setCommandsManager(final CommandsManager commandsManager) {
 		this.commandsManager = commandsManager;
 	}
 

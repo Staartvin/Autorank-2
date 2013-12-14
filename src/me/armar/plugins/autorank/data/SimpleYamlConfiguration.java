@@ -14,13 +14,15 @@ public class SimpleYamlConfiguration extends YamlConfiguration {
 
 	File file;
 
-	public SimpleYamlConfiguration(JavaPlugin plugin, String fileName,
-			LinkedHashMap<String, Object> configDefaults, String name) {
+	public SimpleYamlConfiguration(final JavaPlugin plugin,
+			final String fileName,
+			final LinkedHashMap<String, Object> configDefaults,
+			final String name) {
 		/*
 		 * accepts null as configDefaults -> check for resource and copies it if
 		 * found, makes an empty config if nothing is found
 		 */
-		String folderPath = plugin.getDataFolder().getAbsolutePath()
+		final String folderPath = plugin.getDataFolder().getAbsolutePath()
 				+ File.separator;
 		file = new File(folderPath + fileName);
 
@@ -32,19 +34,19 @@ public class SimpleYamlConfiguration extends YamlConfiguration {
 							"New " + name + " file copied from jar");
 					try {
 						this.load(file);
-					} catch (Exception e) {
+					} catch (final Exception e) {
 						e.printStackTrace();
 					}
 				}
 			} else {
-				for (String key : configDefaults.keySet()) {
+				for (final String key : configDefaults.keySet()) {
 					this.set(key, configDefaults.get(key));
 				}
 
 				try {
 					this.save(file);
 					plugin.getLogger().info("New " + name + " file created");
-				} catch (IOException e) {
+				} catch (final IOException e) {
 					e.printStackTrace();
 				}
 			}
@@ -52,7 +54,7 @@ public class SimpleYamlConfiguration extends YamlConfiguration {
 			try {
 				this.load(file);
 				plugin.getLogger().info(name + " file loaded");
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -62,9 +64,9 @@ public class SimpleYamlConfiguration extends YamlConfiguration {
 	public void save() {
 		try {
 			this.save(file);
-		} catch (ConcurrentModificationException e) {
+		} catch (final ConcurrentModificationException e) {
 			save();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -72,15 +74,15 @@ public class SimpleYamlConfiguration extends YamlConfiguration {
 	public void load() {
 		try {
 			this.load(file);
-		} catch (FileNotFoundException e) {
+		} catch (final FileNotFoundException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
-		} catch (InvalidConfigurationException e) {
+		} catch (final InvalidConfigurationException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void reload() {
 		load();
 		save();

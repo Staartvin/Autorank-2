@@ -12,10 +12,10 @@ public class CommandResult extends Result {
 	private Server server = null;
 
 	@Override
-	public boolean setOptions(String[] commands) {
+	public boolean setOptions(final String[] commands) {
 		this.server = this.getAutorank().getServer();
-		List<String> replace = new ArrayList<String>();
-		for (String command:commands) {
+		final List<String> replace = new ArrayList<String>();
+		for (final String command : commands) {
 			replace.add(command.trim());
 		}
 		this.commands = replace;
@@ -23,13 +23,13 @@ public class CommandResult extends Result {
 	}
 
 	@Override
-	public boolean applyResult(Player player) {
+	public boolean applyResult(final Player player) {
 		if (server != null) {
-			for (String command:commands) {
-				String cmd = command.replace("&p", player.getName());
+			for (final String command : commands) {
+				final String cmd = command.replace("&p", player.getName());
 				server.dispatchCommand(server.getConsoleSender(), cmd);
 			}
-			
+
 		}
 		return server != null;
 	}

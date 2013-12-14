@@ -7,12 +7,13 @@ class ValueComparator implements Comparator<String> {
 
 	Map<String, Integer> base;
 
-	public ValueComparator(Map<String, Integer> base) {
+	public ValueComparator(final Map<String, Integer> base) {
 		this.base = base;
 	}
 
 	// Note: this comparator imposes orderings that are inconsistent with equals.    
-	public int compare(String a, String b) {
+	@Override
+	public int compare(final String a, final String b) {
 		if (base.get(a) >= base.get(b)) {
 			return -1;
 		} else {

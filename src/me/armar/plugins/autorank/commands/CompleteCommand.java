@@ -19,15 +19,15 @@ import org.bukkit.entity.Player;
 
 public class CompleteCommand implements CommandExecutor {
 
-	private Autorank plugin;
+	private final Autorank plugin;
 
-	public CompleteCommand(Autorank instance) {
+	public CompleteCommand(final Autorank instance) {
 		plugin = instance;
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String label,
-			String[] args) {
+	public boolean onCommand(final CommandSender sender, final Command cmd,
+			final String label, final String[] args) {
 
 		// Implemented /ar complete #
 		if (args.length != 2) {
@@ -52,7 +52,7 @@ public class CompleteCommand implements CommandExecutor {
 				sender))
 			return true;
 
-		Player player = (Player) sender;
+		final Player player = (Player) sender;
 
 		int completionID = 0;
 
@@ -62,7 +62,7 @@ public class CompleteCommand implements CommandExecutor {
 			if (completionID < 1) {
 				completionID = 1;
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			player.sendMessage(ChatColor.RED
 					+ Lang.INVALID_NUMBER
 							.getConfigValue(new String[] { args[1] }));
@@ -70,8 +70,8 @@ public class CompleteCommand implements CommandExecutor {
 		}
 
 		// Check if the latest known group is the current group. Otherwise, reset progress
-		String currentGroup = plugin.getPermPlugHandler().getPermissionPlugin()
-				.getPlayerGroups(player)[0];
+		final String currentGroup = plugin.getPermPlugHandler()
+				.getPermissionPlugin().getPlayerGroups(player)[0];
 		String latestKnownGroup = plugin.getRequirementHandler()
 				.getLastKnownGroup(player.getName());
 
@@ -90,9 +90,9 @@ public class CompleteCommand implements CommandExecutor {
 					currentGroup);
 		}
 
-		Map<RankChange, List<Requirement>> failed = plugin.getPlayerChecker()
-				.getAllRequirements(player);
-		Set<RankChange> keySet = failed.keySet();
+		final Map<RankChange, List<Requirement>> failed = plugin
+				.getPlayerChecker().getAllRequirements(player);
+		final Set<RankChange> keySet = failed.keySet();
 
 		if (keySet.size() == 0) {
 			player.sendMessage(ChatColor.RED + "You don't have a next rank up!");
@@ -100,8 +100,8 @@ public class CompleteCommand implements CommandExecutor {
 		}
 
 		List<Requirement> requirements;
-		for (Iterator<RankChange> it = keySet.iterator(); it.hasNext();) {
-			RankChange rank = it.next();
+		for (final Iterator<RankChange> it = keySet.iterator(); it.hasNext();) {
+			final RankChange rank = it.next();
 			requirements = failed.get(rank);
 
 			// Rank player as he has fulfilled all requirements
@@ -116,7 +116,7 @@ public class CompleteCommand implements CommandExecutor {
 				}
 
 				// Human logic = first number is 1 not 0.
-				Requirement req = requirements.get((completionID - 1));
+				final Requirement req = requirements.get((completionID - 1));
 
 				if (plugin.getRequirementHandler().hasCompletedRequirement(
 						(completionID - 1), player.getName())) {
@@ -153,7 +153,7 @@ public class CompleteCommand implements CommandExecutor {
 				}
 			}
 		}
-		
+
 		return true;
 	}
 

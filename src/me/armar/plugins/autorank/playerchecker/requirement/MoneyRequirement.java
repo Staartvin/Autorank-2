@@ -22,48 +22,52 @@ public class MoneyRequirement extends Requirement {
 
 	public MoneyRequirement() {
 		super();
-		setupEconomy(); 
+		setupEconomy();
 	}
 
-	private boolean setupEconomy()
-    {
-        RegisteredServiceProvider<Economy> economyProvider = Bukkit.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
-        if (economyProvider != null) {
-            economy = economyProvider.getProvider();
-        }
+	private boolean setupEconomy() {
+		final RegisteredServiceProvider<Economy> economyProvider = Bukkit
+				.getServer().getServicesManager()
+				.getRegistration(net.milkbowl.vault.economy.Economy.class);
+		if (economyProvider != null) {
+			economy = economyProvider.getProvider();
+		}
 
-        return (economy != null);
-    }
-	
+		return (economy != null);
+	}
+
 	@Override
-	public boolean setOptions(String[] options, boolean optional, List<Result> results, boolean autoComplete, int reqId) {
+	public boolean setOptions(final String[] options, final boolean optional,
+			final List<Result> results, final boolean autoComplete,
+			final int reqId) {
 		this.optional = optional;
 		this.results = results;
 		this.autoComplete = autoComplete;
 		this.reqId = reqId;
-		
+
 		try {
 			minMoney = Integer.parseInt(options[0]);
 			return true;
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			minMoney = 999999999;
 			return false;
 		}
 	}
 
 	@Override
-	public boolean meetsRequirement(Player player) {
+	public boolean meetsRequirement(final Player player) {
 		// TODO Auto-generated method stub
 		if (isCompleted(getReqId(), player.getName())) {
 			return true;
 		}
-		
+
 		return economy != null && economy.has(player.getName(), minMoney);
 	}
 
 	@Override
 	public String getDescription() {
-		return Lang.MONEY_REQUIREMENT.getConfigValue(new String[] {minMoney + " " + economy.currencyNamePlural()});
+		return Lang.MONEY_REQUIREMENT.getConfigValue(new String[] { minMoney
+				+ " " + economy.currencyNamePlural() });
 	}
 
 	@Override
@@ -77,9 +81,10 @@ public class MoneyRequirement extends Requirement {
 	}
 
 	@Override
-	public String getProgress(Player player) {
+	public String getProgress(final Player player) {
 		String progress = "";
-		progress = progress.concat(economy.getBalance(player.getName()) + "/" + minMoney);
+		progress = progress.concat(economy.getBalance(player.getName()) + "/"
+				+ minMoney);
 		return progress;
 	}
 
@@ -87,7 +92,7 @@ public class MoneyRequirement extends Requirement {
 	public boolean useAutoCompletion() {
 		return autoComplete;
 	}
-	
+
 	@Override
 	public int getReqId() {
 		return reqId;

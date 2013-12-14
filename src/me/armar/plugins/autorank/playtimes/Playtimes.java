@@ -12,17 +12,19 @@ public class Playtimes {
 
 	public static int INTERVAL_MINUTES = 5;
 
-	private SimpleYamlConfiguration data;
-	private PlaytimesSave save;
-	private PlaytimesUpdate update;
-	private Autorank plugin;
+	private final SimpleYamlConfiguration data;
+	private final PlaytimesSave save;
+	private final PlaytimesUpdate update;
+	private final Autorank plugin;
 
-	public Playtimes(Autorank plugin) {
+	public Playtimes(final Autorank plugin) {
 		this.plugin = plugin;
-		
-		INTERVAL_MINUTES = plugin.getAdvancedConfig().getInt("interval check", 5);
-		plugin.getLogger().info("Interval check every " + INTERVAL_MINUTES + " minutes.");
-		
+
+		INTERVAL_MINUTES = plugin.getAdvancedConfig().getInt("interval check",
+				5);
+		plugin.getLogger().info(
+				"Interval check every " + INTERVAL_MINUTES + " minutes.");
+
 		this.data = new SimpleYamlConfiguration(plugin, "Data.yml", null,
 				"Data");
 		this.save = new PlaytimesSave(this);
@@ -45,7 +47,7 @@ public class Playtimes {
 	 * @param name Player to check for
 	 * @return Local server playtime
 	 */
-	public int getLocalTime(String name) {
+	public int getLocalTime(final String name) {
 		// This is done on purpose, for future work
 		return data.getInt(name.toLowerCase(), 0);
 	}
@@ -58,7 +60,7 @@ public class Playtimes {
 	 * @param name Player to check for
 	 * @return Global playtime across all servers or -1 if no time was found
 	 */
-	public int getGlobalTime(String name) {
+	public int getGlobalTime(final String name) {
 		return plugin.getMySQLWrapper().getDatabaseTime(name);
 	}
 
@@ -66,11 +68,12 @@ public class Playtimes {
 		data.reload();
 	}
 
-	public void setLocalTime(String name, int time) {
+	public void setLocalTime(final String name, final int time) {
 		data.set(name.toLowerCase(), time);
 	}
 
-	public void setGlobalTime(String name, int time) throws SQLException {
+	public void setGlobalTime(final String name, final int time)
+			throws SQLException {
 		// Check for MySQL
 		if (!plugin.getMySQLWrapper().isMySQLEnabled()) {
 			throw new SQLException(
@@ -80,9 +83,9 @@ public class Playtimes {
 		plugin.getMySQLWrapper().setGlobalTime(name, time);
 	}
 
-	public void modifyLocalTime(String name, int timeDifference)
+	public void modifyLocalTime(final String name, final int timeDifference)
 			throws IllegalArgumentException {
-		int time = data.getInt(name, -1);
+		final int time = data.getInt(name, -1);
 		if (time >= 0) {
 			setLocalTime(name, time + timeDifference);
 		} else {
@@ -90,26 +93,26 @@ public class Playtimes {
 		}
 	}
 
-	public void modifyGlobalTime(String name, int timeDifference)
+	public void modifyGlobalTime(final String name, final int timeDifference)
 			throws IllegalArgumentException {
 		// Check for MySQL
 		if (!plugin.getMySQLWrapper().isMySQLEnabled()) {
 			try {
 				throw new SQLException(
 						"MySQL database is not enabled so you can't modify database!");
-			} catch (SQLException e) {
+			} catch (final SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return;
 			}
 		}
 
-		int time = getGlobalTime(name);
-		
+		final int time = getGlobalTime(name);
+
 		if (time >= 0) {
 			try {
 				setGlobalTime(name, time + timeDifference);
-			} catch (SQLException e) {
+			} catch (final SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return;
@@ -118,13 +121,13 @@ public class Playtimes {
 			// First entry.
 			try {
 				setGlobalTime(name, timeDifference);
-			} catch (SQLException e) {
+			} catch (final SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 	}
-	
+
 	public boolean isMySQLEnabled() {
 		return plugin.getMySQLWrapper().isMySQLEnabled();
 	}
@@ -144,21 +147,21 @@ public class Playtimes {
 	 * @param minimum Lowest threshold to check for
 	 * @return Amount of records removed
 	 */
-	public int archive(int minimum) {
-		Object[] objectArray = getKeys().toArray();
-		List<String> records = new ArrayList<String>();
+	public int archive(final int minimum) {
+		final Object[] objectArray = getKeys().toArray();
+		final List<String> records = new ArrayList<String>();
 
 		// Convert ObjectArray to List of Strings
-		for (Object object : objectArray) {
-			String record = (String) object;
+		for (final Object object : objectArray) {
+			final String record = (String) object;
 
 			records.add(record);
 		}
 		// Keep a counter of archived items
 		int counter = 0;
 
-		for (String record : records) {
-			int time = getLocalTime(record);
+		for (final String record : records) {
+			final int time = getLocalTime(record);
 
 			// Found a record to be archived
 			if (time < minimum) {

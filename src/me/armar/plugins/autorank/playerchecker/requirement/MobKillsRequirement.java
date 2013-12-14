@@ -2,8 +2,10 @@ package me.armar.plugins.autorank.playerchecker.requirement;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.playerchecker.result.Result;
+
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
@@ -21,8 +23,9 @@ public class MobKillsRequirement extends Requirement {
 	}
 
 	@Override
-	public boolean setOptions(String[] options, boolean optional,
-			List<Result> results, boolean autoComplete, int reqId) {
+	public boolean setOptions(final String[] options, final boolean optional,
+			final List<Result> results, final boolean autoComplete,
+			final int reqId) {
 		this.optional = optional;
 		this.results = results;
 		this.autoComplete = autoComplete;
@@ -30,20 +33,20 @@ public class MobKillsRequirement extends Requirement {
 
 		try {
 			totalMobsKilled = Integer.parseInt(options[0]);
-			
+
 			if (options.length > 1) {
 				mobType = options[1].trim().replace(" ", "_");
 			}
 			return true;
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			totalMobsKilled = 0;
 			return false;
 		}
 	}
 
 	@Override
-	public boolean meetsRequirement(Player player) {
-		
+	public boolean meetsRequirement(final Player player) {
+
 		if (isCompleted(getReqId(), player.getName())) {
 			return true;
 		}
@@ -57,12 +60,16 @@ public class MobKillsRequirement extends Requirement {
 	@Override
 	public String getDescription() {
 		if (mobType == null) {
-			return Lang.TOTAL_MOBS_KILLED_REQUIREMENT.getConfigValue(new String[] {totalMobsKilled + " mobs"});	
+			return Lang.TOTAL_MOBS_KILLED_REQUIREMENT
+					.getConfigValue(new String[] { totalMobsKilled + " mobs" });
 		} else {
-			EntityType entity = EntityType.valueOf(mobType.toUpperCase());
-			return Lang.TOTAL_MOBS_KILLED_REQUIREMENT.getConfigValue(new String[] {totalMobsKilled + " " + entity.toString().toLowerCase().replace("_", " ") + "(s)"});
+			final EntityType entity = EntityType.valueOf(mobType.toUpperCase());
+			return Lang.TOTAL_MOBS_KILLED_REQUIREMENT
+					.getConfigValue(new String[] { totalMobsKilled + " "
+							+ entity.toString().toLowerCase().replace("_", " ")
+							+ "(s)" });
 		}
-		
+
 	}
 
 	@Override
@@ -76,10 +83,12 @@ public class MobKillsRequirement extends Requirement {
 	}
 
 	@Override
-	public String getProgress(Player player) {
+	public String getProgress(final Player player) {
 		String progress = "";
 		progress = progress.concat(getAutorank().getStatsHandler()
-				.getTotalMobsKilled(player.getName(), mobType, null) + "/" + totalMobsKilled);
+				.getTotalMobsKilled(player.getName(), mobType, null)
+				+ "/"
+				+ totalMobsKilled);
 		return progress;
 	}
 

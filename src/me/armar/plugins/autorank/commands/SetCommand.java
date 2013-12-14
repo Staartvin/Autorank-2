@@ -10,32 +10,33 @@ import org.bukkit.command.CommandSender;
 
 public class SetCommand implements CommandExecutor {
 
-	private Autorank plugin;
-	
-	public SetCommand(Autorank instance) {
+	private final Autorank plugin;
+
+	public SetCommand(final Autorank instance) {
 		plugin = instance;
 	}
-	
-	
+
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String label,
-			String[] args) {
-		
+	public boolean onCommand(final CommandSender sender, final Command cmd,
+			final String label, final String[] args) {
+
 		int value = -1;
 		if (args.length > 2)
 			try {
 				value = AutorankTools.stringtoInt(args[2]);
-			} catch (NumberFormatException e) {
+			} catch (final NumberFormatException e) {
 			}
 
 		if (value >= 0) {
 
 			if (args[1].equalsIgnoreCase(sender.getName())) {
-				if (!plugin.getCommandsManager().hasPermission("autorank.set.self", sender)) {
+				if (!plugin.getCommandsManager().hasPermission(
+						"autorank.set.self", sender)) {
 					return true;
 				}
 			} else {
-				if (!plugin.getCommandsManager().hasPermission("autorank.set.other", sender)) {
+				if (!plugin.getCommandsManager().hasPermission(
+						"autorank.set.other", sender)) {
 					return true;
 				}
 			}

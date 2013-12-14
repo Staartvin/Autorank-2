@@ -11,24 +11,23 @@ import org.bukkit.command.CommandSender;
 public class HelpCommand implements CommandExecutor {
 
 	@SuppressWarnings("unused")
-	private Autorank plugin;
-	
-	public HelpCommand(Autorank instance) {
+	private final Autorank plugin;
+
+	public HelpCommand(final Autorank instance) {
 		plugin = instance;
 	}
-	
-	
+
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String label,
-			String[] args) {
-		
+	public boolean onCommand(final CommandSender sender, final Command cmd,
+			final String label, final String[] args) {
+
 		if (args.length == 1) {
 			showHelpPages(sender, 1);
 		} else {
 			int page = 1;
 			try {
 				page = Integer.parseInt(args[1]);
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				sender.sendMessage(ChatColor.RED
 						+ Lang.INVALID_NUMBER
 								.getConfigValue(new String[] { args[1] }));
@@ -39,8 +38,8 @@ public class HelpCommand implements CommandExecutor {
 		return true;
 	}
 
-	private void showHelpPages(CommandSender sender, int page) {
-		int maxPages = 3;
+	private void showHelpPages(final CommandSender sender, final int page) {
+		final int maxPages = 3;
 		if (page == 2) {
 			sender.sendMessage(ChatColor.GREEN + "-- Autorank Commands --");
 			sender.sendMessage(ChatColor.AQUA + "/ar help <page> "

@@ -8,29 +8,29 @@ import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 
 public class RequirementBuilder {
 
-	private Map<String, Class<? extends Requirement>> reqs = new HashMap<String, Class<? extends Requirement>>();
+	private final Map<String, Class<? extends Requirement>> reqs = new HashMap<String, Class<? extends Requirement>>();
 
-	public Requirement create(String type) {
+	public Requirement create(final String type) {
 		Requirement res = null;
-		Class<? extends Requirement> c = reqs.get(type);
+		final Class<? extends Requirement> c = reqs.get(type);
 		if (c != null)
 			try {
 				res = c.newInstance();
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		return res;
 	}
 
-	public void registerRequirement(String type,
-			Class<? extends Requirement> requirement) {
+	public void registerRequirement(final String type,
+			final Class<? extends Requirement> requirement) {
 		// Add type to the list
 		reqs.put(type, requirement);
-		
+
 		// Add type to the list of AutorankTools so it can use the correct name.
 		AutorankTools.registerRequirement(type);
-		
+
 	}
 
 }

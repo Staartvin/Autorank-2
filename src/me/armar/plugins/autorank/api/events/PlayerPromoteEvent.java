@@ -14,8 +14,8 @@ import org.bukkit.event.HandlerList;
 public class PlayerPromoteEvent extends Event implements Cancellable {
 	private static final HandlerList handlers = new HandlerList();
 
-	private Player player;
-	private String worldName, groupFrom, groupTo;
+	private final Player player;
+	private final String worldName, groupFrom, groupTo;
 	private boolean isCancelled;
 
 	/**
@@ -24,8 +24,8 @@ public class PlayerPromoteEvent extends Event implements Cancellable {
 	 * @param groupFrom GroupFrom
 	 * @param groupTo GroupTo
 	 */
-	public PlayerPromoteEvent(Player player, String worldName,
-			String groupFrom, String groupTo) {
+	public PlayerPromoteEvent(final Player player, final String worldName,
+			final String groupFrom, final String groupTo) {
 		this.player = player;
 		this.worldName = worldName;
 		this.groupFrom = groupFrom;
@@ -36,6 +36,7 @@ public class PlayerPromoteEvent extends Event implements Cancellable {
 		return player;
 	}
 
+	@Override
 	public HandlerList getHandlers() {
 		return handlers;
 	}
@@ -75,6 +76,7 @@ public class PlayerPromoteEvent extends Event implements Cancellable {
 	/* (non-Javadoc)
 	 * @see org.bukkit.event.Cancellable#isCancelled()
 	 */
+	@Override
 	public boolean isCancelled() {
 		return isCancelled;
 	}
@@ -83,7 +85,7 @@ public class PlayerPromoteEvent extends Event implements Cancellable {
 	 * @see org.bukkit.event.Cancellable#setCancelled(boolean)
 	 */
 	@Override
-	public void setCancelled(boolean cancel) {
+	public void setCancelled(final boolean cancel) {
 		isCancelled = cancel;
 	}
 }

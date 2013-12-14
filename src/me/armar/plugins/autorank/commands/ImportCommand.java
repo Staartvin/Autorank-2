@@ -10,18 +10,18 @@ import org.bukkit.command.CommandSender;
 
 public class ImportCommand implements CommandExecutor {
 
-	private Autorank plugin;
-	
-	public ImportCommand(Autorank instance) {
+	private final Autorank plugin;
+
+	public ImportCommand(final Autorank instance) {
 		plugin = instance;
 	}
-	
-	
+
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String label,
-			String[] args) {
-		
-		if (!plugin.getCommandsManager().hasPermission("autorank.import", sender)) {
+	public boolean onCommand(final CommandSender sender, final Command cmd,
+			final String label, final String[] args) {
+
+		if (!plugin.getCommandsManager().hasPermission("autorank.import",
+				sender)) {
 			return true;
 		}
 

@@ -27,19 +27,20 @@ import org.bukkit.entity.Player;
 public class PlayerChecker {
 
 	private PlayerCheckerTrigger trigger;
-	private Map<String, List<RankChange>> rankChanges = new HashMap<String, List<RankChange>>();
+	private final Map<String, List<RankChange>> rankChanges = new HashMap<String, List<RankChange>>();
 	private RankChangeBuilder builder;
-	private Autorank plugin;
+	private final Autorank plugin;
 
-	public PlayerChecker(Autorank plugin) {
+	public PlayerChecker(final Autorank plugin) {
 		setTrigger(new PlayerCheckerTrigger(plugin, this));
 		setBuilder(new RankChangeBuilder(plugin));
 		this.plugin = plugin;
 	}
 
-	public void initialiseFromConfigs(Autorank plugin) {
-		SimpleYamlConfiguration simpleConfig = plugin.getSimpleConfig();
-		SimpleYamlConfiguration advancedConfig = plugin.getAdvancedConfig();
+	public void initialiseFromConfigs(final Autorank plugin) {
+		final SimpleYamlConfiguration simpleConfig = plugin.getSimpleConfig();
+		final SimpleYamlConfiguration advancedConfig = plugin
+				.getAdvancedConfig();
 
 		List<RankChange> ranks;
 		if ((Boolean) advancedConfig.get("use advanced config")) {
@@ -48,15 +49,15 @@ public class PlayerChecker {
 			ranks = builder.createFromSimpleConfig(simpleConfig);
 		}
 
-		for (RankChange rank : ranks) {
+		for (final RankChange rank : ranks) {
 			addRankChange(rank.getRank(), rank);
 		}
 
 	}
 
-	public void addRankChange(String name, RankChange change) {
+	public void addRankChange(final String name, final RankChange change) {
 		if (rankChanges.get(name) == null) {
-			List<RankChange> list = new ArrayList<RankChange>();
+			final List<RankChange> list = new ArrayList<RankChange>();
 			list.add(change);
 			rankChanges.put(name, list);
 		} else {
@@ -64,19 +65,21 @@ public class PlayerChecker {
 		}
 	}
 
-	public boolean checkPlayer(Player player) {
-		
+	public boolean checkPlayer(final Player player) {
+
 		boolean result = false;
-		
+
 		// Do not rank a player when he is excluded
-		if (AutorankTools.isExcluded(player)) return result;
+		if (AutorankTools.isExcluded(player))
+			return result;
 
-		String[] groups = plugin.getPermPlugHandler().getPermissionPlugin().getPlayerGroups(player);
+		final String[] groups = plugin.getPermPlugHandler()
+				.getPermissionPlugin().getPlayerGroups(player);
 
-		for (String group : groups) {
-			List<RankChange> changes = rankChanges.get(group);
+		for (final String group : groups) {
+			final List<RankChange> changes = rankChanges.get(group);
 			if (changes != null) {
-				for (RankChange change : changes) {
+				for (final RankChange change : changes) {
 					if (change.applyChange(player, group)) {
 						result = true;
 					}
@@ -88,15 +91,16 @@ public class PlayerChecker {
 	}
 
 	public Map<RankChange, List<Requirement>> getFailedRequirements(
-			Player player) {
-		Map<RankChange, List<Requirement>> result = new HashMap<RankChange, List<Requirement>>();
+			final Player player) {
+		final Map<RankChange, List<Requirement>> result = new HashMap<RankChange, List<Requirement>>();
 
-		String[] groups = plugin.getPermPlugHandler().getPermissionPlugin().getPlayerGroups(player);
+		final String[] groups = plugin.getPermPlugHandler()
+				.getPermissionPlugin().getPlayerGroups(player);
 
-		for (String group : groups) {
-			List<RankChange> changes = rankChanges.get(group);
+		for (final String group : groups) {
+			final List<RankChange> changes = rankChanges.get(group);
 			if (changes != null) {
-				for (RankChange change : changes) {
+				for (final RankChange change : changes) {
 					result.put(change, change.getFailedRequirements(player));
 				}
 			}
@@ -104,21 +108,23 @@ public class PlayerChecker {
 
 		return result;
 	}
-	
-	public Map<RankChange, List<Requirement>> getAllRequirements(Player player) {
-		Map<RankChange, List<Requirement>> result = new HashMap<RankChange, List<Requirement>>();
 
-		String[] groups = plugin.getPermPlugHandler().getPermissionPlugin().getPlayerGroups(player);
-		
-		for (String group : groups) {
-			List<RankChange> changes = rankChanges.get(group);
+	public Map<RankChange, List<Requirement>> getAllRequirements(
+			final Player player) {
+		final Map<RankChange, List<Requirement>> result = new HashMap<RankChange, List<Requirement>>();
+
+		final String[] groups = plugin.getPermPlugHandler()
+				.getPermissionPlugin().getPlayerGroups(player);
+
+		for (final String group : groups) {
+			final List<RankChange> changes = rankChanges.get(group);
 			if (changes != null) {
-				for (RankChange change : changes) {
+				for (final RankChange change : changes) {
 					result.put(change, change.getReq());
 				}
 			}
 		}
-		
+
 		return result;
 	}
 
@@ -126,7 +132,7 @@ public class PlayerChecker {
 		return trigger;
 	}
 
-	private void setTrigger(PlayerCheckerTrigger trigger) {
+	private void setTrigger(final PlayerCheckerTrigger trigger) {
 		this.trigger = trigger;
 	}
 
@@ -134,17 +140,17 @@ public class PlayerChecker {
 		return builder;
 	}
 
-	private void setBuilder(RankChangeBuilder builder) {
+	private void setBuilder(final RankChangeBuilder builder) {
 		this.builder = builder;
 	}
 
 	public String[] toStringArray() {
-		List<String> list = new ArrayList<String>();
+		final List<String> list = new ArrayList<String>();
 
-		for (String name : rankChanges.keySet()) {
+		for (final String name : rankChanges.keySet()) {
 
-			List<RankChange> changes = rankChanges.get(name);
-			for (RankChange change : changes) {
+			final List<RankChange> changes = rankChanges.get(name);
+			for (final RankChange change : changes) {
 
 				if (change == null) {
 					list.add("- NULL");

@@ -9,25 +9,27 @@ import org.bukkit.command.CommandSender;
 
 public class DebugCommand implements CommandExecutor {
 
-	private Autorank plugin;
+	private final Autorank plugin;
 
-	public DebugCommand(Autorank instance) {
+	public DebugCommand(final Autorank instance) {
 		plugin = instance;
 	}
 
 	@Override
-	public boolean onCommand(final CommandSender sender, Command cmd, String label,
-			String[] args) {
+	public boolean onCommand(final CommandSender sender, final Command cmd,
+			final String label, final String[] args) {
 
 		// This will create a 'debug.txt' file containing a lot of information about the plugin
-		if (!plugin.getCommandsManager().hasPermission("autorank.debug", sender)) {
+		if (!plugin.getCommandsManager()
+				.hasPermission("autorank.debug", sender)) {
 			return true;
 		}
 
 		plugin.getServer().getScheduler()
 				.runTaskAsynchronously(plugin, new Runnable() {
+					@Override
 					public void run() {
-						String fileName = plugin.getDebugger()
+						final String fileName = plugin.getDebugger()
 								.createDebugFile();
 
 						sender.sendMessage(ChatColor.GREEN + "Debug file '"

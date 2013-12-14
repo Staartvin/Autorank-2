@@ -11,18 +11,18 @@ import org.bukkit.entity.Player;
 
 public class ForceCheckCommand implements CommandExecutor {
 
-	private Autorank plugin;
-	
-	public ForceCheckCommand(Autorank instance) {
+	private final Autorank plugin;
+
+	public ForceCheckCommand(final Autorank instance) {
 		plugin = instance;
 	}
-	
-	
+
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String label,
-			String[] args) {
-		
-		if (!plugin.getCommandsManager().hasPermission("autorank.forcecheck", sender))
+	public boolean onCommand(final CommandSender sender, final Command cmd,
+			final String label, final String[] args) {
+
+		if (!plugin.getCommandsManager().hasPermission("autorank.forcecheck",
+				sender))
 			return true;
 
 		if (args.length != 2) {
@@ -32,8 +32,8 @@ public class ForceCheckCommand implements CommandExecutor {
 			return true;
 		}
 
-		String target = args[1];
-		Player targetPlayer = plugin.getServer().getPlayer(target);
+		final String target = args[1];
+		final Player targetPlayer = plugin.getServer().getPlayer(target);
 
 		if (targetPlayer == null) {
 			sender.sendMessage(ChatColor.RED + "Player " + target

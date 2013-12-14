@@ -7,15 +7,15 @@ import me.armar.plugins.autorank.playerchecker.result.Result;
 
 public class ResultBuilder {
 
-	private Map<String, Class<? extends Result>> results = new HashMap<String, Class<? extends Result>>();
+	private final Map<String, Class<? extends Result>> results = new HashMap<String, Class<? extends Result>>();
 
-	public Result create(String type) {
+	public Result create(final String type) {
 		Result res = null;
-		Class<? extends Result> c = results.get(type);
+		final Class<? extends Result> c = results.get(type);
 		if (c != null) {
 			try {
 				res = c.newInstance();
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -23,7 +23,8 @@ public class ResultBuilder {
 		return res;
 	}
 
-	public void registerResult(String type, Class<? extends Result> result) {
+	public void registerResult(final String type,
+			final Class<? extends Result> result) {
 		results.put(type, result);
 	}
 

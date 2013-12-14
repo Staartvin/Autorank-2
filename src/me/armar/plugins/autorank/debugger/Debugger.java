@@ -12,23 +12,26 @@ import me.armar.plugins.autorank.Autorank;
 
 public class Debugger {
 
-	private Autorank plugin;
-	private final static DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-	private final static DateFormat humanDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	
-	public Debugger(Autorank instance) {
+	private final Autorank plugin;
+	private final static DateFormat dateFormat = new SimpleDateFormat(
+			"yyyyMMddHHmmss");
+	private final static DateFormat humanDateFormat = new SimpleDateFormat(
+			"yyyy-MM-dd HH:mm:ss");
+
+	public Debugger(final Autorank instance) {
 		plugin = instance;
 	}
-	
+
 	public String createDebugFile() {
-		
-		String dateFormatSave = dateFormat.format(new Date());
+
+		final String dateFormatSave = dateFormat.format(new Date());
 		// Creates a new file
-		File txt = new File(plugin.getDataFolder() + "/debugger", "debug-" + dateFormatSave + ".txt");
+		final File txt = new File(plugin.getDataFolder() + "/debugger",
+				"debug-" + dateFormatSave + ".txt");
 		try {
 			txt.getParentFile().mkdirs();
 			txt.createNewFile();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return dateFormatSave;
@@ -38,7 +41,7 @@ public class Debugger {
 		BufferedWriter out = null;
 		try {
 			out = new BufferedWriter(new FileWriter(txt));
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return dateFormatSave;
@@ -52,77 +55,84 @@ public class Debugger {
 			out.newLine();
 			out.write("");
 			out.newLine();
-			
+
 			out.write("Date created: " + humanDateFormat.format(new Date()));
 			out.newLine();
 			out.write("");
 			out.newLine();
-			
-			out.write("Autorank version: " + plugin.getDescription().getVersion());
+
+			out.write("Autorank version: "
+					+ plugin.getDescription().getVersion());
 			out.newLine();
 			out.write("");
 			out.newLine();
-			
-			out.write("Server implementation: " + plugin.getServer().getVersion());
+
+			out.write("Server implementation: "
+					+ plugin.getServer().getVersion());
 			out.newLine();
 			out.write("");
 			out.newLine();
-			
-			out.write("Server version: " + plugin.getServer().getBukkitVersion());
+
+			out.write("Server version: "
+					+ plugin.getServer().getBukkitVersion());
 			out.newLine();
 			out.write("");
 			out.newLine();
-			
-			out.write("Server warning state: " + plugin.getServer().getWarningState());
+
+			out.write("Server warning state: "
+					+ plugin.getServer().getWarningState());
 			out.newLine();
 			out.write("");
 			out.newLine();
-			
+
 			out.write("Ranks defined: ");
 			out.newLine();
 			out.write("");
 			out.newLine();
-			
-			for (String change : plugin.getPlayerChecker().toStringArray()) {
+
+			for (final String change : plugin.getPlayerChecker()
+					.toStringArray()) {
 				out.write(change);
 				out.newLine();
 			}
-			
+
 			out.write("");
 			out.newLine();
-			
-			String usedConfig = (plugin.getConfigHandler().useAdvancedConfig() ? "AdvancedConfig.yml" : "SimpleConfig.yml");
+
+			final String usedConfig = (plugin.getConfigHandler()
+					.useAdvancedConfig() ? "AdvancedConfig.yml"
+					: "SimpleConfig.yml");
 			out.write("Config used: " + usedConfig);
 			out.newLine();
 			out.write("");
 			out.newLine();
-			
+
 			out.write("Using MySQL: " + plugin.getConfigHandler().useMySQL());
 			out.newLine();
 			out.write("");
 			out.newLine();
-			
+
 			out.write("Java version: " + System.getProperty("java.version"));
 			out.newLine();
 			out.write("");
 			out.newLine();
-			
+
 			out.write("Operating system: " + System.getProperty("os.name"));
 			out.newLine();
 			out.write("");
 			out.newLine();
-			
+
 			out.write("OS version: " + System.getProperty("os.version"));
 			out.newLine();
 			out.write("");
 			out.newLine();
-			
+
 			out.write("OS architecture: " + System.getProperty("os.arch"));
 			out.newLine();
 			out.write("");
 			out.newLine();
-			
-		} catch (IOException e) {
+
+		} catch (final IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return dateFormatSave;
@@ -132,11 +142,11 @@ public class Debugger {
 		try {
 			out.close();
 			return dateFormatSave;
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return dateFormatSave;
 		}
 	}
-	
+
 }

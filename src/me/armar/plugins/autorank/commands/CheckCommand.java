@@ -20,24 +20,25 @@ import org.bukkit.entity.Player;
 
 public class CheckCommand implements CommandExecutor {
 
-	private Autorank plugin;
+	private final Autorank plugin;
 
-	public CheckCommand(Autorank instance) {
+	public CheckCommand(final Autorank instance) {
 		plugin = instance;
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String label,
-			String[] args) {
+	public boolean onCommand(final CommandSender sender, final Command cmd,
+			final String label, final String[] args) {
 
 		// This is a local check. It will not show you the database numbers
 		if (args.length > 1) {
 
-			if (!plugin.getCommandsManager().hasPermission("autorank.checkothers", sender)) {
+			if (!plugin.getCommandsManager().hasPermission(
+					"autorank.checkothers", sender)) {
 				return true;
 			}
 
-			Player player = plugin.getServer().getPlayer(args[1]);
+			final Player player = plugin.getServer().getPlayer(args[1]);
 			if (player == null) {
 				AutorankTools.sendColoredMessage(
 						sender,
@@ -55,7 +56,8 @@ public class CheckCommand implements CommandExecutor {
 				check(sender, player);
 			}
 		} else if (sender instanceof Player) {
-			if (!plugin.getCommandsManager().hasPermission("autorank.check", sender)) {
+			if (!plugin.getCommandsManager().hasPermission("autorank.check",
+					sender)) {
 				return true;
 			}
 
@@ -65,7 +67,7 @@ public class CheckCommand implements CommandExecutor {
 								.getConfigValue(new String[] { sender.getName() }));
 				return true;
 			}
-			Player player = (Player) sender;
+			final Player player = (Player) sender;
 			check(sender, player);
 		} else {
 			AutorankTools.sendColoredMessage(sender,
@@ -74,10 +76,11 @@ public class CheckCommand implements CommandExecutor {
 		return true;
 	}
 
-	private void check(CommandSender sender, Player player) {
+	private void check(final CommandSender sender, final Player player) {
 
 		// Check if the latest known group is the current group. Otherwise, reset progress
-		String currentGroup = plugin.getPermPlugHandler().getPermissionPlugin()
+		final String currentGroup = plugin.getPermPlugHandler()
+				.getPermissionPlugin()
 				.getWorldGroups(player, player.getWorld().getName())[0];
 		String latestKnownGroup = plugin.getRequirementHandler()
 				.getLastKnownGroup(player.getName());
@@ -97,15 +100,15 @@ public class CheckCommand implements CommandExecutor {
 		}
 
 		// Change the way requirements are shown. When a player has completed a requirement, it will be green, otherwise it will be red.
-		Map<RankChange, List<Requirement>> failed = plugin.getPlayerChecker()
-				.getAllRequirements(player);
+		final Map<RankChange, List<Requirement>> failed = plugin
+				.getPlayerChecker().getAllRequirements(player);
 
-		Set<RankChange> keySet = failed.keySet();
-		String playername = player.getName();
+		final Set<RankChange> keySet = failed.keySet();
+		final String playername = player.getName();
 
-		String[] groups = plugin.getPermPlugHandler().getPermissionPlugin()
-				.getPlayerGroups(player);
-		StringBuilder stringBuilder = new StringBuilder();
+		final String[] groups = plugin.getPermPlugHandler()
+				.getPermissionPlugin().getPlayerGroups(player);
+		final StringBuilder stringBuilder = new StringBuilder();
 		// has played for
 		stringBuilder
 				.append(playername
@@ -122,7 +125,7 @@ public class CheckCommand implements CommandExecutor {
 			stringBuilder.append(Lang.MULTIPLE_GROUPS.getConfigValue(null)); // Multiple groups
 
 		boolean first = true;
-		for (String group : groups) {
+		for (final String group : groups) {
 			if (!first) {
 				stringBuilder.append(", ");
 			}
@@ -136,22 +139,22 @@ public class CheckCommand implements CommandExecutor {
 			AutorankTools.sendColoredMessage(sender,
 					Lang.NO_NEXT_RANK.getConfigValue(null));
 		} else {
-			Iterator<RankChange> it = keySet.iterator();
+			final Iterator<RankChange> it = keySet.iterator();
 			while (it.hasNext()) {
-				RankChange rank = it.next();
-				List<Requirement> reqs = failed.get(rank);
+				final RankChange rank = it.next();
+				final List<Requirement> reqs = failed.get(rank);
 
 				boolean onlyOptional = true;
 				boolean meetsAllRequirements = true;
-				List<Integer> metRequirements = new ArrayList<Integer>();
+				final List<Integer> metRequirements = new ArrayList<Integer>();
 
-				for (Requirement req : reqs) {
+				for (final Requirement req : reqs) {
 					if (!req.isOptional())
 						onlyOptional = false;
 				}
 
-				for (Requirement req : reqs) {
-					int reqID = req.getReqId();
+				for (final Requirement req : reqs) {
+					final int reqID = req.getReqId();
 
 					if (req.useAutoCompletion()) {
 						// Do auto complete
@@ -198,7 +201,7 @@ public class CheckCommand implements CommandExecutor {
 						}
 					}
 				}
-				String reqMessage = rank.getRankTo() == null ? Lang.MEETS_ALL_REQUIREMENTS_WITHOUT_RANK_UP
+				final String reqMessage = rank.getRankTo() == null ? Lang.MEETS_ALL_REQUIREMENTS_WITHOUT_RANK_UP
 						.getConfigValue(null) : Lang.MEETS_ALL_REQUIREMENTS
 						.getConfigValue(new String[] { rank.getRankTo() });
 
@@ -212,12 +215,12 @@ public class CheckCommand implements CommandExecutor {
 							Lang.REQUIREMENTS_TO_RANK.getConfigValue(null));
 
 					for (int i = 0; i < reqs.size(); i++) {
-						Requirement req = reqs.get(i);
-						int reqID = req.getReqId();
+						final Requirement req = reqs.get(i);
+						final int reqID = req.getReqId();
 
 						if (req != null) {
-							StringBuilder message = new StringBuilder("     "
-									+ ChatColor.GOLD + (i + 1) + ". ");
+							final StringBuilder message = new StringBuilder(
+									"     " + ChatColor.GOLD + (i + 1) + ". ");
 							if (metRequirements.contains(reqID)) {
 								message.append(ChatColor.RED
 										+ req.getDescription() + ChatColor.BLUE

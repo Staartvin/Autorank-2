@@ -5,6 +5,7 @@ import java.util.List;
 
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.playerchecker.result.Result;
+
 import org.bukkit.entity.Player;
 
 public class PlayerKillsRequirement extends Requirement {
@@ -20,8 +21,9 @@ public class PlayerKillsRequirement extends Requirement {
 	}
 
 	@Override
-	public boolean setOptions(String[] options, boolean optional,
-			List<Result> results, boolean autoComplete, int reqId) {
+	public boolean setOptions(final String[] options, final boolean optional,
+			final List<Result> results, final boolean autoComplete,
+			final int reqId) {
 		this.optional = optional;
 		this.results = results;
 		this.autoComplete = autoComplete;
@@ -30,14 +32,14 @@ public class PlayerKillsRequirement extends Requirement {
 		try {
 			totalPlayersKilled = Integer.parseInt(options[0]);
 			return true;
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			totalPlayersKilled = 0;
 			return false;
 		}
 	}
 
 	@Override
-	public boolean meetsRequirement(Player player) {
+	public boolean meetsRequirement(final Player player) {
 
 		if (isCompleted(getReqId(), player.getName())) {
 			return true;
@@ -45,14 +47,14 @@ public class PlayerKillsRequirement extends Requirement {
 
 		// TODO Auto-generated method stub
 		return this.getAutorank().getStatsHandler().isEnabled()
-				&& this.getAutorank().getStatsHandler().getTotalMobsKilled(
-						player.getName(), "player", null) >= totalPlayersKilled;
+				&& this.getAutorank().getStatsHandler()
+						.getTotalMobsKilled(player.getName(), "player", null) >= totalPlayersKilled;
 	}
 
 	@Override
 	public String getDescription() {
 		return Lang.PLAYER_KILLS_REQUIREMENT
-				.getConfigValue(new String[] { totalPlayersKilled + ""});
+				.getConfigValue(new String[] { totalPlayersKilled + "" });
 	}
 
 	@Override
@@ -66,7 +68,7 @@ public class PlayerKillsRequirement extends Requirement {
 	}
 
 	@Override
-	public String getProgress(Player player) {
+	public String getProgress(final Player player) {
 		String progress = "";
 		progress = progress.concat(getAutorank().getStatsHandler()
 				.getTotalMobsKilled(player.getName(), "player", null)

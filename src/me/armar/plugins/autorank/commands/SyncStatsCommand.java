@@ -10,18 +10,18 @@ import org.bukkit.command.CommandSender;
 
 public class SyncStatsCommand implements CommandExecutor {
 
-	private Autorank plugin;
-	
-	public SyncStatsCommand(Autorank instance) {
+	private final Autorank plugin;
+
+	public SyncStatsCommand(final Autorank instance) {
 		plugin = instance;
 	}
-	
-	
+
 	@Override
-	public boolean onCommand(final CommandSender sender, Command cmd, String label,
-			String[] args) {
-		
-		if (!plugin.getCommandsManager().hasPermission("autorank.syncstats", sender))
+	public boolean onCommand(final CommandSender sender, final Command cmd,
+			final String label, final String[] args) {
+
+		if (!plugin.getCommandsManager().hasPermission("autorank.syncstats",
+				sender))
 			return true;
 
 		if (!plugin.getStatsHandler().isEnabled()) {
@@ -32,12 +32,13 @@ public class SyncStatsCommand implements CommandExecutor {
 		int count = 0;
 
 		// Sync playtime of every player
-		for (String entry : plugin.getPlaytimes().getKeys()) {
+		for (final String entry : plugin.getPlaytimes().getKeys()) {
 
-			OfflinePlayer p = plugin.getServer().getOfflinePlayer(entry);
-			
+			final OfflinePlayer p = plugin.getServer().getOfflinePlayer(entry);
+
 			// Time is stored in seconds
-			int statsPlayTime = (int) plugin.getStatsHandler().getTotalPlayTime(p.getName(), null);
+			final int statsPlayTime = plugin.getStatsHandler()
+					.getTotalPlayTime(p.getName(), null);
 
 			if (statsPlayTime <= 0) {
 				continue;

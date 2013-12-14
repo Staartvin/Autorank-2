@@ -25,17 +25,18 @@ import org.bukkit.command.CommandSender;
 
 public class CommandsManager implements CommandExecutor {
 
-	private Autorank plugin;
+	private final Autorank plugin;
 
 	/**
 	 * This class will manage all incoming command request.
-	 * Commands are not performed here, they are only send to the correct place. 
+	 * Commands are not performed here, they are only send to the correct place.
 	 * A specific command class handles the task of performing the command.
+	 * 
 	 * @param plugin Autorank main class
 	 */
-	public CommandsManager(Autorank plugin) {
+	public CommandsManager(final Autorank plugin) {
 		this.plugin = plugin;
-		
+
 		// Register command classes
 		addCommand = new AddCommand(plugin);
 		helpCommand = new HelpCommand(plugin);
@@ -53,25 +54,26 @@ public class CommandsManager implements CommandExecutor {
 		globalCheckCommand = new GlobalCheckCommand(plugin);
 		forceCheckCommand = new ForceCheckCommand(plugin);
 	}
-	
+
 	// All command classes
-	private AddCommand addCommand; 
-	private SetCommand setCommand;
-	private HelpCommand helpCommand;
-	private LeaderboardCommand leaderboardCommand;
-	private RemoveCommand removeCommand;
-	private DebugCommand debugCommand;
-	private SyncCommand syncCommand;
-	private SyncStatsCommand syncStatsCommand;
-	private ReloadCommand reloadCommand;
-	private ImportCommand importCommand;
-	private CompleteCommand completeCommand;
-	private CheckCommand checkCommand;
-	private ArchiveCommand archiveCommand;
-	private GlobalCheckCommand globalCheckCommand;
-	private ForceCheckCommand forceCheckCommand;
-	
-	public boolean hasPermission(String permission, CommandSender sender) {
+	private final AddCommand addCommand;
+	private final SetCommand setCommand;
+	private final HelpCommand helpCommand;
+	private final LeaderboardCommand leaderboardCommand;
+	private final RemoveCommand removeCommand;
+	private final DebugCommand debugCommand;
+	private final SyncCommand syncCommand;
+	private final SyncStatsCommand syncStatsCommand;
+	private final ReloadCommand reloadCommand;
+	private final ImportCommand importCommand;
+	private final CompleteCommand completeCommand;
+	private final CheckCommand checkCommand;
+	private final ArchiveCommand archiveCommand;
+	private final GlobalCheckCommand globalCheckCommand;
+	private final ForceCheckCommand forceCheckCommand;
+
+	public boolean hasPermission(final String permission,
+			final CommandSender sender) {
 		if (!sender.hasPermission(permission)) {
 			sender.sendMessage(ChatColor.RED
 					+ Lang.NO_PERMISSION
@@ -82,8 +84,8 @@ public class CommandsManager implements CommandExecutor {
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd,
-			String label, String[] args) {
+	public boolean onCommand(final CommandSender sender, final Command cmd,
+			final String label, final String[] args) {
 		if (args.length == 0) {
 			sender.sendMessage(ChatColor.BLUE
 					+ "-----------------------------------------------------");
@@ -96,16 +98,16 @@ public class CommandsManager implements CommandExecutor {
 			return true;
 		}
 
-		String action = args[0];
+		final String action = args[0];
 		if (action.equalsIgnoreCase("help")) {
-			
+
 			return helpCommand.onCommand(sender, cmd, label, args);
 		} else if (action.equalsIgnoreCase("check")) {
-			
+
 			return checkCommand.onCommand(sender, cmd, label, args);
 		} else if (action.equalsIgnoreCase("leaderboard")
 				|| action.equalsIgnoreCase("leaderboards")) {
-			
+
 			return leaderboardCommand.onCommand(sender, cmd, label, args);
 		} else if (action.equalsIgnoreCase("set")) {
 
@@ -130,19 +132,19 @@ public class CommandsManager implements CommandExecutor {
 
 			return archiveCommand.onCommand(sender, cmd, label, args);
 		} else if (action.equalsIgnoreCase("gcheck")) {
-			
+
 			return globalCheckCommand.onCommand(sender, cmd, label, args);
 		} else if (action.equalsIgnoreCase("complete")) {
 
 			return completeCommand.onCommand(sender, cmd, label, args);
 		} else if (action.equalsIgnoreCase("sync")) {
-			
+
 			return syncCommand.onCommand(sender, cmd, label, args);
 		} else if (action.equalsIgnoreCase("syncstats")) {
-			
+
 			return syncStatsCommand.onCommand(sender, cmd, label, args);
 		} else if (action.equalsIgnoreCase("forcecheck")) {
-			
+
 			return forceCheckCommand.onCommand(sender, cmd, label, args);
 		}
 

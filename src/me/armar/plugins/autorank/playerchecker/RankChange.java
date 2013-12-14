@@ -11,14 +11,15 @@ import org.bukkit.entity.Player;
 
 public class RankChange {
 
-	private String rank;
-	private List<Requirement> req;
-	private List<Result> res;
-	private String rankTo;
-	private Autorank plugin; //TODO: Fix it all 
+	private final String rank;
+	private final List<Requirement> req;
+	private final List<Result> res;
+	private final String rankTo;
+	private final Autorank plugin; //TODO: Fix it all 
 
-	public RankChange(Autorank plugin, String rank, String rankTo,
-			List<Requirement> req, List<Result> res) {
+	public RankChange(final Autorank plugin, final String rank,
+			final String rankTo, final List<Requirement> req,
+			final List<Result> res) {
 		this.rank = rank;
 		this.req = req;
 		this.res = res;
@@ -41,71 +42,74 @@ public class RankChange {
 	public String getRankTo() {
 		return rankTo;
 	}
-	
+
 	public boolean hasRankUp() {
 		return rankTo != null;
 	}
 
-	public boolean checkRequirements(Player player) {
+	public boolean checkRequirements(final Player player) {
 		boolean result = true;
 
-		for (Requirement r : req) {
+		for (final Requirement r : req) {
 			if (r == null)
 				return false;
 
-			int reqID = r.getReqId();
-			
+			final int reqID = r.getReqId();
+
 			// When optional, always true
 			if (r.isOptional())
 				continue;
 
-			if (!r.useAutoCompletion() && !plugin.getRequirementHandler().hasCompletedRequirement(reqID, player.getName())) {
+			if (!r.useAutoCompletion()
+					&& !plugin.getRequirementHandler().hasCompletedRequirement(
+							reqID, player.getName())) {
 				result = false;
 				break;
 			}
-			
-				if (!r.meetsRequirement(player)) {
-					
-					// Player does not meet requirement, but has completed it already
-					if (plugin.getRequirementHandler().hasCompletedRequirement(reqID, player.getName())) {
-						continue;
-					}
-					result = false;
-					break;
-				} else {
-					// Player meets requirement, thus perform results of requirement
-					// Perform results of a requirement as well
-					List<Result> results = r.getResults();
 
-					// Player has not completed this requirement -> perform results
-					if (!plugin.getRequirementHandler()
-							.hasCompletedRequirement(reqID, player.getName())) {
-						plugin.getRequirementHandler().addPlayerProgress(
-								player.getName(), reqID);
-					} else {
-						// Player already completed this -> do nothing
-						continue;
-					}
+			if (!r.meetsRequirement(player)) {
 
-					boolean noErrors = true;
-					for (Result realResult : results) {
-
-						if (!realResult.applyResult(player)) {
-							noErrors = false;
-						}
-					}
-					result = noErrors;
+				// Player does not meet requirement, but has completed it already
+				if (plugin.getRequirementHandler().hasCompletedRequirement(
+						reqID, player.getName())) {
+					continue;
 				}
+				result = false;
+				break;
+			} else {
+				// Player meets requirement, thus perform results of requirement
+				// Perform results of a requirement as well
+				final List<Result> results = r.getResults();
+
+				// Player has not completed this requirement -> perform results
+				if (!plugin.getRequirementHandler().hasCompletedRequirement(
+						reqID, player.getName())) {
+					plugin.getRequirementHandler().addPlayerProgress(
+							player.getName(), reqID);
+				} else {
+					// Player already completed this -> do nothing
+					continue;
+				}
+
+				boolean noErrors = true;
+				for (final Result realResult : results) {
+
+					if (!realResult.applyResult(player)) {
+						noErrors = false;
+					}
+				}
+				result = noErrors;
+			}
 		}
 
 		return result;
 	}
 
-	public List<Requirement> getFailedRequirements(Player player) {
-		List<Requirement> failed = new CopyOnWriteArrayList<Requirement>();
+	public List<Requirement> getFailedRequirements(final Player player) {
+		final List<Requirement> failed = new CopyOnWriteArrayList<Requirement>();
 		failed.addAll(req);
 
-		for (Requirement r : failed) {
+		for (final Requirement r : failed) {
 			if (r != null)
 				if (r.meetsRequirement(player)) {
 					failed.remove(r);
@@ -115,11 +119,11 @@ public class RankChange {
 		return failed;
 	}
 
-	public boolean applyChange(Player player, String group) {
+	public boolean applyChange(final Player player, final String group) {
 		boolean result = true;
 
 		if (checkRequirements(player)) {
-			for (Result r : res) {
+			for (final Result r : res) {
 				if (r != null)
 					if (!r.applyResult(player, group))
 						result = false;
@@ -131,13 +135,14 @@ public class RankChange {
 		return result;
 	}
 
+	@Override
 	public String toString() {
-		StringBuilder b = new StringBuilder();
+		final StringBuilder b = new StringBuilder();
 		b.append(rank);
 		b.append(": ");
 
 		boolean first = true;
-		for (Requirement r : req) {
+		for (final Requirement r : req) {
 			if (!first)
 				b.append(", ");
 			first = false;
@@ -147,7 +152,7 @@ public class RankChange {
 		b.append(" -> ");
 
 		first = true;
-		for (Result r : res) {
+		for (final Result r : res) {
 			if (!first)
 				b.append(", ");
 			first = false;

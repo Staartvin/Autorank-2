@@ -21,8 +21,9 @@ public class HasItemRequirement extends Requirement {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public boolean setOptions(String[] options, boolean optional,
-			List<Result> results, boolean autoComplete, int reqId) {
+	public boolean setOptions(final String[] options, final boolean optional,
+			final List<Result> results, final boolean autoComplete,
+			final int reqId) {
 		int id = 0;
 		int amount = 1;
 		byte data = 0;
@@ -40,13 +41,13 @@ public class HasItemRequirement extends Requirement {
 			data = (byte) AutorankTools.stringtoInt(options[2]);
 
 		//item = new ItemStack(id, 1, (short) 0, data);
-		item = (new MaterialData(id, (byte) data)).toItemStack(amount);
+		item = (new MaterialData(id, data)).toItemStack(amount);
 
 		return item != null;
 	}
 
 	@Override
-	public boolean meetsRequirement(Player player) {
+	public boolean meetsRequirement(final Player player) {
 		if (isCompleted(getReqId(), player.getName())) {
 			return true;
 		}
@@ -56,7 +57,7 @@ public class HasItemRequirement extends Requirement {
 
 	@Override
 	public String getDescription() {
-		String arg = item.getAmount() + " " + item.getType().toString();
+		final String arg = item.getAmount() + " " + item.getType().toString();
 		return Lang.ITEM_REQUIREMENT.getConfigValue(new String[] { arg });
 	}
 
@@ -71,7 +72,7 @@ public class HasItemRequirement extends Requirement {
 	}
 
 	@Override
-	public String getProgress(Player player) {
+	public String getProgress(final Player player) {
 		String progress = "";
 		progress = progress.concat("");
 		return progress;

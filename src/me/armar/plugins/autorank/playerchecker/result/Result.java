@@ -8,7 +8,7 @@ public abstract class Result {
 
 	private Autorank autorank;
 
-	public final void setAutorank(Autorank autorank) {
+	public final void setAutorank(final Autorank autorank) {
 		this.autorank = autorank;
 	}
 
@@ -19,11 +19,12 @@ public abstract class Result {
 	public abstract boolean setOptions(String[] options);
 
 	public abstract boolean applyResult(Player player);
-	
-	public boolean applyResult(Player player, String group){
+
+	public boolean applyResult(final Player player, final String group) {
 		return applyResult(player);
 	}
 
+	@Override
 	public String toString() {
 		return this.getClass().getSimpleName();
 	}

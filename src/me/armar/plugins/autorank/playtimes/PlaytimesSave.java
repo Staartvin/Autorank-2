@@ -11,9 +11,9 @@ package me.armar.plugins.autorank.playtimes;
 
 public class PlaytimesSave implements Runnable {
 
-	private Playtimes playtimes;
+	private final Playtimes playtimes;
 
-	public PlaytimesSave(Playtimes playtimes) {
+	public PlaytimesSave(final Playtimes playtimes) {
 		this.playtimes = playtimes;
 	}
 

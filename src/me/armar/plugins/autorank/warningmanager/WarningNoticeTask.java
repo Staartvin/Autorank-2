@@ -8,9 +8,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class WarningNoticeTask extends BukkitRunnable {
 
-	private Autorank plugin;
+	private final Autorank plugin;
 
-	public WarningNoticeTask(Autorank instance) {
+	public WarningNoticeTask(final Autorank instance) {
 		plugin = instance;
 	}
 
@@ -18,7 +18,7 @@ public class WarningNoticeTask extends BukkitRunnable {
 	public void run() {
 		// Get all players -> Check if they have a certain permission -> send the most important warning
 
-		for (Player p : plugin.getServer().getOnlinePlayers()) {
+		for (final Player p : plugin.getServer().getOnlinePlayers()) {
 			// If player has notice on warning permission
 			if (p.hasPermission("autorank.warning.notice")) {
 

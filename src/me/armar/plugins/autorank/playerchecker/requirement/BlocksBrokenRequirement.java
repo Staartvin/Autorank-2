@@ -16,10 +16,10 @@ public class BlocksBrokenRequirement extends Requirement {
 	private int blocksBroken = 0;
 	private int blockID = -1;
 	private int damageValue = -1;
-	
+
 	private int reqId;
 
-	private Autorank plugin;
+	private final Autorank plugin;
 	private boolean optional = false;
 	private boolean autoComplete = false;
 	List<Result> results = new ArrayList<Result>();
@@ -30,8 +30,9 @@ public class BlocksBrokenRequirement extends Requirement {
 	}
 
 	@Override
-	public boolean setOptions(String[] options, boolean optional,
-			List<Result> results, boolean autoComplete, int reqId) {
+	public boolean setOptions(final String[] options, final boolean optional,
+			final List<Result> results, final boolean autoComplete,
+			final int reqId) {
 		this.optional = optional;
 		this.results = results;
 		this.autoComplete = autoComplete;
@@ -48,7 +49,7 @@ public class BlocksBrokenRequirement extends Requirement {
 			if (options.length > 2) {
 				damageValue = Integer.parseInt(options[2].trim());
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			blocksBroken = 0;
 			return false;
 		}
@@ -58,14 +59,15 @@ public class BlocksBrokenRequirement extends Requirement {
 	}
 
 	@Override
-	public boolean meetsRequirement(Player player) {
+	public boolean meetsRequirement(final Player player) {
 
-		boolean enabled = plugin.getStatsHandler().isEnabled();
+		final boolean enabled = plugin.getStatsHandler().isEnabled();
 
 		boolean sufficient = false;
 		if (blockID > 0) {
-			sufficient = plugin.getStatsHandler().getBlocksStat(
-					player.getName(), blockID, damageValue, null, "Block break") >= blocksBroken;
+			sufficient = plugin.getStatsHandler()
+					.getBlocksStat(player.getName(), blockID, damageValue,
+							null, "Block break") >= blocksBroken;
 		} else {
 			sufficient = plugin.getStatsHandler().getTotalBlocksBroken(
 					player.getName()) >= blocksBroken;
@@ -83,19 +85,23 @@ public class BlocksBrokenRequirement extends Requirement {
 		String argument = blocksBroken + " ";
 
 		if (blockID > 0 && damageValue >= 0) {
-			ItemStack item = new ItemStack(blockID, 1, (short) damageValue);
+			final ItemStack item = new ItemStack(blockID, 1,
+					(short) damageValue);
 
 			argument = argument.concat(item.getType().name().replace("_", "")
-					.toLowerCase() + " ");
+					.toLowerCase()
+					+ " ");
 		} else if (blockID > 0) {
-			ItemStack item = new ItemStack(blockID, 1);
+			final ItemStack item = new ItemStack(blockID, 1);
 
 			argument = argument.concat(item.getType().name().replace("_", "")
-					.toLowerCase() + " ");
+					.toLowerCase()
+					+ " ");
 		}
 
 		argument = argument.concat("blocks.");
-		return Lang.BROKEN_BLOCKS_REQUIREMENT.getConfigValue(new String[] {argument});
+		return Lang.BROKEN_BLOCKS_REQUIREMENT
+				.getConfigValue(new String[] { argument });
 	}
 
 	@Override
@@ -109,12 +115,15 @@ public class BlocksBrokenRequirement extends Requirement {
 	}
 
 	@Override
-	public String getProgress(Player player) {
+	public String getProgress(final Player player) {
 		String progress = "";
-		progress = progress.concat(getAutorank().getStatsHandler().getBlocksStat(player.getName(), blockID, damageValue, null, "Block break") + "/" + blocksBroken);
+		progress = progress.concat(getAutorank().getStatsHandler()
+				.getBlocksStat(player.getName(), blockID, damageValue, null,
+						"Block break")
+				+ "/" + blocksBroken);
 		return progress;
 	}
-	
+
 	@Override
 	public boolean useAutoCompletion() {
 		return autoComplete;

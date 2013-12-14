@@ -20,27 +20,30 @@ import com.platymuus.bukkit.permissions.PermissionsPlugin;
 public class PermissionsBukkitHandler implements PermissionsHandler {
 
 	private PermissionsPlugin permissionsBukkit;
-	private Autorank plugin;
+	private final Autorank plugin;
 
-	public PermissionsBukkitHandler(Autorank plugin) {
+	public PermissionsBukkitHandler(final Autorank plugin) {
 		this.plugin = plugin;
 		setupPermissionsBukkit();
 	}
 
 	private Boolean setupPermissionsBukkit() {
-		PluginManager pluginManager = plugin.getServer().getPluginManager();
-		Plugin permBukkit = pluginManager.getPlugin("PermissionsBukkit");
+		final PluginManager pluginManager = plugin.getServer()
+				.getPluginManager();
+		final Plugin permBukkit = pluginManager.getPlugin("PermissionsBukkit");
 
 		if (permBukkit != null && permBukkit.isEnabled()) {
 			permissionsBukkit = (PermissionsPlugin) permBukkit;
 		}
-		
+
 		return permissionsBukkit != null;
 	}
 
-	public String[] getPlayerGroups(Player player) {
-		List<Group> groups = permissionsBukkit.getGroups(player.getName());
-		String[] newGroups = new String[groups.size()];
+	@Override
+	public String[] getPlayerGroups(final Player player) {
+		final List<Group> groups = permissionsBukkit
+				.getGroups(player.getName());
+		final String[] newGroups = new String[groups.size()];
 
 		for (int i = 0; i < groups.size(); i++) {
 			newGroups[i] = groups.get(i).getName();
@@ -49,8 +52,9 @@ public class PermissionsBukkitHandler implements PermissionsHandler {
 		return newGroups;
 	}
 
-	public boolean replaceGroup(Player player, String world, String oldGroup,
-			String newGroup) {
+	@Override
+	public boolean replaceGroup(final Player player, final String world,
+			final String oldGroup, final String newGroup) {
 		return (addGroup(player, world, newGroup) && removeGroup(player, world,
 				oldGroup));
 	}
@@ -63,7 +67,8 @@ public class PermissionsBukkitHandler implements PermissionsHandler {
 	 * @param group Group to remove the player from
 	 * @return true if done, false if failed
 	 */
-	public boolean removeGroup(Player player, String world, String group) {
+	public boolean removeGroup(final Player player, final String world,
+			final String group) {
 		// PermissionsBukkit doesn't have a method to set the actual group. Therefore we need to do it with commands...
 		// Come on PermBukkit. Fix your API..
 		plugin.getServer().dispatchCommand(
@@ -82,13 +87,15 @@ public class PermissionsBukkitHandler implements PermissionsHandler {
 	 * @param group Group to add the player to
 	 * @return true if done, false if failed
 	 */
-	public boolean addGroup(Player player, String world, String group) {
+	public boolean addGroup(final Player player, final String world,
+			final String group) {
 		// PermissionsBukkit doesn't have a method to set the actual group. Therefore we need to do it with commands...
 		// Come on PermBukkit. Fix your API..
-		plugin.getServer().dispatchCommand(
-				plugin.getServer().getConsoleSender(),
-				"permissions player addgroup " + player.getName() + " "
-						+ group);
+		plugin.getServer()
+				.dispatchCommand(
+						plugin.getServer().getConsoleSender(),
+						"permissions player addgroup " + player.getName() + " "
+								+ group);
 		return true;
 		// There is no way to check if the command was successful.
 	}
@@ -99,26 +106,28 @@ public class PermissionsBukkitHandler implements PermissionsHandler {
 	 * @return an array of strings containing all setup groups of the
 	 *         permissions plugin.
 	 */
+	@Override
 	public String[] getGroups() {
-		List<Group> groups = permissionsBukkit.getAllGroups();
-		String[] newGroups = new String[groups.size()];
+		final List<Group> groups = permissionsBukkit.getAllGroups();
+		final String[] newGroups = new String[groups.size()];
 
 		for (int i = 0; i < groups.size(); i++) {
 			newGroups[i] = groups.get(i).getName();
 		}
-		
+
 		return newGroups;
 	}
 
 	@Override
-	public String[] getWorldGroups(Player player, String world) {
-		List<Group> groups = permissionsBukkit.getGroups(player.getName());
-		String[] arrayGroups = new String[groups.size()];
-		
-		for (int i=0;i<groups.size(); i++) {
+	public String[] getWorldGroups(final Player player, final String world) {
+		final List<Group> groups = permissionsBukkit
+				.getGroups(player.getName());
+		final String[] arrayGroups = new String[groups.size()];
+
+		for (int i = 0; i < groups.size(); i++) {
 			arrayGroups[i] = groups.get(i).getName();
 		}
-		
+
 		return arrayGroups;
 	}
 }

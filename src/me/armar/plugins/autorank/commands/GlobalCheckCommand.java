@@ -12,15 +12,15 @@ import org.bukkit.entity.Player;
 
 public class GlobalCheckCommand implements CommandExecutor {
 
-	private Autorank plugin;
+	private final Autorank plugin;
 
-	public GlobalCheckCommand(Autorank instance) {
+	public GlobalCheckCommand(final Autorank instance) {
 		plugin = instance;
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String label,
-			String[] args) {
+	public boolean onCommand(final CommandSender sender, final Command cmd,
+			final String label, final String[] args) {
 
 		// This is a global check. It will not show you the database numbers
 		if (!plugin.getMySQLWrapper().isMySQLEnabled()) {
@@ -31,11 +31,12 @@ public class GlobalCheckCommand implements CommandExecutor {
 
 		if (args.length > 1) {
 
-			if (!plugin.getCommandsManager().hasPermission("autorank.checkothers", sender)) {
+			if (!plugin.getCommandsManager().hasPermission(
+					"autorank.checkothers", sender)) {
 				return true;
 			}
 
-			Player player = plugin.getServer().getPlayer(args[1]);
+			final Player player = plugin.getServer().getPlayer(args[1]);
 			if (player == null) {
 				AutorankTools.sendColoredMessage(
 						sender,
@@ -56,7 +57,8 @@ public class GlobalCheckCommand implements CommandExecutor {
 				//check(sender, player);
 			}
 		} else if (sender instanceof Player) {
-			if (!plugin.getCommandsManager().hasPermission("autorank.check", sender)) {
+			if (!plugin.getCommandsManager().hasPermission("autorank.check",
+					sender)) {
 				return true;
 			}
 
@@ -66,7 +68,7 @@ public class GlobalCheckCommand implements CommandExecutor {
 								.getConfigValue(new String[] { sender.getName() }));
 				return true;
 			}
-			Player player = (Player) sender;
+			final Player player = (Player) sender;
 			AutorankTools.sendColoredMessage(
 					sender,
 					"You have played for "

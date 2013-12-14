@@ -19,7 +19,7 @@ public class BlocksPlacedRequirement extends Requirement {
 
 	private int reqId;
 
-	private Autorank plugin;
+	private final Autorank plugin;
 	private boolean optional = false;
 	private boolean autoComplete = false;
 	List<Result> results = new ArrayList<Result>();
@@ -30,8 +30,9 @@ public class BlocksPlacedRequirement extends Requirement {
 	}
 
 	@Override
-	public boolean setOptions(String[] options, boolean optional,
-			List<Result> results, boolean autoComplete, int reqId) {
+	public boolean setOptions(final String[] options, final boolean optional,
+			final List<Result> results, final boolean autoComplete,
+			final int reqId) {
 		this.optional = optional;
 		this.results = results;
 		this.autoComplete = autoComplete;
@@ -48,7 +49,7 @@ public class BlocksPlacedRequirement extends Requirement {
 			if (options.length > 2) {
 				damageValue = Integer.parseInt(options[2].trim());
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			blocksPlaced = 0;
 			return false;
 		}
@@ -57,17 +58,18 @@ public class BlocksPlacedRequirement extends Requirement {
 	}
 
 	@Override
-	public boolean meetsRequirement(Player player) {
+	public boolean meetsRequirement(final Player player) {
 		// TODO Auto-generated method stub
 		//System.out.print("(PLACED) Check for id: " + blockID + ", dv: " + damageValue
 		//		+ ", value: " + blocksPlaced);
 
-		boolean enabled = plugin.getStatsHandler().isEnabled();
+		final boolean enabled = plugin.getStatsHandler().isEnabled();
 
 		boolean sufficient = false;
 		if (blockID > 0) {
-			sufficient = plugin.getStatsHandler().getBlocksStat(
-					player.getName(), blockID, damageValue, null, "Block place") >= blocksPlaced;
+			sufficient = plugin.getStatsHandler()
+					.getBlocksStat(player.getName(), blockID, damageValue,
+							null, "Block place") >= blocksPlaced;
 		} else {
 			sufficient = plugin.getStatsHandler().getTotalBlocksPlaced(
 					player.getName()) >= blocksPlaced;
@@ -86,13 +88,14 @@ public class BlocksPlacedRequirement extends Requirement {
 		String message = blocksPlaced + " ";
 
 		if (blockID > 0 && damageValue >= 0) {
-			ItemStack item = new ItemStack(blockID, 1, (short) damageValue);
+			final ItemStack item = new ItemStack(blockID, 1,
+					(short) damageValue);
 
 			message = message.concat(item.getType().name().replace("_", "")
 					.toLowerCase()
 					+ " ");
 		} else if (blockID > 0) {
-			ItemStack item = new ItemStack(blockID, 1);
+			final ItemStack item = new ItemStack(blockID, 1);
 
 			message = message.concat(item.getType().name().replace("_", "")
 					.toLowerCase()
@@ -100,7 +103,8 @@ public class BlocksPlacedRequirement extends Requirement {
 		}
 
 		message = message.concat("blocks.");
-		return Lang.PLACED_BLOCKS_REQUIREMENT.getConfigValue(new String[] {message});
+		return Lang.PLACED_BLOCKS_REQUIREMENT
+				.getConfigValue(new String[] { message });
 	}
 
 	@Override
@@ -114,12 +118,12 @@ public class BlocksPlacedRequirement extends Requirement {
 	}
 
 	@Override
-	public String getProgress(Player player) {
+	public String getProgress(final Player player) {
 		String progress = "";
 		progress = progress.concat(getAutorank().getStatsHandler()
-				.getBlocksStat(player.getName(), blockID, damageValue, null, "Block place")
-				+ "/"
-				+ blocksPlaced);
+				.getBlocksStat(player.getName(), blockID, damageValue, null,
+						"Block place")
+				+ "/" + blocksPlaced);
 		return progress;
 	}
 
@@ -127,7 +131,7 @@ public class BlocksPlacedRequirement extends Requirement {
 	public boolean useAutoCompletion() {
 		return autoComplete;
 	}
-	
+
 	@Override
 	public int getReqId() {
 		return reqId;

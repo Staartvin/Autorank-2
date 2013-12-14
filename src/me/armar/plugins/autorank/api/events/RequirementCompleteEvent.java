@@ -15,33 +15,35 @@ import org.bukkit.event.HandlerList;
  * 
  */
 public class RequirementCompleteEvent extends Event implements Cancellable {
-	
+
 	private static final HandlerList handlers = new HandlerList();
 
-	private Player player;
-	private Requirement requirement;
+	private final Player player;
+	private final Requirement requirement;
 	private boolean isCancelled;
-
 
 	/**
 	 * Create a new RequirementCompleteEvent.
 	 * This event represents a requirement that is completed by a player.
+	 * 
 	 * @param player Player that completed the requirement
 	 * @param req Requirement that was completed
 	 */
-	public RequirementCompleteEvent(Player player, Requirement req) {
+	public RequirementCompleteEvent(final Player player, final Requirement req) {
 		this.player = player;
 		this.requirement = req;
 	}
 
 	/**
 	 * Gets the player involved in this event.
+	 * 
 	 * @return player object
 	 */
 	public Player getPlayer() {
 		return player;
 	}
 
+	@Override
 	public HandlerList getHandlers() {
 		return handlers;
 	}
@@ -53,6 +55,7 @@ public class RequirementCompleteEvent extends Event implements Cancellable {
 	/* (non-Javadoc)
 	 * @see org.bukkit.event.Cancellable#isCancelled()
 	 */
+	@Override
 	public boolean isCancelled() {
 		return isCancelled;
 	}
@@ -61,12 +64,13 @@ public class RequirementCompleteEvent extends Event implements Cancellable {
 	 * @see org.bukkit.event.Cancellable#setCancelled(boolean)
 	 */
 	@Override
-	public void setCancelled(boolean cancel) {
+	public void setCancelled(final boolean cancel) {
 		isCancelled = cancel;
 	}
 
 	/**
 	 * Get the requirement that has been completed.
+	 * 
 	 * @return Requirement that has been completed.
 	 */
 	public Requirement getRequirement() {

@@ -16,9 +16,9 @@ import com.earth2me.essentials.Essentials;
 public class PlaytimesUpdate implements Runnable {
 
 	private Essentials ess;
-	private Playtimes playtimes;
+	private final Playtimes playtimes;
 
-	public PlaytimesUpdate(Playtimes playtimes, Autorank plugin) {
+	public PlaytimesUpdate(final Playtimes playtimes, final Autorank plugin) {
 		this.playtimes = playtimes;
 
 		if (plugin.getAdvancedConfig().getBoolean("use advanced config")
@@ -30,11 +30,11 @@ public class PlaytimesUpdate implements Runnable {
 
 	@Override
 	public void run() {
-		Player[] onlinePlayers = Bukkit.getServer().getOnlinePlayers();
+		final Player[] onlinePlayers = Bukkit.getServer().getOnlinePlayers();
 		updateMinutesPlayed(onlinePlayers);
 	}
 
-	private void updateMinutesPlayed(Player[] players) {
+	private void updateMinutesPlayed(final Player[] players) {
 		for (int i = 0; i < players.length; i++) {
 			if (players[i] != null) {
 				updateMinutesPlayed(players[i]);
@@ -42,7 +42,7 @@ public class PlaytimesUpdate implements Runnable {
 		}
 	}
 
-	private void updateMinutesPlayed(Player player) {
+	private void updateMinutesPlayed(final Player player) {
 		// Changed this so it is readable ;)
 		// OP's should also get time added. 
 		// When a player has a wildcard permission ('*') it should still update.
@@ -54,22 +54,23 @@ public class PlaytimesUpdate implements Runnable {
 						|| ess.getUser(player).isJailed())
 					return;
 			}
-			String playerName = player.getName().toLowerCase();
+			final String playerName = player.getName().toLowerCase();
 			if (!playtimes.getKeys().contains(playerName)) {
 				playtimes.setLocalTime(playerName, 0);
 			}
 			// Modify local time
 			playtimes.modifyLocalTime(playerName, Playtimes.INTERVAL_MINUTES);
-			
+
 			// Modify global time
 			if (playtimes.isMySQLEnabled()) {
-				playtimes.modifyGlobalTime(playerName, Playtimes.INTERVAL_MINUTES);
+				playtimes.modifyGlobalTime(playerName,
+						Playtimes.INTERVAL_MINUTES);
 			}
 		}
 	}
 
 	private void setupEssentials() {
-		Plugin x = Bukkit.getServer().getPluginManager()
+		final Plugin x = Bukkit.getServer().getPluginManager()
 				.getPlugin("Essentials");
 		if (x != null & x instanceof Essentials) {
 			ess = (Essentials) x;

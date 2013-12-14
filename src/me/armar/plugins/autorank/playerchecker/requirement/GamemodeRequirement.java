@@ -18,8 +18,9 @@ public class GamemodeRequirement extends Requirement {
 	List<Result> results = new ArrayList<Result>();
 
 	@Override
-	public boolean setOptions(String[] options, boolean optional,
-			List<Result> results, boolean autoComplete, int reqId) {
+	public boolean setOptions(final String[] options, final boolean optional,
+			final List<Result> results, final boolean autoComplete,
+			final int reqId) {
 		this.optional = optional;
 		this.results = results;
 		this.autoComplete = autoComplete;
@@ -32,7 +33,7 @@ public class GamemodeRequirement extends Requirement {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public boolean meetsRequirement(Player player) {
+	public boolean meetsRequirement(final Player player) {
 		if (isCompleted(getReqId(), player.getName())) {
 			return true;
 		}
@@ -42,7 +43,8 @@ public class GamemodeRequirement extends Requirement {
 
 	@Override
 	public String getDescription() {
-		return Lang.GAMEMODE_REQUIREMENT.getConfigValue(new String[] {gamemode + ""});
+		return Lang.GAMEMODE_REQUIREMENT.getConfigValue(new String[] { gamemode
+				+ "" });
 	}
 
 	@Override
@@ -56,7 +58,7 @@ public class GamemodeRequirement extends Requirement {
 	}
 
 	@Override
-	public String getProgress(Player player) {
+	public String getProgress(final Player player) {
 		String progress = "";
 		progress = progress
 				.concat(player.getGameMode().name() + "/" + gamemode);
@@ -67,7 +69,7 @@ public class GamemodeRequirement extends Requirement {
 	public boolean useAutoCompletion() {
 		return autoComplete;
 	}
-	
+
 	@Override
 	public int getReqId() {
 		return reqId;

@@ -8,9 +8,9 @@ import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
 
 public class StatsRequirementValidation {
 
-	private Autorank plugin;
+	private final Autorank plugin;
 
-	public StatsRequirementValidation(Autorank instance) {
+	public StatsRequirementValidation(final Autorank instance) {
 		plugin = instance;
 	}
 
@@ -21,7 +21,7 @@ public class StatsRequirementValidation {
 	 * 
 	 * @return true if everything is okay, false otherwise.
 	 */
-	public boolean validateRequirements(SimpleYamlConfiguration config) {
+	public boolean validateRequirements(final SimpleYamlConfiguration config) {
 		if (config == null)
 			return false;
 
@@ -29,31 +29,38 @@ public class StatsRequirementValidation {
 		if (!config.getBoolean("use advanced config")) {
 			return true;
 		}
-		for (String group: plugin.getConfigHandler().getRanks()) {
-			Set<String> reqs = plugin.getConfigHandler().getRequirements(group);
-			
-			for (String req: reqs) {
+		for (final String group : plugin.getConfigHandler().getRanks()) {
+			final Set<String> reqs = plugin.getConfigHandler().getRequirements(
+					group);
+
+			for (final String req : reqs) {
 				if (requiresStats(req)) {
 					if (!plugin.getStatsHandler().isEnabled()) {
-						plugin.getWarningManager().registerWarning("You need to install Stats because you have Stats-required requirements listed in your config.", 5);
+						plugin.getWarningManager()
+								.registerWarning(
+										"You need to install Stats because you have Stats-required requirements listed in your config.",
+										5);
 						return false;
 					}
-					
+
 					if (!plugin.getStatsHandler().areBetaFunctionsEnabled()) {
-						plugin.getWarningManager().registerWarning("You have to enable beta features in the config of Stats!", 5);
+						plugin.getWarningManager()
+								.registerWarning(
+										"You have to enable beta features in the config of Stats!",
+										5);
 						return false;
 					}
 				}
 			}
-			
+
 		}
-		
-		return true;	
+
+		return true;
 	}
-	
-	private boolean requiresStats(String req) {
-		String correctName = AutorankTools.getCorrectName(req);
-		
+
+	private boolean requiresStats(final String req) {
+		final String correctName = AutorankTools.getCorrectName(req);
+
 		if (correctName.equalsIgnoreCase("blocks broken")) {
 			return true;
 		} else if (correctName.equalsIgnoreCase("blocks placed")) {
@@ -66,6 +73,7 @@ public class StatsRequirementValidation {
 			return true;
 		} else if (correctName.equalsIgnoreCase("players killed")) {
 			return true;
-		} else return false;
+		} else
+			return false;
 	}
 }

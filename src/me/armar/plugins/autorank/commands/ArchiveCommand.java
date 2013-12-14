@@ -11,26 +11,25 @@ import org.bukkit.command.CommandSender;
 
 public class ArchiveCommand implements CommandExecutor {
 
-	private Autorank plugin;
-	
-	public ArchiveCommand(Autorank instance) {
+	private final Autorank plugin;
+
+	public ArchiveCommand(final Autorank instance) {
 		plugin = instance;
 	}
-	
-	
+
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String label,
-			String[] args) {
-		
-		if (!plugin.getCommandsManager().hasPermission("autorank.archive", sender)) {
+	public boolean onCommand(final CommandSender sender, final Command cmd,
+			final String label, final String[] args) {
+
+		if (!plugin.getCommandsManager().hasPermission("autorank.archive",
+				sender)) {
 			return true;
 		}
 
 		int rate = -1;
 
 		if (args.length != 2) {
-			sender.sendMessage(ChatColor.RED
-					+ "You need to specify a time!");
+			sender.sendMessage(ChatColor.RED + "You need to specify a time!");
 			return true;
 		}
 
@@ -44,10 +43,9 @@ public class ArchiveCommand implements CommandExecutor {
 		}
 
 		sender.sendMessage(ChatColor.GREEN + "Removed " + ChatColor.YELLOW
-				+ plugin.getPlaytimes().archive(rate) + ""
-				+ ChatColor.GREEN + " records below " + ChatColor.YELLOW
-				+ AutorankTools.minutesToString(rate) + ChatColor.GREEN
-				+ ".");
+				+ plugin.getPlaytimes().archive(rate) + "" + ChatColor.GREEN
+				+ " records below " + ChatColor.YELLOW
+				+ AutorankTools.minutesToString(rate) + ChatColor.GREEN + ".");
 		return true;
 	}
 

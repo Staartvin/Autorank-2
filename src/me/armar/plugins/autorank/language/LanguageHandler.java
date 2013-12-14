@@ -17,34 +17,35 @@ public class LanguageHandler {
 
 	private FileConfiguration languageConfig;
 	private File languageConfigFile;
-	private Autorank plugin;
+	private final Autorank plugin;
 
-	public LanguageHandler(Autorank autorank) {
+	public LanguageHandler(final Autorank autorank) {
 		plugin = autorank;
 	}
-	
+
 	public void createNewFile() {
 		reloadConfig();
 		saveConfig();
-		
+
 		Lang.setFile(languageConfig);
-		
+
 		loadConfig();
-		
+
 		plugin.getLogger().info("Language file loaded (lang.yml)");
 	}
-	
+
 	public void reloadConfig() {
 		if (languageConfigFile == null) {
 			languageConfigFile = new File(plugin.getDataFolder() + "/lang",
 					"lang.yml");
 		}
-		languageConfig = YamlConfiguration.loadConfiguration(languageConfigFile);
+		languageConfig = YamlConfiguration
+				.loadConfiguration(languageConfigFile);
 
 		// Look for defaults in the jar
-		InputStream defConfigStream = plugin.getResource("lang.yml");
+		final InputStream defConfigStream = plugin.getResource("lang.yml");
 		if (defConfigStream != null) {
-			YamlConfiguration defConfig = YamlConfiguration
+			final YamlConfiguration defConfig = YamlConfiguration
 					.loadConfiguration(defConfigStream);
 			languageConfig.setDefaults(defConfig);
 		}
@@ -63,7 +64,7 @@ public class LanguageHandler {
 		}
 		try {
 			getConfig().save(languageConfigFile);
-		} catch (IOException ex) {
+		} catch (final IOException ex) {
 			plugin.getLogger().log(Level.SEVERE,
 					"Could not save config to " + languageConfigFile, ex);
 		}
@@ -72,9 +73,8 @@ public class LanguageHandler {
 	public void loadConfig() {
 
 		languageConfig.options().header("Language file");
-		
-		
-		for (Lang value: Lang.values()) {			
+
+		for (final Lang value : Lang.values()) {
 			languageConfig.addDefault(value.getPath(), value.getDefault());
 		}
 

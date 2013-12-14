@@ -8,24 +8,26 @@ import me.armar.plugins.autorank.playerchecker.result.Result;
 import org.bukkit.entity.Player;
 
 /**
- * Whenever you want to create a new requirement, you'll have to extend this class.
+ * Whenever you want to create a new requirement, you'll have to extend this
+ * class.
  * Every requirement needs the following:
  * 
  * <p>
  * - Option to check if the requirement is optional.
  * <p>
- * - Results that will be performed when the requirement is completed. These results have to be one of the results registered in Autorank.
+ * - Results that will be performed when the requirement is completed. These
+ * results have to be one of the results registered in Autorank.
  * <p>
  * - Option to check if the requirement will auto complete.
  * 
  * @author Staartvin
- *
+ * 
  */
 public abstract class Requirement {
 
 	private Autorank autorank;
 
-	public final void setAutorank(Autorank autorank) {
+	public final void setAutorank(final Autorank autorank) {
 		this.autorank = autorank;
 	}
 
@@ -37,7 +39,8 @@ public abstract class Requirement {
 	 * Setup requirement specific objects.
 	 * 
 	 * This method is called when Autorank sets up its config.
-	 * The requirement id, auto completion and optional values are assigned automatically.
+	 * The requirement id, auto completion and optional values are assigned
+	 * automatically.
 	 * 
 	 * @param options String[] containing values of the config
 	 * @param optional Is this an optional requirement?
@@ -46,7 +49,8 @@ public abstract class Requirement {
 	 * @param reqId id of the requirement
 	 * @return true if everything was setup correctly; false otherwise
 	 */
-	public abstract boolean setOptions(String[] options, boolean optional, List<Result> results, boolean autoComplete, int reqId);
+	public abstract boolean setOptions(String[] options, boolean optional,
+			List<Result> results, boolean autoComplete, int reqId);
 
 	/**
 	 * Does it meet the requirements?
@@ -54,10 +58,8 @@ public abstract class Requirement {
 	 * It should always contain the following line:
 	 * 
 	 * <p>
-	 * if (isCompleted(getReqId(), player.getName())) {
-			return true;
-		}
-		
+	 * if (isCompleted(getReqId(), player.getName())) { return true; }
+	 * 
 	 * @param player Player to check for
 	 * @return true if it meets the requirements; false otherwise
 	 */
@@ -66,54 +68,63 @@ public abstract class Requirement {
 	/**
 	 * Gets the description of the requirement
 	 * Make sure this is always a translatable message.
+	 * 
 	 * @return string containing description (in locale language)
 	 */
 	public abstract String getDescription();
-	
+
 	/**
 	 * Is this an optional requirement?
 	 * (Not a main requirement)
+	 * 
 	 * @return true when optional; false otherwise.
 	 */
 	public abstract boolean isOptional();
-	
+
 	/**
 	 * Gets the results when this requirement is finished
+	 * 
 	 * @return A list of results that has to be done.
 	 */
 	public abstract List<Result> getResults();
-	
+
 	/**
 	 * Use auto completion for this?
+	 * 
 	 * @return true when auto complete; false otherwise
 	 */
 	public abstract boolean useAutoCompletion();
 
+	@Override
 	public String toString() {
 		return this.getClass().getSimpleName();
 	}
-	
+
 	/**
 	 * Check if the requirement is completed already.
+	 * 
 	 * @param reqID Requirement id.
 	 * @param playerName Player to check for
 	 * @return true if completed, false otherwise.
 	 */
-	public final boolean isCompleted(int reqID, String playerName) {
-		return autorank.getRequirementHandler().hasCompletedRequirement(reqID, playerName);
+	public final boolean isCompleted(final int reqID, final String playerName) {
+		return autorank.getRequirementHandler().hasCompletedRequirement(reqID,
+				playerName);
 	}
-	
+
 	/**
 	 * Gets the current progress of a player on a certain requirement.
+	 * 
 	 * @param player Player to check for
 	 * @return String containing the progress
 	 */
 	public abstract String getProgress(Player player);
-	
+
 	/**
 	 * Get the id of this requirement.
 	 * This should get assigned automatically at setOptions().
 	 * The id should always be dynamic.
+	 * 
 	 * @return id
 	 */
 	public abstract int getReqId();

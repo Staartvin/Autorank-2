@@ -24,9 +24,9 @@ import org.bukkit.entity.Player;
  */
 public class API {
 
-	private Autorank plugin;
+	private final Autorank plugin;
 
-	public API(Autorank instance) {
+	public API(final Autorank instance) {
 		plugin = instance;
 	}
 
@@ -37,7 +37,7 @@ public class API {
 	 * @param playerName player to check for.
 	 * @return play time of a player. 0 when has never played before.
 	 */
-	public int getLocalPlayTime(String playerName) {
+	public int getLocalPlayTime(final String playerName) {
 		return plugin.getLocalTime(playerName);
 	}
 
@@ -58,44 +58,49 @@ public class API {
 	 * @param playerName player to check for.
 	 * @return play time of a player. -1 if no entry was found.
 	 */
-	public int getGlobalPlayTime(String playerName) {
+	public int getGlobalPlayTime(final String playerName) {
 		return plugin.getGlobalTime(playerName);
 	}
 
-	/** Gets all requirements for a player at the exact moment.
-	 * This does not consider already finished requirement but just mirrors the config file.
+	/**
+	 * Gets all requirements for a player at the exact moment.
+	 * This does not consider already finished requirement but just mirrors the
+	 * config file.
+	 * 
 	 * @param player Player to get the requirements from.
 	 * @return a list of requirement. An empty list when none are found.
 	 */
-	public List<Requirement> getAllRequirements(Player player) {
-		Map<RankChange, List<Requirement>> failed = plugin.getPlayerChecker()
-				.getAllRequirements(player);
+	public List<Requirement> getAllRequirements(final Player player) {
+		final Map<RankChange, List<Requirement>> failed = plugin
+				.getPlayerChecker().getAllRequirements(player);
 
-		Set<RankChange> keySet = failed.keySet();
-		List<Requirement> reqs = new ArrayList<Requirement>();	
-		
-		for (RankChange rank: keySet) {
-			reqs = failed.get(rank);	
-		}		
-		
+		final Set<RankChange> keySet = failed.keySet();
+		List<Requirement> reqs = new ArrayList<Requirement>();
+
+		for (final RankChange rank : keySet) {
+			reqs = failed.get(rank);
+		}
+
 		return reqs;
 	}
-	
-	/** Gets all requirements that are not yet completed.
+
+	/**
+	 * Gets all requirements that are not yet completed.
+	 * 
 	 * @param player Player to get the failed requirements for.
-	 * @return list of requirements that still have to be completed. 
+	 * @return list of requirements that still have to be completed.
 	 */
-	public List<Requirement> getFailedRequirements(Player player) {
-		List<Requirement> failedRequirements = new ArrayList<Requirement>();
-		
-		List<Requirement> allRequirements = getAllRequirements(player);
-		
-		for (Requirement req: allRequirements) {
+	public List<Requirement> getFailedRequirements(final Player player) {
+		final List<Requirement> failedRequirements = new ArrayList<Requirement>();
+
+		final List<Requirement> allRequirements = getAllRequirements(player);
+
+		for (final Requirement req : allRequirements) {
 			if (!req.meetsRequirement(player)) {
 				failedRequirements.add(req);
 			}
 		}
-		
+
 		return failedRequirements;
 	}
 }

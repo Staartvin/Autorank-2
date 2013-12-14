@@ -18,7 +18,7 @@ import org.bukkit.entity.Player;
  */
 
 public class AutorankTools {
-	
+
 	static List<String> reqTypes = new ArrayList<String>();
 
 	public static int stringToMinutes(String string) {
@@ -26,13 +26,14 @@ public class AutorankTools {
 
 		string = string.trim();
 
-		Pattern pattern = Pattern.compile("((\\d+)d)?((\\d+)h)?((\\d+)m)?");
-		Matcher matcher = pattern.matcher(string);
+		final Pattern pattern = Pattern
+				.compile("((\\d+)d)?((\\d+)h)?((\\d+)m)?");
+		final Matcher matcher = pattern.matcher(string);
 
 		matcher.find();
-		String days = matcher.group(2);
-		String hours = matcher.group(4);
-		String minutes = matcher.group(6);
+		final String days = matcher.group(2);
+		final String hours = matcher.group(4);
+		final String minutes = matcher.group(6);
 
 		res += stringtoDouble(minutes);
 		res += stringtoDouble(hours) * 60;
@@ -42,11 +43,11 @@ public class AutorankTools {
 	}
 
 	public static String minutesToString(int minutes) {
-		StringBuilder b = new StringBuilder();
+		final StringBuilder b = new StringBuilder();
 
-		int days = minutes / 1440;
+		final int days = minutes / 1440;
 		minutes -= days * 1440;
-		int hours = minutes / 60;
+		final int hours = minutes / 60;
 		minutes -= hours * 60;
 
 		if (days != 0) {
@@ -56,7 +57,7 @@ public class AutorankTools {
 				b.append(Lang.DAY_PLURAL.getConfigValue(null));
 			else
 				b.append(Lang.DAY_SINGULAR.getConfigValue(null));
-			
+
 			if (hours != 0 || minutes != 0)
 				b.append(" ");
 		}
@@ -68,7 +69,7 @@ public class AutorankTools {
 				b.append(Lang.HOUR_PLURAL.getConfigValue(null));
 			else
 				b.append(Lang.HOUR_SINGULAR.getConfigValue(null));
-			
+
 			if (minutes != 0)
 				b.append(" ");
 		}
@@ -85,7 +86,7 @@ public class AutorankTools {
 		return b.toString();
 	}
 
-	public static double stringtoDouble(String string)
+	public static double stringtoDouble(final String string)
 			throws NumberFormatException {
 		double res = 0;
 
@@ -96,7 +97,8 @@ public class AutorankTools {
 		return res;
 	}
 
-	public static int stringtoInt(String string) throws NumberFormatException {
+	public static int stringtoInt(final String string)
+			throws NumberFormatException {
 		int res = 0;
 
 		if (string != null)
@@ -106,62 +108,70 @@ public class AutorankTools {
 		return res;
 	}
 
-	public static void sendColoredMessage(CommandSender sender, String msg) {
-		sender.sendMessage(ChatColor.translateAlternateColorCodes('&', ChatColor.GREEN + msg));
+	public static void sendColoredMessage(final CommandSender sender,
+			final String msg) {
+		sender.sendMessage(ChatColor.translateAlternateColorCodes('&',
+				ChatColor.GREEN + msg));
 	}
-	
+
 	/**
 	 * Elaborate method to check whether a player is excluded from ranking.
 	 * 
-	 * When a player has a wildcard permission but is an OP, it will return false;
-	 * When a player has a wildcard permission but is not an OP, it will return true;
+	 * When a player has a wildcard permission but is an OP, it will return
+	 * false;
+	 * When a player has a wildcard permission but is not an OP, it will return
+	 * true;
 	 * When a player only has autorank.exclude, it will return true;
 	 * 
 	 * @param player Player to check for
 	 * @return whether a player is excluded from ranking or not.
 	 */
-	public static boolean isExcluded(Player player) {
+	public static boolean isExcluded(final Player player) {
 		if (player.hasPermission("autorank.askdjaslkdj")) {
 			// Op's have all permissions, but if he is a OP, he isn't excluded
 			if (player.isOp()) {
 				return false;
 			}
-			
+
 			// Player uses wildcard permission, so excluded
 			return true;
 		}
-		
+
 		if (player.hasPermission("autorank.exclude")) {
 			return true;
 		}
-		
-		return false;	
+
+		return false;
 	}
-	
-	/** 
+
+	/**
 	 * This will return the correct type of the requirement.
-	 * As players might want to use multiple requirements of the same type, they only have to specify the name of it with a unique identifier.
+	 * As players might want to use multiple requirements of the same type, they
+	 * only have to specify the name of it with a unique identifier.
 	 * E.g. time1, time2 or exp1, exp2, etc.
+	 * 
 	 * @param oldName Name of the requirement to search for.
 	 * @return correct requirement name or old name if none was found.
 	 */
-	public static String getCorrectName(String oldName) {
-		
-		for (String type: reqTypes) {
+	public static String getCorrectName(final String oldName) {
+
+		for (final String type : reqTypes) {
 			if (oldName.contains(type)) {
 				return type;
 			}
 		}
-		
+
 		return oldName;
 	}
-	
+
 	/**
 	 * Register requirement name so it can be used to get the correct name.
-	 * If a requirement is not passed through this method, it will not show up in {@link #getCorrectName(String)}.
+	 * If a requirement is not passed through this method, it will not show up
+	 * in {@link #getCorrectName(String)}.
+	 * 
 	 * @param type Requirement name
 	 */
-	public static void registerRequirement(String type) {
+	public static void registerRequirement(final String type) {
 		if (!reqTypes.contains(type)) {
 			reqTypes.add(type);
 		}

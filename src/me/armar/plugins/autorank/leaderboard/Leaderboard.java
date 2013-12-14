@@ -24,13 +24,14 @@ public class Leaderboard {
 
 	private String[] messages;
 	private long lastUpdatedTime;
-	private Autorank plugin;
+	private final Autorank plugin;
 	private int leaderboardLength = 10;
 	private String layout = "§6&r | §b&p - §7&d day(s), &h hour(s) and &m minute(s).";
 
-	public Leaderboard(Autorank plugin) {
+	public Leaderboard(final Autorank plugin) {
 		this.plugin = plugin;
-		SimpleYamlConfiguration advConfig = this.plugin.getAdvancedConfig();
+		final SimpleYamlConfiguration advConfig = this.plugin
+				.getAdvancedConfig();
 		if (advConfig.getBoolean("use advanced config")) {
 			leaderboardLength = advConfig.getInt("leaderboard length");
 			layout = advConfig.getString("leaderboard layout");
@@ -39,12 +40,12 @@ public class Leaderboard {
 		updateLeaderboard();
 	}
 
-	public void sendLeaderboard(CommandSender sender) {
+	public void sendLeaderboard(final CommandSender sender) {
 		if (System.currentTimeMillis() - lastUpdatedTime > 600000) {
 			// update leaderboard is last updated longer than 10 minutes ago
 			updateLeaderboard();
 		}
-		for (String msg : messages) {
+		for (final String msg : messages) {
 			AutorankTools.sendColoredMessage(sender, msg);
 		}
 	}
@@ -52,20 +53,20 @@ public class Leaderboard {
 	private void updateLeaderboard() {
 		lastUpdatedTime = System.currentTimeMillis();
 
-		TreeMap<String, Integer> sortedPlaytimes = getSortedPlaytimes();
-		Iterator<Entry<String, Integer>> itr = sortedPlaytimes.entrySet()
+		final TreeMap<String, Integer> sortedPlaytimes = getSortedPlaytimes();
+		final Iterator<Entry<String, Integer>> itr = sortedPlaytimes.entrySet()
 				.iterator();
 
-		List<String> stringList = new ArrayList<String>();
+		final List<String> stringList = new ArrayList<String>();
 		stringList.add("-------- Autorank Leaderboard --------");
 
 		for (int i = 0; i < leaderboardLength && itr.hasNext(); i++) {
-			Entry<String, Integer> entry = (Entry<String, Integer>) itr.next();
-			String name = entry.getKey();
+			final Entry<String, Integer> entry = itr.next();
+			final String name = entry.getKey();
 			Integer time = entry.getValue().intValue();
 
 			String message = layout.replaceAll("&p", name);
-			
+
 			message = message.replaceAll("&r", Integer.toString(i + 1));
 			message = message.replaceAll("&tm", Integer.toString(time));
 			message = message.replaceAll("&th", Integer.toString(time / 60));
@@ -86,11 +87,12 @@ public class Leaderboard {
 	}
 
 	private TreeMap<String, Integer> getSortedPlaytimes() {
-		HashMap<String, Integer> map = new HashMap<String, Integer>();
-		ValueComparator bvc = new ValueComparator(map);
-		TreeMap<String, Integer> sorted_map = new TreeMap<String, Integer>(bvc);
+		final HashMap<String, Integer> map = new HashMap<String, Integer>();
+		final ValueComparator bvc = new ValueComparator(map);
+		final TreeMap<String, Integer> sorted_map = new TreeMap<String, Integer>(
+				bvc);
 
-		for (String playername : plugin.getPlaytimes().getKeys()) {
+		for (final String playername : plugin.getPlaytimes().getKeys()) {
 			map.put(playername, plugin.getPlaytimes().getLocalTime(playername));
 		}
 

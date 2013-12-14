@@ -17,8 +17,9 @@ public class WorldRequirement extends Requirement {
 	List<Result> results = new ArrayList<Result>();
 
 	@Override
-	public boolean setOptions(String[] options, boolean optional,
-			List<Result> results, boolean autoComplete, int reqId) {
+	public boolean setOptions(final String[] options, final boolean optional,
+			final List<Result> results, final boolean autoComplete,
+			final int reqId) {
 		this.optional = optional;
 		this.results = results;
 		this.autoComplete = autoComplete;
@@ -30,7 +31,7 @@ public class WorldRequirement extends Requirement {
 	}
 
 	@Override
-	public boolean meetsRequirement(Player player) {
+	public boolean meetsRequirement(final Player player) {
 		if (isCompleted(getReqId(), player.getName())) {
 			return true;
 		}
@@ -40,7 +41,7 @@ public class WorldRequirement extends Requirement {
 
 	@Override
 	public String getDescription() {
-		return Lang.WORLD_REQUIREMENT.getConfigValue(new String[] {world});
+		return Lang.WORLD_REQUIREMENT.getConfigValue(new String[] { world });
 	}
 
 	@Override
@@ -55,7 +56,7 @@ public class WorldRequirement extends Requirement {
 	}
 
 	@Override
-	public String getProgress(Player player) {
+	public String getProgress(final Player player) {
 		String progress = "";
 		progress = progress.concat(player.getWorld().getName() + "/" + world);
 		return progress;
@@ -65,7 +66,7 @@ public class WorldRequirement extends Requirement {
 	public boolean useAutoCompletion() {
 		return autoComplete;
 	}
-	
+
 	@Override
 	public int getReqId() {
 		return reqId;

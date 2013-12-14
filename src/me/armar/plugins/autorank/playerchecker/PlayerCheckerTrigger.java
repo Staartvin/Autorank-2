@@ -17,23 +17,25 @@ import org.bukkit.entity.Player;
 
 public class PlayerCheckerTrigger implements Runnable {
 
-	private Autorank plugin;
-	private List<Player> playersToBeChecked = new ArrayList<Player>();
-	private PlayerChecker checker;
+	private final Autorank plugin;
+	private final List<Player> playersToBeChecked = new ArrayList<Player>();
+	private final PlayerChecker checker;
 
-	public PlayerCheckerTrigger(Autorank plugin, PlayerChecker checker) {
+	public PlayerCheckerTrigger(final Autorank plugin,
+			final PlayerChecker checker) {
 		this.plugin = plugin;
 		this.checker = checker;
 		plugin.getServer().getScheduler()
 				.scheduleSyncDelayedTask(plugin, this, 200);
 	}
 
+	@Override
 	public void run() {
 
 		// Instead of checking one player at the time, check every player at once.
 		if (plugin.getServer().getOnlinePlayers().length > 0) {
 
-			for (Player player : plugin.getServer().getOnlinePlayers()) {
+			for (final Player player : plugin.getServer().getOnlinePlayers()) {
 				// TODO: Player would not be ranked up if one of the requirement is not auto complete
 				if (!AutorankTools.isExcluded(player))
 					checker.checkPlayer(player);
@@ -45,7 +47,8 @@ public class PlayerCheckerTrigger implements Runnable {
 		// Check every 5 minutes
 		int nextCheck = 6000;
 		if (plugin.getServer().getOnlinePlayers().length > 0) {
-			nextCheck = nextCheck / plugin.getServer().getOnlinePlayers().length;
+			nextCheck = nextCheck
+					/ plugin.getServer().getOnlinePlayers().length;
 
 			// When check time is lower than 1 minute, change it to 1 minute
 			// Decreases load on server

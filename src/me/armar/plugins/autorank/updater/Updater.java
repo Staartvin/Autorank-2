@@ -6,7 +6,13 @@
 
 package me.armar.plugins.autorank.updater;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -154,8 +160,8 @@ public class Updater {
 	 * @param announce True if the program should announce the progress of new
 	 *            updates in console
 	 */
-	public Updater(Plugin plugin, int id, File file, UpdateType type,
-			boolean announce) {
+	public Updater(final Plugin plugin, final int id, final File file,
+			final UpdateType type, final boolean announce) {
 		this.plugin = plugin;
 		this.type = type;
 		this.announce = announce;
@@ -288,7 +294,7 @@ public class Updater {
 	/**
 	 * Save an update from dev.bukkit.org into the server's update folder.
 	 */
-	private void saveFile(File folder, String file, String u) {
+	private void saveFile(final File folder, final String file, final String u) {
 		if (!folder.exists()) {
 			folder.mkdir();
 		}
@@ -356,7 +362,7 @@ public class Updater {
 	/**
 	 * Part of Zip-File-Extractor, modified by Gravity for use with Bukkit
 	 */
-	private void unzip(String file) {
+	private void unzip(final String file) {
 		try {
 			final File fSourceZip = new File(file);
 			final String zipPath = file.substring(0, file.length() - 4);
@@ -446,7 +452,7 @@ public class Updater {
 	 * Check if the name of a jar is one of the plugins currently installed,
 	 * used for extracting the correct files out of a zip.
 	 */
-	private boolean pluginFile(String name) {
+	private boolean pluginFile(final String name) {
 		for (final File file : new File("plugins").listFiles()) {
 			if (file.getName().equals(name)) {
 				return true;
@@ -474,10 +480,11 @@ public class Updater {
 			title = title.replace("Beta", "").replace("beta", "")
 					.replace("Alpha", "").replace("alpha", "")
 					.replace("dev", "").replace("DEV", "").trim();
-			
+
 			if (title.split(" v").length == 2) {
-				final String remoteVersion = title.split(" v")[1].split(" ")[0].trim(); // Get the newest file's version number
-				
+				final String remoteVersion = title.split(" v")[1].split(" ")[0]
+						.trim(); // Get the newest file's version number
+
 				if (this.hasTag(version)
 						|| version.equalsIgnoreCase(remoteVersion)) {
 					// We already have the latest version, or this build is tagged for no-update
@@ -513,7 +520,7 @@ public class Updater {
 	 * Evaluate whether the version number is marked showing that it should not
 	 * be updated by this program
 	 */
-	private boolean hasTag(String version) {
+	private boolean hasTag(final String version) {
 		for (final String string : Updater.NO_UPDATE_TAG) {
 			if (version.contains(string)) {
 				return true;

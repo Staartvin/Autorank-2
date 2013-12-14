@@ -11,17 +11,16 @@ import org.bukkit.command.CommandSender;
 
 public class SyncCommand implements CommandExecutor {
 
-	private Autorank plugin;
-	
-	public SyncCommand(Autorank instance) {
+	private final Autorank plugin;
+
+	public SyncCommand(final Autorank instance) {
 		plugin = instance;
 	}
-	
-	
+
 	@Override
-	public boolean onCommand(final CommandSender sender, Command cmd, String label,
-			String[] args) {
-		
+	public boolean onCommand(final CommandSender sender, final Command cmd,
+			final String label, final String[] args) {
+
 		if (!plugin.getCommandsManager().hasPermission("autorank.sync", sender))
 			return true;
 
@@ -40,21 +39,21 @@ public class SyncCommand implements CommandExecutor {
 					@Override
 					public void run() {
 						// Update all mysql records
-						for (String player : plugin.getPlaytimes()
+						for (final String player : plugin.getPlaytimes()
 								.getKeys()) {
 							if (plugin.getPlaytimes().getLocalTime(player) <= 0)
 								continue;
 
-							int localTime = plugin.getPlaytimes()
+							final int localTime = plugin.getPlaytimes()
 									.getLocalTime(player);
-							int globalTime = plugin.getPlaytimes()
+							final int globalTime = plugin.getPlaytimes()
 									.getGlobalTime(player);
 
 							// Update record
 							try {
 								plugin.getPlaytimes().setGlobalTime(player,
 										localTime + globalTime);
-							} catch (SQLException e) {
+							} catch (final SQLException e) {
 								e.printStackTrace();
 							}
 						}

@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 public class TotalVotesRequirement extends Requirement {
 
 	private int totalVotes = 0;
-	private Autorank plugin;
+	private final Autorank plugin;
 	private boolean optional = false;
 	private boolean autoComplete = false;
 	private int reqId;
@@ -25,8 +25,9 @@ public class TotalVotesRequirement extends Requirement {
 	}
 
 	@Override
-	public boolean setOptions(String[] options, boolean optional,
-			List<Result> results, boolean autoComplete, int reqId) {
+	public boolean setOptions(final String[] options, final boolean optional,
+			final List<Result> results, final boolean autoComplete,
+			final int reqId) {
 		this.optional = optional;
 		this.results = results;
 		this.autoComplete = autoComplete;
@@ -35,27 +36,28 @@ public class TotalVotesRequirement extends Requirement {
 		try {
 			totalVotes = Integer.parseInt(options[0]);
 			return true;
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			totalVotes = 0;
 			return false;
 		}
 	}
 
 	@Override
-	public boolean meetsRequirement(Player player) {
+	public boolean meetsRequirement(final Player player) {
 		if (isCompleted(getReqId(), player.getName())) {
 			return true;
 		}
 
 		// TODO Auto-generated method stub
 		return plugin.getStatsHandler().isEnabled()
-				&& plugin.getStatsHandler()
-						.getNormalStat(player.getName(), "Votes", null) >= totalVotes;
+				&& plugin.getStatsHandler().getNormalStat(player.getName(),
+						"Votes", null) >= totalVotes;
 	}
 
 	@Override
 	public String getDescription() {
-		return Lang.VOTE_REQUIREMENT.getConfigValue(new String[] {totalVotes + ""});
+		return Lang.VOTE_REQUIREMENT.getConfigValue(new String[] { totalVotes
+				+ "" });
 	}
 
 	@Override
@@ -69,10 +71,12 @@ public class TotalVotesRequirement extends Requirement {
 	}
 
 	@Override
-	public String getProgress(Player player) {
+	public String getProgress(final Player player) {
 		String progress = "";
 		progress = progress.concat(getAutorank().getStatsHandler()
-				.getNormalStat(player.getName(), "Votes", null) + "/" + totalVotes);
+				.getNormalStat(player.getName(), "Votes", null)
+				+ "/"
+				+ totalVotes);
 		return progress;
 	}
 

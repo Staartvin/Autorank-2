@@ -31,11 +31,11 @@ import org.bukkit.entity.Player;
  */
 public class RequirementHandler {
 
-	private Autorank plugin;
+	private final Autorank plugin;
 	private FileConfiguration config;
 	private File configFile;
 
-	public RequirementHandler(Autorank instance) {
+	public RequirementHandler(final Autorank instance) {
 		this.plugin = instance;
 	}
 
@@ -56,9 +56,10 @@ public class RequirementHandler {
 		config = YamlConfiguration.loadConfiguration(configFile);
 
 		// Look for defaults in the jar
-		InputStream defConfigStream = plugin.getResource("playerdata.yml");
+		final InputStream defConfigStream = plugin
+				.getResource("playerdata.yml");
 		if (defConfigStream != null) {
-			YamlConfiguration defConfig = YamlConfiguration
+			final YamlConfiguration defConfig = YamlConfiguration
 					.loadConfiguration(defConfigStream);
 			config.setDefaults(defConfig);
 		}
@@ -77,7 +78,7 @@ public class RequirementHandler {
 		}
 		try {
 			getConfig().save(configFile);
-		} catch (IOException ex) {
+		} catch (final IOException ex) {
 			plugin.getLogger().log(Level.SEVERE,
 					"Could not save config to " + configFile, ex);
 		}
@@ -93,20 +94,21 @@ public class RequirementHandler {
 		saveConfig();
 	}
 
-	public void setPlayerProgress(String playerName, List<Integer> progress) {
+	public void setPlayerProgress(final String playerName,
+			final List<Integer> progress) {
 		config.set(playerName + ".progress", progress);
 
 		saveConfig();
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Integer> getProgress(String playerName) {
+	public List<Integer> getProgress(final String playerName) {
 		return (List<Integer>) config.getList(playerName + ".progress",
 				new ArrayList<Integer>());
 	}
 
-	public void addPlayerProgress(String playerName, int reqID) {
-		List<Integer> progress = getProgress(playerName);
+	public void addPlayerProgress(final String playerName, final int reqID) {
+		final List<Integer> progress = getProgress(playerName);
 
 		if (hasCompletedRequirement(reqID, playerName))
 			return;
@@ -116,27 +118,29 @@ public class RequirementHandler {
 		setPlayerProgress(playerName, progress);
 	}
 
-	public String getLastKnownGroup(String playerName) {
+	public String getLastKnownGroup(final String playerName) {
 		return config.getString(playerName + ".last group");
 	}
 
-	public void setLastKnownGroup(String playerName, String group) {
+	public void setLastKnownGroup(final String playerName, final String group) {
 		config.set(playerName + ".last group", group);
 
 		saveConfig();
 	}
 
-	public boolean hasCompletedRequirement(int reqID, String playerName) {
-		List<Integer> progress = getProgress(playerName);
+	public boolean hasCompletedRequirement(final int reqID,
+			final String playerName) {
+		final List<Integer> progress = getProgress(playerName);
 
 		return progress.contains(reqID);
 	}
 
-	public void runResults(Requirement req, Player player) {
+	public void runResults(final Requirement req, final Player player) {
 
 		// Fire event so it can be cancelled
 		// Create the event here
-		RequirementCompleteEvent event = new RequirementCompleteEvent(player, req);
+		final RequirementCompleteEvent event = new RequirementCompleteEvent(
+				player, req);
 		// Call the event
 		Bukkit.getServer().getPluginManager().callEvent(event);
 
@@ -145,10 +149,10 @@ public class RequirementHandler {
 			return;
 
 		// Run results
-		List<Result> results = req.getResults();
+		final List<Result> results = req.getResults();
 
 		// Apply result
-		for (Result realResult : results) {
+		for (final Result realResult : results) {
 			realResult.applyResult(player);
 		}
 	}

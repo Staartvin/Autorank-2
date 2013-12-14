@@ -18,8 +18,9 @@ public class ExpRequirement extends Requirement {
 	List<Result> results = new ArrayList<Result>();
 
 	@Override
-	public boolean setOptions(String[] options, boolean optional,
-			List<Result> results, boolean autoComplete, int reqId) {
+	public boolean setOptions(final String[] options, final boolean optional,
+			final List<Result> results, final boolean autoComplete,
+			final int reqId) {
 		this.optional = optional;
 		this.results = results;
 		this.autoComplete = autoComplete;
@@ -27,14 +28,14 @@ public class ExpRequirement extends Requirement {
 
 		try {
 			minExp = AutorankTools.stringtoInt(options[0]);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 		}
 
 		return minExp == 999999999;
 	}
 
 	@Override
-	public boolean meetsRequirement(Player player) {
+	public boolean meetsRequirement(final Player player) {
 		if (isCompleted(getReqId(), player.getName())) {
 			return true;
 		}
@@ -44,7 +45,8 @@ public class ExpRequirement extends Requirement {
 
 	@Override
 	public String getDescription() {
-		return Lang.EXP_REQUIREMENT.getConfigValue(new String[] {minExp + ""});
+		return Lang.EXP_REQUIREMENT
+				.getConfigValue(new String[] { minExp + "" });
 	}
 
 	@Override
@@ -58,7 +60,7 @@ public class ExpRequirement extends Requirement {
 	}
 
 	@Override
-	public String getProgress(Player player) {
+	public String getProgress(final Player player) {
 		String progress = "";
 		progress = progress.concat(player.getLevel() + "/" + minExp);
 		return progress;
@@ -68,7 +70,7 @@ public class ExpRequirement extends Requirement {
 	public boolean useAutoCompletion() {
 		return autoComplete;
 	}
-	
+
 	@Override
 	public int getReqId() {
 		return reqId;

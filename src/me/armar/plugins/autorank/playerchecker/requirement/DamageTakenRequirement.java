@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 public class DamageTakenRequirement extends Requirement {
 
 	private int damageTaken = 0;
-	private Autorank plugin;
+	private final Autorank plugin;
 	private boolean optional = false;
 	private boolean autoComplete = false;
 	private int reqId;
@@ -24,8 +24,9 @@ public class DamageTakenRequirement extends Requirement {
 	}
 
 	@Override
-	public boolean setOptions(String[] options, boolean optional,
-			List<Result> results, boolean autoComplete, int reqId) {
+	public boolean setOptions(final String[] options, final boolean optional,
+			final List<Result> results, final boolean autoComplete,
+			final int reqId) {
 		this.optional = optional;
 		this.results = results;
 		this.autoComplete = autoComplete;
@@ -34,27 +35,28 @@ public class DamageTakenRequirement extends Requirement {
 		try {
 			damageTaken = Integer.parseInt(options[0]);
 			return true;
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			damageTaken = 0;
 			return false;
 		}
 	}
 
 	@Override
-	public boolean meetsRequirement(Player player) {
+	public boolean meetsRequirement(final Player player) {
 		if (isCompleted(getReqId(), player.getName())) {
 			return true;
 		}
 
 		// TODO Auto-generated method stub
 		return plugin.getStatsHandler().isEnabled()
-				&& plugin.getStatsHandler()
-						.getNormalStat(player.getName(), "Damage taken", null) >= damageTaken;
+				&& plugin.getStatsHandler().getNormalStat(player.getName(),
+						"Damage taken", null) >= damageTaken;
 	}
 
 	@Override
 	public String getDescription() {
-		return Lang.DAMAGE_TAKEN_REQUIREMENT.getConfigValue(new String[] {damageTaken + ""});
+		return Lang.DAMAGE_TAKEN_REQUIREMENT
+				.getConfigValue(new String[] { damageTaken + "" });
 	}
 
 	@Override
@@ -68,10 +70,12 @@ public class DamageTakenRequirement extends Requirement {
 	}
 
 	@Override
-	public String getProgress(Player player) {
+	public String getProgress(final Player player) {
 		String progress = "";
 		progress = progress.concat(getAutorank().getStatsHandler()
-				.getNormalStat(player.getName(), "Damage taken", null) + "/" + damageTaken);
+				.getNormalStat(player.getName(), "Damage taken", null)
+				+ "/"
+				+ damageTaken);
 		return progress;
 	}
 

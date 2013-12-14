@@ -7,14 +7,14 @@ public class MessageResult extends Result {
 	String msg = null;
 
 	@Override
-	public boolean setOptions(String[] options) {
+	public boolean setOptions(final String[] options) {
 		if (options.length > 0)
 			msg = options[0];
 		return msg != null;
 	}
 
 	@Override
-	public boolean applyResult(Player player) {
+	public boolean applyResult(final Player player) {
 		if (player == null) {
 			return false;
 		}

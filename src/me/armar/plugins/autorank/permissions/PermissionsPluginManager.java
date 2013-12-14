@@ -16,18 +16,21 @@ import org.bukkit.plugin.Plugin;
  */
 
 /**
- * PermissionsPluginManager manages what permission handler should be given. It just does basic checks of availability and calculates what permissions plugin suits best.
+ * PermissionsPluginManager manages what permission handler should be given. It
+ * just does basic checks of availability and calculates what permissions plugin
+ * suits best.
  * 
  * It can choose from GroupManager, PermissionsBukkit and Vault.
+ * 
  * @author Staartvin
- *
+ * 
  */
 public class PermissionsPluginManager {
 
-	private Autorank plugin;
+	private final Autorank plugin;
 	private PermissionsHandler permissionPlugin;
-	
-	public PermissionsPluginManager(Autorank plugin) {
+
+	public PermissionsPluginManager(final Autorank plugin) {
 		this.plugin = plugin;
 		if (findVault(plugin)) {
 			Autorank.logMessage("Vault Hooked!");
@@ -36,7 +39,7 @@ public class PermissionsPluginManager {
 		}
 		searchPermPlugin();
 	}
-	
+
 	private void searchPermPlugin() {
 		if (findGroupManager(plugin)) {
 			// use Groupmanager
@@ -49,29 +52,32 @@ public class PermissionsPluginManager {
 			permissionPlugin = new VaultPermissionsHandler(plugin);
 		}
 	}
-	
+
 	public PermissionsHandler getPermissionPlugin() {
 		return permissionPlugin;
 	}
-	
-	protected boolean findVault(Autorank plugin) {
-		Plugin x = plugin.getServer().getPluginManager().getPlugin("Vault");
+
+	protected boolean findVault(final Autorank plugin) {
+		final Plugin x = plugin.getServer().getPluginManager()
+				.getPlugin("Vault");
 		if (x != null & x instanceof Vault) {
 			return true;
 		}
 		return false;
 	}
-	
-	protected boolean findGroupManager(Autorank plugin) {
-		Plugin x = plugin.getServer().getPluginManager().getPlugin("GroupManager");
+
+	protected boolean findGroupManager(final Autorank plugin) {
+		final Plugin x = plugin.getServer().getPluginManager()
+				.getPlugin("GroupManager");
 		if (x != null) {
 			return true;
 		}
 		return false;
 	}
-	
-	protected boolean findPermissionsBukkit(Autorank plugin) {
-		Plugin x = plugin.getServer().getPluginManager().getPlugin("PermissionsBukkit");
+
+	protected boolean findPermissionsBukkit(final Autorank plugin) {
+		final Plugin x = plugin.getServer().getPluginManager()
+				.getPlugin("PermissionsBukkit");
 		if (x != null) {
 			return true;
 		}

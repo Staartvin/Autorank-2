@@ -10,18 +10,18 @@ import org.bukkit.command.CommandSender;
 
 public class ReloadCommand implements CommandExecutor {
 
-	private Autorank plugin;
-	
-	public ReloadCommand(Autorank instance) {
+	private final Autorank plugin;
+
+	public ReloadCommand(final Autorank instance) {
 		plugin = instance;
 	}
-	
-	
+
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String label,
-			String[] args) {
-		
-		if (!plugin.getCommandsManager().hasPermission("autorank.reload", sender)) {
+	public boolean onCommand(final CommandSender sender, final Command cmd,
+			final String label, final String[] args) {
+
+		if (!plugin.getCommandsManager().hasPermission("autorank.reload",
+				sender)) {
 			return true;
 		}
 

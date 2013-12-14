@@ -20,16 +20,15 @@ import org.bukkit.configuration.ConfigurationSection;
  */
 public class MySQLWrapper {
 
-	private Autorank plugin;
+	private final Autorank plugin;
 	private SQLDataStorage mysql;
 	String hostname, username, password, database, table;
 	// Database time
 	int databaseTime = 0;
 	// This thread will be used to check if the database time has been retrieved.
 	Thread timeThread;
-	
 
-	public MySQLWrapper(Autorank instance) {
+	public MySQLWrapper(final Autorank instance) {
 		plugin = instance;
 
 		sqlSetup(plugin.getAdvancedConfig());
@@ -49,35 +48,37 @@ public class MySQLWrapper {
 				+ " modified TIMESTAMP not NULL, " + " PRIMARY KEY ( name ))";
 
 		// Run async to prevent load issues.
-		plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
-			
-			public void run() {
-				mysql.execute(statement);
-			}
-		});
-		
+		plugin.getServer().getScheduler()
+				.runTaskAsynchronously(plugin, new Runnable() {
+
+					@Override
+					public void run() {
+						mysql.execute(statement);
+					}
+				});
 
 	}
-	
+
 	/**
-	 * Because the MySQL queries are done async, we need to wait for the result. Otherwise it would be cached and out of date.
+	 * Because the MySQL queries are done async, we need to wait for the result.
+	 * Otherwise it would be cached and out of date.
 	 * This waits for the thread to die and then it will continue
 	 * Use this whenever you do an async MySQL thread.
 	 */
-	private void waitForThread(Thread thread) {
-		if(thread.isAlive()) {
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+	private void waitForThread(final Thread thread) {
+		if (thread.isAlive()) {
+			try {
+				thread.join();
+			} catch (final InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
-	public void sqlSetup(SimpleYamlConfiguration config) {
-		ConfigurationSection s = config.getConfigurationSection("sql");
+	public void sqlSetup(final SimpleYamlConfiguration config) {
+		final ConfigurationSection s = config.getConfigurationSection("sql");
 
-		Boolean enabled = s.getBoolean("enabled");
+		final Boolean enabled = s.getBoolean("enabled");
 		if (enabled != null && enabled) {
 
 			hostname = s.getString("hostname");
@@ -100,6 +101,7 @@ public class MySQLWrapper {
 	/**
 	 * Gets the database time of player
 	 * Run this ASYNC!
+	 * 
 	 * @param name Playername to get the time of
 	 * @return time player has played across all servers
 	 */
@@ -113,12 +115,12 @@ public class MySQLWrapper {
 		// Retrieve database time
 		timeThread = new Thread(new TimeRunnable(this, mysql, name, table));
 		timeThread.start();
-		
+
 		// Wait for thread to finish
 		waitForThread(timeThread);
-		
+
 		return databaseTime;
-	} 
+	}
 
 	/**
 	 * Sets the time of a player
@@ -126,30 +128,32 @@ public class MySQLWrapper {
 	 * @param playerName Player to set the time of
 	 * @param time Time to change to
 	 */
-	public void setGlobalTime(String playerName, int time) {
+	public void setGlobalTime(final String playerName, final int time) {
 		// Check if connection is still alive
 		if (mysql.isClosed()) {
 			mysql.connect();
 		}
 
-		final String statement = "INSERT INTO " + table + " VALUES ('" + playerName
-				+ "', " + time + ", CURRENT_TIMESTAMP) "
+		final String statement = "INSERT INTO " + table + " VALUES ('"
+				+ playerName + "', " + time + ", CURRENT_TIMESTAMP) "
 				+ "ON DUPLICATE KEY UPDATE " + "time=" + time;
 
 		// Run async to prevent load issues.
-		plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
-			
-			public void run() {
-				// TODO Auto-generated method stub
-				mysql.execute(statement);
-			}
-		});
+		plugin.getServer().getScheduler()
+				.runTaskAsynchronously(plugin, new Runnable() {
+
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						mysql.execute(statement);
+					}
+				});
 	}
 
 	public boolean isMySQLEnabled() {
 		return mysql != null;
 	}
-	
+
 	public String getDatabaseName() {
 		return database;
 	}

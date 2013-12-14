@@ -9,9 +9,9 @@ import org.bukkit.configuration.ConfigurationSection;
 
 public class PermissionGroupValidation {
 
-	private Autorank autorank;
+	private final Autorank autorank;
 
-	public PermissionGroupValidation(Autorank instance) {
+	public PermissionGroupValidation(final Autorank instance) {
 		this.autorank = instance;
 	}
 
@@ -21,20 +21,20 @@ public class PermissionGroupValidation {
 	 * @param config Advanced Config
 	 * @return true if correct; false otherwise
 	 */
-	public boolean validateAdvancedGroups(SimpleYamlConfiguration config) {
+	public boolean validateAdvancedGroups(final SimpleYamlConfiguration config) {
 
 		if (config == null)
 			return false;
 
 		boolean isMissing = false;
-		String[] groups = autorank.getPermPlugHandler().getPermissionPlugin()
-				.getGroups();
+		final String[] groups = autorank.getPermPlugHandler()
+				.getPermissionPlugin().getGroups();
 		Set<String> ranks;
 
 		// Check for advanced config.
 		if (config.getBoolean("use advanced config")) {
 
-			ConfigurationSection section = config
+			final ConfigurationSection section = config
 					.getConfigurationSection("ranks");
 			ranks = section.getKeys(false);
 
@@ -45,9 +45,9 @@ public class PermissionGroupValidation {
 			//ranks = config.getKeys(false);
 		}
 
-		for (String rank : ranks) {
+		for (final String rank : ranks) {
 			for (int i = 0; i < groups.length; i++) {
-				String group = groups[i];
+				final String group = groups[i];
 				if (rank.equals(group))
 					break;
 
@@ -86,11 +86,11 @@ public class PermissionGroupValidation {
 	 * @return true if (rankFrom.equals(group) && rankTo is defined in the
 	 *         config); false otherwise
 	 */
-	public boolean isValidChange(String group) {
-		String rankChange = autorank.getAdvancedConfig().getString(
+	public boolean isValidChange(final String group) {
+		final String rankChange = autorank.getAdvancedConfig().getString(
 				"ranks." + group + ".results.rank change", null);
-		String[] groups = autorank.getPermPlugHandler().getPermissionPlugin()
-				.getGroups();
+		final String[] groups = autorank.getPermPlugHandler()
+				.getPermissionPlugin().getGroups();
 
 		if (rankChange == null)
 			return true;
@@ -101,7 +101,7 @@ public class PermissionGroupValidation {
 		if (!rankChange.contains(";")) {
 			boolean isMissing = true;
 
-			for (String group1 : groups) {
+			for (final String group1 : groups) {
 				if (group1.equals(rankChange.trim())) {
 					isMissing = false;
 				}
@@ -110,7 +110,7 @@ public class PermissionGroupValidation {
 			return !isMissing;
 		}
 
-		String[] array = rankChange.split(";");
+		final String[] array = rankChange.split(";");
 
 		String rankFrom = null, rankTo = null;
 
@@ -142,14 +142,14 @@ public class PermissionGroupValidation {
 		boolean isMissingRankTo = true, isMissingRankFrom = true;
 
 		// Check whether the rankTo exists
-		for (String group1 : groups) {
+		for (final String group1 : groups) {
 			if (group1.equals(rankTo.trim())) {
 				isMissingRankTo = false;
 			}
 		}
 
 		// Check whether the rankFrom exists
-		for (String group1 : groups) {
+		for (final String group1 : groups) {
 			if (group1.equals(rankFrom.trim())) {
 				isMissingRankFrom = false;
 			}
@@ -184,21 +184,21 @@ public class PermissionGroupValidation {
 	 * @param config SimpleConfig
 	 * @return true if they are valid; false otherwise.
 	 */
-	public boolean validateSimpleGroups(SimpleYamlConfiguration config) {
+	public boolean validateSimpleGroups(final SimpleYamlConfiguration config) {
 		if (config == null)
 			return false;
 
 		// is any group missing
 		boolean isMissing = false;
 
-		String[] groups = autorank.getPermPlugHandler().getPermissionPlugin()
-				.getGroups();
-		Set<String> ranks = config.getKeys(false);
+		final String[] groups = autorank.getPermPlugHandler()
+				.getPermissionPlugin().getGroups();
+		final Set<String> ranks = config.getKeys(false);
 
-		for (String rank : ranks) {
+		for (final String rank : ranks) {
 			for (int i = 0; i < groups.length; i++) {
-				String group = groups[i];
-				
+				final String group = groups[i];
+
 				// found matching group
 				if (rank.equals(group))
 					break;
@@ -212,46 +212,53 @@ public class PermissionGroupValidation {
 					isMissing = true;
 					break;
 				}
-				
+
 				// If this is the last group and is not equal to the rank defined in the config:
 				if ((i == (groups.length - 1)) && !rank.equals(group)) {
 					autorank.getWarningManager().registerWarning(
-							"Permissions group is not defined: '" + rank + "'", 10);
+							"Permissions group is not defined: '" + rank + "'",
+							10);
 					isMissing = true;
 				}
 			}
-			
-			
+
 			// Here we check whether the value of rank is good.
-			
+
 			// Value of the group in the config
-			String value = config.getString(rank);
-			
-			String[] temp = value.split(" ");
-			
+			final String value = config.getString(rank);
+
+			final String[] temp = value.split(" ");
+
 			if (temp.length < 3) {
-				autorank.getWarningManager().registerWarning("Rank line of rank '" + rank + "' is invalid. Take a look at the examples in the config!", 10);
+				autorank.getWarningManager()
+						.registerWarning(
+								"Rank line of rank '"
+										+ rank
+										+ "' is invalid. Take a look at the examples in the config!",
+								10);
 				isMissing = true;
 			}
 
-			String rankTo = temp[0];
+			final String rankTo = temp[0];
 
 			boolean isMissingRankTo = true;
-			
-			for (String group: groups) {
+
+			for (final String group : groups) {
 				if (group.equals(rankTo)) {
 					// not missing group
 					isMissingRankTo = false;
 				}
 			}
-			
+
 			if (isMissingRankTo) {
-				autorank.getWarningManager().registerWarning("Rank line of rank '" + rank + "' is invalid. Group '" + rankTo + "' doesn't exist!", 10);
+				autorank.getWarningManager().registerWarning(
+						"Rank line of rank '" + rank + "' is invalid. Group '"
+								+ rankTo + "' doesn't exist!", 10);
 				return false;
 			}
 
 		}
-		
+
 		return !isMissing;
 
 	}

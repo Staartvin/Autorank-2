@@ -20,36 +20,41 @@ public class FactionPowerRequirement extends Requirement {
 	public FactionPowerRequirement() {
 		super();
 	}
-	
+
 	@Override
-	public boolean setOptions(String[] options, boolean optional, List<Result> results, boolean autoComplete, int reqId) {
+	public boolean setOptions(final String[] options, final boolean optional,
+			final List<Result> results, final boolean autoComplete,
+			final int reqId) {
 		this.optional = optional;
 		this.results = results;
 		this.autoComplete = autoComplete;
 		this.reqId = reqId;
-		
+
 		try {
 			factionPower = Double.parseDouble(options[0]);
 			return true;
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			factionPower = 0;
 			return false;
 		}
 	}
 
 	@Override
-	public boolean meetsRequirement(Player player) {
+	public boolean meetsRequirement(final Player player) {
 		// TODO Auto-generated method stub
 		if (isCompleted(getReqId(), player.getName())) {
 			return true;
 		}
-		
-		return this.getAutorank().getFactionsHandler().isEnabled() && this.getAutorank().getFactionsHandler().getFactionPower(player) > factionPower;
+
+		return this.getAutorank().getFactionsHandler().isEnabled()
+				&& this.getAutorank().getFactionsHandler()
+						.getFactionPower(player) > factionPower;
 	}
 
 	@Override
 	public String getDescription() {
-		return Lang.FACTIONS_POWER_REQUIREMENT.getConfigValue(new String[] {factionPower + ""});
+		return Lang.FACTIONS_POWER_REQUIREMENT
+				.getConfigValue(new String[] { factionPower + "" });
 	}
 
 	@Override
@@ -63,11 +68,12 @@ public class FactionPowerRequirement extends Requirement {
 	}
 
 	@Override
-	public String getProgress(Player player) {
+	public String getProgress(final Player player) {
 		String progress = "";
-		DecimalFormat df = new DecimalFormat("#.##");
-		String doubleRounded = df.format(getAutorank().getFactionsHandler().getFactionPower(player));
-		
+		final DecimalFormat df = new DecimalFormat("#.##");
+		final String doubleRounded = df.format(getAutorank()
+				.getFactionsHandler().getFactionPower(player));
+
 		progress = progress.concat(doubleRounded + "/" + factionPower);
 		return progress;
 	}
@@ -76,7 +82,7 @@ public class FactionPowerRequirement extends Requirement {
 	public boolean useAutoCompletion() {
 		return autoComplete;
 	}
-	
+
 	@Override
 	public int getReqId() {
 		return reqId;
