@@ -19,7 +19,7 @@
 			<attribute name="javadoc_location" value="http://ci.ess3.net/guestAuth/repository/download/bt10/.lastSuccessful/JavaDocs/EssentialsGroupManager/dist/javadoc/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="API Libs/Stats-1.37.jar" sourcepath="D:/Users/Vincent/Java Projects/workspace/Autorank2/API Libs/Sources/Stats-1.37.src.zip"/>
+	<classpathentry kind="lib" path="API Libs/Stats-1.37.jar" sourcepath="API Libs/Sources/Stats-1.37.src.zip"/>
 	<classpathentry kind="lib" path="API Libs/PermissionsBukkit-2.1.jar"/>
 	<classpathentry kind="lib" path="API Libs/Vault-1.2.26.jar">
 		<attributes>
