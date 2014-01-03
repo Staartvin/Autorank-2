@@ -70,7 +70,7 @@ public class BlocksBrokenRequirement extends Requirement {
 							null, "Block break") >= blocksBroken;
 		} else {
 			sufficient = plugin.getStatsHandler().getTotalBlocksBroken(
-					player.getName()) >= blocksBroken;
+					player.getName(), null) >= blocksBroken;
 		}
 
 		if (isCompleted(getReqId(), player.getName())) {

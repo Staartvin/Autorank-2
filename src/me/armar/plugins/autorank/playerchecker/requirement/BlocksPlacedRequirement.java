@@ -72,7 +72,7 @@ public class BlocksPlacedRequirement extends Requirement {
 							null, "Block place") >= blocksPlaced;
 		} else {
 			sufficient = plugin.getStatsHandler().getTotalBlocksPlaced(
-					player.getName()) >= blocksPlaced;
+					player.getName(), null) >= blocksPlaced;
 		}
 
 		if (isCompleted(getReqId(), player.getName())) {
