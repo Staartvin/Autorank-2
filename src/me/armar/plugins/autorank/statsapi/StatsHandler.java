@@ -58,15 +58,9 @@ public class StatsHandler {
 		return false;
 	}
 
-	public int getTotalBlocksBroken(final String player) {
-		return (int) statsAPI.getTotalBlocksBroken(player);
-	}
+	public int getTotalBlocksBroken(final String playerName, final String world) {
+		String statName = "Blocks broken";
 
-	public int getTotalBlocksPlaced(final String player) {
-		return (int) statsAPI.getTotalBlocksPlaced(player);
-	}
-
-	public int getTotalPlayTime(final String playerName, final String world) {
 		final StatsPlayer player = getStats(playerName);
 		StatData stat;
 
@@ -74,8 +68,7 @@ public class StatsHandler {
 
 		if (world != null) {
 			// Do check for one world
-			stat = player
-					.getStatData(statsAPI.getStat("Playtime"), world, true);
+			stat = player.getStatData(statsAPI.getStat(statName), world, true);
 
 			for (final Object[] vars : stat.getAllVariables()) {
 				value += stat.getValue(vars);
@@ -83,7 +76,67 @@ public class StatsHandler {
 		} else {
 			// Do global check
 			for (final World w : plugin.getServer().getWorlds()) {
-				stat = player.getStatData(statsAPI.getStat("Playtime"),
+				stat = player.getStatData(statsAPI.getStat(statName),
+						w.getName(), true);
+
+				for (final Object[] vars : stat.getAllVariables()) {
+					value += stat.getValue(vars);
+				}
+			}
+		}
+
+		return value;
+	}
+
+	public int getTotalBlocksPlaced(final String playerName, final String world) {
+		String statName = "Blocks placed";
+
+		final StatsPlayer player = getStats(playerName);
+		StatData stat;
+
+		int value = 0;
+
+		if (world != null) {
+			// Do check for one world
+			stat = player.getStatData(statsAPI.getStat(statName), world, true);
+
+			for (final Object[] vars : stat.getAllVariables()) {
+				value += stat.getValue(vars);
+			}
+		} else {
+			// Do global check
+			for (final World w : plugin.getServer().getWorlds()) {
+				stat = player.getStatData(statsAPI.getStat(statName),
+						w.getName(), true);
+
+				for (final Object[] vars : stat.getAllVariables()) {
+					value += stat.getValue(vars);
+				}
+			}
+		}
+
+		return value;
+	}
+
+	public int getTotalPlayTime(final String playerName, final String world) {
+		String statName = "Playtime";
+
+		final StatsPlayer player = getStats(playerName);
+		StatData stat;
+
+		int value = 0;
+
+		if (world != null) {
+			// Do check for one world
+			stat = player.getStatData(statsAPI.getStat(statName), world, true);
+
+			for (final Object[] vars : stat.getAllVariables()) {
+				value += stat.getValue(vars);
+			}
+		} else {
+			// Do global check
+			for (final World w : plugin.getServer().getWorlds()) {
+				stat = player.getStatData(statsAPI.getStat(statName),
 						w.getName(), true);
 
 				for (final Object[] vars : stat.getAllVariables()) {
