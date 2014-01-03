@@ -52,7 +52,7 @@ public class HasItemRequirement extends Requirement {
 			return true;
 		}
 
-		return item != null && player.getInventory().contains(item);
+		return item != null && player.getInventory().containsAtLeast(item, item.getAmount());
 	}
 
 	@Override
