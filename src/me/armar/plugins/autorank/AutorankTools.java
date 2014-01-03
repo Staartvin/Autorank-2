@@ -116,7 +116,7 @@ public class AutorankTools {
 
 	/**
 	 * Elaborate method to check whether a player is excluded from ranking.
-	 * 
+	 * <p>
 	 * When a player has a wildcard permission but is an OP, it will return
 	 * false;
 	 * When a player has a wildcard permission but is not an OP, it will return
@@ -146,7 +146,7 @@ public class AutorankTools {
 
 	/**
 	 * This will return the correct type of the requirement.
-	 * As players might want to use multiple requirements of the same type, they
+	 * As admins might want to use multiple requirements of the same type, they
 	 * only have to specify the name of it with a unique identifier.
 	 * E.g. time1, time2 or exp1, exp2, etc.
 	 * 
