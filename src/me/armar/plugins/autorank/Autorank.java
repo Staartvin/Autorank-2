@@ -176,7 +176,7 @@ public class Autorank extends JavaPlugin {
 		playerChecker.initialiseFromConfigs(this);
 
 		// Register command
-		getCommand("ar").setExecutor(getCommandsManager());
+		getCommand("autorank").setExecutor(getCommandsManager());
 
 		if (configHandler.useAdvancedConfig()) {
 			getValidateHandler().validateConfigGroups(getAdvancedConfig());

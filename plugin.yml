@@ -7,10 +7,10 @@ version: '2.7.2 Beta'
 authors: [Idrrp, Armarr, Staartvin]
 description: Reward players based on their stats.
 commands:
-    ar:
+    autorank:
         description: Master command of AutoRank
         usage: Autorank is disabled. Check your server.log!
-        aliases: [autorank]
+        aliases: [ar]
 permissions:
     autorank.check:
         description: Allows checking the recommended rank.
