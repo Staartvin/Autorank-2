@@ -37,6 +37,8 @@ public class FactionsHandler {
 	}
 
 	public double getFactionPower(final Player player) {
+		if (!isEnabled()) return 0.0d;
+		
 		final UPlayer uPlayer = UPlayer.get(player);
 
 		if (!uPlayer.hasFaction()) {
