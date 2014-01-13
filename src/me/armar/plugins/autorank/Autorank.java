@@ -53,6 +53,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+
+/**
+ * Date created:  18:34:00
+ *  13 jan. 2014
+ * @author Staartvin
+ *
+ */
 public class Autorank extends JavaPlugin {
 
 	// Test from new PC
