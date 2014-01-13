@@ -4,6 +4,7 @@ import java.util.List;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.playerchecker.result.Result;
+import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 
 import org.bukkit.entity.Player;
 
@@ -128,4 +129,12 @@ public abstract class Requirement {
 	 * @return id
 	 */
 	public abstract int getReqId();
+	
+	/**
+	 * Get the current running stats plugin.
+	 * @return stats plugin that Autorank uses for stat data
+	 */
+	public StatsPlugin getStatsPlugin() {
+		return autorank.getStatsPluginManager().getStatsPlugin();
+	}
 }

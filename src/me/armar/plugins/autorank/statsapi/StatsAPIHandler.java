@@ -11,14 +11,14 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
-public class StatsHandler {
+public class StatsAPIHandler {
 
 	private final Autorank plugin;
 	private StatsAPI statsAPI;
 
 	private final String[] compatibleVersions = { "1.37" };
 
-	public StatsHandler(final Autorank instance) {
+	public StatsAPIHandler(final Autorank instance) {
 		plugin = instance;
 	}
 
@@ -59,7 +59,7 @@ public class StatsHandler {
 	}
 
 	public int getTotalBlocksBroken(final String playerName, final String world) {
-		String statName = "Blocks broken";
+		String statName = "Block break";
 
 		final StatsPlayer player = getStats(playerName);
 		StatData stat;
@@ -89,7 +89,7 @@ public class StatsHandler {
 	}
 
 	public int getTotalBlocksPlaced(final String playerName, final String world) {
-		String statName = "Blocks placed";
+		String statName = "Block place";
 
 		final StatsPlayer player = getStats(playerName);
 		StatData stat;

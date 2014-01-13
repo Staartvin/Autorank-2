@@ -3,11 +3,9 @@ package me.armar.plugins.autorank.playerchecker.requirement;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.playerchecker.result.Result;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -19,14 +17,12 @@ public class BlocksPlacedRequirement extends Requirement {
 
 	private int reqId;
 
-	private final Autorank plugin;
 	private boolean optional = false;
 	private boolean autoComplete = false;
 	List<Result> results = new ArrayList<Result>();
 
 	public BlocksPlacedRequirement() {
 		super();
-		plugin = (Autorank) Bukkit.getPluginManager().getPlugin("Autorank");
 	}
 
 	@Override
@@ -63,16 +59,17 @@ public class BlocksPlacedRequirement extends Requirement {
 		//System.out.print("(PLACED) Check for id: " + blockID + ", dv: " + damageValue
 		//		+ ", value: " + blocksPlaced);
 
-		final boolean enabled = plugin.getStatsHandler().isEnabled();
+		final boolean enabled = getStatsPlugin().isEnabled();
 
 		boolean sufficient = false;
 		if (blockID > 0) {
-			sufficient = plugin.getStatsHandler()
-					.getBlocksStat(player.getName(), blockID, damageValue,
-							null, "Block place") >= blocksPlaced;
+			sufficient = getStatsPlugin().getNormalStat(
+					"blocks_placed",
+					new String[] { player.getName(), null, blockID + "",
+							damageValue + "" }) >= blocksPlaced;
 		} else {
-			sufficient = plugin.getStatsHandler().getTotalBlocksPlaced(
-					player.getName(), null) >= blocksPlaced;
+			sufficient = getStatsPlugin().getNormalStat("total_blocks_placed",
+					new String[] { player.getName(), null }) >= blocksPlaced;
 		}
 
 		if (isCompleted(getReqId(), player.getName())) {
@@ -120,9 +117,10 @@ public class BlocksPlacedRequirement extends Requirement {
 	@Override
 	public String getProgress(final Player player) {
 		String progress = "";
-		progress = progress.concat(getAutorank().getStatsHandler()
-				.getBlocksStat(player.getName(), blockID, damageValue, null,
-						"Block place")
+		progress = progress.concat(getStatsPlugin().getNormalStat(
+				"blocks_placed",
+				new String[] { player.getName(), null, blockID + "",
+						damageValue + "" })
 				+ "/" + blocksPlaced);
 		return progress;
 	}

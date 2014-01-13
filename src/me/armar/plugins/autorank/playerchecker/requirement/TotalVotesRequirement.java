@@ -2,18 +2,14 @@ package me.armar.plugins.autorank.playerchecker.requirement;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.playerchecker.result.Result;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public class TotalVotesRequirement extends Requirement {
 
 	private int totalVotes = 0;
-	private final Autorank plugin;
 	private boolean optional = false;
 	private boolean autoComplete = false;
 	private int reqId;
@@ -21,9 +17,8 @@ public class TotalVotesRequirement extends Requirement {
 
 	public TotalVotesRequirement() {
 		super();
-		plugin = (Autorank) Bukkit.getPluginManager().getPlugin("Autorank");
 	}
-
+	
 	@Override
 	public boolean setOptions(final String[] options, final boolean optional,
 			final List<Result> results, final boolean autoComplete,
@@ -49,9 +44,8 @@ public class TotalVotesRequirement extends Requirement {
 		}
 
 		// TODO Auto-generated method stub
-		return plugin.getStatsHandler().isEnabled()
-				&& plugin.getStatsHandler().getNormalStat(player.getName(),
-						"Votes", null) >= totalVotes;
+		return getStatsPlugin().isEnabled()
+				&& getStatsPlugin().getNormalStat("Votes", new String[] {player.getName(), null}) >= totalVotes;
 	}
 
 	@Override
@@ -73,8 +67,7 @@ public class TotalVotesRequirement extends Requirement {
 	@Override
 	public String getProgress(final Player player) {
 		String progress = "";
-		progress = progress.concat(getAutorank().getStatsHandler()
-				.getNormalStat(player.getName(), "Votes", null)
+		progress = progress.concat(getStatsPlugin().getNormalStat("Votes", new String[] {player.getName(), null})
 				+ "/"
 				+ totalVotes);
 		return progress;

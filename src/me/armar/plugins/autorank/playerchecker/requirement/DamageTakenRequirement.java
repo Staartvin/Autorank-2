@@ -3,24 +3,20 @@ package me.armar.plugins.autorank.playerchecker.requirement;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.playerchecker.result.Result;
-
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public class DamageTakenRequirement extends Requirement {
 
 	private int damageTaken = 0;
-	private final Autorank plugin;
 	private boolean optional = false;
 	private boolean autoComplete = false;
 	private int reqId;
 	List<Result> results = new ArrayList<Result>();
 
 	public DamageTakenRequirement() {
-		plugin = (Autorank) Bukkit.getPluginManager().getPlugin("Autorank");
+		super();
 	}
 
 	@Override
@@ -48,9 +44,9 @@ public class DamageTakenRequirement extends Requirement {
 		}
 
 		// TODO Auto-generated method stub
-		return plugin.getStatsHandler().isEnabled()
-				&& plugin.getStatsHandler().getNormalStat(player.getName(),
-						"Damage taken", null) >= damageTaken;
+		return getStatsPlugin().isEnabled()
+				&& getStatsPlugin().getNormalStat("damage_taken",
+						new String[] { player.getName(), null }) >= damageTaken;
 	}
 
 	@Override
@@ -72,10 +68,9 @@ public class DamageTakenRequirement extends Requirement {
 	@Override
 	public String getProgress(final Player player) {
 		String progress = "";
-		progress = progress.concat(getAutorank().getStatsHandler()
-				.getNormalStat(player.getName(), "Damage taken", null)
-				+ "/"
-				+ damageTaken);
+		progress = progress.concat(getStatsPlugin().getNormalStat(
+				"damage_taken", new String[] { player.getName(), null })
+				+ "/" + damageTaken);
 		return progress;
 	}
 

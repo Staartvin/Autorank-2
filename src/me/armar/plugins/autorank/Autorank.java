@@ -40,7 +40,9 @@ import me.armar.plugins.autorank.playerchecker.result.Result;
 import me.armar.plugins.autorank.playerchecker.result.TeleportResult;
 import me.armar.plugins.autorank.playtimes.Playtimes;
 import me.armar.plugins.autorank.requirementhandler.RequirementHandler;
-import me.armar.plugins.autorank.statsapi.StatsHandler;
+import me.armar.plugins.autorank.statsmanager.StatsPlugin;
+import me.armar.plugins.autorank.statsmanager.StatsPluginManager;
+import me.armar.plugins.autorank.statsmanager.handlers.DummyHandler;
 import me.armar.plugins.autorank.updater.UpdateHandler;
 import me.armar.plugins.autorank.updater.Updater;
 import me.armar.plugins.autorank.validations.ValidateHandler;
@@ -62,7 +64,6 @@ public class Autorank extends JavaPlugin {
 	private PermissionsPluginManager permPlugHandler;
 	private LanguageHandler languageHandler;
 	private ValidateHandler validateHandler;
-	private StatsHandler statsHandler;
 	private MySQLWrapper mysqlWrapper;
 	private static Logger log = Bukkit.getLogger();
 	private UpdateHandler updateHandler;
@@ -72,6 +73,7 @@ public class Autorank extends JavaPlugin {
 	private FactionsHandler factionsHandler;
 	private WarningManager warningManager;
 	private CommandsManager commandsManager;
+	private StatsPluginManager statsPluginManager;
 
 	@Override
 	public void onEnable() {
@@ -124,8 +126,8 @@ public class Autorank extends JavaPlugin {
 		// Create validate handler
 		setValidateHandler(new ValidateHandler(this));
 
-		// Create stats handler
-		setStatsHandler(new StatsHandler(this));
+		// Create stats plugin handler
+		setStatsPluginManager(new StatsPluginManager(this));
 
 		// Create faction handler
 		setFactionsHandler(new FactionsHandler(this));
@@ -133,9 +135,18 @@ public class Autorank extends JavaPlugin {
 		// Create commands manager
 		setCommandsManager(new CommandsManager(this));
 
-		if (statsHandler.setupStatsAPI()) {
+		// Check if we found a stats plugin
+		if (statsPluginManager.getStatsPlugin() != null && !statsPluginManager.getStatsPlugin().getClass().equals(DummyHandler.class)) {
+			String statsPluginName = "none";
+			
+			if (statsPluginManager.findStats()) {
+				statsPluginName = "Stats (by Lolmewn)";
+			}
+			
 			getLogger().info(
-					"Hooked into Stats! Stats requirements can be used.");
+					"Found Stats plugin: " + statsPluginName);
+		} else {
+			getLogger().severe("No Stats plugin found!");
 		}
 
 		if (factionsHandler.setupFactions()) {
@@ -327,14 +338,6 @@ public class Autorank extends JavaPlugin {
 		this.validateHandler = validateHandler;
 	}
 
-	public StatsHandler getStatsHandler() {
-		return statsHandler;
-	}
-
-	public void setStatsHandler(final StatsHandler statsHandler) {
-		this.statsHandler = statsHandler;
-	}
-
 	public MySQLWrapper getMySQLWrapper() {
 		return mysqlWrapper;
 	}
@@ -423,6 +426,18 @@ public class Autorank extends JavaPlugin {
 
 	public void setCommandsManager(final CommandsManager commandsManager) {
 		this.commandsManager = commandsManager;
+	}
+
+	public StatsPluginManager getStatsPluginManager() {
+		return statsPluginManager;
+	}
+
+	public void setStatsPluginManager(StatsPluginManager statsPluginManager) {
+		this.statsPluginManager = statsPluginManager;
+	}
+	
+	public StatsPlugin getHookedStatsPlugin() {
+		return getStatsPluginManager().getStatsPlugin();
 	}
 
 }

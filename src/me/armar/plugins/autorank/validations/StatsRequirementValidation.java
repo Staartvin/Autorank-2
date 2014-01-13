@@ -35,18 +35,10 @@ public class StatsRequirementValidation {
 
 			for (final String req : reqs) {
 				if (requiresStats(req)) {
-					if (!plugin.getStatsHandler().isEnabled()) {
+					if (plugin.getHookedStatsPlugin() == null || !plugin.getHookedStatsPlugin().isEnabled()) {
 						plugin.getWarningManager()
 								.registerWarning(
-										"You need to install Stats because you have Stats-required requirements listed in your config.",
-										5);
-						return false;
-					}
-
-					if (!plugin.getStatsHandler().areBetaFunctionsEnabled()) {
-						plugin.getWarningManager()
-								.registerWarning(
-										"You have to enable beta features in the config of Stats!",
+										"You need to install Stats because you have Stats-required requirements listed in your config (also turn on beta functions).",
 										5);
 						return false;
 					}
