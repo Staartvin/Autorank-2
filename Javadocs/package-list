@@ -20,6 +20,8 @@ me.armar.plugins.autorank.playerchecker.result
 me.armar.plugins.autorank.playtimes
 me.armar.plugins.autorank.requirementhandler
 me.armar.plugins.autorank.statsapi
+me.armar.plugins.autorank.statsmanager
+me.armar.plugins.autorank.statsmanager.handlers
 me.armar.plugins.autorank.updater
 me.armar.plugins.autorank.validations
 me.armar.plugins.autorank.warningmanager
