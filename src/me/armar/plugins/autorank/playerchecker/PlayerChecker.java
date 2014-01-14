@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.AutorankTools;
@@ -126,6 +127,24 @@ public class PlayerChecker {
 		}
 
 		return result;
+	}
+	
+	public String getNextRankup(Player player) {
+		Map<RankChange, List<Requirement>> requirements = getAllRequirements(player);
+		
+		Set<RankChange> rankchanges = requirements.keySet();
+		
+		if (rankchanges.size() == 0) {
+			return null;
+		}
+		
+		String rankName = null;
+		
+		for (RankChange rank: rankchanges) {
+			rankName = rank.getRankTo();
+		}
+		
+		return rankName;
 	}
 
 	public PlayerCheckerTrigger getTrigger() {
