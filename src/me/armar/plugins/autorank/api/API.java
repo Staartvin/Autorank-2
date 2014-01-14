@@ -148,7 +148,7 @@ public class API {
 	 * @param player Player to get the next rank up for.
 	 * @return The name of the group the player will be ranked to; null when no rank up.
 	 */
-	public String getNextRankup(Player player) {
-		return plugin.getPlayerChecker().getNextRankup(player);
+	public String getNextRankupGroup(Player player) {
+		return plugin.getPlayerChecker().getNextRankupGroup(player);
 	}
 }
