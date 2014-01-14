@@ -1,10 +1,7 @@
 package me.armar.plugins.autorank.commands;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.AutorankTools;
@@ -100,10 +97,6 @@ public class CheckCommand implements CommandExecutor {
 		}
 
 		// Change the way requirements are shown. When a player has completed a requirement, it will be green, otherwise it will be red.
-		final Map<RankChange, List<Requirement>> failed = plugin
-				.getPlayerChecker().getAllRequirements(player);
-
-		final Set<RankChange> keySet = failed.keySet();
 		final String playername = player.getName();
 
 		final String[] groups = plugin.getPermPlugHandler()
@@ -135,14 +128,14 @@ public class CheckCommand implements CommandExecutor {
 
 		AutorankTools.sendColoredMessage(sender, stringBuilder.toString());
 
-		if (keySet.size() == 0) {
+		String nextRankup = plugin.getPlayerChecker().getNextRankupGroup(player);
+		
+		if (nextRankup == null) {
 			AutorankTools.sendColoredMessage(sender,
 					Lang.NO_NEXT_RANK.getConfigValue(null));
 		} else {
-			final Iterator<RankChange> it = keySet.iterator();
-			while (it.hasNext()) {
-				final RankChange rank = it.next();
-				final List<Requirement> reqs = failed.get(rank);
+				RankChange rank = plugin.getPlayerChecker().getNextRank(player);
+				List<Requirement> reqs = plugin.getPlayerChecker().getRequirementsForNextRank(player);
 
 				boolean onlyOptional = true;
 				boolean meetsAllRequirements = true;
@@ -244,7 +237,7 @@ public class CheckCommand implements CommandExecutor {
 						}
 					}
 				}
-			}
+			//}
 		}
 	}
 }
