@@ -122,8 +122,29 @@ public class LocationRequirement extends Requirement {
 
 	@Override
 	public String getProgress(final Player player) {
+		// Distance between two points:
+		// d = sqrt((x2 - x1)^2 + (y2 - y1)^2 + (z2 - z1)^2)
+		// See for info: http://www.calculatorsoup.com/calculators/geometry-solids/distance-two-points.php
+		
+		Location playerLoc = player.getLocation();
+		
+		// Player coords
+		int pX, pY, pZ;
+		
+		pX = playerLoc.getBlockX();
+		pY = playerLoc.getBlockY();
+		pZ = playerLoc.getBlockZ();
+		
+		int distance = (int) Math.sqrt(Math.pow((pX - xLocation), 2) + Math.pow((pY - yLocation), 2) + Math.pow((pZ - zLocation), 2));
+		
 		String progress = "";
-		progress = progress.concat("Cannot show progress.");
+		
+		String plurOrSing = "meter";
+		
+		if (distance > 1) {
+			plurOrSing = "meters";
+		}
+		progress = progress.concat(distance + " " + plurOrSing + " away.");
 		return progress;
 	}
 
