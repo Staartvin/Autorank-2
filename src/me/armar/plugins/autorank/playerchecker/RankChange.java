@@ -15,7 +15,7 @@ public class RankChange {
 	private final List<Requirement> req;
 	private final List<Result> res;
 	private final String rankTo;
-	private final Autorank plugin; //TODO: Fix it all 
+	private final Autorank plugin;  
 
 	public RankChange(final Autorank plugin, final String rank,
 			final String rankTo, final List<Requirement> req,
