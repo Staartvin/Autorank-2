@@ -53,16 +53,15 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-
 /**
- * Date created:  18:34:00
- *  13 jan. 2014
+ * Date created: 18:34:00
+ * 13 jan. 2014
+ * 
  * @author Staartvin
- *
+ * 
  */
 public class Autorank extends JavaPlugin {
 
-	// Test from new PC
 	private Leaderboard leaderboard;
 	private Playtimes playtimes;
 	private PlayerChecker playerChecker;
@@ -143,15 +142,16 @@ public class Autorank extends JavaPlugin {
 		setCommandsManager(new CommandsManager(this));
 
 		// Check if we found a stats plugin
-		if (statsPluginManager.getStatsPlugin() != null && !statsPluginManager.getStatsPlugin().getClass().equals(DummyHandler.class)) {
+		if (statsPluginManager.getStatsPlugin() != null
+				&& !statsPluginManager.getStatsPlugin().getClass()
+						.equals(DummyHandler.class)) {
 			String statsPluginName = "none";
-			
+
 			if (statsPluginManager.findStats()) {
 				statsPluginName = "Stats (by Lolmewn)";
 			}
-			
-			getLogger().info(
-					"Found Stats plugin: " + statsPluginName);
+
+			getLogger().info("Found Stats plugin: " + statsPluginName);
 		} else {
 			getLogger().severe("No Stats plugin found!");
 		}
@@ -442,7 +442,7 @@ public class Autorank extends JavaPlugin {
 	public void setStatsPluginManager(StatsPluginManager statsPluginManager) {
 		this.statsPluginManager = statsPluginManager;
 	}
-	
+
 	public StatsPlugin getHookedStatsPlugin() {
 		return getStatsPluginManager().getStatsPlugin();
 	}
