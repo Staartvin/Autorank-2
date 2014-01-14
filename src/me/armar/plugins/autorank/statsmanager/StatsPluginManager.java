@@ -39,7 +39,13 @@ public class StatsPluginManager {
 			// use Vault
 			// Use dummy handler if no stats plugin was found
 			statsPlugin = new DummyHandler();
-			plugin.getWarningManager().registerWarning("Autorank did not find a stats plugin! Most requirements cannot be used!", 5);
+			
+			// Do not register warning as that will show every few seconds.
+			// Print image on console instead.
+			//plugin.getWarningManager().registerWarning("Autorank did not find a stats plugin! Most requirements cannot be used!", 5);
+			
+			plugin.getLogger().severe("Autorank did not find a stats plugin! Most requirements cannot be used!");
+			
 		}
 	}
 	
