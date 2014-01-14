@@ -73,8 +73,16 @@ public class HasItemRequirement extends Requirement {
 
 	@Override
 	public String getProgress(final Player player) {
+		int firstSlot = player.getInventory().first(item.getType());
+		int slotAmount = 0;
+		
+		if (firstSlot >= 0) {
+			slotAmount = player.getInventory().getItem(firstSlot).getAmount();	
+		}
+		
 		String progress = "";
-		progress = progress.concat("");
+		progress = progress
+				.concat(slotAmount + "/" + item.getAmount());
 		return progress;
 	}
 
