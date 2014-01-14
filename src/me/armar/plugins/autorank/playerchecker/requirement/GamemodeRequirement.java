@@ -57,11 +57,12 @@ public class GamemodeRequirement extends Requirement {
 		return results;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public String getProgress(final Player player) {
 		String progress = "";
 		progress = progress
-				.concat(player.getGameMode().name() + "/" + gamemode);
+				.concat(player.getGameMode().getValue() + "/" + gamemode);
 		return progress;
 	}
 
