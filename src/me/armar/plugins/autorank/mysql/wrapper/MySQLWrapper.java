@@ -120,7 +120,6 @@ public class MySQLWrapper {
 		// Do not make a call to the database every time.
 		// Instead, only call once every 5 minutes.
 		if (!isOutOfDate(name)) {
-			System.out.print("Cached time");
 			return getCachedGlobalTime(name);
 		}
 		
@@ -176,7 +175,6 @@ public class MySQLWrapper {
 	 */
 	public Integer getCachedGlobalTime(String playerName) {
 		if (!lastReceivedTime.containsKey(playerName)) {
-			System.out.print("Player is invalid");
 			return -1;
 		}
 		
@@ -184,7 +182,6 @@ public class MySQLWrapper {
 		
 		// Weird cached
 		if (cached <= 0) {
-			System.out.print("Weird value");
 			return -1;
 		}
 		
