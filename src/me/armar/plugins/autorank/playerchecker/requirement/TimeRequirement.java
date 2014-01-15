@@ -9,6 +9,13 @@ import me.armar.plugins.autorank.playerchecker.result.Result;
 
 import org.bukkit.entity.Player;
 
+/**
+ * This requirement checks for local play time
+ * Date created:  13:49:33
+ * 15 jan. 2014
+ * @author Staartvin
+ *
+ */
 public class TimeRequirement extends Requirement {
 
 	int time = -1;
