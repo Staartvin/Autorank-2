@@ -171,7 +171,6 @@ public class Autorank extends JavaPlugin {
 		// Register 'main' requirements
 		req.registerRequirement("exp", ExpRequirement.class);
 		req.registerRequirement("money", MoneyRequirement.class);
-		req.registerRequirement("time", TimeRequirement.class);
 		req.registerRequirement("gamemode", GamemodeRequirement.class);
 		req.registerRequirement("has item", HasItemRequirement.class);
 		req.registerRequirement("world", WorldRequirement.class);
@@ -185,6 +184,7 @@ public class Autorank extends JavaPlugin {
 		req.registerRequirement("players killed", PlayerKillsRequirement.class);
 		req.registerRequirement("global time", GlobalTimeRequirement.class);
 		req.registerRequirement("total time", TotalTimeRequirement.class);
+		req.registerRequirement("time", TimeRequirement.class);
 
 		// REGISTER PLURALS IN AUTORANKTOOLS AS WELL!
 
