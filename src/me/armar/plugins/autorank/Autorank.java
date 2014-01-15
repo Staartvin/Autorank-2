@@ -23,6 +23,7 @@ import me.armar.plugins.autorank.playerchecker.requirement.DamageTakenRequiremen
 import me.armar.plugins.autorank.playerchecker.requirement.ExpRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.FactionPowerRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.GamemodeRequirement;
+import me.armar.plugins.autorank.playerchecker.requirement.GlobalTimeRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.HasItemRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.LocationRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.MobKillsRequirement;
@@ -181,6 +182,7 @@ public class Autorank extends JavaPlugin {
 		req.registerRequirement("location", LocationRequirement.class);
 		req.registerRequirement("faction power", FactionPowerRequirement.class);
 		req.registerRequirement("players killed", PlayerKillsRequirement.class);
+		req.registerRequirement("global time", GlobalTimeRequirement.class);
 
 		// REGISTER PLURALS IN AUTORANKTOOLS AS WELL!
 
