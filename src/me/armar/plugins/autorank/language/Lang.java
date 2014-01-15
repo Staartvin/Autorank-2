@@ -32,7 +32,7 @@ public enum Lang {
 			" and will now be ranked up."), REQUIREMENTS_TO_RANK(
 			"requirements-to-rank", "Requirements to be ranked up: "), DATA_IMPORTED(
 			"data-imported", "New data has been imported!"), TIME_REQUIREMENT(
-			"time-requirement", "Play for at least {0} or higher."), WORLD_REQUIREMENT(
+			"time-requirement", "Play for at least {0}."), WORLD_REQUIREMENT(
 			"world-requirement", "Be in {0}."), VOTE_REQUIREMENT(
 			"vote-requirement", "Vote at least {0} times."), MONEY_REQUIREMENT(
 			"money-requirement", "Have at least {0}."), BROKEN_BLOCKS_REQUIREMENT(
@@ -64,7 +64,7 @@ public enum Lang {
 			"Have at least {0} power in your faction."), PLAYER_KILLS_REQUIREMENT(
 			"player-kills-requirement", "Kill at least {0} player(s)."), GLOBAL_TIME_REQUIREMENT(
 			"global-time-requirement",
-			"Play for at least {0} on any of the servers.");
+			"Play for at least {0} on any of the servers."), PLAYER_IS_INVALID("player-is-invalid", "&6{0}&4 has never been logged before.");
 
 	private String path, def;
 	private static FileConfiguration LANG;
