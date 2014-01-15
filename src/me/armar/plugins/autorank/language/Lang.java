@@ -62,7 +62,9 @@ public enum Lang {
 			"location-requirement", "Be at {0}."), FACTIONS_POWER_REQUIREMENT(
 			"factions-power-requirement",
 			"Have at least {0} power in your faction."), PLAYER_KILLS_REQUIREMENT(
-			"player-kills-requirement", "Kill at least {0} player(s).");
+			"player-kills-requirement", "Kill at least {0} player(s)."), GLOBAL_TIME_REQUIREMENT(
+			"global-time-requirement",
+			"Play for at least {0} on any of the servers.");
 
 	private String path, def;
 	private static FileConfiguration LANG;
