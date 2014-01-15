@@ -1,5 +1,7 @@
 package me.armar.plugins.autorank.mysql.wrapper;
 
+import java.util.HashMap;
+
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.data.SQLDataStorage;
 import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
@@ -27,6 +29,11 @@ public class MySQLWrapper {
 	int databaseTime = 0;
 	// This thread will be used to check if the database time has been retrieved.
 	Thread timeThread;
+	
+	// Keeps track of when a call to the database was for this player
+	private HashMap<String, Long> lastChecked = new HashMap<String, Long>();
+	// Stores the last received global time for a player
+	private HashMap<String, Integer> lastReceivedTime = new HashMap<String, Integer>();
 
 	public MySQLWrapper(final Autorank instance) {
 		plugin = instance;
@@ -101,14 +108,22 @@ public class MySQLWrapper {
 	/**
 	 * Gets the database time of player
 	 * Run this ASYNC!
+	 * <p>
+	 * This will return an updated value every 5 minutes. Calling it every minute isn't smart,
+	 * as it will only update every 5 minutes.
 	 * 
 	 * @param name Playername to get the time of
 	 * @return time player has played across all servers
 	 */
 	public int getDatabaseTime(final String name) {
+		
+		// Do not make a call to the database every time.
+		// Instead, only call once every 5 minutes.
+		if (!isOutOfDate(name)) {
+			return getCachedGlobalTime(name);
+		}
+		
 		// Check if connection is still alive
-		// TODO: make this run async. (When I try to, it doesn't get the fresh result.)
-		// I need to make it wait for the task.
 		if (mysql.isClosed()) {
 			mysql.connect();
 		}
@@ -118,8 +133,59 @@ public class MySQLWrapper {
 
 		// Wait for thread to finish
 		waitForThread(timeThread);
+		
+		// Store last received time and last received value
+		lastChecked.put(name, System.currentTimeMillis());
+		lastReceivedTime.put(name, databaseTime);
 
 		return databaseTime;
+	}
+	
+	public boolean isOutOfDate(String playerName) {
+		// Checks whether the last check was five minutes ago.
+		// When the last check was more than five minutes ago,
+		// the database time is 'outdated'
+		
+		// Never checked
+		if (!lastChecked.containsKey(playerName)) {
+			return false;
+		}
+		
+		long currentTime = System.currentTimeMillis();
+		
+		long lastCheckedTime = lastChecked.get(playerName);
+		
+		// Weird time received.
+		if (lastCheckedTime <= 0) {
+			return false;
+		}
+		
+		// Get the difference in minutes
+		if ((currentTime - lastCheckedTime) / 60000 >= 5) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * Get the cached value of the global time.
+	 * @param playerName Name of the player
+	 * @return cached global time or -1 if nothing was cached.
+	 */
+	public Integer getCachedGlobalTime(String playerName) {
+		if (!lastReceivedTime.containsKey(playerName)) {
+			return -1;
+		}
+		
+		int cached = lastReceivedTime.get(playerName);
+		
+		// Weird cached
+		if (cached <= 0) {
+			return -1;
+		}
+		
+		return cached;
 	}
 
 	/**
