@@ -38,13 +38,8 @@ public class GlobalCheckCommand implements CommandExecutor {
 
 			final Player player = plugin.getServer().getPlayer(args[1]);
 			if (player == null) {
-				AutorankTools.sendColoredMessage(
-						sender,
-						args[1]
-								+ Lang.HAS_PLAYED_FOR.getConfigValue(null)
-								+ AutorankTools.minutesToString(plugin
-										.getGlobalTime(args[1]))
-								+ " across all servers.");
+				sender.sendMessage(Lang.PLAYER_IS_INVALID.getConfigValue(new String[] {args[1]}));
+				return true;
 			} else {
 				if (player.hasPermission("autorank.exclude")) {
 					sender.sendMessage(ChatColor.RED
@@ -53,6 +48,20 @@ public class GlobalCheckCommand implements CommandExecutor {
 					return true;
 				}
 
+				int minutes = plugin
+						.getGlobalTime(args[1]);
+				
+				if (minutes < 0) {
+					sender.sendMessage(Lang.PLAYER_IS_INVALID.getConfigValue(new String[] {args[1]}));
+					return true;
+				}
+				
+				AutorankTools.sendColoredMessage(
+						sender,
+						args[1]
+								+ Lang.HAS_PLAYED_FOR.getConfigValue(null)
+								+ AutorankTools.minutesToString(minutes)
+								+ " across all servers.");
 				// Do no check. Players can't be checked on global times (at the moment)
 				//check(sender, player);
 			}
