@@ -3,7 +3,7 @@ name: Autorank
 softdepend: [Essentials, GroupManager, Stats]
 depend: [Vault]
 url: http://dev.bukkit.org/bukkit-plugins/autorank/
-version: '2.7.2 Beta'
+version: '2.8 Beta'
 authors: [Idrrp, Armarr, Staartvin]
 description: Reward players based on their stats.
 commands:
