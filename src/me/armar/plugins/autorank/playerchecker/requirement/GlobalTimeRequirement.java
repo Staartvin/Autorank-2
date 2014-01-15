@@ -69,7 +69,7 @@ public class GlobalTimeRequirement extends Requirement {
 	@Override
 	public String getProgress(final Player player) {
 		String progress = "";
-		progress = progress.concat(getAutorank().getPlaytimes().getLocalTime(
+		progress = progress.concat(getAutorank().getPlaytimes().getGlobalTime(
 				player.getName())
 				+ " min" + "/" + time + " min");
 		return progress;
