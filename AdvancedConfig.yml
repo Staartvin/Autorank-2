@@ -78,7 +78,8 @@ ranks:
 #       mobs killed: 5;spider (player has to have killed 5 spiders) (if no entity is specified, then any kill counts) (Requires Stats) (for a list of entities: http://jd.bukkit.org/rb/apidocs/org/bukkit/entity/EntityType.html)
 #       location: x;y;z;world;radius (player has to be in a location or within its radius)
 #       faction power: 10 (Amount of power a faction has to have) (Requires Factions)
-#       players killed: 10; (Player has to kill at least 10 players) (Requires Stats)
+#       players killed: 10 (Player has to kill at least 10 players) (Requires Stats)
+#       global time: 10d 1h 5m (Player has to be online for at least 10 days, 1 hour and 5 mins) (Global time is the accumulated time over all servers you have connected the MySQL database with)
 #
 #   results:
 #       rank change: new-rank
