@@ -31,6 +31,7 @@ import me.armar.plugins.autorank.playerchecker.requirement.MoneyRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.PlayerKillsRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 import me.armar.plugins.autorank.playerchecker.requirement.TimeRequirement;
+import me.armar.plugins.autorank.playerchecker.requirement.TotalTimeRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.TotalVotesRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.WorldRequirement;
 import me.armar.plugins.autorank.playerchecker.result.CommandResult;
@@ -183,6 +184,7 @@ public class Autorank extends JavaPlugin {
 		req.registerRequirement("faction power", FactionPowerRequirement.class);
 		req.registerRequirement("players killed", PlayerKillsRequirement.class);
 		req.registerRequirement("global time", GlobalTimeRequirement.class);
+		req.registerRequirement("total time", TotalTimeRequirement.class);
 
 		// REGISTER PLURALS IN AUTORANKTOOLS AS WELL!
 
