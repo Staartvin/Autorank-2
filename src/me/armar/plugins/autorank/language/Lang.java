@@ -64,7 +64,8 @@ public enum Lang {
 			"Have at least {0} power in your faction."), PLAYER_KILLS_REQUIREMENT(
 			"player-kills-requirement", "Kill at least {0} player(s)."), GLOBAL_TIME_REQUIREMENT(
 			"global-time-requirement",
-			"Play for at least {0} on any of the servers."), PLAYER_IS_INVALID("player-is-invalid", "&6{0}&4 has never been logged before.");
+			"Play for at least {0} on any of the servers."), PLAYER_IS_INVALID("player-is-invalid", "&6{0}&4 has never been logged before."), TOTAL_TIME_REQUIREMENT(
+					"total-time-requirement", "Be with this server for at least {0}.");
 
 	private String path, def;
 	private static FileConfiguration LANG;
