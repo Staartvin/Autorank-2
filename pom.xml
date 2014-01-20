@@ -40,25 +40,73 @@
 			</plugin>
 
 		</plugins>
-		
+
 	</build>
-	
+
 	<repositories>
 
-			<repository>
-				<id>bukkit-repo</id>
-				<url>http://repo.bukkit.org/content/groups/public/</url>
-			</repository>
+		<repository>
+			<id>bukkit-repo</id>
+			<url>http://repo.bukkit.org/content/groups/public/</url>
+		</repository>
 
-		</repositories>
+	</repositories>
 
-		<dependencies>
+	<dependencies>
 
-			<dependency>
-				<groupId>org.bukkit</groupId>
-				<artifactId>bukkit</artifactId>
-				<version>1.7.2-R0.2</version>
-			</dependency>
+		<dependency>
+			<groupId>org.bukkit</groupId>
+			<artifactId>bukkit</artifactId>
+			<version>1.7.2-R0.2</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>Essentials</groupId>
+			<artifactId>Essentials</artifactId>
+			<version>2.12.1.2</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/API Libs/Essentials-2.12.1.2.jar</systemPath>
+		</dependency>
+		
+		<dependency>
+			<groupId>Factions</groupId>
+			<artifactId>Factions</artifactId>
+			<version>2.2.2</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/API Libs/Factions-2.2.2.jar</systemPath>
+		</dependency>
+		
+		<dependency>
+			<groupId>MCore</groupId>
+			<artifactId>MCore</artifactId>
+			<version>6.9.1</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/API Libs/mcore-6.9.1.jar</systemPath>
+		</dependency>
+		
+		<dependency>
+			<groupId>PermissionsBukkit</groupId>
+			<artifactId>PermissionsBukkit</artifactId>
+			<version>2.1</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/API Libs/PermissionsBukkit-2.1.jar</systemPath>
+		</dependency>
+		
+		<dependency>
+			<groupId>Stats</groupId>
+			<artifactId>Stats</artifactId>
+			<version>1.37</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/API Libs/Stats-1.37.jar</systemPath>
+		</dependency>
+		
+		<dependency>
+			<groupId>Vault</groupId>
+			<artifactId>Vault</artifactId>
+			<version>1.2.26</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/API Libs/Vault-1.2.26.jar</systemPath>
+		</dependency>
 
-		</dependencies>
+	</dependencies>
 </project>
