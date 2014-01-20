@@ -11,6 +11,7 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.AutorankTools;
 import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 /*
@@ -26,7 +27,7 @@ public class Leaderboard {
 	private long lastUpdatedTime;
 	private final Autorank plugin;
 	private int leaderboardLength = 10;
-	private String layout = "§6&r | §b&p - §7&d day(s), &h hour(s) and &m minute(s).";
+	private String layout = "&6&r | &b&p - &7&d day(s), &h hour(s) and &m minute(s).";
 
 	public Leaderboard(final Autorank plugin) {
 		this.plugin = plugin;
@@ -75,7 +76,8 @@ public class Leaderboard {
 			message = message.replaceAll("&h", Integer.toString(time / 60));
 			time = time - ((time / 60) * 60);
 			message = message.replaceAll("&m", Integer.toString(time));
-			message = message.replaceAll("(&([a-f0-9]))", "\u00A7$2");
+			message = ChatColor.translateAlternateColorCodes('&', message);
+			//message = message.replaceAll("(&([a-f0-9]))", "\u00A7$2");
 
 			stringList.add(message);
 
