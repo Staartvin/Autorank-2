@@ -40,8 +40,10 @@
 			</plugin>
 
 		</plugins>
-
-		<repositories>
+		
+	</build>
+	
+	<repositories>
 
 			<repository>
 				<id>bukkit-repo</id>
@@ -59,6 +61,4 @@
 			</dependency>
 
 		</dependencies>
-
-	</build>
 </project>
