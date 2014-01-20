@@ -69,6 +69,14 @@
 		</dependency>
 		
 		<dependency>
+			<groupId>Essentials_GroupManager</groupId>
+			<artifactId>Essentials_GroupManager</artifactId>
+			<version>2.12.1</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/API Libs/EssentialsGroupManager-2.12.1.jar</systemPath>
+		</dependency>
+		
+		<dependency>
 			<groupId>Factions</groupId>
 			<artifactId>Factions</artifactId>
 			<version>2.2.2</version>
