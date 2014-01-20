@@ -54,8 +54,8 @@
 
 			<dependency>
 				<groupId>org.bukkit</groupId>
-				<artifactId>bukkit</artifactId>
-				<version>1.7.2-R0.1</version>
+				<artifactId>bukkit-1.7.2-R0.3</artifactId>
+				<version>1.7.2-R0.3</version>
 			</dependency>
 
 		</dependencies>
