@@ -64,6 +64,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class Autorank extends JavaPlugin {
 
+	// Test push for Jenkins
 	private Leaderboard leaderboard;
 	private Playtimes playtimes;
 	private PlayerChecker playerChecker;
