@@ -67,7 +67,6 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class Autorank extends JavaPlugin {
 
-	// Almost correct
 	private Leaderboard leaderboard;
 	private Playtimes playtimes;
 	private PlayerChecker playerChecker;
