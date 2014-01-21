@@ -50,6 +50,11 @@
 			<url>http://repo.bukkit.org/content/groups/public/</url>
 		</repository>
 
+		<repository>
+			<id>Plugin Metrics</id>
+			<url>http://repo.mcstats.org/content/repositories/public</url>
+		</repository>
+
 	</repositories>
 
 	<dependencies>
@@ -59,7 +64,7 @@
 			<artifactId>bukkit</artifactId>
 			<version>1.7.2-R0.2</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>Essentials</groupId>
 			<artifactId>Essentials</artifactId>
@@ -67,7 +72,7 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/API Libs/Essentials-2.12.1.2.jar</systemPath>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>Essentials_GroupManager</groupId>
 			<artifactId>Essentials_GroupManager</artifactId>
@@ -75,7 +80,7 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/API Libs/EssentialsGroupManager-2.12.1.jar</systemPath>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>Factions</groupId>
 			<artifactId>Factions</artifactId>
@@ -83,7 +88,7 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/API Libs/Factions-2.2.2.jar</systemPath>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>MCore</groupId>
 			<artifactId>MCore</artifactId>
@@ -91,7 +96,7 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/API Libs/mcore-6.9.1.jar</systemPath>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>PermissionsBukkit</groupId>
 			<artifactId>PermissionsBukkit</artifactId>
@@ -99,7 +104,7 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/API Libs/PermissionsBukkit-2.1.jar</systemPath>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>Stats</groupId>
 			<artifactId>Stats</artifactId>
@@ -107,13 +112,20 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/API Libs/Stats-1.37.jar</systemPath>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>Vault</groupId>
 			<artifactId>Vault</artifactId>
 			<version>1.2.26</version>
 			<scope>system</scope>
 			<systemPath>${project.basedir}/API Libs/Vault-1.2.26.jar</systemPath>
+		</dependency>
+
+		<dependency>
+			<groupId>org.mcstats.bukkit</groupId>
+			<artifactId>metrics</artifactId>
+			<version>R7</version>
+			<scope>compile</scope>
 		</dependency>
 
 	</dependencies>
