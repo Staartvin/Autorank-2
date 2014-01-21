@@ -13,6 +13,8 @@ import me.armar.plugins.autorank.factionapi.FactionsHandler;
 import me.armar.plugins.autorank.language.LanguageHandler;
 import me.armar.plugins.autorank.leaderboard.Leaderboard;
 import me.armar.plugins.autorank.listeners.PlayerJoinListener;
+import me.armar.plugins.autorank.metrics.Metrics;
+import me.armar.plugins.autorank.metrics.Metrics.Graph;
 import me.armar.plugins.autorank.mysql.wrapper.MySQLWrapper;
 import me.armar.plugins.autorank.permissions.PermissionsPluginManager;
 import me.armar.plugins.autorank.playerchecker.PlayerChecker;
@@ -86,6 +88,9 @@ public class Autorank extends JavaPlugin {
 
 	// Metrics (for custom data)
 	private me.armar.plugins.autorank.metrics.Metrics metrics;
+	
+	// Using MySQL
+	public static boolean usingMySQL = false; 
 
 	@Override
 	public void onEnable() {
@@ -223,6 +228,9 @@ public class Autorank extends JavaPlugin {
 		getServer().getScheduler().runTaskTimer(this,
 				new WarningNoticeTask(this), 5 * 20, 30 * 20);
 
+		// Check if using MySQL
+		usingMySQL = this.getMySQLWrapper().isMySQLEnabled();
+		
 		// Start collecting data
 		if (!startMetrics()) {
 			getLogger().info(
@@ -255,7 +263,22 @@ public class Autorank extends JavaPlugin {
 	private boolean startMetrics() {
 		// Try to start metrics
 		try {
+			// Initialise
 			metrics = new me.armar.plugins.autorank.metrics.Metrics(this);
+
+			// Setup graph for MySQL
+			Graph weaponsUsedGraph = metrics
+					.createGraph("Percentage using MySQL");
+
+			weaponsUsedGraph.addPlotter(new Metrics.Plotter("MySQL") {
+
+				@Override
+				public int getValue() {
+					return usingMySQL ? 1: 0;
+				}
+
+			});
+
 			metrics.start();
 			return true;
 		} catch (IOException e) {
