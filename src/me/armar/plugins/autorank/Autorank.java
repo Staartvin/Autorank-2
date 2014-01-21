@@ -1,5 +1,6 @@
 package me.armar.plugins.autorank;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Logger;
 
@@ -82,6 +83,9 @@ public class Autorank extends JavaPlugin {
 	private WarningManager warningManager;
 	private CommandsManager commandsManager;
 	private StatsPluginManager statsPluginManager;
+
+	// Metrics (for custom data)
+	private me.armar.plugins.autorank.metrics.Metrics metrics;
 
 	@Override
 	public void onEnable() {
@@ -218,6 +222,12 @@ public class Autorank extends JavaPlugin {
 		// Create a new task that runs every 30 seconds (will show a warning every 30 seconds)
 		getServer().getScheduler().runTaskTimer(this,
 				new WarningNoticeTask(this), 5 * 20, 30 * 20);
+
+		// Start collecting data
+		if (!startMetrics()) {
+			getLogger().info(
+					"Failed to start Metrics, you can ignore this message");
+		}
 	}
 
 	@Override
@@ -240,6 +250,18 @@ public class Autorank extends JavaPlugin {
 
 		Autorank.logMessage(String.format("Autorank %s has been disabled!",
 				getDescription().getVersion()));
+	}
+
+	private boolean startMetrics() {
+		// Try to start metrics
+		try {
+			metrics = new me.armar.plugins.autorank.metrics.Metrics(this);
+			metrics.start();
+			return true;
+		} catch (IOException e) {
+			// Failed to submit the stats :-(
+			return false;
+		}
 	}
 
 	public LanguageHandler getLanguageHandler() {
