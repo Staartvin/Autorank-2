@@ -58,7 +58,7 @@ public class StatsAPIHandler {
 		return false;
 	}
 
-	public int getTotalBlocksBroken(final String playerName, final String world) {
+	public int getTotalBlocksBroken(final String playerName, final World world) {
 		String statName = "Block break";
 
 		final StatsPlayer player = getStats(playerName);
@@ -68,7 +68,7 @@ public class StatsAPIHandler {
 
 		if (world != null) {
 			// Do check for one world
-			stat = player.getStatData(statsAPI.getStat(statName), world, true);
+			stat = player.getStatData(statsAPI.getStat(statName), world.getName(), true);
 
 			for (final Object[] vars : stat.getAllVariables()) {
 				value += stat.getValue(vars);
@@ -88,7 +88,7 @@ public class StatsAPIHandler {
 		return value;
 	}
 
-	public int getTotalBlocksPlaced(final String playerName, final String world) {
+	public int getTotalBlocksPlaced(final String playerName, final World world) {
 		String statName = "Block place";
 
 		final StatsPlayer player = getStats(playerName);
@@ -98,7 +98,7 @@ public class StatsAPIHandler {
 
 		if (world != null) {
 			// Do check for one world
-			stat = player.getStatData(statsAPI.getStat(statName), world, true);
+			stat = player.getStatData(statsAPI.getStat(statName), world.getName(), true);
 
 			for (final Object[] vars : stat.getAllVariables()) {
 				value += stat.getValue(vars);
@@ -118,7 +118,7 @@ public class StatsAPIHandler {
 		return value;
 	}
 
-	public int getTotalPlayTime(final String playerName, final String world) {
+	public int getTotalPlayTime(final String playerName, final World world) {
 		String statName = "Playtime";
 
 		final StatsPlayer player = getStats(playerName);
@@ -128,7 +128,7 @@ public class StatsAPIHandler {
 
 		if (world != null) {
 			// Do check for one world
-			stat = player.getStatData(statsAPI.getStat(statName), world, true);
+			stat = player.getStatData(statsAPI.getStat(statName), world.getName(), true);
 
 			for (final Object[] vars : stat.getAllVariables()) {
 				value += stat.getValue(vars);

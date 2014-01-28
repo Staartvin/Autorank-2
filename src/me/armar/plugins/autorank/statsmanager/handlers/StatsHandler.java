@@ -82,13 +82,13 @@ public class StatsHandler implements StatsPlugin {
 			value = statsApi.getBlocksStat(playerName, Integer.parseInt(arguments[2]), Integer.parseInt(arguments[3]), world, "Block break");
 		} else if (correctName.equals("total_blocks_placed")) {
 			// Handle total blocks placed
-			value = statsApi.getTotalBlocksPlaced(playerName, world.getName());
+			value = statsApi.getTotalBlocksPlaced(playerName, world);
 		} else if (correctName.equals("total_blocks_broken")) {
 			// Handle total blocks placed
-			value = statsApi.getTotalBlocksBroken(playerName, world.getName());
+			value = statsApi.getTotalBlocksBroken(playerName, world);
 		} else if (correctName.equals("time_played")) {
 			// Handle time played
-			value = statsApi.getTotalPlayTime(playerName, world.getName());
+			value = statsApi.getTotalPlayTime(playerName, world);
 		}
 
 		return value;
