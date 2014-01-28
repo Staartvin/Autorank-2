@@ -206,6 +206,7 @@ public class Autorank extends JavaPlugin {
 		res.registerResult("rank change", RankChangeResult.class);
 		res.registerResult("tp", TeleportResult.class);
 
+		// Load requirements and results per group from config
 		playerChecker.initialiseFromConfigs(this);
 
 		// Register command
