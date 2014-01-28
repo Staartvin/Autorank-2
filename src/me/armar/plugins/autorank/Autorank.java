@@ -209,6 +209,7 @@ public class Autorank extends JavaPlugin {
 		// Register command
 		getCommand("autorank").setExecutor(getCommandsManager());
 
+		// Validate config files
 		if (configHandler.useAdvancedConfig()) {
 			getValidateHandler().validateConfigGroups(getAdvancedConfig());
 		} else {
