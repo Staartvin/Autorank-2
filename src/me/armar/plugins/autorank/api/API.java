@@ -8,6 +8,7 @@ import java.util.Set;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.playerchecker.RankChange;
 import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
+import me.armar.plugins.autorank.playerchecker.result.Result;
 
 import org.bukkit.entity.Player;
 
@@ -150,5 +151,33 @@ public class API {
 	 */
 	public String getNextRankupGroup(Player player) {
 		return plugin.getPlayerChecker().getNextRankupGroup(player);
+	}
+	
+	/**
+	 * Register a requirement that can be used in the advanced config.
+	 * The name should be unique as that is the way Autorank will identify the requirement. 
+	 * <p>
+	 * The name will be the name that is used in the config.
+	 * @param uniqueName Unique name identifier for the requirement
+	 * @param clazz Requirement class that does all the logic
+	 */
+	public void registerRequirement(String uniqueName, Class<? extends Requirement> clazz) {
+		plugin.getLogger().info("Loaded custom requirement: " + uniqueName);
+		
+		plugin.registerRequirement(uniqueName, clazz);
+	}
+	
+	/**
+	 * Register a result that can be used in the advanced config.
+	 * The name should be unique as that is the way Autorank will identify the result. 
+	 * <p>
+	 * The name will be the name that is used in the config.
+	 * @param uniqueName Unique name identifier for the result
+	 * @param clazz Result class that does all the logic
+	 */
+	public void registerResult(String uniqueName, Class<? extends Result> clazz) {
+		plugin.getLogger().info("Loaded custom result: " + uniqueName);
+		
+		plugin.registerResult(uniqueName, clazz);
 	}
 }
