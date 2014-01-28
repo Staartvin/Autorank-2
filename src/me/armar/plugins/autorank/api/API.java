@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.addons.AddOnManager;
 import me.armar.plugins.autorank.playerchecker.RankChange;
 import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 import me.armar.plugins.autorank.playerchecker.result.Result;
@@ -179,5 +180,15 @@ public class API {
 		plugin.getLogger().info("Loaded custom result: " + uniqueName);
 		
 		plugin.registerResult(uniqueName, clazz);
+	}
+	
+	/**
+	 * Get the addon manager of Autorank.
+	 * <p>
+	 * This class stores information about the loaded addons
+	 * @return {@link me.armar.plugins.autorank.addons.AddOnManager} class
+	 */
+	public AddOnManager getAddonManager() {
+		return plugin.getAddonManager();
 	}
 }

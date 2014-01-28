@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Logger;
 
+import me.armar.plugins.autorank.addons.AddOnManager;
 import me.armar.plugins.autorank.api.API;
 import me.armar.plugins.autorank.commands.manager.CommandsManager;
 import me.armar.plugins.autorank.config.ConfigHandler;
@@ -85,6 +86,7 @@ public class Autorank extends JavaPlugin {
 	private WarningManager warningManager;
 	private CommandsManager commandsManager;
 	private StatsPluginManager statsPluginManager;
+	private AddOnManager addonManager;
 
 	// Metrics (for custom data)
 	private me.armar.plugins.autorank.metrics.Metrics metrics;
@@ -221,6 +223,9 @@ public class Autorank extends JavaPlugin {
 
 		// Set debugger
 		setDebugger(new Debugger(this));
+		
+		// Set addon manager
+		setAddonManager(new AddOnManager(this));
 
 		Autorank.logMessage(String.format("Autorank %s has been enabled!",
 				getDescription().getVersion()));
@@ -495,6 +500,14 @@ public class Autorank extends JavaPlugin {
 
 	public StatsPlugin getHookedStatsPlugin() {
 		return getStatsPluginManager().getStatsPlugin();
+	}
+
+	public AddOnManager getAddonManager() {
+		return addonManager;
+	}
+
+	public void setAddonManager(AddOnManager addonManager) {
+		this.addonManager = addonManager;
 	}
 
 }
