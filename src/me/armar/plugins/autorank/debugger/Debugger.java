@@ -102,6 +102,7 @@ public class Debugger {
 			final String usedConfig = (plugin.getConfigHandler()
 					.useAdvancedConfig() ? "AdvancedConfig.yml"
 					: "SimpleConfig.yml");
+			
 			out.write("Config used: " + usedConfig);
 			out.newLine();
 			out.write("");
@@ -128,6 +129,11 @@ public class Debugger {
 			out.newLine();
 
 			out.write("OS architecture: " + System.getProperty("os.arch"));
+			out.newLine();
+			out.write("");
+			out.newLine();
+			
+			out.write("Loaded addons: " + plugin.getAddonManager().getLoadedAddons().toString());
 			out.newLine();
 			out.write("");
 			out.newLine();
