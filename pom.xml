@@ -55,6 +55,16 @@
 			<url>http://repo.mcstats.org/content/repositories/public</url>
 		</repository>
 
+		<repository>
+			<id>stats-repo</id>
+			<url>http://centrility.nl:8081/nexus/content/repositories/releases/</url>
+		</repository>
+
+		<repository>
+			<id>vault-repo</id>
+			<url>http://nexus.theyeticave.net/content/repositories/pub_releases</url>
+		</repository>
+
 	</repositories>
 
 	<dependencies>
@@ -105,21 +115,23 @@
 			<systemPath>${project.basedir}/API Libs/PermissionsBukkit-2.1.jar</systemPath>
 		</dependency>
 
-		<dependency>
-			<groupId>Stats</groupId>
-			<artifactId>Stats</artifactId>
-			<version>1.37</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/API Libs/Stats-1.37.jar</systemPath>
-		</dependency>
+		<!--<dependency> <groupId>Stats</groupId> <artifactId>Stats</artifactId> 
+			<version>1.37</version> <scope>system</scope> <systemPath>${project.basedir}/API 
+			Libs/Stats-1.37.jar</systemPath> </dependency> -->
 
 		<dependency>
+			<groupId>nl.lolmewn.stats</groupId>
+			<artifactId>Stats</artifactId>
+			<version>1.37</version>
+		</dependency>
+
+		<!-- <dependency>
 			<groupId>Vault</groupId>
 			<artifactId>Vault</artifactId>
 			<version>1.2.26</version>
 			<scope>system</scope>
 			<systemPath>${project.basedir}/API Libs/Vault-1.2.26.jar</systemPath>
-		</dependency>
+		</dependency> -->
 
 		<dependency>
 			<groupId>org.mcstats.bukkit</groupId>
