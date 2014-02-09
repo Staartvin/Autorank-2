@@ -80,7 +80,7 @@
 			<artifactId>Essentials</artifactId>
 			<version>2.12.1.2</version>
 			<scope>system</scope>
-			<systemPath>${project.basedir}/API Libs/Essentials-2.12.1.2.jar</systemPath>
+			<systemPath>${project.basedir}/libs/Essentials-2.12.1.2.jar</systemPath>
 		</dependency>
 
 		<dependency>
@@ -88,7 +88,7 @@
 			<artifactId>Essentials_GroupManager</artifactId>
 			<version>2.12.1</version>
 			<scope>system</scope>
-			<systemPath>${project.basedir}/API Libs/EssentialsGroupManager-2.12.1.jar</systemPath>
+			<systemPath>${project.basedir}/libs/EssentialsGroupManager-2.12.1.jar</systemPath>
 		</dependency>
 
 		<dependency>
@@ -96,7 +96,7 @@
 			<artifactId>Factions</artifactId>
 			<version>2.2.2</version>
 			<scope>system</scope>
-			<systemPath>${project.basedir}/API Libs/Factions-2.2.2.jar</systemPath>
+			<systemPath>${project.basedir}/libs/Factions-2.2.2.jar</systemPath>
 		</dependency>
 
 		<dependency>
@@ -104,7 +104,7 @@
 			<artifactId>MCore</artifactId>
 			<version>6.9.1</version>
 			<scope>system</scope>
-			<systemPath>${project.basedir}/API Libs/mcore-6.9.1.jar</systemPath>
+			<systemPath>${project.basedir}/libs/mcore-6.9.1.jar</systemPath>
 		</dependency>
 
 		<dependency>
@@ -112,7 +112,7 @@
 			<artifactId>PermissionsBukkit</artifactId>
 			<version>2.1</version>
 			<scope>system</scope>
-			<systemPath>${project.basedir}/API Libs/PermissionsBukkit-2.1.jar</systemPath>
+			<systemPath>${project.basedir}/libs/PermissionsBukkit-2.1.jar</systemPath>
 		</dependency>
 
 		<!--<dependency> <groupId>Stats</groupId> <artifactId>Stats</artifactId> 

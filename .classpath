@@ -12,29 +12,25 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="API Libs/bukkit-1.7.2-R0.3.jar">
+	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="libs/bukkit-1.7.2-R0.3.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="http://jd.bukkit.org/dev/apidocs/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="API Libs/Essentials-2.12.1.2.jar"/>
-	<classpathentry kind="lib" path="API Libs/EssentialsGroupManager-2.12.1.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="http://ci.ess3.net/guestAuth/repository/download/bt10/.lastSuccessful/JavaDocs/EssentialsGroupManager/dist/javadoc/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="API Libs/Stats-1.37.jar" sourcepath="API Libs/Sources/Stats-1.37.src.zip"/>
-	<classpathentry kind="lib" path="API Libs/PermissionsBukkit-2.1.jar"/>
-	<classpathentry kind="lib" path="API Libs/Vault-1.2.26.jar">
+	<classpathentry kind="lib" path="libs/Essentials-2.12.1.2.jar"/>
+	<classpathentry kind="lib" path="libs/EssentialsGroupManager-2.12.1.jar"/>
+	<classpathentry kind="lib" path="libs/Factions-2.2.2.jar"/>
+	<classpathentry kind="lib" path="libs/mcore-6.9.1.jar"/>
+	<classpathentry kind="lib" path="libs/PermissionsBukkit-2.1.jar"/>
+	<classpathentry kind="lib" path="libs/Stats-1.37.jar" sourcepath="libs/sources/Stats-1.37.src.zip"/>
+	<classpathentry kind="lib" path="libs/Vault-1.2.26.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="http://mythcraft.dyndns.org/javadoc/vault/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="API Libs/Factions-2.2.2.jar"/>
-	<classpathentry kind="lib" path="API Libs/mcore-6.9.1.jar"/>
-	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
-		<attributes>
-			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="output" path="target/classes"/>
