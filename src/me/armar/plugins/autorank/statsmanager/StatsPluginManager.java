@@ -60,6 +60,10 @@ public class StatsPluginManager {
 		return false;
 	}
 	
+	/**
+	 * Get the current stats plugin running on this server
+	 * @return returns the JavaPlugin that is responsible for stats. Null if there is none.
+	 */
 	public StatsPlugin getStatsPlugin() {
 		return statsPlugin;
 	}
