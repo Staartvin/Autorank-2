@@ -53,7 +53,7 @@ public class StatsPluginManager {
 		Plugin x = plugin.getServer().getPluginManager()
 				.getPlugin("Stats");
 		// Main == Stats main class
-		if (x != null & x instanceof Main) {
+		if (x != null && x instanceof Main) {
 			return true;
 		}
 		
