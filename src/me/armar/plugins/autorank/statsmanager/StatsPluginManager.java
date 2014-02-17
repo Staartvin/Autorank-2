@@ -4,9 +4,9 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.statsapi.StatsAPIHandler;
 import me.armar.plugins.autorank.statsmanager.handlers.DummyHandler;
 import me.armar.plugins.autorank.statsmanager.handlers.StatsHandler;
-import nl.lolmewn.stats.Main;
 
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 
 
 /**
@@ -53,7 +53,7 @@ public class StatsPluginManager {
 		Plugin x = plugin.getServer().getPluginManager()
 				.getPlugin("Stats");
 		// Main == Stats main class
-		if (x != null && x instanceof Main) {
+		if (x != null && x instanceof JavaPlugin) {
 			return true;
 		}
 		
