@@ -60,7 +60,7 @@ public class PermissionsPluginManager {
 	protected boolean findVault(final Autorank plugin) {
 		final Plugin x = plugin.getServer().getPluginManager()
 				.getPlugin("Vault");
-		if (x != null & x instanceof Vault) {
+		if (x != null && x instanceof Vault) {
 			return true;
 		}
 		return false;
