@@ -138,9 +138,13 @@ public class StatsAPIHandler {
 			for (final World w : plugin.getServer().getWorlds()) {
 				stat = player.getStatData(statsAPI.getStat(statName),
 						w.getName(), true);
+				
+				System.out.print("Stat: " + stat);
 
 				for (final Object[] vars : stat.getAllVariables()) {
 					value += stat.getValue(vars);
+					
+					System.out.print("Value: " + value);
 				}
 			}
 		}
@@ -329,6 +333,42 @@ public class StatsAPIHandler {
 						}
 					} else {
 						value += blockStat.getValue(vars);
+					}
+				}
+			}
+		}
+
+		return value;
+	}
+	
+	public int getTotalBlocksMoved(String playerName, int type, World world) {
+		final StatsPlayer player = getStats(playerName);
+		String statName = "Move";
+		StatData stat;
+
+		int value = 0;
+
+		if (world != null) {
+			stat = player.getStatData(statsAPI.getStat(statName),
+					world.getName(), true);
+
+			for (final Object[] vars : stat.getAllVariables()) {
+				if ((Integer) vars[0] == type) {
+					value += stat.getValue(vars);
+				}
+			}
+
+		} else {
+			// We want global (no specific world) so we loop over every world.
+
+			for (final World serverWorld : plugin.getServer().getWorlds()) {
+
+				stat = player.getStatData(statsAPI.getStat(statName),
+						serverWorld.getName(), true);
+
+				for (final Object[] vars : stat.getAllVariables()) {
+					if ((Integer) vars[0] == type) {
+						value += stat.getValue(vars);
 					}
 				}
 			}
