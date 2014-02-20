@@ -138,13 +138,9 @@ public class StatsAPIHandler {
 			for (final World w : plugin.getServer().getWorlds()) {
 				stat = player.getStatData(statsAPI.getStat(statName),
 						w.getName(), true);
-				
-				System.out.print("Stat: " + stat);
 
 				for (final Object[] vars : stat.getAllVariables()) {
 					value += stat.getValue(vars);
-					
-					System.out.print("Value: " + value);
 				}
 			}
 		}
