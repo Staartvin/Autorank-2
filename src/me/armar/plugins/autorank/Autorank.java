@@ -22,6 +22,7 @@ import me.armar.plugins.autorank.playerchecker.PlayerChecker;
 import me.armar.plugins.autorank.playerchecker.builders.RequirementBuilder;
 import me.armar.plugins.autorank.playerchecker.builders.ResultBuilder;
 import me.armar.plugins.autorank.playerchecker.requirement.BlocksBrokenRequirement;
+import me.armar.plugins.autorank.playerchecker.requirement.BlocksMovedRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.BlocksPlacedRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.DamageTakenRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.ExpRequirement;
@@ -196,6 +197,7 @@ public class Autorank extends JavaPlugin {
 		req.registerRequirement("global time", GlobalTimeRequirement.class);
 		req.registerRequirement("total time", TotalTimeRequirement.class);
 		req.registerRequirement("time", TimeRequirement.class);
+		req.registerRequirement("blocks moved", BlocksMovedRequirement.class);
 
 		// REGISTER PLURALS IN AUTORANKTOOLS AS WELL!
 
