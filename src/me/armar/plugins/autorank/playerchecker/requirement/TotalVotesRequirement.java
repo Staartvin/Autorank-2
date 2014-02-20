@@ -18,7 +18,7 @@ public class TotalVotesRequirement extends Requirement {
 	public TotalVotesRequirement() {
 		super();
 	}
-	
+
 	@Override
 	public boolean setOptions(final String[] options, final boolean optional,
 			final List<Result> results, final boolean autoComplete,
@@ -45,7 +45,8 @@ public class TotalVotesRequirement extends Requirement {
 
 		// TODO Auto-generated method stub
 		return getStatsPlugin().isEnabled()
-				&& getStatsPlugin().getNormalStat("Votes", new String[] {player.getName(), null}) >= totalVotes;
+				&& getStatsPlugin().getNormalStat("Votes", player.getName(),
+						null) >= totalVotes;
 	}
 
 	@Override
@@ -67,9 +68,9 @@ public class TotalVotesRequirement extends Requirement {
 	@Override
 	public String getProgress(final Player player) {
 		String progress = "";
-		progress = progress.concat(getStatsPlugin().getNormalStat("Votes", new String[] {player.getName(), null})
-				+ "/"
-				+ totalVotes);
+		progress = progress.concat(getStatsPlugin().getNormalStat("Votes",
+				player.getName(), null)
+				+ "/" + totalVotes);
 		return progress;
 	}
 

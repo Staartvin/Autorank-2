@@ -17,7 +17,7 @@ public interface StatsPlugin {
 	 * @param arguments Provide arguments for the stat (playerName, worldName). 1st argument has to be the playername, 2nd argument must be world (can be null)
 	 * @return value of the stat; -1 when the current stats plugin doesn't support this stat; -2 if stat name is invalid
 	 */
-	public int getNormalStat(String statType, String[] arguments);
+	public int getNormalStat(String statType, Object... arguments);
 	
 	/**
 	 * Get the correct name of this stat

@@ -36,12 +36,15 @@ public class SyncStatsCommand implements CommandExecutor {
 
 			final OfflinePlayer p = plugin.getServer().getOfflinePlayer(entry);
 
+			System.out.print("Player: " + p.getName());
+			
 			// Time is stored in seconds
 			final int statsPlayTime = plugin.getHookedStatsPlugin()
 					.getNormalStat("time_played",
-							new String[] { p.getName(), null });
+							p.getName().toLowerCase(), null);
 
 			if (statsPlayTime <= 0) {
+				System.out.print("Player: " + p.getName() + " is 0");
 				continue;
 			}
 

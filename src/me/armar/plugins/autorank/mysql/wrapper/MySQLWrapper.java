@@ -123,6 +123,9 @@ public class MySQLWrapper {
 			return getCachedGlobalTime(name);
 		}
 		
+		// Mysql is not enabled
+		if (!isMySQLEnabled()) return -1;
+		
 		// Check if connection is still alive
 		if (mysql.isClosed()) {
 			mysql.connect();
@@ -195,6 +198,9 @@ public class MySQLWrapper {
 	 * @param time Time to change to
 	 */
 	public void setGlobalTime(final String playerName, final int time) {
+		
+		if (!isMySQLEnabled()) return;
+		
 		// Check if connection is still alive
 		if (mysql.isClosed()) {
 			mysql.connect();

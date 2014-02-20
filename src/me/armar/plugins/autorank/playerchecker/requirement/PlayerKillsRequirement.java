@@ -48,7 +48,7 @@ public class PlayerKillsRequirement extends Requirement {
 		// TODO Auto-generated method stub
 		return getStatsPlugin().isEnabled()
 				&& getStatsPlugin().getNormalStat("players_killed",
-						new String[] { player.getName(), null }) >= totalPlayersKilled;
+						player.getName(), null) >= totalPlayersKilled;
 	}
 
 	@Override
@@ -71,7 +71,7 @@ public class PlayerKillsRequirement extends Requirement {
 	public String getProgress(final Player player) {
 		String progress = "";
 		progress = progress.concat(getStatsPlugin().getNormalStat("players_killed",
-				new String[] { player.getName(), null })
+				player.getName(), null)
 				+ "/"
 				+ totalPlayersKilled);
 		return progress;

@@ -63,13 +63,11 @@ public class BlocksPlacedRequirement extends Requirement {
 
 		boolean sufficient = false;
 		if (blockID > 0) {
-			sufficient = getStatsPlugin().getNormalStat(
-					"blocks_placed",
-					new String[] { player.getName(), null, blockID + "",
-							damageValue + "" }) >= blocksPlaced;
+			sufficient = getStatsPlugin().getNormalStat("blocks_placed",
+					player.getName(), null, blockID + "", damageValue + "") >= blocksPlaced;
 		} else {
 			sufficient = getStatsPlugin().getNormalStat("total_blocks_placed",
-					new String[] { player.getName(), null }) >= blocksPlaced;
+					player.getName(), null) >= blocksPlaced;
 		}
 
 		if (isCompleted(getReqId(), player.getName())) {
@@ -118,9 +116,8 @@ public class BlocksPlacedRequirement extends Requirement {
 	public String getProgress(final Player player) {
 		String progress = "";
 		progress = progress.concat(getStatsPlugin().getNormalStat(
-				"blocks_placed",
-				new String[] { player.getName(), null, blockID + "",
-						damageValue + "" })
+				"blocks_placed", player.getName(), null, blockID + "",
+				damageValue + "")
 				+ "/" + blocksPlaced);
 		return progress;
 	}
