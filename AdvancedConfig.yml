@@ -55,6 +55,8 @@ ranks:
                 value: 0
             has item:
                 value: 50
+            blocks moved:
+                value: 1000;5
         results:
             rank change: member;vip
             command: 'say &p has just been promoted to VIP!; give &p 1 100; tell &p You have just earned 100 stone!'
@@ -81,6 +83,7 @@ ranks:
 #       players killed: 10 (Player has to kill at least 10 players) (Requires Stats)
 #       global time: 10d 1h 5m (Player has to be online for at least 10 days, 1 hour and 5 mins) (Global time is the accumulated time over all servers you have connected the MySQL database with)
 #       total time: 50d 1h (Player has to be with this server for at least 50 days and 1 hour) (The time from when the player joined for the first time is the reference point. This means that when a player has joined 3 weeks ago, his 'total time' = 3 weeks)
+#       blocks moved: 1000;0 (Player has to move at least an x amount of blocks. Second argument is what kind of movement: 0=walk, 1=boat, 2=train, 3=pig, 4=pig in train, 5=horse) (Need Stats for this)
 #
 #   results:
 #       rank change: new-rank
