@@ -113,7 +113,9 @@ public enum Lang {
 	TOTAL_TIME_REQUIREMENT(
 			"total-time-requirement", "Be with this server for at least {0}."),
 	BLOCKS_MOVED_REQUIREMENT(
-			"blocks-moved-requirement", "Travel at least {0} {1}."), ;
+			"blocks-moved-requirement", "Travel at least {0} {1}."),
+	WORLD_GUARD_REGION_REQUIREMENT(
+					"world-guard-region-requirement", "Be in region '{0}'."),;
 
 	private String path, def;
 	private static FileConfiguration LANG;
