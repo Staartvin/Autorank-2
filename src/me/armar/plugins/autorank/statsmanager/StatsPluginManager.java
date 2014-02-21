@@ -1,7 +1,7 @@
 package me.armar.plugins.autorank.statsmanager;
 
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.statsapi.StatsAPIHandler;
+import me.armar.plugins.autorank.hooks.statsapi.StatsAPIHandler;
 import me.armar.plugins.autorank.statsmanager.handlers.DummyHandler;
 import me.armar.plugins.autorank.statsmanager.handlers.StatsHandler;
 

@@ -2,6 +2,7 @@ package me.armar.plugins.autorank.playerchecker.requirement;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.playerchecker.result.Result;
 

@@ -1,4 +1,4 @@
-package me.armar.plugins.autorank.statsapi;
+package me.armar.plugins.autorank.hooks.statsapi;
 
 import me.armar.plugins.autorank.Autorank;
 import nl.lolmewn.stats.api.Stat;
