@@ -35,13 +35,11 @@ public class SyncStatsCommand implements CommandExecutor {
 		for (final String entry : plugin.getPlaytimes().getKeys()) {
 
 			final OfflinePlayer p = plugin.getServer().getOfflinePlayer(entry);
-
-			System.out.print("Player: " + p.getName());
 			
 			// Time is stored in seconds
 			final int statsPlayTime = plugin.getHookedStatsPlugin()
 					.getNormalStat("time_played",
-							p.getName().toLowerCase(), null);
+							p.getName(), null);
 
 			if (statsPlayTime <= 0) {
 				System.out.print("Player: " + p.getName() + " is 0");
@@ -49,14 +47,19 @@ public class SyncStatsCommand implements CommandExecutor {
 			}
 
 			// Update time
-			plugin.getPlaytimes().setLocalTime(entry, (statsPlayTime / 60));
+			plugin.getPlaytimes().setLocalTime(entry, Math.round(statsPlayTime / 60));
 
 			// Increment count
 			count++;
 		}
 
-		sender.sendMessage(ChatColor.GREEN
-				+ (count + " entries have been updated!"));
+		if (count == 0) {
+			sender.sendMessage(ChatColor.GREEN
+					+ "Could not sync stats. Run command again!");
+		} else {
+			sender.sendMessage(ChatColor.GREEN
+					+ "Time has succesfully been updated for all entries.");
+		}
 		return true;
 	}
 
