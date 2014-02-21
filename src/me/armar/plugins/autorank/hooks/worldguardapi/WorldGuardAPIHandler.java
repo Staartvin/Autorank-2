@@ -63,6 +63,8 @@ public class WorldGuardAPIHandler {
 	public boolean isInRegion(Player player, String regionName) {
 		if (!isWorldGuardAvailable()) return false;
 		
+		if (player == null || regionName == null) return false;
+		
 		Location loc = player.getLocation();
 		
 		RegionManager regManager = worldGuardAPI.getRegionManager(loc.getWorld());
@@ -73,8 +75,8 @@ public class WorldGuardAPIHandler {
 		
 		if (set == null) return false;
 		
-		for (ProtectedRegion region: set) {
-			String name = region.getTypeName();
+		for (ProtectedRegion region: set) {			
+			String name = region.getId();
 			
 			if (name.equalsIgnoreCase(regionName)) {
 				return true;
