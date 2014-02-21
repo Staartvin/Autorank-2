@@ -141,11 +141,8 @@ public class StatsAPIHandler {
 
 				for (final Object[] vars : stat.getAllVariables()) {
 					value += stat.getValue(vars);
-					
-					System.out.print("Stat: " + stat.getValue(vars));
 				}
 			}
-			System.out.print("----------------------------------------");
 		}
 
 		return value;
