@@ -42,7 +42,6 @@ public class SyncStatsCommand implements CommandExecutor {
 							p.getName(), null);
 
 			if (statsPlayTime <= 0) {
-				System.out.print("Player: " + p.getName() + " is 0");
 				continue;
 			}
 
