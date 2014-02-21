@@ -39,6 +39,7 @@ import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 import me.armar.plugins.autorank.playerchecker.requirement.TimeRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.TotalTimeRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.TotalVotesRequirement;
+import me.armar.plugins.autorank.playerchecker.requirement.WorldGuardRegionRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.WorldRequirement;
 import me.armar.plugins.autorank.playerchecker.result.CommandResult;
 import me.armar.plugins.autorank.playerchecker.result.EffectResult;
@@ -194,7 +195,6 @@ public class Autorank extends JavaPlugin {
 		req.registerRequirement("money", MoneyRequirement.class);
 		req.registerRequirement("gamemode", GamemodeRequirement.class);
 		req.registerRequirement("has item", HasItemRequirement.class);
-		req.registerRequirement("world", WorldRequirement.class);
 		req.registerRequirement("blocks broken", BlocksBrokenRequirement.class);
 		req.registerRequirement("blocks placed", BlocksPlacedRequirement.class);
 		req.registerRequirement("votes", TotalVotesRequirement.class);
@@ -207,6 +207,8 @@ public class Autorank extends JavaPlugin {
 		req.registerRequirement("total time", TotalTimeRequirement.class);
 		req.registerRequirement("time", TimeRequirement.class);
 		req.registerRequirement("blocks moved", BlocksMovedRequirement.class);
+		req.registerRequirement("worldguard region", WorldGuardRegionRequirement.class);
+		req.registerRequirement("world", WorldRequirement.class);
 
 		// REGISTER PLURALS IN AUTORANKTOOLS AS WELL!
 
