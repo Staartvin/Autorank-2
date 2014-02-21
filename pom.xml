@@ -139,6 +139,22 @@
 			<version>R7</version>
 			<scope>compile</scope>
 		</dependency>
+		
+		<dependency>
+			<groupId>WorldGuard</groupId>
+			<artifactId>WorldGuard</artifactId>
+			<version>5.8</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/libs/worldguard-5.8.jar</systemPath>
+		</dependency>
+		
+		<dependency>
+			<groupId>WorldEdit</groupId>
+			<artifactId>WorldEdit</artifactId>
+			<version>5.5.8</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/libs/WorldEdit.jar</systemPath>
+		</dependency>
 
 	</dependencies>
 </project>
