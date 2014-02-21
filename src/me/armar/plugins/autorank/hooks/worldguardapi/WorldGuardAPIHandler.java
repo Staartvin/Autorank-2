@@ -1,0 +1,87 @@
+package me.armar.plugins.autorank.hooks.worldguardapi;
+
+import me.armar.plugins.autorank.Autorank;
+
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.sk89q.worldguard.protection.ApplicableRegionSet;
+import com.sk89q.worldguard.protection.managers.RegionManager;
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
+
+/**
+ * Handle all tasks with WorldGuard
+ * <p>
+ * Date created:  18:06:52
+ * 21 feb. 2014
+ * @author Staartvin
+ *
+ */
+public class WorldGuardAPIHandler {
+
+	private Autorank plugin;
+	private WorldGuardPlugin worldGuardAPI;
+	
+	public WorldGuardAPIHandler(Autorank instance) {
+		plugin = instance;
+	}
+	
+	public boolean setupWorldGuard() {
+		if (!isWorldGuardInstalled()) {
+			plugin.getLogger().info("WorldGuard has not been found!");
+			return false;
+		} else {
+			worldGuardAPI = getWorldGuard();
+			plugin.getLogger().info("WorldGuard has been found and can be used!");
+			return true;
+		}
+	}
+	
+	private WorldGuardPlugin getWorldGuard() {
+	    Plugin wgPlugin = plugin.getServer().getPluginManager().getPlugin("WorldGuard");
+	 
+	    // WorldGuard may not be loaded
+	    if (wgPlugin == null || !(wgPlugin instanceof WorldGuardPlugin)) {
+	        return null; // Maybe you want throw an exception instead
+	    }
+	 
+	    return (WorldGuardPlugin) wgPlugin;
+	}
+	
+	public boolean isWorldGuardInstalled() {
+		WorldGuardPlugin wg = getWorldGuard();
+		
+		return wg != null && wg.isEnabled();
+	}
+	
+	public boolean isWorldGuardAvailable() {
+		return worldGuardAPI != null;
+	}
+	
+	public boolean isInRegion(Player player, String regionName) {
+		if (!isWorldGuardAvailable()) return false;
+		
+		Location loc = player.getLocation();
+		
+		RegionManager regManager = worldGuardAPI.getRegionManager(loc.getWorld());
+		
+		if (regManager == null) return false;
+		
+		ApplicableRegionSet set = regManager.getApplicableRegions(loc);
+		
+		if (set == null) return false;
+		
+		for (ProtectedRegion region: set) {
+			String name = region.getTypeName();
+			
+			if (name.equalsIgnoreCase(regionName)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+}

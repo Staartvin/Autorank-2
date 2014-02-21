@@ -11,6 +11,7 @@ import me.armar.plugins.autorank.config.ConfigHandler;
 import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
 import me.armar.plugins.autorank.debugger.Debugger;
 import me.armar.plugins.autorank.factionapi.FactionsHandler;
+import me.armar.plugins.autorank.hooks.worldguardapi.WorldGuardAPIHandler;
 import me.armar.plugins.autorank.language.LanguageHandler;
 import me.armar.plugins.autorank.leaderboard.Leaderboard;
 import me.armar.plugins.autorank.listeners.PlayerJoinListener;
@@ -88,6 +89,7 @@ public class Autorank extends JavaPlugin {
 	private CommandsManager commandsManager;
 	private StatsPluginManager statsPluginManager;
 	private AddOnManager addonManager;
+	private WorldGuardAPIHandler worldGuardAPIHandler;
 
 	// Metrics (for custom data)
 	private me.armar.plugins.autorank.metrics.Metrics metrics;
@@ -151,6 +153,9 @@ public class Autorank extends JavaPlugin {
 
 		// Create faction handler
 		setFactionsHandler(new FactionsHandler(this));
+		
+		// Create WorldGuard handler
+		setWorldGuardAPIHandler(new WorldGuardAPIHandler(this));
 
 		// Create commands manager
 		setCommandsManager(new CommandsManager(this));
@@ -170,10 +175,14 @@ public class Autorank extends JavaPlugin {
 			getLogger().severe("No Stats plugin found!");
 		}
 
+		// Setup Factions
 		if (factionsHandler.setupFactions()) {
 			getLogger().info(
 					"Hooked into Factions! Faction requirements can be used.");
 		}
+		
+		// Setup WorldGuard
+		worldGuardAPIHandler.setupWorldGuard();
 
 		final RequirementBuilder req = this.getPlayerChecker().getBuilder()
 				.getRequirementBuilder();
@@ -511,6 +520,14 @@ public class Autorank extends JavaPlugin {
 
 	public void setAddonManager(AddOnManager addonManager) {
 		this.addonManager = addonManager;
+	}
+
+	public WorldGuardAPIHandler getWorldGuardAPIHandler() {
+		return worldGuardAPIHandler;
+	}
+
+	public void setWorldGuardAPIHandler(WorldGuardAPIHandler worldGuardAPIHandler) {
+		this.worldGuardAPIHandler = worldGuardAPIHandler;
 	}
 
 }
