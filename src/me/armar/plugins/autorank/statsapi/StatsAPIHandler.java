@@ -120,7 +120,7 @@ public class StatsAPIHandler {
 
 	public int getTotalPlayTime(final String playerName, final World world) {
 		String statName = "Playtime";
-
+		
 		final StatsPlayer player = getStats(playerName);
 		StatData stat;
 
@@ -141,8 +141,11 @@ public class StatsAPIHandler {
 
 				for (final Object[] vars : stat.getAllVariables()) {
 					value += stat.getValue(vars);
+					
+					System.out.print("Stat: " + stat.getValue(vars));
 				}
 			}
+			System.out.print("----------------------------------------");
 		}
 
 		return value;
