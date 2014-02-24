@@ -44,15 +44,6 @@
 				</configuration>
 			</plugin>
 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>2.1.1</version>
-				<configuration>
-					<packagingExcludes>${basedir}/libs/*.jar</packagingExcludes>
-				</configuration>
-			</plugin>
-
 		</plugins>
 
 	</build>
@@ -137,6 +128,7 @@
 			<groupId>nl.lolmewn.stats</groupId>
 			<artifactId>Stats</artifactId>
 			<version>1.37</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
