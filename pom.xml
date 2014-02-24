@@ -6,6 +6,7 @@
 	<version>2.8-Beta-Dev-${BUILD_NUMBER}</version>
 	<name>Autorank</name>
 	<description>Maven project for Bukkit plugin Autorank</description>
+	<url>http://dev.bukkit.org/server-mods/autorank/</url>
 	<build>
 
 		<sourceDirectory>src</sourceDirectory>
@@ -13,15 +14,15 @@
 		<resources>
 
 			<resource>
-				<directory>API Libs</directory>
+				<directory>libs</directory>
 				<excludes>
-					<exclude>**/*.java</exclude>
+					<exclude>*.java</exclude>
 				</excludes>
 			</resource>
 
 			<resource>
 				<filtering>true</filtering>
-				<directory>${basedir}</directory>
+				<directory>${project.basedir}</directory>
 				<includes>
 					<include>*.yml</include>
 				</includes>
@@ -39,7 +40,7 @@
 					<source>1.6</source>
 					<target>1.6</target>
 					<excludes>
-						<exclude>${basedir}/Javadocs</exclude>
+						<exclude>${project.basedir}/Javadocs</exclude>
 					</excludes>
 				</configuration>
 			</plugin>
@@ -119,11 +120,7 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/libs/PermissionsBukkit-2.1.jar</systemPath>
 		</dependency>
-
-		<!--<dependency> <groupId>Stats</groupId> <artifactId>Stats</artifactId> 
-			<version>1.37</version> <scope>system</scope> <systemPath>${project.basedir}/API 
-			Libs/Stats-1.37.jar</systemPath> </dependency> -->
-
+		
 		<dependency>
 			<groupId>nl.lolmewn.stats</groupId>
 			<artifactId>Stats</artifactId>
