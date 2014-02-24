@@ -26,6 +26,8 @@
 					<include>*.yml</include>
 				</includes>
 			</resource>
+
+
 		</resources>
 
 		<plugins>
@@ -36,6 +38,9 @@
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
+					<excludes>
+						<exclude>{$basedir}/Javadocs</exclude>
+					</excludes>
 				</configuration>
 			</plugin>
 
@@ -139,7 +144,7 @@
 			<version>R7</version>
 			<scope>compile</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>WorldGuard</groupId>
 			<artifactId>WorldGuard</artifactId>
@@ -147,7 +152,7 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/libs/worldguard-5.8.jar</systemPath>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>WorldEdit</groupId>
 			<artifactId>WorldEdit</artifactId>
