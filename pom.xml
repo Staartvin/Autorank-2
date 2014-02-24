@@ -13,12 +13,12 @@
 
 		<resources>
 
-			<resource>
+			<!-- <resource>
 				<directory>libs</directory>
 				<excludes>
 					<exclude>**/*.java</exclude>
 				</excludes>
-			</resource>
+			</resource>-->
 
 			<resource>
 				<filtering>true</filtering>
