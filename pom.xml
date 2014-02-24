@@ -16,7 +16,7 @@
 			<resource>
 				<directory>libs</directory>
 				<excludes>
-					<exclude>*.java</exclude>
+					<exclude>/*.java</exclude>
 				</excludes>
 			</resource>
 
