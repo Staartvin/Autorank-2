@@ -41,6 +41,14 @@
 					<excludes>
 						<exclude>${basedir}/Javadocs</exclude>
 					</excludes>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.1.1</version>
+				<configuration>
 					<packagingExcludes>${basedir}/libs/*.jar</packagingExcludes>
 				</configuration>
 			</plugin>
