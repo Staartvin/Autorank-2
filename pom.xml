@@ -39,8 +39,9 @@
 					<source>1.6</source>
 					<target>1.6</target>
 					<excludes>
-						<exclude>{$basedir}/Javadocs</exclude>
+						<exclude>${basedir}/Javadocs</exclude>
 					</excludes>
+					<packagingExcludes>${basedir}/libs/*.jar</packagingExcludes>
 				</configuration>
 			</plugin>
 
