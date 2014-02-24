@@ -488,7 +488,7 @@ public class Metrics {
      * GZip compress a string of bytes
      *
      * @param input
-     * @return
+     * @return a byte array
      */
     public static byte[] gzip(String input) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -561,7 +561,7 @@ public class Metrics {
      * Escape a string to create a valid JSON string
      *
      * @param text
-     * @return
+     * @return valid JSON string
      */
     private static String escapeJSON(String text) {
         StringBuilder builder = new StringBuilder();

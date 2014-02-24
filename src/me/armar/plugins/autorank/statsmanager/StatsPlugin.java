@@ -10,7 +10,7 @@ public interface StatsPlugin {
 	public boolean isEnabled();
 	
 	/**
-	 * Get the value of a stat. You can only get stats that are of {@link StatsPlugin.statType}.
+	 * Get the value of a stat. You can only get stats that are of a certain type.
 	 * <p>
 	 * <b>NOTE:</b> returns -1 when the current stats plugin doesn't support this stat.
 	 * @param statType Stat you want to get
