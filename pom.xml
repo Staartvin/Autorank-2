@@ -13,16 +13,16 @@
 
 		<resources>
 
-			<!-- <resource>
+			<resource>
 				<directory>libs</directory>
 				<excludes>
 					<exclude>**/*.java</exclude>
 				</excludes>
-			</resource>-->
+			</resource>
 
 			<resource>
 				<filtering>true</filtering>
-				<directory>${project.basedir}</directory>
+				<directory>${basedir}</directory>
 				<includes>
 					<include>*.yml</include>
 				</includes>
@@ -40,7 +40,7 @@
 					<source>1.6</source>
 					<target>1.6</target>
 					<excludes>
-						<exclude>${project.basedir}/Javadocs</exclude>
+						<exclude>${basedir}/Javadocs</exclude>
 					</excludes>
 				</configuration>
 			</plugin>
