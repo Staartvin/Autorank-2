@@ -42,10 +42,5 @@
 			<attribute name="javadoc_location" value="http://docs.sk89q.com/worldguard/apidocs/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry excluding="**" kind="src" output="target/classes" path="libs">
-		<attributes>
-			<attribute name="maven.pomderived" value="true"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
