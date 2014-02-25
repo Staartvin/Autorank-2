@@ -27,11 +27,6 @@
 	<classpathentry kind="lib" path="libs/mcore-6.9.1.jar"/>
 	<classpathentry kind="lib" path="libs/PermissionsBukkit-2.1.jar"/>
 	<classpathentry kind="lib" path="libs/Stats-1.37.jar" sourcepath="libs/sources/Stats-1.37.src.zip"/>
-	<classpathentry kind="lib" path="libs/Vault-1.2.26.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="http://mythcraft.dyndns.org/javadoc/vault/"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="lib" path="libs/WorldEdit.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="http://docs.sk89q.com/worldguard/apidocs/"/>
@@ -40,6 +35,11 @@
 	<classpathentry kind="lib" path="libs/worldguard-5.8.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="http://docs.sk89q.com/worldguard/apidocs/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="libs/Vault.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://mythcraft.dyndns.org/javadoc/vault/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="output" path="target/classes"/>
