@@ -61,18 +61,15 @@
 			<url>http://centrility.nl:8081/nexus/content/repositories/releases/</url>
 		</repository>
 
-
-		<repository>
-			<id>staartvin-repo</id>
-			<url>http://62.131.38.74:8081/artifactory/ext-release-local/</url>
-		</repository>
-
 		<repository>
 			<id>sk89q-repo</id>
 			<url>http://maven.sk89q.com/artifactory/repo/</url>
 		</repository>
 
-
+		<repository>
+			<id>staartvin-repo</id>
+			<url>http://62.131.38.74:8081/artifactory/ext-release-local/</url>
+		</repository>
 	</repositories>
 
 	<dependencies>
@@ -131,22 +128,17 @@
 			<version>5.5.8</version>
 			<scope>compile</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.mcstats.bukkit</groupId>
 			<artifactId>metrics</artifactId>
 			<version>R7</version>
-			<scope>compile</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>com.sk89q</groupId>
 			<artifactId>worldguard</artifactId>
 			<version>5.8</version>
-			<scope>compile</scope>
 		</dependency>
-
-		
-
 	</dependencies>
 </project>
