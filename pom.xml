@@ -132,7 +132,7 @@
 			<scope>compile</scope>
 		</dependency>
 
-		<dependency>
+		<!-- <dependency>
 			<groupId>com.sk89q</groupId>
 			<artifactId>worldguard</artifactId>
 			<version>5.8</version>
@@ -144,7 +144,7 @@
 			<artifactId>worldedit</artifactId>
 			<version>5.5.8</version>
 			<scope>compile</scope>
-		</dependency>
+		</dependency> -->
 
 	</dependencies>
 </project>
