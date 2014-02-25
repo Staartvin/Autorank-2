@@ -63,6 +63,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
+ * 
+ * Main class of Autorank
+ * <p>
  * Date created: 18:34:00
  * 13 jan. 2014
  * 
@@ -70,7 +73,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  * 
  */
 public class Autorank extends JavaPlugin {
-
+	
 	private Leaderboard leaderboard;
 	private Playtimes playtimes;
 	private PlayerChecker playerChecker;
