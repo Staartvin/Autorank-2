@@ -80,8 +80,6 @@
 			<groupId>Essentials</groupId>
 			<artifactId>Essentials</artifactId>
 			<version>2.12.1.2</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/libs/Essentials-2.12.1.2.jar</systemPath>
 		</dependency>
 
 		<dependency>
