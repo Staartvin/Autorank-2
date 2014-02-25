@@ -13,8 +13,12 @@
 
 		<resources>
 
-			<!-- <resource> <directory>libs</directory> <excludes> <exclude>**/*.java</exclude> 
-				</excludes> </resource> -->
+			<!-- <resource>
+				<directory>libs</directory>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+			</resource> -->
 
 			<resource>
 				<filtering>true</filtering>
@@ -115,18 +119,18 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/libs/PermissionsBukkit-2.1.jar</systemPath>
 		</dependency>
-
+		
 		<dependency>
 			<groupId>nl.lolmewn.stats</groupId>
 			<artifactId>Stats</artifactId>
 			<version>1.37</version>
 			<scope>provided</scope>
 		</dependency>
-
+		
 		<dependency>
 			<groupId>Vault</groupId>
 			<artifactId>Vault</artifactId>
-			<version>1.2.26</version>
+						<version>1.2.26</version>
 			<scope>system</scope>
 			<systemPath>${project.basedir}/libs/Vault.jar</systemPath>
 		</dependency>
