@@ -70,8 +70,6 @@ import org.bukkit.plugin.java.JavaPlugin;
  * 
  */
 public class Autorank extends JavaPlugin {
-	
-	// MORE TESTS
 
 	private Leaderboard leaderboard;
 	private Playtimes playtimes;
