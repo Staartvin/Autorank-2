@@ -137,7 +137,7 @@
 		</dependency>-->
 		
 		<dependency>
-			<groupId>net.milkbowl.vault</groupId>
+			<groupId>Vault</groupId>
 			<artifactId>Vault</artifactId>
 			<version>1.2.26</version>
 			<scope>system</scope>
