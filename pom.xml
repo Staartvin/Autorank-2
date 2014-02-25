@@ -83,35 +83,27 @@
 		</dependency>
 
 		<dependency>
-			<groupId>Essentials_GroupManager</groupId>
-			<artifactId>Essentials_GroupManager</artifactId>
+			<groupId>EssentialsGroupManager</groupId>
+			<artifactId>EssentialsGroupManager</artifactId>
 			<version>2.12.1</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/libs/EssentialsGroupManager-2.12.1.jar</systemPath>
 		</dependency>
 
 		<dependency>
 			<groupId>Factions</groupId>
 			<artifactId>Factions</artifactId>
 			<version>2.2.2</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/libs/Factions-2.2.2.jar</systemPath>
 		</dependency>
 
 		<dependency>
 			<groupId>MCore</groupId>
 			<artifactId>MCore</artifactId>
 			<version>6.9.1</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/libs/mcore-6.9.1.jar</systemPath>
 		</dependency>
 
 		<dependency>
-			<groupId>PermissionsBukkit</groupId>
-			<artifactId>PermissionsBukkit</artifactId>
+			<groupId>com.platymuus</groupId>
+			<artifactId>bukkit-permissions</artifactId>
 			<version>2.1</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/libs/PermissionsBukkit-2.1.jar</systemPath>
 		</dependency>
 
 		<dependency>
@@ -124,7 +116,6 @@
 			<groupId>net.milkbowl.vault</groupId>
 			<artifactId>Vault</artifactId>
 			<version>1.2.31</version>
-			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
@@ -135,19 +126,15 @@
 		</dependency>
 
 		<dependency>
-			<groupId>WorldGuard</groupId>
-			<artifactId>WorldGuard</artifactId>
+			<groupId>com.sk89q</groupId>
+			<artifactId>worldguard</artifactId>
 			<version>5.8</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/libs/worldguard-5.8.jar</systemPath>
 		</dependency>
 
 		<dependency>
-			<groupId>WorldEdit</groupId>
-			<artifactId>WorldEdit</artifactId>
+			<groupId>com.sk89q</groupId>
+			<artifactId>worldedit</artifactId>
 			<version>5.5.8</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/libs/WorldEdit.jar</systemPath>
 		</dependency>
 
 	</dependencies>
