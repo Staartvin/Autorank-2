@@ -61,17 +61,18 @@
 			<url>http://centrility.nl:8081/nexus/content/repositories/releases/</url>
 		</repository>
 
-		<repository>
-			<id>sk89q-repo</id>
-			<url>http://maven.sk89q.com/artifactory/repo/</url>
-		</repository>
-		
+
 		<repository>
 			<id>staartvin-repo</id>
 			<url>http://62.131.38.74:8081/artifactory/ext-release-local/</url>
 		</repository>
-		
-		
+
+		<repository>
+			<id>sk89q-repo</id>
+			<url>http://maven.sk89q.com/artifactory/repo/</url>
+		</repository>
+
+
 	</repositories>
 
 	<dependencies>
