@@ -13,12 +13,12 @@
 
 		<resources>
 
-			<resource>
+			<!-- <resource>
 				<directory>libs</directory>
 				<excludes>
 					<exclude>**/*.java</exclude>
 				</excludes>
-			</resource>
+			</resource> -->
 
 			<resource>
 				<filtering>true</filtering>
@@ -140,6 +140,8 @@
 			<groupId>net.milkbowl.vault</groupId>
 			<artifactId>Vault</artifactId>
 			<version>1.2.26</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/libs/Vault.jar</systemPath>
 		</dependency>
 
 		<dependency>
