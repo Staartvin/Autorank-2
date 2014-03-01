@@ -14,13 +14,6 @@
 		<resources>
 
 			<resource>
-				<directory>libs</directory>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</resource>
-
-			<resource>
 				<filtering>true</filtering>
 				<directory>${basedir}</directory>
 				<includes>
