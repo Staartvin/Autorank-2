@@ -83,7 +83,7 @@
 			<artifactId>bukkit</artifactId>
 			<version>1.7.2-R0.2</version>
 			<scope>provided</scope>
-			<packaging>jar</packaging>
+			<type>jar</type>
 		</dependency>
 
 		<dependency>
@@ -91,7 +91,7 @@
 			<artifactId>Essentials</artifactId>
 			<version>2.12.1.2</version>
 			<scope>provided</scope>
-			<packaging>jar</packaging>
+			<type>jar</type>
 		</dependency>
 
 		<dependency>
@@ -99,7 +99,7 @@
 			<artifactId>EssentialsGroupManager</artifactId>
 			<version>2.12.1</version>
 			<scope>provided</scope>
-			<packaging>jar</packaging>
+			<type>jar</type>
 		</dependency>
 
 		<dependency>
@@ -107,7 +107,7 @@
 			<artifactId>Factions</artifactId>
 			<version>2.2.2</version>
 			<scope>provided</scope>
-			<packaging>jar</packaging>
+			<type>jar</type>
 		</dependency>
 
 		<dependency>
@@ -115,7 +115,7 @@
 			<artifactId>MCore</artifactId>
 			<version>6.9.1</version>
 			<scope>provided</scope>
-			<packaging>jar</packaging>
+			<type>jar</type>
 		</dependency>
 
 		<dependency>
@@ -123,7 +123,7 @@
 			<artifactId>bukkit-permissions</artifactId>
 			<version>2.1</version>
 			<scope>provided</scope>
-			<packaging>jar</packaging>
+			<type>jar</type>
 		</dependency>
 
 		<dependency>
@@ -131,7 +131,7 @@
 			<artifactId>Stats</artifactId>
 			<version>1.37</version>
 			<scope>provided</scope>
-			<packaging>jar</packaging>
+			<type>jar</type>
 		</dependency>
 
 		<dependency>
@@ -139,7 +139,7 @@
 			<artifactId>Vault</artifactId>
 			<version>1.2.31</version>
 			<scope>provided</scope>
-			<packaging>jar</packaging>
+			<type>jar</type>
 		</dependency>
 
 		<dependency>
@@ -147,7 +147,7 @@
 			<artifactId>worldedit</artifactId>
 			<version>LATEST</version>
 			<scope>provided</scope>
-			<packaging>jar</packaging>
+			<type>jar</type>
 		</dependency>
 
 		<dependency>
@@ -155,7 +155,7 @@
 			<artifactId>metrics</artifactId>
 			<version>R7</version>
 			<scope>provided</scope>
-			<packaging>jar</packaging>
+			<type>jar</type>
 		</dependency>
 
 		<dependency>
@@ -163,7 +163,7 @@
 			<artifactId>worldguard</artifactId>
 			<version>LATEST</version>
 			<scope>provided</scope>
-			<packaging>jar</packaging>
+			<type>jar</type>
 		</dependency>
 	</dependencies>
 </project>
