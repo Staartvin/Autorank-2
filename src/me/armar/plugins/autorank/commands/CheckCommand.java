@@ -6,7 +6,6 @@ import java.util.List;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.AutorankTools;
 import me.armar.plugins.autorank.api.events.CheckCommandEvent;
-import me.armar.plugins.autorank.api.events.PlayerPromoteEvent;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.playerchecker.RankChange;
 import me.armar.plugins.autorank.playerchecker.requirement.Requirement;

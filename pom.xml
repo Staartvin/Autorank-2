@@ -45,6 +45,10 @@
 
 	</build>
 
+	<properties> <!-- Fix encoding warnings -->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
 	<repositories>
 		<repository>
 			<id>bukkit-repo</id>
