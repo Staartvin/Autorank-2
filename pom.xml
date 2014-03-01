@@ -37,6 +37,7 @@
 					<target>1.6</target>
 					<excludes>
 						<exclude>${basedir}/Javadocs</exclude>
+						<exclude>${basedir}/lib</exclude>
 					</excludes>
 				</configuration>
 			</plugin>
