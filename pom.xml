@@ -13,8 +13,12 @@
 
 		<resources>
 
-			<!-- <resource> <directory>libs</directory> <excludes> <exclude>**/*.java</exclude> 
-				</excludes> </resource> -->
+			<resource>
+				<directory>libs</directory>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+			</resource>
 
 			<resource>
 				<filtering>true</filtering>
@@ -39,22 +43,6 @@
 						<exclude>${basedir}/Javadocs</exclude>
 						<exclude>${basedir}/lib</exclude>
 					</excludes>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>2.4</version>
-				<configuration>
-					<!-- Use this to include a selection of jars that will be included in 
-						the WAR -->
-					<packagingExcludes>${basedir}/lib/**/*.jar</packagingExcludes>
-					<archive>
-						<manifest>
-							<addClasspath>true</addClasspath>
-							<classpathPrefix>lib/</classpathPrefix>
-						</manifest>
-					</archive>
 				</configuration>
 			</plugin>
 
