@@ -1,4 +1,4 @@
-package me.armar.plugins.autorank.factionapi;
+package me.armar.plugins.autorank.hooks.factionsapi;
 
 import me.armar.plugins.autorank.Autorank;
 

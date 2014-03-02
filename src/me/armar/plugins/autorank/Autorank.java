@@ -10,7 +10,7 @@ import me.armar.plugins.autorank.commands.manager.CommandsManager;
 import me.armar.plugins.autorank.config.ConfigHandler;
 import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
 import me.armar.plugins.autorank.debugger.Debugger;
-import me.armar.plugins.autorank.factionapi.FactionsHandler;
+import me.armar.plugins.autorank.hooks.factionsapi.FactionsHandler;
 import me.armar.plugins.autorank.hooks.worldguardapi.WorldGuardAPIHandler;
 import me.armar.plugins.autorank.language.LanguageHandler;
 import me.armar.plugins.autorank.leaderboard.Leaderboard;
