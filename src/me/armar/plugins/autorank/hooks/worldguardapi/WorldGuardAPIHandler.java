@@ -50,16 +50,30 @@ public class WorldGuardAPIHandler {
 	    return (WorldGuardPlugin) wgPlugin;
 	}
 	
+	/**
+	 * Check to see if WorldGuard is running on this server
+	 * @return true if it is, false otherwise.
+	 */
 	public boolean isWorldGuardInstalled() {
 		WorldGuardPlugin wg = getWorldGuard();
 		
 		return wg != null && wg.isEnabled();
 	}
 	
+	/**
+	 * Check whether Autorank has hooked WorldGuard and thus can use it.
+	 * @return true if Autorank hooked into it, false otherwise.
+	 */
 	public boolean isWorldGuardAvailable() {
 		return worldGuardAPI != null;
 	}
 	
+	/**
+	 * Check to see if a player is in a specific region
+	 * @param player Player that needs to be checked
+	 * @param regionName Name of the region to be checked
+	 * @return true if the player is in that region; false otherwise.
+	 */
 	public boolean isInRegion(Player player, String regionName) {
 		if (!isWorldGuardAvailable()) return false;
 		
