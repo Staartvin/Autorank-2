@@ -19,12 +19,12 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
  * @author Staartvin
  *
  */
-public class WorldGuardAPIHandler {
+public class WorldGuardHandler {
 
 	private Autorank plugin;
 	private WorldGuardPlugin worldGuardAPI;
 	
-	public WorldGuardAPIHandler(Autorank instance) {
+	public WorldGuardHandler(Autorank instance) {
 		plugin = instance;
 	}
 	
