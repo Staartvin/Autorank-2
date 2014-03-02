@@ -3,6 +3,8 @@ package me.armar.plugins.autorank.playerchecker.requirement;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.armar.plugins.autorank.hooks.DependencyManager.dependency;
+import me.armar.plugins.autorank.hooks.worldguardapi.WorldGuardHandler;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.playerchecker.result.Result;
 
@@ -43,7 +45,9 @@ public class WorldGuardRegionRequirement extends Requirement {
 			return true;
 		}
 
-		return this.getAutorank().getWorldGuardAPIHandler().isInRegion(player, regionName);
+		WorldGuardHandler wgH = (WorldGuardHandler) this.getAutorank().getDependencyManager().getDependency(dependency.WORLDGUARD);
+		
+		return wgH.isInRegion(player, regionName);
 	}
 
 	@Override

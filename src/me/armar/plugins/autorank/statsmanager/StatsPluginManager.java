@@ -20,14 +20,15 @@ public class StatsPluginManager {
 	
 	public StatsPluginManager(Autorank instance) {
 		plugin = instance;
-		
-		searchStatsPlugin();
 	}
 	
 	private StatsPlugin statsPlugin;
 	
-	private void searchStatsPlugin() {
+	public void searchStatsPlugin() {
 		if (findStats()) {
+			
+			plugin.getLogger().info("Found Stats plugin: Stats (by Lolmewn)");
+			
 			// use Stats
 			StatsAPIHandler api = new StatsAPIHandler(plugin);
 			
@@ -35,16 +36,16 @@ public class StatsPluginManager {
 			api.setupStatsAPI();
 			
 			statsPlugin = new StatsHandler(plugin, api);	
+			
+			if (statsPlugin == null || !statsPlugin.isEnabled()) {
+				plugin.getLogger().info("Couldn't hook into Stats! Make sure the version is correct.");
+				return;
+			}
 		} else {
-			// use Vault
 			// Use dummy handler if no stats plugin was found
 			statsPlugin = new DummyHandler();
 			
-			// Do not register warning as that will show every few seconds.
-			// Print image on console instead.
-			//plugin.getWarningManager().registerWarning("Autorank did not find a stats plugin! Most requirements cannot be used!", 5);
-			
-			plugin.getLogger().severe("Autorank did not find a stats plugin! Most requirements cannot be used!");
+			plugin.getLogger().info("No stats plugin found! Most requirements cannot be used!");
 			
 		}
 	}

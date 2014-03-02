@@ -23,7 +23,7 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 
 	public VaultPermissionsHandler(final Autorank plugin) {
 		if (!setupPermissions(plugin)) {
-			Autorank.logMessage("Vault not found, Autorank will not work!");
+			plugin.getLogger().severe("Vault not found, Autorank will not work!");
 			plugin.getPluginLoader().disablePlugin(plugin);
 		}
 	}

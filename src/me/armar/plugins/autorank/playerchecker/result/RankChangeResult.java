@@ -2,7 +2,6 @@ package me.armar.plugins.autorank.playerchecker.result;
 
 import java.util.ArrayList;
 
-import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.api.events.PlayerPromoteEvent;
 
 import org.bukkit.Bukkit;
@@ -44,10 +43,10 @@ public class RankChangeResult extends Result {
 			oldrank = from;
 		}
 		if (world != null) {
-			Autorank.logMessage("Promote " + player.getName() + " on world "
+			this.getAutorank().getLogger().info("Promote " + player.getName() + " on world "
 					+ world + " from " + oldrank + " to " + to);
 		} else {
-			Autorank.logMessage("Promote " + player.getName()
+			this.getAutorank().getLogger().info("Promote " + player.getName()
 					+ " globally from " + oldrank + " to " + to);
 		}
 

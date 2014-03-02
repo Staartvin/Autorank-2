@@ -55,8 +55,6 @@ public class BlocksMovedRequirement extends Requirement {
 
 		boolean sufficient = false;
 		sufficient = this
-				.getAutorank()
-				.getStatsPluginManager()
 				.getStatsPlugin()
 				.getNormalStat("blocks_moved", player.getName(),
 						player.getWorld().getName(), movementType) > blocksMoved;

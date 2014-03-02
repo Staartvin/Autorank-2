@@ -12,16 +12,7 @@ public class StatsHandler implements StatsPlugin {
 	private StatsAPIHandler statsApi;
 
 	public enum statTypes {
-		BLOCKS_BROKEN,
-		BLOCKS_PLACED,
-		TOTAL_BLOCKS_BROKEN,
-		TOTAL_BLOCKS_PLACED,
-		VOTES,
-		PLAYERS_KILLED,
-		MOBS_KILLED,
-		DAMAGE_TAKEN,
-		TIME_PLAYED,
-		BLOCKS_MOVED
+		BLOCKS_BROKEN, BLOCKS_PLACED, TOTAL_BLOCKS_BROKEN, TOTAL_BLOCKS_PLACED, VOTES, PLAYERS_KILLED, MOBS_KILLED, DAMAGE_TAKEN, TIME_PLAYED, BLOCKS_MOVED
 	};
 
 	public StatsHandler(Autorank instance, StatsAPIHandler statsAPI) {
@@ -32,7 +23,12 @@ public class StatsHandler implements StatsPlugin {
 
 	@Override
 	public boolean isEnabled() {
-		return statsApi != null && statsApi.isEnabled() && statsApi.areBetaFunctionsEnabled();
+		return statsApi != null
+				&& statsApi.isEnabled()
+				&& statsApi.areBetaFunctionsEnabled()
+				&& statsApi.compatibleStatsVersion(plugin.getServer()
+						.getPluginManager().getPlugin("Stats").getDescription()
+						.getVersion());
 	}
 
 	@Override
@@ -71,16 +67,23 @@ public class StatsHandler implements StatsPlugin {
 		} else if (correctName.equals("mobs_killed")) {
 			// Handle mobs killed
 			// arg[2] == mobType
-			value = statsApi.getTotalMobsKilled(playerName, (String) arguments[2], world);
+			value = statsApi.getTotalMobsKilled(playerName,
+					(String) arguments[2], world);
 		} else if (correctName.equals("damage_taken")) {
 			// Handle damage taken
 			value = statsApi.getNormalStat(playerName, "Damage taken", world);
 		} else if (correctName.equals("blocks_placed")) {
 			// Handle blocks placed
-			value = statsApi.getBlocksStat(playerName, Integer.parseInt((String) arguments[2]), Integer.parseInt((String) arguments[3]), world, "Block place");
+			value = statsApi.getBlocksStat(playerName,
+					Integer.parseInt((String) arguments[2]),
+					Integer.parseInt((String) arguments[3]), world,
+					"Block place");
 		} else if (correctName.equals("blocks_broken")) {
 			// Handle blocks broken
-			value = statsApi.getBlocksStat(playerName, Integer.parseInt((String) arguments[2]), Integer.parseInt((String) arguments[3]), world, "Block break");
+			value = statsApi.getBlocksStat(playerName,
+					Integer.parseInt((String) arguments[2]),
+					Integer.parseInt((String) arguments[3]), world,
+					"Block break");
 		} else if (correctName.equals("total_blocks_placed")) {
 			// Handle total blocks placed
 			value = statsApi.getTotalBlocksPlaced(playerName, world);
@@ -92,7 +95,8 @@ public class StatsHandler implements StatsPlugin {
 			value = statsApi.getTotalPlayTime(playerName, world);
 		} else if (correctName.equals("blocks_moved")) {
 			// Handle time played
-			value = statsApi.getTotalBlocksMoved(playerName, (Integer) arguments[2], world);
+			value = statsApi.getTotalBlocksMoved(playerName,
+					(Integer) arguments[2], world);
 		}
 
 		return value;

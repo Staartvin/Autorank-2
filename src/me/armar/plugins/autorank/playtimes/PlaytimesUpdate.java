@@ -17,9 +17,12 @@ public class PlaytimesUpdate implements Runnable {
 
 	private Essentials ess;
 	private final Playtimes playtimes;
+	private Autorank plugin;
 
 	public PlaytimesUpdate(final Playtimes playtimes, final Autorank plugin) {
 		this.playtimes = playtimes;
+		
+		this.plugin = plugin;
 
 		if (plugin.getAdvancedConfig().getBoolean("use advanced config")
 				&& plugin.getAdvancedConfig().getBoolean("afk integration")) {
@@ -74,9 +77,9 @@ public class PlaytimesUpdate implements Runnable {
 				.getPlugin("Essentials");
 		if (x != null & x instanceof Essentials) {
 			ess = (Essentials) x;
-			Autorank.logMessage("Essentials was found! AFK integration can be used.");
+			plugin.getLogger().info("Essentials was found! AFK integration can be used.");
 		} else {
-			Autorank.logMessage("Essentials was NOT found! Disabling AFK integration.");
+			plugin.getLogger().info("Essentials was NOT found! Disabling AFK integration.");
 		}
 	}
 

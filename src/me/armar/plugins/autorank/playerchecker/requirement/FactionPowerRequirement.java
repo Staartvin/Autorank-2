@@ -4,6 +4,8 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.armar.plugins.autorank.hooks.DependencyManager.dependency;
+import me.armar.plugins.autorank.hooks.factionsapi.FactionsHandler;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.playerchecker.result.Result;
 
@@ -46,9 +48,10 @@ public class FactionPowerRequirement extends Requirement {
 			return true;
 		}
 
-		return this.getAutorank().getFactionsHandler().isEnabled()
-				&& this.getAutorank().getFactionsHandler()
-						.getFactionPower(player) > factionPower;
+		FactionsHandler fHandler = (FactionsHandler) this.getAutorank().getDependencyManager().getDependency(dependency.FACTIONS); 
+		
+		return fHandler.isEnabled()
+				&& fHandler.getFactionPower(player) > factionPower;
 	}
 
 	@Override
@@ -71,8 +74,8 @@ public class FactionPowerRequirement extends Requirement {
 	public String getProgress(final Player player) {
 		String progress = "";
 		final DecimalFormat df = new DecimalFormat("#.##");
-		final String doubleRounded = df.format(getAutorank()
-				.getFactionsHandler().getFactionPower(player));
+		final String doubleRounded = df.format(((FactionsHandler) getAutorank()
+				.getDependencyManager().getDependency(dependency.FACTIONS)).getFactionPower(player));
 
 		progress = progress.concat(doubleRounded + "/" + factionPower);
 		return progress;

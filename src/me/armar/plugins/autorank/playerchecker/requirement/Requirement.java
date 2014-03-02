@@ -135,6 +135,6 @@ public abstract class Requirement {
 	 * @return stats plugin that Autorank uses for stat data
 	 */
 	public StatsPlugin getStatsPlugin() {
-		return autorank.getStatsPluginManager().getStatsPlugin();
+		return autorank.getHookedStatsPlugin();
 	}
 }

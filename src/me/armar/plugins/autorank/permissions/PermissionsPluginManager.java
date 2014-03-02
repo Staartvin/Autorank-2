@@ -33,9 +33,9 @@ public class PermissionsPluginManager {
 	public PermissionsPluginManager(final Autorank plugin) {
 		this.plugin = plugin;
 		if (findVault(plugin)) {
-			Autorank.logMessage("Vault Hooked!");
+			plugin.getLogger().info("Vault found and hooked!");
 		} else {
-			Autorank.logMessage("WARNING Vault was not found!");
+			plugin.getLogger().severe("Vault was not found!");
 		}
 		searchPermPlugin();
 	}

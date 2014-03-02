@@ -2,7 +2,6 @@ package me.armar.plugins.autorank;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.logging.Logger;
 
 import me.armar.plugins.autorank.addons.AddOnManager;
 import me.armar.plugins.autorank.api.API;
@@ -10,8 +9,8 @@ import me.armar.plugins.autorank.commands.manager.CommandsManager;
 import me.armar.plugins.autorank.config.ConfigHandler;
 import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
 import me.armar.plugins.autorank.debugger.Debugger;
-import me.armar.plugins.autorank.hooks.factionsapi.FactionsHandler;
-import me.armar.plugins.autorank.hooks.worldguardapi.WorldGuardAPIHandler;
+import me.armar.plugins.autorank.hooks.DependencyManager;
+import me.armar.plugins.autorank.hooks.DependencyManager.dependency;
 import me.armar.plugins.autorank.language.LanguageHandler;
 import me.armar.plugins.autorank.leaderboard.Leaderboard;
 import me.armar.plugins.autorank.listeners.PlayerJoinListener;
@@ -50,15 +49,12 @@ import me.armar.plugins.autorank.playerchecker.result.TeleportResult;
 import me.armar.plugins.autorank.playtimes.Playtimes;
 import me.armar.plugins.autorank.requirementhandler.RequirementHandler;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
-import me.armar.plugins.autorank.statsmanager.StatsPluginManager;
-import me.armar.plugins.autorank.statsmanager.handlers.DummyHandler;
 import me.armar.plugins.autorank.updater.UpdateHandler;
 import me.armar.plugins.autorank.updater.Updater;
 import me.armar.plugins.autorank.validations.ValidateHandler;
 import me.armar.plugins.autorank.warningmanager.WarningManager;
 import me.armar.plugins.autorank.warningmanager.WarningNoticeTask;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -66,15 +62,13 @@ import org.bukkit.plugin.java.JavaPlugin;
  * 
  * Main class of Autorank
  * <p>
- * Date created: 18:34:00
- * 13 jan. 2014
+ * Date created: 18:34:00 13 jan. 2014
  * 
  * @author Staartvin
  * 
  */
 public class Autorank extends JavaPlugin {
-	
-	// Remove that
+
 	private Leaderboard leaderboard;
 	private Playtimes playtimes;
 	private PlayerChecker playerChecker;
@@ -84,23 +78,21 @@ public class Autorank extends JavaPlugin {
 	private LanguageHandler languageHandler;
 	private ValidateHandler validateHandler;
 	private MySQLWrapper mysqlWrapper;
-	private static Logger log = Bukkit.getLogger();
 	private UpdateHandler updateHandler;
 	private ConfigHandler configHandler;
 	private RequirementHandler requirementHandler;
 	private Debugger debugger;
-	private FactionsHandler factionsHandler;
 	private WarningManager warningManager;
 	private CommandsManager commandsManager;
-	private StatsPluginManager statsPluginManager;
 	private AddOnManager addonManager;
-	private WorldGuardAPIHandler worldGuardAPIHandler;
+
+	private DependencyManager dependencyManager;
 
 	// Metrics (for custom data)
 	private me.armar.plugins.autorank.metrics.Metrics metrics;
-	
+
 	// Using MySQL
-	public static boolean usingMySQL = false; 
+	public static boolean usingMySQL = false;
 
 	@Override
 	public void onEnable() {
@@ -153,41 +145,14 @@ public class Autorank extends JavaPlugin {
 		// Create validate handler
 		setValidateHandler(new ValidateHandler(this));
 
-		// Create stats plugin handler
-		setStatsPluginManager(new StatsPluginManager(this));
+		// Load dependency manager
+		setDependencyManager(new DependencyManager(this));
 
-		// Create faction handler
-		setFactionsHandler(new FactionsHandler(this));
-		
-		// Create WorldGuard handler
-		setWorldGuardAPIHandler(new WorldGuardAPIHandler(this));
+		// Load dependencies
+		dependencyManager.loadDependencies();
 
 		// Create commands manager
 		setCommandsManager(new CommandsManager(this));
-
-		// Check if we found a stats plugin
-		if (statsPluginManager.getStatsPlugin() != null
-				&& !statsPluginManager.getStatsPlugin().getClass()
-						.equals(DummyHandler.class)) {
-			String statsPluginName = "none";
-
-			if (statsPluginManager.findStats()) {
-				statsPluginName = "Stats (by Lolmewn)";
-			}
-
-			getLogger().info("Found Stats plugin: " + statsPluginName);
-		} else {
-			getLogger().severe("No Stats plugin found!");
-		}
-
-		// Setup Factions
-		if (factionsHandler.setupFactions()) {
-			getLogger().info(
-					"Hooked into Factions! Faction requirements can be used.");
-		}
-		
-		// Setup WorldGuard
-		worldGuardAPIHandler.setupWorldGuard();
 
 		final RequirementBuilder req = this.getPlayerChecker().getBuilder()
 				.getRequirementBuilder();
@@ -211,7 +176,8 @@ public class Autorank extends JavaPlugin {
 		req.registerRequirement("total time", TotalTimeRequirement.class);
 		req.registerRequirement("time", TimeRequirement.class);
 		req.registerRequirement("blocks moved", BlocksMovedRequirement.class);
-		req.registerRequirement("worldguard region", WorldGuardRegionRequirement.class);
+		req.registerRequirement("worldguard region",
+				WorldGuardRegionRequirement.class);
 		req.registerRequirement("world", WorldRequirement.class);
 
 		// REGISTER PLURALS IN AUTORANKTOOLS AS WELL!
@@ -241,11 +207,11 @@ public class Autorank extends JavaPlugin {
 
 		// Set debugger
 		setDebugger(new Debugger(this));
-		
+
 		// Set addon manager
 		setAddonManager(new AddOnManager(this));
 
-		Autorank.logMessage(String.format("Autorank %s has been enabled!",
+		getLogger().info(String.format("Autorank %s has been enabled!",
 				getDescription().getVersion()));
 
 		// Create a new task that runs every 30 seconds (will show a warning every 30 seconds)
@@ -254,7 +220,7 @@ public class Autorank extends JavaPlugin {
 
 		// Check if using MySQL
 		usingMySQL = this.getMySQLWrapper().isMySQLEnabled();
-		
+
 		// Start collecting data
 		if (!startMetrics()) {
 			getLogger().info(
@@ -267,6 +233,7 @@ public class Autorank extends JavaPlugin {
 		setLeaderboard(null);
 
 		playtimes.save();
+
 		setPlaytimes(null);
 
 		setPlayerChecker(null);
@@ -280,7 +247,7 @@ public class Autorank extends JavaPlugin {
 		// Make sure all tasks are cancelled after shutdown. This seems obvious, but when a player /reloads, the server creates an instance of the plugin which causes duplicate tasks to run. 
 		getServer().getScheduler().cancelTasks(this);
 
-		Autorank.logMessage(String.format("Autorank %s has been disabled!",
+		getLogger().info(String.format("Autorank %s has been disabled!",
 				getDescription().getVersion()));
 	}
 
@@ -291,14 +258,14 @@ public class Autorank extends JavaPlugin {
 			metrics = new me.armar.plugins.autorank.metrics.Metrics(this);
 
 			// Setup graph for MySQL
-			Graph weaponsUsedGraph = metrics
+			Graph mysqlUsedGraph = metrics
 					.createGraph("Percentage using MySQL");
 
-			weaponsUsedGraph.addPlotter(new Metrics.Plotter("MySQL") {
+			mysqlUsedGraph.addPlotter(new Metrics.Plotter("MySQL") {
 
 				@Override
 				public int getValue() {
-					return usingMySQL ? 1: 0;
+					return usingMySQL ? 1 : 0;
 				}
 
 			});
@@ -355,10 +322,6 @@ public class Autorank extends JavaPlugin {
 			final Class<? extends Result> result) {
 		playerChecker.getBuilder().getResultBuilder()
 				.registerResult(name, result);
-	}
-
-	public static void logMessage(final String message) {
-		log.info("[Autorank] " + message);
 	}
 
 	public Leaderboard getLeaderboard() {
@@ -484,14 +447,6 @@ public class Autorank extends JavaPlugin {
 		this.debugger = debugger;
 	}
 
-	public FactionsHandler getFactionsHandler() {
-		return factionsHandler;
-	}
-
-	public void setFactionsHandler(final FactionsHandler factionsHandler) {
-		this.factionsHandler = factionsHandler;
-	}
-
 	public WarningManager getWarningManager() {
 		return warningManager;
 	}
@@ -508,16 +463,8 @@ public class Autorank extends JavaPlugin {
 		this.commandsManager = commandsManager;
 	}
 
-	public StatsPluginManager getStatsPluginManager() {
-		return statsPluginManager;
-	}
-
-	public void setStatsPluginManager(StatsPluginManager statsPluginManager) {
-		this.statsPluginManager = statsPluginManager;
-	}
-
 	public StatsPlugin getHookedStatsPlugin() {
-		return getStatsPluginManager().getStatsPlugin();
+		return (StatsPlugin) getDependencyManager().getDependency(dependency.STATS);
 	}
 
 	public AddOnManager getAddonManager() {
@@ -528,12 +475,11 @@ public class Autorank extends JavaPlugin {
 		this.addonManager = addonManager;
 	}
 
-	public WorldGuardAPIHandler getWorldGuardAPIHandler() {
-		return worldGuardAPIHandler;
+	public DependencyManager getDependencyManager() {
+		return dependencyManager;
 	}
 
-	public void setWorldGuardAPIHandler(WorldGuardAPIHandler worldGuardAPIHandler) {
-		this.worldGuardAPIHandler = worldGuardAPIHandler;
+	public void setDependencyManager(DependencyManager dependencyManager) {
+		this.dependencyManager = dependencyManager;
 	}
-
 }
