@@ -1,11 +1,14 @@
 package me.armar.plugins.autorank.hooks.mcmmoapi;
 
+import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.hooks.DependencyHandler;
+
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import com.gmail.nossr50.mcMMO;
-
-import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.hooks.DependencyHandler;
+import com.gmail.nossr50.api.ExperienceAPI;
+import com.gmail.nossr50.api.exceptions.InvalidSkillException;
 
 /**
  * Handles all connections with McMMO.
@@ -50,6 +53,7 @@ public class McMMOHandler implements DependencyHandler {
 			if (api != null) {
 				plugin.getLogger()
 						.info("mcMMO has been found and can be used!");
+				
 				return true;
 			} else {
 				plugin.getLogger().info(
@@ -75,6 +79,24 @@ public class McMMOHandler implements DependencyHandler {
 	@Override
 	public boolean isAvailable() {
 		return api != null;
+	}
+	
+	/**
+	 * Get the level of a certain skill of a player that is using mcMMO.
+	 * @param player Player to get the skill from
+	 * @param skillName Name of the skill
+	 * @return level of requested skill, or -1 if the skill is invalid.
+	 */
+	public int getSkillLevel(Player player, String skillName) {
+		int skillLevel = 0;
+		
+		try {
+			skillLevel = ExperienceAPI.getLevel(player, skillName);
+		} catch (InvalidSkillException e) {
+			return -1;
+		}
+		
+		return skillLevel;
 	}
 
 }

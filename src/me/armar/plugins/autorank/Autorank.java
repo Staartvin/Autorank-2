@@ -31,6 +31,7 @@ import me.armar.plugins.autorank.playerchecker.requirement.GamemodeRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.GlobalTimeRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.HasItemRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.LocationRequirement;
+import me.armar.plugins.autorank.playerchecker.requirement.McMMOSkillLevelRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.MobKillsRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.MoneyRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.PlayerKillsRequirement;
@@ -179,6 +180,7 @@ public class Autorank extends JavaPlugin {
 		req.registerRequirement("worldguard region",
 				WorldGuardRegionRequirement.class);
 		req.registerRequirement("world", WorldRequirement.class);
+		req.registerRequirement("mcmmo skill level", McMMOSkillLevelRequirement.class);
 
 		// REGISTER PLURALS IN AUTORANKTOOLS AS WELL!
 

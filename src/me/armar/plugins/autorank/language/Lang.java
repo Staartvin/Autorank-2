@@ -115,7 +115,9 @@ public enum Lang {
 	BLOCKS_MOVED_REQUIREMENT(
 			"blocks-moved-requirement", "Travel at least {0} {1}."),
 	WORLD_GUARD_REGION_REQUIREMENT(
-					"world-guard-region-requirement", "Be in region '{0}'."),;
+					"world-guard-region-requirement", "Be in region '{0}'."),
+	MCMMO_SKILL_LEVEL_REQUIREMENT(
+							"mcmmo-skill-level-requirement", "Have at least level {0} in {1}."),;
 
 	private String path, def;
 	private static FileConfiguration LANG;
