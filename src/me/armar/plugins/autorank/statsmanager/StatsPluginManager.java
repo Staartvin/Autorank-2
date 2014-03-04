@@ -37,10 +37,17 @@ public class StatsPluginManager {
 			
 			statsPlugin = new StatsHandler(plugin, api);	
 			
-			if (statsPlugin == null || !statsPlugin.isEnabled()) {
+			if (statsPlugin == null) {
+				plugin.getLogger().info("Couldn't hook into Stats! StatsHandler was unable to hook.");
+				return;
+			}
+			
+			if (!statsPlugin.isEnabled()) {
 				plugin.getLogger().info("Couldn't hook into Stats! Make sure the version is correct.");
 				return;
 			}
+			
+			plugin.getLogger().info("Hooked into Stats (by Lolmewn)");
 		} else {
 			// Use dummy handler if no stats plugin was found
 			statsPlugin = new DummyHandler();

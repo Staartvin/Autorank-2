@@ -23,12 +23,29 @@ public class StatsHandler implements StatsPlugin {
 
 	@Override
 	public boolean isEnabled() {
-		return statsApi != null
-				&& statsApi.isEnabled()
-				&& statsApi.areBetaFunctionsEnabled()
-				&& statsApi.compatibleStatsVersion(plugin.getServer()
-						.getPluginManager().getPlugin("Stats").getDescription()
-						.getVersion());
+		if (statsApi == null) {
+			plugin.getLogger().info("Stats (by Lolmewn) api library was not found!");
+			return false;
+		}
+		
+		if (!statsApi.isEnabled()) {
+			plugin.getLogger().info("Stats (by Lolmewn) is not enabled!"); 
+			return false;
+		}
+		
+		if (!statsApi.areBetaFunctionsEnabled()) {
+			plugin.getLogger().info("Stats (by Lolmewn) does not have beta functions enabled!"); 
+			return false;
+		}
+		
+		if (!statsApi.compatibleStatsVersion(plugin.getServer()
+				.getPluginManager().getPlugin("Stats").getDescription()
+				.getVersion())) {
+			plugin.getLogger().info("This version of Stats (by Lolmewn) is not supported by Autorank!"); 
+			return false;
+		}
+		
+		return true;
 	}
 
 	@Override
