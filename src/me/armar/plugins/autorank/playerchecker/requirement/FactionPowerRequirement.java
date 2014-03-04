@@ -50,8 +50,7 @@ public class FactionPowerRequirement extends Requirement {
 
 		FactionsHandler fHandler = (FactionsHandler) this.getAutorank().getDependencyManager().getDependency(dependency.FACTIONS); 
 		
-		return fHandler.isEnabled()
-				&& fHandler.getFactionPower(player) > factionPower;
+		return fHandler.getFactionPower(player) > factionPower;
 	}
 
 	@Override
