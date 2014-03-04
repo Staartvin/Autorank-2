@@ -26,5 +26,6 @@
 	<classpathentry kind="lib" path="lib/Vault.jar"/>
 	<classpathentry kind="lib" path="lib/WorldEdit.jar"/>
 	<classpathentry kind="lib" path="lib/worldguard.jar"/>
+	<classpathentry kind="lib" path="lib/mcMMO.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
