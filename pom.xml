@@ -176,5 +176,14 @@
 			<scope>provided</scope>
 			<type>jar</type>
 		</dependency>
+		
+		<dependency>
+			<groupId>com.gmail.nossr50.mcMMO</groupId>
+			<artifactId>mcMMO</artifactId>
+			<version>1.4.07</version>
+			<scope>provided</scope>
+			<type>jar</type>
+		</dependency>
+		
 	</dependencies>
 </project>
