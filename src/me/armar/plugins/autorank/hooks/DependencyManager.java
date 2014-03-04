@@ -1,7 +1,10 @@
 package me.armar.plugins.autorank.hooks;
 
+import java.util.HashMap;
+
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.factionsapi.FactionsHandler;
+import me.armar.plugins.autorank.hooks.mcmmoapi.McMMOHandler;
 import me.armar.plugins.autorank.hooks.worldguardapi.WorldGuardHandler;
 import me.armar.plugins.autorank.statsmanager.StatsPluginManager;
 
@@ -17,53 +20,58 @@ import me.armar.plugins.autorank.statsmanager.StatsPluginManager;
 public class DependencyManager {
 
 	public enum dependency {
-		FACTIONS, STATS, WORLDGUARD
+		FACTIONS, STATS, WORLDGUARD, MCMMO
 	};
 
 	private Autorank plugin;
-	
+
 	private StatsPluginManager statsPluginManager;
-	private WorldGuardHandler worldGuardHandler;
-	private FactionsHandler factionsHandler;
+
+	private HashMap<dependency, DependencyHandler> handlers = new HashMap<dependency, DependencyHandler>();
 
 	public DependencyManager(Autorank instance) {
 		plugin = instance;
+
+		// Register handlers
+		handlers.put(dependency.FACTIONS, new FactionsHandler(instance));
+		handlers.put(dependency.WORLDGUARD, new WorldGuardHandler(instance));
+		handlers.put(dependency.MCMMO, new McMMOHandler(instance));
 		
 		statsPluginManager = new StatsPluginManager(instance);
-		factionsHandler = new FactionsHandler(instance);
-		worldGuardHandler = new WorldGuardHandler(instance);
 	}
 
 	public void loadDependencies() {
-		
+
 		// Make seperate loading bar
-		plugin.getLogger().info("---------------[Autorank Dependencies]---------------");
+		plugin.getLogger().info(
+				"---------------[Autorank Dependencies]---------------");
 		plugin.getLogger().info("Searching dependencies...");
-		
-		
+
 		// Search a stats plugin.
 		statsPluginManager.searchStatsPlugin();
 
-		// Setup Factions
-		factionsHandler.setup();
+		// Load all dependencies
+		for (DependencyHandler depHandler: handlers.values()) {
+			depHandler.setup();
+		}
 
-		// Setup WorldGuard
-		worldGuardHandler.setup();
-		
 		// Make seperate stop loading bar
-		plugin.getLogger().info("---------------[Autorank Dependencies]---------------");
+		plugin.getLogger().info(
+				"---------------[Autorank Dependencies]---------------");
 	}
-	
+
 	public Object getDependency(dependency dep) {
-		switch (dep) {
-		case FACTIONS:
-			return factionsHandler;
-		case WORLDGUARD:
-			return worldGuardHandler;
-		case STATS:
+		
+		// Search for multiple stats plugins.
+		if (dep.equals(dependency.STATS)) {
 			return statsPluginManager.getStatsPlugin();
-		default:
-			throw new IllegalArgumentException("Unknown dependency '" + dep.toString() + "'");
+		}
+		
+		if (!handlers.containsKey(dep)) {
+			throw new IllegalArgumentException("Unknown dependency '"
+					+ dep.toString() + "'");
+		} else {
+			return handlers.get(dep);
 		}
 	}
 
