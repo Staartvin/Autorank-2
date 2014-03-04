@@ -1,6 +1,7 @@
 package me.armar.plugins.autorank.hooks.factionsapi;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.hooks.DependencyHandler;
 
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -8,42 +9,18 @@ import org.bukkit.plugin.Plugin;
 import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.entity.UPlayer;
 
-public class FactionsHandler {
+public class FactionsHandler implements DependencyHandler {
 
 	private final Autorank plugin;
-	private Factions factions;
+	private Factions api;
 
 	public FactionsHandler(final Autorank instance) {
 		plugin = instance;
 	}
 
-	public boolean isEnabled() {
-		return factions != null;
-	}
-
-	public boolean setupFactions() {
-		final Plugin factionPlugin = plugin.getServer().getPluginManager()
-				.getPlugin("Factions");
-
-		if (factionPlugin == null) {
-			plugin.getLogger().info("Factions has not been found!");
-			return false;
-		}
-
-		if (!factionPlugin.getDescription().getAuthors().contains("Brettflan")) {
-			plugin.getLogger().info("Factions plugin from another author has been found!");
-			return false;
-		}
-			
-		factions = (Factions) factionPlugin;
-
-		plugin.getLogger().info("Factions has been found and can be used!");
-		
-		return factions != null;
-	}
 
 	public double getFactionPower(final Player player) {
-		if (!isEnabled()) return 0.0d;
+		if (!isAvailable()) return 0.0d;
 		
 		final UPlayer uPlayer = UPlayer.get(player);
 
@@ -52,5 +29,62 @@ public class FactionsHandler {
 		}
 
 		return uPlayer.getFaction().getPower();
+	}
+
+	/* (non-Javadoc)
+	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#get()
+	 */
+	@Override
+	public Plugin get() {
+		Plugin plugin = this.plugin.getServer().getPluginManager()
+				.getPlugin("Factions");
+
+		// WorldGuard may not be loaded
+		if (plugin == null || !(plugin instanceof Factions)) {
+			return null; // Maybe you want throw an exception instead
+		}
+
+		return plugin;
+	}
+
+	/* (non-Javadoc)
+	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#setup()
+	 */
+	@Override
+	public boolean setup() {
+		if (!isInstalled()) {
+			plugin.getLogger().info("Factions has not been found!");
+			return false;
+		} else {
+			api = (Factions) get();
+
+			if (api != null) {
+				plugin.getLogger()
+						.info("Factions has been found and can be used!");
+				return true;
+			} else {
+				plugin.getLogger().info(
+						"Factions has been found but cannot be used!");
+				return false;
+			}
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#isInstalled()
+	 */
+	@Override
+	public boolean isInstalled() {
+		Factions plugin = (Factions) get();
+
+		return plugin != null && plugin.isEnabled();
+	}
+
+	/* (non-Javadoc)
+	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#isAvailable()
+	 */
+	@Override
+	public boolean isAvailable() {
+		return api != null;
 	}
 }

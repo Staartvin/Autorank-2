@@ -23,7 +23,7 @@ public class DependencyManager {
 	private Autorank plugin;
 	
 	private StatsPluginManager statsPluginManager;
-	private WorldGuardHandler worldGuardAPIHandler;
+	private WorldGuardHandler worldGuardHandler;
 	private FactionsHandler factionsHandler;
 
 	public DependencyManager(Autorank instance) {
@@ -31,7 +31,7 @@ public class DependencyManager {
 		
 		statsPluginManager = new StatsPluginManager(instance);
 		factionsHandler = new FactionsHandler(instance);
-		worldGuardAPIHandler = new WorldGuardHandler(instance);
+		worldGuardHandler = new WorldGuardHandler(instance);
 	}
 
 	public void loadDependencies() {
@@ -45,10 +45,10 @@ public class DependencyManager {
 		statsPluginManager.searchStatsPlugin();
 
 		// Setup Factions
-		factionsHandler.setupFactions();
+		factionsHandler.setup();
 
 		// Setup WorldGuard
-		worldGuardAPIHandler.setupWorldGuard();
+		worldGuardHandler.setup();
 		
 		// Make seperate stop loading bar
 		plugin.getLogger().info("---------------[Autorank Dependencies]---------------");
@@ -59,7 +59,7 @@ public class DependencyManager {
 		case FACTIONS:
 			return factionsHandler;
 		case WORLDGUARD:
-			return worldGuardAPIHandler;
+			return worldGuardHandler;
 		case STATS:
 			return statsPluginManager.getStatsPlugin();
 		default:
