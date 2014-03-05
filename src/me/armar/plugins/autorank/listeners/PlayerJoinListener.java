@@ -81,6 +81,5 @@ public class PlayerJoinListener implements Listener {
 						}, 10L);
 			}
 		}
-
 	}
 }
