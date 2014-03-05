@@ -113,6 +113,12 @@ public class AutorankTools {
 		sender.sendMessage(ChatColor.translateAlternateColorCodes('&',
 				ChatColor.GREEN + msg));
 	}
+	
+	public static void sendColoredMessage(final Player player,
+			final String msg) {
+		player.sendMessage(ChatColor.translateAlternateColorCodes('&',
+				ChatColor.GREEN + msg));
+	}
 
 	/**
 	 * Elaborate method to check whether a player is excluded from ranking.
