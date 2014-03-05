@@ -1,6 +1,6 @@
 main: me.armar.plugins.autorank.Autorank
 name: Autorank
-softdepend: [Essentials, GroupManager, Stats]
+softdepend: [Essentials, GroupManager, Stats, WorldEdit, WorldGuard, Factions, mcMMO]
 depend: [Vault]
 url: http://dev.bukkit.org/bukkit-plugins/autorank/
 version: ${project.version}
