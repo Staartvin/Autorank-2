@@ -109,17 +109,16 @@ public class CheckCommand implements CommandExecutor {
 		}
 
 		// Change the way requirements are shown. When a player has completed a requirement, it will be green, otherwise it will be red.
-		final String playername = player.getName();
 
 		final String[] groups = plugin.getPermPlugHandler()
 				.getPermissionPlugin().getPlayerGroups(player);
 		final StringBuilder stringBuilder = new StringBuilder();
 		// has played for
 		stringBuilder
-				.append(playername
+				.append(player.getName()
 						+ Lang.HAS_PLAYED_FOR.getConfigValue(null)
 						+ AutorankTools.minutesToString(plugin
-								.getLocalTime(playername)) + ", ");
+								.getLocalTime(player.getName())) + ", ");
 		// is in
 		stringBuilder.append(Lang.IS_IN.getConfigValue(null));
 		if (groups.length == 0)
