@@ -16,4 +16,7 @@ Although we test our builds a lot, some bugs might find a way through.
 ==========
 
 Wiki: https://github.com/Armarr/Autorank-2/wiki
+
 Development server: http://62.131.38.74:8080/job/Autorank%20Beta/
+
+Javadocs: http://62.131.38.74:8080/job/Autorank%20Beta/javadoc/
