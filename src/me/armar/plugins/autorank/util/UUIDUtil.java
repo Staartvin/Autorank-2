@@ -14,6 +14,13 @@ import org.bukkit.entity.Player;
 public class UUIDUtil {
 
 	
+	/**
+	 * Get a player by its UUID.
+	 * <br>
+	 * The player has to be online.
+	 * @param uuid uuid of the player (including hyphens)
+	 * @return player object corresponding to this UUID, or null if no player with that UUID was found.
+	 */
 	public static Player getOnlinePlayer(String uuid) {
 		for (Player p: Bukkit.getOnlinePlayers()) {
 			if (p.getUniqueId().toString().equals(uuid)) {
