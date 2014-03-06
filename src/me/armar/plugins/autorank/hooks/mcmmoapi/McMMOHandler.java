@@ -8,7 +8,6 @@ import org.bukkit.plugin.Plugin;
 
 import com.gmail.nossr50.mcMMO;
 import com.gmail.nossr50.api.ExperienceAPI;
-import com.gmail.nossr50.api.exceptions.InvalidSkillException;
 
 /**
  * Handles all connections with McMMO.
@@ -92,7 +91,7 @@ public class McMMOHandler implements DependencyHandler {
 		
 		try {
 			skillLevel = ExperienceAPI.getLevel(player, skillName);
-		} catch (InvalidSkillException e) {
+		} catch (Exception e) {
 			return -1;
 		}
 		
