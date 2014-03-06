@@ -92,6 +92,7 @@ public class McMMOHandler implements DependencyHandler {
 		try {
 			skillLevel = ExperienceAPI.getLevel(player, skillName);
 		} catch (Exception e) {
+			plugin.getLogger().warning("Skill '" + skillName + "' is not a valid skill!");
 			return -1;
 		}
 		
