@@ -40,6 +40,12 @@ public class DependencyManager {
 		statsPluginManager = new StatsPluginManager(instance);
 	}
 
+	/**
+	 * Loads all dependencies used for Autorank.
+	 * <br>
+	 * Autorank will check for dependencies and shows the output on the console.
+	 * 
+	 */
 	public void loadDependencies() {
 
 		// Make seperate loading bar
