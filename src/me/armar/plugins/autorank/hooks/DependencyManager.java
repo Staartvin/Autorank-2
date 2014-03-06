@@ -19,6 +19,15 @@ import me.armar.plugins.autorank.statsmanager.StatsPluginManager;
  */
 public class DependencyManager {
 
+	/**
+	 * Enum containing all dependencies Autorank has.<br>  
+	 * Some are optional, some not. This enumeration is used to dynamically load the dependecies.
+	 * <p>
+	 * Date created:  16:48:08
+	 * 6 mrt. 2014
+	 * @author Staartvin
+	 *
+	 */
 	public enum dependency {
 		FACTIONS, STATS, WORLDGUARD, MCMMO
 	};
