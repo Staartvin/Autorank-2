@@ -4,7 +4,6 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.permissions.handlers.GroupManagerHandler;
 import me.armar.plugins.autorank.permissions.handlers.PermissionsBukkitHandler;
 import me.armar.plugins.autorank.permissions.handlers.VaultPermissionsHandler;
-import net.milkbowl.vault.Vault;
 
 import org.bukkit.plugin.Plugin;
 
@@ -32,11 +31,11 @@ public class PermissionsPluginManager {
 
 	public PermissionsPluginManager(final Autorank plugin) {
 		this.plugin = plugin;
-		if (findVault(plugin)) {
+		/*if (findVault(plugin)) {
 			plugin.getLogger().info("Vault found and hooked!");
 		} else {
 			plugin.getLogger().severe("Vault was not found!");
-		}
+		}*/
 		searchPermPlugin();
 	}
 
@@ -55,15 +54,6 @@ public class PermissionsPluginManager {
 
 	public PermissionsHandler getPermissionPlugin() {
 		return permissionPlugin;
-	}
-
-	protected boolean findVault(final Autorank plugin) {
-		final Plugin x = plugin.getServer().getPluginManager()
-				.getPlugin("Vault");
-		if (x != null && x instanceof Vault) {
-			return true;
-		}
-		return false;
 	}
 
 	protected boolean findGroupManager(final Autorank plugin) {

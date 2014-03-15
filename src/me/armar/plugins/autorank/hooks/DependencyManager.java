@@ -6,6 +6,7 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.essentialsapi.EssentialsHandler;
 import me.armar.plugins.autorank.hooks.factionsapi.FactionsHandler;
 import me.armar.plugins.autorank.hooks.mcmmoapi.McMMOHandler;
+import me.armar.plugins.autorank.hooks.vaultapi.VaultHandler;
 import me.armar.plugins.autorank.hooks.worldguardapi.WorldGuardHandler;
 import me.armar.plugins.autorank.statsmanager.StatsPluginManager;
 
@@ -30,7 +31,7 @@ public class DependencyManager {
 	 *
 	 */
 	public enum dependency {
-		FACTIONS, STATS, WORLDGUARD, MCMMO, ESSENTIALS
+		FACTIONS, STATS, WORLDGUARD, MCMMO, ESSENTIALS, VAULT
 	};
 
 	private Autorank plugin;
@@ -47,6 +48,7 @@ public class DependencyManager {
 		handlers.put(dependency.WORLDGUARD, new WorldGuardHandler(instance));
 		handlers.put(dependency.MCMMO, new McMMOHandler(instance));
 		handlers.put(dependency.ESSENTIALS, new EssentialsHandler(instance));
+		handlers.put(dependency.VAULT, new VaultHandler(instance));
 		
 		statsPluginManager = new StatsPluginManager(instance);
 	}
