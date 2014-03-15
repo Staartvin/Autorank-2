@@ -1,12 +1,11 @@
 package me.armar.plugins.autorank.playtimes;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.hooks.DependencyManager.dependency;
+import me.armar.plugins.autorank.hooks.essentialsapi.EssentialsHandler;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-
-import com.earth2me.essentials.Essentials;
 
 /*
  * PlaytimesUpdate does an update on all online players 
@@ -15,7 +14,6 @@ import com.earth2me.essentials.Essentials;
  */
 public class PlaytimesUpdate implements Runnable {
 
-	private Essentials ess;
 	private final Playtimes playtimes;
 	private Autorank plugin;
 
@@ -24,10 +22,7 @@ public class PlaytimesUpdate implements Runnable {
 		
 		this.plugin = plugin;
 
-		if (plugin.getAdvancedConfig().getBoolean("use advanced config")
-				&& plugin.getAdvancedConfig().getBoolean("afk integration")) {
-			setupEssentials();
-		}
+		
 
 	}
 
@@ -52,11 +47,14 @@ public class PlaytimesUpdate implements Runnable {
 
 		if (player.hasPermission("autorank.rsefrxsgtse")
 				|| !player.hasPermission("autorank.timeexclude")) {
-			if (ess != null) {
-				if (ess.getUser(player).isAfk()
-						|| ess.getUser(player).isJailed())
-					return;
+
+			EssentialsHandler essHandler = (EssentialsHandler) plugin.getDependencyManager().getDependency(dependency.ESSENTIALS);
+			
+			// Check to see if player is afk or jailed
+			if (essHandler.isAFK(player) || essHandler.isJailed(player)) {
+				return;
 			}
+			
 			final String playerName = player.getName().toLowerCase();
 			if (!playtimes.getKeys().contains(playerName)) {
 				playtimes.setLocalTime(playerName, 0);
@@ -69,17 +67,10 @@ public class PlaytimesUpdate implements Runnable {
 				playtimes.modifyGlobalTime(playerName,
 						Playtimes.INTERVAL_MINUTES);
 			}
-		}
-	}
-
-	private void setupEssentials() {
-		final Plugin x = Bukkit.getServer().getPluginManager()
-				.getPlugin("Essentials");
-		if (x != null & x instanceof Essentials) {
-			ess = (Essentials) x;
-			plugin.getLogger().info("Essentials was found! AFK integration can be used.");
-		} else {
-			plugin.getLogger().info("Essentials was NOT found! Disabling AFK integration.");
+			
+			// Check if player meets requirements
+			plugin.getPlayerChecker().checkPlayer(player);
+			
 		}
 	}
 
