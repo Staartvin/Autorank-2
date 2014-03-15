@@ -27,13 +27,11 @@ import org.bukkit.entity.Player;
  */
 public class PlayerChecker {
 
-	private PlayerCheckerTrigger trigger;
 	private final Map<String, List<RankChange>> rankChanges = new HashMap<String, List<RankChange>>();
 	private RankChangeBuilder builder;
 	private final Autorank plugin;
 
 	public PlayerChecker(final Autorank plugin) {
-		setTrigger(new PlayerCheckerTrigger(plugin, this));
 		setBuilder(new RankChangeBuilder(plugin));
 		this.plugin = plugin;
 	}
@@ -189,14 +187,6 @@ public class PlayerChecker {
 		}
 		
 		return getAllRequirements(player).get(rank);
-	}
-
-	public PlayerCheckerTrigger getTrigger() {
-		return trigger;
-	}
-
-	private void setTrigger(final PlayerCheckerTrigger trigger) {
-		this.trigger = trigger;
 	}
 
 	public RankChangeBuilder getBuilder() {
