@@ -45,7 +45,7 @@ public class RequirementHandler {
 		loadConfig();
 
 		plugin.getLogger()
-				.info("New playerdata.yml file loaded. AR can keep track of player progress now!");
+				.info("Playerdata file loaded. Keeping track of player progress!");
 	}
 
 	public void reloadConfig() {
