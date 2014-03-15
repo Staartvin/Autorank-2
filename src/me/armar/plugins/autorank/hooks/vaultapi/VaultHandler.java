@@ -6,6 +6,14 @@ import net.milkbowl.vault.Vault;
 
 import org.bukkit.plugin.Plugin;
 
+/**
+ * Handles all connections with Vault
+ * <p>
+ * Date created:  21:02:20
+ * 15 mrt. 2014
+ * @author Staartvin
+ *
+ */
 public class VaultHandler implements DependencyHandler {
 
 	private final Autorank plugin;

@@ -11,6 +11,14 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
+/**
+ * Handles all connections with Stats
+ * <p>
+ * Date created:  21:02:34
+ * 15 mrt. 2014
+ * @author Staartvin
+ *
+ */
 public class StatsAPIHandler {
 
 	private final Autorank plugin;

@@ -14,13 +14,17 @@ import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-/*
- * Leaderboard stores how when the last update was and if someone wants to 
- * display it and it it outdated (set to 10 minutes) 
- * it will generate a new leaderboard.
- * 
- */
 
+/**
+ * Leaderboard stores how when the last update was and if someone wants to<br> 
+ * display it and it it outdated (set to 10 minutes) 
+ * it will generate a new leaderboard.<br>
+ * <p>
+ * Date created:  21:03:23
+ * 15 mrt. 2014
+ * @author Staartvin
+ *
+ */
 public class Leaderboard {
 
 	private String[] messages;

@@ -9,6 +9,14 @@ import org.bukkit.plugin.Plugin;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
 
+/**
+ * Handles all connections with Essentials
+ * <p>
+ * Date created:  21:02:05
+ * 15 mrt. 2014
+ * @author Staartvin
+ *
+ */
 public class EssentialsHandler implements DependencyHandler {
 
 	private final Autorank plugin;

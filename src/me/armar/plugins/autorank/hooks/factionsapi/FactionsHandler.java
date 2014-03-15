@@ -9,6 +9,14 @@ import org.bukkit.plugin.Plugin;
 import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.entity.UPlayer;
 
+/**
+ * Handles all connections with Factions
+ * <p>
+ * Date created:  21:01:50
+ * 15 mrt. 2014
+ * @author Staartvin
+ *
+ */
 public class FactionsHandler implements DependencyHandler {
 
 	private final Autorank plugin;

@@ -13,7 +13,7 @@ import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
 /**
- * Handle all tasks with WorldGuard
+ * Handle all connections with WorldGuard
  * <p>
  * Date created: 18:06:52 21 feb. 2014
  * 
