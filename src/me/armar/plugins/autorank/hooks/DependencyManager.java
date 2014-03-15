@@ -3,6 +3,7 @@ package me.armar.plugins.autorank.hooks;
 import java.util.HashMap;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.hooks.essentialsapi.EssentialsHandler;
 import me.armar.plugins.autorank.hooks.factionsapi.FactionsHandler;
 import me.armar.plugins.autorank.hooks.mcmmoapi.McMMOHandler;
 import me.armar.plugins.autorank.hooks.worldguardapi.WorldGuardHandler;
@@ -29,7 +30,7 @@ public class DependencyManager {
 	 *
 	 */
 	public enum dependency {
-		FACTIONS, STATS, WORLDGUARD, MCMMO
+		FACTIONS, STATS, WORLDGUARD, MCMMO, ESSENTIALS
 	};
 
 	private Autorank plugin;
@@ -45,6 +46,7 @@ public class DependencyManager {
 		handlers.put(dependency.FACTIONS, new FactionsHandler(instance));
 		handlers.put(dependency.WORLDGUARD, new WorldGuardHandler(instance));
 		handlers.put(dependency.MCMMO, new McMMOHandler(instance));
+		handlers.put(dependency.ESSENTIALS, new EssentialsHandler(instance));
 		
 		statsPluginManager = new StatsPluginManager(instance);
 	}
