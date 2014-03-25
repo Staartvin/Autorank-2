@@ -30,9 +30,7 @@ public class EssentialsHandler implements DependencyHandler {
 		if (!isAvailable())
 			return false;
 		
-		if (!plugin.getAdvancedConfig().getBoolean("afk integration")) {
-			return false;
-		}
+		if (!plugin.getConfigHandler().useAFKIntegration()) return false;
 		
 		User user = api.getUser(player);
 		

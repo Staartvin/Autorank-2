@@ -163,4 +163,15 @@ public class ConfigHandler {
 
 		return -1;
 	}
+
+	public String useTimeOf() {
+		return config.getString("use time of", "Autorank");
+	}
+
+	public boolean useAFKIntegration() {
+		if (!useAdvancedConfig())
+			return true;
+
+		return config.getBoolean("afk integration", false);
+	}
 }
