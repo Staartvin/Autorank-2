@@ -8,7 +8,7 @@ import org.bukkit.plugin.Plugin;
 import org.royaldev.royalcommands.RoyalCommands;
 
 /**
- * Handles all connections with Essentials
+ * Handles all connections with RoyalCommands
  * <p>
  * Date created:  21:02:05
  * 15 mrt. 2014
