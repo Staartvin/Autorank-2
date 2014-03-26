@@ -1,8 +1,7 @@
 package me.armar.plugins.autorank.playtimes;
 
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.hooks.DependencyManager.dependency;
-import me.armar.plugins.autorank.hooks.essentialsapi.EssentialsHandler;
+import me.armar.plugins.autorank.hooks.DependencyManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -47,11 +46,11 @@ public class PlaytimesUpdate implements Runnable {
 
 		if (player.hasPermission("autorank.rsefrxsgtse")
 				|| !player.hasPermission("autorank.timeexclude")) {
-
-			EssentialsHandler essHandler = (EssentialsHandler) plugin.getDependencyManager().getDependency(dependency.ESSENTIALS);
 			
-			// Check to see if player is afk or jailed
-			if (essHandler.isAFK(player) || essHandler.isJailed(player)) {
+			DependencyManager depManager = plugin.getDependencyManager();
+			
+			// Check to see if player is afk
+			if (depManager.isAFK(player)) {
 				return;
 			}
 			

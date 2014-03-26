@@ -6,9 +6,12 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.essentialsapi.EssentialsHandler;
 import me.armar.plugins.autorank.hooks.factionsapi.FactionsHandler;
 import me.armar.plugins.autorank.hooks.mcmmoapi.McMMOHandler;
+import me.armar.plugins.autorank.hooks.royalcommandsapi.RoyalCommandsHandler;
 import me.armar.plugins.autorank.hooks.vaultapi.VaultHandler;
 import me.armar.plugins.autorank.hooks.worldguardapi.WorldGuardHandler;
 import me.armar.plugins.autorank.statsmanager.StatsPluginManager;
+
+import org.bukkit.entity.Player;
 
 /**
  * This class is used for loading all the dependencies Autorank has. <br>
@@ -31,7 +34,7 @@ public class DependencyManager {
 	 *
 	 */
 	public enum dependency {
-		FACTIONS, STATS, WORLDGUARD, MCMMO, ESSENTIALS, VAULT
+		FACTIONS, STATS, WORLDGUARD, MCMMO, ESSENTIALS, VAULT, ROYALCOMMANDS
 	};
 
 	private Autorank plugin;
@@ -49,6 +52,7 @@ public class DependencyManager {
 		handlers.put(dependency.MCMMO, new McMMOHandler(instance));
 		handlers.put(dependency.ESSENTIALS, new EssentialsHandler(instance));
 		handlers.put(dependency.VAULT, new VaultHandler(instance));
+		handlers.put(dependency.ROYALCOMMANDS, new RoyalCommandsHandler(instance));
 		
 		statsPluginManager = new StatsPluginManager(instance);
 	}
@@ -92,6 +96,19 @@ public class DependencyManager {
 		} else {
 			return handlers.get(dep);
 		}
+	}
+	
+	public boolean isAFK(Player player) {
+		if (!plugin.getConfigHandler().useAFKIntegration()) return false;
+		
+		if (handlers.get(dependency.ESSENTIALS).isAvailable()) {
+			return ((EssentialsHandler) handlers.get(dependency.ESSENTIALS)).isAFK(player);
+		} else if (handlers.get(dependency.ROYALCOMMANDS).isAvailable()) {
+			return ((RoyalCommandsHandler) handlers.get(dependency.ROYALCOMMANDS)).isAFK(player);
+		}
+		
+		// No suitable plugin found
+		return false;		
 	}
 
 }
