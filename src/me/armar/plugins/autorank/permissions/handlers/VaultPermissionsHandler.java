@@ -41,7 +41,7 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 
 	@Override
 	public String[] getPlayerGroups(final Player player) {
-		return permission.getPlayerGroups(player);
+		return new String[] {permission.getPrimaryGroup(player)};
 	}
 
 	@Override
