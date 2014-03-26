@@ -6,6 +6,7 @@ import java.util.Set;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
+import me.armar.plugins.autorank.hooks.DependencyManager.dependency;
 
 import com.google.common.collect.Lists;
 
@@ -164,10 +165,25 @@ public class ConfigHandler {
 		return -1;
 	}
 
-	public String useTimeOf() {
-		return config.getString("use time of", "Autorank");
+	/**
+	 * Get the plugin that is used to get the time a player played on this server.
+	 * <br>This is only accounted for the local time. The global time is still calculated by Autorank.
+	 * @return 
+	 */
+	public dependency useTimeOf() {
+		
+		String timePlugin = config.getString("use time of", "Autorank");
+		
+		if (timePlugin.equalsIgnoreCase("Stats")) return dependency.STATS;
+		else if (timePlugin.equalsIgnoreCase("OnTime")) return dependency.ONTIME;
+		else return dependency.AUTORANK;
 	}
 
+	/**
+	 * Whether Autorank should care about players that are AFK or not.
+	 * <br>If the SimpleConfig is used, this will always be true.
+	 * @return true when AFK integration should be used; false otherwise.
+	 */
 	public boolean useAFKIntegration() {
 		if (!useAdvancedConfig())
 			return true;
