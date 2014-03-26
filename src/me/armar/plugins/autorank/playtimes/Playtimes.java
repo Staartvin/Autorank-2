@@ -7,6 +7,9 @@ import java.util.Set;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
+import me.armar.plugins.autorank.hooks.DependencyManager.dependency;
+import me.armar.plugins.autorank.hooks.ontimeapi.OnTimeHandler;
+import me.armar.plugins.autorank.hooks.statsapi.StatsAPIHandler;
 
 public class Playtimes {
 
@@ -16,6 +19,9 @@ public class Playtimes {
 	private final PlaytimesSave save;
 	private final PlaytimesUpdate update;
 	private final Autorank plugin;
+	
+	// Used to store what plugin Autorank uses for checking the time
+	private dependency timePlugin;
 
 	public Playtimes(final Autorank plugin) {
 		this.plugin = plugin;
@@ -37,7 +43,8 @@ public class Playtimes {
 				.getScheduler()
 				.runTaskTimer(plugin, update, INTERVAL_MINUTES * 20 * 60,
 						INTERVAL_MINUTES * 20 * 60);
-
+		
+		timePlugin = plugin.getConfigHandler().useTimeOf();
 	}
 
 	/**
@@ -48,8 +55,20 @@ public class Playtimes {
 	 * @return Local server playtime
 	 */
 	public int getLocalTime(final String name) {
-		// This is done on purpose, for future work
-		return data.getInt(name.toLowerCase(), 0);
+		
+		int playTime = 0;
+		
+		// Determine what plugin to use for getting the time.
+		if (timePlugin.equals(dependency.STATS)) {
+			playTime = ((StatsAPIHandler) plugin.getDependencyManager().getDependency(dependency.STATS)).getTotalPlayTime(name, null);
+		} else if (timePlugin.equals(dependency.ONTIME)) {
+			playTime = ((OnTimeHandler) plugin.getDependencyManager().getDependency(dependency.ONTIME)).getPlayTime(name);
+		} else {
+			// Use internal system of Autorank.
+			playTime = data.getInt(name.toLowerCase(), 0);
+		}
+		
+		return playTime;
 	}
 
 	/**
