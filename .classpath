@@ -31,5 +31,6 @@
 	<classpathentry kind="lib" path="lib/WorldEdit.jar"/>
 	<classpathentry kind="lib" path="lib/mcMMO.jar"/>
 	<classpathentry kind="lib" path="lib/WorldGuard.jar"/>
+	<classpathentry kind="lib" path="lib/RoyalCommands.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

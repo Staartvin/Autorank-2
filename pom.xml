@@ -176,7 +176,7 @@
 			<scope>provided</scope>
 			<type>jar</type>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.gmail.nossr50.mcMMO</groupId>
 			<artifactId>mcMMO</artifactId>
@@ -184,6 +184,15 @@
 			<scope>provided</scope>
 			<type>jar</type>
 		</dependency>
-		
+
+		<dependency>
+			<groupId>RoyalCommands</groupId>
+			<artifactId>RoyalCommands</artifactId>
+			<version>3.3.0</version>
+			<scope>provided</scope>
+			<type>jar</type>
+		</dependency>
+
+
 	</dependencies>
 </project>
