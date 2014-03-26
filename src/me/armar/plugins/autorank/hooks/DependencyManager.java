@@ -6,6 +6,7 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.essentialsapi.EssentialsHandler;
 import me.armar.plugins.autorank.hooks.factionsapi.FactionsHandler;
 import me.armar.plugins.autorank.hooks.mcmmoapi.McMMOHandler;
+import me.armar.plugins.autorank.hooks.ontimeapi.OnTimeHandler;
 import me.armar.plugins.autorank.hooks.royalcommandsapi.RoyalCommandsHandler;
 import me.armar.plugins.autorank.hooks.vaultapi.VaultHandler;
 import me.armar.plugins.autorank.hooks.worldguardapi.WorldGuardHandler;
@@ -26,7 +27,8 @@ public class DependencyManager {
 
 	/**
 	 * Enum containing all dependencies Autorank has.<br>  
-	 * Some are optional, some not. This enumeration is used to dynamically load the dependecies.
+	 * Some are optional, some not. This enumeration is used to dynamically load the dependencies.<br>
+	 * Autorank is also included because this enum is used for methods that require the own plugin.
 	 * <p>
 	 * Date created:  16:48:08
 	 * 6 mrt. 2014
@@ -34,7 +36,7 @@ public class DependencyManager {
 	 *
 	 */
 	public enum dependency {
-		FACTIONS, STATS, WORLDGUARD, MCMMO, ESSENTIALS, VAULT, ROYALCOMMANDS
+		AUTORANK, FACTIONS, STATS, WORLDGUARD, MCMMO, ESSENTIALS, VAULT, ROYALCOMMANDS, ONTIME
 	};
 
 	private Autorank plugin;
@@ -53,6 +55,7 @@ public class DependencyManager {
 		handlers.put(dependency.ESSENTIALS, new EssentialsHandler(instance));
 		handlers.put(dependency.VAULT, new VaultHandler(instance));
 		handlers.put(dependency.ROYALCOMMANDS, new RoyalCommandsHandler(instance));
+		handlers.put(dependency.ONTIME, new OnTimeHandler(instance));
 		
 		statsPluginManager = new StatsPluginManager(instance);
 	}

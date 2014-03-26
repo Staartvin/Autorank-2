@@ -27,10 +27,15 @@
 	<classpathentry kind="lib" path="lib/mcore.jar"/>
 	<classpathentry kind="lib" path="lib/PermissionsBukkit.jar"/>
 	<classpathentry kind="lib" path="lib/Stats.jar"/>
-	<classpathentry kind="lib" path="lib/Vault.jar"/>
+	<classpathentry kind="lib" path="lib/Vault.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://mythcraft.dyndns.org/javadoc/vault/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="lib/WorldEdit.jar"/>
 	<classpathentry kind="lib" path="lib/mcMMO.jar"/>
 	<classpathentry kind="lib" path="lib/WorldGuard.jar"/>
 	<classpathentry kind="lib" path="lib/RoyalCommands.jar"/>
+	<classpathentry kind="lib" path="lib/OnTime.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

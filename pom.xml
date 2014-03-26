@@ -193,6 +193,15 @@
 			<type>jar</type>
 		</dependency>
 
+		<dependency>
+			<groupId>OnTime</groupId>
+			<artifactId>OnTime</artifactId>
+			<version>3.12.2</version>
+			<scope>provided</scope>
+			<type>jar</type>
+		</dependency>
+
+
 
 	</dependencies>
 </project>
