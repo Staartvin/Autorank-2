@@ -26,6 +26,8 @@ public class OnTimeHandler implements DependencyHandler {
 	}
 	
 	public int getPlayTime(String playerName) {
+		if (!isAvailable()) return 0;
+		
 		String[] matchedNames = OnTimeAPI.matchPlayerNames(playerName);
 		
 		// No match found

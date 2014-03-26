@@ -89,6 +89,8 @@ public class McMMOHandler implements DependencyHandler {
 	public int getSkillLevel(Player player, String skillName) {
 		int skillLevel = 0;
 		
+		if (!isAvailable()) return skillLevel;
+		
 		try {
 			skillLevel = ExperienceAPI.getLevel(player, skillName);
 		} catch (Exception e) {

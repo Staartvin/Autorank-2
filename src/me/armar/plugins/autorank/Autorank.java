@@ -209,6 +209,9 @@ public class Autorank extends JavaPlugin {
 
 		// Set debugger
 		setDebugger(new Debugger(this));
+		
+		// Debug message telling what plugin is used for timing.
+		getLogger().info("Using timings of: " + getConfigHandler().useTimeOf().toString().toLowerCase());
 
 		// Set addon manager
 		setAddonManager(new AddOnManager(this));
