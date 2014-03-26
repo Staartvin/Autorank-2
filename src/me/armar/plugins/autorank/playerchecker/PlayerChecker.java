@@ -7,10 +7,10 @@ import java.util.Map;
 import java.util.Set;
 
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.AutorankTools;
 import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
 import me.armar.plugins.autorank.playerchecker.builders.RankChangeBuilder;
 import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
+import me.armar.plugins.autorank.util.AutorankTools;
 
 import org.bukkit.entity.Player;
 

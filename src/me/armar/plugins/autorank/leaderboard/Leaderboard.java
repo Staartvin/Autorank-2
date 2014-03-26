@@ -8,8 +8,8 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.AutorankTools;
 import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
+import me.armar.plugins.autorank.util.AutorankTools;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;

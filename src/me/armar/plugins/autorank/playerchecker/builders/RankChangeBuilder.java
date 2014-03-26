@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Set;
 
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.AutorankTools;
 import me.armar.plugins.autorank.config.ConfigHandler;
 import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
 import me.armar.plugins.autorank.playerchecker.RankChange;
@@ -15,6 +14,7 @@ import me.armar.plugins.autorank.playerchecker.requirement.TimeRequirement;
 import me.armar.plugins.autorank.playerchecker.result.MessageResult;
 import me.armar.plugins.autorank.playerchecker.result.RankChangeResult;
 import me.armar.plugins.autorank.playerchecker.result.Result;
+import me.armar.plugins.autorank.util.AutorankTools;
 
 public class RankChangeBuilder {
 

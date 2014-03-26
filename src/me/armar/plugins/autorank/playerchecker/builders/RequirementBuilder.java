@@ -3,8 +3,8 @@ package me.armar.plugins.autorank.playerchecker.builders;
 import java.util.HashMap;
 import java.util.Map;
 
-import me.armar.plugins.autorank.AutorankTools;
 import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
+import me.armar.plugins.autorank.util.AutorankTools;
 
 public class RequirementBuilder {
 

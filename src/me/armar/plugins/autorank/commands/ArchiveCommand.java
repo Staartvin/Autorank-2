@@ -1,8 +1,8 @@
 package me.armar.plugins.autorank.commands;
 
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.AutorankTools;
 import me.armar.plugins.autorank.language.Lang;
+import me.armar.plugins.autorank.util.AutorankTools;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;

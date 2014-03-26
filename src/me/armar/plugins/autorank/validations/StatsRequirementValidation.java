@@ -3,8 +3,8 @@ package me.armar.plugins.autorank.validations;
 import java.util.Set;
 
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.AutorankTools;
 import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
+import me.armar.plugins.autorank.util.AutorankTools;
 
 public class StatsRequirementValidation {
 

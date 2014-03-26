@@ -1,4 +1,4 @@
-package me.armar.plugins.autorank;
+package me.armar.plugins.autorank.util;
 
 import java.util.ArrayList;
 import java.util.List;
