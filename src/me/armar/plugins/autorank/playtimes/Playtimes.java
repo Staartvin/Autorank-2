@@ -10,6 +10,8 @@ import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
 import me.armar.plugins.autorank.hooks.DependencyManager.dependency;
 import me.armar.plugins.autorank.hooks.ontimeapi.OnTimeHandler;
 import me.armar.plugins.autorank.hooks.statsapi.StatsAPIHandler;
+import me.armar.plugins.autorank.statsmanager.StatsPlugin;
+import me.armar.plugins.autorank.statsmanager.handlers.StatsHandler;
 
 public class Playtimes {
 
@@ -60,7 +62,14 @@ public class Playtimes {
 		
 		// Determine what plugin to use for getting the time.
 		if (timePlugin.equals(dependency.STATS)) {
-			playTime = ((StatsAPIHandler) plugin.getDependencyManager().getDependency(dependency.STATS)).getTotalPlayTime(name, null);
+			StatsPlugin stats = plugin.getHookedStatsPlugin();
+			
+			if (stats instanceof StatsHandler) {
+				playTime = ((StatsAPIHandler) plugin.getDependencyManager().getDependency(dependency.STATS)).getTotalPlayTime(name, null);
+			} else {
+				// Stats not found, using Autorank's system.
+				playTime = data.getInt(name.toLowerCase(), 0);
+			}
 		} else if (timePlugin.equals(dependency.ONTIME)) {
 			playTime = ((OnTimeHandler) plugin.getDependencyManager().getDependency(dependency.ONTIME)).getPlayTime(name);
 		} else {
