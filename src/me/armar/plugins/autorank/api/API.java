@@ -34,6 +34,8 @@ public class API {
 
 	/**
 	 * Gets the local play time (playtime on this server) of a player.
+	 * <br>The time given depends on what plugin is used for keeping track of time.
+	 * <br>The time is always given in minutes.
 	 * <p>
 	 * 
 	 * @param playerName player to check for.
