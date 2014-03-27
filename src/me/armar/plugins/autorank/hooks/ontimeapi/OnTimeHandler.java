@@ -28,16 +28,6 @@ public class OnTimeHandler implements DependencyHandler {
 	public int getPlayTime(String playerName) {
 		if (!isAvailable()) return 0;
 		
-		String[] matchedNames = OnTimeAPI.matchPlayerNames(playerName);
-		
-		// No match found
-		if (matchedNames == null) return 0;
-		
-		if (matchedNames.length > 0) {
-			// Grab the first name
-			playerName = matchedNames[0];
-		}
-		
 		// Divide by 60000 because time is in milliseconds
 		return (int) (OnTimeAPI.getPlayerTimeData(playerName, data.TOTALPLAY) / 60000);
 	}
