@@ -1,6 +1,7 @@
 package me.armar.plugins.autorank.statsmanager;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.hooks.DependencyManager.dependency;
 import me.armar.plugins.autorank.hooks.statsapi.StatsAPIHandler;
 import me.armar.plugins.autorank.statsmanager.handlers.DummyHandler;
 import me.armar.plugins.autorank.statsmanager.handlers.StatsHandler;
@@ -29,13 +30,8 @@ public class StatsPluginManager {
 			
 			plugin.getLogger().info("Found Stats plugin: Stats (by Lolmewn)");
 			
-			// use Stats
-			StatsAPIHandler api = new StatsAPIHandler(plugin);
 			
-			// Connect to Stats
-			api.setupStatsAPI();
-			
-			statsPlugin = new StatsHandler(plugin, api);	
+			statsPlugin = new StatsHandler(plugin, (StatsAPIHandler) plugin.getDependencyManager().getDependency(dependency.STATS));	
 			
 			if (statsPlugin == null) {
 				plugin.getLogger().info("Couldn't hook into Stats! StatsHandler was unable to hook.");
