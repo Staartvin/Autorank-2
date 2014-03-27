@@ -98,7 +98,7 @@ public class EssentialsHandler implements DependencyHandler {
 	 */
 	@Override
 	public boolean isInstalled() {
-		Essentials plugin = (Essentials) get();
+		Plugin plugin = get();
 
 		return plugin != null && plugin.isEnabled();
 	}
