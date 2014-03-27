@@ -1,6 +1,8 @@
 package me.armar.plugins.autorank.hooks.statsapi;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.hooks.DependencyHandler;
+import nl.lolmewn.stats.Main;
 import nl.lolmewn.stats.api.Stat;
 import nl.lolmewn.stats.api.StatsAPI;
 import nl.lolmewn.stats.player.StatData;
@@ -9,7 +11,6 @@ import nl.lolmewn.stats.player.StatsPlayer;
 import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.RegisteredServiceProvider;
 
 /**
  * Handles all connections with Stats
@@ -19,35 +20,15 @@ import org.bukkit.plugin.RegisteredServiceProvider;
  * @author Staartvin
  *
  */
-public class StatsAPIHandler {
+public class StatsAPIHandler implements DependencyHandler {
 
 	private final Autorank plugin;
-	private StatsAPI statsAPI;
+	private StatsAPI api;
 
 	private final String[] compatibleVersions = { "1.37" };
 
 	public StatsAPIHandler(final Autorank instance) {
 		plugin = instance;
-	}
-
-	public boolean setupStatsAPI() {
-		final Plugin statsPlugin = plugin.getServer().getPluginManager()
-				.getPlugin("Stats");
-
-		// There are multiple stat plugins so we check for the correct author.
-		if (statsPlugin == null
-				|| !statsPlugin.getDescription().getAuthors()
-						.contains("Lolmewn") || !statsPlugin.isEnabled()) {
-			return false;
-		}
-
-		final RegisteredServiceProvider<StatsAPI> stats = plugin.getServer()
-				.getServicesManager()
-				.getRegistration(nl.lolmewn.stats.api.StatsAPI.class);
-		if (stats != null) {
-			statsAPI = stats.getProvider();
-		}
-		return (statsAPI != null);
 	}
 
 	/**
@@ -67,6 +48,9 @@ public class StatsAPIHandler {
 	}
 
 	public int getTotalBlocksBroken(final String playerName, final World world) {
+		if (!isAvailable())
+			return 0;
+		
 		String statName = "Block break";
 
 		final StatsPlayer player = getStats(playerName);
@@ -76,7 +60,7 @@ public class StatsAPIHandler {
 
 		if (world != null) {
 			// Do check for one world
-			stat = player.getStatData(statsAPI.getStat(statName), world.getName(), true);
+			stat = player.getStatData(api.getStat(statName), world.getName(), true);
 
 			for (final Object[] vars : stat.getAllVariables()) {
 				value += stat.getValue(vars);
@@ -84,7 +68,7 @@ public class StatsAPIHandler {
 		} else {
 			// Do global check
 			for (final World w : plugin.getServer().getWorlds()) {
-				stat = player.getStatData(statsAPI.getStat(statName),
+				stat = player.getStatData(api.getStat(statName),
 						w.getName(), true);
 
 				for (final Object[] vars : stat.getAllVariables()) {
@@ -97,6 +81,9 @@ public class StatsAPIHandler {
 	}
 
 	public int getTotalBlocksPlaced(final String playerName, final World world) {
+		if (!isAvailable())
+			return 0;
+		
 		String statName = "Block place";
 
 		final StatsPlayer player = getStats(playerName);
@@ -106,7 +93,7 @@ public class StatsAPIHandler {
 
 		if (world != null) {
 			// Do check for one world
-			stat = player.getStatData(statsAPI.getStat(statName), world.getName(), true);
+			stat = player.getStatData(api.getStat(statName), world.getName(), true);
 
 			for (final Object[] vars : stat.getAllVariables()) {
 				value += stat.getValue(vars);
@@ -114,7 +101,7 @@ public class StatsAPIHandler {
 		} else {
 			// Do global check
 			for (final World w : plugin.getServer().getWorlds()) {
-				stat = player.getStatData(statsAPI.getStat(statName),
+				stat = player.getStatData(api.getStat(statName),
 						w.getName(), true);
 
 				for (final Object[] vars : stat.getAllVariables()) {
@@ -127,6 +114,9 @@ public class StatsAPIHandler {
 	}
 
 	public int getTotalPlayTime(final String playerName, final World world) {
+		if (!isAvailable())
+			return 0;
+		
 		String statName = "Playtime";
 		
 		final StatsPlayer player = getStats(playerName);
@@ -136,7 +126,7 @@ public class StatsAPIHandler {
 
 		if (world != null) {
 			// Do check for one world
-			stat = player.getStatData(statsAPI.getStat(statName), world.getName(), true);
+			stat = player.getStatData(api.getStat(statName), world.getName(), true);
 
 			for (final Object[] vars : stat.getAllVariables()) {
 				value += stat.getValue(vars);
@@ -144,7 +134,7 @@ public class StatsAPIHandler {
 		} else {
 			// Do global check
 			for (final World w : plugin.getServer().getWorlds()) {
-				stat = player.getStatData(statsAPI.getStat(statName),
+				stat = player.getStatData(api.getStat(statName),
 						w.getName(), true);
 
 				for (final Object[] vars : stat.getAllVariables()) {
@@ -157,7 +147,7 @@ public class StatsAPIHandler {
 	}
 
 	public StatsPlayer getStats(final String player) {
-		return statsAPI.getStatsPlayer(player);
+		return api.getStatsPlayer(player);
 	}
 
 	/**
@@ -173,23 +163,18 @@ public class StatsAPIHandler {
 		return sPlayer.getStatData(statType, false);
 	}
 
-	public StatsAPI getStatsAPI() {
-		return statsAPI;
-	}
-
-	public boolean isEnabled() {
-		return (statsAPI != null);
-	}
-
 	public int getNormalStat(final String playerName, final String statName,
 			final World world) {
+		if (!isAvailable())
+			return 0;
+		
 		final StatsPlayer player = getStats(playerName);
 		StatData stat;
 
 		int value = 0;
 
 		if (world != null) {
-			stat = player.getStatData(statsAPI.getStat(statName),
+			stat = player.getStatData(api.getStat(statName),
 					world.getName(), true);
 
 			for (final Object[] vars : stat.getAllVariables()) {
@@ -201,7 +186,7 @@ public class StatsAPIHandler {
 
 			for (final World serverWorld : plugin.getServer().getWorlds()) {
 
-				stat = player.getStatData(statsAPI.getStat(statName),
+				stat = player.getStatData(api.getStat(statName),
 						serverWorld.getName(), true);
 
 				for (final Object[] vars : stat.getAllVariables()) {
@@ -226,7 +211,7 @@ public class StatsAPIHandler {
 	 */
 	public int getBlocksStat(final String playerName, final int id,
 			final int damageValue, final World world, final String statType) {
-		if (!isEnabled())
+		if (!isAvailable())
 			return 0;
 
 		final StatsPlayer player = getStats(playerName);
@@ -241,7 +226,7 @@ public class StatsAPIHandler {
 		// Implement world logic
 
 		if (world != null) {
-			blockStat = player.getStatData(statsAPI.getStatExact(statType),
+			blockStat = player.getStatData(api.getStatExact(statType),
 					world.getName(), true);
 
 			for (final Object[] vars : blockStat.getAllVariables()) {
@@ -261,7 +246,7 @@ public class StatsAPIHandler {
 		} else {
 			// We want global (no specific world) so we loop over every world.
 			for (final World serverWorld : plugin.getServer().getWorlds()) {
-				blockStat = player.getStatData(statsAPI.getStatExact(statType),
+				blockStat = player.getStatData(api.getStatExact(statType),
 						serverWorld.getName(), true);
 
 				for (final Object[] vars : blockStat.getAllVariables()) {
@@ -286,7 +271,7 @@ public class StatsAPIHandler {
 
 	public int getTotalMobsKilled(final String playerName,
 			final String mobName, final World world) {
-		if (!isEnabled())
+		if (!isAvailable())
 			return 0;
 
 		final StatsPlayer player = getStats(playerName);
@@ -303,7 +288,7 @@ public class StatsAPIHandler {
 		// Implement world logic
 
 		if (world != null) {
-			blockStat = player.getStatData(statsAPI.getStatExact("Kill"),
+			blockStat = player.getStatData(api.getStatExact("Kill"),
 					world.getName(), true);
 
 			for (final Object[] vars : blockStat.getAllVariables()) {
@@ -322,7 +307,7 @@ public class StatsAPIHandler {
 		} else {
 			// We want global (no specific world) so we loop over every world.
 			for (final World serverWorld : plugin.getServer().getWorlds()) {
-				blockStat = player.getStatData(statsAPI.getStatExact("Kill"),
+				blockStat = player.getStatData(api.getStatExact("Kill"),
 						serverWorld.getName(), true);
 
 				for (final Object[] vars : blockStat.getAllVariables()) {
@@ -346,6 +331,9 @@ public class StatsAPIHandler {
 	}
 	
 	public int getTotalBlocksMoved(String playerName, int type, World world) {
+		if (!isAvailable())
+			return 0;
+		
 		final StatsPlayer player = getStats(playerName);
 		String statName = "Move";
 		StatData stat;
@@ -353,7 +341,7 @@ public class StatsAPIHandler {
 		int value = 0;
 
 		if (world != null) {
-			stat = player.getStatData(statsAPI.getStat(statName),
+			stat = player.getStatData(api.getStat(statName),
 					world.getName(), true);
 
 			for (final Object[] vars : stat.getAllVariables()) {
@@ -367,7 +355,7 @@ public class StatsAPIHandler {
 
 			for (final World serverWorld : plugin.getServer().getWorlds()) {
 
-				stat = player.getStatData(statsAPI.getStat(statName),
+				stat = player.getStatData(api.getStat(statName),
 						serverWorld.getName(), true);
 
 				for (final Object[] vars : stat.getAllVariables()) {
@@ -390,9 +378,68 @@ public class StatsAPIHandler {
 	}
 
 	public boolean areBetaFunctionsEnabled() {
-		if (statsAPI != null) {
-			return statsAPI.isUsingBetaFunctions();
+		if (api != null) {
+			return api.isUsingBetaFunctions();
 		}
 		return false;
+	}
+
+	/* (non-Javadoc)
+	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#get()
+	 */
+	@Override
+	public Plugin get() {
+		Plugin plugin = this.plugin.getServer().getPluginManager()
+				.getPlugin("Stats");
+
+		// WorldGuard may not be loaded
+		if (plugin == null || !(plugin instanceof Main)) {
+			return null; // Maybe you want throw an exception instead
+		}
+
+		return plugin;
+	}
+
+	/* (non-Javadoc)
+	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#setup()
+	 */
+	@Override
+	public boolean setup() {
+		if (!isInstalled()) {
+			plugin.getLogger().info("Stats has not been found!");
+			return false;
+		} else {
+			Main stats = (Main) get();
+			
+			api = stats.getAPI();
+
+			if (api != null) {
+				plugin.getLogger().info(
+						"Stats has been found and can be used!");
+				return true;
+			} else {
+				plugin.getLogger().info(
+						"Stats has been found but cannot be used!");
+				return false;
+			}
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#isInstalled()
+	 */
+	@Override
+	public boolean isInstalled() {
+		Plugin plugin = get();
+
+		return plugin != null && plugin.isEnabled();
+	}
+
+	/* (non-Javadoc)
+	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#isAvailable()
+	 */
+	@Override
+	public boolean isAvailable() {
+		return api != null;
 	}
 }
