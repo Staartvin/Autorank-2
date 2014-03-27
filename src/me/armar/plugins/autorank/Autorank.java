@@ -10,7 +10,6 @@ import me.armar.plugins.autorank.config.ConfigHandler;
 import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
 import me.armar.plugins.autorank.debugger.Debugger;
 import me.armar.plugins.autorank.hooks.DependencyManager;
-import me.armar.plugins.autorank.hooks.DependencyManager.dependency;
 import me.armar.plugins.autorank.language.LanguageHandler;
 import me.armar.plugins.autorank.leaderboard.Leaderboard;
 import me.armar.plugins.autorank.listeners.PlayerJoinListener;
@@ -134,9 +133,6 @@ public class Autorank extends JavaPlugin {
 		// Create playtime class
 		setPlaytimes(new Playtimes(this));
 
-		// Create leaderboard class
-		setLeaderboard(new Leaderboard(this));
-
 		// Create permission plugin handler class
 		setPermPlugHandler(new PermissionsPluginManager(this));
 
@@ -151,6 +147,9 @@ public class Autorank extends JavaPlugin {
 
 		// Load dependencies
 		dependencyManager.loadDependencies();
+		
+		// Create leaderboard class
+		setLeaderboard(new Leaderboard(this));
 
 		// Create commands manager
 		setCommandsManager(new CommandsManager(this));
@@ -469,7 +468,7 @@ public class Autorank extends JavaPlugin {
 	}
 
 	public StatsPlugin getHookedStatsPlugin() {
-		return (StatsPlugin) getDependencyManager().getDependency(dependency.STATS);
+		return getDependencyManager().getStatsPlugin();
 	}
 
 	public AddOnManager getAddonManager() {
