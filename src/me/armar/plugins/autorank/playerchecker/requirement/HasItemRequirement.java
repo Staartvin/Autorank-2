@@ -9,7 +9,6 @@ import me.armar.plugins.autorank.util.AutorankTools;
 
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.material.MaterialData;
 
 public class HasItemRequirement extends Requirement {
 
@@ -26,7 +25,7 @@ public class HasItemRequirement extends Requirement {
 			final int reqId) {
 		int id = 0;
 		int amount = 1;
-		byte data = 0;
+		short data = 0;
 		this.reqId = reqId;
 
 		this.optional = optional;
@@ -38,10 +37,10 @@ public class HasItemRequirement extends Requirement {
 		if (options.length > 1)
 			amount = AutorankTools.stringtoInt(options[1]);
 		if (options.length > 2)
-			data = (byte) AutorankTools.stringtoInt(options[2]);
+			data = (short) AutorankTools.stringtoInt(options[2]);
 
 		//item = new ItemStack(id, 1, (short) 0, data);
-		item = (new MaterialData(id, data)).toItemStack(amount);
+		item = new ItemStack(id, amount, data);
 
 		return item != null;
 	}
