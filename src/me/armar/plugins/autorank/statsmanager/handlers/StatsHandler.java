@@ -28,7 +28,7 @@ public class StatsHandler implements StatsPlugin {
 			return false;
 		}
 		
-		if (!statsApi.isEnabled()) {
+		if (!statsApi.isAvailable()) {
 			plugin.getLogger().info("Stats (by Lolmewn) is not enabled!"); 
 			return false;
 		}
