@@ -213,6 +213,8 @@ public class Autorank extends JavaPlugin {
 		getLogger().info("Using timings of: " + getConfigHandler().useTimeOf().toString().toLowerCase());
 
 		// Set addon manager
+		// Note that custom requirements and results are not yet loaded into memory.
+		// TODO Add support for custom requirements and results.
 		setAddonManager(new AddOnManager(this));
 
 		getLogger().info(String.format("Autorank %s has been enabled!",
