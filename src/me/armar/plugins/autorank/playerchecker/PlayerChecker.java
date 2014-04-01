@@ -48,6 +48,9 @@ public class PlayerChecker {
 			ranks = builder.createFromSimpleConfig(simpleConfig);
 		}
 
+		// Clear all rank changes, so nothing is left behind.
+		rankChanges.clear();
+		
 		for (final RankChange rank : ranks) {
 			addRankChange(rank.getRank(), rank);
 		}
