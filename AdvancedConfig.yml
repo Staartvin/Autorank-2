@@ -8,12 +8,13 @@
 #############################################################################
 
 use advanced config: false
-# all other advanced settings are ignored if this is set to false
+# If this is false, the SimpleConfig will be used for ranking.
 
 afk integration: true
-# If a compatible AFK plugin is found autorank will not count online time for AFK players
+# If a compatible AFK plugin is found Autorank will not count online time for AFK players
 # This option is always on when using the SimpleConfig
-# Currently supports: Essentials
+# Currently supports: Essentials and RoyalCommands
+# Autorank automatically chooses what plugin to use for AFK integration.
 
 use partial completion: true
 # When this is true, players can use /ar complete # to complete a requirement at any moment they like.
