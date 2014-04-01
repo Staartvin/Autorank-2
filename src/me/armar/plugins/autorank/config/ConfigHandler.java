@@ -190,4 +190,15 @@ public class ConfigHandler {
 
 		return config.getBoolean("afk integration", false);
 	}
+	
+	/**
+	 * Check whether Autorank should log detailed information about
+	 * <br>the found dependencies.
+	 * @return true if has to, false otherwise.
+	 */
+	public boolean useAdvancedDependencyLogs() {
+		if (!useAdvancedConfig()) return false;
+		
+		return config.getBoolean("advanced dependency output", false);
+	}
 }

@@ -124,3 +124,8 @@ auto-updater:
     auto-download: false    
 
 #   
+
+# If this is true, Autorank will tell you in the console what dependencies were found and which ones weren't found.
+# Turn this off to remove the console spam from Autorank about dependencies.
+# This feature can be useful when Autorank can't find your dependency, but you have it installed.
+advanced dependency output: false

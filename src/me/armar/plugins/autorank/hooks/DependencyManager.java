@@ -74,24 +74,30 @@ public class DependencyManager {
 	public void loadDependencies() {
 
 		// Make seperate loading bar
-		plugin.getLogger().info(
-				"---------------[Autorank Dependencies]---------------");
-		plugin.getLogger().info("Searching dependencies...");
+		if (plugin.getConfigHandler().useAdvancedDependencyLogs()) {
+			plugin.getLogger().info(
+					"---------------[Autorank Dependencies]---------------");
+			plugin.getLogger().info("Searching dependencies...");
+		}
 
 		// Load all dependencies
 		for (DependencyHandler depHandler : handlers.values()) {
 			depHandler.setup();
 		}
 
-		plugin.getLogger().info("Searching stats plugin...");
-		plugin.getLogger().info("");
-		
+		if (plugin.getConfigHandler().useAdvancedDependencyLogs()) {
+			plugin.getLogger().info("Searching stats plugin...");
+			plugin.getLogger().info("");
+		}
+
 		// Search a stats plugin.
 		statsPluginManager.searchStatsPlugin();
 
-		// Make seperate stop loading bar
-		plugin.getLogger().info(
-				"---------------[Autorank Dependencies]---------------");
+		if (plugin.getConfigHandler().useAdvancedDependencyLogs()) {
+			// Make seperate stop loading bar
+			plugin.getLogger().info(
+					"---------------[Autorank Dependencies]---------------");
+		}
 	}
 
 	public DependencyHandler getDependency(dependency dep) {
