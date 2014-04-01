@@ -85,6 +85,11 @@ public class MySQLWrapper {
 	public void sqlSetup(final SimpleYamlConfiguration config) {
 		final ConfigurationSection s = config.getConfigurationSection("sql");
 
+		if (s == null) {
+			plugin.getLogger().warning("MySQL options are missing in the advancedconfig.yml!");
+			return;
+		}
+		
 		final Boolean enabled = s.getBoolean("enabled");
 		if (enabled != null && enabled) {
 
