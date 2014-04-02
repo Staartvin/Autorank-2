@@ -30,6 +30,9 @@ public class NameFetcher implements Callable<Map<UUID, String>> {
 		this.uuids = ImmutableList.copyOf(uuids);
 	}
 
+	/* (non-Javadoc)
+	 * @see java.util.concurrent.Callable#call()
+	 */
 	@Override
 	public Map<UUID, String> call() throws Exception {
 		Map<UUID, String> uuidStringMap = new HashMap<UUID, String>();
