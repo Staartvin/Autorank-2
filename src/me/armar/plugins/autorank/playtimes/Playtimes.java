@@ -21,7 +21,7 @@ public class Playtimes {
 	private final PlaytimesSave save;
 	private final PlaytimesUpdate update;
 	private final Autorank plugin;
-	
+
 	// Used to store what plugin Autorank uses for checking the time
 	private dependency timePlugin;
 
@@ -45,7 +45,7 @@ public class Playtimes {
 				.getScheduler()
 				.runTaskTimer(plugin, update, INTERVAL_MINUTES * 20 * 60,
 						INTERVAL_MINUTES * 20 * 60);
-		
+
 		timePlugin = plugin.getConfigHandler().useTimeOf();
 	}
 
@@ -57,26 +57,30 @@ public class Playtimes {
 	 * @return Local server playtime
 	 */
 	public int getLocalTime(final String name) {
-		
+
 		int playTime = 0;
-		
+
 		// Determine what plugin to use for getting the time.
 		if (timePlugin.equals(dependency.STATS)) {
 			StatsPlugin stats = plugin.getHookedStatsPlugin();
-			
+
 			if (stats instanceof StatsHandler) {
-				playTime = ((StatsAPIHandler) plugin.getDependencyManager().getDependency(dependency.STATS)).getTotalPlayTime(name, null);
+				playTime = ((StatsAPIHandler) plugin.getDependencyManager()
+						.getDependency(dependency.STATS)).getTotalPlayTime(
+						name, null);
 			} else {
 				// Stats not found, using Autorank's system.
 				playTime = data.getInt(name.toLowerCase(), 0);
 			}
 		} else if (timePlugin.equals(dependency.ONTIME)) {
-			playTime = ((OnTimeHandler) plugin.getDependencyManager().getDependency(dependency.ONTIME)).getPlayTime(name);
+			playTime = ((OnTimeHandler) plugin.getDependencyManager()
+					.getDependency(dependency.ONTIME)).getPlayTime(name);
 		} else {
+
 			// Use internal system of Autorank.
 			playTime = data.getInt(name.toLowerCase(), 0);
 		}
-		
+
 		return playTime;
 	}
 
