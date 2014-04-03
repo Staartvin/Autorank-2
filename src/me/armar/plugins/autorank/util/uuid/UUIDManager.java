@@ -20,8 +20,6 @@ public class UUIDManager {
 	private Map<UUID, String> foundPlayers = new HashMap<UUID, String>();
 
 	public Map<String, UUID> getUUIDs(final List<String> names) {
-
-		long startTime = System.currentTimeMillis();
 		
 		// Clear maps first
 		foundUUIDs.clear();
@@ -49,21 +47,17 @@ public class UUIDManager {
 
 		if (fetcherThread.isAlive()) {
 			try {
-				fetcherThread.join();
+				fetcherThread.join(1000);
 			} catch (final InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
-		
-		System.out.print("Time for UUIDs: " + (System.currentTimeMillis() - startTime));
 
 		// Thread stopped now, collect results
 		return foundUUIDs;
 	}
 
 	public Map<UUID, String> getPlayers(final List<UUID> uuids) {
-		
-		long startTime = System.currentTimeMillis();
 		// Clear names first
 		foundPlayers.clear();
 
@@ -90,13 +84,11 @@ public class UUIDManager {
 
 		if (fetcherThread.isAlive()) {
 			try {
-				fetcherThread.join();
+				fetcherThread.join(1000);
 			} catch (final InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
-		
-		System.out.print("Time for Players: " + (System.currentTimeMillis() - startTime));
 
 		// Thread stopped now, collect results
 		return foundPlayers;
@@ -108,6 +100,8 @@ public class UUIDManager {
 	 * @return the name of player or null if not found.
 	 */
 	public String getPlayerFromUUID(UUID uuid) {
+		if (uuid == null) return null;
+		
 		Map<UUID, String> players = getPlayers(Arrays.asList(uuid));
 		
 		if (players == null) return null;
@@ -123,6 +117,8 @@ public class UUIDManager {
 	 * @return UUID of the associated Mojang account or null if not found.
 	 */
 	public UUID getUUIDFromPlayer(String playerName) {
+		if (playerName == null) return null;
+		
 		Map<String, UUID> uuids = getUUIDs(Arrays.asList(playerName));
 		
 		if (uuids == null) return null;
