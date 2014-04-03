@@ -51,6 +51,7 @@ import me.armar.plugins.autorank.requirementhandler.RequirementHandler;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.armar.plugins.autorank.updater.UpdateHandler;
 import me.armar.plugins.autorank.updater.Updater;
+import me.armar.plugins.autorank.util.uuid.UUIDManager;
 import me.armar.plugins.autorank.validations.ValidateHandler;
 import me.armar.plugins.autorank.warningmanager.WarningManager;
 import me.armar.plugins.autorank.warningmanager.WarningNoticeTask;
@@ -85,6 +86,7 @@ public class Autorank extends JavaPlugin {
 	private WarningManager warningManager;
 	private CommandsManager commandsManager;
 	private AddOnManager addonManager;
+	private UUIDManager uuidManager;
 
 	private DependencyManager dependencyManager;
 
@@ -216,6 +218,9 @@ public class Autorank extends JavaPlugin {
 		// Note that custom requirements and results are not yet loaded into memory.
 		// TODO Add support for custom requirements and results.
 		setAddonManager(new AddOnManager(this));
+		
+		// Start UUIDManager
+		setUUIDManager(new UUIDManager());
 
 		getLogger().info(String.format("Autorank %s has been enabled!",
 				getDescription().getVersion()));
@@ -487,5 +492,13 @@ public class Autorank extends JavaPlugin {
 
 	public void setDependencyManager(DependencyManager dependencyManager) {
 		this.dependencyManager = dependencyManager;
+	}
+
+	public UUIDManager getUUIDManager() {
+		return uuidManager;
+	}
+
+	public void setUUIDManager(UUIDManager uuidManager) {
+		this.uuidManager = uuidManager;
 	}
 }
