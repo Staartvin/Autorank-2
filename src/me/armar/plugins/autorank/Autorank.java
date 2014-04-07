@@ -132,11 +132,11 @@ public class Autorank extends JavaPlugin {
 		// Create MySQL Wrapper
 		setMySQLWrapper(new MySQLWrapper(this));
 
-        	// Load dependency manager
-        	setDependencyManager(new DependencyManager(this));
+		// Load dependency manager
+		setDependencyManager(new DependencyManager(this));
 
-        	// Load dependencies
-        	dependencyManager.loadDependencies();
+		// Load dependencies
+		dependencyManager.loadDependencies();
 
 		// Create playtime class
 		setPlaytimes(new Playtimes(this));
@@ -149,7 +149,7 @@ public class Autorank extends JavaPlugin {
 
 		// Create validate handler
 		setValidateHandler(new ValidateHandler(this));
-		
+
 		// Create leaderboard class
 		setLeaderboard(new Leaderboard(this));
 
@@ -181,7 +181,8 @@ public class Autorank extends JavaPlugin {
 		req.registerRequirement("worldguard region",
 				WorldGuardRegionRequirement.class);
 		req.registerRequirement("world", WorldRequirement.class);
-		req.registerRequirement("mcmmo skill level", McMMOSkillLevelRequirement.class);
+		req.registerRequirement("mcmmo skill level",
+				McMMOSkillLevelRequirement.class);
 
 		// REGISTER PLURALS IN AUTORANKTOOLS AS WELL!
 
@@ -210,20 +211,24 @@ public class Autorank extends JavaPlugin {
 
 		// Set debugger
 		setDebugger(new Debugger(this));
-		
+
 		// Debug message telling what plugin is used for timing.
-		getLogger().info("Using timings of: " + getConfigHandler().useTimeOf().toString().toLowerCase());
+		getLogger().info(
+				"Using timings of: "
+						+ getConfigHandler().useTimeOf().toString()
+								.toLowerCase());
 
 		// Set addon manager
 		// Note that custom requirements and results are not yet loaded into memory.
 		// TODO Add support for custom requirements and results.
 		setAddonManager(new AddOnManager(this));
-		
+
 		// Start UUIDManager
 		setUUIDManager(new UUIDManager());
 
-		getLogger().info(String.format("Autorank %s has been enabled!",
-				getDescription().getVersion()));
+		getLogger().info(
+				String.format("Autorank %s has been enabled!", getDescription()
+						.getVersion()));
 
 		// Create a new task that runs every 30 seconds (will show a warning every 30 seconds)
 		getServer().getScheduler().runTaskTimer(this,
@@ -258,8 +263,9 @@ public class Autorank extends JavaPlugin {
 		// Make sure all tasks are cancelled after shutdown. This seems obvious, but when a player /reloads, the server creates an instance of the plugin which causes duplicate tasks to run. 
 		getServer().getScheduler().cancelTasks(this);
 
-		getLogger().info(String.format("Autorank %s has been disabled!",
-				getDescription().getVersion()));
+		getLogger().info(
+				String.format("Autorank %s has been disabled!",
+						getDescription().getVersion()));
 	}
 
 	private boolean startMetrics() {
