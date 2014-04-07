@@ -1,6 +1,7 @@
 main: me.armar.plugins.autorank.Autorank
 name: Autorank
-softdepend: [Vault, Essentials, GroupManager, Stats, WorldEdit, WorldGuard, Factions, mcMMO, RoyalCommands, OnTime, Privileges, bPermissions, PermissionsEx, PermissionsBukkit, DroxPerms]
+depend: [Vault]
+softdepend: [Essentials, GroupManager, Stats, WorldEdit, WorldGuard, Factions, mcMMO, RoyalCommands, OnTime, Privileges, bPermissions, PermissionsEx, PermissionsBukkit, DroxPerms]
 url: http://dev.bukkit.org/bukkit-plugins/autorank/
 version: ${project.version}
 authors: [Idrrp, Armarr, Staartvin]
