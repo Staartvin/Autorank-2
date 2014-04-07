@@ -132,6 +132,12 @@ public class Autorank extends JavaPlugin {
 		// Create MySQL Wrapper
 		setMySQLWrapper(new MySQLWrapper(this));
 
+        // Load dependency manager
+        setDependencyManager(new DependencyManager(this));
+
+        // Load dependencies
+        dependencyManager.loadDependencies();
+
 		// Create playtime class
 		setPlaytimes(new Playtimes(this));
 
@@ -143,12 +149,6 @@ public class Autorank extends JavaPlugin {
 
 		// Create validate handler
 		setValidateHandler(new ValidateHandler(this));
-
-		// Load dependency manager
-		setDependencyManager(new DependencyManager(this));
-
-		// Load dependencies
-		dependencyManager.loadDependencies();
 		
 		// Create leaderboard class
 		setLeaderboard(new Leaderboard(this));
