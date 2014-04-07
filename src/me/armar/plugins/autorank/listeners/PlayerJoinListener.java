@@ -26,8 +26,8 @@ public class PlayerJoinListener implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerJoin(final PlayerJoinEvent event) {
-		final Player player = event.getPlayer(); 
-			
+		final Player player = event.getPlayer();
+
 		// Player isn't allowed to see messages.
 		if (player.hasPermission("autorank.noticeonupdate")) {
 			// No update was available
