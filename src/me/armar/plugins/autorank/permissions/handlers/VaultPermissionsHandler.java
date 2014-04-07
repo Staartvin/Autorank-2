@@ -28,8 +28,9 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 		}
 	}
 
-	private Boolean setupPermissions(final Autorank plugin) {
-		final RegisteredServiceProvider<Permission> permissionProvider = plugin
+	private boolean setupPermissions(final Autorank plugin) {
+
+                final RegisteredServiceProvider<Permission> permissionProvider = plugin
 				.getServer()
 				.getServicesManager()
 				.getRegistration(net.milkbowl.vault.permission.Permission.class);
