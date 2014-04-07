@@ -31,7 +31,7 @@ public class GroupManagerHandler implements PermissionsHandler {
 		setupGroupManager();
 	}
 
-	public void setupGroupManager() {
+	public boolean setupGroupManager() {
 		final PluginManager pluginManager = plugin.getServer()
 				.getPluginManager();
 		final Plugin GMplugin = pluginManager.getPlugin("GroupManager");
@@ -40,6 +40,8 @@ public class GroupManagerHandler implements PermissionsHandler {
 			groupManager = (GroupManager) GMplugin;
 
 		}
+
+        return groupManager != null;
 	}
 
 	public String getGroup(final Player player) {
