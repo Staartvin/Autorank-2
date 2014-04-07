@@ -21,11 +21,15 @@ public class SetCommand implements CommandExecutor {
 			final String label, final String[] args) {
 
 		int value = -1;
-		if (args.length > 2)
-			try {
-				value = AutorankTools.stringtoInt(args[2]);
-			} catch (final NumberFormatException e) {
+		if (args.length > 2) {
+			StringBuilder builder = new StringBuilder();
+
+			for (int i = 2; i < args.length; i++) {
+				builder.append(args[i]);
 			}
+
+			value = AutorankTools.stringToMinutes(builder.toString());
+		}
 
 		if (value >= 0) {
 
@@ -45,7 +49,7 @@ public class SetCommand implements CommandExecutor {
 			AutorankTools.sendColoredMessage(
 					sender,
 					Lang.PLAYTIME_CHANGED.getConfigValue(new String[] {
-							args[1], value + "" }));
+							args[1], value + " minutes" }));
 		} else {
 			AutorankTools
 					.sendColoredMessage(
