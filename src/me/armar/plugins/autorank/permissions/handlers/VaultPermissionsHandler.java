@@ -16,7 +16,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 public class VaultPermissionsHandler implements PermissionsHandler {
 
 	// TODO Vault and PEX cannot work together. Vault does not get the world groups properly and can't set the world groups properly.
-	// FIX YOUR GOD DAMN PLUGIN, MILKBOW. 
+	// FIX YOUR GOD DAMN PLUGIN, MILKBOWL.
 	// TODO Fix the Vault issue with PermissionsEx.
 
 	private static Permission permission = null;
