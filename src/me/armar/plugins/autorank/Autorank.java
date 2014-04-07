@@ -138,6 +138,8 @@ public class Autorank extends JavaPlugin {
 		// Load dependencies
 		dependencyManager.loadDependencies();
 
+               if(dependencyManager.getDependency(DependencyManager.dependency.VAULT).get() == null) {return;}
+
 		// Create playtime class
 		setPlaytimes(new Playtimes(this));
 
