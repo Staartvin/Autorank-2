@@ -2,9 +2,11 @@ package me.armar.plugins.autorank.permissions.handlers;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.permissions.PermissionsHandler;
+import net.milkbowl.vault.Vault;
 import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 /**
@@ -30,14 +32,23 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 
 	private boolean setupPermissions(final Autorank plugin) {
 
+                Plugin vPlugin = plugin.getServer().getPluginManager()
+                        .getPlugin("Vault");
+
+                if (vPlugin == null || !(vPlugin instanceof Vault)) {
+                    return false;
+                }
+
                 final RegisteredServiceProvider<Permission> permissionProvider = plugin
 				.getServer()
 				.getServicesManager()
 				.getRegistration(net.milkbowl.vault.permission.Permission.class);
-		if (permissionProvider != null) {
-			permission = permissionProvider.getProvider();
-		}
-		return (permission != null);
+
+                if (permissionProvider != null) {
+                       permission = permissionProvider.getProvider();
+                }
+
+                return permission != null;
 	}
 
 	@Override
