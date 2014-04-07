@@ -27,7 +27,7 @@ public class PermissionsBukkitHandler implements PermissionsHandler {
 		setupPermissionsBukkit();
 	}
 
-	private Boolean setupPermissionsBukkit() {
+	private boolean setupPermissionsBukkit() {
 		final PluginManager pluginManager = plugin.getServer()
 				.getPluginManager();
 		final Plugin permBukkit = pluginManager.getPlugin("PermissionsBukkit");
