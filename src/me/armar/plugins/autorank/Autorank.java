@@ -107,6 +107,9 @@ public class Autorank extends JavaPlugin {
 		setAdvancedConfig(new SimpleYamlConfiguration(this,
 				"AdvancedConfig.yml", null, "Advanced config"));
 
+		// Start UUIDManager
+		setUUIDManager(new UUIDManager());
+		
 		// Create warning manager
 		setWarningManager(new WarningManager());
 
@@ -140,6 +143,9 @@ public class Autorank extends JavaPlugin {
 
 		// Create playtime class
 		setPlaytimes(new Playtimes(this));
+		
+		// Convert data folder
+		playtimes.convertToUUIDStorage();
 
 		// Create permission plugin handler class
 		setPermPlugHandler(new PermissionsPluginManager(this));
@@ -222,9 +228,6 @@ public class Autorank extends JavaPlugin {
 		// Note that custom requirements and results are not yet loaded into memory.
 		// TODO Add support for custom requirements and results.
 		setAddonManager(new AddOnManager(this));
-
-		// Start UUIDManager
-		setUUIDManager(new UUIDManager());
 
 		getLogger().info(
 				String.format("Autorank %s has been enabled!", getDescription()
