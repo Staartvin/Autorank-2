@@ -102,7 +102,6 @@ public class AutorankTools {
 		int res = 0;
 
 		if (string != null)
-
 			res = Integer.parseInt(string);
 
 		return res;
@@ -113,9 +112,8 @@ public class AutorankTools {
 		sender.sendMessage(ChatColor.translateAlternateColorCodes('&',
 				ChatColor.GREEN + msg));
 	}
-	
-	public static void sendColoredMessage(final Player player,
-			final String msg) {
+
+	public static void sendColoredMessage(final Player player, final String msg) {
 		player.sendMessage(ChatColor.translateAlternateColorCodes('&',
 				ChatColor.GREEN + msg));
 	}
@@ -124,10 +122,9 @@ public class AutorankTools {
 	 * Elaborate method to check whether a player is excluded from ranking.
 	 * <p>
 	 * When a player has a wildcard permission but is an OP, it will return
-	 * false;
-	 * When a player has a wildcard permission but is not an OP, it will return
+	 * false; When a player has a wildcard permission but is not an OP, it will
+	 * return true; When a player only has autorank.exclude, it will return
 	 * true;
-	 * When a player only has autorank.exclude, it will return true;
 	 * 
 	 * @param player Player to check for
 	 * @return whether a player is excluded from ranking or not.

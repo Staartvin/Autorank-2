@@ -22,13 +22,18 @@ public class SetCommand implements CommandExecutor {
 
 		int value = -1;
 		if (args.length > 2) {
+			
 			StringBuilder builder = new StringBuilder();
 
 			for (int i = 2; i < args.length; i++) {
 				builder.append(args[i]);
 			}
-
-			value = AutorankTools.stringToMinutes(builder.toString());
+			
+			if (!builder.toString().contains("m") && !builder.toString().contains("h") && !builder.toString().contains("d")) {
+				value = AutorankTools.stringtoInt(builder.toString().trim());
+			} else {
+				value = AutorankTools.stringToMinutes(builder.toString());	
+			}
 		}
 
 		if (value >= 0) {
