@@ -61,7 +61,12 @@ public class Playtimes {
 
 		int playTime = 0;
 		
-		UUID uuid = plugin.getUUIDManager().getUUIDFromPlayer(name);
+		
+		UUID uuid = null;
+		
+		if (plugin.getUUIDManager() != null) {
+			uuid = plugin.getUUIDManager().getUUIDFromPlayer(name);
+		}
 
 		// Determine what plugin to use for getting the time.
 		if (timePlugin.equals(dependency.STATS)) {
@@ -133,11 +138,17 @@ public class Playtimes {
 
 	public void modifyLocalTime(final String name, final int timeDifference)
 			throws IllegalArgumentException {
-		final int time = data.getInt(name, -1);
+		
+		UUID uuid = plugin.getUUIDManager().getUUIDFromPlayer(name);
+		
+		if (uuid == null) {
+			throw new IllegalArgumentException("Player '" + name + "' does not have a UUID!");
+		}
+		
+		final int time = data.getInt(uuid.toString(), -1);
+		
 		if (time >= 0) {
 			setLocalTime(name, time + timeDifference);
-		} else {
-			throw new IllegalArgumentException("No data stored for player");
 		}
 	}
 
@@ -222,5 +233,36 @@ public class Playtimes {
 
 		save();
 		return counter;
+	}
+	
+	/**
+	 * Use this method to convert an old data.yml (that was storing player names) to the new format (storing UUIDs).
+	 * 
+	 */
+	public void convertToUUIDStorage() {
+		
+		Set<String> records = getKeys();
+		
+		for (String record: records) {
+			// UUID contains dashes and playernames do not, so if it contains dashes
+			// it is probably a UUID and thus we should skip it.
+			if (record.contains("-")) continue;
+			
+			UUID uuid = plugin.getUUIDManager().getUUIDFromPlayer(record);
+			
+			// Could not convert this name to uuid
+			if (uuid == null) continue;
+			
+			System.out.print("Update name: " + record);
+			
+			// Get the time that player has played.
+			int minutesPlayed = data.getInt(record);
+			
+			// Remove the data from the file.
+			data.set(record, null);
+			
+			// Add new data (in UUID form to the file)
+			data.set(uuid.toString(), minutesPlayed);
+		}
 	}
 }
