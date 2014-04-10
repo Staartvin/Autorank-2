@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
@@ -59,6 +60,8 @@ public class Playtimes {
 	public int getLocalTime(final String name) {
 
 		int playTime = 0;
+		
+		UUID uuid = plugin.getUUIDManager().getUUIDFromPlayer(name);
 
 		// Determine what plugin to use for getting the time.
 		if (timePlugin.equals(dependency.STATS)) {
@@ -69,16 +72,22 @@ public class Playtimes {
 						.getDependency(dependency.STATS)).getTotalPlayTime(
 						name, null);
 			} else {
+				if (uuid == null) 
+					return playTime;
+				
 				// Stats not found, using Autorank's system.
-				playTime = data.getInt(name.toLowerCase(), 0);
+				playTime = data.getInt(uuid.toString(), 0);
 			}
 		} else if (timePlugin.equals(dependency.ONTIME)) {
 			playTime = ((OnTimeHandler) plugin.getDependencyManager()
 					.getDependency(dependency.ONTIME)).getPlayTime(name);
 		} else {
 
+			if (uuid == null) 
+				return playTime;
+			
 			// Use internal system of Autorank.
-			playTime = data.getInt(name.toLowerCase(), 0);
+			playTime = data.getInt(uuid.toString(), 0);
 		}
 
 		return playTime;
@@ -101,7 +110,14 @@ public class Playtimes {
 	}
 
 	public void setLocalTime(final String name, final int time) {
-		data.set(name.toLowerCase(), time);
+		
+		UUID uuid = plugin.getUUIDManager().getUUIDFromPlayer(name);
+		
+		if (uuid == null) {
+			throw new IllegalArgumentException("Player '" + name + "' does not have a UUID!");
+		}
+		
+		data.set(uuid.toString(), time);
 	}
 
 	public void setGlobalTime(final String name, final int time)
@@ -193,7 +209,7 @@ public class Playtimes {
 		int counter = 0;
 
 		for (final String record : records) {
-			final int time = getLocalTime(record);
+			final int time = data.getInt(record);
 
 			// Found a record to be archived
 			if (time < minimum) {
