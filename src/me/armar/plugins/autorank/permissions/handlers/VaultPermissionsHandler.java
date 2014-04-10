@@ -25,8 +25,16 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 
 	public VaultPermissionsHandler(final Autorank plugin) {
 		if (!setupPermissions(plugin)) {
-			plugin.getLogger().severe("Vault not found, Autorank will not work!");
-			plugin.getPluginLoader().disablePlugin(plugin);
+			
+			// Only shutdown Autorank when Vault is needed and not found.
+			// Delay shutdown so Autorank can start successfully.
+			plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
+				public void run() {
+					
+					plugin.getLogger().severe("Disabling Autorank: Vault was not found");
+					plugin.getServer().getPluginManager().disablePlugin(plugin);
+				}
+			}, 60L);
 		}
 	}
 
@@ -53,6 +61,8 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 
 	@Override
 	public String[] getPlayerGroups(final Player player) {
+		if (permission == null) return new String[10];
+		
 		return permission.getPlayerGroups(player);
 	}
 
@@ -89,6 +99,8 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 	 */
 	public boolean removeGroup(final Player player, final String world,
 			final String group) {
+		if (permission == null) return false;
+		
 		return permission.playerRemoveGroup(world, player.getName(), group);
 	}
 
@@ -102,6 +114,8 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 	 */
 	public boolean addGroup(final Player player, final String world,
 			final String group) {
+		if (permission == null) return false;
+		
 		return permission.playerAddGroup(world, player.getName(), group);
 	}
 
@@ -113,11 +127,19 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 	 */
 	@Override
 	public String[] getGroups() {
+		if (permission == null) {
+			return new String[10];
+		}
+		
 		return permission.getGroups();
 	}
 
 	@Override
 	public String[] getWorldGroups(final Player player, final String world) {
+		if (permission == null) {
+			return new String[10];
+		}
+		
 		return permission.getPlayerGroups(world, player.getName());
 	}
 }

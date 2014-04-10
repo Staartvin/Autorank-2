@@ -143,6 +143,8 @@ public class PermissionGroupValidation {
 
 		// Check whether the rankTo exists
 		for (final String group1 : groups) {
+			if (group1 == null) continue;
+			
 			if (group1.equals(rankTo.trim())) {
 				isMissingRankTo = false;
 			}
@@ -150,6 +152,8 @@ public class PermissionGroupValidation {
 
 		// Check whether the rankFrom exists
 		for (final String group1 : groups) {
+			if (group1 == null) continue;
+			
 			if (group1.equals(rankFrom.trim())) {
 				isMissingRankFrom = false;
 			}
