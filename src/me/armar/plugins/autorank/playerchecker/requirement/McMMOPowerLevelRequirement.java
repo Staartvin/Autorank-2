@@ -49,7 +49,7 @@ public class McMMOPowerLevelRequirement extends Requirement {
 		
 		int level = handler.getPowerLevel(player);
 		
-		return level > 0 && level > powerLevel;
+		return level > 0 && level >= powerLevel;
 	}
 
 	@Override

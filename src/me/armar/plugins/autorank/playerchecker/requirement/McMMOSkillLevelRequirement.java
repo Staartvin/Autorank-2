@@ -52,7 +52,7 @@ public class McMMOSkillLevelRequirement extends Requirement {
 		
 		int level = handler.getSkillLevel(player, skillName);
 		
-		return level > 0 && level > skillLevel;
+		return level > 0 && level >= skillLevel;
 	}
 
 	@Override
