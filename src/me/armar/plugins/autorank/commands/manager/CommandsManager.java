@@ -167,9 +167,9 @@ public class CommandsManager implements TabExecutor {
 
 		if (args.length == 1) {
 			// Show a list of commands if needed
-			return Lists.newArrayList("help", "add", "set", "remove", "check",
-					"leaderboard", "gcheck", "reload", "import", "archive",
-					"debug", "complete", "sync", "syncstats", "forcecheck");
+			return Lists.newArrayList("help", "check", "leaderboard", "set",
+					"add", "remove", "debug", "reload", "import", "archive",
+					"gcheck", "complete", "sync", "syncstats", "forcecheck");
 		}
 
 		if (args.length > 1) {
@@ -180,7 +180,8 @@ public class CommandsManager implements TabExecutor {
 					|| subCommand.equalsIgnoreCase("set")) {
 				// Give example numbers if needed.
 				if (args.length == 3) {
-					return Lists.newArrayList("5", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55", "60");
+					return Lists.newArrayList("5", "10", "15", "20", "25",
+							"30", "35", "40", "45", "50", "55", "60");
 				}
 			}
 		}
