@@ -52,7 +52,7 @@ public class McMMOHandler implements DependencyHandler {
 			if (api != null) {
 				plugin.getLogger()
 						.info("mcMMO has been found and can be used!");
-				
+
 				return true;
 			} else {
 				plugin.getLogger().info(
@@ -79,26 +79,40 @@ public class McMMOHandler implements DependencyHandler {
 	public boolean isAvailable() {
 		return api != null;
 	}
-	
+
 	/**
 	 * Get the level of a certain skill of a player that is using mcMMO.
+	 * 
 	 * @param player Player to get the skill from
 	 * @param skillName Name of the skill
 	 * @return level of requested skill, or -1 if the skill is invalid.
 	 */
 	public int getSkillLevel(Player player, String skillName) {
 		int skillLevel = 0;
-		
-		if (!isAvailable()) return skillLevel;
-		
+
+		if (!isAvailable())
+			return skillLevel;
+
 		try {
 			skillLevel = ExperienceAPI.getLevel(player, skillName);
 		} catch (Exception e) {
-			plugin.getLogger().warning("Skill '" + skillName + "' is not a valid skill!");
+			plugin.getLogger().warning(
+					"Skill '" + skillName + "' is not a valid skill!");
 			return -1;
 		}
-		
+
 		return skillLevel;
+	}
+
+	public int getPowerLevel(Player player) {
+		int powerLevel = 0;
+
+		if (!isAvailable())
+			return powerLevel;
+
+		powerLevel = ExperienceAPI.getPowerLevel(player);
+		
+		return powerLevel;
 	}
 
 }
