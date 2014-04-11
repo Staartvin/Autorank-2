@@ -65,6 +65,8 @@ ranks:
                 value: 0
             has item:
                 value: 50
+            has item2:
+                value: 5;10
             blocks moved:
                 value: 1000;5
         results:
@@ -96,6 +98,7 @@ ranks:
 #       blocks moved: 1000;0 (Player has to move at least an x amount of blocks. Second argument is what kind of movement: 0=walk, 1=boat, 2=train, 3=pig, 4=pig in train, 5=horse) (Need Stats for this)
 #       worldguard region: TestRegion (Player has to be in a certain WorldGuard region) (requires WorldGuard)
 #       mcmmo skill level: 100;mining (Player has to have at least level 100 in mining) (requires McMMO)
+#       mcmmo power level: 100 (Player has to have at least power level 100) (requires McMMO)
 #
 #   results:
 #       rank change: new-rank
