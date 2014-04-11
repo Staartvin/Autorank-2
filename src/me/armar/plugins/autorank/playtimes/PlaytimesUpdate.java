@@ -54,10 +54,8 @@ public class PlaytimesUpdate implements Runnable {
 				return;
 			}
 			
-			final String playerName = player.getName().toLowerCase();
-			if (!playtimes.getKeys().contains(playerName)) {
-				playtimes.setLocalTime(playerName, 0);
-			}
+			final String playerName = player.getName();
+			
 			// Modify local time
 			playtimes.modifyLocalTime(playerName, Playtimes.INTERVAL_MINUTES);
 
