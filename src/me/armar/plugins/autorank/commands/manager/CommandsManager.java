@@ -165,8 +165,6 @@ public class CommandsManager implements TabExecutor {
 	public List<String> onTabComplete(CommandSender sender, Command cmd,
 			String commandLabel, String[] args) {
 
-		System.out.print("CommandLabel: " + commandLabel);
-
 		if (args.length == 1) {
 			// Show a list of commands if needed
 			return Lists.newArrayList("help", "add", "set", "remove", "check",
