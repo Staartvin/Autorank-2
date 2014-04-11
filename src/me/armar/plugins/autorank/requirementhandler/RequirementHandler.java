@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
 
 import me.armar.plugins.autorank.Autorank;
@@ -43,6 +44,9 @@ public class RequirementHandler {
 		reloadConfig();
 		saveConfig();
 		loadConfig();
+		
+		// Convert old format to new UUID storage format
+		convertNamesToUUIDs();
 
 		plugin.getLogger()
 				.info("Playerdata file loaded. Keeping track of player progress!");
@@ -96,14 +100,18 @@ public class RequirementHandler {
 
 	public void setPlayerProgress(final String playerName,
 			final List<Integer> progress) {
-		config.set(playerName + ".progress", progress);
+		UUID uuid = plugin.getUUIDManager().getUUIDFromPlayer(playerName);
+		
+		config.set(uuid.toString() + ".progress", progress);
 
 		saveConfig();
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Integer> getProgress(final String playerName) {
-		return (List<Integer>) config.getList(playerName + ".progress",
+		UUID uuid = plugin.getUUIDManager().getUUIDFromPlayer(playerName);
+		
+		return (List<Integer>) config.getList(uuid.toString() + ".progress",
 				new ArrayList<Integer>());
 	}
 
@@ -119,11 +127,14 @@ public class RequirementHandler {
 	}
 
 	public String getLastKnownGroup(final String playerName) {
-		return config.getString(playerName + ".last group");
+		UUID uuid = plugin.getUUIDManager().getUUIDFromPlayer(playerName);
+		
+		return config.getString(uuid.toString() + ".last group");
 	}
 
 	public void setLastKnownGroup(final String playerName, final String group) {
-		config.set(playerName + ".last group", group);
+		UUID uuid = plugin.getUUIDManager().getUUIDFromPlayer(playerName);
+		config.set(uuid.toString() + ".last group", group);
 
 		saveConfig();
 	}
@@ -155,5 +166,29 @@ public class RequirementHandler {
 		for (final Result realResult : results) {
 			realResult.applyResult(player);
 		}
+	}
+	
+	public void convertNamesToUUIDs() {
+		for (String name: getConfig().getKeys(false)) {
+
+			// Probably UUID because names don't have dashes.
+			if (name.contains("-")) continue;
+			
+			UUID uuid = plugin.getUUIDManager().getUUIDFromPlayer(name);
+			
+			if (uuid == null) continue;
+			
+			List<Integer> progress = config.getIntegerList(name + ".progress");
+			String lastKnownGroup = config.getString(name + ".last group");
+			
+			// Remove name
+			config.set(name, null);
+
+			// Replace name with UUID
+			config.set(uuid.toString() + ".progress", progress);
+			config.set(uuid.toString() + ".last group", lastKnownGroup);
+		}
+		
+		saveConfig();
 	}
 }
