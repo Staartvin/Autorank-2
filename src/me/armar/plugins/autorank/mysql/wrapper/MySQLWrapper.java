@@ -52,7 +52,7 @@ public class MySQLWrapper {
 		}
 
 		final String statement = "CREATE TABLE  IF NOT EXISTS " + table + " "
-				+ "(uuid TINYTEXT not NULL, " + " time INTEGER not NULL, "
+				+ "(uuid VARCHAR(255) not NULL, " + " time INTEGER not NULL, "
 				+ " modified TIMESTAMP not NULL, " + " PRIMARY KEY ( uuid ))";
 
 		// Run async to prevent load issues.
