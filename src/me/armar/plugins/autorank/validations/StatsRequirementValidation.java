@@ -52,6 +52,10 @@ public class StatsRequirementValidation {
 
 	private boolean requiresStats(final String req) {
 		final String correctName = AutorankTools.getCorrectName(req);
+		
+		if (correctName == null) {
+			return false;
+		}
 
 		if (correctName.equalsIgnoreCase("blocks broken")) {
 			return true;
@@ -64,6 +68,8 @@ public class StatsRequirementValidation {
 		} else if (correctName.equalsIgnoreCase("mobs killed")) {
 			return true;
 		} else if (correctName.equalsIgnoreCase("players killed")) {
+			return true;
+		} else if (correctName.equalsIgnoreCase("blocks moved")) {
 			return true;
 		} else
 			return false;

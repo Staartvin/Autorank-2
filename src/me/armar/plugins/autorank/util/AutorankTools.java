@@ -164,7 +164,7 @@ public class AutorankTools {
 			}
 		}
 
-		return oldName;
+		return null;
 	}
 
 	/**

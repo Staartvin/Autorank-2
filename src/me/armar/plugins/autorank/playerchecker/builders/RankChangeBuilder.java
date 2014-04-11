@@ -121,6 +121,13 @@ public class RankChangeBuilder {
 						return result;
 					}
 				}
+				
+				String correctName = AutorankTools.getCorrectName(requirement);
+				
+				if (correctName == null) {
+					throw new IllegalArgumentException("Requirement '" + requirement + "' of group '" + group + "' is unknown!");
+				}
+				
 				req.add(createRequirement(
 						AutorankTools.getCorrectName(requirement),
 						configHandler.getRequirement(requirement, group),
