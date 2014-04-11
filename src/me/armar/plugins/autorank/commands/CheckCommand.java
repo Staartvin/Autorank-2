@@ -39,12 +39,20 @@ public class CheckCommand implements CommandExecutor {
 
 			final Player player = plugin.getServer().getPlayer(args[1]);
 			if (player == null) {
+
+				int time = plugin.getLocalTime(args[1]);
+				
+				if (time <= 0) {
+					sender.sendMessage(Lang.PLAYER_IS_INVALID
+							.getConfigValue(new String[] { args[1] }));
+					return true;
+				}
+
 				AutorankTools.sendColoredMessage(
 						sender,
 						args[1]
 								+ Lang.HAS_PLAYED_FOR.getConfigValue(null)
-								+ AutorankTools.minutesToString(plugin
-										.getLocalTime(args[1])));
+								+ AutorankTools.minutesToString(time));
 			} else {
 				if (AutorankTools.isExcluded(player)) {
 					sender.sendMessage(ChatColor.RED
@@ -77,7 +85,7 @@ public class CheckCommand implements CommandExecutor {
 
 	public void check(final CommandSender sender, final Player player) {
 		// Call event to let other plugins know that a player wants to check itself.
-		
+
 		// Create the event here
 		CheckCommandEvent event = new CheckCommandEvent(player);
 		// Call the event
@@ -114,11 +122,10 @@ public class CheckCommand implements CommandExecutor {
 				.getPermissionPlugin().getPlayerGroups(player);
 		final StringBuilder stringBuilder = new StringBuilder();
 		// has played for
-		stringBuilder
-				.append(player.getName()
-						+ Lang.HAS_PLAYED_FOR.getConfigValue(null)
-						+ AutorankTools.minutesToString(plugin
-								.getLocalTime(player.getName())) + ", ");
+		stringBuilder.append(player.getName()
+				+ Lang.HAS_PLAYED_FOR.getConfigValue(null)
+				+ AutorankTools.minutesToString(plugin.getLocalTime(player
+						.getName())) + ", ");
 		// is in
 		stringBuilder.append(Lang.IS_IN.getConfigValue(null));
 		if (groups.length == 0)
