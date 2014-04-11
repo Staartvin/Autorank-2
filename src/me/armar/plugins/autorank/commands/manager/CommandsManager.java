@@ -1,5 +1,7 @@
 package me.armar.plugins.autorank.commands.manager;
 
+import java.util.List;
+
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.AddCommand;
 import me.armar.plugins.autorank.commands.ArchiveCommand;
@@ -20,10 +22,12 @@ import me.armar.plugins.autorank.language.Lang;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 
-public class CommandsManager implements CommandExecutor {
+import com.google.common.collect.Lists;
+
+public class CommandsManager implements TabExecutor {
 
 	private final Autorank plugin;
 
@@ -152,5 +156,36 @@ public class CommandsManager implements CommandExecutor {
 		sender.sendMessage(ChatColor.YELLOW
 				+ "Use '/ar help' for a list of commands.");
 		return true;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.bukkit.command.TabCompleter#onTabComplete(org.bukkit.command.CommandSender, org.bukkit.command.Command, java.lang.String, java.lang.String[])
+	 */
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command cmd,
+			String commandLabel, String[] args) {
+
+		System.out.print("CommandLabel: " + commandLabel);
+
+		if (args.length == 1) {
+			return Lists.newArrayList("help", "add", "set", "remove", "check",
+					"leaderboard", "gcheck", "reload", "import", "archive",
+					"debug", "complete", "sync", "syncstats", "forcecheck");
+		}
+
+		if (args.length > 1) {
+			String subCommand = args[0];
+
+			if (subCommand.equalsIgnoreCase("add")
+					|| subCommand.equalsIgnoreCase("remove")
+					|| subCommand.equalsIgnoreCase("set")) {
+				if (args.length == 3) {
+					return Lists.newArrayList("5", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55", "60");
+				}
+			}
+		}
+
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
