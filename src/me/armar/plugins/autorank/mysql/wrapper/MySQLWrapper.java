@@ -1,6 +1,7 @@
 package me.armar.plugins.autorank.mysql.wrapper;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.data.SQLDataStorage;
@@ -51,8 +52,8 @@ public class MySQLWrapper {
 		}
 
 		final String statement = "CREATE TABLE  IF NOT EXISTS " + table + " "
-				+ "(name VARCHAR(16) not NULL, " + " time INTEGER not NULL, "
-				+ " modified TIMESTAMP not NULL, " + " PRIMARY KEY ( name ))";
+				+ "(uuid TINYTEXT not NULL, " + " time INTEGER not NULL, "
+				+ " modified TIMESTAMP not NULL, " + " PRIMARY KEY ( uuid ))";
 
 		// Run async to prevent load issues.
 		plugin.getServer().getScheduler()
@@ -136,7 +137,7 @@ public class MySQLWrapper {
 			mysql.connect();
 		}
 		// Retrieve database time
-		timeThread = new Thread(new TimeRunnable(this, mysql, name, table));
+		timeThread = new Thread(new TimeRunnable(plugin, this, mysql, name, table));
 		timeThread.start();
 
 		// Wait for thread to finish
@@ -210,9 +211,11 @@ public class MySQLWrapper {
 		if (mysql.isClosed()) {
 			mysql.connect();
 		}
+		
+		UUID uuid = plugin.getUUIDManager().getUUIDFromPlayer(playerName);
 
 		final String statement = "INSERT INTO " + table + " VALUES ('"
-				+ playerName + "', " + time + ", CURRENT_TIMESTAMP) "
+				+ uuid.toString() + "', " + time + ", CURRENT_TIMESTAMP) "
 				+ "ON DUPLICATE KEY UPDATE " + "time=" + time;
 
 		// Run async to prevent load issues.
