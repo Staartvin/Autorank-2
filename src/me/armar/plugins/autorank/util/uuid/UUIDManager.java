@@ -1,11 +1,15 @@
 package me.armar.plugins.autorank.util.uuid;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
+
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 /**
  * Manages everything related to UUIDs
@@ -21,13 +25,11 @@ public class UUIDManager {
 	private Map<UUID, String> foundPlayers = new HashMap<UUID, String>();
 
 	// This hashmap stores the cached values of uuids for players. 
-	// Player names are always lowercase.
 	private HashMap<String, UUID> cachedUUIDs = new HashMap<String, UUID>();
 
 	// This hashmap stores what the time is that of the latest cache for a certain player.
 	// This is used to see if the cached UUID was older than 12 hours. If it is older than 12 hours,
 	// it will be renewed.
-	// Player names are always lowercase.
 	private HashMap<String, Long> lastCached = new HashMap<String, Long>();
 
 	// This the time that one cached value is valid (in hours).
@@ -46,12 +48,11 @@ public class UUIDManager {
 
 		// Check if we have cached values
 		for (String playerName : names) {
-			playerName = playerName.toLowerCase();
 
 			// If cached value is still valid, use it.
 			if (!shouldUpdateValue(playerName)) {
 				//System.out.print("Using cached value of uuid for " + playerName);
-				uuids.put(playerName, cachedUUIDs.get(playerName));
+				uuids.put(playerName, getCachedUUID(playerName));
 			}
 		}
 
@@ -89,6 +90,12 @@ public class UUIDManager {
 				try {
 					response = fetcher.call();
 				} catch (Exception e) {
+					if (e instanceof IOException) {
+						Bukkit.getLogger()
+								.warning(
+										"Autorank tried to contact Mojang page for UUID lookup but failed.");
+						return;
+					}
 					e.printStackTrace();
 				}
 
@@ -110,7 +117,7 @@ public class UUIDManager {
 
 		// Update cached entries
 		for (Entry<String, UUID> entry : foundUUIDs.entrySet()) {
-			String playerName = entry.getKey().toLowerCase();
+			String playerName = entry.getKey();
 			UUID uuid = entry.getValue();
 
 			// Add found uuids to the list of uuids to return
@@ -118,8 +125,7 @@ public class UUIDManager {
 
 			if (shouldUpdateValue(playerName)) {
 				// Update cached values
-				cachedUUIDs.put(playerName, uuid);
-				lastCached.put(playerName, System.currentTimeMillis());
+				addCachedPlayer(playerName, uuid);
 			} else {
 				// Do not update if it is not needed.
 				continue;
@@ -147,7 +153,7 @@ public class UUIDManager {
 
 			for (Entry<String, UUID> entry : cachedUUIDs.entrySet()) {
 				if (entry.getValue().equals(uuid)) {
-					playerName = entry.getKey().toLowerCase();
+					playerName = entry.getKey();
 				}
 			}
 
@@ -194,6 +200,12 @@ public class UUIDManager {
 				try {
 					response = fetcher.call();
 				} catch (Exception e) {
+					if (e instanceof IOException) {
+						Bukkit.getLogger()
+								.warning(
+										"Autorank tried to contact Mojang page for UUID lookup but failed.");
+						return;
+					}
 					e.printStackTrace();
 				}
 
@@ -215,7 +227,7 @@ public class UUIDManager {
 
 		// Update cached entries
 		for (Entry<UUID, String> entry : foundPlayers.entrySet()) {
-			String playerName = entry.getValue().toLowerCase();
+			String playerName = entry.getValue();
 			UUID uuid = entry.getKey();
 
 			// Add found players to the list of players to return
@@ -223,8 +235,7 @@ public class UUIDManager {
 
 			if (shouldUpdateValue(playerName)) {
 				// Update cached values
-				cachedUUIDs.put(playerName, uuid);
-				lastCached.put(playerName, System.currentTimeMillis());
+				addCachedPlayer(playerName, uuid);
 			} else {
 				// Do not update if it is not needed.
 				continue;
@@ -278,21 +289,14 @@ public class UUIDManager {
 			return null;
 		}
 
-		return uuids.get(playerName.toLowerCase());
+		return uuids.get(playerName);
 	}
 
 	private boolean shouldUpdateValue(String playerName) {
 
-		playerName = playerName.toLowerCase();
-
-		// Never cached, so cache now.
-		if (!lastCached.containsKey(playerName)
-				|| !cachedUUIDs.containsKey(playerName))
-			return true;
-
 		// Incorrectly cached, so cache now.
-		if (lastCached.get(playerName) == null
-				|| cachedUUIDs.get(playerName) == null)
+		if (!isLastCached(playerName)
+				|| !isCachedUUID(playerName))
 			return true;
 
 		long lastCacheTime = lastCached.get(playerName);
@@ -307,5 +311,65 @@ public class UUIDManager {
 		}
 
 		return false;
+	}
+
+	private UUID getCachedUUID(String playerName) {
+		// Already found
+		if (cachedUUIDs.containsKey(playerName))
+			return cachedUUIDs.get(playerName);
+
+		// Search for lowercase matches
+		for (String loggedName : cachedUUIDs.keySet()) {
+			if (loggedName.equalsIgnoreCase(playerName)) {
+				playerName = loggedName;
+				break;
+			}
+		}
+		
+		if (!cachedUUIDs.containsKey(playerName)) return null;
+
+		// Grab UUID
+		return cachedUUIDs.get(playerName);
+	}
+
+	private long getLastCached(String playerName) {
+		// Already found
+		if (lastCached.containsKey(playerName))
+			return lastCached.get(playerName);
+
+		// Search for lowercase matches
+		for (String loggedName : lastCached.keySet()) {
+			if (loggedName.equalsIgnoreCase(playerName)) {
+				playerName = loggedName;
+				break;
+			}
+		}
+		
+		if (!lastCached.containsKey(playerName)) return -1;
+
+		// Grab last changed
+		return lastCached.get(playerName);
+	}
+	
+	private boolean isCachedUUID(String playerName) {
+		return getCachedUUID(playerName) != null;
+	}
+	
+	private boolean isLastCached(String playerName) {
+		return getLastCached(playerName) > 0;
+	}
+	
+	public void addCachedPlayer(Player player) {
+		// Do not update if we still have one that is valid
+		if (!shouldUpdateValue(player.getName())) return; 
+		
+		addCachedPlayer(player.getName(), player.getUniqueId());
+	}
+	
+	private void addCachedPlayer(String playerName, UUID uuid) {
+		System.out.print("Cached " + playerName + " with UUID " + uuid.toString());
+
+		cachedUUIDs.put(playerName, uuid);
+		lastCached.put(playerName, System.currentTimeMillis());
 	}
 }
