@@ -16,7 +16,7 @@ import org.bukkit.configuration.file.FileConfiguration;
  * 
  */
 public enum Lang {
-	PLAYER_NOT_ONLINE("player-not-online", "{0} is not online!"),
+	PLAYER_NOT_ONLINE("player-not-online", "&6{0}&4 is not online!"),
 	AUTORANK_RELOADED(
 			"autorank-reloaded", "&3Autorank has been reloaded."),
 	INVALID_FORMAT(
