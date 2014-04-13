@@ -194,10 +194,6 @@ public class Playtimes {
 		return plugin.getMySQLWrapper().isMySQLEnabled();
 	}
 
-	/*public Set<String> getKeys() {
-		return data.getKeys(false);
-	}*/
-
 	public List<UUID> getUUIDKeys() {
 		List<UUID> uuids = new ArrayList<UUID>();
 
