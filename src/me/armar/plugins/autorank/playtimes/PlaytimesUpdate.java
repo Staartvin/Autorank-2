@@ -54,14 +54,12 @@ public class PlaytimesUpdate implements Runnable {
 				return;
 			}
 			
-			final String playerName = player.getName();
-			
 			// Modify local time
-			playtimes.modifyLocalTime(playerName, Playtimes.INTERVAL_MINUTES);
+			playtimes.modifyLocalTime(player.getUniqueId(), Playtimes.INTERVAL_MINUTES);
 
 			// Modify global time
 			if (playtimes.isMySQLEnabled()) {
-				playtimes.modifyGlobalTime(playerName,
+				playtimes.modifyGlobalTime(player.getUniqueId(),
 						Playtimes.INTERVAL_MINUTES);
 			}
 			
