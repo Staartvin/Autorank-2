@@ -45,7 +45,7 @@ public class GlobalTimeRequirement extends Requirement {
 		}
 
 		final double playtime = this.getAutorank().getPlaytimes()
-				.getGlobalTime(player.getName());
+				.getGlobalTime(player.getUniqueId());
 		return time != -1 && time <= playtime;
 	}
 
@@ -70,7 +70,7 @@ public class GlobalTimeRequirement extends Requirement {
 	public String getProgress(final Player player) {
 		String progress = "";
 		progress = progress.concat(getAutorank().getPlaytimes().getGlobalTime(
-				player.getName())
+				player.getUniqueId())
 				+ " min" + "/" + time + " min");
 		return progress;
 	}
