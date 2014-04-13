@@ -4,7 +4,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
 
-import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.data.SQLDataStorage;
 
 /**
@@ -19,25 +18,22 @@ import me.armar.plugins.autorank.data.SQLDataStorage;
 public class TimeRunnable implements Runnable {
 
 	private final MySQLWrapper wrapper;
-	private final Autorank plugin;
 	private final SQLDataStorage mysql;
-	private final String name, table;
+	private final String table;
+	private final UUID uuid;
 	private int time = 0;
 
-	public TimeRunnable(Autorank plugin, final MySQLWrapper wrapper, final SQLDataStorage mysql,
-			final String name, final String table) {
+	public TimeRunnable(final MySQLWrapper wrapper, final SQLDataStorage mysql,
+			final UUID uuid, final String table) {
 		this.wrapper = wrapper;
 		this.mysql = mysql;
-		this.name = name;
+		this.uuid = uuid;
 		this.table = table;
-		this.plugin = plugin;
 	}
 
 	@Override
 	public void run() {
 		if (mysql != null) {
-
-			UUID uuid = plugin.getUUIDManager().getUUIDFromPlayer(name);
 			
 			final String statement = "SELECT * FROM " + table + " WHERE uuid='"
 					+ uuid.toString() + "'";

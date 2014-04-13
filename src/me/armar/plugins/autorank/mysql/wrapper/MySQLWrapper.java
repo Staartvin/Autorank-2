@@ -30,11 +30,11 @@ public class MySQLWrapper {
 	int databaseTime = 0;
 	// This thread will be used to check if the database time has been retrieved.
 	Thread timeThread;
-	
+
 	// Keeps track of when a call to the database was for this player
-	private HashMap<String, Long> lastChecked = new HashMap<String, Long>();
+	private HashMap<UUID, Long> lastChecked = new HashMap<UUID, Long>();
 	// Stores the last received global time for a player
-	private HashMap<String, Integer> lastReceivedTime = new HashMap<String, Integer>();
+	private HashMap<UUID, Integer> lastReceivedTime = new HashMap<UUID, Integer>();
 
 	public MySQLWrapper(final Autorank instance) {
 		plugin = instance;
@@ -87,10 +87,11 @@ public class MySQLWrapper {
 		final ConfigurationSection s = config.getConfigurationSection("sql");
 
 		if (s == null) {
-			plugin.getLogger().warning("MySQL options are missing in the advancedconfig.yml!");
+			plugin.getLogger().warning(
+					"MySQL options are missing in the advancedconfig.yml!");
 			return;
 		}
-		
+
 		final Boolean enabled = s.getBoolean("enabled");
 		if (enabled != null && enabled) {
 
@@ -115,60 +116,61 @@ public class MySQLWrapper {
 	 * Gets the database time of player
 	 * Run this ASYNC!
 	 * <p>
-	 * This will return an updated value every 5 minutes. Calling it every minute isn't smart,
-	 * as it will only update every 5 minutes.
+	 * This will return an updated value every 5 minutes. Calling it every
+	 * minute isn't smart, as it will only update every 5 minutes.
 	 * 
-	 * @param name Playername to get the time of
+	 * @param uuid UUID to get the time of
 	 * @return time player has played across all servers
 	 */
-	public int getDatabaseTime(final String name) {
-		
+	public int getDatabaseTime(UUID uuid) {
+
 		// Do not make a call to the database every time.
 		// Instead, only call once every 5 minutes.
-		if (!isOutOfDate(name)) {
-			return getCachedGlobalTime(name);
+		if (!isOutOfDate(uuid)) {
+			return getCachedGlobalTime(uuid);
 		}
-		
+
 		// Mysql is not enabled
-		if (!isMySQLEnabled()) return -1;
-		
+		if (!isMySQLEnabled())
+			return -1;
+
 		// Check if connection is still alive
 		if (mysql.isClosed()) {
 			mysql.connect();
 		}
 		// Retrieve database time
-		timeThread = new Thread(new TimeRunnable(plugin, this, mysql, name, table));
+		timeThread = new Thread(new TimeRunnable(this, mysql, uuid, table));
 		timeThread.start();
 
 		// Wait for thread to finish
 		waitForThread(timeThread);
-		
+
 		// Store last received time and last received value
-		lastChecked.put(name, System.currentTimeMillis());
-		lastReceivedTime.put(name, databaseTime);
+		lastChecked.put(uuid, System.currentTimeMillis());
+		lastReceivedTime.put(uuid, databaseTime);
 
 		return databaseTime;
 	}
-	
-	public boolean isOutOfDate(String playerName) {
+
+	public boolean isOutOfDate(UUID uuid) {
 		// Checks whether the last check was five minutes ago.
 		// When the last check was more than five minutes ago,
 		// the database time is 'outdated'
-		
+
 		// Never checked
-		if (!lastChecked.containsKey(playerName)) {
+		if (!lastChecked.containsKey(uuid)) {
 			return true;
 		}
-		
+
 		long currentTime = System.currentTimeMillis();
-		
-		long lastCheckedTime = lastChecked.get(playerName);
-		
+
+		long lastCheckedTime = lastChecked.get(uuid);
+
 		// Weird time received.
 		if (lastCheckedTime <= 0) {
 			return true;
 		}
-		
+
 		// Get the difference in minutes
 		if ((currentTime - lastCheckedTime) / 60000 >= 5) {
 			return true;
@@ -176,43 +178,43 @@ public class MySQLWrapper {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Get the cached value of the global time.
+	 * 
 	 * @param playerName Name of the player
 	 * @return cached global time or -1 if nothing was cached.
 	 */
-	public Integer getCachedGlobalTime(String playerName) {
-		if (!lastReceivedTime.containsKey(playerName)) {
+	public Integer getCachedGlobalTime(UUID uuid) {
+		if (!lastReceivedTime.containsKey(uuid)) {
 			return -1;
 		}
-		
-		int cached = lastReceivedTime.get(playerName);
-		
+
+		int cached = lastReceivedTime.get(uuid);
+
 		// Weird cached
 		if (cached <= 0) {
 			return -1;
 		}
-		
+
 		return cached;
 	}
 
 	/**
 	 * Sets the time of a player
 	 * 
-	 * @param playerName Player to set the time of
+	 * @param uuid UUID to set the time of
 	 * @param time Time to change to
 	 */
-	public void setGlobalTime(final String playerName, final int time) {
-		
-		if (!isMySQLEnabled()) return;
-		
+	public void setGlobalTime(UUID uuid, final int time) {
+
+		if (!isMySQLEnabled())
+			return;
+
 		// Check if connection is still alive
 		if (mysql.isClosed()) {
 			mysql.connect();
 		}
-		
-		UUID uuid = plugin.getUUIDManager().getUUIDFromPlayer(playerName);
 
 		final String statement = "INSERT INTO " + table + " VALUES ('"
 				+ uuid.toString() + "', " + time + ", CURRENT_TIMESTAMP) "
