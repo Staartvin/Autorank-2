@@ -38,11 +38,22 @@ public class API {
 	 * <br>The time is always given in minutes.
 	 * <p>
 	 * 
-	 * @param playerName player to check for.
+	 * @param UUID uuid to get the time for
 	 * @return play time of a player. 0 when has never played before.
 	 */
-	public int getLocalPlayTime(final String playerName) {
-		return plugin.getLocalTime(playerName);
+	public int getTimeOfPlayer(Player player) {
+		return plugin.getPlaytimes().getTimeOfPlayer(player.getName());
+	}
+	
+	/**
+	 * Gets the local play time of this player on this server according to Autorank.
+	 * <br>This method will grab the time from the data.yml used by Autorank and
+	 * <br>this is not dependend on other plugins.
+	 * @param player Player to get the time for.
+	 * @return play time of this player or 0 if not found.
+	 */
+	public int getLocalTime(Player player) {
+		return plugin.getPlaytimes().getLocalTime(player.getUniqueId());
 	}
 
 	/**
@@ -59,11 +70,11 @@ public class API {
 	 * MySQL database linked) of a player.
 	 * <p>
 	 * 
-	 * @param playerName player to check for.
+	 * @param player Player to check for.
 	 * @return play time of a player. -1 if no entry was found.
 	 */
-	public int getGlobalPlayTime(final String playerName) {
-		return plugin.getGlobalTime(playerName);
+	public int getGlobalPlayTime(Player player) {
+		return plugin.getPlaytimes().getGlobalTime(player.getUniqueId());
 	}
 
 	/**
