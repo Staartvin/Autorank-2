@@ -27,6 +27,9 @@ public class PlayerJoinListener implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerJoin(final PlayerJoinEvent event) {
 		final Player player = event.getPlayer();
+		
+		// Add cached player
+		plugin.getUUIDManager().addCachedPlayer(player);
 
 		// Player isn't allowed to see messages.
 		if (player.hasPermission("autorank.noticeonupdate")) {
@@ -68,7 +71,6 @@ public class PlayerJoinListener implements Listener {
 
 							@Override
 							public void run() {
-								// TODO Auto-generated method stub
 								player.sendMessage(ChatColor.BLUE
 										+ "<AUTORANK> "
 										+ ChatColor.RED
