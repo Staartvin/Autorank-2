@@ -60,7 +60,7 @@ public class UUIDManager {
 		if (uuids.entrySet().size() == names.size()) {
 			useInternetLookup = false;
 		}
-		
+
 		// No internet lookup needed.
 		if (!useInternetLookup) {
 			// Return all cached values.
@@ -141,11 +141,11 @@ public class UUIDManager {
 		boolean useInternetLookup = true;
 
 		// Check if we have cached values
-		for (UUID uuid: uuids) {
-			
+		for (UUID uuid : uuids) {
+
 			String playerName = null;
-			
-			for (Entry<String, UUID> entry: cachedUUIDs.entrySet()) {
+
+			for (Entry<String, UUID> entry : cachedUUIDs.entrySet()) {
 				if (entry.getValue().equals(uuid)) {
 					playerName = entry.getKey().toLowerCase();
 				}
@@ -156,7 +156,7 @@ public class UUIDManager {
 				if (!shouldUpdateValue(playerName)) {
 					//System.out.print("Using cached value of playername for " + playerName);
 					players.put(uuid, playerName);
-				}	
+				}
 			}
 		}
 
@@ -212,10 +212,23 @@ public class UUIDManager {
 				e.printStackTrace();
 			}
 		}
-		
-		// Add two lists together
-		for (Entry<UUID, String> entry: foundPlayers.entrySet()) {
-			players.put(entry.getKey(), entry.getValue());
+
+		// Update cached entries
+		for (Entry<UUID, String> entry : foundPlayers.entrySet()) {
+			String playerName = entry.getValue().toLowerCase();
+			UUID uuid = entry.getKey();
+
+			// Add found players to the list of players to return
+			players.put(uuid, playerName);
+
+			if (shouldUpdateValue(playerName)) {
+				// Update cached values
+				cachedUUIDs.put(playerName, uuid);
+				lastCached.put(playerName, System.currentTimeMillis());
+			} else {
+				// Do not update if it is not needed.
+				continue;
+			}
 		}
 
 		// Thread stopped now, collect results
@@ -259,12 +272,12 @@ public class UUIDManager {
 
 		if (uuids == null) {
 			return null;
-		}	
+		}
 
 		if (uuids.isEmpty()) {
 			return null;
 		}
-		
+
 		return uuids.get(playerName.toLowerCase());
 	}
 
