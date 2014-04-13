@@ -33,6 +33,7 @@ public class ForceCheckCommand implements CommandExecutor {
 		}
 
 		final String target = args[1];
+		@SuppressWarnings("deprecation")
 		final Player targetPlayer = plugin.getServer().getPlayer(target);
 
 		if (targetPlayer == null) {

@@ -1,5 +1,7 @@
 package me.armar.plugins.autorank.commands;
 
+import java.util.UUID;
+
 import me.armar.plugins.autorank.Autorank;
 
 import org.bukkit.ChatColor;
@@ -32,9 +34,9 @@ public class SyncStatsCommand implements CommandExecutor {
 		int count = 0;
 
 		// Sync playtime of every player
-		for (final String entry : plugin.getPlaytimes().getKeys()) {
+		for (UUID uuid : plugin.getPlaytimes().getUUIDKeys()) {
 
-			final OfflinePlayer p = plugin.getServer().getOfflinePlayer(entry);
+			final OfflinePlayer p = plugin.getServer().getOfflinePlayer(uuid);
 			
 			// Time is stored in seconds
 			final int statsPlayTime = plugin.getHookedStatsPlugin()
@@ -46,7 +48,7 @@ public class SyncStatsCommand implements CommandExecutor {
 			}
 
 			// Update time
-			plugin.getPlaytimes().setLocalTime(entry, Math.round(statsPlayTime / 60));
+			plugin.getPlaytimes().setLocalTime(uuid, Math.round(statsPlayTime / 60));
 
 			// Increment count
 			count++;

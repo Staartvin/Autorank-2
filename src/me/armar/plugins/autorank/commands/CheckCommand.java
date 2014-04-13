@@ -37,22 +37,22 @@ public class CheckCommand implements CommandExecutor {
 				return true;
 			}
 
+			@SuppressWarnings("deprecation")
 			final Player player = plugin.getServer().getPlayer(args[1]);
 			if (player == null) {
 
-				int time = plugin.getLocalTime(args[1]);
-				
+				int time = plugin.getPlaytimes().getLocalTime(
+						plugin.getUUIDManager().getUUIDFromPlayer(args[1]));
+
 				if (time <= 0) {
 					sender.sendMessage(Lang.PLAYER_IS_INVALID
 							.getConfigValue(new String[] { args[1] }));
 					return true;
 				}
 
-				AutorankTools.sendColoredMessage(
-						sender,
-						args[1]
-								+ Lang.HAS_PLAYED_FOR.getConfigValue(null)
-								+ AutorankTools.minutesToString(time));
+				AutorankTools.sendColoredMessage(sender, args[1]
+						+ Lang.HAS_PLAYED_FOR.getConfigValue(null)
+						+ AutorankTools.minutesToString(time));
 			} else {
 				if (AutorankTools.isExcluded(player)) {
 					sender.sendMessage(ChatColor.RED
@@ -124,8 +124,8 @@ public class CheckCommand implements CommandExecutor {
 		// has played for
 		stringBuilder.append(player.getName()
 				+ Lang.HAS_PLAYED_FOR.getConfigValue(null)
-				+ AutorankTools.minutesToString(plugin.getLocalTime(player
-						.getName())) + ", ");
+				+ AutorankTools.minutesToString(plugin.getPlaytimes()
+						.getLocalTime(player.getUniqueId())) + ", ");
 		// is in
 		stringBuilder.append(Lang.IS_IN.getConfigValue(null));
 		if (groups.length == 0)

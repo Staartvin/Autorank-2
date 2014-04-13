@@ -1,5 +1,7 @@
 package me.armar.plugins.autorank.commands;
 
+import java.util.UUID;
+
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
@@ -25,6 +27,8 @@ public class RemoveCommand implements CommandExecutor {
 			return true;
 		}
 
+		UUID uuid = plugin.getUUIDManager().getUUIDFromPlayer(args[1]);
+		
 		int value = -1;
 		
 		if (args.length > 2) {
@@ -39,15 +43,15 @@ public class RemoveCommand implements CommandExecutor {
 					&& !builder.toString().contains("h")
 					&& !builder.toString().contains("d")) {
 				value = -AutorankTools.stringtoInt(builder.toString().trim());
-				value += plugin.getLocalTime(args[1]);
+				value += plugin.getPlaytimes().getLocalTime(uuid);
 			} else {
 				value = -AutorankTools.stringToMinutes(builder.toString());
-				value += plugin.getLocalTime(args[1]);
+				value += plugin.getPlaytimes().getLocalTime(uuid);
 			}
 		}
 
 		if (value >= 0) {
-			plugin.setLocalTime(args[1], value);
+			plugin.getPlaytimes().setLocalTime(uuid, value);
 			AutorankTools.sendColoredMessage(
 					sender,
 					Lang.PLAYTIME_CHANGED.getConfigValue(new String[] {

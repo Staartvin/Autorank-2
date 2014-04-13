@@ -36,9 +36,10 @@ public class GlobalCheckCommand implements CommandExecutor {
 				return true;
 			}
 
+			@SuppressWarnings("deprecation")
 			final Player player = plugin.getServer().getPlayer(args[1]);
 			if (player == null) {
-				sender.sendMessage(Lang.PLAYER_IS_INVALID.getConfigValue(new String[] {args[1]}));
+				sender.sendMessage(Lang.PLAYER_NOT_ONLINE.getConfigValue(new String[] {args[1]}));
 				return true;
 			} else {
 				if (player.hasPermission("autorank.exclude")) {
@@ -48,8 +49,8 @@ public class GlobalCheckCommand implements CommandExecutor {
 					return true;
 				}
 
-				int minutes = plugin
-						.getGlobalTime(args[1]);
+				int minutes = plugin.getPlaytimes()
+						.getGlobalTime(player.getUniqueId());
 				
 				if (minutes < 0) {
 					sender.sendMessage(Lang.PLAYER_IS_INVALID.getConfigValue(new String[] {args[1]}));
@@ -81,8 +82,8 @@ public class GlobalCheckCommand implements CommandExecutor {
 			AutorankTools.sendColoredMessage(
 					sender,
 					"You have played for "
-							+ AutorankTools.minutesToString(plugin
-									.getGlobalTime(player.getName()))
+							+ AutorankTools.minutesToString(plugin.getPlaytimes()
+									.getGlobalTime(player.getUniqueId()))
 							+ " across all servers.");
 
 		} else {

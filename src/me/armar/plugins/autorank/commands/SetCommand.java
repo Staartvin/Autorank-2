@@ -50,7 +50,7 @@ public class SetCommand implements CommandExecutor {
 				}
 			}
 
-			plugin.setLocalTime(args[1], value);
+			plugin.getPlaytimes().setLocalTime(plugin.getUUIDManager().getUUIDFromPlayer(args[1]), value);
 			AutorankTools.sendColoredMessage(
 					sender,
 					Lang.PLAYTIME_CHANGED.getConfigValue(new String[] {

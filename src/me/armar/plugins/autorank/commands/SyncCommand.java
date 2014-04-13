@@ -1,6 +1,7 @@
 package me.armar.plugins.autorank.commands;
 
 import java.sql.SQLException;
+import java.util.UUID;
 
 import me.armar.plugins.autorank.Autorank;
 
@@ -39,19 +40,18 @@ public class SyncCommand implements CommandExecutor {
 					@Override
 					public void run() {
 						// Update all mysql records
-						for (final String player : plugin.getPlaytimes()
-								.getKeys()) {
-							if (plugin.getPlaytimes().getLocalTime(player) <= 0)
+						for (UUID uuid : plugin.getPlaytimes().getUUIDKeys()) {
+							if (plugin.getPlaytimes().getLocalTime(uuid) <= 0)
 								continue;
 
 							final int localTime = plugin.getPlaytimes()
-									.getLocalTime(player);
+									.getLocalTime(uuid);
 							final int globalTime = plugin.getPlaytimes()
-									.getGlobalTime(player);
+									.getGlobalTime(uuid);
 
 							// Update record
 							try {
-								plugin.getPlaytimes().setGlobalTime(player,
+								plugin.getPlaytimes().setGlobalTime(uuid,
 										localTime + globalTime);
 							} catch (final SQLException e) {
 								e.printStackTrace();
