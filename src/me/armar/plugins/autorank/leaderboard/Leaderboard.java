@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.TreeMap;
+import java.util.UUID;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
@@ -14,16 +15,15 @@ import me.armar.plugins.autorank.util.AutorankTools;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-
 /**
- * Leaderboard stores how when the last update was and if someone wants to<br> 
- * display it and it it outdated (set to 10 minutes) 
+ * Leaderboard stores how when the last update was and if someone wants to<br>
+ * display it and it it outdated (set to 10 minutes)
  * it will generate a new leaderboard.<br>
  * <p>
- * Date created:  21:03:23
- * 15 mrt. 2014
+ * Date created: 21:03:23 15 mrt. 2014
+ * 
  * @author Staartvin
- *
+ * 
  */
 public class Leaderboard {
 
@@ -41,14 +41,24 @@ public class Leaderboard {
 			leaderboardLength = advConfig.getInt("leaderboard length");
 			layout = advConfig.getString("leaderboard layout");
 		}
-
-		updateLeaderboard();
+		
+		// Run async because it uses UUID lookup
+		plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+			public void run() {
+				updateLeaderboard();
+			}
+		});
 	}
 
 	public void sendLeaderboard(final CommandSender sender) {
 		if (System.currentTimeMillis() - lastUpdatedTime > 600000) {
-			// update leaderboard is last updated longer than 10 minutes ago
-			updateLeaderboard();
+			// Update leaderboard because it is not valid anymore.
+			// Run async because it uses UUID lookup
+			plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+				public void run() {
+					updateLeaderboard();
+				}
+			});
 		}
 		for (final String msg : messages) {
 			AutorankTools.sendColoredMessage(sender, msg);
@@ -81,7 +91,6 @@ public class Leaderboard {
 			time = time - ((time / 60) * 60);
 			message = message.replaceAll("&m", Integer.toString(time));
 			message = ChatColor.translateAlternateColorCodes('&', message);
-			//message = message.replaceAll("(&([a-f0-9]))", "\u00A7$2");
 
 			stringList.add(message);
 
@@ -98,8 +107,14 @@ public class Leaderboard {
 		final TreeMap<String, Integer> sorted_map = new TreeMap<String, Integer>(
 				bvc);
 
-		for (final String playername : plugin.getPlaytimes().getKeys()) {
-			map.put(playername, plugin.getPlaytimes().getLocalTime(playername));
+		List<UUID> uuids = plugin.getPlaytimes().getUUIDKeys();
+		List<String> playerNames = plugin.getPlaytimes().getPlayerKeys();
+
+		for (int i = 0; i < playerNames.size(); i++) {
+			String playerName = playerNames.get(i);
+
+			map.put(playerName, plugin.getPlaytimes()
+					.getLocalTime(uuids.get(i)));
 		}
 
 		sorted_map.putAll(map);
