@@ -1,7 +1,6 @@
 package me.armar.plugins.autorank;
 
 import java.io.IOException;
-import java.sql.SQLException;
 
 import me.armar.plugins.autorank.addons.AddOnManager;
 import me.armar.plugins.autorank.api.API;
@@ -57,7 +56,6 @@ import me.armar.plugins.autorank.validations.ValidateHandler;
 import me.armar.plugins.autorank.warningmanager.WarningManager;
 import me.armar.plugins.autorank.warningmanager.WarningNoticeTask;
 
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -312,27 +310,6 @@ public class Autorank extends JavaPlugin {
 	public void reload() {
 		getServer().getPluginManager().disablePlugin(this);
 		getServer().getPluginManager().enablePlugin(this);
-	}
-
-	public int getLocalTime(final String player) {
-		return playtimes.getLocalTime(player);
-	}
-
-	public int getGlobalTime(final String player) {
-		return playtimes.getGlobalTime(player);
-	}
-
-	public void setLocalTime(final String player, final int time) {
-		playtimes.setLocalTime(player, time);
-	}
-
-	public void setGlobalTime(final String player, final int time)
-			throws SQLException {
-		playtimes.setGlobalTime(player, time);
-	}
-
-	public void checkAndChangeRank(final Player player) {
-		playerChecker.checkPlayer(player);
 	}
 
 	public void registerRequirement(final String name,
