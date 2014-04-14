@@ -5,6 +5,7 @@ import java.util.UUID;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
+import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -27,7 +28,7 @@ public class RemoveCommand implements CommandExecutor {
 			return true;
 		}
 
-		UUID uuid = plugin.getUUIDManager().getUUIDFromPlayer(args[1]);
+		UUID uuid = UUIDManager.getUUIDFromPlayer(args[1]);
 		
 		int value = -1;
 		

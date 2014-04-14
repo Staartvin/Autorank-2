@@ -15,6 +15,7 @@ import me.armar.plugins.autorank.hooks.ontimeapi.OnTimeHandler;
 import me.armar.plugins.autorank.hooks.statsapi.StatsAPIHandler;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.armar.plugins.autorank.statsmanager.handlers.StatsHandler;
+import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
 public class Playtimes {
 
@@ -86,9 +87,7 @@ public class Playtimes {
 						playerName, null);
 			} else {
 				
-				if (plugin.getUUIDManager() != null) {
-					uuid = plugin.getUUIDManager().getUUIDFromPlayer(playerName);
-				}
+				uuid = UUIDManager.getUUIDFromPlayer(playerName);
 				
 				if (uuid == null)
 					return playTime;
@@ -101,9 +100,7 @@ public class Playtimes {
 					.getDependency(dependency.ONTIME)).getPlayTime(playerName);
 		} else {
 
-			if (plugin.getUUIDManager() != null) {
-				uuid = plugin.getUUIDManager().getUUIDFromPlayer(playerName);
-			}
+			uuid = UUIDManager.getUUIDFromPlayer(playerName);
 			
 			if (uuid == null)
 				return playTime;
@@ -209,7 +206,7 @@ public class Playtimes {
 
 		List<String> playerNames = new ArrayList<String>();
 
-		Map<UUID, String> foundPlayers = plugin.getUUIDManager().getPlayers(
+		Map<UUID, String> foundPlayers = UUIDManager.getPlayers(
 				uuids);
 
 		for (Entry<UUID, String> entry : foundPlayers.entrySet()) {
@@ -265,7 +262,7 @@ public class Playtimes {
 			if (record.contains("-"))
 				continue;
 
-			UUID uuid = plugin.getUUIDManager().getUUIDFromPlayer(record);
+			UUID uuid = UUIDManager.getUUIDFromPlayer(record);
 
 			// Could not convert this name to uuid
 			if (uuid == null)

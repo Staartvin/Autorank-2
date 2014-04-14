@@ -21,21 +21,21 @@ import org.bukkit.entity.Player;
  */
 public class UUIDManager {
 
-	private Map<String, UUID> foundUUIDs = new HashMap<String, UUID>();
-	private Map<UUID, String> foundPlayers = new HashMap<UUID, String>();
+	private static Map<String, UUID> foundUUIDs = new HashMap<String, UUID>();
+	private static Map<UUID, String> foundPlayers = new HashMap<UUID, String>();
 
 	// This hashmap stores the cached values of uuids for players. 
-	private HashMap<String, UUID> cachedUUIDs = new HashMap<String, UUID>();
+	private static HashMap<String, UUID> cachedUUIDs = new HashMap<String, UUID>();
 
 	// This hashmap stores what the time is that of the latest cache for a certain player.
 	// This is used to see if the cached UUID was older than 12 hours. If it is older than 12 hours,
 	// it will be renewed.
-	private HashMap<String, Long> lastCached = new HashMap<String, Long>();
+	private static HashMap<String, Long> lastCached = new HashMap<String, Long>();
 
 	// This the time that one cached value is valid (in hours).
-	private int maxLifeTime = 12;
+	private static int maxLifeTime = 12;
 
-	public Map<String, UUID> getUUIDs(final List<String> names) {
+	public static Map<String, UUID> getUUIDs(final List<String> names) {
 
 		// Clear maps first
 		foundUUIDs.clear();
@@ -93,7 +93,7 @@ public class UUIDManager {
 					if (e instanceof IOException) {
 						Bukkit.getLogger()
 								.warning(
-										"Autorank tried to contact Mojang page for UUID lookup but failed.");
+										"Tried to contact Mojang page for UUID lookup but failed.");
 						return;
 					}
 					e.printStackTrace();
@@ -136,7 +136,7 @@ public class UUIDManager {
 		return uuids;
 	}
 
-	public Map<UUID, String> getPlayers(final List<UUID> uuids) {
+	public static Map<UUID, String> getPlayers(final List<UUID> uuids) {
 		// Clear names first
 		foundPlayers.clear();
 
@@ -253,7 +253,7 @@ public class UUIDManager {
 	 * @param uuid the UUID of the Mojang account
 	 * @return the name of player or null if not found.
 	 */
-	public String getPlayerFromUUID(UUID uuid) {
+	public static String getPlayerFromUUID(UUID uuid) {
 		if (uuid == null)
 			return null;
 
@@ -274,7 +274,7 @@ public class UUIDManager {
 	 * @param playerName Name of the player
 	 * @return UUID of the associated Mojang account or null if not found.
 	 */
-	public UUID getUUIDFromPlayer(String playerName) {
+	public static UUID getUUIDFromPlayer(String playerName) {
 		if (playerName == null) {
 			return null;
 		}
@@ -292,7 +292,7 @@ public class UUIDManager {
 		return uuids.get(playerName);
 	}
 
-	private boolean shouldUpdateValue(String playerName) {
+	private static boolean shouldUpdateValue(String playerName) {
 
 		// Incorrectly cached, so cache now.
 		if (!isLastCached(playerName)
@@ -313,7 +313,7 @@ public class UUIDManager {
 		return false;
 	}
 
-	private UUID getCachedUUID(String playerName) {
+	private static UUID getCachedUUID(String playerName) {
 		// Already found
 		if (cachedUUIDs.containsKey(playerName))
 			return cachedUUIDs.get(playerName);
@@ -332,7 +332,7 @@ public class UUIDManager {
 		return cachedUUIDs.get(playerName);
 	}
 
-	private long getLastCached(String playerName) {
+	private static long getLastCached(String playerName) {
 		// Already found
 		if (lastCached.containsKey(playerName))
 			return lastCached.get(playerName);
@@ -351,25 +351,27 @@ public class UUIDManager {
 		return lastCached.get(playerName);
 	}
 	
-	private boolean isCachedUUID(String playerName) {
+	private static boolean isCachedUUID(String playerName) {
 		return getCachedUUID(playerName) != null;
 	}
 	
-	private boolean isLastCached(String playerName) {
+	private static boolean isLastCached(String playerName) {
 		return getLastCached(playerName) > 0;
 	}
 	
-	public void addCachedPlayer(Player player) {
+	public static void addCachedPlayer(Player player) {
 		// Do not update if we still have one that is valid
 		if (!shouldUpdateValue(player.getName())) return; 
 		
 		addCachedPlayer(player.getName(), player.getUniqueId());
 	}
 	
-	private void addCachedPlayer(String playerName, UUID uuid) {
+	private static void addCachedPlayer(String playerName, UUID uuid) {
 		System.out.print("Cached " + playerName + " with UUID " + uuid.toString());
 
 		cachedUUIDs.put(playerName, uuid);
 		lastCached.put(playerName, System.currentTimeMillis());
 	}
 }
+
+

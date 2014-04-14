@@ -51,7 +51,6 @@ import me.armar.plugins.autorank.requirementhandler.RequirementHandler;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.armar.plugins.autorank.updater.UpdateHandler;
 import me.armar.plugins.autorank.updater.Updater;
-import me.armar.plugins.autorank.util.uuid.UUIDManager;
 import me.armar.plugins.autorank.validations.ValidateHandler;
 import me.armar.plugins.autorank.warningmanager.WarningManager;
 import me.armar.plugins.autorank.warningmanager.WarningNoticeTask;
@@ -85,7 +84,6 @@ public class Autorank extends JavaPlugin {
 	private WarningManager warningManager;
 	private CommandsManager commandsManager;
 	private AddOnManager addonManager;
-	private UUIDManager uuidManager;
 
 	private DependencyManager dependencyManager;
 
@@ -105,9 +103,6 @@ public class Autorank extends JavaPlugin {
 				null, "Simple config"));
 		setAdvancedConfig(new SimpleYamlConfiguration(this,
 				"AdvancedConfig.yml", null, "Advanced config"));
-
-		// Start UUIDManager
-		setUUIDManager(new UUIDManager());
 		
 		// Create warning manager
 		setWarningManager(new WarningManager());
@@ -481,13 +476,5 @@ public class Autorank extends JavaPlugin {
 
 	public void setDependencyManager(DependencyManager dependencyManager) {
 		this.dependencyManager = dependencyManager;
-	}
-
-	public UUIDManager getUUIDManager() {
-		return uuidManager;
-	}
-
-	public void setUUIDManager(UUIDManager uuidManager) {
-		this.uuidManager = uuidManager;
 	}
 }

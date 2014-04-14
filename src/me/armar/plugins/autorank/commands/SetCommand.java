@@ -3,6 +3,7 @@ package me.armar.plugins.autorank.commands;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
+import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -50,7 +51,7 @@ public class SetCommand implements CommandExecutor {
 				}
 			}
 
-			plugin.getPlaytimes().setLocalTime(plugin.getUUIDManager().getUUIDFromPlayer(args[1]), value);
+			plugin.getPlaytimes().setLocalTime(UUIDManager.getUUIDFromPlayer(args[1]), value);
 			AutorankTools.sendColoredMessage(
 					sender,
 					Lang.PLAYTIME_CHANGED.getConfigValue(new String[] {

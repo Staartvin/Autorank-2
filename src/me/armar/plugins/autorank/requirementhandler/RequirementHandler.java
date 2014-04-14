@@ -12,6 +12,7 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.api.events.RequirementCompleteEvent;
 import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 import me.armar.plugins.autorank.playerchecker.result.Result;
+import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -100,7 +101,7 @@ public class RequirementHandler {
 
 	public void setPlayerProgress(final String playerName,
 			final List<Integer> progress) {
-		UUID uuid = plugin.getUUIDManager().getUUIDFromPlayer(playerName);
+		UUID uuid = UUIDManager.getUUIDFromPlayer(playerName);
 		
 		config.set(uuid.toString() + ".progress", progress);
 
@@ -109,7 +110,7 @@ public class RequirementHandler {
 
 	@SuppressWarnings("unchecked")
 	public List<Integer> getProgress(final String playerName) {
-		UUID uuid = plugin.getUUIDManager().getUUIDFromPlayer(playerName);
+		UUID uuid = UUIDManager.getUUIDFromPlayer(playerName);
 		
 		return (List<Integer>) config.getList(uuid.toString() + ".progress",
 				new ArrayList<Integer>());
@@ -127,13 +128,13 @@ public class RequirementHandler {
 	}
 
 	public String getLastKnownGroup(final String playerName) {
-		UUID uuid = plugin.getUUIDManager().getUUIDFromPlayer(playerName);
+		UUID uuid = UUIDManager.getUUIDFromPlayer(playerName);
 		
 		return config.getString(uuid.toString() + ".last group");
 	}
 
 	public void setLastKnownGroup(final String playerName, final String group) {
-		UUID uuid = plugin.getUUIDManager().getUUIDFromPlayer(playerName);
+		UUID uuid = UUIDManager.getUUIDFromPlayer(playerName);
 		config.set(uuid.toString() + ".last group", group);
 
 		saveConfig();
@@ -174,7 +175,7 @@ public class RequirementHandler {
 			// Probably UUID because names don't have dashes.
 			if (name.contains("-")) continue;
 			
-			UUID uuid = plugin.getUUIDManager().getUUIDFromPlayer(name);
+			UUID uuid = UUIDManager.getUUIDFromPlayer(name);
 			
 			if (uuid == null) continue;
 			

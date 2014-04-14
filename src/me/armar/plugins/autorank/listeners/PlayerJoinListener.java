@@ -1,6 +1,7 @@
 package me.armar.plugins.autorank.listeners;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -29,7 +30,7 @@ public class PlayerJoinListener implements Listener {
 		final Player player = event.getPlayer();
 		
 		// Add cached player
-		plugin.getUUIDManager().addCachedPlayer(player);
+		UUIDManager.addCachedPlayer(player);
 
 		// Player isn't allowed to see messages.
 		if (player.hasPermission("autorank.noticeonupdate")) {
