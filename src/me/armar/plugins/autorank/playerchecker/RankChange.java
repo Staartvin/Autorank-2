@@ -15,7 +15,7 @@ public class RankChange {
 	private final List<Requirement> req;
 	private final List<Result> res;
 	private final String rankTo;
-	private final Autorank plugin;  
+	private final Autorank plugin;
 
 	public RankChange(final Autorank plugin, final String rank,
 			final String rankTo, final List<Requirement> req,
@@ -60,11 +60,20 @@ public class RankChange {
 			if (r.isOptional())
 				continue;
 
+			// We don't do partial completion so we only need to check if a player passes all requirements.
+			if (!plugin.getConfigHandler().usePartialCompletion()) {
+				if (!r.meetsRequirement(player)) {
+					return false;
+				} else {
+					continue;
+				}
+			}
+
+			// If this requirement doesn't auto complete and hasn't already been completed, return false;
 			if (!r.useAutoCompletion()
 					&& !plugin.getRequirementHandler().hasCompletedRequirement(
 							reqID, player.getName())) {
-				result = false;
-				break;
+				return false;
 			}
 
 			if (!r.meetsRequirement(player)) {
@@ -74,8 +83,8 @@ public class RankChange {
 						reqID, player.getName())) {
 					continue;
 				}
-				result = false;
-				break;
+
+				return false;
 			} else {
 				// Player meets requirement, thus perform results of requirement
 				// Perform results of a requirement as well
