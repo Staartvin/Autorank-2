@@ -36,7 +36,7 @@ public class PlayerChecker {
 		this.plugin = plugin;
 	}
 
-	public void initialiseFromConfigs(final Autorank plugin) {
+	public void initialiseFromConfigs() {
 		final SimpleYamlConfiguration simpleConfig = plugin.getSimpleConfig();
 		final SimpleYamlConfiguration advancedConfig = plugin
 				.getAdvancedConfig();

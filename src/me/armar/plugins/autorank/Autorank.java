@@ -196,7 +196,15 @@ public class Autorank extends JavaPlugin {
 		res.registerResult("tp", TeleportResult.class);
 
 		// Load requirements and results per group from config
-		playerChecker.initialiseFromConfigs(this);
+		playerChecker.initialiseFromConfigs();
+		
+		// Load again after 5 seconds so custom commands can be listed
+		getServer().getScheduler().runTaskLaterAsynchronously(this, new Runnable() {
+			public void run() {
+				
+				getPlayerChecker().initialiseFromConfigs();
+			}
+		}, 100);
 
 		// Register command
 		getCommand("autorank").setExecutor(getCommandsManager());
