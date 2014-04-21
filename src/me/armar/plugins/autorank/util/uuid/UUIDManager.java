@@ -203,7 +203,7 @@ public class UUIDManager {
 					if (e instanceof IOException) {
 						Bukkit.getLogger()
 								.warning(
-										"Autorank tried to contact Mojang page for UUID lookup but failed.");
+										"Tried to contact Mojang page for UUID lookup but failed.");
 						return;
 					}
 					e.printStackTrace();
@@ -367,7 +367,7 @@ public class UUIDManager {
 	}
 	
 	private static void addCachedPlayer(String playerName, UUID uuid) {
-		System.out.print("Cached " + playerName + " with UUID " + uuid.toString());
+		//System.out.print("Cached " + playerName + " with UUID " + uuid.toString());
 
 		cachedUUIDs.put(playerName, uuid);
 		lastCached.put(playerName, System.currentTimeMillis());
