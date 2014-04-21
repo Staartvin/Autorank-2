@@ -119,7 +119,9 @@ public enum Lang {
 	MCMMO_SKILL_LEVEL_REQUIREMENT(
 			"mcmmo-skill-level-requirement", "Have at least level {0} in {1}."),
 	MCMMO_POWER_LEVEL_REQUIREMENT(
-			"mcmmo-power-level-requirement", "Have at least power level {0}."),;
+			"mcmmo-power-level-requirement", "Have at least power level {0}."),
+	PERMISSION_REQUIREMENT(
+					"permission-requirement", "Have permission '{0}'."),;
 
 	private String path, def;
 	private static FileConfiguration LANG;
