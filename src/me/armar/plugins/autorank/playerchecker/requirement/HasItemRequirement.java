@@ -15,6 +15,7 @@ public class HasItemRequirement extends Requirement {
 	ItemStack item = null;
 	private boolean optional = false;
 	private boolean autoComplete = false;
+	private boolean showShortValue = false;
 	private int reqId;
 	List<Result> results = new ArrayList<Result>();
 
@@ -36,8 +37,11 @@ public class HasItemRequirement extends Requirement {
 			id = AutorankTools.stringtoInt(options[0]);
 		if (options.length > 1)
 			amount = AutorankTools.stringtoInt(options[1]);
-		if (options.length > 2)
+		if (options.length > 2) {
 			data = (short) AutorankTools.stringtoInt(options[2]);
+			// Short value can make a difference, thus we show it.
+			showShortValue = true;
+		}
 
 		//item = new ItemStack(id, 1, (short) 0, data);
 		item = new ItemStack(id, amount, data);
@@ -52,8 +56,12 @@ public class HasItemRequirement extends Requirement {
 
 	@Override
 	public String getDescription() {
-		final String arg = item.getAmount() + " " + item.getType().toString();
-		return Lang.ITEM_REQUIREMENT.getConfigValue(new String[] { arg });
+		StringBuilder arg = new StringBuilder(item.getAmount() + " " + item.getType().toString());
+		if (showShortValue) {
+			arg.append(" (Dam. value: " + item.getDurability() + ")");
+		}
+		
+		return Lang.ITEM_REQUIREMENT.getConfigValue(new String[] { arg.toString() });
 	}
 
 	@Override
