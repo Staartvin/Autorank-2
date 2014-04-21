@@ -133,6 +133,11 @@ public class ConfigHandler {
 			// Not defined (Not optional + not defined = true)
 			if (config.get("ranks." + group + ".requirements." + requirement
 					+ ".options.auto complete") == null) {
+				
+				// If partial completion is false, we do not auto complete
+				if (!usePartialCompletion()) {
+					return false;
+				}
 				//System.out.print("Return true for " + group + " requirement " + requirement);
 				return true;
 			} else {

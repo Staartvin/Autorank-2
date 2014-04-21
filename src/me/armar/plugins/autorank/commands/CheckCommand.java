@@ -117,8 +117,6 @@ public class CheckCommand implements CommandExecutor {
 					currentGroup);
 		}
 
-		// Change the way requirements are shown. When a player has completed a requirement, it will be green, otherwise it will be red.
-
 		final String[] groups = plugin.getPermPlugHandler()
 				.getPermissionPlugin().getPlayerGroups(player);
 		final StringBuilder stringBuilder = new StringBuilder();
@@ -162,6 +160,7 @@ public class CheckCommand implements CommandExecutor {
 			boolean meetsAllRequirements = true;
 			final List<Integer> metRequirements = new ArrayList<Integer>();
 
+			// Check if we only have optional requirements
 			for (final Requirement req : reqs) {
 				if (!req.isOptional())
 					onlyOptional = false;
@@ -174,6 +173,10 @@ public class CheckCommand implements CommandExecutor {
 					// Do auto complete
 					if (req.meetsRequirement(player)) {
 						// Player meets the requirement -> give him results
+
+						// Doesn't need to check whether this requirement was already done
+						if (!plugin.getConfigHandler().usePartialCompletion())
+							continue;
 
 						if (!plugin.getRequirementHandler()
 								.hasCompletedRequirement(reqID,
@@ -188,12 +191,16 @@ public class CheckCommand implements CommandExecutor {
 						metRequirements.add(reqID);
 						continue;
 					} else {
-						// Player does not meet requirements, but has done this already
-						if (plugin.getRequirementHandler()
-								.hasCompletedRequirement(reqID,
-										player.getName())) {
-							metRequirements.add(reqID);
-							continue;
+
+						// Only check if player has done this when partial completion is used
+						if (plugin.getConfigHandler().usePartialCompletion()) {
+							// Player does not meet requirements, but has done this already
+							if (plugin.getRequirementHandler()
+									.hasCompletedRequirement(reqID,
+											player.getName())) {
+								metRequirements.add(reqID);
+								continue;
+							}
 						}
 
 						// Player does not meet requirements -> do nothing
@@ -201,10 +208,24 @@ public class CheckCommand implements CommandExecutor {
 						continue;
 					}
 				} else {
+
+					// Doesn't auto complete and doesn't meet requirement, then continue searching
+					if (!plugin.getConfigHandler().usePartialCompletion()) {
+
+						if (!req.meetsRequirement(player)) {
+							meetsAllRequirements = false;
+							continue;
+						} else {
+							// Player does meet requirement, continue searching
+							continue;
+						}
+
+					}
+
 					// Do not auto complete
 					if (plugin.getRequirementHandler().hasCompletedRequirement(
 							reqID, player.getName())) {
-						// Player has completed requirement
+						// Player has completed requirement already
 						metRequirements.add(reqID);
 						continue;
 					} else {
