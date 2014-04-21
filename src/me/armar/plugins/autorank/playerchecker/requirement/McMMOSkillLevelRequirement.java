@@ -43,10 +43,6 @@ public class McMMOSkillLevelRequirement extends Requirement {
 
 	@Override
 	public boolean meetsRequirement(final Player player) {
-		// TODO Auto-generated method stub
-		if (isCompleted(getReqId(), player.getName())) {
-			return true;
-		}
 
 		McMMOHandler handler = (McMMOHandler) this.getAutorank().getDependencyManager().getDependency(dependency.MCMMO);
 		

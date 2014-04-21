@@ -39,10 +39,6 @@ public class PermissionRequirement extends Requirement {
 
 	@Override
 	public boolean meetsRequirement(final Player player) {
-		// TODO Auto-generated method stub
-		if (isCompleted(getReqId(), player.getName())) {
-			return true;
-		}
 
 		return permission != null && player.hasPermission(permission);
 	}

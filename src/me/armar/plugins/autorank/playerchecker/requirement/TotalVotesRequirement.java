@@ -40,11 +40,6 @@ public class TotalVotesRequirement extends Requirement {
 
 	@Override
 	public boolean meetsRequirement(final Player player) {
-		if (isCompleted(getReqId(), player.getName())) {
-			return true;
-		}
-
-		// TODO Auto-generated method stub
 		return getStatsPlugin().isEnabled()
 				&& getStatsPlugin().getNormalStat("Votes", player.getName(),
 						null) >= totalVotes;

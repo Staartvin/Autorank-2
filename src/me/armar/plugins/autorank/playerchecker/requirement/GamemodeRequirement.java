@@ -34,10 +34,6 @@ public class GamemodeRequirement extends Requirement {
 	@SuppressWarnings("deprecation")
 	@Override
 	public boolean meetsRequirement(final Player player) {
-		if (isCompleted(getReqId(), player.getName())) {
-			return true;
-		}
-
 		return gamemode != -1 && gamemode == player.getGameMode().getValue();
 	}
 

@@ -68,9 +68,6 @@ public class BlocksBrokenRequirement extends Requirement {
 					player.getName(), null) >= blocksBroken;
 		}
 
-		if (isCompleted(getReqId(), player.getName())) {
-			return true;
-		}
 		return enabled && sufficient;
 	}
 

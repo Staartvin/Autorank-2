@@ -56,10 +56,6 @@ public class MoneyRequirement extends Requirement {
 
 	@Override
 	public boolean meetsRequirement(final Player player) {
-		// TODO Auto-generated method stub
-		if (isCompleted(getReqId(), player.getName())) {
-			return true;
-		}
 
 		return economy != null && economy.has(player.getName(), minMoney);
 	}

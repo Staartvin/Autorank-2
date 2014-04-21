@@ -55,10 +55,6 @@ public class BlocksPlacedRequirement extends Requirement {
 
 	@Override
 	public boolean meetsRequirement(final Player player) {
-		// TODO Auto-generated method stub
-		//System.out.print("(PLACED) Check for id: " + blockID + ", dv: " + damageValue
-		//		+ ", value: " + blocksPlaced);
-
 		final boolean enabled = getStatsPlugin().isEnabled();
 
 		boolean sufficient = false;
@@ -68,10 +64,6 @@ public class BlocksPlacedRequirement extends Requirement {
 		} else {
 			sufficient = getStatsPlugin().getNormalStat("total_blocks_placed",
 					player.getName(), null) >= blocksPlaced;
-		}
-
-		if (isCompleted(getReqId(), player.getName())) {
-			return true;
 		}
 
 		return enabled && sufficient;

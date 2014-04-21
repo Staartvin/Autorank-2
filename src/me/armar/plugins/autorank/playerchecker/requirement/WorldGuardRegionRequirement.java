@@ -41,10 +41,6 @@ public class WorldGuardRegionRequirement extends Requirement {
 
 	@Override
 	public boolean meetsRequirement(final Player player) {
-		if (isCompleted(getReqId(), player.getName())) {
-			return true;
-		}
-
 		WorldGuardHandler wgH = (WorldGuardHandler) this.getAutorank().getDependencyManager().getDependency(dependency.WORLDGUARD);
 		
 		return wgH.isInRegion(player, regionName);

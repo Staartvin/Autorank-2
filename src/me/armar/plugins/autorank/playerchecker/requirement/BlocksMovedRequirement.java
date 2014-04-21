@@ -59,9 +59,6 @@ public class BlocksMovedRequirement extends Requirement {
 				.getNormalStat("blocks_moved", player.getName(),
 						player.getWorld().getName(), movementType) > blocksMoved;
 
-		if (isCompleted(getReqId(), player.getName())) {
-			return true;
-		}
 		return enabled && sufficient;
 	}
 

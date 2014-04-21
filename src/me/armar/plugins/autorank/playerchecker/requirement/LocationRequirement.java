@@ -63,10 +63,6 @@ public class LocationRequirement extends Requirement {
 
 	@Override
 	public boolean meetsRequirement(final Player player) {
-		if (isCompleted(getReqId(), player.getName())) {
-			return true;
-		}
-
 		final Location pLocation = player.getLocation();
 
 		// Positive and negative values

@@ -32,10 +32,6 @@ public class WorldRequirement extends Requirement {
 
 	@Override
 	public boolean meetsRequirement(final Player player) {
-		if (isCompleted(getReqId(), player.getName())) {
-			return true;
-		}
-
 		return world != null && world.equals(player.getWorld().getName());
 	}
 

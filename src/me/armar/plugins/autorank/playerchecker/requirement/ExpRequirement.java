@@ -36,10 +36,6 @@ public class ExpRequirement extends Requirement {
 
 	@Override
 	public boolean meetsRequirement(final Player player) {
-		if (isCompleted(getReqId(), player.getName())) {
-			return true;
-		}
-
 		return player.getLevel() >= minExp;
 	}
 

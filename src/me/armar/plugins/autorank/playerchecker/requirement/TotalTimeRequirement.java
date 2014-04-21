@@ -43,9 +43,6 @@ public class TotalTimeRequirement extends Requirement {
 
 	@Override
 	public boolean meetsRequirement(final Player player) {
-		if (isCompleted(getReqId(), player.getName())) {
-			return true;
-		}
 		// the time he first joined the server
 		long joinTime = player.getFirstPlayed();
 

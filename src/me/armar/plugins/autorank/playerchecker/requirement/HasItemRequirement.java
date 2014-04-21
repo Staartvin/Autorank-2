@@ -47,10 +47,6 @@ public class HasItemRequirement extends Requirement {
 
 	@Override
 	public boolean meetsRequirement(final Player player) {
-		if (isCompleted(getReqId(), player.getName())) {
-			return true;
-		}
-
 		return item != null && player.getInventory().containsAtLeast(item, item.getAmount());
 	}
 

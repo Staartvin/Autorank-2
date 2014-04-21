@@ -46,12 +46,6 @@ public class MobKillsRequirement extends Requirement {
 
 	@Override
 	public boolean meetsRequirement(final Player player) {
-
-		if (isCompleted(getReqId(), player.getName())) {
-			return true;
-		}
-
-		// TODO Auto-generated method stub
 		return getStatsPlugin().isEnabled()
 				&& getStatsPlugin().getNormalStat("mobs_killed",
 						player.getName(), null, mobType) >= totalMobsKilled;

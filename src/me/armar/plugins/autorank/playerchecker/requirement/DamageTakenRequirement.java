@@ -40,11 +40,6 @@ public class DamageTakenRequirement extends Requirement {
 
 	@Override
 	public boolean meetsRequirement(final Player player) {
-		if (isCompleted(getReqId(), player.getName())) {
-			return true;
-		}
-
-		// TODO Auto-generated method stub
 		return getStatsPlugin().isEnabled()
 				&& getStatsPlugin().getNormalStat("damage_taken",
 						player.getName(), null) >= damageTaken;

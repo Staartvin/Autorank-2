@@ -43,11 +43,6 @@ public class FactionPowerRequirement extends Requirement {
 
 	@Override
 	public boolean meetsRequirement(final Player player) {
-		// TODO Auto-generated method stub
-		if (isCompleted(getReqId(), player.getName())) {
-			return true;
-		}
-
 		FactionsHandler fHandler = (FactionsHandler) this.getAutorank().getDependencyManager().getDependency(dependency.FACTIONS); 
 		
 		return fHandler.getFactionPower(player) > factionPower;
