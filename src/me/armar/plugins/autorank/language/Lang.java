@@ -27,14 +27,8 @@ public enum Lang {
 			"cannot-check-console", "&cCannot check for console!"),
 	NO_PERMISSION(
 			"no-permission", "&cYou need ({0}) for that!"),
-	HAS_PLAYED_FOR(
-			"has-played-for", " has played for "),
-	IS_IN("is-in", "is in "),
 	NO_GROUPS(
 			"no-groups", "no groups"),
-	ONE_GROUP("one-group", "group "),
-	MULTIPLE_GROUPS(
-			"multiple-groups", "groups "),
 	NO_NEXT_RANK("no-next-rankup",
 			"and does not have a next rankup"),
 	MEETS_ALL_REQUIREMENTS(
@@ -44,8 +38,6 @@ public enum Lang {
 			"meets all the requirements"),
 	RANKED_UP_NOW("ranked-up-now",
 			" and will now be ranked up."),
-	REQUIREMENTS_TO_RANK(
-			"requirements-to-rank", "Requirements to be ranked up: "),
 	DATA_IMPORTED(
 			"data-imported", "New data has been imported!"),
 	TIME_REQUIREMENT(
