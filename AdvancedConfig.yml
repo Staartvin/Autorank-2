@@ -49,7 +49,6 @@ check command layout: '&p has played for &time and is in &groups. Requirements t
 # &p : Player name
 # &time : time in hours, minutes and seconds
 # &groups : Groups the player is in. Most of the time this is only one group.
-# \n : Starts a new line
 # &reqs : a list of all requirements
 
 ranks:
