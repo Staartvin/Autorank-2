@@ -119,34 +119,61 @@ public class CheckCommand implements CommandExecutor {
 
 		final String[] groups = plugin.getPermPlugHandler()
 				.getPermissionPlugin().getPlayerGroups(player);
-		final StringBuilder stringBuilder = new StringBuilder();
+
+		String layout = plugin.getConfigHandler().getCheckCommandLayout();
+
+		// Start building layout
+
+		layout = layout.replace("&p", player.getName());
+		layout = layout.replace("&time", AutorankTools.minutesToString(plugin
+				.getPlaytimes().getLocalTime(player.getUniqueId())));
+
+		StringBuilder groupsString = new StringBuilder("");
+
+		if (groups.length == 0) {
+			groupsString.append(Lang.NO_GROUPS.getConfigValue(null));
+		} else {
+			boolean first = true;
+			for (final String group : groups) {
+				if (!first) {
+					groupsString.append(", ");
+				}
+				groupsString.append(group);
+				first = false;
+			}
+		}
+
+		layout = layout.replace("&groups", groupsString.toString());
+
+		String nextRankup = plugin.getPlayerChecker()
+				.getNextRankupGroup(player);
+
+		boolean showReqs = false;
+
+		if (nextRankup == null) {
+			layout = layout.replace("&reqs", "none");
+		} else {
+			layout = layout.replace("&reqs", "");
+			showReqs = true;
+		}
+
+		AutorankTools.sendColoredMessage(sender, layout);
+
 		// has played for
-		stringBuilder.append(player.getName()
+		/*stringBuilder.append(player.getName()
 				+ Lang.HAS_PLAYED_FOR.getConfigValue(null)
 				+ AutorankTools.minutesToString(plugin.getPlaytimes()
-						.getLocalTime(player.getUniqueId())) + ", ");
+						.getLocalTime(player.getUniqueId())) + ", ");*/
+
 		// is in
-		stringBuilder.append(Lang.IS_IN.getConfigValue(null));
-		if (groups.length == 0)
+		//stringBuilder.append(Lang.IS_IN.getConfigValue(null));
+		/*if (groups.length == 0)
 			stringBuilder.append(Lang.NO_GROUPS.getConfigValue(null)); // No groups.
 		else if (groups.length == 1)
 			stringBuilder.append(Lang.ONE_GROUP.getConfigValue(null)); // One group
 		else
 			stringBuilder.append(Lang.MULTIPLE_GROUPS.getConfigValue(null)); // Multiple groups
-
-		boolean first = true;
-		for (final String group : groups) {
-			if (!first) {
-				stringBuilder.append(", ");
-			}
-			stringBuilder.append(group);
-			first = false;
-		}
-
-		AutorankTools.sendColoredMessage(sender, stringBuilder.toString());
-
-		String nextRankup = plugin.getPlayerChecker()
-				.getNextRankupGroup(player);
+		*/
 
 		if (nextRankup == null) {
 			AutorankTools.sendColoredMessage(sender,
@@ -244,37 +271,54 @@ public class CheckCommand implements CommandExecutor {
 						+ Lang.RANKED_UP_NOW.getConfigValue(null));
 				plugin.getPlayerChecker().checkPlayer(player);
 			} else {
-				AutorankTools.sendColoredMessage(sender,
-						Lang.REQUIREMENTS_TO_RANK.getConfigValue(null));
+				//AutorankTools.sendColoredMessage(sender,
+					//	Lang.REQUIREMENTS_TO_RANK.getConfigValue(null));
 
-				for (int i = 0; i < reqs.size(); i++) {
-					final Requirement req = reqs.get(i);
-					final int reqID = req.getReqId();
+				if (showReqs) {
+					List<String> messages = getRequirementsInStringList(reqs,
+							metRequirements);
 
-					if (req != null) {
-						final StringBuilder message = new StringBuilder("     "
-								+ ChatColor.GOLD + (i + 1) + ". ");
-						if (metRequirements.contains(reqID)) {
-							message.append(ChatColor.RED + req.getDescription()
-									+ ChatColor.BLUE + " ("
-									+ Lang.DONE_MARKER.getConfigValue(null)
-									+ ")");
-						} else {
-							message.append(ChatColor.RED + req.getDescription());
-						}
-
-						if (req.isOptional()) {
-							message.append(ChatColor.AQUA + " ("
-									+ Lang.OPTIONAL_MARKER.getConfigValue(null)
-									+ ")");
-						}
-						AutorankTools.sendColoredMessage(sender,
-								message.toString());
-
+					for (String message : messages) {
+						AutorankTools.sendColoredMessage(sender, message);
 					}
 				}
+
 			}
-			//}
 		}
+	}
+
+	private List<String> getRequirementsInStringList(List<Requirement> reqs,
+			List<Integer> metRequirements) {
+		// Converts requirements into a list of readable requirements
+
+		List<String> messages = new ArrayList<String>();
+
+		for (int i = 0; i < reqs.size(); i++) {
+			final Requirement req = reqs.get(i);
+			final int reqID = req.getReqId();
+
+			if (req != null) {
+				final StringBuilder message = new StringBuilder("     "
+						+ ChatColor.GOLD + (i + 1) + ". ");
+				if (metRequirements.contains(reqID)) {
+					message.append(ChatColor.RED + req.getDescription()
+							+ ChatColor.BLUE + " ("
+							+ Lang.DONE_MARKER.getConfigValue(null) + ")");
+				} else {
+					message.append(ChatColor.RED + req.getDescription());
+				}
+
+				if (req.isOptional()) {
+					message.append(ChatColor.AQUA + " ("
+							+ Lang.OPTIONAL_MARKER.getConfigValue(null) + ")");
+				}
+
+				messages.add(message.toString());
+
+			}
+		}
+
+		return messages;
+
 	}
 }

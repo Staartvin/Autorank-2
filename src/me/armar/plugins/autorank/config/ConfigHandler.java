@@ -206,4 +206,8 @@ public class ConfigHandler {
 		
 		return config.getBoolean("advanced dependency output", false);
 	}
+	
+	public String getCheckCommandLayout() {
+		return config.getString("check command layout", "&p has played for &time and is in group(s) &groups. Requirements to be ranked up: &reqs");
+	}
 }
