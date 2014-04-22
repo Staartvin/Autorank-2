@@ -52,7 +52,7 @@ public class CheckCommand implements CommandExecutor {
 				}
 
 				AutorankTools.sendColoredMessage(sender, args[1]
-						+ Lang.HAS_PLAYED_FOR.getConfigValue(null)
+						+ " has played for "
 						+ AutorankTools.minutesToString(time));
 			} else {
 				if (AutorankTools.isExcluded(player)) {
@@ -79,7 +79,7 @@ public class CheckCommand implements CommandExecutor {
 			check(sender, player);
 		} else {
 			AutorankTools.sendColoredMessage(sender,
-					Lang.CANNOT_CHECK_CONSOLE.getConfigValue(null));
+					Lang.CANNOT_CHECK_CONSOLE.getConfigValue());
 		}
 		return true;
 	}
@@ -131,7 +131,7 @@ public class CheckCommand implements CommandExecutor {
 		StringBuilder groupsString = new StringBuilder("");
 
 		if (groups.length == 0) {
-			groupsString.append(Lang.NO_GROUPS.getConfigValue(null));
+			groupsString.append(Lang.NO_GROUPS.getConfigValue());
 		} else {
 			boolean first = true;
 			for (final String group : groups) {
@@ -177,7 +177,7 @@ public class CheckCommand implements CommandExecutor {
 
 		if (nextRankup == null) {
 			AutorankTools.sendColoredMessage(sender,
-					Lang.NO_NEXT_RANK.getConfigValue(null));
+					Lang.NO_NEXT_RANK.getConfigValue());
 		} else {
 			RankChange rank = plugin.getPlayerChecker().getNextRank(player);
 			List<Requirement> reqs = plugin.getPlayerChecker()
@@ -262,13 +262,13 @@ public class CheckCommand implements CommandExecutor {
 				}
 			}
 			final String reqMessage = rank.getRankTo() == null ? Lang.MEETS_ALL_REQUIREMENTS_WITHOUT_RANK_UP
-					.getConfigValue(null) : Lang.MEETS_ALL_REQUIREMENTS
+					.getConfigValue() : Lang.MEETS_ALL_REQUIREMENTS
 					.getConfigValue(new String[] { rank.getRankTo() });
 
 			if (meetsAllRequirements || onlyOptional) {
 
 				AutorankTools.sendColoredMessage(sender, reqMessage
-						+ Lang.RANKED_UP_NOW.getConfigValue(null));
+						+ Lang.RANKED_UP_NOW.getConfigValue());
 				plugin.getPlayerChecker().checkPlayer(player);
 			} else {
 				//AutorankTools.sendColoredMessage(sender,
@@ -303,14 +303,14 @@ public class CheckCommand implements CommandExecutor {
 				if (metRequirements.contains(reqID)) {
 					message.append(ChatColor.RED + req.getDescription()
 							+ ChatColor.BLUE + " ("
-							+ Lang.DONE_MARKER.getConfigValue(null) + ")");
+							+ Lang.DONE_MARKER.getConfigValue() + ")");
 				} else {
 					message.append(ChatColor.RED + req.getDescription());
 				}
 
 				if (req.isOptional()) {
 					message.append(ChatColor.AQUA + " ("
-							+ Lang.OPTIONAL_MARKER.getConfigValue(null) + ")");
+							+ Lang.OPTIONAL_MARKER.getConfigValue() + ")");
 				}
 
 				messages.add(message.toString());

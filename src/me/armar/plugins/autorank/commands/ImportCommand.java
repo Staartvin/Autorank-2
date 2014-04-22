@@ -26,7 +26,7 @@ public class ImportCommand implements CommandExecutor {
 		}
 
 		AutorankTools.sendColoredMessage(sender,
-				Lang.DATA_IMPORTED.getConfigValue(null));
+				Lang.DATA_IMPORTED.getConfigValue());
 		plugin.getPlaytimes().importData();
 
 		return true;

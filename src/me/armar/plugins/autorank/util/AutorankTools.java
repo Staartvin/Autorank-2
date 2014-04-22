@@ -54,9 +54,9 @@ public class AutorankTools {
 			b.append(days);
 			b.append(" ");
 			if (days != 1)
-				b.append(Lang.DAY_PLURAL.getConfigValue(null));
+				b.append(Lang.DAY_PLURAL.getConfigValue());
 			else
-				b.append(Lang.DAY_SINGULAR.getConfigValue(null));
+				b.append(Lang.DAY_SINGULAR.getConfigValue());
 
 			if (hours != 0 || minutes != 0)
 				b.append(" ");
@@ -66,9 +66,9 @@ public class AutorankTools {
 			b.append(hours);
 			b.append(" ");
 			if (hours != 1)
-				b.append(Lang.HOUR_PLURAL.getConfigValue(null));
+				b.append(Lang.HOUR_PLURAL.getConfigValue());
 			else
-				b.append(Lang.HOUR_SINGULAR.getConfigValue(null));
+				b.append(Lang.HOUR_SINGULAR.getConfigValue());
 
 			if (minutes != 0)
 				b.append(" ");
@@ -78,9 +78,9 @@ public class AutorankTools {
 			b.append(minutes);
 			b.append(" ");
 			if (minutes != 1)
-				b.append(Lang.MINUTE_PLURAL.getConfigValue(null));
+				b.append(Lang.MINUTE_PLURAL.getConfigValue());
 			else
-				b.append(Lang.MINUTE_SINGULAR.getConfigValue(null));
+				b.append(Lang.MINUTE_SINGULAR.getConfigValue());
 		}
 
 		return b.toString();

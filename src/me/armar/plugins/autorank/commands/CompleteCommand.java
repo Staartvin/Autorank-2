@@ -122,7 +122,7 @@ public class CompleteCommand implements CommandExecutor {
 						(completionID - 1), player.getName())) {
 					player.sendMessage(ChatColor.RED
 							+ Lang.ALREADY_COMPLETED_REQUIREMENT
-									.getConfigValue(null));
+									.getConfigValue());
 					return true;
 				}
 

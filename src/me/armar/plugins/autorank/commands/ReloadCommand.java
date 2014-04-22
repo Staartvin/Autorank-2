@@ -26,7 +26,7 @@ public class ReloadCommand implements CommandExecutor {
 		}
 
 		AutorankTools.sendColoredMessage(sender,
-				Lang.AUTORANK_RELOADED.getConfigValue(null));
+				Lang.AUTORANK_RELOADED.getConfigValue());
 		plugin.reload();
 
 		return true;

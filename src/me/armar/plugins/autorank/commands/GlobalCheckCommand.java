@@ -25,7 +25,7 @@ public class GlobalCheckCommand implements CommandExecutor {
 		// This is a global check. It will not show you the database numbers
 		if (!plugin.getMySQLWrapper().isMySQLEnabled()) {
 			sender.sendMessage(ChatColor.RED
-					+ Lang.MYSQL_IS_NOT_ENABLED.getConfigValue(null));
+					+ Lang.MYSQL_IS_NOT_ENABLED.getConfigValue());
 			return true;
 		}
 
@@ -39,7 +39,8 @@ public class GlobalCheckCommand implements CommandExecutor {
 			@SuppressWarnings("deprecation")
 			final Player player = plugin.getServer().getPlayer(args[1]);
 			if (player == null) {
-				sender.sendMessage(Lang.PLAYER_NOT_ONLINE.getConfigValue(new String[] {args[1]}));
+				sender.sendMessage(Lang.PLAYER_NOT_ONLINE
+						.getConfigValue(new String[] { args[1] }));
 				return true;
 			} else {
 				if (player.hasPermission("autorank.exclude")) {
@@ -49,18 +50,18 @@ public class GlobalCheckCommand implements CommandExecutor {
 					return true;
 				}
 
-				int minutes = plugin.getPlaytimes()
-						.getGlobalTime(player.getUniqueId());
-				
+				int minutes = plugin.getPlaytimes().getGlobalTime(
+						player.getUniqueId());
+
 				if (minutes < 0) {
-					sender.sendMessage(Lang.PLAYER_IS_INVALID.getConfigValue(new String[] {args[1]}));
+					sender.sendMessage(Lang.PLAYER_IS_INVALID
+							.getConfigValue(new String[] { args[1] }));
 					return true;
 				}
-				
+
 				AutorankTools.sendColoredMessage(
 						sender,
-						args[1]
-								+ Lang.HAS_PLAYED_FOR.getConfigValue(null)
+						args[1] + " has played for "
 								+ AutorankTools.minutesToString(minutes)
 								+ " across all servers.");
 				// Do no check. Players can't be checked on global times (at the moment)
@@ -82,13 +83,14 @@ public class GlobalCheckCommand implements CommandExecutor {
 			AutorankTools.sendColoredMessage(
 					sender,
 					"You have played for "
-							+ AutorankTools.minutesToString(plugin.getPlaytimes()
-									.getGlobalTime(player.getUniqueId()))
+							+ AutorankTools.minutesToString(plugin
+									.getPlaytimes().getGlobalTime(
+											player.getUniqueId()))
 							+ " across all servers.");
 
 		} else {
 			AutorankTools.sendColoredMessage(sender,
-					Lang.CANNOT_CHECK_CONSOLE.getConfigValue(null));
+					Lang.CANNOT_CHECK_CONSOLE.getConfigValue());
 		}
 		return true;
 	}
