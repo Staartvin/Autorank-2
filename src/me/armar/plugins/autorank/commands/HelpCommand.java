@@ -30,7 +30,7 @@ public class HelpCommand implements CommandExecutor {
 			} catch (final Exception e) {
 				sender.sendMessage(ChatColor.RED
 						+ Lang.INVALID_NUMBER
-								.getConfigValue(new String[] { args[1] }));
+								.getConfigValue(args[1]));
 				return true;
 			}
 			showHelpPages(sender, page);

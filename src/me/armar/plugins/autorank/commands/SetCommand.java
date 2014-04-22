@@ -54,14 +54,14 @@ public class SetCommand implements CommandExecutor {
 			plugin.getPlaytimes().setLocalTime(UUIDManager.getUUIDFromPlayer(args[1]), value);
 			AutorankTools.sendColoredMessage(
 					sender,
-					Lang.PLAYTIME_CHANGED.getConfigValue(new String[] {
-							args[1], value + " minutes" }));
+					Lang.PLAYTIME_CHANGED.getConfigValue(
+							args[1], value + " minutes"));
 		} else {
 			AutorankTools
 					.sendColoredMessage(
 							sender,
 							Lang.INVALID_FORMAT
-									.getConfigValue(new String[] { "/ar set [player] [value]" }));
+									.getConfigValue("/ar set [player] [value]" ));
 		}
 
 		return true;

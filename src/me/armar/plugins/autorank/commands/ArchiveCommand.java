@@ -38,7 +38,7 @@ public class ArchiveCommand implements CommandExecutor {
 		if (rate <= 0) {
 			sender.sendMessage(ChatColor.RED
 					+ Lang.INVALID_FORMAT
-							.getConfigValue(new String[] { "/ar archive 10d/10h/10m" }));
+							.getConfigValue("/ar archive 10d/10h/10m"));
 			return true;
 		}
 

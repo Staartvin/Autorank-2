@@ -130,8 +130,7 @@ public class CompleteCommand implements CommandExecutor {
 					// Player meets requirement
 					player.sendMessage(ChatColor.GREEN
 							+ Lang.SUCCESSFULLY_COMPLETED_REQUIREMENT
-									.getConfigValue(new String[] { completionID
-											+ "" }));
+									.getConfigValue(completionID + ""));
 					player.sendMessage(ChatColor.AQUA + req.getDescription());
 
 					// Run results
@@ -145,8 +144,7 @@ public class CompleteCommand implements CommandExecutor {
 					// player does not meet requirements
 					player.sendMessage(ChatColor.RED
 							+ Lang.DO_NOT_MEET_REQUIREMENTS_FOR
-									.getConfigValue(new String[] { completionID
-											+ "" }));
+									.getConfigValue(completionID + ""));
 					player.sendMessage(ChatColor.AQUA + req.getDescription());
 					player.sendMessage(ChatColor.GREEN + "Current: "
 							+ ChatColor.GOLD + req.getProgress(player));

@@ -47,7 +47,7 @@ public class CheckCommand implements CommandExecutor {
 
 				if (time <= 0) {
 					sender.sendMessage(Lang.PLAYER_IS_INVALID
-							.getConfigValue(new String[] { args[1] }));
+							.getConfigValue(args[1]));
 					return true;
 				}
 
@@ -58,7 +58,7 @@ public class CheckCommand implements CommandExecutor {
 				if (AutorankTools.isExcluded(player)) {
 					sender.sendMessage(ChatColor.RED
 							+ Lang.PLAYER_IS_EXCLUDED
-									.getConfigValue(new String[] { args[1] }));
+									.getConfigValue(args[1]));
 					return true;
 				}
 				check(sender, player);
@@ -72,7 +72,7 @@ public class CheckCommand implements CommandExecutor {
 			if (AutorankTools.isExcluded((Player) sender)) {
 				sender.sendMessage(ChatColor.RED
 						+ Lang.PLAYER_IS_EXCLUDED
-								.getConfigValue(new String[] { sender.getName() }));
+								.getConfigValue(sender.getName()));
 				return true;
 			}
 			final Player player = (Player) sender;
@@ -263,7 +263,7 @@ public class CheckCommand implements CommandExecutor {
 			}
 			final String reqMessage = rank.getRankTo() == null ? Lang.MEETS_ALL_REQUIREMENTS_WITHOUT_RANK_UP
 					.getConfigValue() : Lang.MEETS_ALL_REQUIREMENTS
-					.getConfigValue(new String[] { rank.getRankTo() });
+					.getConfigValue(rank.getRankTo());
 
 			if (meetsAllRequirements || onlyOptional) {
 

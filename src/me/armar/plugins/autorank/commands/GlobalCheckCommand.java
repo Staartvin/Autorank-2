@@ -40,13 +40,13 @@ public class GlobalCheckCommand implements CommandExecutor {
 			final Player player = plugin.getServer().getPlayer(args[1]);
 			if (player == null) {
 				sender.sendMessage(Lang.PLAYER_NOT_ONLINE
-						.getConfigValue(new String[] { args[1] }));
+						.getConfigValue(args[1]));
 				return true;
 			} else {
 				if (player.hasPermission("autorank.exclude")) {
 					sender.sendMessage(ChatColor.RED
 							+ Lang.PLAYER_IS_EXCLUDED
-									.getConfigValue(new String[] { args[1] }));
+									.getConfigValue(args[1]));
 					return true;
 				}
 
@@ -55,7 +55,7 @@ public class GlobalCheckCommand implements CommandExecutor {
 
 				if (minutes < 0) {
 					sender.sendMessage(Lang.PLAYER_IS_INVALID
-							.getConfigValue(new String[] { args[1] }));
+							.getConfigValue(args[1]));
 					return true;
 				}
 
@@ -76,7 +76,7 @@ public class GlobalCheckCommand implements CommandExecutor {
 			if (sender.hasPermission("autorank.exclude")) {
 				sender.sendMessage(ChatColor.RED
 						+ Lang.PLAYER_IS_EXCLUDED
-								.getConfigValue(new String[] { sender.getName() }));
+								.getConfigValue(sender.getName()));
 				return true;
 			}
 			final Player player = (Player) sender;

@@ -55,14 +55,14 @@ public class RemoveCommand implements CommandExecutor {
 			plugin.getPlaytimes().setLocalTime(uuid, value);
 			AutorankTools.sendColoredMessage(
 					sender,
-					Lang.PLAYTIME_CHANGED.getConfigValue(new String[] {
-							args[1], value + "" }));
+					Lang.PLAYTIME_CHANGED.getConfigValue(
+							args[1], value + ""));
 		} else {
 			AutorankTools
 					.sendColoredMessage(
 							sender,
 							Lang.INVALID_FORMAT
-									.getConfigValue(new String[] { "/ar remove [player] [value]" }));
+									.getConfigValue("/ar remove [player] [value]"));
 		}
 
 		return true;

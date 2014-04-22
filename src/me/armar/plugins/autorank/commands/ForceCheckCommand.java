@@ -1,6 +1,7 @@
 package me.armar.plugins.autorank.commands;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
 
 import org.bukkit.ChatColor;
@@ -37,14 +38,12 @@ public class ForceCheckCommand implements CommandExecutor {
 		final Player targetPlayer = plugin.getServer().getPlayer(target);
 
 		if (targetPlayer == null) {
-			sender.sendMessage(ChatColor.RED + "Player " + target
-					+ " is not online!");
+			sender.sendMessage(Lang.PLAYER_NOT_ONLINE.getConfigValue(target));
 			return true;
 		}
 
 		if (AutorankTools.isExcluded(targetPlayer)) {
-			sender.sendMessage(ChatColor.RED
-					+ "This player is excluded from ranking!");
+			sender.sendMessage(Lang.PLAYER_IS_EXCLUDED.getConfigValue(targetPlayer.getName()));
 			return true;
 		}
 

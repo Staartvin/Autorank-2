@@ -26,7 +26,7 @@ public class AddCommand implements CommandExecutor {
 		if (!plugin.getCommandsManager().hasPermission("autorank.add", sender)) {
 			return true;
 		}
-		
+
 		UUID uuid = UUIDManager.getUUIDFromPlayer(args[1]);
 
 		int value = -1;
@@ -52,16 +52,14 @@ public class AddCommand implements CommandExecutor {
 
 		if (value >= 0) {
 			plugin.getPlaytimes().setLocalTime(uuid, value);
-			AutorankTools.sendColoredMessage(
-					sender,
-					Lang.PLAYTIME_CHANGED.getConfigValue(new String[] {
-							args[1], value + "" }));
+			AutorankTools.sendColoredMessage(sender,
+					Lang.PLAYTIME_CHANGED.getConfigValue(args[1], value + ""));
 		} else {
 			AutorankTools
 					.sendColoredMessage(
 							sender,
 							Lang.INVALID_FORMAT
-									.getConfigValue(new String[] { "/ar add [player] [value]" }));
+									.getConfigValue("/ar add [player] [value]"));
 		}
 
 		return true;
