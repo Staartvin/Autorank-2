@@ -106,6 +106,7 @@ ranks:
 #       worldguard region: TestRegion (Player has to be in a certain WorldGuard region) (requires WorldGuard)
 #       mcmmo skill level: 100;mining (Player has to have at least level 100 in mining) (requires McMMO)
 #       mcmmo power level: 100 (Player has to have at least power level 100) (requires McMMO)
+#       permission: i.need.a.permission (Player has to have this permission)
 #
 #   results:
 #       rank change: new-rank
