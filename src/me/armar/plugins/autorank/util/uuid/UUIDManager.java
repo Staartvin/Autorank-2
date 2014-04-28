@@ -109,7 +109,7 @@ public class UUIDManager {
 
 		if (fetcherThread.isAlive()) {
 			try {
-				fetcherThread.join(1000);
+				fetcherThread.join();
 			} catch (final InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -219,7 +219,7 @@ public class UUIDManager {
 
 		if (fetcherThread.isAlive()) {
 			try {
-				fetcherThread.join(1000);
+				fetcherThread.join();
 			} catch (final InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -266,13 +266,13 @@ public class UUIDManager {
 			return null;
 
 		// Search case insensitive
-		for (Entry<UUID, String> entry : players.entrySet()) {
-			if (entry.getKey().toString().equals(uuid.toString())) {
-				return entry.getValue();
-			}
-		}
-
-		return null;
+		//for (Entry<UUID, String> entry : players.entrySet()) {
+		//	if (entry.getKey().toString().equals(uuid.toString())) {
+		//		return entry.getValue();
+		//	}
+		//}
+		
+		return players.get(uuid);
 	}
 
 	/**
