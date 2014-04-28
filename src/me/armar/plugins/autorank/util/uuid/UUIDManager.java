@@ -301,6 +301,10 @@ public class UUIDManager {
 
 		long lastCacheTime = getLastCached(playerName);
 
+		if (lastCacheTime <= 0) {
+			return true;
+		}
+		
 		long currentTime = System.currentTimeMillis();
 
 		long lifeTime = currentTime - lastCacheTime;
