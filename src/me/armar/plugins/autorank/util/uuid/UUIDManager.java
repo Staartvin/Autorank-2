@@ -299,7 +299,7 @@ public class UUIDManager {
 				|| !isCachedUUID(playerName))
 			return true;
 
-		long lastCacheTime = lastCached.get(playerName);
+		long lastCacheTime = getLastCached(playerName);
 
 		long currentTime = System.currentTimeMillis();
 
