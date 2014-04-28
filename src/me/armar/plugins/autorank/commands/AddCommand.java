@@ -28,6 +28,11 @@ public class AddCommand implements CommandExecutor {
 		}
 
 		UUID uuid = UUIDManager.getUUIDFromPlayer(args[1]);
+		
+		if (uuid == null) {
+			sender.sendMessage(Lang.UNKNOWN_PLAYER.getConfigValue(args[1]));
+			return true;
+		}
 
 		int value = -1;
 
@@ -49,7 +54,9 @@ public class AddCommand implements CommandExecutor {
 				value += plugin.getPlaytimes().getLocalTime(uuid);
 			}
 		}
-
+		
+		
+		
 		if (value >= 0) {
 			plugin.getPlaytimes().setLocalTime(uuid, value);
 			AutorankTools.sendColoredMessage(sender,
