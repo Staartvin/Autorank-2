@@ -78,6 +78,7 @@ public class Leaderboard {
 		for (int i = 0; i < leaderboardLength && itr.hasNext(); i++) {
 			final Entry<String, Integer> entry = itr.next();
 			final String name = entry.getKey();
+			
 			Integer time = entry.getValue().intValue();
 
 			String message = layout.replaceAll("&p", name);
@@ -112,7 +113,7 @@ public class Leaderboard {
 
 		for (int i = 0; i < playerNames.size(); i++) {
 			String playerName = playerNames.get(i);
-
+			
 			map.put(playerName, plugin.getPlaytimes()
 					.getLocalTime(uuids.get(i)));
 		}
