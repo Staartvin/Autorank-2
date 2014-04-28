@@ -104,7 +104,7 @@ public class Autorank extends JavaPlugin {
 				null, "Simple config"));
 		setAdvancedConfig(new SimpleYamlConfiguration(this,
 				"AdvancedConfig.yml", null, "Advanced config"));
-		
+
 		// Create warning manager
 		setWarningManager(new WarningManager());
 
@@ -138,7 +138,7 @@ public class Autorank extends JavaPlugin {
 
 		// Create playtime class
 		setPlaytimes(new Playtimes(this));
-		
+
 		// Convert data folder
 		playtimes.convertToUUIDStorage();
 
@@ -199,14 +199,15 @@ public class Autorank extends JavaPlugin {
 
 		// Load requirements and results per group from config
 		playerChecker.initialiseFromConfigs();
-		
+
 		// Load again after 5 seconds so custom commands can be listed
-		getServer().getScheduler().runTaskLaterAsynchronously(this, new Runnable() {
-			public void run() {
-				
-				getPlayerChecker().initialiseFromConfigs();
-			}
-		}, 100);
+		getServer().getScheduler().runTaskLaterAsynchronously(this,
+				new Runnable() {
+					public void run() {
+
+						getPlayerChecker().initialiseFromConfigs();
+					}
+				}, 100);
 
 		// Register command
 		getCommand("autorank").setExecutor(getCommandsManager());
@@ -255,22 +256,45 @@ public class Autorank extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		setLeaderboard(null);
+
+		// Make sure all tasks are cancelled after shutdown. This seems obvious, but when a player /reloads, the server creates an instance of the plugin which causes duplicate tasks to run. 
+		getServer().getScheduler().cancelTasks(this);
 
 		playtimes.save();
 
 		setPlaytimes(null);
 
+		setWarningManager(null);
+
+		setLanguageHandler(null);
+
+		setLeaderboard(null);
+
+		setAddonManager(null);
+
+		setDebugger(null);
+
+		setCommandsManager(null);
+
+		setValidateHandler(null);
+
 		setPlayerChecker(null);
+
+		setPermPlugHandler(null);
+
+		setDependencyManager(null);
+
+		setMySQLWrapper(null);
+
+		setUpdateHandler(null);
+
+		setConfigHandler(null);
+
+		setRequirementHandler(null);
 
 		setSimpleConfig(null);
 
 		setAdvancedConfig(null);
-
-		setWarningManager(null);
-
-		// Make sure all tasks are cancelled after shutdown. This seems obvious, but when a player /reloads, the server creates an instance of the plugin which causes duplicate tasks to run. 
-		getServer().getScheduler().cancelTasks(this);
 
 		getLogger().info(
 				String.format("Autorank %s has been disabled!",
