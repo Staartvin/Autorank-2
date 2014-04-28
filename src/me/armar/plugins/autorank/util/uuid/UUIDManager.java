@@ -265,7 +265,14 @@ public class UUIDManager {
 		if (players.isEmpty())
 			return null;
 
-		return players.get(uuid);
+		// Search case insensitive
+		for (Entry<UUID, String> entry : players.entrySet()) {
+			if (entry.getKey().toString().equals(uuid.toString())) {
+				return entry.getValue();
+			}
+		}
+
+		return null;
 	}
 
 	/**
@@ -289,22 +296,29 @@ public class UUIDManager {
 			return null;
 		}
 
-		return uuids.get(playerName);
+		// Search case insensitive
+		for (Entry<String, UUID> entry : uuids.entrySet()) {
+			if (entry.getKey().equalsIgnoreCase(playerName)) {
+				return entry.getValue();
+			}
+		}
+
+		return null;
 	}
 
 	private static boolean shouldUpdateValue(String playerName) {
 
 		// Incorrectly cached, so cache now.
-		if (!isLastCached(playerName)
-				|| !isCachedUUID(playerName))
+		if (!isLastCached(playerName) || !isCachedUUID(playerName))
 			return true;
 
 		long lastCacheTime = getLastCached(playerName);
 
+		// No cache time
 		if (lastCacheTime <= 0) {
 			return true;
 		}
-		
+
 		long currentTime = System.currentTimeMillis();
 
 		long lifeTime = currentTime - lastCacheTime;
@@ -329,8 +343,9 @@ public class UUIDManager {
 				break;
 			}
 		}
-		
-		if (!cachedUUIDs.containsKey(playerName)) return null;
+
+		if (!cachedUUIDs.containsKey(playerName))
+			return null;
 
 		// Grab UUID
 		return cachedUUIDs.get(playerName);
@@ -348,28 +363,30 @@ public class UUIDManager {
 				break;
 			}
 		}
-		
-		if (!lastCached.containsKey(playerName)) return -1;
+
+		if (!lastCached.containsKey(playerName))
+			return -1;
 
 		// Grab last changed
 		return lastCached.get(playerName);
 	}
-	
+
 	private static boolean isCachedUUID(String playerName) {
 		return getCachedUUID(playerName) != null;
 	}
-	
+
 	private static boolean isLastCached(String playerName) {
 		return getLastCached(playerName) > 0;
 	}
-	
+
 	public static void addCachedPlayer(Player player) {
 		// Do not update if we still have one that is valid
-		if (!shouldUpdateValue(player.getName())) return; 
-		
+		if (!shouldUpdateValue(player.getName()))
+			return;
+
 		addCachedPlayer(player.getName(), player.getUniqueId());
 	}
-	
+
 	private static void addCachedPlayer(String playerName, UUID uuid) {
 		//System.out.print("Cached " + playerName + " with UUID " + uuid.toString());
 
@@ -377,5 +394,3 @@ public class UUIDManager {
 		lastCached.put(playerName, System.currentTimeMillis());
 	}
 }
-
-
