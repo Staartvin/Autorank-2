@@ -38,7 +38,7 @@ public class API {
 	 * <br>The time is always given in minutes.
 	 * <p>
 	 * 
-	 * @param UUID uuid to get the time for
+	 * @param player Player to get the time for
 	 * @return play time of a player. 0 when has never played before.
 	 */
 	public int getTimeOfPlayer(Player player) {

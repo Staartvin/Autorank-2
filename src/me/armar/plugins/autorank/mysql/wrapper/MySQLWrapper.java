@@ -182,7 +182,7 @@ public class MySQLWrapper {
 	/**
 	 * Get the cached value of the global time.
 	 * 
-	 * @param playerName Name of the player
+	 * @param uuid UUID to get the time for
 	 * @return cached global time or -1 if nothing was cached.
 	 */
 	public Integer getCachedGlobalTime(UUID uuid) {

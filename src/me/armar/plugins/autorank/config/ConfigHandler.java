@@ -173,7 +173,7 @@ public class ConfigHandler {
 	/**
 	 * Get the plugin that is used to get the time a player played on this server.
 	 * <br>This is only accounted for the local time. The global time is still calculated by Autorank.
-	 * @return 
+	 * @return {@link me.armar.plugins.autorank.hooks.DependencyManager.dependency} object that is used
 	 */
 	public dependency useTimeOf() {
 		
