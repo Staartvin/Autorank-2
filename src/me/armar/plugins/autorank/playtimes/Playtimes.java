@@ -52,18 +52,20 @@ public class Playtimes {
 
 		timePlugin = plugin.getConfigHandler().useTimeOf();
 	}
-	
+
 	/**
 	 * Returns playtime on this particular server
 	 * It reads from the local data.yml
+	 * 
 	 * @param uuid UUID to get the time for
 	 * @return play time of that account or -1 if not found.
 	 */
 	public int getLocalTime(UUID uuid) {
-		if (uuid == null) return -1;
+		if (uuid == null)
+			return -1;
 		return data.getInt(uuid.toString(), 0);
 	}
-	
+
 	/**
 	 * Get the time of a player. <br>
 	 * This depends on what plugin is used to get the time from.
@@ -86,12 +88,12 @@ public class Playtimes {
 						.getDependency(dependency.STATS)).getTotalPlayTime(
 						playerName, null);
 			} else {
-				
+
 				uuid = UUIDManager.getUUIDFromPlayer(playerName);
-				
+
 				if (uuid == null)
 					return playTime;
-				
+
 				// Stats not found, using Autorank's system.
 				playTime = data.getInt(uuid.toString(), 0);
 			}
@@ -101,7 +103,7 @@ public class Playtimes {
 		} else {
 
 			uuid = UUIDManager.getUUIDFromPlayer(playerName);
-			
+
 			if (uuid == null)
 				return playTime;
 
@@ -112,7 +114,6 @@ public class Playtimes {
 		return playTime;
 	}
 
-	
 	/**
 	 * Returns total playtime across all servers
 	 * (Multiple servers write to 1 database and get the total playtime from
@@ -122,20 +123,20 @@ public class Playtimes {
 	 * @return Global playtime across all servers or -1 if no time was found
 	 */
 	public int getGlobalTime(UUID uuid) {
-		if (uuid == null) return -1;
+		if (uuid == null)
+			return -1;
 		return plugin.getMySQLWrapper().getDatabaseTime(uuid);
 	}
 
 	public void importData() {
 		data.reload();
 	}
-	
+
 	public void setLocalTime(UUID uuid, int time) {
 		data.set(uuid.toString(), time);
 	}
-	
-	public void setGlobalTime(UUID uuid, final int time)
-			throws SQLException {
+
+	public void setGlobalTime(UUID uuid, final int time) throws SQLException {
 		// Check for MySQL
 		if (!plugin.getMySQLWrapper().isMySQLEnabled()) {
 			throw new SQLException(
@@ -144,7 +145,7 @@ public class Playtimes {
 
 		plugin.getMySQLWrapper().setGlobalTime(uuid, time);
 	}
-	
+
 	public void modifyLocalTime(UUID uuid, final int timeDifference)
 			throws IllegalArgumentException {
 
@@ -154,7 +155,7 @@ public class Playtimes {
 			setLocalTime(uuid, time + timeDifference);
 		}
 	}
-	
+
 	public void modifyGlobalTime(UUID uuid, final int timeDifference)
 			throws IllegalArgumentException {
 		// Check for MySQL
@@ -206,8 +207,7 @@ public class Playtimes {
 
 		List<String> playerNames = new ArrayList<String>();
 
-		Map<UUID, String> foundPlayers = UUIDManager.getPlayers(
-				uuids);
+		Map<UUID, String> foundPlayers = UUIDManager.getPlayers(uuids);
 
 		for (Entry<UUID, String> entry : foundPlayers.entrySet()) {
 			playerNames.add(entry.getValue());
@@ -231,7 +231,7 @@ public class Playtimes {
 		// Keep a counter of archived items
 		int counter = 0;
 
-		for (UUID uuid: getUUIDKeys()) {
+		for (UUID uuid : getUUIDKeys()) {
 			int time = this.getLocalTime(uuid);
 
 			// Found a record to be archived
@@ -254,28 +254,36 @@ public class Playtimes {
 	 */
 	public void convertToUUIDStorage() {
 
-		Set<String> records = data.getKeys(false);
+		final Set<String> records = data.getKeys(false);
 
-		for (String record : records) {
-			// UUID contains dashes and playernames do not, so if it contains dashes
-			// it is probably a UUID and thus we should skip it.
-			if (record.contains("-"))
-				continue;
+		// Run async to prevent load-time problems.
+		plugin.getServer().getScheduler()
+				.runTaskAsynchronously(plugin, new Runnable() {
 
-			UUID uuid = UUIDManager.getUUIDFromPlayer(record);
+					public void run() {
+						for (String record : records) {
+							// UUID contains dashes and playernames do not, so if it contains dashes
+							// it is probably a UUID and thus we should skip it.
+							if (record.contains("-"))
+								continue;
 
-			// Could not convert this name to uuid
-			if (uuid == null)
-				continue;
+							UUID uuid = UUIDManager.getUUIDFromPlayer(record);
 
-			// Get the time that player has played.
-			int minutesPlayed = data.getInt(record);
+							// Could not convert this name to uuid
+							if (uuid == null)
+								continue;
 
-			// Remove the data from the file.
-			data.set(record, null);
+							// Get the time that player has played.
+							int minutesPlayed = data.getInt(record);
 
-			// Add new data (in UUID form to the file)
-			data.set(uuid.toString(), minutesPlayed);
-		}
+							// Remove the data from the file.
+							data.set(record, null);
+
+							// Add new data (in UUID form to the file)
+							data.set(uuid.toString(), minutesPlayed);
+						}
+					}
+
+				});
 	}
 }

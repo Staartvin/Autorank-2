@@ -45,12 +45,12 @@ public class RequirementHandler {
 		reloadConfig();
 		saveConfig();
 		loadConfig();
-		
+
 		// Convert old format to new UUID storage format
 		convertNamesToUUIDs();
 
-		plugin.getLogger()
-				.info("Playerdata file loaded. Keeping track of player progress!");
+		plugin.getLogger().info(
+				"Playerdata file loaded. Keeping track of player progress!");
 	}
 
 	public void reloadConfig() {
@@ -102,7 +102,7 @@ public class RequirementHandler {
 	public void setPlayerProgress(final String playerName,
 			final List<Integer> progress) {
 		UUID uuid = UUIDManager.getUUIDFromPlayer(playerName);
-		
+
 		config.set(uuid.toString() + ".progress", progress);
 
 		saveConfig();
@@ -111,7 +111,7 @@ public class RequirementHandler {
 	@SuppressWarnings("unchecked")
 	public List<Integer> getProgress(final String playerName) {
 		UUID uuid = UUIDManager.getUUIDFromPlayer(playerName);
-		
+
 		return (List<Integer>) config.getList(uuid.toString() + ".progress",
 				new ArrayList<Integer>());
 	}
@@ -129,7 +129,7 @@ public class RequirementHandler {
 
 	public String getLastKnownGroup(final String playerName) {
 		UUID uuid = UUIDManager.getUUIDFromPlayer(playerName);
-		
+
 		return config.getString(uuid.toString() + ".last group");
 	}
 
@@ -168,28 +168,41 @@ public class RequirementHandler {
 			realResult.applyResult(player);
 		}
 	}
-	
+
 	public void convertNamesToUUIDs() {
-		for (String name: getConfig().getKeys(false)) {
 
-			// Probably UUID because names don't have dashes.
-			if (name.contains("-")) continue;
-			
-			UUID uuid = UUIDManager.getUUIDFromPlayer(name);
-			
-			if (uuid == null) continue;
-			
-			List<Integer> progress = config.getIntegerList(name + ".progress");
-			String lastKnownGroup = config.getString(name + ".last group");
-			
-			// Remove name
-			config.set(name, null);
+		// Run async to prevent problems.
+		plugin.getServer().getScheduler()
+				.runTaskAsynchronously(plugin, new Runnable() {
 
-			// Replace name with UUID
-			config.set(uuid.toString() + ".progress", progress);
-			config.set(uuid.toString() + ".last group", lastKnownGroup);
-		}
-		
-		saveConfig();
+					public void run() {
+						for (String name : getConfig().getKeys(false)) {
+
+							// Probably UUID because names don't have dashes.
+							if (name.contains("-"))
+								continue;
+
+							UUID uuid = UUIDManager.getUUIDFromPlayer(name);
+
+							if (uuid == null)
+								continue;
+
+							List<Integer> progress = config.getIntegerList(name
+									+ ".progress");
+							String lastKnownGroup = config.getString(name
+									+ ".last group");
+
+							// Remove name
+							config.set(name, null);
+
+							// Replace name with UUID
+							config.set(uuid.toString() + ".progress", progress);
+							config.set(uuid.toString() + ".last group",
+									lastKnownGroup);
+						}
+
+						saveConfig();
+					}
+				});
 	}
 }
