@@ -274,7 +274,7 @@ public class Playtimes {
 								continue;
 
 							// Get the time that player has played.
-							int minutesPlayed = data.getInt(record);
+							int minutesPlayed = data.getInt(record, 0);
 
 							// Remove the data from the file.
 							data.set(record, null);
