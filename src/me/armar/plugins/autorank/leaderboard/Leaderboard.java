@@ -57,12 +57,19 @@ public class Leaderboard {
 			plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
 				public void run() {
 					updateLeaderboard();
+					
+					// Send them afterwards, not at the same time.
+					for (final String msg : messages) {
+						AutorankTools.sendColoredMessage(sender, msg);
+					}
 				}
 			});
+		} else {
+			for (final String msg : messages) {
+				AutorankTools.sendColoredMessage(sender, msg);
+			}
 		}
-		for (final String msg : messages) {
-			AutorankTools.sendColoredMessage(sender, msg);
-		}
+		
 	}
 
 	private void updateLeaderboard() {
