@@ -45,6 +45,11 @@ public class Leaderboard {
 		// Run async because it uses UUID lookup
 		plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
 			public void run() {
+				
+				
+				// Convert first
+				plugin.getPlaytimes().convertToUUIDStorage();
+				
 				updateLeaderboard();
 			}
 		});
