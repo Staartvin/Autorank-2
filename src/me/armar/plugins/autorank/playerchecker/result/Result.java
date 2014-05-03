@@ -20,9 +20,9 @@ public abstract class Result {
 
 	public abstract boolean applyResult(Player player);
 
-	public boolean applyResult(final Player player, final String group) {
+	/*public boolean applyResult(final Player player, final String group) {
 		return applyResult(player);
-	}
+	}*/
 
 	@Override
 	public String toString() {

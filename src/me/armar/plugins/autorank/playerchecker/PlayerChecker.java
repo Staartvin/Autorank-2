@@ -82,7 +82,7 @@ public class PlayerChecker {
 			final List<RankChange> changes = rankChanges.get(group);
 			if (changes != null) {
 				for (final RankChange change : changes) {
-					if (change.applyChange(player, group)) {
+					if (change.applyChange(player)) {
 						result = true;
 					}
 				}

@@ -35,10 +35,10 @@ public class RankChangeResult extends Result {
 	}
 
 	@Override
-	public boolean applyResult(final Player player, final String group) {
+	public boolean applyResult(final Player player) {
 		String oldrank = null;
 		if (from == null) {
-			oldrank = group;
+			return false;
 		} else {
 			oldrank = from;
 		}
@@ -71,12 +71,6 @@ public class RankChangeResult extends Result {
 
 		return this.getAutorank().getPermPlugHandler().getPermissionPlugin()
 				.replaceGroup(player, world, oldrank, to);
-	}
-
-	@Override
-	public boolean applyResult(final Player player) {
-		return this.getAutorank().getPermPlugHandler().getPermissionPlugin()
-				.replaceGroup(player, world, from, to);
 	}
 
 }

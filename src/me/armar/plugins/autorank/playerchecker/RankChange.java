@@ -128,13 +128,13 @@ public class RankChange {
 		return failed;
 	}
 
-	public boolean applyChange(final Player player, final String group) {
+	public boolean applyChange(final Player player) {
 		boolean result = true;
 
 		if (checkRequirements(player)) {
 			for (final Result r : res) {
 				if (r != null)
-					if (!r.applyResult(player, group))
+					if (!r.applyResult(player))
 						result = false;
 			}
 		} else {
