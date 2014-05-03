@@ -41,13 +41,14 @@ public class Playtimes {
 				"Data");
 		this.save = new PlaytimesSave(this);
 		this.update = new PlaytimesUpdate(this, plugin);
-
-		plugin.getServer().getScheduler()
-				.runTaskTimer(plugin, save, 12000, 12000);
-		plugin.getServer().getScheduler().runTaskTimer(plugin, save, 600, 600);
+		
+		// Run save task every 30 seconds
+		plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, save, 600, 600);
+		
+		// Run update timer every x minutes
 		plugin.getServer()
 				.getScheduler()
-				.runTaskTimer(plugin, update, INTERVAL_MINUTES * 20 * 60,
+				.runTaskTimerAsynchronously(plugin, update, INTERVAL_MINUTES * 20 * 60,
 						INTERVAL_MINUTES * 20 * 60);
 
 		timePlugin = plugin.getConfigHandler().useTimeOf();
