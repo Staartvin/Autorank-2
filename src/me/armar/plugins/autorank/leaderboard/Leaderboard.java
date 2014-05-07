@@ -88,16 +88,20 @@ public class Leaderboard {
 	private void updateLeaderboard() {
 		lastUpdatedTime = System.currentTimeMillis();
 
-		final Map<String, Integer> sortedPlaytimes = getSortedPlaytimes();
-		final Iterator<Entry<String, Integer>> itr = sortedPlaytimes.entrySet()
+		final Map<UUID, Integer> sortedPlaytimes = getSortedPlaytimes();
+		final Iterator<Entry<UUID, Integer>> itr = sortedPlaytimes.entrySet()
 				.iterator();
 
 		final List<String> stringList = new ArrayList<String>();
 		stringList.add("-------- Autorank Leaderboard --------");
 
 		for (int i = 0; i < leaderboardLength && itr.hasNext(); i++) {
-			final Entry<String, Integer> entry = itr.next();
-			final String name = entry.getKey();
+			final Entry<UUID, Integer> entry = itr.next();
+			
+			final UUID uuid = entry.getKey();
+			
+			// Grab playername from here so it doesn't load all player names ever.
+			final String name = UUIDManager.getPlayerFromUUID(uuid);
 
 			Integer time = entry.getValue().intValue();
 
@@ -120,43 +124,38 @@ public class Leaderboard {
 		stringList.add("------------------------------------");
 
 		messages = stringList.toArray(new String[stringList.size()]);
+		
+		//System.out.print("Took: " + (System.currentTimeMillis() - lastUpdatedTime)  + " ms."); 
 	}
 
-	private Map<String, Integer> getSortedPlaytimes() {
-		final HashMap<String, Integer> unsortedMap = new HashMap<String, Integer>();
-
-		List<String> playerNames = plugin.getPlaytimes().getPlayerKeys();
-
+	private Map<UUID, Integer> getSortedPlaytimes() {
+		
+		List<UUID> uuids = plugin.getPlaytimes().getUUIDKeys();
+		
+		HashMap<UUID, Integer> times = new HashMap<UUID, Integer>();
+		
 		// Fill unsorted lists
-		for (int i = 0; i < playerNames.size(); i++) {
-			String playerName = playerNames.get(i);
-
-			UUID uuid = UUIDManager.getUUIDFromPlayer(playerName);
-
-			if (uuid == null)
-				continue;
-
-			unsortedMap.put(playerName, plugin.getPlaytimes()
-					.getLocalTime(uuid));
+		for (int i = 0; i < uuids.size(); i++) {
+			times.put(uuids.get(i), plugin.getPlaytimes().getLocalTime(uuids.get(i)));
 		}
-
+		
 		// Sort all values
-		final Map<String, Integer> sortedMap = sortByComparator(unsortedMap,
+		final Map<UUID, Integer> sortedMap = sortByComparator(times,
 				false);
 
 		return sortedMap;
 	}
 
-	private static Map<String, Integer> sortByComparator(
-			Map<String, Integer> unsortMap, final boolean order) {
+	private static Map<UUID, Integer> sortByComparator(
+			Map<UUID, Integer> unsortMap, final boolean order) {
 
-		List<Entry<String, Integer>> list = new LinkedList<Entry<String, Integer>>(
+		List<Entry<UUID, Integer>> list = new LinkedList<Entry<UUID, Integer>>(
 				unsortMap.entrySet());
 
 		// Sorting the list based on values
-		Collections.sort(list, new Comparator<Entry<String, Integer>>() {
-			public int compare(Entry<String, Integer> o1,
-					Entry<String, Integer> o2) {
+		Collections.sort(list, new Comparator<Entry<UUID, Integer>>() {
+			public int compare(Entry<UUID, Integer> o1,
+					Entry<UUID, Integer> o2) {
 				if (order) {
 					return o1.getValue().compareTo(o2.getValue());
 				} else {
@@ -167,8 +166,8 @@ public class Leaderboard {
 		});
 
 		// Maintaining insertion order with the help of LinkedList
-		Map<String, Integer> sortedMap = new LinkedHashMap<String, Integer>();
-		for (Entry<String, Integer> entry : list) {
+		Map<UUID, Integer> sortedMap = new LinkedHashMap<UUID, Integer>();
+		for (Entry<UUID, Integer> entry : list) {
 			sortedMap.put(entry.getKey(), entry.getValue());
 		}
 
