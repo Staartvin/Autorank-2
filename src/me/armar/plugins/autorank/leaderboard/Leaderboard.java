@@ -46,40 +46,43 @@ public class Leaderboard {
 			leaderboardLength = advConfig.getInt("leaderboard length");
 			layout = advConfig.getString("leaderboard layout");
 		}
-		
+
 		// Run async because it uses UUID lookup
-		plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
-			public void run() {
-				
-				
-				// Convert first
-				plugin.getPlaytimes().convertToUUIDStorage();
-				
-				updateLeaderboard();
-			}
-		});
+		plugin.getServer().getScheduler()
+				.runTaskAsynchronously(plugin, new Runnable() {
+					public void run() {
+
+						// Convert first
+						plugin.getPlaytimes().convertToUUIDStorage();
+
+						updateLeaderboard();
+					}
+				});
 	}
 
 	public void sendLeaderboard(final CommandSender sender) {
-		if (System.currentTimeMillis() - lastUpdatedTime > 600000) {
+		if (System.currentTimeMillis() - lastUpdatedTime > 600000
+				|| messages == null) {
 			// Update leaderboard because it is not valid anymore.
 			// Run async because it uses UUID lookup
-			plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
-				public void run() {
-					updateLeaderboard();
-					
-					// Send them afterwards, not at the same time.
-					for (final String msg : messages) {
-						AutorankTools.sendColoredMessage(sender, msg);
-					}
-				}
-			});
+			plugin.getServer().getScheduler()
+					.runTaskAsynchronously(plugin, new Runnable() {
+						public void run() {
+							updateLeaderboard();
+
+							// Send them afterwards, not at the same time.
+							for (final String msg : messages) {
+								AutorankTools.sendColoredMessage(sender, msg);
+							}
+						}
+					});
 		} else {
+			// send them instantly
 			for (final String msg : messages) {
 				AutorankTools.sendColoredMessage(sender, msg);
 			}
 		}
-		
+
 	}
 
 	private void updateLeaderboard() {
@@ -95,7 +98,7 @@ public class Leaderboard {
 		for (int i = 0; i < leaderboardLength && itr.hasNext(); i++) {
 			final Entry<String, Integer> entry = itr.next();
 			final String name = entry.getKey();
-			
+
 			Integer time = entry.getValue().intValue();
 
 			String message = layout.replaceAll("&p", name);
@@ -127,52 +130,49 @@ public class Leaderboard {
 		// Fill unsorted lists
 		for (int i = 0; i < playerNames.size(); i++) {
 			String playerName = playerNames.get(i);
-			
+
 			UUID uuid = UUIDManager.getUUIDFromPlayer(playerName);
-			
-			if (uuid == null) continue;
-			
+
+			if (uuid == null)
+				continue;
+
 			unsortedMap.put(playerName, plugin.getPlaytimes()
 					.getLocalTime(uuid));
 		}
-		
+
 		// Sort all values
-		final Map<String, Integer> sortedMap = sortByComparator(unsortedMap, false);
-		
+		final Map<String, Integer> sortedMap = sortByComparator(unsortedMap,
+				false);
+
 		return sortedMap;
 	}
-	
-    private static Map<String, Integer> sortByComparator(Map<String, Integer> unsortMap, final boolean order)
-    {
 
-        List<Entry<String, Integer>> list = new LinkedList<Entry<String, Integer>>(unsortMap.entrySet());
+	private static Map<String, Integer> sortByComparator(
+			Map<String, Integer> unsortMap, final boolean order) {
 
-        // Sorting the list based on values
-        Collections.sort(list, new Comparator<Entry<String, Integer>>()
-        {
-            public int compare(Entry<String, Integer> o1,
-                    Entry<String, Integer> o2)
-            {
-                if (order)
-                {
-                    return o1.getValue().compareTo(o2.getValue());
-                }
-                else
-                {
-                    return o2.getValue().compareTo(o1.getValue());
+		List<Entry<String, Integer>> list = new LinkedList<Entry<String, Integer>>(
+				unsortMap.entrySet());
 
-                }
-            }
-        });
+		// Sorting the list based on values
+		Collections.sort(list, new Comparator<Entry<String, Integer>>() {
+			public int compare(Entry<String, Integer> o1,
+					Entry<String, Integer> o2) {
+				if (order) {
+					return o1.getValue().compareTo(o2.getValue());
+				} else {
+					return o2.getValue().compareTo(o1.getValue());
 
-        // Maintaining insertion order with the help of LinkedList
-        Map<String, Integer> sortedMap = new LinkedHashMap<String, Integer>();
-        for (Entry<String, Integer> entry : list)
-        {
-            sortedMap.put(entry.getKey(), entry.getValue());
-        }
+				}
+			}
+		});
 
-        return sortedMap;
-    }
+		// Maintaining insertion order with the help of LinkedList
+		Map<String, Integer> sortedMap = new LinkedHashMap<String, Integer>();
+		for (Entry<String, Integer> entry : list) {
+			sortedMap.put(entry.getKey(), entry.getValue());
+		}
+
+		return sortedMap;
+	}
 
 }
