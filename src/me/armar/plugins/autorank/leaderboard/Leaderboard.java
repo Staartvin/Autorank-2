@@ -15,6 +15,7 @@ import java.util.UUID;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
 import me.armar.plugins.autorank.util.AutorankTools;
+import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -121,15 +122,18 @@ public class Leaderboard {
 	private Map<String, Integer> getSortedPlaytimes() {
 		final HashMap<String, Integer> unsortedMap = new HashMap<String, Integer>();
 
-		List<UUID> uuids = plugin.getPlaytimes().getUUIDKeys();
 		List<String> playerNames = plugin.getPlaytimes().getPlayerKeys();
 
 		// Fill unsorted lists
 		for (int i = 0; i < playerNames.size(); i++) {
 			String playerName = playerNames.get(i);
 			
+			UUID uuid = UUIDManager.getUUIDFromPlayer(playerName);
+			
+			if (uuid == null) continue;
+			
 			unsortedMap.put(playerName, plugin.getPlaytimes()
-					.getLocalTime(uuids.get(i)));
+					.getLocalTime(uuid));
 		}
 		
 		// Sort all values
