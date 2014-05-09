@@ -8,191 +8,108 @@ import nl.lolmewn.stats.api.StatsAPI;
 import nl.lolmewn.stats.player.StatData;
 import nl.lolmewn.stats.player.StatsPlayer;
 
-import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.Plugin;
 
 /**
  * Handles all connections with Stats
  * <p>
- * Date created:  21:02:34
- * 15 mrt. 2014
+ * Date created: 21:02:34 15 mrt. 2014
+ * 
  * @author Staartvin
- *
+ * 
  */
 public class StatsAPIHandler implements DependencyHandler {
 
 	private final Autorank plugin;
 	private StatsAPI api;
 
-	private final String[] compatibleVersions = { "1.37" };
-
 	public StatsAPIHandler(final Autorank instance) {
 		plugin = instance;
 	}
 
-	/**
-	 * Check whether the given version of Stats is compatible with Autorank
-	 * 
-	 * @param version version of Stats that is running on this system.
-	 * @return true if compatible; false otherwise
-	 */
-	public boolean compatibleStatsVersion(final String version) {
-		for (final String v : compatibleVersions) {
-			if (version.contains(v)) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	public int getTotalBlocksBroken(final String playerName, final World world) {
+	public int getTotalBlocksBroken(final String playerName, String worldName) {
 		if (!isAvailable())
 			return 0;
-		
-		String statName = "Block break";
 
-		final StatsPlayer player = getStats(playerName);
-		StatData stat;
-
-		int value = 0;
-
-		if (world != null) {
-			// Do check for one world
-			stat = player.getStatData(api.getStat(statName), world.getName(), true);
-
-			for (final Object[] vars : stat.getAllVariables()) {
-				value += stat.getValue(vars);
-			}
+		if (worldName != null) {
+			return (int) Math.round(api.getTotalBlocksBroken(playerName, worldName));
 		} else {
-			// Do global check
-			for (final World w : plugin.getServer().getWorlds()) {
-				stat = player.getStatData(api.getStat(statName),
-						w.getName(), true);
-
-				for (final Object[] vars : stat.getAllVariables()) {
-					value += stat.getValue(vars);
-				}
-			}
+			return (int) Math.round(api.getTotalBlocksBroken(playerName));
 		}
-
-		return value;
 	}
 
-	public int getTotalBlocksPlaced(final String playerName, final World world) {
+	public int getTotalBlocksPlaced(final String playerName, String worldName) {
 		if (!isAvailable())
 			return 0;
-		
-		String statName = "Block place";
 
-		final StatsPlayer player = getStats(playerName);
-		StatData stat;
-
-		int value = 0;
-
-		if (world != null) {
-			// Do check for one world
-			stat = player.getStatData(api.getStat(statName), world.getName(), true);
-
-			for (final Object[] vars : stat.getAllVariables()) {
-				value += stat.getValue(vars);
-			}
+		if (worldName != null) {
+			return (int) Math.round(api.getTotalBlocksPlaced(playerName, worldName));
 		} else {
-			// Do global check
-			for (final World w : plugin.getServer().getWorlds()) {
-				stat = player.getStatData(api.getStat(statName),
-						w.getName(), true);
-
-				for (final Object[] vars : stat.getAllVariables()) {
-					value += stat.getValue(vars);
-				}
-			}
+			return (int) Math.round(api.getTotalBlocksPlaced(playerName));
 		}
-
-		return value;
 	}
 
-	public int getTotalPlayTime(final String playerName, final World world) {
+	public int getTotalPlayTime(final String playerName, String worldName) {
 		if (!isAvailable())
 			return 0;
-		
-		String statName = "Playtime";
-		
-		final StatsPlayer player = getStats(playerName);
-		StatData stat;
 
-		int value = 0;
-
-		if (world != null) {
-			// Do check for one world
-			stat = player.getStatData(api.getStat(statName), world.getName(), true);
-
-			for (final Object[] vars : stat.getAllVariables()) {
-				value += stat.getValue(vars);
-			}
+		if (worldName != null) {
+			return (int) Math.round(api.getPlaytime(playerName, worldName));
 		} else {
-			// Do global check
-			for (final World w : plugin.getServer().getWorlds()) {
-				stat = player.getStatData(api.getStat(statName),
-						w.getName(), true);
-
-				for (final Object[] vars : stat.getAllVariables()) {
-					value += stat.getValue(vars);
-				}
-			}
+			return (int) Math.round(api.getPlaytime(playerName));
 		}
-
-		return value;
 	}
 
-	public StatsPlayer getStats(final String player) {
-		return api.getStatsPlayer(player);
+	public StatsPlayer getStats(final String playerName) {
+		return api.getPlayer(playerName);
+	}
+
+	public Stat getStat(String name) {
+		return api.getStat(name);
 	}
 
 	/**
 	 * Get the stats of a player, a new stat will be created if it didn't exist
 	 * yet.
 	 * 
-	 * @param statType StatType to get from the player
-	 * @param player Player to get the stats of.
+	 * @param statName Name of the stat to get
+	 * @param playerName Player to get the stats of.
+	 * @param worldName World to check for.
 	 * @return Requested stat of the player
 	 */
-	public StatData getStatType(final Stat statType, final String player) {
-		final StatsPlayer sPlayer = getStats(player);
-		return sPlayer.getStatData(statType, false);
+	public StatData getStatType(String statName, final String playerName,
+			String worldName) {
+		final StatsPlayer sPlayer = getStats(playerName);
+
+		Stat stat = getStat(statName);
+
+		if (stat == null)
+			throw new IllegalArgumentException("Unknown stat '" + statName
+					+ "'!");
+
+		StatData data = null;
+
+		if (worldName != null) {
+			data = sPlayer.getStatData(stat, worldName, true);
+		} else {
+			data = sPlayer.getGlobalStatData(stat);
+		}
+
+		return data;
 	}
 
 	public int getNormalStat(final String playerName, final String statName,
-			final World world) {
+			String worldName) {
 		if (!isAvailable())
 			return 0;
-		
-		final StatsPlayer player = getStats(playerName);
-		StatData stat;
+
+		StatData stat = getStatType(statName, playerName, worldName);
 
 		int value = 0;
 
-		if (world != null) {
-			stat = player.getStatData(api.getStat(statName),
-					world.getName(), true);
-
-			for (final Object[] vars : stat.getAllVariables()) {
-				value += stat.getValue(vars);
-			}
-
-		} else {
-			// We want global (no specific world) so we loop over every world.
-
-			for (final World serverWorld : plugin.getServer().getWorlds()) {
-
-				stat = player.getStatData(api.getStat(statName),
-						serverWorld.getName(), true);
-
-				for (final Object[] vars : stat.getAllVariables()) {
-					value += stat.getValue(vars);
-				}
-			}
+		for (final Object[] vars : stat.getAllVariables()) {
+			value += stat.getValue(vars);
 		}
 
 		return value;
@@ -205,63 +122,36 @@ public class StatsAPIHandler implements DependencyHandler {
 	 * @param id Item ID to check for
 	 * @param damageValue Damage value to check for. (negative number to not
 	 *            skip check)
-	 * @param world World to check in. Null for global.
+	 * @param worldName World to check in. Null for global.
 	 * @param statType Either "Block break" or "Block place"
 	 * @return amount player placed/broke of a block
 	 */
 	public int getBlocksStat(final String playerName, final int id,
-			final int damageValue, final World world, final String statType) {
+			final int damageValue, String worldName, final String statType) {
 		if (!isAvailable())
 			return 0;
 
-		final StatsPlayer player = getStats(playerName);
-		StatData blockStat;
+		StatData blockStat = getStatType(statType, playerName, worldName);
 		int value = 0;
 		boolean checkDamageValue = false;
 
 		if (damageValue > 0) {
 			checkDamageValue = true;
 		}
-
-		// Implement world logic
-
-		if (world != null) {
-			blockStat = player.getStatData(api.getStatExact(statType),
-					world.getName(), true);
-
-			for (final Object[] vars : blockStat.getAllVariables()) {
-
-				if (checkDamageValue) {
-					// VAR 0 = blockID, VAR 1 = damageValue, VAR 2 = (1 = break, 0 = place)
-					if ((Integer) vars[0] == id
-							&& (Byte) vars[1] == damageValue) {
-						value += blockStat.getValue(vars);
-					}
-				} else {
-					if ((Integer) vars[0] == id) {
-						value += blockStat.getValue(vars);
-					}
+		
+		for (final Object[] vars : blockStat.getAllVariables()) {
+			
+			if (checkDamageValue) {
+				// VAR 0 = blockID, VAR 1 = damageValue, VAR 2 = (1 = break, 0 = place)
+				byte[] byteArray = (byte[]) vars[1];
+				
+				if ((Integer) vars[0] == id
+						&& Integer.parseInt(new String(byteArray)) == damageValue) {
+					value += blockStat.getValue(vars);
 				}
-			}
-		} else {
-			// We want global (no specific world) so we loop over every world.
-			for (final World serverWorld : plugin.getServer().getWorlds()) {
-				blockStat = player.getStatData(api.getStatExact(statType),
-						serverWorld.getName(), true);
-
-				for (final Object[] vars : blockStat.getAllVariables()) {
-
-					if (checkDamageValue) {
-						// VAR 0 = blockID, VAR 1 = damageValue, VAR 2 = (1 = break, 0 = place)
-						if ((Integer) vars[0] == id
-								&& (Byte) vars[1] == damageValue) {
-							value += blockStat.getValue(vars);
-						}
-					} else {
-						if ((Integer) vars[0] == id) {
-							value += blockStat.getValue(vars);
-						}
-					}
+			} else {
+				if ((Integer) vars[0] == id) {
+					value += blockStat.getValue(vars);
 				}
 			}
 		}
@@ -270,13 +160,14 @@ public class StatsAPIHandler implements DependencyHandler {
 	}
 
 	public int getTotalMobsKilled(final String playerName,
-			final String mobName, final World world) {
+			final String mobName, final String worldName) {
 		if (!isAvailable())
 			return 0;
 
-		final StatsPlayer player = getStats(playerName);
+		String statName = "Kill";
+		
+		StatData data = getStatType(statName, playerName, worldName);
 
-		StatData blockStat;
 		final EntityType mob = getEntityType(mobName);
 		boolean checkEntityType = false;
 		int value = 0;
@@ -285,87 +176,39 @@ public class StatsAPIHandler implements DependencyHandler {
 			checkEntityType = true;
 		}
 
-		// Implement world logic
+		for (final Object[] vars : data.getAllVariables()) {
 
-		if (world != null) {
-			blockStat = player.getStatData(api.getStatExact("Kill"),
-					world.getName(), true);
+			// var 0 is mob type
 
-			for (final Object[] vars : blockStat.getAllVariables()) {
-
-				// var 0 is mob type
-
-				if (checkEntityType) {
-					if (getEntityType(vars[0].toString()) != null
-							&& getEntityType(vars[0].toString()).equals(mob)) {
-						value += blockStat.getValue(vars);
-					}
-				} else {
-					value += blockStat.getValue(vars);
+			if (checkEntityType) {
+				if (getEntityType(vars[0].toString()) != null
+						&& getEntityType(vars[0].toString()).equals(mob)) {
+					value += data.getValue(vars);
 				}
-			}
-		} else {
-			// We want global (no specific world) so we loop over every world.
-			for (final World serverWorld : plugin.getServer().getWorlds()) {
-				blockStat = player.getStatData(api.getStatExact("Kill"),
-						serverWorld.getName(), true);
-
-				for (final Object[] vars : blockStat.getAllVariables()) {
-
-					// var 0 is mob type
-
-					if (checkEntityType) {
-						if (getEntityType(vars[0].toString()) != null
-								&& getEntityType(vars[0].toString())
-										.equals(mob)) {
-							value += blockStat.getValue(vars);
-						}
-					} else {
-						value += blockStat.getValue(vars);
-					}
-				}
+			} else {
+				value += data.getValue(vars);
 			}
 		}
-
+		
 		return value;
 	}
-	
-	public int getTotalBlocksMoved(String playerName, int type, World world) {
+
+	public int getTotalBlocksMoved(String playerName, int type, String worldName) {
 		if (!isAvailable())
 			return 0;
-		
-		final StatsPlayer player = getStats(playerName);
+
 		String statName = "Move";
-		StatData stat;
+		
+		StatData stat = getStatType(statName, playerName, worldName);
 
 		int value = 0;
 
-		if (world != null) {
-			stat = player.getStatData(api.getStat(statName),
-					world.getName(), true);
-
-			for (final Object[] vars : stat.getAllVariables()) {
-				if ((Integer) vars[0] == type) {
-					value += stat.getValue(vars);
-				}
-			}
-
-		} else {
-			// We want global (no specific world) so we loop over every world.
-
-			for (final World serverWorld : plugin.getServer().getWorlds()) {
-
-				stat = player.getStatData(api.getStat(statName),
-						serverWorld.getName(), true);
-
-				for (final Object[] vars : stat.getAllVariables()) {
-					if ((Integer) vars[0] == type) {
-						value += stat.getValue(vars);
-					}
-				}
+		for (final Object[] vars : stat.getAllVariables()) {
+			if ((Integer) vars[0] == type) {
+				value += stat.getValue(vars);
 			}
 		}
-
+		
 		return value;
 	}
 
@@ -410,12 +253,12 @@ public class StatsAPIHandler implements DependencyHandler {
 			return false;
 		} else {
 			Main stats = (Main) get();
-			
+
 			api = stats.getAPI();
 
 			if (api != null) {
-				plugin.getLogger().info(
-						"Stats has been found and can be used!");
+				plugin.getLogger()
+						.info("Stats has been found and can be used!");
 				return true;
 			} else {
 				plugin.getLogger().info(
