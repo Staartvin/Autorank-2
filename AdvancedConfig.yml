@@ -30,29 +30,10 @@ ranks:
                 value: 50
             has item2:
                 value: 40
-            has item3:
-                value: 373;1;16461
-            has item4:
-                value: 373;1;16449    
-            players killed:
-                value: 10
             mobs killed:
                 value: 10;pig
             mobs killed2:
                 value: 10;spider
-            faction power:
-                value: 3.5
-            location: -164;71;202;world;2
-            global time: 10d
-            total time: 1000d
-            blocks broken: 24;100;2
-            blocks placed: 20;200
-            damage taken: 10
-            blocks moved: 1000;5
-            worldguard region: TestRegion
-            mcmmo skill level: 100;archery
-            mcmmo power level: 100
-            permission: 'i.need.this.permission'
         results:
             rank change: Member;Vip
             command: 'say &p has just been promoted to VIP!; give &p 1 100; tell &p You have just earned 100 stone!'
