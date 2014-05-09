@@ -89,7 +89,7 @@ public class BlocksPlacedRequirement extends Requirement {
 					+ " ");
 		}
 
-		message = message.concat("blocks.");
+		message = message.concat("blocks");
 		return Lang.PLACED_BLOCKS_REQUIREMENT
 				.getConfigValue(new String[] { message });
 	}

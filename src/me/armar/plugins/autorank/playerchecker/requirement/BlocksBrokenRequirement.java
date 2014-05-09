@@ -91,7 +91,7 @@ public class BlocksBrokenRequirement extends Requirement {
 					+ " ");
 		}
 
-		argument = argument.concat("blocks.");
+		argument = argument.concat("blocks");
 		return Lang.BROKEN_BLOCKS_REQUIREMENT
 				.getConfigValue(new String[] { argument });
 	}
