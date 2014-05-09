@@ -102,6 +102,8 @@ public class Leaderboard {
 			
 			// Grab playername from here so it doesn't load all player names ever.
 			final String name = UUIDManager.getPlayerFromUUID(uuid);
+			
+			if (name == null) continue;
 
 			Integer time = entry.getValue().intValue();
 
