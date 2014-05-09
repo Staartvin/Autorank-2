@@ -1,0 +1,75 @@
+#############################################################################
+#                                                                           #
+#                   Autorank 2 Settings                                     #
+#                                                                           #
+#   This config is used to configure Autorank. The other configs provide    #
+#   a way to configure the rank system. This config is for configuring the  #
+#   the options Autorank has to offer you                                   #
+#                                                                           #
+#############################################################################
+
+use advanced config: false
+# If this is false, the SimpleConfig will be used for ranking.
+
+afk integration: true
+# If a compatible AFK plugin is found Autorank will not count online time for AFK players
+# This option is always on when using the SimpleConfig
+# Currently supports: Essentials and RoyalCommands
+# Autorank automatically chooses what plugin to use for AFK integration.
+
+use partial completion: true
+# When this is true, players can use /ar complete # to complete a requirement at any moment they like.
+# When this is false, players will only be able to /ar check and check for all requirements at one time. They would need to have all requirements at that moment.
+
+interval check: 5
+# This is the interval between checks of Autorank (in minutes).
+# Lowering this number will increase accuracy but will also increase server lag.
+
+use time of: Autorank
+# You can specify what time plugin Autorank will use to calculate the time that a player has played.
+# This only changes the local time. 
+# A list to choose from:
+# 1. Autorank
+# 2. Stats
+# 3. OnTime
+# If no valid time plugin was found, it defaults to Autorank
+
+leaderboard layout: '&6&r | &b&p - &7&d day(s), &h hour(s) and &m minute(s).'
+leaderboard length: 5
+# changes the appearance of the /ar leaderboard command
+# &r : Ranking in the leaderboard
+# &p : Player name
+# &m : Minutes (with full days and full hours not counted)
+# &h : Hours (with full days not counted)
+# &d : Days
+# &tm : Total amount of minutes
+# &th : Total amount of hours
+
+check command layout: '&p has played for &time and is in &groups. Requirements to be ranked up: &reqs'
+# Changes the layout of the /ar check command.
+# &p : Player name
+# &time : time in hours, minutes and seconds
+# &groups : Groups the player is in. Most of the time this is only one group.
+# &reqs : a list of all requirements
+
+sql:
+    enabled: false
+    hostname: localhost:3306
+    username: root
+    password: ''
+    database: minecraft
+    table: autorank
+# All these options are for configuring your MySQL database with Autorank.
+# Hostname has to include a port, but doesn't have to be port 3306.
+
+auto-updater:
+    check-for-new-versions: true
+#   When check-for-new-versions is true, Autorank will tell you when a new version is available.
+    
+    auto-download: false
+#   When auto-download is true, Autorank will automatically download the most recent version    
+
+advanced dependency output: false
+# If this is true, Autorank will tell you in the console what dependencies were found and which ones weren't found.
+# Turn this off to remove the console spam from Autorank about dependencies.
+# This feature can be useful when Autorank can't find your dependency, but you have it installed.

@@ -7,60 +7,16 @@
 #                                                                           #
 #############################################################################
 
-use advanced config: false
-# If this is false, the SimpleConfig will be used for ranking.
-
-afk integration: true
-# If a compatible AFK plugin is found Autorank will not count online time for AFK players
-# This option is always on when using the SimpleConfig
-# Currently supports: Essentials and RoyalCommands
-# Autorank automatically chooses what plugin to use for AFK integration.
-
-use partial completion: true
-# When this is true, players can use /ar complete # to complete a requirement at any moment they like.
-# When this is false, players will only be able to /ar check and check for all requirements at one time. They would need to have all requirements at that moment.
-
-interval check: 5
-# This is the interval between checks of Autorank (in minutes).
-# Lowering this number will increase accuracy but will also increase server lag.
-
-use time of: Autorank
-# You can specify what time plugin Autorank will use to calculate the time that a player has played.
-# This only changes the local time. 
-# A list to choose from:
-# 1. Autorank
-# 2. Stats
-# 3. OnTime
-# If no valid time plugin was found, it defaults to Autorank
-
-leaderboard layout: '&6&r | &b&p - &7&d day(s), &h hour(s) and &m minute(s).'
-leaderboard length: 5
-# changes the appearance of the /ar leaderboard command
-# &r : Ranking in the leaderboard
-# &p : Player name
-# &m : Minutes (with full days and full hours not counted)
-# &h : Hours (with full days not counted)
-# &d : Days
-# &tm : Total amount of minutes
-# &th : Total amount of hours
-
-check command layout: '&p has played for &time and is in &groups. Requirements to be ranked up: &reqs'
-# Changes the layout of the /ar check command.
-# &p : Player name
-# &time : time in hours, minutes and seconds
-# &groups : Groups the player is in. Most of the time this is only one group.
-# &reqs : a list of all requirements
-
 ranks:
-    guest:
+    Guest:
         requirements:
             time:
                 value: 10h
         results:
-            rank change: guest;member
+            rank change: Guest;Member
             command: 'say &p just got a promotion; broadcast &p has just been promoted to Member!'
             message: 'Congratulations, you are now a member.'
-    member:
+    Member:
         requirements:
             time:
                 value: 5d
@@ -73,11 +29,32 @@ ranks:
             has item:
                 value: 50
             has item2:
-                value: 5;10
-            blocks moved:
-                value: 1000;5
+                value: 40
+            has item3:
+                value: 373;1;16461
+            has item4:
+                value: 373;1;16449    
+            players killed:
+                value: 10
+            mobs killed:
+                value: 10;pig
+            mobs killed2:
+                value: 10;spider
+            faction power:
+                value: 3.5
+            location: -164;71;202;world;2
+            global time: 10d
+            total time: 1000d
+            blocks broken: 24;100;2
+            blocks placed: 20;200
+            damage taken: 10
+            blocks moved: 1000;5
+            worldguard region: TestRegion
+            mcmmo skill level: 100;archery
+            mcmmo power level: 100
+            permission: 'i.need.this.permission'
         results:
-            rank change: member;vip
+            rank change: Member;Vip
             command: 'say &p has just been promoted to VIP!; give &p 1 100; tell &p You have just earned 100 stone!'
             message: 'Congratulations, you are now a vip.'
             
@@ -116,28 +93,3 @@ ranks:
 #       command: 'say &p hi; give &p 1 100'(executes a console command. &p will be replaced by the player name) You can perform more commands with the ';' sign.
 #       effect: STEP_SOUND;8 (first argument is the effect name, second is the effect data. For a list of possible effects go to http://jd.bukkit.org/rb/doxygen/d8/db9/enumorg_1_1bukkit_1_1Effect.html)
 #       tp: x;y;z;world;yaw;pitch (tp: 0;0;0;world_nether;1.0;2.0)
-
-sql:
-    enabled: false
-    hostname: localhost:3306
-    username: root
-    password: ''
-    database: minecraft
-    table: autorank
-#   
-#   
-
-auto-updater:
-
-#   When check-for-new-versions is true, Autorank will tell you when a new version is available.
-    check-for-new-versions: true
-    
-#   When auto-download is true, Autorank will automatically download the most recent version    
-    auto-download: false    
-
-#   
-
-# If this is true, Autorank will tell you in the console what dependencies were found and which ones weren't found.
-# Turn this off to remove the console spam from Autorank about dependencies.
-# This feature can be useful when Autorank can't find your dependency, but you have it installed.
-advanced dependency output: false
