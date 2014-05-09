@@ -13,7 +13,6 @@ import java.util.Map.Entry;
 import java.util.UUID;
 
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
@@ -40,11 +39,9 @@ public class Leaderboard {
 
 	public Leaderboard(final Autorank plugin) {
 		this.plugin = plugin;
-		final SimpleYamlConfiguration advConfig = this.plugin
-				.getAdvancedConfig();
-		if (advConfig.getBoolean("use advanced config")) {
-			leaderboardLength = advConfig.getInt("leaderboard length");
-			layout = advConfig.getString("leaderboard layout");
+		if (plugin.getConfigHandler().useAdvancedConfig()) {
+			leaderboardLength = plugin.getConfigHandler().getLeaderboardLength();
+			layout = plugin.getConfigHandler().getLeaderboardLayout();
 		}
 
 		// Run async because it uses UUID lookup

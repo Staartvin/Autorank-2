@@ -32,8 +32,8 @@ public class Playtimes {
 	public Playtimes(final Autorank plugin) {
 		this.plugin = plugin;
 
-		INTERVAL_MINUTES = plugin.getAdvancedConfig().getInt("interval check",
-				5);
+		INTERVAL_MINUTES = plugin.getConfigHandler().getIntervalTime();
+		
 		plugin.getLogger().info(
 				"Interval check every " + INTERVAL_MINUTES + " minutes.");
 

@@ -38,12 +38,10 @@ public class PlayerChecker {
 
 	public void initialiseFromConfigs() {
 		final SimpleYamlConfiguration simpleConfig = plugin.getSimpleConfig();
-		final SimpleYamlConfiguration advancedConfig = plugin
-				.getAdvancedConfig();
 
 		List<RankChange> ranks;
-		if ((Boolean) advancedConfig.get("use advanced config")) {
-			ranks = builder.createFromAdvancedConfig(advancedConfig);
+		if (plugin.getConfigHandler().useAdvancedConfig()) {
+			ranks = builder.createFromAdvancedConfig(plugin.getAdvancedConfig());
 		} else {
 			ranks = builder.createFromSimpleConfig(simpleConfig);
 		}

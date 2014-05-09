@@ -74,6 +74,7 @@ public class Autorank extends JavaPlugin {
 	private PlayerChecker playerChecker;
 	private SimpleYamlConfiguration simpleConfig;
 	private SimpleYamlConfiguration advancedConfig;
+	private SimpleYamlConfiguration settingsConfig;
 	private PermissionsPluginManager permPlugHandler;
 	private LanguageHandler languageHandler;
 	private ValidateHandler validateHandler;
@@ -104,7 +105,8 @@ public class Autorank extends JavaPlugin {
 				null, "Simple config"));
 		setAdvancedConfig(new SimpleYamlConfiguration(this,
 				"AdvancedConfig.yml", null, "Advanced config"));
-
+		setSettingsConfig(new SimpleYamlConfiguration(this, "Settings.yml", null, "Settings config"));
+		
 		// Create warning manager
 		setWarningManager(new WarningManager());
 
@@ -295,6 +297,8 @@ public class Autorank extends JavaPlugin {
 		setSimpleConfig(null);
 
 		setAdvancedConfig(null);
+		
+		setSettingsConfig(null);
 
 		getLogger().info(
 				String.format("Autorank %s has been disabled!",
@@ -510,5 +514,13 @@ public class Autorank extends JavaPlugin {
 
 	public void setDependencyManager(DependencyManager dependencyManager) {
 		this.dependencyManager = dependencyManager;
+	}
+
+	public SimpleYamlConfiguration getSettingsConfig() {
+		return settingsConfig;
+	}
+
+	public void setSettingsConfig(SimpleYamlConfiguration settingsConfig) {
+		this.settingsConfig = settingsConfig;
 	}
 }

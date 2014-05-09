@@ -24,8 +24,7 @@ public class UpdateHandler {
 	}
 
 	public boolean doCheckForNewVersion() {
-		return plugin.getAdvancedConfig().getBoolean(
-				"auto-updater.check-for-new-versions", true);
+		return plugin.getConfigHandler().doCheckForNewerVersion();
 	}
 
 	public boolean isUpdateAvailable() {

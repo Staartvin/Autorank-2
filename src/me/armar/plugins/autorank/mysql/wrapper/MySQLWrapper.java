@@ -4,10 +4,9 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.config.ConfigHandler;
+import me.armar.plugins.autorank.config.ConfigHandler.MySQLOptions;
 import me.armar.plugins.autorank.data.SQLDataStorage;
-import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
-
-import org.bukkit.configuration.ConfigurationSection;
 
 /**
  * This class keeps all incoming and outgoing under control.
@@ -39,7 +38,8 @@ public class MySQLWrapper {
 	public MySQLWrapper(final Autorank instance) {
 		plugin = instance;
 
-		sqlSetup(plugin.getAdvancedConfig());
+		sqlSetup();
+		
 		if (mysql != null) {
 			setupTable();
 		}
@@ -83,23 +83,24 @@ public class MySQLWrapper {
 		}
 	}
 
-	public void sqlSetup(final SimpleYamlConfiguration config) {
-		final ConfigurationSection s = config.getConfigurationSection("sql");
+	public void sqlSetup() {
+		
+		ConfigHandler configHandler = plugin.getConfigHandler();
+		/*final ConfigurationSection s = config.getConfigurationSection("sql");
 
 		if (s == null) {
 			plugin.getLogger().warning(
 					"MySQL options are missing in the advancedconfig.yml!");
 			return;
-		}
+		}*/
 
-		final Boolean enabled = s.getBoolean("enabled");
-		if (enabled != null && enabled) {
+		if (configHandler.useMySQL()) {
 
-			hostname = s.getString("hostname");
-			username = s.getString("username");
-			password = s.getString("password");
-			database = s.getString("database");
-			table = s.getString("table");
+			hostname = configHandler.getMySQLSettings(MySQLOptions.HOSTNAME);
+			username = configHandler.getMySQLSettings(MySQLOptions.USERNAME);
+			password = configHandler.getMySQLSettings(MySQLOptions.PASSWORD);
+			database = configHandler.getMySQLSettings(MySQLOptions.DATABASE);
+			table = configHandler.getMySQLSettings(MySQLOptions.TABLE);
 
 			mysql = new SQLDataStorage(hostname, username, password, database);
 			if (!mysql.connect()) {

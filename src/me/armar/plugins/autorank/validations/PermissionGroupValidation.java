@@ -87,8 +87,7 @@ public class PermissionGroupValidation {
 	 *         config); false otherwise
 	 */
 	public boolean isValidChange(final String group) {
-		final String rankChange = autorank.getAdvancedConfig().getString(
-				"ranks." + group + ".results.rank change", null);
+		final String rankChange = autorank.getConfigHandler().getRankChange(group);
 		final String[] groups = autorank.getPermPlugHandler()
 				.getPermissionPlugin().getGroups();
 
