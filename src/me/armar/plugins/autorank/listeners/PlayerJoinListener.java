@@ -31,6 +31,9 @@ public class PlayerJoinListener implements Listener {
 		
 		// Add cached player
 		UUIDManager.addCachedPlayer(player);
+		
+		// Perform check for player on login
+		plugin.getPlayerChecker().checkPlayer(player);
 
 		// Player isn't allowed to see messages.
 		if (player.hasPermission("autorank.noticeonupdate")) {
