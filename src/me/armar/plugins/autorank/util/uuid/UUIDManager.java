@@ -398,8 +398,7 @@ public class UUIDManager {
 	/**
 	 * Add a player to the cache storage.<br>
 	 * This can used when a player joins the server, because we know that the
-	 * name <br>
-	 * will always be the same for that session.
+	 * <br>name will always be the same for that session.
 	 * 
 	 * @param player Player to cache.
 	 */
@@ -414,7 +413,7 @@ public class UUIDManager {
 	/**
 	 * Remove a player from the cache storage.<br>
 	 * This can used when a you want to make sure that you get a non-cached value.
-	 * @param player Player to cache.
+	 * @param player Player to remove.
 	 */ 
 	public static void removeCachedPlayer(Player player) {
 		// There is no cached value for this player
