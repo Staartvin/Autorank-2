@@ -258,7 +258,7 @@ public class Autorank extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-
+		
 		// Make sure all tasks are cancelled after shutdown. This seems obvious, but when a player /reloads, the server creates an instance of the plugin which causes duplicate tasks to run. 
 		getServer().getScheduler().cancelTasks(this);
 
