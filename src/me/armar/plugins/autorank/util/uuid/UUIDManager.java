@@ -12,7 +12,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 /**
- * Manages everything related to UUIDs
+ * This class allows developers to easily get UUIDs from names
+ * <br>or to do the reverse.
+ * <br>It has an implemented cache system, which makes sure it doesn't do a lookup
+ * <br>when not needed.
  * <p>
  * Date created: 17:13:57 2 apr. 2014
  * 
@@ -27,14 +30,24 @@ public class UUIDManager {
 	// This hashmap stores the cached values of uuids for players. 
 	private static HashMap<String, UUID> cachedUUIDs = new HashMap<String, UUID>();
 
-	// This hashmap stores what the time is that of the latest cache for a certain player.
+	// This hashmap stores the latest cache time for a certain player.
 	// This is used to see if the cached UUID was older than 12 hours. If it is older than 12 hours,
 	// it will be renewed.
 	private static HashMap<String, Long> lastCached = new HashMap<String, Long>();
 
-	// This the time that one cached value is valid (in hours).
-	private static int maxLifeTime = 12;
+	// This is the time that one cached value is valid (in hours).
+	private static final int maxLifeTime = 12;
 
+	/**
+	 * Get the UUIDs of a list of players. <br>
+	 * This method has to run async, because it will use the lookup from the
+	 * Mojang API. <br>
+	 * It also takes care of already cached values. It doesn't lookup new
+	 * players when it still has old, valid ones stored.
+	 * 
+	 * @param names A list of playernames that you want the UUIDs of.
+	 * @return A map containing every UUID per player name.
+	 */
 	public static Map<String, UUID> getUUIDs(final List<String> names) {
 
 		// Clear maps first
@@ -51,7 +64,6 @@ public class UUIDManager {
 
 			// If cached value is still valid, use it.
 			if (!shouldUpdateValue(playerName)) {
-				//System.out.print("Using cached value of uuid for " + playerName);
 				uuids.put(playerName, getCachedUUID(playerName));
 			}
 		}
@@ -136,6 +148,16 @@ public class UUIDManager {
 		return uuids;
 	}
 
+	/**
+	 * Get the player names associated with this UUID. <br>
+	 * This method has to run async, because it will use the lookup from the
+	 * Mojang API. <br>
+	 * It also takes care of already cached values. It doesn't lookup new
+	 * players when it still has old, valid ones stored.
+	 * 
+	 * @param uuids A list of uuids to get the player names of.
+	 * @return A map containing every player name per UUID.
+	 */
 	public static Map<UUID, String> getPlayers(final List<UUID> uuids) {
 		// Clear names first
 		foundPlayers.clear();
@@ -160,7 +182,6 @@ public class UUIDManager {
 			if (playerName != null) {
 				// If cached value is still valid, use it.
 				if (!shouldUpdateValue(playerName)) {
-					//System.out.print("Using cached value of playername for " + playerName);
 					players.put(uuid, playerName);
 				}
 			}
@@ -248,7 +269,8 @@ public class UUIDManager {
 
 	/**
 	 * Get the Minecraft name of the player that is hooked to this Mojang
-	 * account UUID.
+	 * account UUID. <br>
+	 * It uses {@link #getPlayers(List)} to get the player's name.
 	 * 
 	 * @param uuid the UUID of the Mojang account
 	 * @return the name of player or null if not found.
@@ -265,18 +287,12 @@ public class UUIDManager {
 		if (players.isEmpty())
 			return null;
 
-		// Search case insensitive
-		//for (Entry<UUID, String> entry : players.entrySet()) {
-		//	if (entry.getKey().toString().equals(uuid.toString())) {
-		//		return entry.getValue();
-		//	}
-		//}
-		
 		return players.get(uuid);
 	}
 
 	/**
-	 * Get the UUID of the Mojang account associated with this player name
+	 * Get the UUID of the Mojang account associated with this player name <br>
+	 * It uses {@link #getUUIDs(List)} to get the UUID.
 	 * 
 	 * @param playerName Name of the player
 	 * @return UUID of the associated Mojang account or null if not found.
@@ -379,6 +395,14 @@ public class UUIDManager {
 		return getLastCached(playerName) > 0;
 	}
 
+	/**
+	 * Add a player to the cache storage.<br>
+	 * This can used when a player joins the server, because we know that the
+	 * name <br>
+	 * will always be the same for that session.
+	 * 
+	 * @param player Player to cache.
+	 */
 	public static void addCachedPlayer(Player player) {
 		// Do not update if we still have one that is valid
 		if (!shouldUpdateValue(player.getName()))
@@ -387,10 +411,26 @@ public class UUIDManager {
 		addCachedPlayer(player.getName(), player.getUniqueId());
 	}
 
-	private static void addCachedPlayer(String playerName, UUID uuid) {
-		//System.out.print("Cached " + playerName + " with UUID " + uuid.toString());
+	/**
+	 * Remove a player from the cache storage.<br>
+	 * This can used when a you want to make sure that you get a non-cached value.
+	 * @param player Player to cache.
+	 */ 
+	public static void removeCachedPlayer(Player player) {
+		// There is no cached value for this player
+		if (!isCachedUUID(player.getName()))
+			return;
+		
+		removeCachedPlayer(player.getName());
+	}
 
+	private static void addCachedPlayer(String playerName, UUID uuid) {
 		cachedUUIDs.put(playerName, uuid);
 		lastCached.put(playerName, System.currentTimeMillis());
+	}
+	
+	private static void removeCachedPlayer(String playerName) {
+		cachedUUIDs.remove(playerName);
+		lastCached.remove(playerName);
 	}
 }
