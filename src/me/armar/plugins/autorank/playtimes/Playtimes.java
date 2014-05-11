@@ -271,8 +271,9 @@ public class Playtimes {
 							UUID uuid = UUIDManager.getUUIDFromPlayer(record);
 
 							// Could not convert this name to uuid
-							if (uuid == null)
-								continue;
+							if (uuid == null) {
+								throw new NullPointerException("Could not find UUID of " + record);
+							}
 
 							// Get the time that player has played.
 							int minutesPlayed = data.getInt(record, 0);
