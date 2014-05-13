@@ -26,6 +26,8 @@ public class Playtimes {
 	private final PlaytimesUpdate update;
 	private final Autorank plugin;
 
+	private boolean convertingData = false;
+
 	// Used to store what plugin Autorank uses for checking the time
 	private dependency timePlugin;
 
@@ -33,7 +35,7 @@ public class Playtimes {
 		this.plugin = plugin;
 
 		INTERVAL_MINUTES = plugin.getConfigHandler().getIntervalTime();
-		
+
 		plugin.getLogger().info(
 				"Interval check every " + INTERVAL_MINUTES + " minutes.");
 
@@ -41,15 +43,16 @@ public class Playtimes {
 				"Data");
 		this.save = new PlaytimesSave(this);
 		this.update = new PlaytimesUpdate(this, plugin);
-		
+
 		// Run save task every 30 seconds
-		plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, save, 600, 600);
-		
+		plugin.getServer().getScheduler()
+				.runTaskTimerAsynchronously(plugin, save, 600, 600);
+
 		// Run update timer every x minutes
 		plugin.getServer()
 				.getScheduler()
-				.runTaskTimerAsynchronously(plugin, update, INTERVAL_MINUTES * 20 * 60,
-						INTERVAL_MINUTES * 20 * 60);
+				.runTaskTimerAsynchronously(plugin, update,
+						INTERVAL_MINUTES * 20 * 60, INTERVAL_MINUTES * 20 * 60);
 
 		timePlugin = plugin.getConfigHandler().useTimeOf();
 	}
@@ -194,10 +197,32 @@ public class Playtimes {
 	}
 
 	public List<UUID> getUUIDKeys() {
+
 		List<UUID> uuids = new ArrayList<UUID>();
 
+		// Return empty list
+		if (!isConverted()) {
+			return uuids;
+		}
+
 		for (String uuidString : data.getKeys(false)) {
-			uuids.add(UUID.fromString(uuidString));
+			UUID uuid = null;
+			try {
+				uuid = UUID.fromString(uuidString);
+			} catch (IllegalArgumentException e) {
+				/*plugin.getLogger().severe(
+						"Player '" + uuidString + "' is not converted yet!");*/
+				continue;
+			}
+
+			// Invalid uuid
+			if (uuid == null) {
+				/*plugin.getLogger().severe(
+						"Player '" + uuidString + "' is not converted yet!");*/
+				continue;
+			}
+
+			uuids.add(uuid);
 		}
 
 		return uuids;
@@ -255,13 +280,34 @@ public class Playtimes {
 	 */
 	public void convertToUUIDStorage() {
 
-		final Set<String> records = data.getKeys(false);
+		if (convertingData)
+			return;
+
+		convertingData = true;
 
 		// Run async to prevent load-time problems.
 		plugin.getServer().getScheduler()
 				.runTaskAsynchronously(plugin, new Runnable() {
 
 					public void run() {
+
+						// First archive all names below 1
+						archive(1);
+						
+						final Set<String> records = data.getKeys(false);
+						
+						int size = records.size();
+
+						// 9 items per second
+						int speed = 9;
+						int duration = (int) Math.floor(size / speed);
+						String timeName = getDurationString(duration);
+						
+						plugin.getLogger().warning("Starting converting data.yml");
+						plugin.getLogger().warning(
+								"Conversion will take approx. " + timeName
+										+ " guess for your data.yml)");
+
 						for (String record : records) {
 							// UUID contains dashes and playernames do not, so if it contains dashes
 							// it is probably a UUID and thus we should skip it.
@@ -272,7 +318,9 @@ public class Playtimes {
 
 							// Could not convert this name to uuid
 							if (uuid == null) {
-								throw new NullPointerException("Could not find UUID of " + record);
+								plugin.getLogger().severe(
+										"Could not find UUID of " + record);
+								continue;
 							}
 
 							// Get the time that player has played.
@@ -284,8 +332,66 @@ public class Playtimes {
 							// Add new data (in UUID form to the file)
 							data.set(uuid.toString(), minutesPlayed);
 						}
+
+						save();
+
+						plugin.getLogger().info(
+								"Converted data.yml to UUID format");
 					}
 
 				});
+	}
+
+	public boolean isConverted() {
+		return convertingData;
+	}
+
+	private String getDurationString(int seconds) {
+
+	    int hours = seconds / 3600;
+	    int minutes = (seconds % 3600) / 60;
+	    seconds = seconds % 60;
+
+	    StringBuilder builder = new StringBuilder("");
+	    
+	    if (hours > 0) {
+	    	if (hours == 1) {
+	    		builder.append("1 hour");
+	    	} else {
+	    		builder.append(hours + " hours");
+	    	}
+	    	
+	    	if (minutes > 0 || seconds > 0) {
+	    		builder.append(", ");
+	    	} else {
+	    		builder.append(".");
+	    	}
+	    	
+	    }
+	    
+	    if (minutes > 0) {
+	    	if (minutes == 1) {
+	    		builder.append("1 minute");
+	    	} else {
+	    		builder.append(minutes + " minutes");
+	    	}
+	    	
+	    	if (seconds > 0) {
+	    		builder.append(" and ");
+	    	} else {
+	    		builder.append(".");
+	    	}
+	    }
+	    
+	    if (seconds > 0) {
+	    	if (seconds == 1) {
+	    		builder.append("1 second");
+	    	} else {
+	    		builder.append(seconds + " seconds");
+	    	}
+	    	builder.append(".");
+	    }
+	    
+	    return builder.toString();
 	}
 }
