@@ -36,6 +36,8 @@ public class RequirementHandler {
 	private final Autorank plugin;
 	private FileConfiguration config;
 	private File configFile;
+	
+	private boolean convertingData = false;
 
 	public RequirementHandler(final Autorank instance) {
 		this.plugin = instance;
@@ -171,6 +173,12 @@ public class RequirementHandler {
 
 	public void convertNamesToUUIDs() {
 
+		if (convertingData) return;
+		
+		convertingData = true;
+		
+		plugin.getLogger().info("Starting to convert playerdata.yml");
+		
 		// Run async to prevent problems.
 		plugin.getServer().getScheduler()
 				.runTaskAsynchronously(plugin, new Runnable() {
@@ -202,6 +210,8 @@ public class RequirementHandler {
 						}
 
 						saveConfig();
+						
+						plugin.getLogger().info("Converted playerdata.yml to UUID format");
 					}
 				});
 	}
