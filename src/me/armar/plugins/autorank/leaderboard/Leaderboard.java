@@ -48,10 +48,6 @@ public class Leaderboard {
 		plugin.getServer().getScheduler()
 				.runTaskAsynchronously(plugin, new Runnable() {
 					public void run() {
-
-						// Convert first
-						plugin.getPlaytimes().convertToUUIDStorage();
-
 						updateLeaderboard();
 					}
 				});
