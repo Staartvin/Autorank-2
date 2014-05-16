@@ -16,6 +16,7 @@ public class HasItemRequirement extends Requirement {
 	private boolean optional = false;
 	private boolean autoComplete = false;
 	private boolean showShortValue = false;
+	private String displayName = null;
 	private int reqId;
 	List<Result> results = new ArrayList<Result>();
 
@@ -42,6 +43,10 @@ public class HasItemRequirement extends Requirement {
 			// Short value can make a difference, thus we show it.
 			showShortValue = true;
 		}
+		if (options.length > 3) {
+			// Displayname
+			displayName = options[3];
+		}
 
 		//item = new ItemStack(id, 1, (short) 0, data);
 		item = new ItemStack(id, amount, data);
@@ -56,9 +61,18 @@ public class HasItemRequirement extends Requirement {
 
 	@Override
 	public String getDescription() {
-		StringBuilder arg = new StringBuilder(item.getAmount() + " " + item.getType().toString());
-		if (showShortValue) {
-			arg.append(" (Dam. value: " + item.getDurability() + ")");
+		StringBuilder arg = new StringBuilder(item.getAmount() + " ");
+		
+		if (displayName != null) {
+			// Show displayname instead of material name
+			arg.append(displayName);
+		} else {
+		
+			arg.append(item.getType().toString());	
+			
+			if (showShortValue) {
+				arg.append(" (Dam. value: " + item.getDurability() + ")");
+			}
 		}
 		
 		return Lang.ITEM_REQUIREMENT.getConfigValue(new String[] { arg.toString() });
