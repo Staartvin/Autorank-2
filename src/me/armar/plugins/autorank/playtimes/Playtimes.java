@@ -306,7 +306,7 @@ public class Playtimes {
 						plugin.getLogger().warning("Starting converting data.yml");
 						plugin.getLogger().warning(
 								"Conversion will take approx. " + timeName
-										+ " guess for your data.yml)");
+										+ "( guess for your data.yml)");
 
 						for (String record : records) {
 							// UUID contains dashes and playernames do not, so if it contains dashes
