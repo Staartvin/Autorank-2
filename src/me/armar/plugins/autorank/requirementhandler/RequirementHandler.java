@@ -41,6 +41,11 @@ public class RequirementHandler {
 
 	public RequirementHandler(final Autorank instance) {
 		this.plugin = instance;
+		
+		// Start requirement saver task
+		// Run save task every minute
+		plugin.getServer().getScheduler()
+						.runTaskTimerAsynchronously(plugin, new RequirementHandlerSaver(this), 1200, 1200);
 	}
 
 	public void createNewFile() {
@@ -52,7 +57,7 @@ public class RequirementHandler {
 		convertNamesToUUIDs();
 
 		plugin.getLogger().info(
-				"Playerdata file loaded. Keeping track of player progress!");
+				"Loaded playerdata.");
 	}
 
 	public void reloadConfig() {
@@ -106,8 +111,6 @@ public class RequirementHandler {
 		UUID uuid = UUIDManager.getUUIDFromPlayer(playerName);
 
 		config.set(uuid.toString() + ".progress", progress);
-
-		saveConfig();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -138,8 +141,6 @@ public class RequirementHandler {
 	public void setLastKnownGroup(final String playerName, final String group) {
 		UUID uuid = UUIDManager.getUUIDFromPlayer(playerName);
 		config.set(uuid.toString() + ".last group", group);
-
-		saveConfig();
 	}
 
 	public boolean hasCompletedRequirement(final int reqID,
@@ -208,8 +209,6 @@ public class RequirementHandler {
 							config.set(uuid.toString() + ".last group",
 									lastKnownGroup);
 						}
-
-						saveConfig();
 						
 						plugin.getLogger().info("Converted playerdata.yml to UUID format");
 					}
