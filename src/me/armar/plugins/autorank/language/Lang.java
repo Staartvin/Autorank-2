@@ -47,7 +47,7 @@ public enum Lang {
 	/**
 	 * and does not have a next rankup
 	 */
-	NO_NEXT_RANK("no-next-rankup", "and does not have a next rankup"),
+	NO_NEXT_RANK("no-next-rankup", "Does not have a next rankup."),
 	/**
 	 * meets all the requirements for rank {0}
 	 */
