@@ -50,7 +50,7 @@ public class PlayerChecker {
 		rankChanges.clear();
 		
 		for (final RankChange rank : ranks) {
-			addRankChange(rank.getRank(), rank);
+			addRankChange(rank.getRankFrom(), rank);
 		}
 
 	}
@@ -134,21 +134,11 @@ public class PlayerChecker {
 	 * @return name of the permission group the player will be ranked to; null if no rank up
 	 */
 	public String getNextRankupGroup(Player player) {
-		Map<RankChange, List<Requirement>> requirements = getAllRequirements(player);
+		RankChange change = getNextRank(player);
 		
-		Set<RankChange> rankchanges = requirements.keySet();
+		if (change == null) return null;
 		
-		if (rankchanges.size() == 0) {
-			return null;
-		}
-		
-		String rankName = null;
-		
-		for (RankChange rank: rankchanges) {
-			rankName = rank.getRankTo();
-		}
-		
-		return rankName;
+		return change.getRankTo();
 	}
 	
 	/**

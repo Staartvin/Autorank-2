@@ -51,14 +51,14 @@ public class CheckCommand implements CommandExecutor {
 					return true;
 				}
 
-				AutorankTools.sendColoredMessage(sender, args[1]
-						+ " has played for "
-						+ AutorankTools.minutesToString(time));
+				AutorankTools.sendColoredMessage(
+						sender,
+						args[1] + " has played for "
+								+ AutorankTools.minutesToString(time));
 			} else {
 				if (AutorankTools.isExcluded(player)) {
 					sender.sendMessage(ChatColor.RED
-							+ Lang.PLAYER_IS_EXCLUDED
-									.getConfigValue(args[1]));
+							+ Lang.PLAYER_IS_EXCLUDED.getConfigValue(args[1]));
 					return true;
 				}
 				check(sender, player);
@@ -71,8 +71,8 @@ public class CheckCommand implements CommandExecutor {
 
 			if (AutorankTools.isExcluded((Player) sender)) {
 				sender.sendMessage(ChatColor.RED
-						+ Lang.PLAYER_IS_EXCLUDED
-								.getConfigValue(sender.getName()));
+						+ Lang.PLAYER_IS_EXCLUDED.getConfigValue(sender
+								.getName()));
 				return true;
 			}
 			final Player player = (Player) sender;
@@ -145,12 +145,12 @@ public class CheckCommand implements CommandExecutor {
 
 		layout = layout.replace("&groups", groupsString.toString());
 
-		String nextRankup = plugin.getPlayerChecker()
-				.getNextRankupGroup(player);
+		RankChange nextRankChange = plugin.getPlayerChecker().getNextRank(
+				player);
 
 		boolean showReqs = false;
 
-		if (nextRankup == null) {
+		if (nextRankChange == null) {
 			layout = layout.replace("&reqs", "none");
 		} else {
 			layout = layout.replace("&reqs", "");
@@ -175,115 +175,118 @@ public class CheckCommand implements CommandExecutor {
 			stringBuilder.append(Lang.MULTIPLE_GROUPS.getConfigValue(null)); // Multiple groups
 		*/
 
+		String nextRankup = plugin.getPlayerChecker()
+				.getNextRankupGroup(player);
+
 		if (nextRankup == null) {
 			AutorankTools.sendColoredMessage(sender,
 					Lang.NO_NEXT_RANK.getConfigValue());
-		} else {
-			RankChange rank = plugin.getPlayerChecker().getNextRank(player);
-			List<Requirement> reqs = plugin.getPlayerChecker()
-					.getRequirementsForNextRank(player);
+		}
+		
+		// Don't get requirements when the player has no new requirements
+		if (nextRankChange == null) return;
 
-			boolean onlyOptional = true;
-			boolean meetsAllRequirements = true;
-			final List<Integer> metRequirements = new ArrayList<Integer>();
+		List<Requirement> reqs = plugin.getPlayerChecker()
+				.getRequirementsForNextRank(player);
 
-			// Check if we only have optional requirements
-			for (final Requirement req : reqs) {
-				if (!req.isOptional())
-					onlyOptional = false;
-			}
+		boolean onlyOptional = true;
+		boolean meetsAllRequirements = true;
+		final List<Integer> metRequirements = new ArrayList<Integer>();
 
-			for (final Requirement req : reqs) {
-				final int reqID = req.getReqId();
+		// Check if we only have optional requirements
+		for (final Requirement req : reqs) {
+			if (!req.isOptional())
+				onlyOptional = false;
+		}
 
-				if (req.useAutoCompletion()) {
-					// Do auto complete
-					if (req.meetsRequirement(player)) {
-						// Player meets the requirement -> give him results
+		for (final Requirement req : reqs) {
+			final int reqID = req.getReqId();
 
-						// Doesn't need to check whether this requirement was already done
-						if (!plugin.getConfigHandler().usePartialCompletion())
-							continue;
+			if (req.useAutoCompletion()) {
+				// Do auto complete
+				if (req.meetsRequirement(player)) {
+					// Player meets the requirement -> give him results
 
-						if (!plugin.getRequirementHandler()
-								.hasCompletedRequirement(reqID,
-										player.getName())) {
-							plugin.getRequirementHandler().addPlayerProgress(
-									player.getName(), reqID);
-
-							// Run results
-							plugin.getRequirementHandler().runResults(req,
-									player);
-						}
-						metRequirements.add(reqID);
+					// Doesn't need to check whether this requirement was already done
+					if (!plugin.getConfigHandler().usePartialCompletion())
 						continue;
-					} else {
 
-						// Only check if player has done this when partial completion is used
-						if (plugin.getConfigHandler().usePartialCompletion()) {
-							// Player does not meet requirements, but has done this already
-							if (plugin.getRequirementHandler()
-									.hasCompletedRequirement(reqID,
-											player.getName())) {
-								metRequirements.add(reqID);
-								continue;
-							}
-						}
+					if (!plugin.getRequirementHandler()
+							.hasCompletedRequirement(reqID, player.getName())) {
+						plugin.getRequirementHandler().addPlayerProgress(
+								player.getName(), reqID);
 
-						// Player does not meet requirements -> do nothing
-						meetsAllRequirements = false;
-						continue;
+						// Run results
+						plugin.getRequirementHandler().runResults(req, player);
 					}
+					metRequirements.add(reqID);
+					continue;
 				} else {
 
-					// Doesn't auto complete and doesn't meet requirement, then continue searching
-					if (!plugin.getConfigHandler().usePartialCompletion()) {
-
-						if (!req.meetsRequirement(player)) {
-							meetsAllRequirements = false;
-							continue;
-						} else {
-							// Player does meet requirement, continue searching
+					// Only check if player has done this when partial completion is used
+					if (plugin.getConfigHandler().usePartialCompletion()) {
+						// Player does not meet requirements, but has done this already
+						if (plugin.getRequirementHandler()
+								.hasCompletedRequirement(reqID,
+										player.getName())) {
+							metRequirements.add(reqID);
 							continue;
 						}
-
 					}
 
-					// Do not auto complete
-					if (plugin.getRequirementHandler().hasCompletedRequirement(
-							reqID, player.getName())) {
-						// Player has completed requirement already
-						metRequirements.add(reqID);
-						continue;
-					} else {
+					// Player does not meet requirements -> do nothing
+					meetsAllRequirements = false;
+					continue;
+				}
+			} else {
+
+				// Doesn't auto complete and doesn't meet requirement, then continue searching
+				if (!plugin.getConfigHandler().usePartialCompletion()) {
+
+					if (!req.meetsRequirement(player)) {
 						meetsAllRequirements = false;
 						continue;
+					} else {
+						// Player does meet requirement, continue searching
+						continue;
 					}
-				}
-			}
-			final String reqMessage = rank.getRankTo() == null ? Lang.MEETS_ALL_REQUIREMENTS_WITHOUT_RANK_UP
-					.getConfigValue() : Lang.MEETS_ALL_REQUIREMENTS
-					.getConfigValue(rank.getRankTo());
 
-			if (meetsAllRequirements || onlyOptional) {
-
-				AutorankTools.sendColoredMessage(sender, reqMessage
-						+ Lang.RANKED_UP_NOW.getConfigValue());
-				plugin.getPlayerChecker().checkPlayer(player);
-			} else {
-				//AutorankTools.sendColoredMessage(sender,
-					//	Lang.REQUIREMENTS_TO_RANK.getConfigValue(null));
-
-				if (showReqs) {
-					List<String> messages = getRequirementsInStringList(reqs,
-							metRequirements);
-
-					for (String message : messages) {
-						AutorankTools.sendColoredMessage(sender, message);
-					}
 				}
 
+				// Do not auto complete
+				if (plugin.getRequirementHandler().hasCompletedRequirement(
+						reqID, player.getName())) {
+					// Player has completed requirement already
+					metRequirements.add(reqID);
+					continue;
+				} else {
+					meetsAllRequirements = false;
+					continue;
+				}
 			}
+		}
+		final String reqMessage = nextRankChange.getRankTo() == null ? Lang.MEETS_ALL_REQUIREMENTS_WITHOUT_RANK_UP
+				.getConfigValue() : Lang.MEETS_ALL_REQUIREMENTS
+				.getConfigValue(nextRankChange.getRankTo());
+
+		if (meetsAllRequirements || onlyOptional) {
+
+			AutorankTools.sendColoredMessage(sender, reqMessage
+					+ Lang.RANKED_UP_NOW.getConfigValue());
+			plugin.getPlayerChecker().checkPlayer(player);
+		} else {
+			//AutorankTools.sendColoredMessage(sender,
+			//	Lang.REQUIREMENTS_TO_RANK.getConfigValue(null));
+
+			if (showReqs) {
+				List<String> messages = getRequirementsInStringList(reqs,
+						metRequirements);
+
+				for (String message : messages) {
+					AutorankTools.sendColoredMessage(sender, message);
+				}
+			}
+
 		}
 	}
 

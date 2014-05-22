@@ -11,24 +11,24 @@ import org.bukkit.entity.Player;
 
 public class RankChange {
 
-	private final String rank;
+	private final String rankFrom;
 	private final List<Requirement> req;
 	private final List<Result> res;
 	private final String rankTo;
 	private final Autorank plugin;
 
-	public RankChange(final Autorank plugin, final String rank,
+	public RankChange(final Autorank plugin, final String rankFrom,
 			final String rankTo, final List<Requirement> req,
 			final List<Result> res) {
-		this.rank = rank;
+		this.rankFrom = rankFrom;
 		this.req = req;
 		this.res = res;
 		this.rankTo = rankTo;
 		this.plugin = plugin;
 	}
 
-	public String getRank() {
-		return rank;
+	public String getRankFrom() {
+		return rankFrom;
 	}
 
 	public List<Requirement> getReq() {
@@ -147,7 +147,7 @@ public class RankChange {
 	@Override
 	public String toString() {
 		final StringBuilder b = new StringBuilder();
-		b.append(rank);
+		b.append(rankFrom);
 		b.append(": ");
 
 		boolean first = true;
