@@ -73,10 +73,10 @@ public class CompleteCommand implements CommandExecutor {
 		final String currentGroup = plugin.getPermPlugHandler()
 				.getPermissionPlugin().getPlayerGroups(player)[0];
 		String latestKnownGroup = plugin.getRequirementHandler()
-				.getLastKnownGroup(player.getName());
+				.getLastKnownGroup(player.getUniqueId());
 
 		if (latestKnownGroup == null) {
-			plugin.getRequirementHandler().setLastKnownGroup(player.getName(),
+			plugin.getRequirementHandler().setLastKnownGroup(player.getUniqueId(),
 					currentGroup);
 
 			latestKnownGroup = currentGroup;
@@ -84,9 +84,9 @@ public class CompleteCommand implements CommandExecutor {
 
 		if (!latestKnownGroup.equalsIgnoreCase(currentGroup)) {
 			// Reset progress and update latest known group
-			plugin.getRequirementHandler().setPlayerProgress(player.getName(),
+			plugin.getRequirementHandler().setPlayerProgress(player.getUniqueId(),
 					new ArrayList<Integer>());
-			plugin.getRequirementHandler().setLastKnownGroup(player.getName(),
+			plugin.getRequirementHandler().setLastKnownGroup(player.getUniqueId(),
 					currentGroup);
 		}
 
@@ -119,7 +119,7 @@ public class CompleteCommand implements CommandExecutor {
 				final Requirement req = requirements.get((completionID - 1));
 
 				if (plugin.getRequirementHandler().hasCompletedRequirement(
-						(completionID - 1), player.getName())) {
+						(completionID - 1), player.getUniqueId())) {
 					player.sendMessage(ChatColor.RED
 							+ Lang.ALREADY_COMPLETED_REQUIREMENT
 									.getConfigValue());
@@ -138,7 +138,7 @@ public class CompleteCommand implements CommandExecutor {
 
 					// Log that a player has passed this requirement
 					plugin.getRequirementHandler().addPlayerProgress(
-							player.getName(), (completionID - 1));
+							player.getUniqueId(), (completionID - 1));
 
 				} else {
 					// player does not meet requirements

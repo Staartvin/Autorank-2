@@ -64,10 +64,10 @@ public class RankChangeResult extends Result {
 
 		// When rank is changed: reset progress and update last known group
 		getAutorank().getRequirementHandler().setPlayerProgress(
-				player.getName(), new ArrayList<Integer>());
+				player.getUniqueId(), new ArrayList<Integer>());
 
 		getAutorank().getRequirementHandler().setLastKnownGroup(
-				player.getName(), to);
+				player.getUniqueId(), to);
 
 		return this.getAutorank().getPermPlugHandler().getPermissionPlugin()
 				.replaceGroup(player, world, oldrank, to);

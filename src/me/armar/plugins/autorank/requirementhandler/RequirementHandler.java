@@ -106,46 +106,46 @@ public class RequirementHandler {
 		saveConfig();
 	}
 
-	public void setPlayerProgress(final String playerName,
+	public void setPlayerProgress(UUID uuid,
 			final List<Integer> progress) {
-		UUID uuid = UUIDManager.getUUIDFromPlayer(playerName);
+		//UUID uuid = UUIDManager.getUUIDFromPlayer(playerName);
 
 		config.set(uuid.toString() + ".progress", progress);
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Integer> getProgress(final String playerName) {
-		UUID uuid = UUIDManager.getUUIDFromPlayer(playerName);
+	public List<Integer> getProgress(UUID uuid) {
+		//UUID uuid = UUIDManager.getUUIDFromPlayer(playerName);
 
 		return (List<Integer>) config.getList(uuid.toString() + ".progress",
 				new ArrayList<Integer>());
 	}
 
-	public void addPlayerProgress(final String playerName, final int reqID) {
-		final List<Integer> progress = getProgress(playerName);
+	public void addPlayerProgress(UUID uuid, final int reqID) {
+		final List<Integer> progress = getProgress(uuid);
 
-		if (hasCompletedRequirement(reqID, playerName))
+		if (hasCompletedRequirement(reqID, uuid))
 			return;
 
 		progress.add(reqID);
 
-		setPlayerProgress(playerName, progress);
+		setPlayerProgress(uuid, progress);
 	}
 
-	public String getLastKnownGroup(final String playerName) {
-		UUID uuid = UUIDManager.getUUIDFromPlayer(playerName);
+	public String getLastKnownGroup(UUID uuid) {
+		//UUID uuid = UUIDManager.getUUIDFromPlayer(playerName);
 
 		return config.getString(uuid.toString() + ".last group");
 	}
 
-	public void setLastKnownGroup(final String playerName, final String group) {
-		UUID uuid = UUIDManager.getUUIDFromPlayer(playerName);
+	public void setLastKnownGroup(UUID uuid, final String group) {
+		//UUID uuid = UUIDManager.getUUIDFromPlayer(playerName);
 		config.set(uuid.toString() + ".last group", group);
 	}
 
 	public boolean hasCompletedRequirement(final int reqID,
-			final String playerName) {
-		final List<Integer> progress = getProgress(playerName);
+			UUID uuid) {
+		final List<Integer> progress = getProgress(uuid);
 
 		return progress.contains(reqID);
 	}

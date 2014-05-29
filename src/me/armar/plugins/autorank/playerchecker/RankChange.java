@@ -78,7 +78,7 @@ public class RankChange {
 			// If this requirement doesn't auto complete and hasn't already been completed, return false;
 			if (!r.useAutoCompletion()
 					&& !plugin.getRequirementHandler().hasCompletedRequirement(
-							reqID, player.getName())) {
+							reqID, player.getUniqueId())) {
 				return false;
 			}
 
@@ -86,7 +86,7 @@ public class RankChange {
 
 				// Player does not meet requirement, but has completed it already
 				if (plugin.getRequirementHandler().hasCompletedRequirement(
-						reqID, player.getName())) {
+						reqID, player.getUniqueId())) {
 					continue;
 				}
 
@@ -98,9 +98,9 @@ public class RankChange {
 
 				// Player has not completed this requirement -> perform results
 				if (!plugin.getRequirementHandler().hasCompletedRequirement(
-						reqID, player.getName())) {
+						reqID, player.getUniqueId())) {
 					plugin.getRequirementHandler().addPlayerProgress(
-							player.getName(), reqID);
+							player.getUniqueId(), reqID);
 				} else {
 					// Player already completed this -> do nothing
 					continue;

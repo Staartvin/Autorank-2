@@ -101,20 +101,20 @@ public class CheckCommand implements CommandExecutor {
 				.getPermissionPlugin()
 				.getWorldGroups(player, player.getWorld().getName())[0];
 		String latestKnownGroup = plugin.getRequirementHandler()
-				.getLastKnownGroup(player.getName());
+				.getLastKnownGroup(player.getUniqueId());
 
 		if (latestKnownGroup == null) {
-			plugin.getRequirementHandler().setLastKnownGroup(player.getName(),
-					currentGroup);
+			plugin.getRequirementHandler().setLastKnownGroup(
+					player.getUniqueId(), currentGroup);
 
 			latestKnownGroup = currentGroup;
 		}
 		if (!latestKnownGroup.equalsIgnoreCase(currentGroup)) {
 			// Reset progress and update latest known group
-			plugin.getRequirementHandler().setPlayerProgress(player.getName(),
-					new ArrayList<Integer>());
-			plugin.getRequirementHandler().setLastKnownGroup(player.getName(),
-					currentGroup);
+			plugin.getRequirementHandler().setPlayerProgress(
+					player.getUniqueId(), new ArrayList<Integer>());
+			plugin.getRequirementHandler().setLastKnownGroup(
+					player.getUniqueId(), currentGroup);
 		}
 
 		final String[] groups = plugin.getPermPlugHandler()
@@ -182,9 +182,10 @@ public class CheckCommand implements CommandExecutor {
 			AutorankTools.sendColoredMessage(sender,
 					Lang.NO_NEXT_RANK.getConfigValue());
 		}*/
-		
+
 		// Don't get requirements when the player has no new requirements
-		if (nextRankChange == null) return;
+		if (nextRankChange == null)
+			return;
 
 		List<Requirement> reqs = plugin.getPlayerChecker()
 				.getRequirementsForNextRank(player);
@@ -212,9 +213,10 @@ public class CheckCommand implements CommandExecutor {
 						continue;
 
 					if (!plugin.getRequirementHandler()
-							.hasCompletedRequirement(reqID, player.getName())) {
+							.hasCompletedRequirement(reqID,
+									player.getUniqueId())) {
 						plugin.getRequirementHandler().addPlayerProgress(
-								player.getName(), reqID);
+								player.getUniqueId(), reqID);
 
 						// Run results
 						plugin.getRequirementHandler().runResults(req, player);
@@ -228,7 +230,7 @@ public class CheckCommand implements CommandExecutor {
 						// Player does not meet requirements, but has done this already
 						if (plugin.getRequirementHandler()
 								.hasCompletedRequirement(reqID,
-										player.getName())) {
+										player.getUniqueId())) {
 							metRequirements.add(reqID);
 							continue;
 						}
@@ -255,7 +257,7 @@ public class CheckCommand implements CommandExecutor {
 
 				// Do not auto complete
 				if (plugin.getRequirementHandler().hasCompletedRequirement(
-						reqID, player.getName())) {
+						reqID, player.getUniqueId())) {
 					// Player has completed requirement already
 					metRequirements.add(reqID);
 					continue;
@@ -270,17 +272,17 @@ public class CheckCommand implements CommandExecutor {
 				.getConfigValue(nextRankChange.getRankTo());
 
 		String reqMessage2 = "";
-				
-		if (plugin.getRequirementHandler().hasCompletedRank(player.getUniqueId(), nextRankChange.getRankFrom())) {
+
+		if (plugin.getRequirementHandler().hasCompletedRank(
+				player.getUniqueId(), nextRankChange.getRankFrom())) {
 			reqMessage2 = " but has no rankup.";
 		} else {
 			reqMessage2 = Lang.RANKED_UP_NOW.getConfigValue();
 		}
-				
+
 		if (meetsAllRequirements || onlyOptional) {
 
-			AutorankTools.sendColoredMessage(sender, reqMessage
-					+ reqMessage2);
+			AutorankTools.sendColoredMessage(sender, reqMessage + reqMessage2);
 			plugin.getPlayerChecker().checkPlayer(player);
 		} else {
 			//AutorankTools.sendColoredMessage(sender,

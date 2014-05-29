@@ -1,6 +1,7 @@
 package me.armar.plugins.autorank.playerchecker.requirement;
 
 import java.util.List;
+import java.util.UUID;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.playerchecker.result.Result;
@@ -108,9 +109,9 @@ public abstract class Requirement {
 	 * @param playerName Player to check for
 	 * @return true if completed, false otherwise.
 	 */
-	public final boolean isCompleted(final int reqID, final String playerName) {
+	public final boolean isCompleted(final int reqID, UUID uuid) {
 		return autorank.getRequirementHandler().hasCompletedRequirement(reqID,
-				playerName);
+				uuid);
 	}
 
 	/**
