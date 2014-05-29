@@ -50,6 +50,12 @@ public class RankChange {
 	public boolean checkRequirements(final Player player) {
 		boolean result = true;
 
+		// Player already got this rank
+		if (plugin.getRequirementHandler()
+				.getCompletedRanks(player.getUniqueId()).contains(rankFrom)) {
+			return false;
+		}
+
 		for (final Requirement r : req) {
 			if (r == null)
 				return false;
@@ -132,10 +138,24 @@ public class RankChange {
 		boolean result = true;
 
 		if (checkRequirements(player)) {
+			// Apply all 'main' results
+
+			// Player already got this rank
+			if (plugin.getRequirementHandler()
+					.getCompletedRanks(player.getUniqueId()).contains(rankFrom)) {
+				return false;
+			}
+
+			// Add progress of completed requirements
+			plugin.getRequirementHandler().addCompletedRanks(
+					player.getUniqueId(), rankFrom);
+
 			for (final Result r : res) {
-				if (r != null)
-					if (!r.applyResult(player))
+				if (r != null) {
+					if (!r.applyResult(player)) {
 						result = false;
+					}
+				}
 			}
 		} else {
 			result = false;
