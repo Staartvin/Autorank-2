@@ -30,26 +30,18 @@ public class PermissionGroupValidation {
 		final String[] groups = autorank.getPermPlugHandler()
 				.getPermissionPlugin().getGroups();
 		Set<String> ranks;
-
-		// Check for advanced config.
-		if (config.getBoolean("use advanced config")) {
-
-			final ConfigurationSection section = config
-					.getConfigurationSection("ranks");
-			ranks = section.getKeys(false);
-
-		} // Check for simple config
-		else {
-			return true;
-			// TODO make a seperate method for simple config
-			//ranks = config.getKeys(false);
-		}
+		
+		final ConfigurationSection section = config
+				.getConfigurationSection("ranks");
+		ranks = section.getKeys(false);
 
 		for (final String rank : ranks) {
 			for (int i = 0; i < groups.length; i++) {
 				final String group = groups[i];
-				if (rank.equals(group))
+				if (rank.equals(group)) {
 					break;
+				}
+
 
 				if (rank.equalsIgnoreCase(group)) {
 					// Do not log but register warning
@@ -59,13 +51,16 @@ public class PermissionGroupValidation {
 					isMissing = true;
 					break;
 				}
-				// If this is the last group and is not equal to the rank defined in the config:
-				if ((i == (groups.length - 1)) && !rank.equals(group)) {
+				
+				if ((i == (groups.length - 1))) {
+					// If this is the last group and is not equal to the rank defined in the config:
 					autorank.getWarningManager().registerWarning(
-							"Permissions group is not defined: " + rank, 10);
+							"Permissions group is not defined in permissions file: " + rank, 10);
 					isMissing = true;
 				}
 			}
+			
+			
 
 			if (!isValidChange(rank)) {
 				//autorank.getWarningManager().registerWarning("Rank change of rank '" + rank + "' is invalid. (Do the groups used exist?)", 10);
