@@ -171,6 +171,28 @@ public class RequirementHandler {
 			realResult.applyResult(player);
 		}
 	}
+	
+	public void addCompletedRanks(UUID uuid, String rank) {
+		List<String> completed = getCompletedRanks(uuid);
+		
+		completed.add(rank);
+		
+		setCompletedRanks(uuid, completed);
+	}
+	
+	public void setCompletedRanks(UUID uuid, List<String> completedRanks) {
+		config.set(uuid.toString() + ".completed ranks", completedRanks);
+	}
+	
+	public boolean hasCompletedRank(UUID uuid, String rank) {
+		return getCompletedRanks(uuid).contains(rank);
+	}
+	
+	public List<String> getCompletedRanks(UUID uuid) {
+		List<String> completed = config.getStringList(uuid.toString() + ".completed ranks");
+		
+		return completed;
+	}
 
 	public void convertNamesToUUIDs() {
 
