@@ -175,13 +175,13 @@ public class CheckCommand implements CommandExecutor {
 			stringBuilder.append(Lang.MULTIPLE_GROUPS.getConfigValue(null)); // Multiple groups
 		*/
 
-		String nextRankup = plugin.getPlayerChecker()
+		/*String nextRankup = plugin.getPlayerChecker()
 				.getNextRankupGroup(player);
 
-		if (nextRankup == null) {
+		if (nextRankup == null || plugin.getRequirementHandler().getCompletedRanks(player.getUniqueId()).contains(nextRankChange.getRankFrom())) {
 			AutorankTools.sendColoredMessage(sender,
 					Lang.NO_NEXT_RANK.getConfigValue());
-		}
+		}*/
 		
 		// Don't get requirements when the player has no new requirements
 		if (nextRankChange == null) return;
@@ -269,10 +269,18 @@ public class CheckCommand implements CommandExecutor {
 				.getConfigValue() : Lang.MEETS_ALL_REQUIREMENTS
 				.getConfigValue(nextRankChange.getRankTo());
 
+		String reqMessage2 = "";
+				
+		if (plugin.getRequirementHandler().hasCompletedRank(player.getUniqueId(), nextRankChange.getRankFrom())) {
+			reqMessage2 = " but has no rankup.";
+		} else {
+			reqMessage2 = Lang.RANKED_UP_NOW.getConfigValue();
+		}
+				
 		if (meetsAllRequirements || onlyOptional) {
 
 			AutorankTools.sendColoredMessage(sender, reqMessage
-					+ Lang.RANKED_UP_NOW.getConfigValue());
+					+ reqMessage2);
 			plugin.getPlayerChecker().checkPlayer(player);
 		} else {
 			//AutorankTools.sendColoredMessage(sender,
