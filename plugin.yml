@@ -65,3 +65,9 @@ permissions:
     autorank.warning.notice:
         description: Allows a player to see warnings when problems occur with Autorank.
         default: op
+    autorank.convert.playerdata:
+        description: Allows a player to convert the playerdata to UUID format.
+        default: op
+    autorank.convert.data:
+        description: Allows a player to convert the data.yml to UUID format.
+        default: op
