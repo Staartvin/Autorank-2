@@ -26,6 +26,11 @@ public class AddCommand implements CommandExecutor {
 		if (!plugin.getCommandsManager().hasPermission("autorank.add", sender)) {
 			return true;
 		}
+		
+		if (args.length < 3) {
+			sender.sendMessage(Lang.INVALID_FORMAT.getConfigValue("/ar add <player> <value>"));
+			return true;
+		}
 
 		UUID uuid = UUIDManager.getUUIDFromPlayer(args[1]);
 		

@@ -23,6 +23,12 @@ public class SetCommand implements CommandExecutor {
 			final String label, final String[] args) {
 
 		int value = -1;
+		
+		if (args.length < 3) {
+			sender.sendMessage(Lang.INVALID_FORMAT.getConfigValue("/ar set <player> <value>"));
+			return true;
+		}
+		
 		if (args.length > 2) {
 			
 			StringBuilder builder = new StringBuilder();
@@ -69,7 +75,7 @@ public class SetCommand implements CommandExecutor {
 					.sendColoredMessage(
 							sender,
 							Lang.INVALID_FORMAT
-									.getConfigValue("/ar set [player] [value]" ));
+									.getConfigValue("/ar set <player> <value>" ));
 		}
 
 		return true;
