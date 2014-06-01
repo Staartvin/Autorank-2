@@ -1,12 +1,16 @@
 package me.armar.plugins.autorank.commands.manager;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.AddCommand;
 import me.armar.plugins.autorank.commands.ArchiveCommand;
 import me.armar.plugins.autorank.commands.CheckCommand;
 import me.armar.plugins.autorank.commands.CompleteCommand;
+import me.armar.plugins.autorank.commands.ConvertUUIDCommand;
 import me.armar.plugins.autorank.commands.DebugCommand;
 import me.armar.plugins.autorank.commands.ForceCheckCommand;
 import me.armar.plugins.autorank.commands.GlobalCheckCommand;
@@ -22,6 +26,7 @@ import me.armar.plugins.autorank.language.Lang;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 
@@ -42,39 +47,24 @@ public class CommandsManager implements TabExecutor {
 		this.plugin = plugin;
 
 		// Register command classes
-		addCommand = new AddCommand(plugin);
-		helpCommand = new HelpCommand(plugin);
-		setCommand = new SetCommand(plugin);
-		leaderboardCommand = new LeaderboardCommand(plugin);
-		removeCommand = new RemoveCommand(plugin);
-		debugCommand = new DebugCommand(plugin);
-		syncCommand = new SyncCommand(plugin);
-		syncStatsCommand = new SyncStatsCommand(plugin);
-		reloadCommand = new ReloadCommand(plugin);
-		importCommand = new ImportCommand(plugin);
-		completeCommand = new CompleteCommand(plugin);
-		checkCommand = new CheckCommand(plugin);
-		archiveCommand = new ArchiveCommand(plugin);
-		globalCheckCommand = new GlobalCheckCommand(plugin);
-		forceCheckCommand = new ForceCheckCommand(plugin);
+		registeredCommands.put(Arrays.asList("add"), new AddCommand(plugin));
+		registeredCommands.put(Arrays.asList("help"), new HelpCommand(plugin));
+		registeredCommands.put(Arrays.asList("set"), new SetCommand(plugin));
+		registeredCommands.put(Arrays.asList("leaderboard", "leaderboards"), new LeaderboardCommand(plugin));
+		registeredCommands.put(Arrays.asList("remove", "rem"), new RemoveCommand(plugin));
+		registeredCommands.put(Arrays.asList("debug"), new DebugCommand(plugin));
+		registeredCommands.put(Arrays.asList("sync"), new SyncCommand(plugin));
+		registeredCommands.put(Arrays.asList("syncstats"), new SyncStatsCommand(plugin));
+		registeredCommands.put(Arrays.asList("reload"), new ReloadCommand(plugin));
+		registeredCommands.put(Arrays.asList("import"), new ImportCommand(plugin));
+		registeredCommands.put(Arrays.asList("complete"), new CompleteCommand(plugin));
+		registeredCommands.put(Arrays.asList("check"), new CheckCommand(plugin));
+		registeredCommands.put(Arrays.asList("archive"), new ArchiveCommand(plugin));
+		registeredCommands.put(Arrays.asList("gcheck", "globalcheck"), new GlobalCheckCommand(plugin));
+		registeredCommands.put(Arrays.asList("fcheck", "forcecheck"), new ForceCheckCommand(plugin));
+		registeredCommands.put(Arrays.asList("convert"), new ConvertUUIDCommand(plugin));
 	}
-
-	// All command classes
-	private final AddCommand addCommand;
-	private final SetCommand setCommand;
-	private final HelpCommand helpCommand;
-	private final LeaderboardCommand leaderboardCommand;
-	private final RemoveCommand removeCommand;
-	private final DebugCommand debugCommand;
-	private final SyncCommand syncCommand;
-	private final SyncStatsCommand syncStatsCommand;
-	private final ReloadCommand reloadCommand;
-	private final ImportCommand importCommand;
-	private final CompleteCommand completeCommand;
-	private final CheckCommand checkCommand;
-	private final ArchiveCommand archiveCommand;
-	private final GlobalCheckCommand globalCheckCommand;
-	private final ForceCheckCommand forceCheckCommand;
+	private HashMap<List<String>, CommandExecutor> registeredCommands = new HashMap<List<String>, CommandExecutor>();
 
 	public boolean hasPermission(final String permission,
 			final CommandSender sender) {
@@ -90,6 +80,7 @@ public class CommandsManager implements TabExecutor {
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command cmd,
 			final String label, final String[] args) {
+		
 		if (args.length == 0) {
 			sender.sendMessage(ChatColor.BLUE
 					+ "-----------------------------------------------------");
@@ -103,55 +94,18 @@ public class CommandsManager implements TabExecutor {
 		}
 
 		final String action = args[0];
-		if (action.equalsIgnoreCase("help")) {
-
-			return helpCommand.onCommand(sender, cmd, label, args);
-		} else if (action.equalsIgnoreCase("check")) {
-
-			return checkCommand.onCommand(sender, cmd, label, args);
-		} else if (action.equalsIgnoreCase("leaderboard")
-				|| action.equalsIgnoreCase("leaderboards")) {
-
-			return leaderboardCommand.onCommand(sender, cmd, label, args);
-		} else if (action.equalsIgnoreCase("set")) {
-
-			return setCommand.onCommand(sender, cmd, label, args);
-		} else if (action.equalsIgnoreCase("add")) {
-
-			return addCommand.onCommand(sender, cmd, label, args);
-		} else if (action.equalsIgnoreCase("remove")
-				|| action.equalsIgnoreCase("rem")) {
-
-			return removeCommand.onCommand(sender, cmd, label, args);
-		} else if (action.equalsIgnoreCase("debug")) {
-
-			return debugCommand.onCommand(sender, cmd, label, args);
-		} else if (action.equalsIgnoreCase("reload")) {
-
-			return reloadCommand.onCommand(sender, cmd, label, args);
-		} else if (action.equalsIgnoreCase("import")) {
-
-			return importCommand.onCommand(sender, cmd, label, args);
-		} else if (action.equalsIgnoreCase("archive")) {
-
-			return archiveCommand.onCommand(sender, cmd, label, args);
-		} else if (action.equalsIgnoreCase("gcheck")) {
-
-			return globalCheckCommand.onCommand(sender, cmd, label, args);
-		} else if (action.equalsIgnoreCase("complete")) {
-
-			return completeCommand.onCommand(sender, cmd, label, args);
-		} else if (action.equalsIgnoreCase("sync")) {
-
-			return syncCommand.onCommand(sender, cmd, label, args);
-		} else if (action.equalsIgnoreCase("syncstats")) {
-
-			return syncStatsCommand.onCommand(sender, cmd, label, args);
-		} else if (action.equalsIgnoreCase("forcecheck")) {
-
-			return forceCheckCommand.onCommand(sender, cmd, label, args);
+		
+		
+		// Go through every list and check if that action is in there.
+		for (Entry<List<String>, CommandExecutor> entry : registeredCommands.entrySet()) {
+			
+			for (String actionString: entry.getKey()) {
+				if (actionString.equalsIgnoreCase(action)) {
+					return entry.getValue().onCommand(sender, cmd, label, args);
+				}
+			}
 		}
-
+		
 		sender.sendMessage(ChatColor.RED + "Command not recognised!");
 		sender.sendMessage(ChatColor.YELLOW
 				+ "Use '/ar help' for a list of commands.");
@@ -169,7 +123,7 @@ public class CommandsManager implements TabExecutor {
 			// Show a list of commands if needed
 			return Lists.newArrayList("help", "check", "leaderboard", "set",
 					"add", "remove", "debug", "reload", "import", "archive",
-					"gcheck", "complete", "sync", "syncstats", "forcecheck");
+					"gcheck", "complete", "sync", "syncstats", "forcecheck", "convert");
 		}
 
 		if (args.length > 1) {
