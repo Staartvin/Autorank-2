@@ -66,6 +66,8 @@ public class HelpCommand implements CommandExecutor {
 					+ ChatColor.GRAY + "- Sync Autorank's time to Stats' time");
 			sender.sendMessage(ChatColor.AQUA + "/ar forcecheck <player>"
 					+ ChatColor.GRAY + "- Do a manual silent check.");
+			sender.sendMessage(ChatColor.AQUA + "/ar convert <file>"
+					+ ChatColor.GRAY + "- Convert a file to UUID format.");
 			sender.sendMessage(ChatColor.BLUE + "Page 3 of " + maxPages);
 		} else {
 			sender.sendMessage(ChatColor.GREEN + "-- Autorank Commands --");
