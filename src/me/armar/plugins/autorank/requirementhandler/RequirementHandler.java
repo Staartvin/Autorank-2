@@ -54,7 +54,7 @@ public class RequirementHandler {
 		loadConfig();
 
 		// Convert old format to new UUID storage format
-		convertNamesToUUIDs();
+		//convertNamesToUUIDs();
 
 		plugin.getLogger().info(
 				"Loaded playerdata.");

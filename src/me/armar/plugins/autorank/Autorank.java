@@ -142,7 +142,7 @@ public class Autorank extends JavaPlugin {
 		setPlaytimes(new Playtimes(this));
 
 		// Convert data folder
-		playtimes.convertToUUIDStorage();
+		//playtimes.convertToUUIDStorage();
 
 		// Create permission plugin handler class
 		setPermPlugHandler(new PermissionsPluginManager(this));
