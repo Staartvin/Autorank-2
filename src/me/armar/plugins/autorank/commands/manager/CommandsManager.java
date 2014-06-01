@@ -59,7 +59,7 @@ public class CommandsManager implements TabExecutor {
 		registeredCommands.put(Arrays.asList("import"), new ImportCommand(plugin));
 		registeredCommands.put(Arrays.asList("complete"), new CompleteCommand(plugin));
 		registeredCommands.put(Arrays.asList("check"), new CheckCommand(plugin));
-		registeredCommands.put(Arrays.asList("archive"), new ArchiveCommand(plugin));
+		registeredCommands.put(Arrays.asList("archive", "arch"), new ArchiveCommand(plugin));
 		registeredCommands.put(Arrays.asList("gcheck", "globalcheck"), new GlobalCheckCommand(plugin));
 		registeredCommands.put(Arrays.asList("fcheck", "forcecheck"), new ForceCheckCommand(plugin));
 		registeredCommands.put(Arrays.asList("convert"), new ConvertUUIDCommand(plugin));
