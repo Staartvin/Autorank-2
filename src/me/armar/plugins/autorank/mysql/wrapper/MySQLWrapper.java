@@ -2,6 +2,11 @@ package me.armar.plugins.autorank.mysql.wrapper;
 
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.config.ConfigHandler;
@@ -25,10 +30,6 @@ public class MySQLWrapper {
 	private final Autorank plugin;
 	private SQLDataStorage mysql;
 	String hostname, username, password, database, table;
-	// Database time
-	int databaseTime = 0;
-	// This thread will be used to check if the database time has been retrieved.
-	Thread timeThread;
 
 	// Keeps track of when a call to the database was for this player
 	private HashMap<UUID, Long> lastChecked = new HashMap<UUID, Long>();
@@ -67,22 +68,6 @@ public class MySQLWrapper {
 
 	}
 
-	/**
-	 * Because the MySQL queries are done async, we need to wait for the result.
-	 * Otherwise it would be cached and out of date.
-	 * This waits for the thread to die and then it will continue
-	 * Use this whenever you do an async MySQL thread.
-	 */
-	private void waitForThread(final Thread thread) {
-		if (thread.isAlive()) {
-			try {
-				thread.join();
-			} catch (final InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
 	public void sqlSetup() {
 		
 		ConfigHandler configHandler = plugin.getConfigHandler();
@@ -115,7 +100,7 @@ public class MySQLWrapper {
 
 	/**
 	 * Gets the database time of player
-	 * Run this ASYNC!
+	 * <br>Run this ASYNC, because it will block the thread it's on.
 	 * <p>
 	 * This will return an updated value every 5 minutes. Calling it every
 	 * minute isn't smart, as it will only update every 5 minutes.
@@ -140,17 +125,32 @@ public class MySQLWrapper {
 			mysql.connect();
 		}
 		// Retrieve database time
-		timeThread = new Thread(new TimeRunnable(this, mysql, uuid, table));
-		timeThread.start();
-
-		// Wait for thread to finish
-		waitForThread(timeThread);
-
+		// Setup executor service with pool = 1
+		ExecutorService executor = Executors.newFixedThreadPool(1);
+		
+		// Initialise new callable class
+		Callable<Integer> callable = new GrabDatabaseTimeTask(mysql, uuid, table);
+		
+		// Sumbit callable
+		Future<Integer> futureValue = executor.submit(callable);
+		
+		// Grab value (will block thread, but there is no other way)
+		// That's why you need to run this async.
+		int value = -1;
+		
+		try {
+			value = futureValue.get();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
+		
 		// Store last received time and last received value
 		lastChecked.put(uuid, System.currentTimeMillis());
-		lastReceivedTime.put(uuid, databaseTime);
+		lastReceivedTime.put(uuid, value);
 
-		return databaseTime;
+		return value;
 	}
 
 	public boolean isOutOfDate(UUID uuid) {
