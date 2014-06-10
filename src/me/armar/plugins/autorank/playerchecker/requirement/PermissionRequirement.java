@@ -5,6 +5,7 @@ import java.util.List;
 
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.playerchecker.result.Result;
+
 import org.bukkit.entity.Player;
 
 public class PermissionRequirement extends Requirement {
