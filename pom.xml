@@ -122,8 +122,8 @@
 		</dependency>
 
 		<dependency>
-			<groupId>MCore</groupId>
-			<artifactId>MCore</artifactId>
+			<groupId>mcore</groupId>
+			<artifactId>mcore</artifactId>
 			<version>7.2.1</version>
 			<scope>provided</scope>
 			<type>jar</type>

@@ -61,6 +61,7 @@ public class RequirementHandler {
 		plugin.getLogger().info("Loaded playerdata.");
 	}
 
+	@SuppressWarnings("deprecation")
 	public void reloadConfig() {
 		if (configFile == null) {
 			configFile = new File(plugin.getDataFolder() + "/playerdata",
