@@ -98,7 +98,7 @@
 		</dependency>
 
 		<dependency>
-			<groupId>net.ess3</groupId>
+			<groupId>net.ess</groupId>
 			<artifactId>Essentials</artifactId>
 			<version>2.13.1</version>
 			<scope>provided</scope>
