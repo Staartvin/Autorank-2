@@ -101,6 +101,7 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 	 * @param group Group to remove the player from
 	 * @return true if done, false if failed
 	 */
+	@SuppressWarnings("deprecation")
 	public boolean removeGroup(final Player player, final String world,
 			final String group) {
 		if (permission == null)
@@ -117,6 +118,7 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 	 * @param group Group to add the player to
 	 * @return true if done, false if failed
 	 */
+	@SuppressWarnings("deprecation")
 	public boolean addGroup(final Player player, final String world,
 			final String group) {
 		if (permission == null)
@@ -140,6 +142,7 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 		return permission.getGroups();
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public String[] getWorldGroups(final Player player, final String world) {
 		if (permission == null) {

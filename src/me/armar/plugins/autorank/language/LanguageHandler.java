@@ -34,6 +34,7 @@ public class LanguageHandler {
 		plugin.getLogger().info("Language file loaded (lang.yml)");
 	}
 
+	@SuppressWarnings("deprecation")
 	public void reloadConfig() {
 		if (languageConfigFile == null) {
 			languageConfigFile = new File(plugin.getDataFolder() + "/lang",

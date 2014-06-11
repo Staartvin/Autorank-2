@@ -57,7 +57,7 @@ public class MoneyRequirement extends Requirement {
 	@Override
 	public boolean meetsRequirement(final Player player) {
 
-		return economy != null && economy.has(player.getName(), minMoney);
+		return economy != null && economy.has(this.getAutorank().getServer().getOfflinePlayer(player.getUniqueId()), minMoney);
 	}
 
 	@Override
@@ -79,7 +79,7 @@ public class MoneyRequirement extends Requirement {
 	@Override
 	public String getProgress(final Player player) {
 		String progress = "";
-		progress = progress.concat(economy.getBalance(player.getName()) + "/"
+		progress = progress.concat(economy.getBalance(this.getAutorank().getServer().getOfflinePlayer(player.getUniqueId())) + "/"
 				+ minMoney);
 		return progress;
 	}

@@ -11,11 +11,6 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
-		<attributes>
-			<attribute name="maven.pomderived" value="true"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="lib" path="lib/Essentials.jar"/>
 	<classpathentry kind="lib" path="lib/EssentialsGroupManager.jar"/>
 	<classpathentry kind="lib" path="lib/Factions.jar"/>
@@ -23,7 +18,7 @@
 	<classpathentry kind="lib" path="lib/PermissionsBukkit.jar"/>
 	<classpathentry kind="lib" path="lib/Vault.jar">
 		<attributes>
-			<attribute name="javadoc_location" value="http://mythcraft.dyndns.org/javadoc/vault/"/>
+			<attribute name="javadoc_location" value="http://mythcraft.duckdns.org/javadoc/vault/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/WorldEdit.jar"/>
@@ -39,6 +34,11 @@
 	<classpathentry kind="lib" path="lib/Stats.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="http://ci.lolmewn.nl/job/Stats/javadoc/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="output" path="target/classes"/>
