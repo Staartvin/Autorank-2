@@ -12,10 +12,10 @@ import com.earth2me.essentials.User;
 /**
  * Handles all connections with Essentials
  * <p>
- * Date created:  21:02:05
- * 15 mrt. 2014
+ * Date created: 21:02:05 15 mrt. 2014
+ * 
  * @author Staartvin
- *
+ * 
  */
 public class EssentialsHandler implements DependencyHandler {
 
@@ -29,29 +29,30 @@ public class EssentialsHandler implements DependencyHandler {
 	public boolean isAFK(Player player) {
 		if (!isAvailable())
 			return false;
-		
-		if (!plugin.getConfigHandler().useAFKIntegration()) return false;
-		
+
+		if (!plugin.getConfigHandler().useAFKIntegration())
+			return false;
+
 		User user = api.getUser(player);
-		
+
 		if (user == null) {
 			return false;
 		}
-		
-		return user.isAfk();	
+
+		return user.isAfk();
 	}
-	
+
 	public boolean isJailed(Player player) {
 		if (!isAvailable())
 			return false;
-		
+
 		User user = api.getUser(player);
-		
+
 		if (user == null) {
 			return false;
 		}
-		
-		return user.isJailed();	
+
+		return user.isJailed();
 	}
 
 	/* (non-Javadoc)

@@ -293,17 +293,18 @@ public class Playtimes {
 
 						// First archive all names below 1
 						archive(1);
-						
+
 						final Set<String> records = data.getKeys(false);
-						
+
 						int size = records.size();
 
 						// 9 items per second
 						int speed = 9;
 						int duration = (int) Math.floor(size / speed);
 						String timeName = getDurationString(duration);
-						
-						plugin.getLogger().warning("Starting converting data.yml");
+
+						plugin.getLogger().warning(
+								"Starting converting data.yml");
 						plugin.getLogger().warning(
 								"Conversion will take approx. " + timeName
 										+ "( guess for your data.yml)");
@@ -348,50 +349,50 @@ public class Playtimes {
 
 	private String getDurationString(int seconds) {
 
-	    int hours = seconds / 3600;
-	    int minutes = (seconds % 3600) / 60;
-	    seconds = seconds % 60;
+		int hours = seconds / 3600;
+		int minutes = (seconds % 3600) / 60;
+		seconds = seconds % 60;
 
-	    StringBuilder builder = new StringBuilder("");
-	    
-	    if (hours > 0) {
-	    	if (hours == 1) {
-	    		builder.append("1 hour");
-	    	} else {
-	    		builder.append(hours + " hours");
-	    	}
-	    	
-	    	if (minutes > 0 || seconds > 0) {
-	    		builder.append(", ");
-	    	} else {
-	    		builder.append(".");
-	    	}
-	    	
-	    }
-	    
-	    if (minutes > 0) {
-	    	if (minutes == 1) {
-	    		builder.append("1 minute");
-	    	} else {
-	    		builder.append(minutes + " minutes");
-	    	}
-	    	
-	    	if (seconds > 0) {
-	    		builder.append(" and ");
-	    	} else {
-	    		builder.append(".");
-	    	}
-	    }
-	    
-	    if (seconds > 0) {
-	    	if (seconds == 1) {
-	    		builder.append("1 second");
-	    	} else {
-	    		builder.append(seconds + " seconds");
-	    	}
-	    	builder.append(".");
-	    }
-	    
-	    return builder.toString();
+		StringBuilder builder = new StringBuilder("");
+
+		if (hours > 0) {
+			if (hours == 1) {
+				builder.append("1 hour");
+			} else {
+				builder.append(hours + " hours");
+			}
+
+			if (minutes > 0 || seconds > 0) {
+				builder.append(", ");
+			} else {
+				builder.append(".");
+			}
+
+		}
+
+		if (minutes > 0) {
+			if (minutes == 1) {
+				builder.append("1 minute");
+			} else {
+				builder.append(minutes + " minutes");
+			}
+
+			if (seconds > 0) {
+				builder.append(" and ");
+			} else {
+				builder.append(".");
+			}
+		}
+
+		if (seconds > 0) {
+			if (seconds == 1) {
+				builder.append("1 second");
+			} else {
+				builder.append(seconds + " seconds");
+			}
+			builder.append(".");
+		}
+
+		return builder.toString();
 	}
 }

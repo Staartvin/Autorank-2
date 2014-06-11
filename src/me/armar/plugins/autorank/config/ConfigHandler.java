@@ -28,8 +28,10 @@ public class ConfigHandler {
 		this.settingsConfig = plugin.getSettingsConfig();
 		this.advancedConfig = plugin.getAdvancedConfig();
 	}
-	
-	public enum MySQLOptions {HOSTNAME, USERNAME, PASSWORD, DATABASE, TABLE}
+
+	public enum MySQLOptions {
+		HOSTNAME, USERNAME, PASSWORD, DATABASE, TABLE
+	}
 
 	public boolean useAdvancedConfig() {
 		return settingsConfig.getBoolean("use advanced config");
@@ -241,7 +243,7 @@ public class ConfigHandler {
 		return settingsConfig.getString("leaderboard layout",
 				"&6&r | &b&p - &7&d day(s), &h hour(s) and &m minute(s).");
 	}
-	
+
 	public String getMySQLSettings(MySQLOptions option) {
 		switch (option) {
 		case HOSTNAME:
@@ -258,12 +260,13 @@ public class ConfigHandler {
 			return null;
 		}
 	}
-	
+
 	public int getIntervalTime() {
 		return settingsConfig.getInt("interval check", 5);
 	}
-	
+
 	public boolean doCheckForNewerVersion() {
-		return settingsConfig.getBoolean("auto-updater.check-for-new-versions", true);
+		return settingsConfig.getBoolean("auto-updater.check-for-new-versions",
+				true);
 	}
 }

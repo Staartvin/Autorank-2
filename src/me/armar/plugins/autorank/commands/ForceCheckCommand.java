@@ -43,7 +43,8 @@ public class ForceCheckCommand implements CommandExecutor {
 		}
 
 		if (AutorankTools.isExcluded(targetPlayer)) {
-			sender.sendMessage(Lang.PLAYER_IS_EXCLUDED.getConfigValue(targetPlayer.getName()));
+			sender.sendMessage(Lang.PLAYER_IS_EXCLUDED
+					.getConfigValue(targetPlayer.getName()));
 			return true;
 		}
 

@@ -24,24 +24,27 @@ public class SetCommand implements CommandExecutor {
 			final String label, final String[] args) {
 
 		int value = -1;
-		
+
 		if (args.length < 3) {
-			sender.sendMessage(Lang.INVALID_FORMAT.getConfigValue("/ar set <player> <value>"));
+			sender.sendMessage(Lang.INVALID_FORMAT
+					.getConfigValue("/ar set <player> <value>"));
 			return true;
 		}
-		
+
 		if (args.length > 2) {
-			
+
 			StringBuilder builder = new StringBuilder();
 
 			for (int i = 2; i < args.length; i++) {
 				builder.append(args[i]);
 			}
-			
-			if (!builder.toString().contains("m") && !builder.toString().contains("h") && !builder.toString().contains("d")) {
+
+			if (!builder.toString().contains("m")
+					&& !builder.toString().contains("h")
+					&& !builder.toString().contains("d")) {
 				value = AutorankTools.stringtoInt(builder.toString().trim());
 			} else {
-				value = AutorankTools.stringToMinutes(builder.toString());	
+				value = AutorankTools.stringToMinutes(builder.toString());
 			}
 		}
 
@@ -60,23 +63,20 @@ public class SetCommand implements CommandExecutor {
 			}
 
 			UUID uuid = UUIDManager.getUUIDFromPlayer(args[1]);
-			
+
 			if (uuid == null) {
 				sender.sendMessage(Lang.UNKNOWN_PLAYER.getConfigValue(args[1]));
 				return true;
 			}
-			
+
 			plugin.getPlaytimes().setLocalTime(uuid, value);
 			AutorankTools.sendColoredMessage(
 					sender,
-					Lang.PLAYTIME_CHANGED.getConfigValue(
-							args[1], value + " minutes"));
+					Lang.PLAYTIME_CHANGED.getConfigValue(args[1], value
+							+ " minutes"));
 		} else {
-			AutorankTools
-					.sendColoredMessage(
-							sender,
-							Lang.INVALID_FORMAT
-									.getConfigValue("/ar set <player> <value>" ));
+			AutorankTools.sendColoredMessage(sender, Lang.INVALID_FORMAT
+					.getConfigValue("/ar set <player> <value>"));
 		}
 
 		return true;

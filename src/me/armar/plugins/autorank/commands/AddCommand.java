@@ -26,14 +26,15 @@ public class AddCommand implements CommandExecutor {
 		if (!plugin.getCommandsManager().hasPermission("autorank.add", sender)) {
 			return true;
 		}
-		
+
 		if (args.length < 3) {
-			sender.sendMessage(Lang.INVALID_FORMAT.getConfigValue("/ar add <player> <value>"));
+			sender.sendMessage(Lang.INVALID_FORMAT
+					.getConfigValue("/ar add <player> <value>"));
 			return true;
 		}
 
 		UUID uuid = UUIDManager.getUUIDFromPlayer(args[1]);
-		
+
 		if (uuid == null) {
 			sender.sendMessage(Lang.UNKNOWN_PLAYER.getConfigValue(args[1]));
 			return true;
@@ -59,19 +60,14 @@ public class AddCommand implements CommandExecutor {
 				value += plugin.getPlaytimes().getLocalTime(uuid);
 			}
 		}
-		
-		
-		
+
 		if (value >= 0) {
 			plugin.getPlaytimes().setLocalTime(uuid, value);
 			AutorankTools.sendColoredMessage(sender,
 					Lang.PLAYTIME_CHANGED.getConfigValue(args[1], value + ""));
 		} else {
-			AutorankTools
-					.sendColoredMessage(
-							sender,
-							Lang.INVALID_FORMAT
-									.getConfigValue("/ar add [player] [value]"));
+			AutorankTools.sendColoredMessage(sender, Lang.INVALID_FORMAT
+					.getConfigValue("/ar add [player] [value]"));
 		}
 
 		return true;

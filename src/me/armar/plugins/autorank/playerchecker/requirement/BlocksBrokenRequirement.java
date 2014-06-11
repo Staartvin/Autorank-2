@@ -110,9 +110,8 @@ public class BlocksBrokenRequirement extends Requirement {
 	public String getProgress(final Player player) {
 		String progress = "";
 		progress = progress.concat(getStatsPlugin().getNormalStat(
-				"blocks_broken",
-				player.getName(), null, blockID + "",
-						damageValue + "")
+				"blocks_broken", player.getName(), null, blockID + "",
+				damageValue + "")
 				+ "/" + blocksBroken);
 		return progress;
 	}

@@ -9,10 +9,10 @@ import org.bukkit.plugin.Plugin;
 /**
  * Handles all connections with Vault
  * <p>
- * Date created:  21:02:20
- * 15 mrt. 2014
+ * Date created: 21:02:20 15 mrt. 2014
+ * 
  * @author Staartvin
- *
+ * 
  */
 public class VaultHandler implements DependencyHandler {
 
@@ -51,8 +51,8 @@ public class VaultHandler implements DependencyHandler {
 			api = (Vault) get();
 
 			if (api != null) {
-				plugin.getLogger().info(
-						"Vault has been found and can be used!");
+				plugin.getLogger()
+						.info("Vault has been found and can be used!");
 				return true;
 			} else {
 				plugin.getLogger().info(

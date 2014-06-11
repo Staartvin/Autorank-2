@@ -11,10 +11,10 @@ import org.bukkit.plugin.Plugin;
 /**
  * Handles all connections with OnTime
  * <p>
- * Date created:  21:02:05
- * 15 mrt. 2014
+ * Date created: 21:02:05 15 mrt. 2014
+ * 
  * @author Staartvin
- *
+ * 
  */
 public class OnTimeHandler implements DependencyHandler {
 
@@ -24,10 +24,11 @@ public class OnTimeHandler implements DependencyHandler {
 	public OnTimeHandler(final Autorank instance) {
 		plugin = instance;
 	}
-	
+
 	public int getPlayTime(String playerName) {
-		if (!isAvailable()) return 0;
-		
+		if (!isAvailable())
+			return 0;
+
 		// Divide by 60000 because time is in milliseconds
 		return (int) (OnTimeAPI.getPlayerTimeData(playerName, data.TOTALPLAY) / 60000);
 	}

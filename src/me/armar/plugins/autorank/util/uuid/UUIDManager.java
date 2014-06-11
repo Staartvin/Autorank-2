@@ -12,10 +12,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 /**
- * This class allows developers to easily get UUIDs from names
- * <br>or to do the reverse.
- * <br>It has an implemented cache system, which makes sure it doesn't do a lookup
- * <br>when not needed.
+ * This class allows developers to easily get UUIDs from names <br>
+ * or to do the reverse. <br>
+ * It has an implemented cache system, which makes sure it doesn't do a lookup <br>
+ * when not needed.
  * <p>
  * Date created: 17:13:57 2 apr. 2014
  * 
@@ -397,8 +397,8 @@ public class UUIDManager {
 
 	/**
 	 * Add a player to the cache storage.<br>
-	 * This can used when a player joins the server, because we know that the
-	 * <br>name will always be the same for that session.
+	 * This can used when a player joins the server, because we know that the <br>
+	 * name will always be the same for that session.
 	 * 
 	 * @param player Player to cache.
 	 */
@@ -412,14 +412,16 @@ public class UUIDManager {
 
 	/**
 	 * Remove a player from the cache storage.<br>
-	 * This can used when a you want to make sure that you get a non-cached value.
+	 * This can used when a you want to make sure that you get a non-cached
+	 * value.
+	 * 
 	 * @param player Player to remove.
-	 */ 
+	 */
 	public static void removeCachedPlayer(Player player) {
 		// There is no cached value for this player
 		if (!isCachedUUID(player.getName()))
 			return;
-		
+
 		removeCachedPlayer(player.getName());
 	}
 
@@ -427,7 +429,7 @@ public class UUIDManager {
 		cachedUUIDs.put(playerName, uuid);
 		lastCached.put(playerName, System.currentTimeMillis());
 	}
-	
+
 	private static void removeCachedPlayer(String playerName) {
 		cachedUUIDs.remove(playerName);
 		lastCached.remove(playerName);

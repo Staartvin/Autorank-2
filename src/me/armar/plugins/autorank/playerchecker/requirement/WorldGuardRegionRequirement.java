@@ -12,10 +12,11 @@ import org.bukkit.entity.Player;
 
 /**
  * This requirement checks for WorldGuard region
- * Date created:  13:49:33
+ * Date created: 13:49:33
  * 15 jan. 2014
+ * 
  * @author Staartvin
- *
+ * 
  */
 public class WorldGuardRegionRequirement extends Requirement {
 
@@ -41,8 +42,9 @@ public class WorldGuardRegionRequirement extends Requirement {
 
 	@Override
 	public boolean meetsRequirement(final Player player) {
-		WorldGuardHandler wgH = (WorldGuardHandler) this.getAutorank().getDependencyManager().getDependency(dependency.WORLDGUARD);
-		
+		WorldGuardHandler wgH = (WorldGuardHandler) this.getAutorank()
+				.getDependencyManager().getDependency(dependency.WORLDGUARD);
+
 		return wgH.isInRegion(player, regionName);
 	}
 

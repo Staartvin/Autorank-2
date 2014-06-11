@@ -40,7 +40,8 @@ public class Leaderboard {
 	public Leaderboard(final Autorank plugin) {
 		this.plugin = plugin;
 		if (plugin.getConfigHandler().useAdvancedConfig()) {
-			leaderboardLength = plugin.getConfigHandler().getLeaderboardLength();
+			leaderboardLength = plugin.getConfigHandler()
+					.getLeaderboardLength();
 			layout = plugin.getConfigHandler().getLeaderboardLayout();
 		}
 
@@ -90,13 +91,14 @@ public class Leaderboard {
 
 		for (int i = 0; i < leaderboardLength && itr.hasNext(); i++) {
 			final Entry<UUID, Integer> entry = itr.next();
-			
+
 			final UUID uuid = entry.getKey();
-			
+
 			// Grab playername from here so it doesn't load all player names ever.
 			final String name = UUIDManager.getPlayerFromUUID(uuid);
-			
-			if (name == null) continue;
+
+			if (name == null)
+				continue;
 
 			Integer time = entry.getValue().intValue();
 
@@ -119,24 +121,24 @@ public class Leaderboard {
 		stringList.add("------------------------------------");
 
 		messages = stringList.toArray(new String[stringList.size()]);
-		
+
 		//System.out.print("Took: " + (System.currentTimeMillis() - lastUpdatedTime)  + " ms."); 
 	}
 
 	private Map<UUID, Integer> getSortedPlaytimes() {
-		
+
 		List<UUID> uuids = plugin.getPlaytimes().getUUIDKeys();
-		
+
 		HashMap<UUID, Integer> times = new HashMap<UUID, Integer>();
-		
+
 		// Fill unsorted lists
 		for (int i = 0; i < uuids.size(); i++) {
-			times.put(uuids.get(i), plugin.getPlaytimes().getLocalTime(uuids.get(i)));
+			times.put(uuids.get(i),
+					plugin.getPlaytimes().getLocalTime(uuids.get(i)));
 		}
-		
+
 		// Sort all values
-		final Map<UUID, Integer> sortedMap = sortByComparator(times,
-				false);
+		final Map<UUID, Integer> sortedMap = sortByComparator(times, false);
 
 		return sortedMap;
 	}
@@ -149,8 +151,7 @@ public class Leaderboard {
 
 		// Sorting the list based on values
 		Collections.sort(list, new Comparator<Entry<UUID, Integer>>() {
-			public int compare(Entry<UUID, Integer> o1,
-					Entry<UUID, Integer> o2) {
+			public int compare(Entry<UUID, Integer> o1, Entry<UUID, Integer> o2) {
 				if (order) {
 					return o1.getValue().compareTo(o2.getValue());
 				} else {

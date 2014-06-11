@@ -76,18 +76,18 @@ public class CompleteCommand implements CommandExecutor {
 				.getLastKnownGroup(player.getUniqueId());
 
 		if (latestKnownGroup == null) {
-			plugin.getRequirementHandler().setLastKnownGroup(player.getUniqueId(),
-					currentGroup);
+			plugin.getRequirementHandler().setLastKnownGroup(
+					player.getUniqueId(), currentGroup);
 
 			latestKnownGroup = currentGroup;
 		}
 
 		if (!latestKnownGroup.equalsIgnoreCase(currentGroup)) {
 			// Reset progress and update latest known group
-			plugin.getRequirementHandler().setPlayerProgress(player.getUniqueId(),
-					new ArrayList<Integer>());
-			plugin.getRequirementHandler().setLastKnownGroup(player.getUniqueId(),
-					currentGroup);
+			plugin.getRequirementHandler().setPlayerProgress(
+					player.getUniqueId(), new ArrayList<Integer>());
+			plugin.getRequirementHandler().setLastKnownGroup(
+					player.getUniqueId(), currentGroup);
 		}
 
 		final Map<RankChange, List<Requirement>> failed = plugin

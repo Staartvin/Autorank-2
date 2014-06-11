@@ -64,10 +64,9 @@ public class PlayerKillsRequirement extends Requirement {
 	@Override
 	public String getProgress(final Player player) {
 		String progress = "";
-		progress = progress.concat(getStatsPlugin().getNormalStat("players_killed",
-				player.getName(), null)
-				+ "/"
-				+ totalPlayersKilled);
+		progress = progress.concat(getStatsPlugin().getNormalStat(
+				"players_killed", player.getName(), null)
+				+ "/" + totalPlayersKilled);
 		return progress;
 	}
 

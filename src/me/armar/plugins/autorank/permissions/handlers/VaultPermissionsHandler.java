@@ -25,44 +25,48 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 
 	public VaultPermissionsHandler(final Autorank plugin) {
 		if (!setupPermissions(plugin)) {
-			
+
 			// Only shutdown Autorank when Vault is needed and not found.
 			// Delay shutdown so Autorank can start successfully.
-			plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
-				public void run() {
-					
-					plugin.getLogger().severe("Disabling Autorank: Vault was not found");
-					plugin.getServer().getPluginManager().disablePlugin(plugin);
-				}
-			}, 60L);
+			plugin.getServer().getScheduler()
+					.runTaskLater(plugin, new Runnable() {
+						public void run() {
+
+							plugin.getLogger().severe(
+									"Disabling Autorank: Vault was not found");
+							plugin.getServer().getPluginManager()
+									.disablePlugin(plugin);
+						}
+					}, 60L);
 		}
 	}
 
 	private boolean setupPermissions(final Autorank plugin) {
 
-                Plugin vPlugin = plugin.getServer().getPluginManager()
-                        .getPlugin("Vault");
+		Plugin vPlugin = plugin.getServer().getPluginManager()
+				.getPlugin("Vault");
 
-                if (vPlugin == null || !(vPlugin instanceof Vault)) {
-                    return false;
-                }
+		if (vPlugin == null || !(vPlugin instanceof Vault)) {
+			return false;
+		}
 
-                final RegisteredServiceProvider<Permission> permissionProvider = plugin
+		final RegisteredServiceProvider<Permission> permissionProvider = plugin
 				.getServer()
 				.getServicesManager()
 				.getRegistration(net.milkbowl.vault.permission.Permission.class);
 
-               if (permissionProvider != null) {
-                      permission = permissionProvider.getProvider();
-               }
+		if (permissionProvider != null) {
+			permission = permissionProvider.getProvider();
+		}
 
-               return permission != null;
+		return permission != null;
 	}
 
 	@Override
 	public String[] getPlayerGroups(final Player player) {
-		if (permission == null) return new String[10];
-		
+		if (permission == null)
+			return new String[10];
+
 		return permission.getPlayerGroups(player);
 	}
 
@@ -99,8 +103,9 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 	 */
 	public boolean removeGroup(final Player player, final String world,
 			final String group) {
-		if (permission == null) return false;
-		
+		if (permission == null)
+			return false;
+
 		return permission.playerRemoveGroup(world, player.getName(), group);
 	}
 
@@ -114,8 +119,9 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 	 */
 	public boolean addGroup(final Player player, final String world,
 			final String group) {
-		if (permission == null) return false;
-		
+		if (permission == null)
+			return false;
+
 		return permission.playerAddGroup(world, player.getName(), group);
 	}
 
@@ -130,7 +136,7 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 		if (permission == null) {
 			return new String[10];
 		}
-		
+
 		return permission.getGroups();
 	}
 
@@ -139,7 +145,7 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 		if (permission == null) {
 			return new String[10];
 		}
-		
+
 		return permission.getPlayerGroups(world, player.getName());
 	}
 }

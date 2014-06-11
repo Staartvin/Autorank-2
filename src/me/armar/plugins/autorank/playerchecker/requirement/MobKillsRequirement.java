@@ -79,9 +79,8 @@ public class MobKillsRequirement extends Requirement {
 	@Override
 	public String getProgress(final Player player) {
 		String progress = "";
-		progress = progress.concat(getStatsPlugin()
-				.getNormalStat("mobs_killed",
-						player.getName(), null, mobType)
+		progress = progress.concat(getStatsPlugin().getNormalStat(
+				"mobs_killed", player.getName(), null, mobType)
 				+ "/" + totalMobsKilled);
 		return progress;
 	}

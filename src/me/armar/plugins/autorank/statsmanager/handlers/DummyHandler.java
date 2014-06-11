@@ -4,10 +4,11 @@ import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 
 /**
  * This class is used when no stats plugin is found.
- * This does not do anything, but it allows the stats plugin to be gone so that there are no errors.
+ * This does not do anything, but it allows the stats plugin to be gone so that
+ * there are no errors.
  * 
  * @author Staartvin
- *
+ * 
  */
 public class DummyHandler implements StatsPlugin {
 

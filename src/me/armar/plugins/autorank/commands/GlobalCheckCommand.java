@@ -45,8 +45,7 @@ public class GlobalCheckCommand implements CommandExecutor {
 			} else {
 				if (player.hasPermission("autorank.exclude")) {
 					sender.sendMessage(ChatColor.RED
-							+ Lang.PLAYER_IS_EXCLUDED
-									.getConfigValue(args[1]));
+							+ Lang.PLAYER_IS_EXCLUDED.getConfigValue(args[1]));
 					return true;
 				}
 
@@ -75,8 +74,8 @@ public class GlobalCheckCommand implements CommandExecutor {
 
 			if (sender.hasPermission("autorank.exclude")) {
 				sender.sendMessage(ChatColor.RED
-						+ Lang.PLAYER_IS_EXCLUDED
-								.getConfigValue(sender.getName()));
+						+ Lang.PLAYER_IS_EXCLUDED.getConfigValue(sender
+								.getName()));
 				return true;
 			}
 			final Player player = (Player) sender;

@@ -11,10 +11,11 @@ import org.bukkit.entity.Player;
 
 /**
  * This requirement checks for global playtime
- * Date created:  13:49:53
+ * Date created: 13:49:53
  * 15 jan. 2014
+ * 
  * @author Staartvin
- *
+ * 
  */
 public class GlobalTimeRequirement extends Requirement {
 

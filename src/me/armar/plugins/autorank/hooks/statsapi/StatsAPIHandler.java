@@ -33,7 +33,8 @@ public class StatsAPIHandler implements DependencyHandler {
 			return 0;
 
 		if (worldName != null) {
-			return (int) Math.round(api.getTotalBlocksBroken(playerName, worldName));
+			return (int) Math.round(api.getTotalBlocksBroken(playerName,
+					worldName));
 		} else {
 			return (int) Math.round(api.getTotalBlocksBroken(playerName));
 		}
@@ -44,7 +45,8 @@ public class StatsAPIHandler implements DependencyHandler {
 			return 0;
 
 		if (worldName != null) {
-			return (int) Math.round(api.getTotalBlocksPlaced(playerName, worldName));
+			return (int) Math.round(api.getTotalBlocksPlaced(playerName,
+					worldName));
 		} else {
 			return (int) Math.round(api.getTotalBlocksPlaced(playerName));
 		}
@@ -138,13 +140,13 @@ public class StatsAPIHandler implements DependencyHandler {
 		if (damageValue > 0) {
 			checkDamageValue = true;
 		}
-		
+
 		for (final Object[] vars : blockStat.getAllVariables()) {
-			
+
 			if (checkDamageValue) {
 				// VAR 0 = blockID, VAR 1 = damageValue, VAR 2 = (1 = break, 0 = place)
 				byte[] byteArray = (byte[]) vars[1];
-				
+
 				if ((Integer) vars[0] == id
 						&& Integer.parseInt(new String(byteArray)) == damageValue) {
 					value += blockStat.getValue(vars);
@@ -165,7 +167,7 @@ public class StatsAPIHandler implements DependencyHandler {
 			return 0;
 
 		String statName = "Kill";
-		
+
 		StatData data = getStatType(statName, playerName, worldName);
 
 		final EntityType mob = getEntityType(mobName);
@@ -189,7 +191,7 @@ public class StatsAPIHandler implements DependencyHandler {
 				value += data.getValue(vars);
 			}
 		}
-		
+
 		return value;
 	}
 
@@ -198,7 +200,7 @@ public class StatsAPIHandler implements DependencyHandler {
 			return 0;
 
 		String statName = "Move";
-		
+
 		StatData stat = getStatType(statName, playerName, worldName);
 
 		int value = 0;
@@ -208,7 +210,7 @@ public class StatsAPIHandler implements DependencyHandler {
 				value += stat.getValue(vars);
 			}
 		}
-		
+
 		return value;
 	}
 

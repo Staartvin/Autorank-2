@@ -11,14 +11,16 @@ import java.util.Date;
 import me.armar.plugins.autorank.Autorank;
 
 /**
- * This class is used to debug stuff when Autorank is running.
- * <br>Whenever a player uses the /ar debug command, it will create a new file with all sorts of information.
- * <br>This information can be sent to the author so that he can easily see what's wrong.
+ * This class is used to debug stuff when Autorank is running. <br>
+ * Whenever a player uses the /ar debug command, it will create a new file with
+ * all sorts of information. <br>
+ * This information can be sent to the author so that he can easily see what's
+ * wrong.
  * <p>
- * Date created:  21:00:29
- * 15 mrt. 2014
+ * Date created: 21:00:29 15 mrt. 2014
+ * 
  * @author Staartvin
- *
+ * 
  */
 public class Debugger {
 
@@ -112,7 +114,7 @@ public class Debugger {
 			final String usedConfig = (plugin.getConfigHandler()
 					.useAdvancedConfig() ? "AdvancedConfig.yml"
 					: "SimpleConfig.yml");
-			
+
 			out.write("Config used: " + usedConfig);
 			out.newLine();
 			out.write("");
@@ -142,8 +144,9 @@ public class Debugger {
 			out.newLine();
 			out.write("");
 			out.newLine();
-			
-			out.write("Loaded addons: " + plugin.getAddonManager().getLoadedAddons().toString());
+
+			out.write("Loaded addons: "
+					+ plugin.getAddonManager().getLoadedAddons().toString());
 			out.newLine();
 			out.write("");
 			out.newLine();

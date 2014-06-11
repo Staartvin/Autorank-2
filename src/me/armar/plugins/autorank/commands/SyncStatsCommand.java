@@ -37,18 +37,18 @@ public class SyncStatsCommand implements CommandExecutor {
 		for (UUID uuid : plugin.getPlaytimes().getUUIDKeys()) {
 
 			final OfflinePlayer p = plugin.getServer().getOfflinePlayer(uuid);
-			
+
 			// Time is stored in seconds
 			final int statsPlayTime = plugin.getHookedStatsPlugin()
-					.getNormalStat("time_played",
-							p.getName(), null);
+					.getNormalStat("time_played", p.getName(), null);
 
 			if (statsPlayTime <= 0) {
 				continue;
 			}
 
 			// Update time
-			plugin.getPlaytimes().setLocalTime(uuid, Math.round(statsPlayTime / 60));
+			plugin.getPlaytimes().setLocalTime(uuid,
+					Math.round(statsPlayTime / 60));
 
 			// Increment count
 			count++;

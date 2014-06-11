@@ -43,8 +43,9 @@ public class FactionPowerRequirement extends Requirement {
 
 	@Override
 	public boolean meetsRequirement(final Player player) {
-		FactionsHandler fHandler = (FactionsHandler) this.getAutorank().getDependencyManager().getDependency(dependency.FACTIONS); 
-		
+		FactionsHandler fHandler = (FactionsHandler) this.getAutorank()
+				.getDependencyManager().getDependency(dependency.FACTIONS);
+
 		return fHandler.getFactionPower(player) > factionPower;
 	}
 
@@ -69,7 +70,8 @@ public class FactionPowerRequirement extends Requirement {
 		String progress = "";
 		final DecimalFormat df = new DecimalFormat("#.##");
 		final String doubleRounded = df.format(((FactionsHandler) getAutorank()
-				.getDependencyManager().getDependency(dependency.FACTIONS)).getFactionPower(player));
+				.getDependencyManager().getDependency(dependency.FACTIONS))
+				.getFactionPower(player));
 
 		progress = progress.concat(doubleRounded + "/" + factionPower);
 		return progress;

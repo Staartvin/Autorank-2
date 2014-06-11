@@ -50,20 +50,33 @@ public class CommandsManager implements TabExecutor {
 		registeredCommands.put(Arrays.asList("add"), new AddCommand(plugin));
 		registeredCommands.put(Arrays.asList("help"), new HelpCommand(plugin));
 		registeredCommands.put(Arrays.asList("set"), new SetCommand(plugin));
-		registeredCommands.put(Arrays.asList("leaderboard", "leaderboards"), new LeaderboardCommand(plugin));
-		registeredCommands.put(Arrays.asList("remove", "rem"), new RemoveCommand(plugin));
-		registeredCommands.put(Arrays.asList("debug"), new DebugCommand(plugin));
+		registeredCommands.put(Arrays.asList("leaderboard", "leaderboards"),
+				new LeaderboardCommand(plugin));
+		registeredCommands.put(Arrays.asList("remove", "rem"),
+				new RemoveCommand(plugin));
+		registeredCommands
+				.put(Arrays.asList("debug"), new DebugCommand(plugin));
 		registeredCommands.put(Arrays.asList("sync"), new SyncCommand(plugin));
-		registeredCommands.put(Arrays.asList("syncstats"), new SyncStatsCommand(plugin));
-		registeredCommands.put(Arrays.asList("reload"), new ReloadCommand(plugin));
-		registeredCommands.put(Arrays.asList("import"), new ImportCommand(plugin));
-		registeredCommands.put(Arrays.asList("complete"), new CompleteCommand(plugin));
-		registeredCommands.put(Arrays.asList("check"), new CheckCommand(plugin));
-		registeredCommands.put(Arrays.asList("archive", "arch"), new ArchiveCommand(plugin));
-		registeredCommands.put(Arrays.asList("gcheck", "globalcheck"), new GlobalCheckCommand(plugin));
-		registeredCommands.put(Arrays.asList("fcheck", "forcecheck"), new ForceCheckCommand(plugin));
-		registeredCommands.put(Arrays.asList("convert"), new ConvertUUIDCommand(plugin));
+		registeredCommands.put(Arrays.asList("syncstats"),
+				new SyncStatsCommand(plugin));
+		registeredCommands.put(Arrays.asList("reload"), new ReloadCommand(
+				plugin));
+		registeredCommands.put(Arrays.asList("import"), new ImportCommand(
+				plugin));
+		registeredCommands.put(Arrays.asList("complete"), new CompleteCommand(
+				plugin));
+		registeredCommands
+				.put(Arrays.asList("check"), new CheckCommand(plugin));
+		registeredCommands.put(Arrays.asList("archive", "arch"),
+				new ArchiveCommand(plugin));
+		registeredCommands.put(Arrays.asList("gcheck", "globalcheck"),
+				new GlobalCheckCommand(plugin));
+		registeredCommands.put(Arrays.asList("fcheck", "forcecheck"),
+				new ForceCheckCommand(plugin));
+		registeredCommands.put(Arrays.asList("convert"),
+				new ConvertUUIDCommand(plugin));
 	}
+
 	private HashMap<List<String>, CommandExecutor> registeredCommands = new HashMap<List<String>, CommandExecutor>();
 
 	public boolean hasPermission(final String permission,
@@ -80,7 +93,7 @@ public class CommandsManager implements TabExecutor {
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command cmd,
 			final String label, final String[] args) {
-		
+
 		if (args.length == 0) {
 			sender.sendMessage(ChatColor.BLUE
 					+ "-----------------------------------------------------");
@@ -94,18 +107,18 @@ public class CommandsManager implements TabExecutor {
 		}
 
 		final String action = args[0];
-		
-		
+
 		// Go through every list and check if that action is in there.
-		for (Entry<List<String>, CommandExecutor> entry : registeredCommands.entrySet()) {
-			
-			for (String actionString: entry.getKey()) {
+		for (Entry<List<String>, CommandExecutor> entry : registeredCommands
+				.entrySet()) {
+
+			for (String actionString : entry.getKey()) {
 				if (actionString.equalsIgnoreCase(action)) {
 					return entry.getValue().onCommand(sender, cmd, label, args);
 				}
 			}
 		}
-		
+
 		sender.sendMessage(ChatColor.RED + "Command not recognised!");
 		sender.sendMessage(ChatColor.YELLOW
 				+ "Use '/ar help' for a list of commands.");
@@ -123,7 +136,8 @@ public class CommandsManager implements TabExecutor {
 			// Show a list of commands if needed
 			return Lists.newArrayList("help", "check", "leaderboard", "set",
 					"add", "remove", "debug", "reload", "import", "archive",
-					"gcheck", "complete", "sync", "syncstats", "forcecheck", "convert");
+					"gcheck", "complete", "sync", "syncstats", "forcecheck",
+					"convert");
 		}
 
 		if (args.length > 1) {

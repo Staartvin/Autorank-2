@@ -30,7 +30,7 @@ public class PermissionGroupValidation {
 		final String[] groups = autorank.getPermPlugHandler()
 				.getPermissionPlugin().getGroups();
 		Set<String> ranks;
-		
+
 		final ConfigurationSection section = config
 				.getConfigurationSection("ranks");
 		ranks = section.getKeys(false);
@@ -42,7 +42,6 @@ public class PermissionGroupValidation {
 					break;
 				}
 
-
 				if (rank.equalsIgnoreCase(group)) {
 					// Do not log but register warning
 					autorank.getWarningManager().registerWarning(
@@ -51,16 +50,15 @@ public class PermissionGroupValidation {
 					isMissing = true;
 					break;
 				}
-				
+
 				if ((i == (groups.length - 1))) {
 					// If this is the last group and is not equal to the rank defined in the config:
 					autorank.getWarningManager().registerWarning(
-							"Permissions group is not defined in permissions file: " + rank, 10);
+							"Permissions group is not defined in permissions file: "
+									+ rank, 10);
 					isMissing = true;
 				}
 			}
-			
-			
 
 			if (!isValidChange(rank)) {
 				//autorank.getWarningManager().registerWarning("Rank change of rank '" + rank + "' is invalid. (Do the groups used exist?)", 10);
@@ -82,7 +80,8 @@ public class PermissionGroupValidation {
 	 *         config); false otherwise
 	 */
 	public boolean isValidChange(final String group) {
-		final String rankChange = autorank.getConfigHandler().getRankChange(group);
+		final String rankChange = autorank.getConfigHandler().getRankChange(
+				group);
 		final String[] groups = autorank.getPermPlugHandler()
 				.getPermissionPlugin().getGroups();
 
@@ -137,8 +136,9 @@ public class PermissionGroupValidation {
 
 		// Check whether the rankTo exists
 		for (final String group1 : groups) {
-			if (group1 == null) continue;
-			
+			if (group1 == null)
+				continue;
+
 			if (group1.equals(rankTo.trim())) {
 				isMissingRankTo = false;
 			}
@@ -146,8 +146,9 @@ public class PermissionGroupValidation {
 
 		// Check whether the rankFrom exists
 		for (final String group1 : groups) {
-			if (group1 == null) continue;
-			
+			if (group1 == null)
+				continue;
+
 			if (group1.equals(rankFrom.trim())) {
 				isMissingRankFrom = false;
 			}

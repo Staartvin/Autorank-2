@@ -28,10 +28,10 @@ public class PlayerJoinListener implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerJoin(final PlayerJoinEvent event) {
 		final Player player = event.getPlayer();
-		
+
 		// Add cached player
 		UUIDManager.addCachedPlayer(player);
-		
+
 		// Perform check for player on login
 		plugin.getPlayerChecker().checkPlayer(player);
 

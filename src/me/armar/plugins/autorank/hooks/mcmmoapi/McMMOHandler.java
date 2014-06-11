@@ -111,7 +111,7 @@ public class McMMOHandler implements DependencyHandler {
 			return powerLevel;
 
 		powerLevel = ExperienceAPI.getPowerLevel(player);
-		
+
 		return powerLevel;
 	}
 

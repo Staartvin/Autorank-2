@@ -41,7 +41,7 @@ public class GroupManagerHandler implements PermissionsHandler {
 
 		}
 
-        return groupManager != null;
+		return groupManager != null;
 	}
 
 	public String getGroup(final Player player) {

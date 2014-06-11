@@ -22,8 +22,8 @@ public class GrabDatabaseTimeTask implements Callable<Integer> {
 	private final String table;
 	private final UUID uuid;
 
-	public GrabDatabaseTimeTask(final SQLDataStorage mysql,
-			final UUID uuid, final String table) {
+	public GrabDatabaseTimeTask(final SQLDataStorage mysql, final UUID uuid,
+			final String table) {
 		this.mysql = mysql;
 		this.uuid = uuid;
 		this.table = table;
@@ -34,20 +34,21 @@ public class GrabDatabaseTimeTask implements Callable<Integer> {
 	 */
 	@Override
 	public Integer call() throws Exception {
-		if (mysql == null) return -1;
-		
+		if (mysql == null)
+			return -1;
+
 		int time = -1;
-		
+
 		final String statement = "SELECT * FROM " + table + " WHERE uuid='"
 				+ uuid.toString() + "'";
 		final ResultSet rs = mysql.executeQuery(statement);
-		
+
 		if (rs == null)
 			return time;
 
 		try {
 			if (rs.next()) {
-				time =  rs.getInt(2);
+				time = rs.getInt(2);
 			} else {
 				return time;
 			}
@@ -57,7 +58,7 @@ public class GrabDatabaseTimeTask implements Callable<Integer> {
 			System.out.println("SQLState: " + e.getSQLState());
 			System.out.println("VendorError: " + e.getErrorCode());
 		}
-		
+
 		return time;
 	}
 

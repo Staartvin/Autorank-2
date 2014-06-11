@@ -54,10 +54,8 @@ public class BlocksMovedRequirement extends Requirement {
 		final boolean enabled = getStatsPlugin().isEnabled();
 
 		boolean sufficient = false;
-		sufficient = this
-				.getStatsPlugin()
-				.getNormalStat("blocks_moved", player.getName(),
-						player.getWorld().getName(), movementType) > blocksMoved;
+		sufficient = this.getStatsPlugin().getNormalStat("blocks_moved",
+				player.getName(), player.getWorld().getName(), movementType) > blocksMoved;
 
 		return enabled && sufficient;
 	}

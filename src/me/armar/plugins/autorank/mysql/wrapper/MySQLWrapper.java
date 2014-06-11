@@ -40,7 +40,7 @@ public class MySQLWrapper {
 		plugin = instance;
 
 		sqlSetup();
-		
+
 		if (mysql != null) {
 			setupTable();
 		}
@@ -69,7 +69,7 @@ public class MySQLWrapper {
 	}
 
 	public void sqlSetup() {
-		
+
 		ConfigHandler configHandler = plugin.getConfigHandler();
 		/*final ConfigurationSection s = config.getConfigurationSection("sql");
 
@@ -99,8 +99,8 @@ public class MySQLWrapper {
 	}
 
 	/**
-	 * Gets the database time of player
-	 * <br>Run this ASYNC, because it will block the thread it's on.
+	 * Gets the database time of player <br>
+	 * Run this ASYNC, because it will block the thread it's on.
 	 * <p>
 	 * This will return an updated value every 5 minutes. Calling it every
 	 * minute isn't smart, as it will only update every 5 minutes.
@@ -127,17 +127,18 @@ public class MySQLWrapper {
 		// Retrieve database time
 		// Setup executor service with pool = 1
 		ExecutorService executor = Executors.newFixedThreadPool(1);
-		
+
 		// Initialise new callable class
-		Callable<Integer> callable = new GrabDatabaseTimeTask(mysql, uuid, table);
-		
+		Callable<Integer> callable = new GrabDatabaseTimeTask(mysql, uuid,
+				table);
+
 		// Sumbit callable
 		Future<Integer> futureValue = executor.submit(callable);
-		
+
 		// Grab value (will block thread, but there is no other way)
 		// That's why you need to run this async.
 		int value = -1;
-		
+
 		try {
 			value = futureValue.get();
 		} catch (InterruptedException e) {
@@ -145,7 +146,7 @@ public class MySQLWrapper {
 		} catch (ExecutionException e) {
 			e.printStackTrace();
 		}
-		
+
 		// Store last received time and last received value
 		lastChecked.put(uuid, System.currentTimeMillis());
 		lastReceivedTime.put(uuid, value);

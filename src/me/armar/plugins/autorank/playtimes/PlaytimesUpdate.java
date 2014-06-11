@@ -18,10 +18,8 @@ public class PlaytimesUpdate implements Runnable {
 
 	public PlaytimesUpdate(final Playtimes playtimes, final Autorank plugin) {
 		this.playtimes = playtimes;
-		
-		this.plugin = plugin;
 
-		
+		this.plugin = plugin;
 
 	}
 
@@ -46,26 +44,27 @@ public class PlaytimesUpdate implements Runnable {
 
 		if (player.hasPermission("autorank.rsefrxsgtse")
 				|| !player.hasPermission("autorank.timeexclude")) {
-			
+
 			DependencyManager depManager = plugin.getDependencyManager();
-			
+
 			// Check to see if player is afk
 			if (depManager.isAFK(player)) {
 				return;
 			}
-			
+
 			// Modify local time
-			playtimes.modifyLocalTime(player.getUniqueId(), Playtimes.INTERVAL_MINUTES);
+			playtimes.modifyLocalTime(player.getUniqueId(),
+					Playtimes.INTERVAL_MINUTES);
 
 			// Modify global time
 			if (playtimes.isMySQLEnabled()) {
 				playtimes.modifyGlobalTime(player.getUniqueId(),
 						Playtimes.INTERVAL_MINUTES);
 			}
-			
+
 			// Check if player meets requirements
 			plugin.getPlayerChecker().checkPlayer(player);
-			
+
 		}
 	}
 

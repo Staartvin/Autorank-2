@@ -83,8 +83,7 @@ public class TotalTimeRequirement extends Requirement {
 		long difference = (currentTime - joinTime) / 60000;
 
 		String progress = "";
-		progress = progress.concat(difference
-				+ " min" + "/" + time + " min");
+		progress = progress.concat(difference + " min" + "/" + time + " min");
 		return progress;
 	}
 

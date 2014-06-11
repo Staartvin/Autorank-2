@@ -105,8 +105,9 @@ public class Autorank extends JavaPlugin {
 				null, "Simple config"));
 		setAdvancedConfig(new SimpleYamlConfiguration(this,
 				"AdvancedConfig.yml", null, "Advanced config"));
-		setSettingsConfig(new SimpleYamlConfiguration(this, "Settings.yml", null, "Settings config"));
-		
+		setSettingsConfig(new SimpleYamlConfiguration(this, "Settings.yml",
+				null, "Settings config"));
+
 		// Create warning manager
 		setWarningManager(new WarningManager());
 
@@ -258,7 +259,7 @@ public class Autorank extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		
+
 		// Make sure all tasks are cancelled after shutdown. This seems obvious, but when a player /reloads, the server creates an instance of the plugin which causes duplicate tasks to run. 
 		getServer().getScheduler().cancelTasks(this);
 
@@ -297,7 +298,7 @@ public class Autorank extends JavaPlugin {
 		setSimpleConfig(null);
 
 		setAdvancedConfig(null);
-		
+
 		setSettingsConfig(null);
 
 		getLogger().info(

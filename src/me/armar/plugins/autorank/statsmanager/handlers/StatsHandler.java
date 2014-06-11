@@ -22,27 +22,29 @@ public class StatsHandler implements StatsPlugin {
 	@Override
 	public boolean isEnabled() {
 		if (statsApi == null) {
-			plugin.getLogger().info("Stats (by Lolmewn) api library was not found!");
+			plugin.getLogger().info(
+					"Stats (by Lolmewn) api library was not found!");
 			return false;
 		}
-		
+
 		if (!statsApi.isAvailable()) {
-			plugin.getLogger().info("Stats (by Lolmewn) is not enabled!"); 
+			plugin.getLogger().info("Stats (by Lolmewn) is not enabled!");
 			return false;
 		}
-		
+
 		if (!statsApi.areBetaFunctionsEnabled()) {
-			plugin.getLogger().info("Stats (by Lolmewn) does not have beta functions enabled!"); 
+			plugin.getLogger().info(
+					"Stats (by Lolmewn) does not have beta functions enabled!");
 			return false;
 		}
-		
+
 		/*if (!statsApi.compatibleStatsVersion(plugin.getServer()
 				.getPluginManager().getPlugin("Stats").getDescription()
 				.getVersion())) {
 			plugin.getLogger().info("This version of Stats (by Lolmewn) is not supported by Autorank!"); 
 			return false;
 		}*/
-		
+
 		return true;
 	}
 
@@ -72,7 +74,8 @@ public class StatsHandler implements StatsPlugin {
 			value = statsApi.getNormalStat(playerName, "Votes", worldName);
 		} else if (correctName.equals("players_killed")) {
 			// Handle players killed
-			value = statsApi.getTotalMobsKilled(playerName, "player", worldName);
+			value = statsApi
+					.getTotalMobsKilled(playerName, "player", worldName);
 		} else if (correctName.equals("mobs_killed")) {
 			// Handle mobs killed
 			// arg[2] == mobType
@@ -80,7 +83,8 @@ public class StatsHandler implements StatsPlugin {
 					(String) arguments[2], worldName);
 		} else if (correctName.equals("damage_taken")) {
 			// Handle damage taken
-			value = statsApi.getNormalStat(playerName, "Damage taken", worldName);
+			value = statsApi.getNormalStat(playerName, "Damage taken",
+					worldName);
 		} else if (correctName.equals("blocks_placed")) {
 			// Handle blocks placed
 			value = statsApi.getBlocksStat(playerName,

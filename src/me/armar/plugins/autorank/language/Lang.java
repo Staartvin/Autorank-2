@@ -231,7 +231,8 @@ public enum Lang {
 	/**
 	 * Player {0} is unknown and couldn't be identified.
 	 */
-	UNKNOWN_PLAYER("unknown-player", "&cPlayer {0} is unknown and couldn't be identified."),;
+	UNKNOWN_PLAYER("unknown-player",
+			"&cPlayer {0} is unknown and couldn't be identified."), ;
 
 	private String path, def;
 	private static FileConfiguration LANG;

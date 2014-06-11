@@ -12,10 +12,10 @@ import com.massivecraft.factions.entity.UPlayer;
 /**
  * Handles all connections with Factions
  * <p>
- * Date created:  21:01:50
- * 15 mrt. 2014
+ * Date created: 21:01:50 15 mrt. 2014
+ * 
  * @author Staartvin
- *
+ * 
  */
 public class FactionsHandler implements DependencyHandler {
 
@@ -26,10 +26,10 @@ public class FactionsHandler implements DependencyHandler {
 		plugin = instance;
 	}
 
-
 	public double getFactionPower(final Player player) {
-		if (!isAvailable()) return 0.0d;
-		
+		if (!isAvailable())
+			return 0.0d;
+
 		final UPlayer uPlayer = UPlayer.get(player);
 
 		if (!uPlayer.hasFaction()) {
@@ -67,8 +67,8 @@ public class FactionsHandler implements DependencyHandler {
 			api = (Factions) get();
 
 			if (api != null) {
-				plugin.getLogger()
-						.info("Factions has been found and can be used!");
+				plugin.getLogger().info(
+						"Factions has been found and can be used!");
 				return true;
 			} else {
 				plugin.getLogger().info(

@@ -10,10 +10,10 @@ import org.royaldev.royalcommands.RoyalCommands;
 /**
  * Handles all connections with RoyalCommands
  * <p>
- * Date created:  21:02:05
- * 15 mrt. 2014
+ * Date created: 21:02:05 15 mrt. 2014
+ * 
  * @author Staartvin
- *
+ * 
  */
 public class RoyalCommandsHandler implements DependencyHandler {
 
@@ -27,9 +27,10 @@ public class RoyalCommandsHandler implements DependencyHandler {
 	public boolean isAFK(Player player) {
 		if (!isAvailable())
 			return false;
-		
-		if (!plugin.getConfigHandler().useAFKIntegration()) return false;
-		
+
+		if (!plugin.getConfigHandler().useAFKIntegration())
+			return false;
+
 		return api.getAPI().getPlayerAPI().isAfk(player);
 	}
 

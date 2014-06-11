@@ -43,11 +43,15 @@ public class RankChangeResult extends Result {
 			oldrank = from;
 		}
 		if (world != null) {
-			this.getAutorank().getLogger().info("Promote " + player.getName() + " on world "
-					+ world + " from " + oldrank + " to " + to);
+			this.getAutorank()
+					.getLogger()
+					.info("Promote " + player.getName() + " on world " + world
+							+ " from " + oldrank + " to " + to);
 		} else {
-			this.getAutorank().getLogger().info("Promote " + player.getName()
-					+ " globally from " + oldrank + " to " + to);
+			this.getAutorank()
+					.getLogger()
+					.info("Promote " + player.getName() + " globally from "
+							+ oldrank + " to " + to);
 		}
 
 		// Call PlayerPromoteEvent

@@ -56,26 +56,29 @@ public class HasItemRequirement extends Requirement {
 
 	@Override
 	public boolean meetsRequirement(final Player player) {
-		return item != null && player.getInventory().containsAtLeast(item, item.getAmount());
+		return item != null
+				&& player.getInventory()
+						.containsAtLeast(item, item.getAmount());
 	}
 
 	@Override
 	public String getDescription() {
 		StringBuilder arg = new StringBuilder(item.getAmount() + " ");
-		
+
 		if (displayName != null) {
 			// Show displayname instead of material name
 			arg.append(displayName);
 		} else {
-		
-			arg.append(item.getType().toString());	
-			
+
+			arg.append(item.getType().toString());
+
 			if (showShortValue) {
 				arg.append(" (Dam. value: " + item.getDurability() + ")");
 			}
 		}
-		
-		return Lang.ITEM_REQUIREMENT.getConfigValue(new String[] { arg.toString() });
+
+		return Lang.ITEM_REQUIREMENT.getConfigValue(new String[] { arg
+				.toString() });
 	}
 
 	@Override
@@ -92,14 +95,13 @@ public class HasItemRequirement extends Requirement {
 	public String getProgress(final Player player) {
 		int firstSlot = player.getInventory().first(item.getType());
 		int slotAmount = 0;
-		
+
 		if (firstSlot >= 0) {
-			slotAmount = player.getInventory().getItem(firstSlot).getAmount();	
+			slotAmount = player.getInventory().getItem(firstSlot).getAmount();
 		}
-		
+
 		String progress = "";
-		progress = progress
-				.concat(slotAmount + "/" + item.getAmount());
+		progress = progress.concat(slotAmount + "/" + item.getAmount());
 		return progress;
 	}
 

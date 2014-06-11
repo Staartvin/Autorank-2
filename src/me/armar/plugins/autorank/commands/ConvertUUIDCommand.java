@@ -23,35 +23,39 @@ public class ConvertUUIDCommand implements CommandExecutor {
 			sender.sendMessage(ChatColor.RED + "No file was given to convert.");
 			return true;
 		}
-		
+
 		String targetFile = args[1];
-		
+
 		if (targetFile.equalsIgnoreCase("playerdata")) {
-			
-			if (!plugin.getCommandsManager().hasPermission("autorank.convert.playerdata",
-					sender)) {
+
+			if (!plugin.getCommandsManager().hasPermission(
+					"autorank.convert.playerdata", sender)) {
 				return true;
 			}
-			
+
 			// Convert playerdata
 			plugin.getRequirementHandler().convertNamesToUUIDs();
-			
-			sender.sendMessage(ChatColor.RED + "Converting playerdata.yml to use new UUID format.");
-		} else if (targetFile.equalsIgnoreCase("data") || targetFile.equalsIgnoreCase("times")) {
-			
-			if (!plugin.getCommandsManager().hasPermission("autorank.convert.data",
-					sender)) {
+
+			sender.sendMessage(ChatColor.RED
+					+ "Converting playerdata.yml to use new UUID format.");
+		} else if (targetFile.equalsIgnoreCase("data")
+				|| targetFile.equalsIgnoreCase("times")) {
+
+			if (!plugin.getCommandsManager().hasPermission(
+					"autorank.convert.data", sender)) {
 				return true;
 			}
-			
+
 			// Convert data.yml
 			plugin.getPlaytimes().convertToUUIDStorage();
-			
-			sender.sendMessage(ChatColor.RED + "Converting data.yml to use new UUID format.");
+
+			sender.sendMessage(ChatColor.RED
+					+ "Converting data.yml to use new UUID format.");
 		} else {
-			sender.sendMessage(ChatColor.RED + "Unknown file. Can convert either 'data' or 'playerdata'.");
+			sender.sendMessage(ChatColor.RED
+					+ "Unknown file. Can convert either 'data' or 'playerdata'.");
 		}
-		
+
 		return true;
 	}
 

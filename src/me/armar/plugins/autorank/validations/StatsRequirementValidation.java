@@ -35,7 +35,8 @@ public class StatsRequirementValidation {
 
 			for (final String req : reqs) {
 				if (requiresStats(req)) {
-					if (plugin.getHookedStatsPlugin() == null || !plugin.getHookedStatsPlugin().isEnabled()) {
+					if (plugin.getHookedStatsPlugin() == null
+							|| !plugin.getHookedStatsPlugin().isEnabled()) {
 						plugin.getWarningManager()
 								.registerWarning(
 										"You need to install Stats because you have Stats-required requirements listed in your config (also turn on beta functions).",
@@ -52,7 +53,7 @@ public class StatsRequirementValidation {
 
 	private boolean requiresStats(final String req) {
 		final String correctName = AutorankTools.getCorrectName(req);
-		
+
 		if (correctName == null) {
 			return false;
 		}

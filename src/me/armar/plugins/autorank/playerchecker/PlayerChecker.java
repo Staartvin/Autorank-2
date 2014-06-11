@@ -41,14 +41,15 @@ public class PlayerChecker {
 
 		List<RankChange> ranks;
 		if (plugin.getConfigHandler().useAdvancedConfig()) {
-			ranks = builder.createFromAdvancedConfig(plugin.getAdvancedConfig());
+			ranks = builder
+					.createFromAdvancedConfig(plugin.getAdvancedConfig());
 		} else {
 			ranks = builder.createFromSimpleConfig(simpleConfig);
 		}
 
 		// Clear all rank changes, so nothing is left behind.
 		rankChanges.clear();
-		
+
 		for (final RankChange rank : ranks) {
 			addRankChange(rank.getRankFrom(), rank);
 		}
@@ -127,56 +128,62 @@ public class PlayerChecker {
 
 		return result;
 	}
-	
+
 	/**
 	 * Get the next rank up permission group
+	 * 
 	 * @param player Player to check for
-	 * @return name of the permission group the player will be ranked to; null if no rank up
+	 * @return name of the permission group the player will be ranked to; null
+	 *         if no rank up
 	 */
 	public String getNextRankupGroup(Player player) {
 		RankChange change = getNextRank(player);
-		
-		if (change == null) return null;
-		
+
+		if (change == null)
+			return null;
+
 		return change.getRankTo();
 	}
-	
+
 	/**
 	 * Get the next {@link RankChange} class for the player
+	 * 
 	 * @param player Player to check for.
-	 * @return the {@link RankChange} class that is associated with this player's rankup; null if no rank up
+	 * @return the {@link RankChange} class that is associated with this
+	 *         player's rankup; null if no rank up
 	 */
 	public RankChange getNextRank(Player player) {
 		Map<RankChange, List<Requirement>> requirements = getAllRequirements(player);
-		
+
 		Set<RankChange> rankchanges = requirements.keySet();
-		
+
 		if (rankchanges.size() == 0) {
 			return null;
 		}
-		
+
 		RankChange newRank = null;
-		
-		for (RankChange rank: rankchanges) {
+
+		for (RankChange rank : rankchanges) {
 			newRank = rank;
 		}
-		
+
 		return newRank;
 	}
-	
+
 	/**
 	 * Get all requirements for a player to rank up.
 	 * All requirements are included, even if they are completed.
+	 * 
 	 * @param player Player to get the requirements for
 	 * @return a list of requirements; null if the player has no rank up.
 	 */
 	public List<Requirement> getRequirementsForNextRank(Player player) {
 		RankChange rank = getNextRank(player);
-		
+
 		if (rank == null) {
 			return null;
 		}
-		
+
 		return getAllRequirements(player).get(rank);
 	}
 

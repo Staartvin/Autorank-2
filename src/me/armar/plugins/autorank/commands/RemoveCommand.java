@@ -29,10 +29,11 @@ public class RemoveCommand implements CommandExecutor {
 		}
 
 		if (args.length < 3) {
-			sender.sendMessage(Lang.INVALID_FORMAT.getConfigValue("/ar rem <player> <value>"));
+			sender.sendMessage(Lang.INVALID_FORMAT
+					.getConfigValue("/ar rem <player> <value>"));
 			return true;
 		}
-		
+
 		UUID uuid = UUIDManager.getUUIDFromPlayer(args[1]);
 
 		if (uuid == null) {

@@ -33,9 +33,9 @@ public class API {
 	}
 
 	/**
-	 * Gets the local play time (playtime on this server) of a player.
-	 * <br>The time given depends on what plugin is used for keeping track of time.
-	 * <br>The time is always given in minutes.
+	 * Gets the local play time (playtime on this server) of a player. <br>
+	 * The time given depends on what plugin is used for keeping track of time. <br>
+	 * The time is always given in minutes.
 	 * <p>
 	 * 
 	 * @param player Player to get the time for
@@ -44,11 +44,13 @@ public class API {
 	public int getTimeOfPlayer(Player player) {
 		return plugin.getPlaytimes().getTimeOfPlayer(player.getName());
 	}
-	
+
 	/**
-	 * Gets the local play time of this player on this server according to Autorank.
-	 * <br>This method will grab the time from the data.yml used by Autorank and
-	 * <br>this is not dependend on other plugins.
+	 * Gets the local play time of this player on this server according to
+	 * Autorank. <br>
+	 * This method will grab the time from the data.yml used by Autorank and <br>
+	 * this is not dependend on other plugins.
+	 * 
 	 * @param player Player to get the time for.
 	 * @return play time of this player or 0 if not found.
 	 */
@@ -118,87 +120,99 @@ public class API {
 
 		return failedRequirements;
 	}
-	
+
 	/**
 	 * Gets the primary permissions group of a player.
+	 * 
 	 * @param player Player to get the primary group of
 	 * @return Name of the group that appears first.
 	 */
 	public String getPrimaryGroup(Player player) {
 		List<String> groups = getPermissionGroups(player);
-		
+
 		if (groups.size() < 1) {
-			throw new IllegalArgumentException("Groups of player '" + player.getName() + "' are empty.");
+			throw new IllegalArgumentException("Groups of player '"
+					+ player.getName() + "' are empty.");
 		}
-		
+
 		return groups.get(0);
 	}
-	
+
 	/**
 	 * Gets the permission groups a player is part of.
+	 * 
 	 * @param player Player to get the groups of
 	 * @return A list of permission groups
 	 */
 	public List<String> getPermissionGroups(Player player) {
-		String[] groups = plugin.getPermPlugHandler().getPermissionPlugin().getPlayerGroups(player);
-		
+		String[] groups = plugin.getPermPlugHandler().getPermissionPlugin()
+				.getPlayerGroups(player);
+
 		List<String> permGroups = new ArrayList<String>();
-		
+
 		// Convert array into list
-		for (String group: groups) {
+		for (String group : groups) {
 			permGroups.add(group);
 		}
-		
+
 		return permGroups;
 	}
-	
+
 	/**
 	 * Gets the permission group that the player will be ranked up to after
 	 * he completes all requirements.
 	 * <p>
-	 * <b>NOTE:</b> This does not mean the player will always be ranked up to this group. 
-	 * If a requirement has its own <i>'rank change'</i> result, the player
-	 * will be ranked up to that group and not the 'global results' group.
+	 * <b>NOTE:</b> This does not mean the player will always be ranked up to
+	 * this group. If a requirement has its own <i>'rank change'</i> result, the
+	 * player will be ranked up to that group and not the 'global results'
+	 * group.
 	 * 
 	 * @param player Player to get the next rank up for.
-	 * @return The name of the group the player will be ranked to; null when no rank up.
+	 * @return The name of the group the player will be ranked to; null when no
+	 *         rank up.
 	 */
 	public String getNextRankupGroup(Player player) {
 		return plugin.getPlayerChecker().getNextRankupGroup(player);
 	}
-	
+
 	/**
 	 * Register a requirement that can be used in the advanced config.
-	 * The name should be unique as that is the way Autorank will identify the requirement. 
+	 * The name should be unique as that is the way Autorank will identify the
+	 * requirement.
 	 * <p>
 	 * The name will be the name that is used in the config.
+	 * 
 	 * @param uniqueName Unique name identifier for the requirement
 	 * @param clazz Requirement class that does all the logic
 	 */
-	public void registerRequirement(String uniqueName, Class<? extends Requirement> clazz) {
+	public void registerRequirement(String uniqueName,
+			Class<? extends Requirement> clazz) {
 		plugin.getLogger().info("Loaded custom requirement: " + uniqueName);
-		
+
 		plugin.registerRequirement(uniqueName, clazz);
 	}
-	
+
 	/**
 	 * Register a result that can be used in the advanced config.
-	 * The name should be unique as that is the way Autorank will identify the result. 
+	 * The name should be unique as that is the way Autorank will identify the
+	 * result.
 	 * <p>
 	 * The name will be the name that is used in the config.
+	 * 
 	 * @param uniqueName Unique name identifier for the result
 	 * @param clazz Result class that does all the logic
 	 */
 	public void registerResult(String uniqueName, Class<? extends Result> clazz) {
 		plugin.getLogger().info("Loaded custom result: " + uniqueName);
-		
+
 		plugin.registerResult(uniqueName, clazz);
 	}
-	
+
 	/**
 	 * Get the addon manager of Autorank.
 	 * <p>
 	 * This class stores information about the loaded addons
+	 * 
 	 * @return {@link me.armar.plugins.autorank.addons.AddOnManager} class
 	 */
 	public AddOnManager getAddonManager() {
