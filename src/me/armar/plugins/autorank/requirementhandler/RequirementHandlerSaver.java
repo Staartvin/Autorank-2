@@ -1,5 +1,7 @@
 package me.armar.plugins.autorank.requirementhandler;
 
+import java.util.ConcurrentModificationException;
+
 /**
  * Simple runnable task that saves the playerdata.yml every minute.
  * <p>
@@ -22,7 +24,12 @@ public class RequirementHandlerSaver implements Runnable {
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		requirementHandler.saveConfig();
+		try {
+			requirementHandler.saveConfig();	
+		} catch (ConcurrentModificationException e) {
+			requirementHandler.saveConfig();
+		}
+		
 
 	}
 
