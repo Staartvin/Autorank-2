@@ -45,14 +45,10 @@ public abstract class Requirement {
 	 * Setup requirement specific objects.
 	 * 
 	 * This method is called when Autorank sets up its config.
-	 * The requirement id, auto completion and optional values are assigned
+	 * <br>The requirement id, auto completion and optional values are assigned
 	 * automatically.
 	 * 
 	 * @param options String[] containing values of the config
-	 * @param optional Is this an optional requirement?
-	 * @param results List<Result> containing results
-	 * @param autoComplete Will this auto complete?
-	 * @param reqId id of the requirement
 	 * @return true if everything was setup correctly; false otherwise
 	 */
 	public abstract boolean setOptions(String[] options/*, boolean optional,
@@ -152,18 +148,35 @@ public abstract class Requirement {
 		return autorank.getHookedStatsPlugin();
 	}
 	
+	/**
+	 * Set the requirement id of this requirement
+	 * @param reqId id to set it to
+	 */
 	public void setReqId(int reqId) {
 		this.reqId = reqId;
 	}
 	
+	/**
+	 * Set whether this requirement is optional or not
+	 * @param optional true if optional; false otherwise
+	 */
 	public void setOptional(boolean optional) {
 		this.optional = optional;
 	}
 	
+	/**
+	 * Set whether this requirement auto completes itself
+	 * @param autoComplete true if auto complete; false otherwise
+	 */
 	public void setAutoComplete(boolean autoComplete) {
 		this.autoComplete = autoComplete;
 	}
 	
+	/**
+	 * Set the results of this requirement.
+	 * <br>These results will be performed when this requirement is met.
+	 * @param results results to perform upon completion
+	 */
 	public void setResults(List<Result> results) {
 		this.results = results;
 	}
