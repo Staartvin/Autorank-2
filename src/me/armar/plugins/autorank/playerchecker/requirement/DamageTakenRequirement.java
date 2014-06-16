@@ -8,10 +8,6 @@ public class DamageTakenRequirement extends Requirement {
 
 	private int damageTaken = 0;
 
-	public DamageTakenRequirement() {
-		super();
-	}
-
 	@Override
 	public boolean setOptions(final String[] options) {
 		try {

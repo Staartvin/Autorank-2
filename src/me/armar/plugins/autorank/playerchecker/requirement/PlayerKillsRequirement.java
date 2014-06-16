@@ -8,10 +8,6 @@ public class PlayerKillsRequirement extends Requirement {
 
 	private int totalPlayersKilled = 0;
 
-	public PlayerKillsRequirement() {
-		super();
-	}
-
 	@Override
 	public boolean setOptions(final String[] options) {
 		try {

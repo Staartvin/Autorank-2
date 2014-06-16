@@ -8,10 +8,6 @@ public class PermissionRequirement extends Requirement {
 
 	private String permission = null;
 
-	public PermissionRequirement() {
-		super();
-	}
-
 	@Override
 	public boolean setOptions(final String[] options) {
 		try {

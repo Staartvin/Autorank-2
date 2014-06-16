@@ -13,10 +13,6 @@ public class LocationRequirement extends Requirement {
 	private String world;
 	private int radius = 1;
 
-	public LocationRequirement() {
-		super();
-	}
-
 	@Override
 	public boolean setOptions(final String[] options) {
 

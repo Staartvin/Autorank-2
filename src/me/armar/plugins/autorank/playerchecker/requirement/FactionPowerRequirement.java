@@ -12,10 +12,6 @@ public class FactionPowerRequirement extends Requirement {
 
 	private double factionPower = 0;
 
-	public FactionPowerRequirement() {
-		super();
-	}
-
 	@Override
 	public boolean setOptions(final String[] options) {
 		try {
