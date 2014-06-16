@@ -1,10 +1,6 @@
 package me.armar.plugins.autorank.playerchecker.requirement;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import me.armar.plugins.autorank.language.Lang;
-import me.armar.plugins.autorank.playerchecker.result.Result;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -16,26 +12,15 @@ public class LocationRequirement extends Requirement {
 	private int xLocation = 0, yLocation = 0, zLocation = 0;
 	private String world;
 	private int radius = 1;
-	private boolean optional = false;
-	private boolean autoComplete = false;
-	private int reqId;
-	List<Result> results = new ArrayList<Result>();
 
 	public LocationRequirement() {
 		super();
 	}
 
 	@Override
-	public boolean setOptions(final String[] options, final boolean optional,
-			final List<Result> results, final boolean autoComplete,
-			final int reqId) {
+	public boolean setOptions(final String[] options) {
 
 		// Location = x;y;z;world;radius
-		this.optional = optional;
-		this.results = results;
-		this.autoComplete = autoComplete;
-		this.reqId = reqId;
-
 		if (options.length != 5) {
 			return false;
 		}
@@ -107,16 +92,6 @@ public class LocationRequirement extends Requirement {
 	}
 
 	@Override
-	public boolean isOptional() {
-		return optional;
-	}
-
-	@Override
-	public List<Result> getResults() {
-		return results;
-	}
-
-	@Override
 	public String getProgress(final Player player) {
 		// Distance between two points:
 		// d = sqrt((x2 - x1)^2 + (y2 - y1)^2 + (z2 - z1)^2)
@@ -145,15 +120,5 @@ public class LocationRequirement extends Requirement {
 		}
 		progress = progress.concat(distance + " " + plurOrSing + " away.");
 		return progress;
-	}
-
-	@Override
-	public boolean useAutoCompletion() {
-		return autoComplete;
-	}
-
-	@Override
-	public int getReqId() {
-		return reqId;
 	}
 }
