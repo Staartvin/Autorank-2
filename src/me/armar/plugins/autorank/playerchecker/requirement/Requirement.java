@@ -1,5 +1,6 @@
 package me.armar.plugins.autorank.playerchecker.requirement;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,6 +29,9 @@ import org.bukkit.entity.Player;
 public abstract class Requirement {
 
 	private Autorank autorank;
+	private boolean optional = false, autoComplete = false;
+	private int reqId;
+	private List<Result> results = new ArrayList<Result>();
 
 	public final void setAutorank(final Autorank autorank) {
 		this.autorank = autorank;
@@ -51,8 +55,8 @@ public abstract class Requirement {
 	 * @param reqId id of the requirement
 	 * @return true if everything was setup correctly; false otherwise
 	 */
-	public abstract boolean setOptions(String[] options, boolean optional,
-			List<Result> results, boolean autoComplete, int reqId);
+	public abstract boolean setOptions(String[] options/*, boolean optional,
+			List<Result> results, boolean autoComplete, int reqId*/);
 
 	/**
 	 * Does it meet the requirements?
@@ -81,21 +85,27 @@ public abstract class Requirement {
 	 * 
 	 * @return true when optional; false otherwise.
 	 */
-	public abstract boolean isOptional();
+	public boolean isOptional() {
+		return optional;
+	}
 
 	/**
 	 * Gets the results when this requirement is finished
 	 * 
 	 * @return A list of results that has to be done.
 	 */
-	public abstract List<Result> getResults();
+	public List<Result> getResults() {
+		return results;
+	}
 
 	/**
 	 * Use auto completion for this?
 	 * 
 	 * @return true when auto complete; false otherwise
 	 */
-	public abstract boolean useAutoCompletion();
+	public boolean useAutoCompletion() {
+		return autoComplete;
+	}
 
 	@Override
 	public String toString() {
@@ -129,7 +139,9 @@ public abstract class Requirement {
 	 * 
 	 * @return id
 	 */
-	public abstract int getReqId();
+	public int getReqId() {
+		return reqId;
+	}
 
 	/**
 	 * Get the current running stats plugin.
@@ -138,5 +150,21 @@ public abstract class Requirement {
 	 */
 	public StatsPlugin getStatsPlugin() {
 		return autorank.getHookedStatsPlugin();
+	}
+	
+	public void setReqId(int reqId) {
+		this.reqId = reqId;
+	}
+	
+	public void setOptional(boolean optional) {
+		this.optional = optional;
+	}
+	
+	public void setAutoComplete(boolean autoComplete) {
+		this.autoComplete = autoComplete;
+	}
+	
+	public void setResults(List<Result> results) {
+		this.results = results;
 	}
 }
