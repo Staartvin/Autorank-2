@@ -52,8 +52,11 @@ public class RankChangeBuilder {
 			// Time requirement
 			final List<Requirement> req = new ArrayList<Requirement>();
 			final Requirement timeReq = new TimeRequirement();
-			timeReq.setOptions(new String[] { options[1] }, false,
-					new ArrayList<Result>(), true, 0);
+			timeReq.setOptions(new String[] { options[1] });
+			timeReq.setOptional(false);
+			timeReq.setResults(new ArrayList<Result>());
+			timeReq.setAutoComplete(true);
+			timeReq.setReqId(0);
 			timeReq.setAutorank(autorank);
 			req.add(timeReq);
 
@@ -186,8 +189,11 @@ public class RankChangeBuilder {
 
 		if (res != null) {
 			res.setAutorank(autorank);
-			res.setOptions(arg.split(";"), optional, results, autoComplete,
-					reqId);
+			res.setOptions(arg.split(";"));
+			res.setOptional(optional);
+			res.setAutoComplete(autoComplete);
+			res.setReqId(reqId);
+			res.setResults(results);
 		}
 		return res;
 	}
