@@ -3,8 +3,11 @@ package me.armar.plugins.autorank.hooks.vaultapi;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.DependencyHandler;
 import net.milkbowl.vault.Vault;
+import net.milkbowl.vault.economy.Economy;
 
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.RegisteredServiceProvider;
 
 /**
  * Handles all connections with Vault
@@ -18,6 +21,7 @@ public class VaultHandler implements DependencyHandler {
 
 	private final Autorank plugin;
 	private Vault api;
+	public static Economy economy = null;
 
 	public VaultHandler(final Autorank instance) {
 		plugin = instance;
@@ -50,7 +54,7 @@ public class VaultHandler implements DependencyHandler {
 		} else {
 			api = (Vault) get();
 
-			if (api != null) {
+			if (api != null && setupEconomy()) {
 				plugin.getLogger()
 						.info("Vault has been found and can be used!");
 				return true;
@@ -78,5 +82,16 @@ public class VaultHandler implements DependencyHandler {
 	@Override
 	public boolean isAvailable() {
 		return api != null;
+	}
+	
+	private boolean setupEconomy() {
+		final RegisteredServiceProvider<Economy> economyProvider = Bukkit
+				.getServer().getServicesManager()
+				.getRegistration(net.milkbowl.vault.economy.Economy.class);
+		if (economyProvider != null) {
+			economy = economyProvider.getProvider();
+		}
+
+		return (economy != null);
 	}
 }
