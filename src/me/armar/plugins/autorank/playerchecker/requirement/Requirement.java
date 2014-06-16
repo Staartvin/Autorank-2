@@ -51,8 +51,7 @@ public abstract class Requirement {
 	 * @param options String[] containing values of the config
 	 * @return true if everything was setup correctly; false otherwise
 	 */
-	public abstract boolean setOptions(String[] options/*, boolean optional,
-			List<Result> results, boolean autoComplete, int reqId*/);
+	public abstract boolean setOptions(String[] options);
 
 	/**
 	 * Does it meet the requirements?
