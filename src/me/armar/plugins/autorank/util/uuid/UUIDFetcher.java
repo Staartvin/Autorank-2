@@ -50,8 +50,14 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
 			String body = JSONArray.toJSONString(names.subList(i * 100,
 					Math.min((i + 1) * 100, names.size())));
 			writeBody(connection, body);
-			JSONArray array = (JSONArray) jsonParser
-					.parse(new InputStreamReader(connection.getInputStream()));
+			JSONArray array;
+			
+			try {
+				array = (JSONArray) jsonParser.parse(new InputStreamReader(connection.getInputStream()));
+			} catch (Exception e) {
+				throw new Exception("Could not parse name to uuid!");
+			}
+			
 			for (Object profile : array) {
 				JSONObject jsonProfile = (JSONObject) profile;
 				String id = (String) jsonProfile.get("id");

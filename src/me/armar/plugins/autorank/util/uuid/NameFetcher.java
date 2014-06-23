@@ -41,8 +41,16 @@ public class NameFetcher implements Callable<Map<UUID, String>> {
 			HttpURLConnection connection = (HttpURLConnection) new URL(
 					PROFILE_URL + uuid.toString().replace("-", ""))
 					.openConnection();
-			JSONObject response = (JSONObject) jsonParser
-					.parse(new InputStreamReader(connection.getInputStream()));
+			
+			JSONObject response;
+			
+			try {
+				response = (JSONObject) jsonParser
+						.parse(new InputStreamReader(connection.getInputStream()));
+			} catch (Exception e) {
+				throw new Exception("Could not parse uuid to name!");
+			}
+			
 			String name = (String) response.get("name");
 			if (name == null) {
 				continue;
