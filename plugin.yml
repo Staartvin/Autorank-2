@@ -56,6 +56,9 @@ permissions:
     autorank.sync:
         description: Allows a player to do /ar sync
         default: op
+    autorank.syncstats:
+        description: Allows a player to do /ar syncstats
+        default: op    
     autorank.complete:
         description: Allows a player to do /ar complete
         default: op    
