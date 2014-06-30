@@ -73,3 +73,7 @@ advanced dependency output: false
 # If this is true, Autorank will tell you in the console what dependencies were found and which ones weren't found.
 # Turn this off to remove the console spam from Autorank about dependencies.
 # This feature can be useful when Autorank can't find your dependency, but you have it installed.
+
+show help command based on permission: false
+# If this is true, the /ar help command will only show the available commands for a certain player.
+# If a player doesn't have the permission to perform the command, it will not show that command on the help page.

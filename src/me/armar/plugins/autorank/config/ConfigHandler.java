@@ -269,4 +269,8 @@ public class ConfigHandler {
 		return settingsConfig.getBoolean("auto-updater.check-for-new-versions",
 				true);
 	}
+	
+	public boolean doBaseHelpPageOnPermission() {
+		return settingsConfig.getBoolean("show help command based on permission", false);
+	}
 }
