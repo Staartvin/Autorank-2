@@ -25,6 +25,11 @@ public class SyncCommand implements CommandExecutor {
 		if (!plugin.getCommandsManager().hasPermission("autorank.sync", sender))
 			return true;
 
+		if (args.length > 1 && args[1].equalsIgnoreCase("stats")) {
+			sender.hasPermission(ChatColor.RED + "You probably meant /ar syncstats or /ar sync!");
+			return true;
+		}
+		
 		if (!plugin.getConfigHandler().useMySQL()) {
 			sender.sendMessage(ChatColor.RED + "MySQL is not being used!");
 			return true;
