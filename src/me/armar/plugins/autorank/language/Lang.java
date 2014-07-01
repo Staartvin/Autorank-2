@@ -31,7 +31,7 @@ public enum Lang {
 	/**
 	 * Changed playtime of {0} to {1}.
 	 */
-	PLAYTIME_CHANGED("playtime_changed", "Changed playtime of {0} to {1}."),
+	PLAYTIME_CHANGED("playtime-changed", "Changed playtime of {0} to {1}."),
 	/**
 	 * Cannot check for console!
 	 */
@@ -232,7 +232,19 @@ public enum Lang {
 	 * Player {0} is unknown and couldn't be identified.
 	 */
 	UNKNOWN_PLAYER("unknown-player",
-			"&cPlayer {0} is unknown and couldn't be identified."), ;
+			"&cPlayer {0} is unknown and couldn't be identified."),
+	/**
+	 * Catch at least {0} fish.
+	 */
+	FISH_CAUGHT_REQUIREMENT("fish-caught-requirement", "Catch at least {0} fish."),
+	/**
+	 * Craft at least {0} item(s).
+	 */
+	ITEMS_CRAFTED_REQUIREMENT("items-crafted-requirement", "Craft at least {0} item(s)."),
+	/**
+	 * Shear at least {0} sheep.
+	 */
+	TIMES_SHEARED_REQUIREMENT("times-sheared-requirement", "Shear at least {0} sheep."),;
 
 	private String path, def;
 	private static FileConfiguration LANG;
