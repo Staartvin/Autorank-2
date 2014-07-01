@@ -25,9 +25,11 @@ import me.armar.plugins.autorank.playerchecker.requirement.BlocksPlacedRequireme
 import me.armar.plugins.autorank.playerchecker.requirement.DamageTakenRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.ExpRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.FactionPowerRequirement;
+import me.armar.plugins.autorank.playerchecker.requirement.FishCaughtRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.GamemodeRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.GlobalTimeRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.HasItemRequirement;
+import me.armar.plugins.autorank.playerchecker.requirement.ItemsCraftedRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.LocationRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.McMMOPowerLevelRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.McMMOSkillLevelRequirement;
@@ -37,6 +39,7 @@ import me.armar.plugins.autorank.playerchecker.requirement.PermissionRequirement
 import me.armar.plugins.autorank.playerchecker.requirement.PlayerKillsRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 import me.armar.plugins.autorank.playerchecker.requirement.TimeRequirement;
+import me.armar.plugins.autorank.playerchecker.requirement.TimesShearedRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.TotalTimeRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.TotalVotesRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.WorldGuardRegionRequirement;
@@ -190,6 +193,9 @@ public class Autorank extends JavaPlugin {
 		req.registerRequirement("mcmmo power level",
 				McMMOPowerLevelRequirement.class);
 		req.registerRequirement("permission", PermissionRequirement.class);
+		req.registerRequirement("fish caught", FishCaughtRequirement.class);
+		req.registerRequirement("items crafted", ItemsCraftedRequirement.class);
+		req.registerRequirement("times sheared", TimesShearedRequirement.class);
 
 		// REGISTER PLURALS IN AUTORANKTOOLS AS WELL!
 

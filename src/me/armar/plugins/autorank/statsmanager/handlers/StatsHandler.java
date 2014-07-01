@@ -9,8 +9,8 @@ public class StatsHandler implements StatsPlugin {
 	private Autorank plugin;
 	private StatsAPIHandler statsApi;
 
-	public enum statTypes {
-		BLOCKS_BROKEN, BLOCKS_PLACED, TOTAL_BLOCKS_BROKEN, TOTAL_BLOCKS_PLACED, VOTES, PLAYERS_KILLED, MOBS_KILLED, DAMAGE_TAKEN, TIME_PLAYED, BLOCKS_MOVED
+	public static enum statTypes {
+		BLOCKS_BROKEN, BLOCKS_PLACED, TOTAL_BLOCKS_BROKEN, TOTAL_BLOCKS_PLACED, VOTES, PLAYERS_KILLED, MOBS_KILLED, DAMAGE_TAKEN, TIME_PLAYED, BLOCKS_MOVED, FISH_CAUGHT, ITEMS_CRAFTED, TIMES_SHEARED
 	};
 
 	public StatsHandler(Autorank instance, StatsAPIHandler statsAPI) {
@@ -110,6 +110,21 @@ public class StatsHandler implements StatsPlugin {
 			// Handle time played
 			value = statsApi.getTotalBlocksMoved(playerName,
 					(Integer) arguments[2], worldName);
+		} else if (correctName.equals("fish_caught")) {
+			// Handle time played
+			// Fish catched is the proper spelling of the stat
+			value = statsApi.getNormalStat(playerName,
+					"Fish catched", worldName);
+		} else if (correctName.equals("items_crafted")) {
+			// Handle time played
+			// Fish catched is the proper spelling of the stat
+			value = statsApi.getNormalStat(playerName,
+					"Items crafted", worldName);
+		} else if (correctName.equals("times_sheared")) {
+			// Handle time played
+			// Fish catched is the proper spelling of the stat
+			value = statsApi.getNormalStat(playerName,
+					"Shear", worldName);
 		}
 
 		return value;
