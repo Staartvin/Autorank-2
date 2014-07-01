@@ -82,6 +82,7 @@ public class DependencyManager {
 
 		// Load all dependencies
 		for (DependencyHandler depHandler : handlers.values()) {
+			// Make sure to respect settings
 			depHandler.setup(plugin.getConfigHandler().useAdvancedDependencyLogs());
 		}
 
