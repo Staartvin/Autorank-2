@@ -71,19 +71,25 @@ public class WorldGuardHandler implements DependencyHandler {
 	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#setup()
 	 */
 	@Override
-	public boolean setup() {
+	public boolean setup(boolean verbose) {
 		if (!isInstalled()) {
-			plugin.getLogger().info("WorldGuard has not been found!");
+			if (verbose) {
+				plugin.getLogger().info("WorldGuard has not been found!");
+			}
 			return false;
 		} else {
 			worldGuardAPI = (WorldGuardPlugin) get();
 			if (worldGuardAPI != null) {
-				plugin.getLogger().info(
-						"WorldGuard has been found and can be used!");
+				if (verbose) {
+					plugin.getLogger().info(
+							"WorldGuard has been found and can be used!");
+				}
 				return true;
 			} else {
-				plugin.getLogger().info(
-						"WorldGuard has been found but cannot be used!");
+				if (verbose) {
+					plugin.getLogger().info(
+							"WorldGuard has been found but cannot be used!");
+				}
 				return false;
 			}
 		}

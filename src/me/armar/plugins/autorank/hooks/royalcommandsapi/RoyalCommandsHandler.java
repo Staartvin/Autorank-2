@@ -54,20 +54,26 @@ public class RoyalCommandsHandler implements DependencyHandler {
 	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#setup()
 	 */
 	@Override
-	public boolean setup() {
+	public boolean setup(boolean verbose) {
 		if (!isInstalled()) {
-			plugin.getLogger().info("RoyalCommands has not been found!");
+			if (verbose) {
+				plugin.getLogger().info("RoyalCommands has not been found!");
+			}
 			return false;
 		} else {
 			api = (RoyalCommands) get();
 
 			if (api != null) {
-				plugin.getLogger().info(
-						"RoyalCommands has been found and can be used!");
+				if (verbose) {
+					plugin.getLogger().info(
+							"RoyalCommands has been found and can be used!");
+				}
 				return true;
 			} else {
-				plugin.getLogger().info(
-						"RoyalCommands has been found but cannot be used!");
+				if (verbose) {
+					plugin.getLogger().info(
+							"RoyalCommands has been found but cannot be used!");
+				}
 				return false;
 			}
 		}

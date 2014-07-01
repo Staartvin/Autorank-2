@@ -47,20 +47,26 @@ public class VaultHandler implements DependencyHandler {
 	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#setup()
 	 */
 	@Override
-	public boolean setup() {
+	public boolean setup(boolean verbose) {
 		if (!isInstalled()) {
-			plugin.getLogger().info("Vault has not been found!");
+			if (verbose) {
+				plugin.getLogger().info("Vault has not been found!");
+			}
 			return false;
 		} else {
 			api = (Vault) get();
 
 			if (api != null && setupEconomy()) {
-				plugin.getLogger()
-						.info("Vault has been found and can be used!");
+				if (verbose) {
+					plugin.getLogger().info(
+							"Vault has been found and can be used!");
+				}
 				return true;
 			} else {
-				plugin.getLogger().info(
-						"Vault has been found but cannot be used!");
+				if (verbose) {
+					plugin.getLogger().info(
+							"Vault has been found but cannot be used!");
+				}
 				return false;
 			}
 		}
@@ -83,7 +89,7 @@ public class VaultHandler implements DependencyHandler {
 	public boolean isAvailable() {
 		return api != null;
 	}
-	
+
 	private boolean setupEconomy() {
 		final RegisteredServiceProvider<Economy> economyProvider = Bukkit
 				.getServer().getServicesManager()

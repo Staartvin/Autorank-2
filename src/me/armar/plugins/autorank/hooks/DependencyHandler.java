@@ -26,7 +26,7 @@ public interface DependencyHandler {
 	 * 
 	 * @return true if correctly setup, false otherwise.
 	 */
-	public boolean setup();
+	public boolean setup(boolean verbose);
 
 	/**
 	 * Check to see if this dependency is running on this server

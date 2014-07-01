@@ -53,20 +53,26 @@ public class OnTimeHandler implements DependencyHandler {
 	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#setup()
 	 */
 	@Override
-	public boolean setup() {
+	public boolean setup(boolean verbose) {
 		if (!isInstalled()) {
-			plugin.getLogger().info("OnTime has not been found!");
+			if (verbose) {
+				plugin.getLogger().info("OnTime has not been found!");
+			}
 			return false;
 		} else {
 			api = (OnTime) get();
 
 			if (api != null) {
-				plugin.getLogger().info(
-						"OnTime has been found and can be used!");
+				if (verbose) {
+					plugin.getLogger().info(
+							"OnTime has been found and can be used!");
+				}
 				return true;
 			} else {
-				plugin.getLogger().info(
-						"OnTime has been found but cannot be used!");
+				if (verbose) {
+					plugin.getLogger().info(
+							"OnTime has been found but cannot be used!");
+				}
 				return false;
 			}
 		}
