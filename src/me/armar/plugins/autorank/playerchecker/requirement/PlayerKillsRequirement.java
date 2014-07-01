@@ -1,6 +1,7 @@
 package me.armar.plugins.autorank.playerchecker.requirement;
 
 import me.armar.plugins.autorank.language.Lang;
+import me.armar.plugins.autorank.statsmanager.handlers.StatsHandler;
 
 import org.bukkit.entity.Player;
 
@@ -22,7 +23,7 @@ public class PlayerKillsRequirement extends Requirement {
 	@Override
 	public boolean meetsRequirement(final Player player) {
 		return getStatsPlugin().isEnabled()
-				&& getStatsPlugin().getNormalStat("players_killed",
+				&& getStatsPlugin().getNormalStat(StatsHandler.statTypes.PLAYERS_KILLED.toString(),
 						player.getName(), null) >= totalPlayersKilled;
 	}
 
@@ -36,7 +37,7 @@ public class PlayerKillsRequirement extends Requirement {
 	public String getProgress(final Player player) {
 		String progress = "";
 		progress = progress.concat(getStatsPlugin().getNormalStat(
-				"players_killed", player.getName(), null)
+				StatsHandler.statTypes.PLAYERS_KILLED.toString(), player.getName(), null)
 				+ "/" + totalPlayersKilled);
 		return progress;
 	}

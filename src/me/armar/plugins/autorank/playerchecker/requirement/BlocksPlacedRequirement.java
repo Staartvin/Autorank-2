@@ -1,6 +1,8 @@
 package me.armar.plugins.autorank.playerchecker.requirement;
 
 import me.armar.plugins.autorank.language.Lang;
+import me.armar.plugins.autorank.statsmanager.handlers.StatsHandler;
+
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -37,10 +39,10 @@ public class BlocksPlacedRequirement extends Requirement {
 
 		boolean sufficient = false;
 		if (blockID > 0) {
-			sufficient = getStatsPlugin().getNormalStat("blocks_placed",
+			sufficient = getStatsPlugin().getNormalStat(StatsHandler.statTypes.BLOCKS_PLACED.toString(),
 					player.getName(), null, blockID + "", damageValue + "") >= blocksPlaced;
 		} else {
-			sufficient = getStatsPlugin().getNormalStat("total_blocks_placed",
+			sufficient = getStatsPlugin().getNormalStat(StatsHandler.statTypes.TOTAL_BLOCKS_PLACED.toString(),
 					player.getName(), null) >= blocksPlaced;
 		}
 
@@ -76,7 +78,7 @@ public class BlocksPlacedRequirement extends Requirement {
 	public String getProgress(final Player player) {
 		String progress = "";
 		progress = progress.concat(getStatsPlugin().getNormalStat(
-				"blocks_placed", player.getName(), null, blockID + "",
+				StatsHandler.statTypes.BLOCKS_PLACED.toString(), player.getName(), null, blockID + "",
 				damageValue + "")
 				+ "/" + blocksPlaced);
 		return progress;

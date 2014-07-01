@@ -1,6 +1,7 @@
 package me.armar.plugins.autorank.playerchecker.requirement;
 
 import me.armar.plugins.autorank.language.Lang;
+import me.armar.plugins.autorank.statsmanager.handlers.StatsHandler;
 
 import org.bukkit.entity.Player;
 
@@ -33,7 +34,7 @@ public class BlocksMovedRequirement extends Requirement {
 		final boolean enabled = getStatsPlugin().isEnabled();
 
 		boolean sufficient = false;
-		sufficient = this.getStatsPlugin().getNormalStat("blocks_moved",
+		sufficient = this.getStatsPlugin().getNormalStat(StatsHandler.statTypes.BLOCKS_MOVED.toString(),
 				player.getName(), player.getWorld().getName(), movementType) > blocksMoved;
 
 		return enabled && sufficient;
@@ -51,7 +52,7 @@ public class BlocksMovedRequirement extends Requirement {
 	public String getProgress(final Player player) {
 		String progress = "";
 		progress = progress.concat(getStatsPlugin().getNormalStat(
-				"blocks_moved", player.getName(), player.getWorld().getName(),
+				StatsHandler.statTypes.BLOCKS_MOVED.toString(), player.getName(), player.getWorld().getName(),
 				movementType)
 				+ "/" + blocksMoved + " (" + getMovementString() + ")");
 		return progress;

@@ -1,6 +1,7 @@
 package me.armar.plugins.autorank.playerchecker.requirement;
 
 import me.armar.plugins.autorank.language.Lang;
+import me.armar.plugins.autorank.statsmanager.handlers.StatsHandler;
 
 import org.bukkit.entity.Player;
 
@@ -22,7 +23,7 @@ public class TotalVotesRequirement extends Requirement {
 	@Override
 	public boolean meetsRequirement(final Player player) {
 		return getStatsPlugin().isEnabled()
-				&& getStatsPlugin().getNormalStat("Votes", player.getName(),
+				&& getStatsPlugin().getNormalStat(StatsHandler.statTypes.VOTES.toString(), player.getName(),
 						null) >= totalVotes;
 	}
 
@@ -35,7 +36,7 @@ public class TotalVotesRequirement extends Requirement {
 	@Override
 	public String getProgress(final Player player) {
 		String progress = "";
-		progress = progress.concat(getStatsPlugin().getNormalStat("Votes",
+		progress = progress.concat(getStatsPlugin().getNormalStat(StatsHandler.statTypes.VOTES.toString(),
 				player.getName(), null)
 				+ "/" + totalVotes);
 		return progress;
