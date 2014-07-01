@@ -98,6 +98,8 @@ public class DependencyManager {
 			plugin.getLogger().info(
 					"---------------[Autorank Dependencies]---------------");
 		}
+		
+		plugin.getLogger().info("Loaded libraries and dependencies");
 	}
 
 	public DependencyHandler getDependency(dependency dep) {
