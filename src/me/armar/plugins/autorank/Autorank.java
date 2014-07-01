@@ -49,6 +49,7 @@ import me.armar.plugins.autorank.playerchecker.result.EffectResult;
 import me.armar.plugins.autorank.playerchecker.result.MessageResult;
 import me.armar.plugins.autorank.playerchecker.result.RankChangeResult;
 import me.armar.plugins.autorank.playerchecker.result.Result;
+import me.armar.plugins.autorank.playerchecker.result.SpawnFireworkResult;
 import me.armar.plugins.autorank.playerchecker.result.TeleportResult;
 import me.armar.plugins.autorank.playtimes.Playtimes;
 import me.armar.plugins.autorank.requirementhandler.RequirementHandler;
@@ -205,6 +206,7 @@ public class Autorank extends JavaPlugin {
 		res.registerResult("message", MessageResult.class);
 		res.registerResult("rank change", RankChangeResult.class);
 		res.registerResult("tp", TeleportResult.class);
+		res.registerResult("firework", SpawnFireworkResult.class);
 
 		// Load requirements and results per group from config
 		playerChecker.initialiseFromConfigs();
