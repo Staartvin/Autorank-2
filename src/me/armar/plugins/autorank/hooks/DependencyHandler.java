@@ -24,6 +24,7 @@ public interface DependencyHandler {
 	/**
 	 * Setup the hook between this dependency and Autorank
 	 * 
+	 * @param verbose Whether to show output or not
 	 * @return true if correctly setup, false otherwise.
 	 */
 	public boolean setup(boolean verbose);
