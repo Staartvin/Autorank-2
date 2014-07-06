@@ -26,8 +26,6 @@ public class Playtimes {
 	private final PlaytimesUpdate update;
 	private final Autorank plugin;
 
-	private boolean convertingData = false;
-
 	// Used to store what plugin Autorank uses for checking the time
 	private dependency timePlugin;
 
@@ -204,11 +202,6 @@ public class Playtimes {
 
 		List<UUID> uuids = new ArrayList<UUID>();
 
-		// Return empty list
-		if (!isConverted()) {
-			return uuids;
-		}
-
 		for (String uuidString : data.getKeys(false)) {
 			UUID uuid = null;
 			try {
@@ -284,11 +277,6 @@ public class Playtimes {
 	 */
 	public void convertToUUIDStorage() {
 
-		if (convertingData)
-			return;
-
-		convertingData = true;
-
 		// Run async to prevent load-time problems.
 		plugin.getServer().getScheduler()
 				.runTaskAsynchronously(plugin, new Runnable() {
@@ -345,10 +333,6 @@ public class Playtimes {
 					}
 
 				});
-	}
-
-	public boolean isConverted() {
-		return convertingData;
 	}
 
 	private String getDurationString(int seconds) {
