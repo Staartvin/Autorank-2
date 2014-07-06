@@ -20,35 +20,41 @@ import org.bukkit.entity.Player;
 public class AutorankTools {
 
 	static List<String> reqTypes = new ArrayList<String>();
+	
+	public static enum Time {SECONDS, MINUTES, HOURS, DAYS}
 
-	public static int stringToMinutes(String string) {
-		int res = 0;
-
-		string = string.trim();
-
-		final Pattern pattern = Pattern
-				.compile("((\\d+)d)?((\\d+)h)?((\\d+)m)?");
-		final Matcher matcher = pattern.matcher(string);
-
-		matcher.find();
-		final String days = matcher.group(2);
-		final String hours = matcher.group(4);
-		final String minutes = matcher.group(6);
-
-		res += stringtoDouble(minutes);
-		res += stringtoDouble(hours) * 60;
-		res += stringtoDouble(days) * 60 * 24;
-
-		return res;
-	}
-
-	public static String minutesToString(int minutes) {
+	public static String timeToString(int count, Time time) {
 		final StringBuilder b = new StringBuilder();
 
-		final int days = minutes / 1440;
-		minutes -= days * 1440;
-		final int hours = minutes / 60;
-		minutes -= hours * 60;
+		int days = 0, hours = 0, minutes = 0, seconds = 0;
+		
+		if (time.equals(Time.DAYS)) {
+			days = count;
+		} else if (time.equals(Time.HOURS)) {
+			days = count / 24;
+			
+			hours = count - (days * 24);
+		} else if (time.equals(Time.MINUTES)) {
+			days = count / 1440;
+			
+			count = count - (days * 1440);
+			
+			hours = count / 60;
+			
+			minutes = count - (hours * 60);
+		} else if (time.equals(Time.SECONDS)) {
+			days = count / 86400;
+			
+			count = count - (days * 86400);
+			
+			hours = count / 3600;
+			
+			count = count - (hours * 3600);
+			
+			minutes = count / 60;
+			
+			seconds = count - (minutes * 60);
+		}
 
 		if (days != 0) {
 			b.append(days);
@@ -81,9 +87,54 @@ public class AutorankTools {
 				b.append(Lang.MINUTE_PLURAL.getConfigValue());
 			else
 				b.append(Lang.MINUTE_SINGULAR.getConfigValue());
+			
+			if (seconds != 0)
+				b.append(" ");
+		}
+		
+		if (seconds != 0) {
+			b.append(seconds);
+			b.append(" ");
+			if (seconds != 1)
+				b.append(Lang.SECOND_PLURAL.getConfigValue());
+			else
+				b.append(Lang.SECOND_SINGULAR.getConfigValue());
 		}
 
 		return b.toString();
+	}
+	
+	public static int stringToTime(String string, Time time) {
+		int res = 0;
+
+		string = string.trim();
+
+		final Pattern pattern = Pattern
+				.compile("((\\d+)d)?((\\d+)h)?((\\d+)m)?");
+		final Matcher matcher = pattern.matcher(string);
+
+		matcher.find();
+		final String days = matcher.group(2);
+		final String hours = matcher.group(4);
+		final String minutes = matcher.group(6);
+
+		res += stringtoDouble(minutes);
+		res += stringtoDouble(hours) * 60;
+		res += stringtoDouble(days) * 60 * 24;
+
+		// Res time is in minutes
+		
+		if (time.equals(Time.SECONDS)) {
+			return res * 60;
+		} else if (time.equals(Time.MINUTES)) {
+			return res;
+		} else if (time.equals(Time.HOURS)) {
+			return res / 60;
+		} else if (time.equals(Time.DAYS)) {
+			return res / 1440;
+		} else {
+			return 0;
+		}
 	}
 
 	public static double stringtoDouble(final String string)
