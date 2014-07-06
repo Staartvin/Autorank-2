@@ -77,3 +77,7 @@ advanced dependency output: false
 show help command based on permission: false
 # If this is true, the /ar help command will only show the available commands for a certain player.
 # If a player doesn't have the permission to perform the command, it will not show that command on the help page.
+
+use debug: false
+# Only set this to true when you want to debug Autorank
+# When this is true, Autorank will spit out debug messages

@@ -263,6 +263,8 @@ public class Autorank extends JavaPlugin {
 			getLogger().info(
 					"Failed to start Metrics, you can ignore this message");
 		}
+		
+		debugMessage("Autorank debug is turned on!");
 	}
 
 	@Override
@@ -339,6 +341,13 @@ public class Autorank extends JavaPlugin {
 			// Failed to submit the stats :-(
 			return false;
 		}
+	}
+	
+	public void debugMessage(String message) {
+		// Don't put out debug message when it is not needed.
+		if (!this.getConfigHandler().useDebugOutput()) return;
+		
+		System.out.print("[Autorank debug] " + message);
 	}
 
 	public LanguageHandler getLanguageHandler() {

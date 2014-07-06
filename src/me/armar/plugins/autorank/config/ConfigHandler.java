@@ -273,4 +273,8 @@ public class ConfigHandler {
 	public boolean doBaseHelpPageOnPermission() {
 		return settingsConfig.getBoolean("show help command based on permission", false);
 	}
+	
+	public boolean useDebugOutput() {
+		return settingsConfig.getBoolean("use debug", false);
+	}
 }
