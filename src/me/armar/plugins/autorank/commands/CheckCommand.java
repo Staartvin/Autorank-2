@@ -9,6 +9,7 @@ import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.playerchecker.RankChange;
 import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 import me.armar.plugins.autorank.util.AutorankTools;
+import me.armar.plugins.autorank.util.AutorankTools.Time;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -52,7 +53,7 @@ public class CheckCommand implements CommandExecutor {
 				AutorankTools.sendColoredMessage(
 						sender,
 						args[1] + " has played for "
-								+ AutorankTools.minutesToString(time));
+								+ AutorankTools.timeToString(time, Time.SECONDS));
 			} else {
 				if (AutorankTools.isExcluded(player)) {
 					sender.sendMessage(ChatColor.RED
@@ -123,8 +124,8 @@ public class CheckCommand implements CommandExecutor {
 		// Start building layout
 
 		layout = layout.replace("&p", player.getName());
-		layout = layout.replace("&time", AutorankTools.minutesToString(plugin
-				.getPlaytimes().getTimeOfPlayer(player.getName())));
+		layout = layout.replace("&time", AutorankTools.timeToString(plugin
+				.getPlaytimes().getTimeOfPlayer(player.getName()), Time.SECONDS));
 
 		StringBuilder groupsString = new StringBuilder("");
 

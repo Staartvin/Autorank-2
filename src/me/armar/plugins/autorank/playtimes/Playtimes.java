@@ -72,7 +72,8 @@ public class Playtimes {
 
 	/**
 	 * Get the time of a player. <br>
-	 * This depends on what plugin is used to get the time from.
+	 * This depends on what plugin is used to get the time from. <br>
+	 * Time is seconds.
 	 * 
 	 * @param playerName Player to get the time for
 	 * @return play time of given player or 0 if not found.
@@ -88,6 +89,7 @@ public class Playtimes {
 			StatsPlugin stats = plugin.getHookedStatsPlugin();
 
 			if (stats instanceof StatsHandler) {
+				// In seconds
 				playTime = ((StatsAPIHandler) plugin.getDependencyManager()
 						.getDependency(dependency.STATS)).getTotalPlayTime(
 						playerName, null);
@@ -99,11 +101,13 @@ public class Playtimes {
 					return playTime;
 
 				// Stats not found, using Autorank's system.
-				playTime = data.getInt(uuid.toString(), 0);
+				playTime = data.getInt(uuid.toString(), 0) * 60;
 			}
 		} else if (timePlugin.equals(dependency.ONTIME)) {
 			playTime = ((OnTimeHandler) plugin.getDependencyManager()
 					.getDependency(dependency.ONTIME)).getPlayTime(playerName);
+			// Time is in minutes, so convert to seconds
+			playTime = playTime * 60;
 		} else {
 
 			uuid = UUIDManager.getUUIDFromPlayer(playerName);
@@ -112,7 +116,7 @@ public class Playtimes {
 				return playTime;
 
 			// Use internal system of Autorank.
-			playTime = data.getInt(uuid.toString(), 0);
+			playTime = data.getInt(uuid.toString(), 0)  * 60;
 		}
 
 		return playTime;

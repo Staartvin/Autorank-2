@@ -5,6 +5,7 @@ import java.util.UUID;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
+import me.armar.plugins.autorank.util.AutorankTools.Time;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
 import org.bukkit.command.Command;
@@ -57,7 +58,7 @@ public class RemoveCommand implements CommandExecutor {
 				value = -AutorankTools.stringtoInt(builder.toString().trim());
 				value += plugin.getPlaytimes().getLocalTime(uuid);
 			} else {
-				value = -AutorankTools.stringToMinutes(builder.toString());
+				value = -AutorankTools.stringToTime(builder.toString(), Time.MINUTES);
 				value += plugin.getPlaytimes().getLocalTime(uuid);
 			}
 		}

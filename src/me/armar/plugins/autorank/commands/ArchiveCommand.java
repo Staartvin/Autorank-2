@@ -3,6 +3,7 @@ package me.armar.plugins.autorank.commands;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
+import me.armar.plugins.autorank.util.AutorankTools.Time;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -33,7 +34,7 @@ public class ArchiveCommand implements CommandExecutor {
 			return true;
 		}
 
-		rate = AutorankTools.stringToMinutes(args[1]);
+		rate = AutorankTools.stringToTime(args[1], Time.MINUTES);
 
 		if (rate <= 0) {
 			sender.sendMessage(ChatColor.RED
@@ -45,7 +46,7 @@ public class ArchiveCommand implements CommandExecutor {
 		sender.sendMessage(ChatColor.GREEN + "Removed " + ChatColor.YELLOW
 				+ plugin.getPlaytimes().archive(rate) + "" + ChatColor.GREEN
 				+ " records below " + ChatColor.YELLOW
-				+ AutorankTools.minutesToString(rate) + ChatColor.GREEN + ".");
+				+ AutorankTools.timeToString(rate, Time.MINUTES) + ChatColor.GREEN + ".");
 		return true;
 	}
 

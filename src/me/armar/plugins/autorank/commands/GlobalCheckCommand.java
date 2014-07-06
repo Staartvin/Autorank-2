@@ -3,6 +3,7 @@ package me.armar.plugins.autorank.commands;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
+import me.armar.plugins.autorank.util.AutorankTools.Time;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -61,7 +62,7 @@ public class GlobalCheckCommand implements CommandExecutor {
 				AutorankTools.sendColoredMessage(
 						sender,
 						args[1] + " has played for "
-								+ AutorankTools.minutesToString(minutes)
+								+ AutorankTools.timeToString(minutes, Time.MINUTES)
 								+ " across all servers.");
 				// Do no check. Players can't be checked on global times (at the moment)
 				//check(sender, player);
@@ -82,9 +83,9 @@ public class GlobalCheckCommand implements CommandExecutor {
 			AutorankTools.sendColoredMessage(
 					sender,
 					"You have played for "
-							+ AutorankTools.minutesToString(plugin
+							+ AutorankTools.timeToString(plugin
 									.getPlaytimes().getGlobalTime(
-											player.getUniqueId()))
+											player.getUniqueId()), Time.MINUTES)
 							+ " across all servers.");
 
 		} else {

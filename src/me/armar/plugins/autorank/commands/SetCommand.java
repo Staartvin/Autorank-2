@@ -5,6 +5,7 @@ import java.util.UUID;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
+import me.armar.plugins.autorank.util.AutorankTools.Time;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
 import org.bukkit.command.Command;
@@ -44,7 +45,7 @@ public class SetCommand implements CommandExecutor {
 					&& !builder.toString().contains("d")) {
 				value = AutorankTools.stringtoInt(builder.toString().trim());
 			} else {
-				value = AutorankTools.stringToMinutes(builder.toString());
+				value = AutorankTools.stringToTime(builder.toString(), Time.MINUTES);
 			}
 		}
 

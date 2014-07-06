@@ -108,6 +108,14 @@ public enum Lang {
 	/**
 	 * minute
 	 */
+	SECOND_SINGULAR("second-singular", "second"),
+	/**
+	 * minutes
+	 */
+	SECOND_PLURAL("second-plural", "seconds"),
+	/**
+	 * minute
+	 */
 	MINUTE_SINGULAR("minute-singular", "minute"),
 	/**
 	 * minutes

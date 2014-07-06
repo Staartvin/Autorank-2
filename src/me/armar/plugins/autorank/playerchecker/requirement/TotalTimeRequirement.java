@@ -2,6 +2,7 @@ package me.armar.plugins.autorank.playerchecker.requirement;
 
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
+import me.armar.plugins.autorank.util.AutorankTools.Time;
 
 import org.bukkit.entity.Player;
 
@@ -22,7 +23,7 @@ public class TotalTimeRequirement extends Requirement {
 	@Override
 	public boolean setOptions(final String[] options) {
 		if (options.length > 0)
-			this.time = AutorankTools.stringToMinutes(options[0]);
+			this.time = AutorankTools.stringToTime(options[0], Time.MINUTES);
 		
 		return (time != -1);
 	}
@@ -44,7 +45,7 @@ public class TotalTimeRequirement extends Requirement {
 	public String getDescription() {
 		return Lang.TOTAL_TIME_REQUIREMENT
 				.getConfigValue(new String[] { AutorankTools
-						.minutesToString(time) });
+						.timeToString(time, Time.MINUTES) });
 	}
 
 	@Override
