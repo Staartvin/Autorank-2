@@ -23,6 +23,13 @@ public class AutorankTools {
 	
 	public static enum Time {SECONDS, MINUTES, HOURS, DAYS}
 
+	/**
+	 * Convert an integer to a string. <br>
+	 * Format of the returned string: <b>x days, y hours, z minutes and r seconds</b>
+	 * @param count the value to convert
+	 * @param time the type of time of the value given
+	 * @return string in given format
+	 */
 	public static String timeToString(int count, Time time) {
 		final StringBuilder b = new StringBuilder();
 
@@ -104,6 +111,12 @@ public class AutorankTools {
 		return b.toString();
 	}
 	
+	/**
+	 * Convert a string to an integer.
+	 * @param string input; this must be in the format '10d 14h 15m'
+	 * @param time the time type of the output
+	 * @return the integer representing the number of seconds/minutes/hours/days
+	 */
 	public static int stringToTime(String string, Time time) {
 		int res = 0;
 
