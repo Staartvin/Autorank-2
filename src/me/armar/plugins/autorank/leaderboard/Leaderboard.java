@@ -80,11 +80,15 @@ public class Leaderboard {
 	}
 
 	private void updateLeaderboard() {
+		plugin.debugMessage("Updating leaderboard...");
+		
 		lastUpdatedTime = System.currentTimeMillis();
 
 		final Map<UUID, Integer> sortedPlaytimes = getSortedPlaytimes();
 		final Iterator<Entry<UUID, Integer>> itr = sortedPlaytimes.entrySet()
 				.iterator();
+		
+		plugin.debugMessage("Size leaderboard: " + sortedPlaytimes.size());
 
 		final List<String> stringList = new ArrayList<String>();
 		stringList.add("-------- Autorank Leaderboard --------");
