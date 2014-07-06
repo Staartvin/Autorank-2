@@ -179,9 +179,4 @@ public class AutorankTools {
 			reqTypes.add(type);
 		}
 	}
-	
-	public static void debugMessage(String message) {
-		System.out.print("[Autorank debug] " + message);
-	}
-
 }
