@@ -30,6 +30,8 @@ public class PlaytimesUpdate implements Runnable {
 	}
 
 	private void updateMinutesPlayed(final Player[] players) {
+		plugin.debugMessage("Checking players for automatic ranking");
+		
 		for (int i = 0; i < players.length; i++) {
 			if (players[i] != null) {
 				updateMinutesPlayed(players[i]);

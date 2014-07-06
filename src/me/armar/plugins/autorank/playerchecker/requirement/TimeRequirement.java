@@ -27,8 +27,9 @@ public class TimeRequirement extends Requirement {
 
 	@Override
 	public boolean meetsRequirement(final Player player) {
+		// Use getTimeOf so that when switched to another time, it'll still work.
 		final double playtime = this.getAutorank().getPlaytimes()
-				.getLocalTime(player.getUniqueId());
+				.getTimeOfPlayer(player.getName());
 		return time != -1 && time <= playtime;
 	}
 
@@ -42,8 +43,8 @@ public class TimeRequirement extends Requirement {
 	@Override
 	public String getProgress(final Player player) {
 		String progress = "";
-		progress = progress.concat(getAutorank().getPlaytimes().getLocalTime(
-				player.getUniqueId())
+		progress = progress.concat(getAutorank().getPlaytimes().getTimeOfPlayer(
+				player.getName())
 				+ " min" + "/" + time + " min");
 		return progress;
 	}

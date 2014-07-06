@@ -45,12 +45,12 @@ public class SyncCommand implements CommandExecutor {
 					@Override
 					public void run() {
 						// Update all mysql records
-						for (UUID uuid : plugin.getPlaytimes().getUUIDKeys()) {
-							if (plugin.getPlaytimes().getLocalTime(uuid) <= 0)
-								continue;
-
+						for (UUID uuid : plugin.getPlaytimes().getUUIDKeys())  {
 							final int localTime = plugin.getPlaytimes()
 									.getLocalTime(uuid);
+							
+							if (localTime <= 0) continue;
+							
 							final int globalTime = plugin.getPlaytimes()
 									.getGlobalTime(uuid);
 

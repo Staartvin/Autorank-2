@@ -9,7 +9,6 @@ import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.playerchecker.RankChange;
 import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 import me.armar.plugins.autorank.util.AutorankTools;
-import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -42,8 +41,7 @@ public class CheckCommand implements CommandExecutor {
 			final Player player = plugin.getServer().getPlayer(args[1]);
 			if (player == null) {
 
-				int time = plugin.getPlaytimes().getLocalTime(
-						UUIDManager.getUUIDFromPlayer(args[1]));
+				int time = plugin.getPlaytimes().getTimeOfPlayer(args[1]);
 
 				if (time <= 0) {
 					sender.sendMessage(Lang.PLAYER_IS_INVALID
@@ -126,7 +124,7 @@ public class CheckCommand implements CommandExecutor {
 
 		layout = layout.replace("&p", player.getName());
 		layout = layout.replace("&time", AutorankTools.minutesToString(plugin
-				.getPlaytimes().getLocalTime(player.getUniqueId())));
+				.getPlaytimes().getTimeOfPlayer(player.getName())));
 
 		StringBuilder groupsString = new StringBuilder("");
 

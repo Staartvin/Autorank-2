@@ -134,6 +134,7 @@ public class Leaderboard {
 		// Fill unsorted lists
 		for (int i = 0; i < uuids.size(); i++) {
 			times.put(uuids.get(i),
+					// We should use getTimeOfPlayer(), but that requires a lot of rewrites, so I'll leave it at the moment.
 					plugin.getPlaytimes().getLocalTime(uuids.get(i)));
 		}
 

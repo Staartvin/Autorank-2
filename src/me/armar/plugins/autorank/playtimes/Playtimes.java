@@ -395,4 +395,8 @@ public class Playtimes {
 
 		return builder.toString();
 	}
+	
+	public Autorank getAutorank() {
+		return plugin;
+	}
 }
