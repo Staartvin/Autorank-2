@@ -1,5 +1,8 @@
 package me.armar.plugins.autorank.util.uuid;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -27,7 +30,7 @@ public class NameFetcher implements Callable<Map<UUID, String>> {
 	private final JSONParser jsonParser = new JSONParser();
 	private final List<UUID> uuids;
 
-	public NameFetcher(List<UUID> uuids) {
+	public NameFetcher(final List<UUID> uuids) {
 		this.uuids = ImmutableList.copyOf(uuids);
 	}
 
@@ -36,32 +39,66 @@ public class NameFetcher implements Callable<Map<UUID, String>> {
 	 */
 	@Override
 	public Map<UUID, String> call() throws Exception {
-		Map<UUID, String> uuidStringMap = new HashMap<UUID, String>();
-		for (UUID uuid : uuids) {
-			HttpURLConnection connection = (HttpURLConnection) new URL(
+		final Map<UUID, String> uuidStringMap = new HashMap<UUID, String>();
+		for (final UUID uuid : uuids) {
+			final HttpURLConnection connection = (HttpURLConnection) new URL(
 					PROFILE_URL + uuid.toString().replace("-", ""))
 					.openConnection();
-			
+
 			JSONObject response;
-			
+
+			String name = null;
+
 			try {
-				response = (JSONObject) jsonParser
-						.parse(new InputStreamReader(connection.getInputStream()));
-			} catch (Exception e) {
-				throw new Exception("Could not parse uuid to name!");
+				response = (JSONObject) jsonParser.parse(new InputStreamReader(
+						connection.getInputStream()));
+
+				name = (String) response.get("name");
+				if (name == null) {
+					continue;
+				}
+				final String cause = (String) response.get("cause");
+				final String errorMessage = (String) response
+						.get("errorMessage");
+				if (cause != null && cause.length() > 0) {
+					throw new IllegalStateException(errorMessage);
+				}
+			} catch (final Exception e) {
+				// Try converting the stream to a string and removing all the spaces. 
+				String fromStream = fromStream(connection.getInputStream()).replaceAll(" ", "");
+
+				// Parse again
+				response = (JSONObject) jsonParser.parse(fromStream);
+
+				// Should work now!
+				name = (String) response.get("name");
+				
+				if (name == null) {
+					throw new Exception("Could not parse uuid '" + uuid.toString() + "' to name!");
+				}
+				final String cause = (String) response.get("cause");
+				final String errorMessage = (String) response
+						.get("errorMessage");
+				if (cause != null && cause.length() > 0) {
+					throw new IllegalStateException(errorMessage);
+				}
 			}
-			
-			String name = (String) response.get("name");
-			if (name == null) {
-				continue;
-			}
-			String cause = (String) response.get("cause");
-			String errorMessage = (String) response.get("errorMessage");
-			if (cause != null && cause.length() > 0) {
-				throw new IllegalStateException(errorMessage);
-			}
+
 			uuidStringMap.put(uuid, name);
 		}
 		return uuidStringMap;
+	}
+
+	public static String fromStream(final InputStream in) throws IOException {
+		final BufferedReader reader = new BufferedReader(new InputStreamReader(
+				in));
+		final StringBuilder out = new StringBuilder();
+		final String newLine = System.getProperty("line.separator");
+		String line;
+		while ((line = reader.readLine()) != null) {
+			out.append(line);
+			out.append(newLine);
+		}
+		return out.toString();
 	}
 }
