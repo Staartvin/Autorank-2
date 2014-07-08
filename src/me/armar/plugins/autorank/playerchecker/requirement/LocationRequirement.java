@@ -93,7 +93,7 @@ public class LocationRequirement extends Requirement {
 		// d = sqrt((x2 - x1)^2 + (y2 - y1)^2 + (z2 - z1)^2)
 		// See for info: http://www.calculatorsoup.com/calculators/geometry-solids/distance-two-points.php
 
-		Location playerLoc = player.getLocation();
+		final Location playerLoc = player.getLocation();
 
 		// Player coords
 		int pX, pY, pZ;
@@ -102,7 +102,7 @@ public class LocationRequirement extends Requirement {
 		pY = playerLoc.getBlockY();
 		pZ = playerLoc.getBlockZ();
 
-		int distance = (int) Math
+		final int distance = (int) Math
 				.sqrt(Math.pow((pX - xLocation), 2)
 						+ Math.pow((pY - yLocation), 2)
 						+ Math.pow((pZ - zLocation), 2));

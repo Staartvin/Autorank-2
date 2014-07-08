@@ -24,7 +24,7 @@ public class ConvertUUIDCommand implements CommandExecutor {
 			return true;
 		}
 
-		String targetFile = args[1];
+		final String targetFile = args[1];
 
 		if (targetFile.equalsIgnoreCase("playerdata")) {
 

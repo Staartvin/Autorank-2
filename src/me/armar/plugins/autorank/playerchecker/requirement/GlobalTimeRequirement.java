@@ -35,8 +35,8 @@ public class GlobalTimeRequirement extends Requirement {
 	@Override
 	public String getDescription() {
 		return Lang.GLOBAL_TIME_REQUIREMENT
-				.getConfigValue(new String[] { AutorankTools
-						.timeToString(time, Time.MINUTES) });
+				.getConfigValue(new String[] { AutorankTools.timeToString(time,
+						Time.MINUTES) });
 	}
 
 	@Override

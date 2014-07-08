@@ -19,13 +19,13 @@ public class DummyHandler implements StatsPlugin {
 	}
 
 	@Override
-	public int getNormalStat(String statType, Object... arguments) {
+	public int getNormalStat(final String statType, final Object... arguments) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public String getCorrectStatName(String statType) {
+	public String getCorrectStatName(final String statType) {
 		// TODO Auto-generated method stub
 		return null;
 	}

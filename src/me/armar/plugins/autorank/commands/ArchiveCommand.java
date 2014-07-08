@@ -46,7 +46,8 @@ public class ArchiveCommand implements CommandExecutor {
 		sender.sendMessage(ChatColor.GREEN + "Removed " + ChatColor.YELLOW
 				+ plugin.getPlaytimes().archive(rate) + "" + ChatColor.GREEN
 				+ " records below " + ChatColor.YELLOW
-				+ AutorankTools.timeToString(rate, Time.MINUTES) + ChatColor.GREEN + ".");
+				+ AutorankTools.timeToString(rate, Time.MINUTES)
+				+ ChatColor.GREEN + ".");
 		return true;
 	}
 

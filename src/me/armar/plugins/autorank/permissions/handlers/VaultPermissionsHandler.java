@@ -30,6 +30,7 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 			// Delay shutdown so Autorank can start successfully.
 			plugin.getServer().getScheduler()
 					.runTaskLater(plugin, new Runnable() {
+						@Override
 						public void run() {
 
 							plugin.getLogger().severe(
@@ -43,7 +44,7 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 
 	private boolean setupPermissions(final Autorank plugin) {
 
-		Plugin vPlugin = plugin.getServer().getPluginManager()
+		final Plugin vPlugin = plugin.getServer().getPluginManager()
 				.getPlugin("Vault");
 
 		if (vPlugin == null || !(vPlugin instanceof Vault)) {

@@ -97,30 +97,35 @@ public class HelpCommand implements CommandExecutor {
 			sender.sendMessage(ChatColor.BLUE + "Page 2 of " + maxPages);
 		} else if (page == 3) {
 			sender.sendMessage(ChatColor.GREEN + "-- Autorank Commands --");
-			
+
 			if (plugin.getConfigHandler().doBaseHelpPageOnPermission()) {
-				
+
 				if (sender.hasPermission("autorank.syncstats"))
-				sender.sendMessage(ChatColor.AQUA + "/ar syncstats"
-						+ ChatColor.GRAY + "- Sync Autorank's time to Stats' time");
-				
+					sender.sendMessage(ChatColor.AQUA + "/ar syncstats"
+							+ ChatColor.GRAY
+							+ "- Sync Autorank's time to Stats' time");
+
 				if (sender.hasPermission("autorank.forcecheck"))
-				sender.sendMessage(ChatColor.AQUA + "/ar forcecheck <player>"
-						+ ChatColor.GRAY + "- Do a manual silent check.");
-				
-				if (sender.hasPermission("autorank.convert.playerdata") || sender.hasPermission("autorank.convert.data"))
-				sender.sendMessage(ChatColor.AQUA + "/ar convert <file>"
-						+ ChatColor.GRAY + "- Convert a file to UUID format.");
-				
+					sender.sendMessage(ChatColor.AQUA
+							+ "/ar forcecheck <player>" + ChatColor.GRAY
+							+ "- Do a manual silent check.");
+
+				if (sender.hasPermission("autorank.convert.playerdata")
+						|| sender.hasPermission("autorank.convert.data"))
+					sender.sendMessage(ChatColor.AQUA + "/ar convert <file>"
+							+ ChatColor.GRAY
+							+ "- Convert a file to UUID format.");
+
 			} else {
 				sender.sendMessage(ChatColor.AQUA + "/ar syncstats"
-						+ ChatColor.GRAY + "- Sync Autorank's time to Stats' time");
+						+ ChatColor.GRAY
+						+ "- Sync Autorank's time to Stats' time");
 				sender.sendMessage(ChatColor.AQUA + "/ar forcecheck <player>"
 						+ ChatColor.GRAY + "- Do a manual silent check.");
 				sender.sendMessage(ChatColor.AQUA + "/ar convert <file>"
 						+ ChatColor.GRAY + "- Convert a file to UUID format.");
 			}
-			
+
 			sender.sendMessage(ChatColor.BLUE + "Page 3 of " + maxPages);
 		} else {
 			sender.sendMessage(ChatColor.GREEN + "-- Autorank Commands --");

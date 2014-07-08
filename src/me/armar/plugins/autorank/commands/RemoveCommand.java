@@ -35,7 +35,7 @@ public class RemoveCommand implements CommandExecutor {
 			return true;
 		}
 
-		UUID uuid = UUIDManager.getUUIDFromPlayer(args[1]);
+		final UUID uuid = UUIDManager.getUUIDFromPlayer(args[1]);
 
 		if (uuid == null) {
 			sender.sendMessage(Lang.UNKNOWN_PLAYER.getConfigValue(args[1]));
@@ -46,7 +46,7 @@ public class RemoveCommand implements CommandExecutor {
 
 		if (args.length > 2) {
 
-			StringBuilder builder = new StringBuilder();
+			final StringBuilder builder = new StringBuilder();
 
 			for (int i = 2; i < args.length; i++) {
 				builder.append(args[i]);
@@ -58,7 +58,8 @@ public class RemoveCommand implements CommandExecutor {
 				value = -AutorankTools.stringtoInt(builder.toString().trim());
 				value += plugin.getPlaytimes().getLocalTime(uuid);
 			} else {
-				value = -AutorankTools.stringToTime(builder.toString(), Time.MINUTES);
+				value = -AutorankTools.stringToTime(builder.toString(),
+						Time.MINUTES);
 				value += plugin.getPlaytimes().getLocalTime(uuid);
 			}
 		}

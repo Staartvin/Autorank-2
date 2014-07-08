@@ -15,14 +15,14 @@ import org.bukkit.entity.Player;
  * 
  */
 public class TimeRequirement extends Requirement {
-	
+
 	int time = -1;
 
 	@Override
 	public boolean setOptions(final String[] options) {
 		if (options.length > 0)
 			this.time = AutorankTools.stringToTime(options[0], Time.MINUTES);
-		
+
 		return (time != -1);
 	}
 
@@ -38,16 +38,19 @@ public class TimeRequirement extends Requirement {
 	@Override
 	public String getDescription() {
 		return Lang.TIME_REQUIREMENT
-				.getConfigValue(new String[] { AutorankTools
-						.timeToString(time, Time.MINUTES) });
+				.getConfigValue(new String[] { AutorankTools.timeToString(time,
+						Time.MINUTES) });
 	}
 
 	@Override
 	public String getProgress(final Player player) {
 		String progress = "";
-		progress = progress.concat(getAutorank().getPlaytimes().getTimeOfPlayer(
-				player.getName())
-				+ " min" + "/" + time + " min");
+		progress = progress.concat(getAutorank().getPlaytimes()
+				.getTimeOfPlayer(player.getName())
+				+ " min"
+				+ "/"
+				+ time
+				+ " min");
 		return progress;
 	}
 }

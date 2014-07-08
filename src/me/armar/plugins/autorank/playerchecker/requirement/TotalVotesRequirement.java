@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 public class TotalVotesRequirement extends Requirement {
 
 	private int totalVotes = 0;
-	
+
 	@Override
 	public boolean setOptions(final String[] options) {
 		try {
@@ -23,8 +23,9 @@ public class TotalVotesRequirement extends Requirement {
 	@Override
 	public boolean meetsRequirement(final Player player) {
 		return getStatsPlugin().isEnabled()
-				&& getStatsPlugin().getNormalStat(StatsHandler.statTypes.VOTES.toString(), player.getName(),
-						null) >= totalVotes;
+				&& getStatsPlugin().getNormalStat(
+						StatsHandler.statTypes.VOTES.toString(),
+						player.getName(), null) >= totalVotes;
 	}
 
 	@Override
@@ -36,8 +37,9 @@ public class TotalVotesRequirement extends Requirement {
 	@Override
 	public String getProgress(final Player player) {
 		String progress = "";
-		progress = progress.concat(getStatsPlugin().getNormalStat(StatsHandler.statTypes.VOTES.toString(),
-				player.getName(), null)
+		progress = progress.concat(getStatsPlugin()
+				.getNormalStat(StatsHandler.statTypes.VOTES.toString(),
+						player.getName(), null)
 				+ "/" + totalVotes);
 		return progress;
 	}

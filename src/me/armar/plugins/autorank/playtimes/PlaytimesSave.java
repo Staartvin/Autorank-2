@@ -19,9 +19,9 @@ public class PlaytimesSave implements Runnable {
 
 	@Override
 	public void run() {
-		
+
 		playtimes.getAutorank().debugMessage("Saving data.yml...");
-		
+
 		playtimes.save();
 	}
 

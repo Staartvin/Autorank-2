@@ -19,15 +19,16 @@ import com.gmail.nossr50.api.ExperienceAPI;
  */
 public class McMMOHandler implements DependencyHandler {
 
-	private Autorank plugin;
+	private final Autorank plugin;
 	private mcMMO api;
 
-	public McMMOHandler(Autorank instance) {
+	public McMMOHandler(final Autorank instance) {
 		plugin = instance;
 	}
 
+	@Override
 	public Plugin get() {
-		Plugin plugin = this.plugin.getServer().getPluginManager()
+		final Plugin plugin = this.plugin.getServer().getPluginManager()
 				.getPlugin("mcMMO");
 
 		// WorldGuard may not be loaded
@@ -42,7 +43,7 @@ public class McMMOHandler implements DependencyHandler {
 	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#setup()
 	 */
 	@Override
-	public boolean setup(boolean verbose) {
+	public boolean setup(final boolean verbose) {
 		if (!isInstalled()) {
 			if (verbose) {
 				plugin.getLogger().info("mcMMO has not been found!");
@@ -73,7 +74,7 @@ public class McMMOHandler implements DependencyHandler {
 	 */
 	@Override
 	public boolean isInstalled() {
-		mcMMO plugin = (mcMMO) get();
+		final mcMMO plugin = (mcMMO) get();
 
 		return plugin != null && plugin.isEnabled();
 	}
@@ -93,7 +94,7 @@ public class McMMOHandler implements DependencyHandler {
 	 * @param skillName Name of the skill
 	 * @return level of requested skill, or -1 if the skill is invalid.
 	 */
-	public int getSkillLevel(Player player, String skillName) {
+	public int getSkillLevel(final Player player, final String skillName) {
 		int skillLevel = 0;
 
 		if (!isAvailable())
@@ -101,7 +102,7 @@ public class McMMOHandler implements DependencyHandler {
 
 		try {
 			skillLevel = ExperienceAPI.getLevel(player, skillName);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			plugin.getLogger().warning(
 					"Skill '" + skillName + "' is not a valid skill!");
 			return -1;
@@ -110,7 +111,7 @@ public class McMMOHandler implements DependencyHandler {
 		return skillLevel;
 	}
 
-	public int getPowerLevel(Player player) {
+	public int getPowerLevel(final Player player) {
 		int powerLevel = 0;
 
 		if (!isAvailable())

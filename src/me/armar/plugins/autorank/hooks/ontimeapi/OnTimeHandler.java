@@ -25,7 +25,7 @@ public class OnTimeHandler implements DependencyHandler {
 		plugin = instance;
 	}
 
-	public int getPlayTime(String playerName) {
+	public int getPlayTime(final String playerName) {
 		if (!isAvailable())
 			return 0;
 
@@ -38,7 +38,7 @@ public class OnTimeHandler implements DependencyHandler {
 	 */
 	@Override
 	public Plugin get() {
-		Plugin plugin = this.plugin.getServer().getPluginManager()
+		final Plugin plugin = this.plugin.getServer().getPluginManager()
 				.getPlugin("OnTime");
 
 		// WorldGuard may not be loaded
@@ -53,7 +53,7 @@ public class OnTimeHandler implements DependencyHandler {
 	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#setup()
 	 */
 	@Override
-	public boolean setup(boolean verbose) {
+	public boolean setup(final boolean verbose) {
 		if (!isInstalled()) {
 			if (verbose) {
 				plugin.getLogger().info("OnTime has not been found!");
@@ -83,7 +83,7 @@ public class OnTimeHandler implements DependencyHandler {
 	 */
 	@Override
 	public boolean isInstalled() {
-		Plugin plugin = get();
+		final Plugin plugin = get();
 
 		return plugin != null && plugin.isEnabled();
 	}

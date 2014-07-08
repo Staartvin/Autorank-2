@@ -22,10 +22,10 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
  */
 public class WorldGuardHandler implements DependencyHandler {
 
-	private Autorank plugin;
+	private final Autorank plugin;
 	private WorldGuardPlugin worldGuardAPI;
 
-	public WorldGuardHandler(Autorank instance) {
+	public WorldGuardHandler(final Autorank instance) {
 		plugin = instance;
 	}
 
@@ -36,28 +36,28 @@ public class WorldGuardHandler implements DependencyHandler {
 	 * @param regionName Name of the region to be checked
 	 * @return true if the player is in that region; false otherwise.
 	 */
-	public boolean isInRegion(Player player, String regionName) {
+	public boolean isInRegion(final Player player, final String regionName) {
 		if (!isAvailable())
 			return false;
 
 		if (player == null || regionName == null)
 			return false;
 
-		Location loc = player.getLocation();
+		final Location loc = player.getLocation();
 
-		RegionManager regManager = worldGuardAPI.getRegionManager(loc
+		final RegionManager regManager = worldGuardAPI.getRegionManager(loc
 				.getWorld());
 
 		if (regManager == null)
 			return false;
 
-		ApplicableRegionSet set = regManager.getApplicableRegions(loc);
+		final ApplicableRegionSet set = regManager.getApplicableRegions(loc);
 
 		if (set == null)
 			return false;
 
-		for (ProtectedRegion region : set) {
-			String name = region.getId();
+		for (final ProtectedRegion region : set) {
+			final String name = region.getId();
 
 			if (name.equalsIgnoreCase(regionName)) {
 				return true;
@@ -71,7 +71,7 @@ public class WorldGuardHandler implements DependencyHandler {
 	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#setup()
 	 */
 	@Override
-	public boolean setup(boolean verbose) {
+	public boolean setup(final boolean verbose) {
 		if (!isInstalled()) {
 			if (verbose) {
 				plugin.getLogger().info("WorldGuard has not been found!");
@@ -100,7 +100,7 @@ public class WorldGuardHandler implements DependencyHandler {
 	 */
 	@Override
 	public boolean isInstalled() {
-		WorldGuardPlugin wg = (WorldGuardPlugin) get();
+		final WorldGuardPlugin wg = (WorldGuardPlugin) get();
 
 		return wg != null && wg.isEnabled();
 	}
@@ -118,7 +118,7 @@ public class WorldGuardHandler implements DependencyHandler {
 	 */
 	@Override
 	public Plugin get() {
-		Plugin wgPlugin = plugin.getServer().getPluginManager()
+		final Plugin wgPlugin = plugin.getServer().getPluginManager()
 				.getPlugin("WorldGuard");
 
 		// WorldGuard may not be loaded

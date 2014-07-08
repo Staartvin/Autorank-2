@@ -42,7 +42,7 @@ public class CheckCommand implements CommandExecutor {
 			final Player player = plugin.getServer().getPlayer(args[1]);
 			if (player == null) {
 
-				int time = plugin.getPlaytimes().getTimeOfPlayer(args[1]);
+				final int time = plugin.getPlaytimes().getTimeOfPlayer(args[1]);
 
 				if (time <= 0) {
 					sender.sendMessage(Lang.PLAYER_IS_INVALID
@@ -52,8 +52,10 @@ public class CheckCommand implements CommandExecutor {
 
 				AutorankTools.sendColoredMessage(
 						sender,
-						args[1] + " has played for "
-								+ AutorankTools.timeToString(time, Time.SECONDS));
+						args[1]
+								+ " has played for "
+								+ AutorankTools
+										.timeToString(time, Time.SECONDS));
 			} else {
 				if (AutorankTools.isExcluded(player)) {
 					sender.sendMessage(ChatColor.RED
@@ -87,7 +89,7 @@ public class CheckCommand implements CommandExecutor {
 		// Call event to let other plugins know that a player wants to check itself.
 
 		// Create the event here
-		CheckCommandEvent event = new CheckCommandEvent(player);
+		final CheckCommandEvent event = new CheckCommandEvent(player);
 		// Call the event
 		Bukkit.getServer().getPluginManager().callEvent(event);
 
@@ -124,10 +126,11 @@ public class CheckCommand implements CommandExecutor {
 		// Start building layout
 
 		layout = layout.replace("&p", player.getName());
-		layout = layout.replace("&time", AutorankTools.timeToString(plugin
-				.getPlaytimes().getTimeOfPlayer(player.getName()), Time.SECONDS));
+		layout = layout.replace("&time",
+				AutorankTools.timeToString(plugin.getPlaytimes()
+						.getTimeOfPlayer(player.getName()), Time.SECONDS));
 
-		StringBuilder groupsString = new StringBuilder("");
+		final StringBuilder groupsString = new StringBuilder("");
 
 		if (groups.length == 0) {
 			groupsString.append(Lang.NO_GROUPS.getConfigValue());
@@ -144,8 +147,8 @@ public class CheckCommand implements CommandExecutor {
 
 		layout = layout.replace("&groups", groupsString.toString());
 
-		RankChange nextRankChange = plugin.getPlayerChecker().getNextRank(
-				player);
+		final RankChange nextRankChange = plugin.getPlayerChecker()
+				.getNextRank(player);
 
 		boolean showReqs = false;
 
@@ -186,7 +189,7 @@ public class CheckCommand implements CommandExecutor {
 		if (nextRankChange == null)
 			return;
 
-		List<Requirement> reqs = plugin.getPlayerChecker()
+		final List<Requirement> reqs = plugin.getPlayerChecker()
 				.getRequirementsForNextRank(player);
 
 		boolean onlyOptional = true;
@@ -288,10 +291,10 @@ public class CheckCommand implements CommandExecutor {
 			//	Lang.REQUIREMENTS_TO_RANK.getConfigValue(null));
 
 			if (showReqs) {
-				List<String> messages = getRequirementsInStringList(reqs,
+				final List<String> messages = getRequirementsInStringList(reqs,
 						metRequirements);
 
-				for (String message : messages) {
+				for (final String message : messages) {
 					AutorankTools.sendColoredMessage(sender, message);
 				}
 			}
@@ -299,11 +302,11 @@ public class CheckCommand implements CommandExecutor {
 		}
 	}
 
-	private List<String> getRequirementsInStringList(List<Requirement> reqs,
-			List<Integer> metRequirements) {
+	private List<String> getRequirementsInStringList(
+			final List<Requirement> reqs, final List<Integer> metRequirements) {
 		// Converts requirements into a list of readable requirements
 
-		List<String> messages = new ArrayList<String>();
+		final List<String> messages = new ArrayList<String>();
 
 		for (int i = 0; i < reqs.size(); i++) {
 			final Requirement req = reqs.get(i);

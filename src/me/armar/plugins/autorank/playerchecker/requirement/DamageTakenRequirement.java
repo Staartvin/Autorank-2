@@ -23,7 +23,8 @@ public class DamageTakenRequirement extends Requirement {
 	@Override
 	public boolean meetsRequirement(final Player player) {
 		return getStatsPlugin().isEnabled()
-				&& getStatsPlugin().getNormalStat(StatsHandler.statTypes.DAMAGE_TAKEN.toString(),
+				&& getStatsPlugin().getNormalStat(
+						StatsHandler.statTypes.DAMAGE_TAKEN.toString(),
 						player.getName(), null) >= damageTaken;
 	}
 
@@ -37,7 +38,8 @@ public class DamageTakenRequirement extends Requirement {
 	public String getProgress(final Player player) {
 		String progress = "";
 		progress = progress.concat(getStatsPlugin().getNormalStat(
-				StatsHandler.statTypes.DAMAGE_TAKEN.toString(), player.getName(), null)
+				StatsHandler.statTypes.DAMAGE_TAKEN.toString(),
+				player.getName(), null)
 				+ "/" + damageTaken);
 		return progress;
 	}

@@ -34,7 +34,7 @@ public class SetCommand implements CommandExecutor {
 
 		if (args.length > 2) {
 
-			StringBuilder builder = new StringBuilder();
+			final StringBuilder builder = new StringBuilder();
 
 			for (int i = 2; i < args.length; i++) {
 				builder.append(args[i]);
@@ -45,7 +45,8 @@ public class SetCommand implements CommandExecutor {
 					&& !builder.toString().contains("d")) {
 				value = AutorankTools.stringtoInt(builder.toString().trim());
 			} else {
-				value = AutorankTools.stringToTime(builder.toString(), Time.MINUTES);
+				value = AutorankTools.stringToTime(builder.toString(),
+						Time.MINUTES);
 			}
 		}
 
@@ -63,7 +64,7 @@ public class SetCommand implements CommandExecutor {
 				}
 			}
 
-			UUID uuid = UUIDManager.getUUIDFromPlayer(args[1]);
+			final UUID uuid = UUIDManager.getUUIDFromPlayer(args[1]);
 
 			if (uuid == null) {
 				sender.sendMessage(Lang.UNKNOWN_PLAYER.getConfigValue(args[1]));

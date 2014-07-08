@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 public class PlaytimesUpdate implements Runnable {
 
 	private final Playtimes playtimes;
-	private Autorank plugin;
+	private final Autorank plugin;
 
 	public PlaytimesUpdate(final Playtimes playtimes, final Autorank plugin) {
 		this.playtimes = playtimes;
@@ -31,7 +31,7 @@ public class PlaytimesUpdate implements Runnable {
 
 	private void updateMinutesPlayed(final Player[] players) {
 		plugin.debugMessage("Checking players for automatic ranking");
-		
+
 		for (int i = 0; i < players.length; i++) {
 			if (players[i] != null) {
 				updateMinutesPlayed(players[i]);
@@ -47,7 +47,7 @@ public class PlaytimesUpdate implements Runnable {
 		if (player.hasPermission("autorank.rsefrxsgtse")
 				|| !player.hasPermission("autorank.timeexclude")) {
 
-			DependencyManager depManager = plugin.getDependencyManager();
+			final DependencyManager depManager = plugin.getDependencyManager();
 
 			// Check to see if player is afk
 			if (depManager.isAFK(player)) {

@@ -26,10 +26,11 @@ public class SyncCommand implements CommandExecutor {
 			return true;
 
 		if (args.length > 1 && args[1].equalsIgnoreCase("stats")) {
-			sender.hasPermission(ChatColor.RED + "You probably meant /ar syncstats or /ar sync!");
+			sender.hasPermission(ChatColor.RED
+					+ "You probably meant /ar syncstats or /ar sync!");
 			return true;
 		}
-		
+
 		if (!plugin.getConfigHandler().useMySQL()) {
 			sender.sendMessage(ChatColor.RED + "MySQL is not being used!");
 			return true;
@@ -45,12 +46,14 @@ public class SyncCommand implements CommandExecutor {
 					@Override
 					public void run() {
 						// Update all mysql records
-						for (UUID uuid : plugin.getPlaytimes().getUUIDKeys())  {
+						for (final UUID uuid : plugin.getPlaytimes()
+								.getUUIDKeys()) {
 							final int localTime = plugin.getPlaytimes()
 									.getLocalTime(uuid);
-							
-							if (localTime <= 0) continue;
-							
+
+							if (localTime <= 0)
+								continue;
+
 							final int globalTime = plugin.getPlaytimes()
 									.getGlobalTime(uuid);
 

@@ -11,7 +11,7 @@ public class BlocksBrokenRequirement extends Requirement {
 	private int blocksBroken = 0;
 	private int blockID = -1;
 	private int damageValue = -1;
-	
+
 	@Override
 	public boolean setOptions(final String[] options) {
 		try {
@@ -41,10 +41,12 @@ public class BlocksBrokenRequirement extends Requirement {
 
 		boolean sufficient = false;
 		if (blockID > 0) {
-			sufficient = getStatsPlugin().getNormalStat(StatsHandler.statTypes.BLOCKS_BROKEN.toString(),
+			sufficient = getStatsPlugin().getNormalStat(
+					StatsHandler.statTypes.BLOCKS_BROKEN.toString(),
 					player.getName(), null, blockID + "", damageValue + "") >= blocksBroken;
 		} else {
-			sufficient = getStatsPlugin().getNormalStat(StatsHandler.statTypes.TOTAL_BLOCKS_BROKEN.toString(),
+			sufficient = getStatsPlugin().getNormalStat(
+					StatsHandler.statTypes.TOTAL_BLOCKS_BROKEN.toString(),
 					player.getName(), null) >= blocksBroken;
 		}
 
@@ -80,8 +82,8 @@ public class BlocksBrokenRequirement extends Requirement {
 	public String getProgress(final Player player) {
 		String progress = "";
 		progress = progress.concat(getStatsPlugin().getNormalStat(
-				StatsHandler.statTypes.BLOCKS_BROKEN.toString(), player.getName(), null, blockID + "",
-				damageValue + "")
+				StatsHandler.statTypes.BLOCKS_BROKEN.toString(),
+				player.getName(), null, blockID + "", damageValue + "")
 				+ "/" + blocksBroken);
 		return progress;
 	}

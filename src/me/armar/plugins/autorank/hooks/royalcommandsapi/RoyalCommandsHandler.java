@@ -24,7 +24,7 @@ public class RoyalCommandsHandler implements DependencyHandler {
 		plugin = instance;
 	}
 
-	public boolean isAFK(Player player) {
+	public boolean isAFK(final Player player) {
 		if (!isAvailable())
 			return false;
 
@@ -39,7 +39,7 @@ public class RoyalCommandsHandler implements DependencyHandler {
 	 */
 	@Override
 	public Plugin get() {
-		Plugin plugin = this.plugin.getServer().getPluginManager()
+		final Plugin plugin = this.plugin.getServer().getPluginManager()
 				.getPlugin("RoyalCommands");
 
 		// WorldGuard may not be loaded
@@ -54,7 +54,7 @@ public class RoyalCommandsHandler implements DependencyHandler {
 	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#setup()
 	 */
 	@Override
-	public boolean setup(boolean verbose) {
+	public boolean setup(final boolean verbose) {
 		if (!isInstalled()) {
 			if (verbose) {
 				plugin.getLogger().info("RoyalCommands has not been found!");
@@ -84,7 +84,7 @@ public class RoyalCommandsHandler implements DependencyHandler {
 	 */
 	@Override
 	public boolean isInstalled() {
-		RoyalCommands plugin = (RoyalCommands) get();
+		final RoyalCommands plugin = (RoyalCommands) get();
 
 		return plugin != null && plugin.isEnabled();
 	}

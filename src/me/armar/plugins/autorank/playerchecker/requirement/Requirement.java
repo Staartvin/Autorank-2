@@ -44,8 +44,8 @@ public abstract class Requirement {
 	/**
 	 * Setup requirement specific objects.
 	 * 
-	 * This method is called when Autorank sets up its config.
-	 * <br>The requirement id, auto completion and optional values are assigned
+	 * This method is called when Autorank sets up its config. <br>
+	 * The requirement id, auto completion and optional values are assigned
 	 * automatically.
 	 * 
 	 * @param options String[] containing values of the config
@@ -114,7 +114,7 @@ public abstract class Requirement {
 	 * @param playerName Player to check for
 	 * @return true if completed, false otherwise.
 	 */
-	public final boolean isCompleted(final int reqID, UUID uuid) {
+	public final boolean isCompleted(final int reqID, final UUID uuid) {
 		return autorank.getRequirementHandler().hasCompletedRequirement(reqID,
 				uuid);
 	}
@@ -146,37 +146,41 @@ public abstract class Requirement {
 	public StatsPlugin getStatsPlugin() {
 		return autorank.getHookedStatsPlugin();
 	}
-	
+
 	/**
 	 * Set the requirement id of this requirement
+	 * 
 	 * @param reqId id to set it to
 	 */
-	public void setReqId(int reqId) {
+	public void setReqId(final int reqId) {
 		this.reqId = reqId;
 	}
-	
+
 	/**
 	 * Set whether this requirement is optional or not
+	 * 
 	 * @param optional true if optional; false otherwise
 	 */
-	public void setOptional(boolean optional) {
+	public void setOptional(final boolean optional) {
 		this.optional = optional;
 	}
-	
+
 	/**
 	 * Set whether this requirement auto completes itself
+	 * 
 	 * @param autoComplete true if auto complete; false otherwise
 	 */
-	public void setAutoComplete(boolean autoComplete) {
+	public void setAutoComplete(final boolean autoComplete) {
 		this.autoComplete = autoComplete;
 	}
-	
+
 	/**
-	 * Set the results of this requirement.
-	 * <br>These results will be performed when this requirement is met.
+	 * Set the results of this requirement. <br>
+	 * These results will be performed when this requirement is met.
+	 * 
 	 * @param results results to perform upon completion
 	 */
-	public void setResults(List<Result> results) {
+	public void setResults(final List<Result> results) {
 		this.results = results;
 	}
 }

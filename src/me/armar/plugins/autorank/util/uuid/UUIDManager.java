@@ -54,13 +54,13 @@ public class UUIDManager {
 		foundUUIDs.clear();
 
 		// A new map to store cached values
-		HashMap<String, UUID> uuids = new HashMap<String, UUID>();
+		final HashMap<String, UUID> uuids = new HashMap<String, UUID>();
 
 		// This is used to check if we need to use the lookup from the mojang website.
 		boolean useInternetLookup = true;
 
 		// Check if we have cached values
-		for (String playerName : names) {
+		for (final String playerName : names) {
 
 			// If cached value is still valid, use it.
 			if (!shouldUpdateValue(playerName)) {
@@ -86,22 +86,23 @@ public class UUIDManager {
 
 		// Remove players that don't need to be looked up anymore. 
 		// Just for performance sake.
-		for (Entry<String, UUID> entry : uuids.entrySet()) {
+		for (final Entry<String, UUID> entry : uuids.entrySet()) {
 			names.remove(entry.getKey());
 		}
 
 		// Now we need to lookup the other players
 
-		Thread fetcherThread = new Thread(new Runnable() {
+		final Thread fetcherThread = new Thread(new Runnable() {
 
+			@Override
 			public void run() {
-				UUIDFetcher fetcher = new UUIDFetcher(names);
+				final UUIDFetcher fetcher = new UUIDFetcher(names);
 
 				Map<String, UUID> response = null;
 
 				try {
 					response = fetcher.call();
-				} catch (Exception e) {
+				} catch (final Exception e) {
 					if (e instanceof IOException) {
 						Bukkit.getLogger()
 								.warning(
@@ -128,9 +129,9 @@ public class UUIDManager {
 		}
 
 		// Update cached entries
-		for (Entry<String, UUID> entry : foundUUIDs.entrySet()) {
-			String playerName = entry.getKey();
-			UUID uuid = entry.getValue();
+		for (final Entry<String, UUID> entry : foundUUIDs.entrySet()) {
+			final String playerName = entry.getKey();
+			final UUID uuid = entry.getValue();
 
 			// Add found uuids to the list of uuids to return
 			uuids.put(playerName, uuid);
@@ -163,17 +164,17 @@ public class UUIDManager {
 		foundPlayers.clear();
 
 		// A new map to store cached values
-		HashMap<UUID, String> players = new HashMap<UUID, String>();
+		final HashMap<UUID, String> players = new HashMap<UUID, String>();
 
 		// This is used to check if we need to use the lookup from the mojang website.
 		boolean useInternetLookup = true;
 
 		// Check if we have cached values
-		for (UUID uuid : uuids) {
+		for (final UUID uuid : uuids) {
 
 			String playerName = null;
 
-			for (Entry<String, UUID> entry : cachedUUIDs.entrySet()) {
+			for (final Entry<String, UUID> entry : cachedUUIDs.entrySet()) {
 				if (entry.getValue().equals(uuid)) {
 					playerName = entry.getKey();
 				}
@@ -205,22 +206,23 @@ public class UUIDManager {
 
 		// Remove uuids that don't need to be looked up anymore. 
 		// Just for performance sake.
-		for (UUID entry : players.keySet()) {
+		for (final UUID entry : players.keySet()) {
 			uuids.remove(entry);
 		}
 
 		// Now we need to lookup the other players
 
-		Thread fetcherThread = new Thread(new Runnable() {
+		final Thread fetcherThread = new Thread(new Runnable() {
 
+			@Override
 			public void run() {
-				NameFetcher fetcher = new NameFetcher(uuids);
+				final NameFetcher fetcher = new NameFetcher(uuids);
 
 				Map<UUID, String> response = null;
 
 				try {
 					response = fetcher.call();
-				} catch (Exception e) {
+				} catch (final Exception e) {
 					if (e instanceof IOException) {
 						Bukkit.getLogger()
 								.warning(
@@ -247,9 +249,9 @@ public class UUIDManager {
 		}
 
 		// Update cached entries
-		for (Entry<UUID, String> entry : foundPlayers.entrySet()) {
-			String playerName = entry.getValue();
-			UUID uuid = entry.getKey();
+		for (final Entry<UUID, String> entry : foundPlayers.entrySet()) {
+			final String playerName = entry.getValue();
+			final UUID uuid = entry.getKey();
 
 			// Add found players to the list of players to return
 			players.put(uuid, playerName);
@@ -275,11 +277,11 @@ public class UUIDManager {
 	 * @param uuid the UUID of the Mojang account
 	 * @return the name of player or null if not found.
 	 */
-	public static String getPlayerFromUUID(UUID uuid) {
+	public static String getPlayerFromUUID(final UUID uuid) {
 		if (uuid == null)
 			return null;
 
-		Map<UUID, String> players = getPlayers(Arrays.asList(uuid));
+		final Map<UUID, String> players = getPlayers(Arrays.asList(uuid));
 
 		if (players == null)
 			return null;
@@ -297,12 +299,12 @@ public class UUIDManager {
 	 * @param playerName Name of the player
 	 * @return UUID of the associated Mojang account or null if not found.
 	 */
-	public static UUID getUUIDFromPlayer(String playerName) {
+	public static UUID getUUIDFromPlayer(final String playerName) {
 		if (playerName == null) {
 			return null;
 		}
 
-		Map<String, UUID> uuids = getUUIDs(Arrays.asList(playerName));
+		final Map<String, UUID> uuids = getUUIDs(Arrays.asList(playerName));
 
 		if (uuids == null) {
 			return null;
@@ -313,7 +315,7 @@ public class UUIDManager {
 		}
 
 		// Search case insensitive
-		for (Entry<String, UUID> entry : uuids.entrySet()) {
+		for (final Entry<String, UUID> entry : uuids.entrySet()) {
 			if (entry.getKey().equalsIgnoreCase(playerName)) {
 				return entry.getValue();
 			}
@@ -322,22 +324,22 @@ public class UUIDManager {
 		return null;
 	}
 
-	private static boolean shouldUpdateValue(String playerName) {
+	private static boolean shouldUpdateValue(final String playerName) {
 
 		// Incorrectly cached, so cache now.
 		if (!isLastCached(playerName) || !isCachedUUID(playerName))
 			return true;
 
-		long lastCacheTime = getLastCached(playerName);
+		final long lastCacheTime = getLastCached(playerName);
 
 		// No cache time
 		if (lastCacheTime <= 0) {
 			return true;
 		}
 
-		long currentTime = System.currentTimeMillis();
+		final long currentTime = System.currentTimeMillis();
 
-		long lifeTime = currentTime - lastCacheTime;
+		final long lifeTime = currentTime - lastCacheTime;
 
 		// The cached value is older than it ought to be.
 		if ((lifeTime / 3600000) > maxLifeTime) {
@@ -353,7 +355,7 @@ public class UUIDManager {
 			return cachedUUIDs.get(playerName);
 
 		// Search for lowercase matches
-		for (String loggedName : cachedUUIDs.keySet()) {
+		for (final String loggedName : cachedUUIDs.keySet()) {
 			if (loggedName.equalsIgnoreCase(playerName)) {
 				playerName = loggedName;
 				break;
@@ -373,7 +375,7 @@ public class UUIDManager {
 			return lastCached.get(playerName);
 
 		// Search for lowercase matches
-		for (String loggedName : lastCached.keySet()) {
+		for (final String loggedName : lastCached.keySet()) {
 			if (loggedName.equalsIgnoreCase(playerName)) {
 				playerName = loggedName;
 				break;
@@ -387,11 +389,11 @@ public class UUIDManager {
 		return lastCached.get(playerName);
 	}
 
-	private static boolean isCachedUUID(String playerName) {
+	private static boolean isCachedUUID(final String playerName) {
 		return getCachedUUID(playerName) != null;
 	}
 
-	private static boolean isLastCached(String playerName) {
+	private static boolean isLastCached(final String playerName) {
 		return getLastCached(playerName) > 0;
 	}
 
@@ -402,7 +404,7 @@ public class UUIDManager {
 	 * 
 	 * @param player Player to cache.
 	 */
-	public static void addCachedPlayer(Player player) {
+	public static void addCachedPlayer(final Player player) {
 		// Do not update if we still have one that is valid
 		if (!shouldUpdateValue(player.getName()))
 			return;
@@ -417,7 +419,7 @@ public class UUIDManager {
 	 * 
 	 * @param player Player to remove.
 	 */
-	public static void removeCachedPlayer(Player player) {
+	public static void removeCachedPlayer(final Player player) {
 		// There is no cached value for this player
 		if (!isCachedUUID(player.getName()))
 			return;
@@ -425,12 +427,12 @@ public class UUIDManager {
 		removeCachedPlayer(player.getName());
 	}
 
-	private static void addCachedPlayer(String playerName, UUID uuid) {
+	private static void addCachedPlayer(final String playerName, final UUID uuid) {
 		cachedUUIDs.put(playerName, uuid);
 		lastCached.put(playerName, System.currentTimeMillis());
 	}
 
-	private static void removeCachedPlayer(String playerName) {
+	private static void removeCachedPlayer(final String playerName) {
 		cachedUUIDs.remove(playerName);
 		lastCached.remove(playerName);
 	}

@@ -136,8 +136,8 @@ public class PlayerChecker {
 	 * @return name of the permission group the player will be ranked to; null
 	 *         if no rank up
 	 */
-	public String getNextRankupGroup(Player player) {
-		RankChange change = getNextRank(player);
+	public String getNextRankupGroup(final Player player) {
+		final RankChange change = getNextRank(player);
 
 		if (change == null)
 			return null;
@@ -152,10 +152,10 @@ public class PlayerChecker {
 	 * @return the {@link RankChange} class that is associated with this
 	 *         player's rankup; null if no rank up
 	 */
-	public RankChange getNextRank(Player player) {
-		Map<RankChange, List<Requirement>> requirements = getAllRequirements(player);
+	public RankChange getNextRank(final Player player) {
+		final Map<RankChange, List<Requirement>> requirements = getAllRequirements(player);
 
-		Set<RankChange> rankchanges = requirements.keySet();
+		final Set<RankChange> rankchanges = requirements.keySet();
 
 		if (rankchanges.size() == 0) {
 			return null;
@@ -163,7 +163,7 @@ public class PlayerChecker {
 
 		RankChange newRank = null;
 
-		for (RankChange rank : rankchanges) {
+		for (final RankChange rank : rankchanges) {
 			newRank = rank;
 		}
 
@@ -177,8 +177,8 @@ public class PlayerChecker {
 	 * @param player Player to get the requirements for
 	 * @return a list of requirements; null if the player has no rank up.
 	 */
-	public List<Requirement> getRequirementsForNextRank(Player player) {
-		RankChange rank = getNextRank(player);
+	public List<Requirement> getRequirementsForNextRank(final Player player) {
+		final RankChange rank = getNextRank(player);
 
 		if (rank == null) {
 			return null;

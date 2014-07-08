@@ -41,7 +41,7 @@ public class API {
 	 * @param player Player to get the time for
 	 * @return play time of a player. 0 when has never played before.
 	 */
-	public int getTimeOfPlayer(Player player) {
+	public int getTimeOfPlayer(final Player player) {
 		return plugin.getPlaytimes().getTimeOfPlayer(player.getName());
 	}
 
@@ -54,7 +54,7 @@ public class API {
 	 * @param player Player to get the time for.
 	 * @return play time of this player or 0 if not found.
 	 */
-	public int getLocalTime(Player player) {
+	public int getLocalTime(final Player player) {
 		return plugin.getPlaytimes().getLocalTime(player.getUniqueId());
 	}
 
@@ -75,7 +75,7 @@ public class API {
 	 * @param player Player to check for.
 	 * @return play time of a player. -1 if no entry was found.
 	 */
-	public int getGlobalPlayTime(Player player) {
+	public int getGlobalPlayTime(final Player player) {
 		return plugin.getPlaytimes().getGlobalTime(player.getUniqueId());
 	}
 
@@ -127,8 +127,8 @@ public class API {
 	 * @param player Player to get the primary group of
 	 * @return Name of the group that appears first.
 	 */
-	public String getPrimaryGroup(Player player) {
-		List<String> groups = getPermissionGroups(player);
+	public String getPrimaryGroup(final Player player) {
+		final List<String> groups = getPermissionGroups(player);
 
 		if (groups.size() < 1) {
 			throw new IllegalArgumentException("Groups of player '"
@@ -144,14 +144,14 @@ public class API {
 	 * @param player Player to get the groups of
 	 * @return A list of permission groups
 	 */
-	public List<String> getPermissionGroups(Player player) {
-		String[] groups = plugin.getPermPlugHandler().getPermissionPlugin()
-				.getPlayerGroups(player);
+	public List<String> getPermissionGroups(final Player player) {
+		final String[] groups = plugin.getPermPlugHandler()
+				.getPermissionPlugin().getPlayerGroups(player);
 
-		List<String> permGroups = new ArrayList<String>();
+		final List<String> permGroups = new ArrayList<String>();
 
 		// Convert array into list
-		for (String group : groups) {
+		for (final String group : groups) {
 			permGroups.add(group);
 		}
 
@@ -171,7 +171,7 @@ public class API {
 	 * @return The name of the group the player will be ranked to; null when no
 	 *         rank up.
 	 */
-	public String getNextRankupGroup(Player player) {
+	public String getNextRankupGroup(final Player player) {
 		return plugin.getPlayerChecker().getNextRankupGroup(player);
 	}
 
@@ -185,8 +185,8 @@ public class API {
 	 * @param uniqueName Unique name identifier for the requirement
 	 * @param clazz Requirement class that does all the logic
 	 */
-	public void registerRequirement(String uniqueName,
-			Class<? extends Requirement> clazz) {
+	public void registerRequirement(final String uniqueName,
+			final Class<? extends Requirement> clazz) {
 		plugin.getLogger().info("Loaded custom requirement: " + uniqueName);
 
 		plugin.registerRequirement(uniqueName, clazz);
@@ -202,7 +202,8 @@ public class API {
 	 * @param uniqueName Unique name identifier for the result
 	 * @param clazz Result class that does all the logic
 	 */
-	public void registerResult(String uniqueName, Class<? extends Result> clazz) {
+	public void registerResult(final String uniqueName,
+			final Class<? extends Result> clazz) {
 		plugin.getLogger().info("Loaded custom result: " + uniqueName);
 
 		plugin.registerResult(uniqueName, clazz);

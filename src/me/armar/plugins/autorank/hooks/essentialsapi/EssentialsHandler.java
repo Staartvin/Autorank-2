@@ -26,14 +26,14 @@ public class EssentialsHandler implements DependencyHandler {
 		plugin = instance;
 	}
 
-	public boolean isAFK(Player player) {
+	public boolean isAFK(final Player player) {
 		if (!isAvailable())
 			return false;
 
 		if (!plugin.getConfigHandler().useAFKIntegration())
 			return false;
 
-		User user = api.getUser(player);
+		final User user = api.getUser(player);
 
 		if (user == null) {
 			return false;
@@ -42,11 +42,11 @@ public class EssentialsHandler implements DependencyHandler {
 		return user.isAfk();
 	}
 
-	public boolean isJailed(Player player) {
+	public boolean isJailed(final Player player) {
 		if (!isAvailable())
 			return false;
 
-		User user = api.getUser(player);
+		final User user = api.getUser(player);
 
 		if (user == null) {
 			return false;
@@ -60,7 +60,7 @@ public class EssentialsHandler implements DependencyHandler {
 	 */
 	@Override
 	public Plugin get() {
-		Plugin plugin = this.plugin.getServer().getPluginManager()
+		final Plugin plugin = this.plugin.getServer().getPluginManager()
 				.getPlugin("Essentials");
 
 		// WorldGuard may not be loaded
@@ -75,10 +75,10 @@ public class EssentialsHandler implements DependencyHandler {
 	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#setup()
 	 */
 	@Override
-	public boolean setup(boolean verbose) {
+	public boolean setup(final boolean verbose) {
 		if (!isInstalled()) {
 			if (verbose) {
-				plugin.getLogger().info("Essentials has not been found!");	
+				plugin.getLogger().info("Essentials has not been found!");
 			}
 			return false;
 		} else {
@@ -87,13 +87,13 @@ public class EssentialsHandler implements DependencyHandler {
 			if (api != null) {
 				if (verbose) {
 					plugin.getLogger().info(
-							"Essentials has been found and can be used!");	
+							"Essentials has been found and can be used!");
 				}
 				return true;
 			} else {
 				if (verbose) {
 					plugin.getLogger().info(
-							"Essentials has been found but cannot be used!");	
+							"Essentials has been found but cannot be used!");
 				}
 				return false;
 			}
@@ -105,7 +105,7 @@ public class EssentialsHandler implements DependencyHandler {
 	 */
 	@Override
 	public boolean isInstalled() {
-		Plugin plugin = get();
+		final Plugin plugin = get();
 
 		return plugin != null && plugin.isEnabled();
 	}

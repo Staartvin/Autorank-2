@@ -48,7 +48,7 @@ public class HasItemRequirement extends Requirement {
 
 	@Override
 	public String getDescription() {
-		StringBuilder arg = new StringBuilder(item.getAmount() + " ");
+		final StringBuilder arg = new StringBuilder(item.getAmount() + " ");
 
 		if (displayName != null) {
 			// Show displayname instead of material name
@@ -68,7 +68,7 @@ public class HasItemRequirement extends Requirement {
 
 	@Override
 	public String getProgress(final Player player) {
-		int firstSlot = player.getInventory().first(item.getType());
+		final int firstSlot = player.getInventory().first(item.getType());
 		int slotAmount = 0;
 
 		if (firstSlot >= 0) {

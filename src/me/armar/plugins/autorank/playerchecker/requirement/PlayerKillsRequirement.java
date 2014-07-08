@@ -23,7 +23,8 @@ public class PlayerKillsRequirement extends Requirement {
 	@Override
 	public boolean meetsRequirement(final Player player) {
 		return getStatsPlugin().isEnabled()
-				&& getStatsPlugin().getNormalStat(StatsHandler.statTypes.PLAYERS_KILLED.toString(),
+				&& getStatsPlugin().getNormalStat(
+						StatsHandler.statTypes.PLAYERS_KILLED.toString(),
 						player.getName(), null) >= totalPlayersKilled;
 	}
 
@@ -37,7 +38,8 @@ public class PlayerKillsRequirement extends Requirement {
 	public String getProgress(final Player player) {
 		String progress = "";
 		progress = progress.concat(getStatsPlugin().getNormalStat(
-				StatsHandler.statTypes.PLAYERS_KILLED.toString(), player.getName(), null)
+				StatsHandler.statTypes.PLAYERS_KILLED.toString(),
+				player.getName(), null)
 				+ "/" + totalPlayersKilled);
 		return progress;
 	}

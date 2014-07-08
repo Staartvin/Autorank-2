@@ -34,7 +34,8 @@ public class BlocksMovedRequirement extends Requirement {
 		final boolean enabled = getStatsPlugin().isEnabled();
 
 		boolean sufficient = false;
-		sufficient = this.getStatsPlugin().getNormalStat(StatsHandler.statTypes.BLOCKS_MOVED.toString(),
+		sufficient = this.getStatsPlugin().getNormalStat(
+				StatsHandler.statTypes.BLOCKS_MOVED.toString(),
 				player.getName(), player.getWorld().getName(), movementType) > blocksMoved;
 
 		return enabled && sufficient;
@@ -42,7 +43,7 @@ public class BlocksMovedRequirement extends Requirement {
 
 	@Override
 	public String getDescription() {
-		String moveType = getMovementString();
+		final String moveType = getMovementString();
 
 		return Lang.BLOCKS_MOVED_REQUIREMENT.getConfigValue(new String[] {
 				blocksMoved + " blocks", moveType });
@@ -52,8 +53,8 @@ public class BlocksMovedRequirement extends Requirement {
 	public String getProgress(final Player player) {
 		String progress = "";
 		progress = progress.concat(getStatsPlugin().getNormalStat(
-				StatsHandler.statTypes.BLOCKS_MOVED.toString(), player.getName(), player.getWorld().getName(),
-				movementType)
+				StatsHandler.statTypes.BLOCKS_MOVED.toString(),
+				player.getName(), player.getWorld().getName(), movementType)
 				+ "/" + blocksMoved + " (" + getMovementString() + ")");
 		return progress;
 	}

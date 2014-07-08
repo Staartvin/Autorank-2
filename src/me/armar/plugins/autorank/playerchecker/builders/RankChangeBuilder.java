@@ -125,7 +125,8 @@ public class RankChangeBuilder {
 					}
 				}
 
-				String correctName = AutorankTools.getCorrectName(requirement);
+				final String correctName = AutorankTools
+						.getCorrectName(requirement);
 
 				if (correctName == null) {
 					throw new IllegalArgumentException("Requirement '"

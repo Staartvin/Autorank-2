@@ -29,7 +29,8 @@ public class MobKillsRequirement extends Requirement {
 	@Override
 	public boolean meetsRequirement(final Player player) {
 		return getStatsPlugin().isEnabled()
-				&& getStatsPlugin().getNormalStat(StatsHandler.statTypes.MOBS_KILLED.toString(),
+				&& getStatsPlugin().getNormalStat(
+						StatsHandler.statTypes.MOBS_KILLED.toString(),
 						player.getName(), null, mobType) >= totalMobsKilled;
 	}
 
@@ -52,7 +53,8 @@ public class MobKillsRequirement extends Requirement {
 	public String getProgress(final Player player) {
 		String progress = "";
 		progress = progress.concat(getStatsPlugin().getNormalStat(
-				StatsHandler.statTypes.MOBS_KILLED.toString(), player.getName(), null, mobType)
+				StatsHandler.statTypes.MOBS_KILLED.toString(),
+				player.getName(), null, mobType)
 				+ "/" + totalMobsKilled);
 		return progress;
 	}

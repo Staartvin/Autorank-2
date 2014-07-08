@@ -214,6 +214,7 @@ public class Autorank extends JavaPlugin {
 		// Load again after 5 seconds so custom commands can be listed
 		getServer().getScheduler().runTaskLaterAsynchronously(this,
 				new Runnable() {
+					@Override
 					public void run() {
 
 						getPlayerChecker().initialiseFromConfigs();
@@ -263,7 +264,7 @@ public class Autorank extends JavaPlugin {
 			getLogger().info(
 					"Failed to start Metrics, you can ignore this message");
 		}
-		
+
 		debugMessage("Autorank debug is turned on!");
 	}
 
@@ -323,7 +324,7 @@ public class Autorank extends JavaPlugin {
 			metrics = new me.armar.plugins.autorank.metrics.Metrics(this);
 
 			// Setup graph for MySQL
-			Graph mysqlUsedGraph = metrics
+			final Graph mysqlUsedGraph = metrics
 					.createGraph("Percentage using MySQL");
 
 			mysqlUsedGraph.addPlotter(new Metrics.Plotter("MySQL") {
@@ -337,16 +338,17 @@ public class Autorank extends JavaPlugin {
 
 			metrics.start();
 			return true;
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			// Failed to submit the stats :-(
 			return false;
 		}
 	}
-	
-	public void debugMessage(String message) {
+
+	public void debugMessage(final String message) {
 		// Don't put out debug message when it is not needed.
-		if (!this.getConfigHandler().useDebugOutput()) return;
-		
+		if (!this.getConfigHandler().useDebugOutput())
+			return;
+
 		System.out.print("[Autorank debug] " + message);
 	}
 
@@ -522,7 +524,7 @@ public class Autorank extends JavaPlugin {
 		return addonManager;
 	}
 
-	public void setAddonManager(AddOnManager addonManager) {
+	public void setAddonManager(final AddOnManager addonManager) {
 		this.addonManager = addonManager;
 	}
 
@@ -530,7 +532,7 @@ public class Autorank extends JavaPlugin {
 		return dependencyManager;
 	}
 
-	public void setDependencyManager(DependencyManager dependencyManager) {
+	public void setDependencyManager(final DependencyManager dependencyManager) {
 		this.dependencyManager = dependencyManager;
 	}
 
@@ -538,7 +540,7 @@ public class Autorank extends JavaPlugin {
 		return settingsConfig;
 	}
 
-	public void setSettingsConfig(SimpleYamlConfiguration settingsConfig) {
+	public void setSettingsConfig(final SimpleYamlConfiguration settingsConfig) {
 		this.settingsConfig = settingsConfig;
 	}
 }

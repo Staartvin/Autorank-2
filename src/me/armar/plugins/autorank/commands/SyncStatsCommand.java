@@ -34,7 +34,7 @@ public class SyncStatsCommand implements CommandExecutor {
 		int count = 0;
 
 		// Sync playtime of every player
-		for (UUID uuid : plugin.getPlaytimes().getUUIDKeys()) {
+		for (final UUID uuid : plugin.getPlaytimes().getUUIDKeys()) {
 
 			final OfflinePlayer p = plugin.getServer().getOfflinePlayer(uuid);
 

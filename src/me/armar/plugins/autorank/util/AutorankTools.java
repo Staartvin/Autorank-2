@@ -20,46 +20,50 @@ import org.bukkit.entity.Player;
 public class AutorankTools {
 
 	static List<String> reqTypes = new ArrayList<String>();
-	
-	public static enum Time {SECONDS, MINUTES, HOURS, DAYS}
+
+	public static enum Time {
+		SECONDS, MINUTES, HOURS, DAYS
+	}
 
 	/**
 	 * Convert an integer to a string. <br>
-	 * Format of the returned string: <b>x days, y hours, z minutes and r seconds</b>
+	 * Format of the returned string: <b>x days, y hours, z minutes and r
+	 * seconds</b>
+	 * 
 	 * @param count the value to convert
 	 * @param time the type of time of the value given
 	 * @return string in given format
 	 */
-	public static String timeToString(int count, Time time) {
+	public static String timeToString(int count, final Time time) {
 		final StringBuilder b = new StringBuilder();
 
 		int days = 0, hours = 0, minutes = 0, seconds = 0;
-		
+
 		if (time.equals(Time.DAYS)) {
 			days = count;
 		} else if (time.equals(Time.HOURS)) {
 			days = count / 24;
-			
+
 			hours = count - (days * 24);
 		} else if (time.equals(Time.MINUTES)) {
 			days = count / 1440;
-			
+
 			count = count - (days * 1440);
-			
+
 			hours = count / 60;
-			
+
 			minutes = count - (hours * 60);
 		} else if (time.equals(Time.SECONDS)) {
 			days = count / 86400;
-			
+
 			count = count - (days * 86400);
-			
+
 			hours = count / 3600;
-			
+
 			count = count - (hours * 3600);
-			
+
 			minutes = count / 60;
-			
+
 			seconds = count - (minutes * 60);
 		}
 
@@ -94,11 +98,11 @@ public class AutorankTools {
 				b.append(Lang.MINUTE_PLURAL.getConfigValue());
 			else
 				b.append(Lang.MINUTE_SINGULAR.getConfigValue());
-			
+
 			if (seconds != 0)
 				b.append(" ");
 		}
-		
+
 		if (seconds != 0) {
 			b.append(seconds);
 			b.append(" ");
@@ -110,14 +114,15 @@ public class AutorankTools {
 
 		return b.toString();
 	}
-	
+
 	/**
 	 * Convert a string to an integer.
+	 * 
 	 * @param string input; this must be in the format '10d 14h 15m'
 	 * @param time the time type of the output
 	 * @return the integer representing the number of seconds/minutes/hours/days
 	 */
-	public static int stringToTime(String string, Time time) {
+	public static int stringToTime(String string, final Time time) {
 		int res = 0;
 
 		string = string.trim();
@@ -136,7 +141,7 @@ public class AutorankTools {
 		res += stringtoDouble(days) * 60 * 24;
 
 		// Res time is in minutes
-		
+
 		if (time.equals(Time.SECONDS)) {
 			return res * 60;
 		} else if (time.equals(Time.MINUTES)) {

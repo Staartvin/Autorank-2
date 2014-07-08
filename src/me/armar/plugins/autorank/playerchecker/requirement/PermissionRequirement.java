@@ -33,7 +33,7 @@ public class PermissionRequirement extends Requirement {
 
 	@Override
 	public String getProgress(final Player player) {
-		String progress = "unknown";
+		final String progress = "unknown";
 		return progress;
 	}
 }

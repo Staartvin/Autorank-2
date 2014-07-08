@@ -23,7 +23,9 @@ public class ItemsCraftedRequirement extends Requirement {
 	@Override
 	public boolean meetsRequirement(final Player player) {
 
-		return this.getStatsPlugin().getNormalStat(StatsHandler.statTypes.ITEMS_CRAFTED.toString(), player.getName(), null) > itemsCrafted;
+		return this.getStatsPlugin().getNormalStat(
+				StatsHandler.statTypes.ITEMS_CRAFTED.toString(),
+				player.getName(), null) > itemsCrafted;
 	}
 
 	@Override
@@ -34,11 +36,12 @@ public class ItemsCraftedRequirement extends Requirement {
 	@Override
 	public String getProgress(final Player player) {
 		String progress = "";
-		
-		int progressBar = this.getStatsPlugin().getNormalStat(StatsHandler.statTypes.ITEMS_CRAFTED.toString(), player.getName(), null);
-		
-		progress = progress.concat(progressBar + "/"
-				+ itemsCrafted);
+
+		final int progressBar = this.getStatsPlugin().getNormalStat(
+				StatsHandler.statTypes.ITEMS_CRAFTED.toString(),
+				player.getName(), null);
+
+		progress = progress.concat(progressBar + "/" + itemsCrafted);
 		return progress;
 	}
 }

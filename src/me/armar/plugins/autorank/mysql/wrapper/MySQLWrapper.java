@@ -32,9 +32,9 @@ public class MySQLWrapper {
 	String hostname, username, password, database, table;
 
 	// Keeps track of when a call to the database was for this player
-	private HashMap<UUID, Long> lastChecked = new HashMap<UUID, Long>();
+	private final HashMap<UUID, Long> lastChecked = new HashMap<UUID, Long>();
 	// Stores the last received global time for a player
-	private HashMap<UUID, Integer> lastReceivedTime = new HashMap<UUID, Integer>();
+	private final HashMap<UUID, Integer> lastReceivedTime = new HashMap<UUID, Integer>();
 
 	public MySQLWrapper(final Autorank instance) {
 		plugin = instance;
@@ -70,7 +70,7 @@ public class MySQLWrapper {
 
 	public void sqlSetup() {
 
-		ConfigHandler configHandler = plugin.getConfigHandler();
+		final ConfigHandler configHandler = plugin.getConfigHandler();
 		/*final ConfigurationSection s = config.getConfigurationSection("sql");
 
 		if (s == null) {
@@ -108,7 +108,7 @@ public class MySQLWrapper {
 	 * @param uuid UUID to get the time of
 	 * @return time player has played across all servers
 	 */
-	public int getDatabaseTime(UUID uuid) {
+	public int getDatabaseTime(final UUID uuid) {
 
 		// Do not make a call to the database every time.
 		// Instead, only call once every 5 minutes.
@@ -126,14 +126,14 @@ public class MySQLWrapper {
 		}
 		// Retrieve database time
 		// Setup executor service with pool = 1
-		ExecutorService executor = Executors.newFixedThreadPool(1);
+		final ExecutorService executor = Executors.newFixedThreadPool(1);
 
 		// Initialise new callable class
-		Callable<Integer> callable = new GrabDatabaseTimeTask(mysql, uuid,
-				table);
+		final Callable<Integer> callable = new GrabDatabaseTimeTask(mysql,
+				uuid, table);
 
 		// Sumbit callable
-		Future<Integer> futureValue = executor.submit(callable);
+		final Future<Integer> futureValue = executor.submit(callable);
 
 		// Grab value (will block thread, but there is no other way)
 		// That's why you need to run this async.
@@ -141,9 +141,9 @@ public class MySQLWrapper {
 
 		try {
 			value = futureValue.get();
-		} catch (InterruptedException e) {
+		} catch (final InterruptedException e) {
 			e.printStackTrace();
-		} catch (ExecutionException e) {
+		} catch (final ExecutionException e) {
 			e.printStackTrace();
 		}
 
@@ -154,7 +154,7 @@ public class MySQLWrapper {
 		return value;
 	}
 
-	public boolean isOutOfDate(UUID uuid) {
+	public boolean isOutOfDate(final UUID uuid) {
 		// Checks whether the last check was five minutes ago.
 		// When the last check was more than five minutes ago,
 		// the database time is 'outdated'
@@ -164,9 +164,9 @@ public class MySQLWrapper {
 			return true;
 		}
 
-		long currentTime = System.currentTimeMillis();
+		final long currentTime = System.currentTimeMillis();
 
-		long lastCheckedTime = lastChecked.get(uuid);
+		final long lastCheckedTime = lastChecked.get(uuid);
 
 		// Weird time received.
 		if (lastCheckedTime <= 0) {
@@ -187,12 +187,12 @@ public class MySQLWrapper {
 	 * @param uuid UUID to get the time for
 	 * @return cached global time or -1 if nothing was cached.
 	 */
-	public Integer getCachedGlobalTime(UUID uuid) {
+	public Integer getCachedGlobalTime(final UUID uuid) {
 		if (!lastReceivedTime.containsKey(uuid)) {
 			return -1;
 		}
 
-		int cached = lastReceivedTime.get(uuid);
+		final int cached = lastReceivedTime.get(uuid);
 
 		// Weird cached
 		if (cached <= 0) {
@@ -208,7 +208,7 @@ public class MySQLWrapper {
 	 * @param uuid UUID to set the time of
 	 * @param time Time to change to
 	 */
-	public void setGlobalTime(UUID uuid, final int time) {
+	public void setGlobalTime(final UUID uuid, final int time) {
 
 		if (!isMySQLEnabled())
 			return;

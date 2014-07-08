@@ -12,9 +12,9 @@ import java.util.ConcurrentModificationException;
  */
 public class RequirementHandlerSaver implements Runnable {
 
-	private RequirementHandler requirementHandler;
+	private final RequirementHandler requirementHandler;
 
-	public RequirementHandlerSaver(RequirementHandler reqHandler) {
+	public RequirementHandlerSaver(final RequirementHandler reqHandler) {
 		requirementHandler = reqHandler;
 	}
 
@@ -25,11 +25,10 @@ public class RequirementHandlerSaver implements Runnable {
 	public void run() {
 		// TODO Auto-generated method stub
 		try {
-			requirementHandler.saveConfig();	
-		} catch (ConcurrentModificationException e) {
+			requirementHandler.saveConfig();
+		} catch (final ConcurrentModificationException e) {
 			requirementHandler.saveConfig();
 		}
-		
 
 	}
 

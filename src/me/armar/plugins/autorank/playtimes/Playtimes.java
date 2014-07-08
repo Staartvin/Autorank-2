@@ -27,7 +27,7 @@ public class Playtimes {
 	private final Autorank plugin;
 
 	// Used to store what plugin Autorank uses for checking the time
-	private dependency timePlugin;
+	private final dependency timePlugin;
 
 	public Playtimes(final Autorank plugin) {
 		this.plugin = plugin;
@@ -41,7 +41,7 @@ public class Playtimes {
 				"Data");
 		this.save = new PlaytimesSave(this);
 		this.update = new PlaytimesUpdate(this, plugin);
-		
+
 		// Run save task every 30 seconds
 		plugin.getServer().getScheduler()
 				.runTaskTimerAsynchronously(plugin, save, 20L, 1200L);
@@ -62,7 +62,7 @@ public class Playtimes {
 	 * @param uuid UUID to get the time for
 	 * @return play time of that account or -1 if not found.
 	 */
-	public int getLocalTime(UUID uuid) {
+	public int getLocalTime(final UUID uuid) {
 		if (uuid == null)
 			return -1;
 		return data.getInt(uuid.toString(), 0);
@@ -76,7 +76,7 @@ public class Playtimes {
 	 * @param playerName Player to get the time for
 	 * @return play time of given player or 0 if not found.
 	 */
-	public int getTimeOfPlayer(String playerName) {
+	public int getTimeOfPlayer(final String playerName) {
 
 		int playTime = 0;
 
@@ -84,7 +84,7 @@ public class Playtimes {
 
 		// Determine what plugin to use for getting the time.
 		if (timePlugin.equals(dependency.STATS)) {
-			StatsPlugin stats = plugin.getHookedStatsPlugin();
+			final StatsPlugin stats = plugin.getHookedStatsPlugin();
 
 			if (stats instanceof StatsHandler) {
 				// In seconds
@@ -114,7 +114,7 @@ public class Playtimes {
 				return playTime;
 
 			// Use internal system of Autorank.
-			playTime = data.getInt(uuid.toString(), 0)  * 60;
+			playTime = data.getInt(uuid.toString(), 0) * 60;
 		}
 
 		return playTime;
@@ -128,7 +128,7 @@ public class Playtimes {
 	 * @param uuid UUID to check for
 	 * @return Global playtime across all servers or -1 if no time was found
 	 */
-	public int getGlobalTime(UUID uuid) {
+	public int getGlobalTime(final UUID uuid) {
 		if (uuid == null)
 			return -1;
 		return plugin.getMySQLWrapper().getDatabaseTime(uuid);
@@ -138,11 +138,12 @@ public class Playtimes {
 		data.reload();
 	}
 
-	public void setLocalTime(UUID uuid, int time) {
+	public void setLocalTime(final UUID uuid, final int time) {
 		data.set(uuid.toString(), time);
 	}
 
-	public void setGlobalTime(UUID uuid, final int time) throws SQLException {
+	public void setGlobalTime(final UUID uuid, final int time)
+			throws SQLException {
 		// Check for MySQL
 		if (!plugin.getMySQLWrapper().isMySQLEnabled()) {
 			throw new SQLException(
@@ -152,7 +153,7 @@ public class Playtimes {
 		plugin.getMySQLWrapper().setGlobalTime(uuid, time);
 	}
 
-	public void modifyLocalTime(UUID uuid, final int timeDifference)
+	public void modifyLocalTime(final UUID uuid, final int timeDifference)
 			throws IllegalArgumentException {
 
 		final int time = this.getLocalTime(uuid);
@@ -162,7 +163,7 @@ public class Playtimes {
 		}
 	}
 
-	public void modifyGlobalTime(UUID uuid, final int timeDifference)
+	public void modifyGlobalTime(final UUID uuid, final int timeDifference)
 			throws IllegalArgumentException {
 		// Check for MySQL
 		if (!plugin.getMySQLWrapper().isMySQLEnabled()) {
@@ -200,13 +201,13 @@ public class Playtimes {
 
 	public List<UUID> getUUIDKeys() {
 
-		List<UUID> uuids = new ArrayList<UUID>();
+		final List<UUID> uuids = new ArrayList<UUID>();
 
-		for (String uuidString : data.getKeys(false)) {
+		for (final String uuidString : data.getKeys(false)) {
 			UUID uuid = null;
 			try {
 				uuid = UUID.fromString(uuidString);
-			} catch (IllegalArgumentException e) {
+			} catch (final IllegalArgumentException e) {
 				/*plugin.getLogger().severe(
 						"Player '" + uuidString + "' is not converted yet!");*/
 				continue;
@@ -226,13 +227,13 @@ public class Playtimes {
 	}
 
 	public List<String> getPlayerKeys() {
-		List<UUID> uuids = getUUIDKeys();
+		final List<UUID> uuids = getUUIDKeys();
 
-		List<String> playerNames = new ArrayList<String>();
+		final List<String> playerNames = new ArrayList<String>();
 
-		Map<UUID, String> foundPlayers = UUIDManager.getPlayers(uuids);
+		final Map<UUID, String> foundPlayers = UUIDManager.getPlayers(uuids);
 
-		for (Entry<UUID, String> entry : foundPlayers.entrySet()) {
+		for (final Entry<UUID, String> entry : foundPlayers.entrySet()) {
 			playerNames.add(entry.getValue());
 		}
 
@@ -254,8 +255,8 @@ public class Playtimes {
 		// Keep a counter of archived items
 		int counter = 0;
 
-		for (UUID uuid : getUUIDKeys()) {
-			int time = this.getLocalTime(uuid);
+		for (final UUID uuid : getUUIDKeys()) {
+			final int time = this.getLocalTime(uuid);
 
 			// Found a record to be archived
 			if (time < minimum) {
@@ -281,6 +282,7 @@ public class Playtimes {
 		plugin.getServer().getScheduler()
 				.runTaskAsynchronously(plugin, new Runnable() {
 
+					@Override
 					public void run() {
 
 						// First archive all names below 1
@@ -288,12 +290,12 @@ public class Playtimes {
 
 						final Set<String> records = data.getKeys(false);
 
-						int size = records.size();
+						final int size = records.size();
 
 						// 9 items per second
-						int speed = 9;
-						int duration = (int) Math.floor(size / speed);
-						String timeName = getDurationString(duration);
+						final int speed = 9;
+						final int duration = (int) Math.floor(size / speed);
+						final String timeName = getDurationString(duration);
 
 						plugin.getLogger().warning(
 								"Starting converting data.yml");
@@ -301,13 +303,14 @@ public class Playtimes {
 								"Conversion will take approx. " + timeName
 										+ "( guess for your data.yml)");
 
-						for (String record : records) {
+						for (final String record : records) {
 							// UUID contains dashes and playernames do not, so if it contains dashes
 							// it is probably a UUID and thus we should skip it.
 							if (record.contains("-"))
 								continue;
 
-							UUID uuid = UUIDManager.getUUIDFromPlayer(record);
+							final UUID uuid = UUIDManager
+									.getUUIDFromPlayer(record);
 
 							// Could not convert this name to uuid
 							if (uuid == null) {
@@ -317,7 +320,7 @@ public class Playtimes {
 							}
 
 							// Get the time that player has played.
-							int minutesPlayed = data.getInt(record, 0);
+							final int minutesPlayed = data.getInt(record, 0);
 
 							// Remove the data from the file.
 							data.set(record, null);
@@ -337,11 +340,11 @@ public class Playtimes {
 
 	private String getDurationString(int seconds) {
 
-		int hours = seconds / 3600;
-		int minutes = (seconds % 3600) / 60;
+		final int hours = seconds / 3600;
+		final int minutes = (seconds % 3600) / 60;
 		seconds = seconds % 60;
 
-		StringBuilder builder = new StringBuilder("");
+		final StringBuilder builder = new StringBuilder("");
 
 		if (hours > 0) {
 			if (hours == 1) {
@@ -383,7 +386,7 @@ public class Playtimes {
 
 		return builder.toString();
 	}
-	
+
 	public Autorank getAutorank() {
 		return plugin;
 	}

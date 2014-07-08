@@ -28,7 +28,8 @@ public class StatsAPIHandler implements DependencyHandler {
 		plugin = instance;
 	}
 
-	public int getTotalBlocksBroken(final String playerName, String worldName) {
+	public int getTotalBlocksBroken(final String playerName,
+			final String worldName) {
 		if (!isAvailable())
 			return 0;
 
@@ -40,7 +41,8 @@ public class StatsAPIHandler implements DependencyHandler {
 		}
 	}
 
-	public int getTotalBlocksPlaced(final String playerName, String worldName) {
+	public int getTotalBlocksPlaced(final String playerName,
+			final String worldName) {
 		if (!isAvailable())
 			return 0;
 
@@ -52,7 +54,7 @@ public class StatsAPIHandler implements DependencyHandler {
 		}
 	}
 
-	public int getTotalPlayTime(final String playerName, String worldName) {
+	public int getTotalPlayTime(final String playerName, final String worldName) {
 		if (!isAvailable())
 			return 0;
 
@@ -67,7 +69,7 @@ public class StatsAPIHandler implements DependencyHandler {
 		return api.getPlayer(playerName);
 	}
 
-	public Stat getStat(String name) {
+	public Stat getStat(final String name) {
 		return api.getStat(name);
 	}
 
@@ -80,11 +82,11 @@ public class StatsAPIHandler implements DependencyHandler {
 	 * @param worldName World to check for.
 	 * @return Requested stat of the player
 	 */
-	public StatData getStatType(String statName, final String playerName,
-			String worldName) {
+	public StatData getStatType(final String statName, final String playerName,
+			final String worldName) {
 		final StatsPlayer sPlayer = getStats(playerName);
 
-		Stat stat = getStat(statName);
+		final Stat stat = getStat(statName);
 
 		if (stat == null)
 			throw new IllegalArgumentException("Unknown stat '" + statName
@@ -102,11 +104,11 @@ public class StatsAPIHandler implements DependencyHandler {
 	}
 
 	public int getNormalStat(final String playerName, final String statName,
-			String worldName) {
+			final String worldName) {
 		if (!isAvailable())
 			return 0;
 
-		StatData stat = getStatType(statName, playerName, worldName);
+		final StatData stat = getStatType(statName, playerName, worldName);
 
 		int value = 0;
 
@@ -129,11 +131,11 @@ public class StatsAPIHandler implements DependencyHandler {
 	 * @return amount player placed/broke of a block
 	 */
 	public int getBlocksStat(final String playerName, final int id,
-			final int damageValue, String worldName, final String statType) {
+			final int damageValue, final String worldName, final String statType) {
 		if (!isAvailable())
 			return 0;
 
-		StatData blockStat = getStatType(statType, playerName, worldName);
+		final StatData blockStat = getStatType(statType, playerName, worldName);
 		int value = 0;
 		boolean checkDamageValue = false;
 
@@ -145,7 +147,7 @@ public class StatsAPIHandler implements DependencyHandler {
 
 			if (checkDamageValue) {
 				// VAR 0 = blockID, VAR 1 = damageValue, VAR 2 = (1 = break, 0 = place)
-				byte[] byteArray = (byte[]) vars[1];
+				final byte[] byteArray = (byte[]) vars[1];
 
 				if ((Integer) vars[0] == id
 						&& Integer.parseInt(new String(byteArray)) == damageValue) {
@@ -166,9 +168,9 @@ public class StatsAPIHandler implements DependencyHandler {
 		if (!isAvailable())
 			return 0;
 
-		String statName = "Kill";
+		final String statName = "Kill";
 
-		StatData data = getStatType(statName, playerName, worldName);
+		final StatData data = getStatType(statName, playerName, worldName);
 
 		final EntityType mob = getEntityType(mobName);
 		boolean checkEntityType = false;
@@ -195,13 +197,14 @@ public class StatsAPIHandler implements DependencyHandler {
 		return value;
 	}
 
-	public int getTotalBlocksMoved(String playerName, int type, String worldName) {
+	public int getTotalBlocksMoved(final String playerName, final int type,
+			final String worldName) {
 		if (!isAvailable())
 			return 0;
 
-		String statName = "Move";
+		final String statName = "Move";
 
-		StatData stat = getStatType(statName, playerName, worldName);
+		final StatData stat = getStatType(statName, playerName, worldName);
 
 		int value = 0;
 
@@ -234,7 +237,7 @@ public class StatsAPIHandler implements DependencyHandler {
 	 */
 	@Override
 	public Plugin get() {
-		Plugin plugin = this.plugin.getServer().getPluginManager()
+		final Plugin plugin = this.plugin.getServer().getPluginManager()
 				.getPlugin("Stats");
 
 		// WorldGuard may not be loaded
@@ -249,14 +252,14 @@ public class StatsAPIHandler implements DependencyHandler {
 	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#setup()
 	 */
 	@Override
-	public boolean setup(boolean verbose) {
+	public boolean setup(final boolean verbose) {
 		if (!isInstalled()) {
 			if (verbose) {
 				plugin.getLogger().info("Stats has not been found!");
 			}
 			return false;
 		} else {
-			Main stats = (Main) get();
+			final Main stats = (Main) get();
 
 			api = stats.getAPI();
 
@@ -281,7 +284,7 @@ public class StatsAPIHandler implements DependencyHandler {
 	 */
 	@Override
 	public boolean isInstalled() {
-		Plugin plugin = get();
+		final Plugin plugin = get();
 
 		return plugin != null && plugin.isEnabled();
 	}

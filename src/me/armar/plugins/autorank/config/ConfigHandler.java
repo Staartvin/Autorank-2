@@ -192,7 +192,8 @@ public class ConfigHandler {
 	 */
 	public dependency useTimeOf() {
 
-		String timePlugin = settingsConfig.getString("use time of", "Autorank");
+		final String timePlugin = settingsConfig.getString("use time of",
+				"Autorank");
 
 		if (timePlugin.equalsIgnoreCase("Stats"))
 			return dependency.STATS;
@@ -244,7 +245,7 @@ public class ConfigHandler {
 				"&6&r | &b&p - &7&d day(s), &h hour(s) and &m minute(s).");
 	}
 
-	public String getMySQLSettings(MySQLOptions option) {
+	public String getMySQLSettings(final MySQLOptions option) {
 		switch (option) {
 		case HOSTNAME:
 			return settingsConfig.getString("sql.hostname");
@@ -269,11 +270,12 @@ public class ConfigHandler {
 		return settingsConfig.getBoolean("auto-updater.check-for-new-versions",
 				true);
 	}
-	
+
 	public boolean doBaseHelpPageOnPermission() {
-		return settingsConfig.getBoolean("show help command based on permission", false);
+		return settingsConfig.getBoolean(
+				"show help command based on permission", false);
 	}
-	
+
 	public boolean useDebugOutput() {
 		return settingsConfig.getBoolean("use debug", false);
 	}

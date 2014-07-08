@@ -44,7 +44,7 @@ public class FactionsHandler implements DependencyHandler {
 	 */
 	@Override
 	public Plugin get() {
-		Plugin plugin = this.plugin.getServer().getPluginManager()
+		final Plugin plugin = this.plugin.getServer().getPluginManager()
 				.getPlugin("Factions");
 
 		// WorldGuard may not be loaded
@@ -59,7 +59,7 @@ public class FactionsHandler implements DependencyHandler {
 	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#setup()
 	 */
 	@Override
-	public boolean setup(boolean verbose) {
+	public boolean setup(final boolean verbose) {
 		if (!isInstalled()) {
 			if (verbose) {
 				plugin.getLogger().info("Factions has not been found!");
@@ -90,7 +90,7 @@ public class FactionsHandler implements DependencyHandler {
 	 */
 	@Override
 	public boolean isInstalled() {
-		Factions plugin = (Factions) get();
+		final Factions plugin = (Factions) get();
 
 		return plugin != null && plugin.isEnabled();
 	}

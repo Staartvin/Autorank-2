@@ -17,9 +17,9 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class StatsPluginManager {
 
-	private Autorank plugin;
+	private final Autorank plugin;
 
-	public StatsPluginManager(Autorank instance) {
+	public StatsPluginManager(final Autorank instance) {
 		plugin = instance;
 	}
 
@@ -57,7 +57,8 @@ public class StatsPluginManager {
 	}
 
 	public boolean findStats() {
-		Plugin x = plugin.getServer().getPluginManager().getPlugin("Stats");
+		final Plugin x = plugin.getServer().getPluginManager()
+				.getPlugin("Stats");
 		// Main == Stats main class
 		if (x != null && x instanceof JavaPlugin) {
 			return true;

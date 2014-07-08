@@ -23,7 +23,9 @@ public class TimesShearedRequirement extends Requirement {
 	@Override
 	public boolean meetsRequirement(final Player player) {
 
-		return this.getStatsPlugin().getNormalStat(StatsHandler.statTypes.TIMES_SHEARED.toString(), player.getName(), null) > timesSheared;
+		return this.getStatsPlugin().getNormalStat(
+				StatsHandler.statTypes.TIMES_SHEARED.toString(),
+				player.getName(), null) > timesSheared;
 	}
 
 	@Override
@@ -34,11 +36,12 @@ public class TimesShearedRequirement extends Requirement {
 	@Override
 	public String getProgress(final Player player) {
 		String progress = "";
-		
-		int progressBar = this.getStatsPlugin().getNormalStat(StatsHandler.statTypes.TIMES_SHEARED.toString(), player.getName(), null);
-		
-		progress = progress.concat(progressBar + "/"
-				+ timesSheared);
+
+		final int progressBar = this.getStatsPlugin().getNormalStat(
+				StatsHandler.statTypes.TIMES_SHEARED.toString(),
+				player.getName(), null);
+
+		progress = progress.concat(progressBar + "/" + timesSheared);
 		return progress;
 	}
 }

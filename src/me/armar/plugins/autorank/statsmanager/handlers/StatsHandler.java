@@ -6,14 +6,14 @@ import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 
 public class StatsHandler implements StatsPlugin {
 
-	private Autorank plugin;
-	private StatsAPIHandler statsApi;
+	private final Autorank plugin;
+	private final StatsAPIHandler statsApi;
 
 	public static enum statTypes {
 		BLOCKS_BROKEN, BLOCKS_PLACED, TOTAL_BLOCKS_BROKEN, TOTAL_BLOCKS_PLACED, VOTES, PLAYERS_KILLED, MOBS_KILLED, DAMAGE_TAKEN, TIME_PLAYED, BLOCKS_MOVED, FISH_CAUGHT, ITEMS_CRAFTED, TIMES_SHEARED
 	};
 
-	public StatsHandler(Autorank instance, StatsAPIHandler statsAPI) {
+	public StatsHandler(final Autorank instance, final StatsAPIHandler statsAPI) {
 		this.plugin = instance;
 
 		statsApi = statsAPI;
@@ -49,7 +49,7 @@ public class StatsHandler implements StatsPlugin {
 	}
 
 	@Override
-	public int getNormalStat(String statType, Object... arguments) {
+	public int getNormalStat(final String statType, final Object... arguments) {
 		// First argument is always the name, second arg is always the world
 
 		if (arguments.length < 2) {
@@ -57,15 +57,15 @@ public class StatsHandler implements StatsPlugin {
 					"Missing player or world for stat " + statType);
 		}
 
-		String correctName = getCorrectStatName(statType).toLowerCase();
+		final String correctName = getCorrectStatName(statType).toLowerCase();
 
 		// Invalid name
 		if (correctName == null) {
 			return -2;
 		}
 
-		String playerName = (String) arguments[0];
-		String worldName = (String) arguments[1];
+		final String playerName = (String) arguments[0];
+		final String worldName = (String) arguments[1];
 
 		int value = -1;
 
@@ -113,18 +113,17 @@ public class StatsHandler implements StatsPlugin {
 		} else if (correctName.equals("fish_caught")) {
 			// Handle time played
 			// Fish catched is the proper spelling of the stat
-			value = statsApi.getNormalStat(playerName,
-					"Fish catched", worldName);
+			value = statsApi.getNormalStat(playerName, "Fish catched",
+					worldName);
 		} else if (correctName.equals("items_crafted")) {
 			// Handle time played
 			// Fish catched is the proper spelling of the stat
-			value = statsApi.getNormalStat(playerName,
-					"Items crafted", worldName);
+			value = statsApi.getNormalStat(playerName, "Items crafted",
+					worldName);
 		} else if (correctName.equals("times_sheared")) {
 			// Handle time played
 			// Fish catched is the proper spelling of the stat
-			value = statsApi.getNormalStat(playerName,
-					"Shear", worldName);
+			value = statsApi.getNormalStat(playerName, "Shear", worldName);
 		}
 
 		return value;
@@ -135,7 +134,7 @@ public class StatsHandler implements StatsPlugin {
 
 		statType = statType.replace(" ", "_");
 
-		for (statTypes t : statTypes.values()) {
+		for (final statTypes t : statTypes.values()) {
 			if (t.name().equalsIgnoreCase(statType)) {
 				return t.name();
 			}

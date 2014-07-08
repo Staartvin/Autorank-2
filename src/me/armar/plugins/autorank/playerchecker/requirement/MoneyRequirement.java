@@ -23,7 +23,9 @@ public class MoneyRequirement extends Requirement {
 	@Override
 	public boolean meetsRequirement(final Player player) {
 
-		return VaultHandler.economy != null && VaultHandler.economy.has(this.getAutorank().getServer().getOfflinePlayer(player.getUniqueId()), minMoney);
+		return VaultHandler.economy != null
+				&& VaultHandler.economy.has(this.getAutorank().getServer()
+						.getOfflinePlayer(player.getUniqueId()), minMoney);
 	}
 
 	@Override
@@ -35,8 +37,10 @@ public class MoneyRequirement extends Requirement {
 	@Override
 	public String getProgress(final Player player) {
 		String progress = "";
-		progress = progress.concat(VaultHandler.economy.getBalance(this.getAutorank().getServer().getOfflinePlayer(player.getUniqueId())) + "/"
-				+ minMoney);
+		progress = progress.concat(VaultHandler.economy.getBalance(this
+				.getAutorank().getServer()
+				.getOfflinePlayer(player.getUniqueId()))
+				+ "/" + minMoney);
 		return progress;
 	}
 }

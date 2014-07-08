@@ -244,15 +244,18 @@ public enum Lang {
 	/**
 	 * Catch at least {0} fish.
 	 */
-	FISH_CAUGHT_REQUIREMENT("fish-caught-requirement", "Catch at least {0} fish."),
+	FISH_CAUGHT_REQUIREMENT("fish-caught-requirement",
+			"Catch at least {0} fish."),
 	/**
 	 * Craft at least {0} item(s).
 	 */
-	ITEMS_CRAFTED_REQUIREMENT("items-crafted-requirement", "Craft at least {0} item(s)."),
+	ITEMS_CRAFTED_REQUIREMENT("items-crafted-requirement",
+			"Craft at least {0} item(s)."),
 	/**
 	 * Shear at least {0} sheep.
 	 */
-	TIMES_SHEARED_REQUIREMENT("times-sheared-requirement", "Shear at least {0} sheep."),;
+	TIMES_SHEARED_REQUIREMENT("times-sheared-requirement",
+			"Shear at least {0} sheep."), ;
 
 	private String path, def;
 	private static FileConfiguration LANG;
@@ -283,7 +286,7 @@ public enum Lang {
 	 * @param args arguments that need to be given. (Can be null)
 	 * @return value in config or otherwise default value
 	 */
-	public String getConfigValue(String... args) {
+	public String getConfigValue(final String... args) {
 		String value = ChatColor.translateAlternateColorCodes('&',
 				LANG.getString(this.path, this.def));
 

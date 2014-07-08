@@ -43,13 +43,13 @@ public class DependencyManager {
 		AUTORANK, FACTIONS, STATS, WORLDGUARD, MCMMO, ESSENTIALS, VAULT, ROYALCOMMANDS, ONTIME
 	};
 
-	private Autorank plugin;
+	private final Autorank plugin;
 
-	private StatsPluginManager statsPluginManager;
+	private final StatsPluginManager statsPluginManager;
 
-	private HashMap<dependency, DependencyHandler> handlers = new HashMap<dependency, DependencyHandler>();
+	private final HashMap<dependency, DependencyHandler> handlers = new HashMap<dependency, DependencyHandler>();
 
-	public DependencyManager(Autorank instance) {
+	public DependencyManager(final Autorank instance) {
 		plugin = instance;
 
 		// Register handlers
@@ -81,9 +81,10 @@ public class DependencyManager {
 		}
 
 		// Load all dependencies
-		for (DependencyHandler depHandler : handlers.values()) {
+		for (final DependencyHandler depHandler : handlers.values()) {
 			// Make sure to respect settings
-			depHandler.setup(plugin.getConfigHandler().useAdvancedDependencyLogs());
+			depHandler.setup(plugin.getConfigHandler()
+					.useAdvancedDependencyLogs());
 		}
 
 		if (plugin.getConfigHandler().useAdvancedDependencyLogs()) {
@@ -99,11 +100,11 @@ public class DependencyManager {
 			plugin.getLogger().info(
 					"---------------[Autorank Dependencies]---------------");
 		}
-		
+
 		plugin.getLogger().info("Loaded libraries and dependencies");
 	}
 
-	public DependencyHandler getDependency(dependency dep) {
+	public DependencyHandler getDependency(final dependency dep) {
 
 		if (!handlers.containsKey(dep)) {
 			throw new IllegalArgumentException("Unknown dependency '"
@@ -117,7 +118,7 @@ public class DependencyManager {
 		return statsPluginManager.getStatsPlugin();
 	}
 
-	public boolean isAFK(Player player) {
+	public boolean isAFK(final Player player) {
 		if (!plugin.getConfigHandler().useAFKIntegration())
 			return false;
 

@@ -39,12 +39,13 @@ public class SpawnFireworkResult extends Result {
 		if (player == null)
 			return false;
 
-		Location loc = (target.equals("player")) ? player.getLocation() : player.getWorld().getSpawnLocation();
-		
-		Firework fw = (Firework) loc.getWorld().spawnEntity(
-				loc, EntityType.FIREWORK);
-		FireworkMeta fwm = fw.getFireworkMeta();
-		FireworkEffect effect = FireworkEffect.builder()
+		final Location loc = (target.equals("player")) ? player.getLocation()
+				: player.getWorld().getSpawnLocation();
+
+		final Firework fw = (Firework) loc.getWorld().spawnEntity(loc,
+				EntityType.FIREWORK);
+		final FireworkMeta fwm = fw.getFireworkMeta();
+		final FireworkEffect effect = FireworkEffect.builder()
 				.withColor(colour).with(type).build();
 
 		fwm.addEffect(effect);

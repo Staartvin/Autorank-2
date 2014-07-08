@@ -17,9 +17,9 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class AddOnManager {
 
-	private Autorank plugin;
+	private final Autorank plugin;
 
-	private HashMap<String, JavaPlugin> loadedAddons = new HashMap<String, JavaPlugin>();
+	private final HashMap<String, JavaPlugin> loadedAddons = new HashMap<String, JavaPlugin>();
 
 	/**
 	 * AddOnManager handlers all actions between addons and Autorank. You can
@@ -27,7 +27,7 @@ public class AddOnManager {
 	 * 
 	 * @param instance instance of the main class of Autorank.
 	 */
-	public AddOnManager(Autorank instance) {
+	public AddOnManager(final Autorank instance) {
 		plugin = instance;
 	}
 
@@ -46,7 +46,7 @@ public class AddOnManager {
 	 * @param addonName name of the addon
 	 * @return true if loaded, false otherwise.
 	 */
-	public boolean isAddonLoaded(String addonName) {
+	public boolean isAddonLoaded(final String addonName) {
 		return loadedAddons.containsKey(addonName);
 	}
 
@@ -56,7 +56,7 @@ public class AddOnManager {
 	 * @param addonName name of the addon
 	 * @param addon Main class of the addon
 	 */
-	public void loadAddon(String addonName, JavaPlugin addon) {
+	public void loadAddon(final String addonName, final JavaPlugin addon) {
 		// Register addon
 		if (isAddonLoaded(addonName))
 			return;
@@ -75,7 +75,7 @@ public class AddOnManager {
 	 * 
 	 * @param addonName
 	 */
-	public void unloadAddon(String addonName) {
+	public void unloadAddon(final String addonName) {
 		if (!isAddonLoaded(addonName))
 			return;
 
@@ -91,7 +91,7 @@ public class AddOnManager {
 	 * @param addonName name of the addon
 	 * @return main class of the addon, or null if non-existent.
 	 */
-	public JavaPlugin getLoadedAddon(String addonName) {
+	public JavaPlugin getLoadedAddon(final String addonName) {
 		if (!isAddonLoaded(addonName))
 			return null;
 
@@ -102,7 +102,7 @@ public class AddOnManager {
 	 * Unload all addons that are currently loaded.
 	 */
 	public void unloadAllAddons() {
-		for (String addon : loadedAddons.keySet()) {
+		for (final String addon : loadedAddons.keySet()) {
 			unloadAddon(addon);
 		}
 	}

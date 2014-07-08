@@ -77,7 +77,7 @@ public class CommandsManager implements TabExecutor {
 				new ConvertUUIDCommand(plugin));
 	}
 
-	private HashMap<List<String>, CommandExecutor> registeredCommands = new HashMap<List<String>, CommandExecutor>();
+	private final HashMap<List<String>, CommandExecutor> registeredCommands = new HashMap<List<String>, CommandExecutor>();
 
 	public boolean hasPermission(final String permission,
 			final CommandSender sender) {
@@ -109,10 +109,10 @@ public class CommandsManager implements TabExecutor {
 		final String action = args[0];
 
 		// Go through every list and check if that action is in there.
-		for (Entry<List<String>, CommandExecutor> entry : registeredCommands
+		for (final Entry<List<String>, CommandExecutor> entry : registeredCommands
 				.entrySet()) {
 
-			for (String actionString : entry.getKey()) {
+			for (final String actionString : entry.getKey()) {
 				if (actionString.equalsIgnoreCase(action)) {
 					return entry.getValue().onCommand(sender, cmd, label, args);
 				}
@@ -129,8 +129,8 @@ public class CommandsManager implements TabExecutor {
 	 * @see org.bukkit.command.TabCompleter#onTabComplete(org.bukkit.command.CommandSender, org.bukkit.command.Command, java.lang.String, java.lang.String[])
 	 */
 	@Override
-	public List<String> onTabComplete(CommandSender sender, Command cmd,
-			String commandLabel, String[] args) {
+	public List<String> onTabComplete(final CommandSender sender,
+			final Command cmd, final String commandLabel, final String[] args) {
 
 		if (args.length == 1) {
 			// Show a list of commands if needed
@@ -141,7 +141,7 @@ public class CommandsManager implements TabExecutor {
 		}
 
 		if (args.length > 1) {
-			String subCommand = args[0];
+			final String subCommand = args[0];
 
 			if (subCommand.equalsIgnoreCase("add")
 					|| subCommand.equalsIgnoreCase("remove")

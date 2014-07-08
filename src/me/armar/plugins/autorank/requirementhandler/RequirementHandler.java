@@ -108,21 +108,21 @@ public class RequirementHandler {
 		saveConfig();
 	}
 
-	public void setPlayerProgress(UUID uuid, final List<Integer> progress) {
+	public void setPlayerProgress(final UUID uuid, final List<Integer> progress) {
 		//UUID uuid = UUIDManager.getUUIDFromPlayer(playerName);
 
 		config.set(uuid.toString() + ".progress", progress);
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Integer> getProgress(UUID uuid) {
+	public List<Integer> getProgress(final UUID uuid) {
 		//UUID uuid = UUIDManager.getUUIDFromPlayer(playerName);
 
 		return (List<Integer>) config.getList(uuid.toString() + ".progress",
 				new ArrayList<Integer>());
 	}
 
-	public void addPlayerProgress(UUID uuid, final int reqID) {
+	public void addPlayerProgress(final UUID uuid, final int reqID) {
 		final List<Integer> progress = getProgress(uuid);
 
 		if (hasCompletedRequirement(reqID, uuid))
@@ -133,18 +133,18 @@ public class RequirementHandler {
 		setPlayerProgress(uuid, progress);
 	}
 
-	public String getLastKnownGroup(UUID uuid) {
+	public String getLastKnownGroup(final UUID uuid) {
 		//UUID uuid = UUIDManager.getUUIDFromPlayer(playerName);
 
 		return config.getString(uuid.toString() + ".last group");
 	}
 
-	public void setLastKnownGroup(UUID uuid, final String group) {
+	public void setLastKnownGroup(final UUID uuid, final String group) {
 		//UUID uuid = UUIDManager.getUUIDFromPlayer(playerName);
 		config.set(uuid.toString() + ".last group", group);
 	}
 
-	public boolean hasCompletedRequirement(final int reqID, UUID uuid) {
+	public boolean hasCompletedRequirement(final int reqID, final UUID uuid) {
 		final List<Integer> progress = getProgress(uuid);
 
 		return progress.contains(reqID);
@@ -172,24 +172,25 @@ public class RequirementHandler {
 		}
 	}
 
-	public void addCompletedRanks(UUID uuid, String rank) {
-		List<String> completed = getCompletedRanks(uuid);
+	public void addCompletedRanks(final UUID uuid, final String rank) {
+		final List<String> completed = getCompletedRanks(uuid);
 
 		completed.add(rank);
 
 		setCompletedRanks(uuid, completed);
 	}
 
-	public void setCompletedRanks(UUID uuid, List<String> completedRanks) {
+	public void setCompletedRanks(final UUID uuid,
+			final List<String> completedRanks) {
 		config.set(uuid.toString() + ".completed ranks", completedRanks);
 	}
 
-	public boolean hasCompletedRank(UUID uuid, String rank) {
+	public boolean hasCompletedRank(final UUID uuid, final String rank) {
 		return getCompletedRanks(uuid).contains(rank);
 	}
 
-	public List<String> getCompletedRanks(UUID uuid) {
-		List<String> completed = config.getStringList(uuid.toString()
+	public List<String> getCompletedRanks(final UUID uuid) {
+		final List<String> completed = config.getStringList(uuid.toString()
 				+ ".completed ranks");
 
 		return completed;
@@ -208,21 +209,23 @@ public class RequirementHandler {
 		plugin.getServer().getScheduler()
 				.runTaskAsynchronously(plugin, new Runnable() {
 
+					@Override
 					public void run() {
-						for (String name : getConfig().getKeys(false)) {
+						for (final String name : getConfig().getKeys(false)) {
 
 							// Probably UUID because names don't have dashes.
 							if (name.contains("-"))
 								continue;
 
-							UUID uuid = UUIDManager.getUUIDFromPlayer(name);
+							final UUID uuid = UUIDManager
+									.getUUIDFromPlayer(name);
 
 							if (uuid == null)
 								continue;
 
-							List<Integer> progress = config.getIntegerList(name
-									+ ".progress");
-							String lastKnownGroup = config.getString(name
+							final List<Integer> progress = config
+									.getIntegerList(name + ".progress");
+							final String lastKnownGroup = config.getString(name
 									+ ".last group");
 
 							// Remove name

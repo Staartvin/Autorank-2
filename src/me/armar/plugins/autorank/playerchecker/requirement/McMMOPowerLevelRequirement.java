@@ -21,10 +21,10 @@ public class McMMOPowerLevelRequirement extends Requirement {
 
 	@Override
 	public boolean meetsRequirement(final Player player) {
-		McMMOHandler handler = (McMMOHandler) this.getAutorank()
+		final McMMOHandler handler = (McMMOHandler) this.getAutorank()
 				.getDependencyManager().getDependency(dependency.MCMMO);
 
-		int level = handler.getPowerLevel(player);
+		final int level = handler.getPowerLevel(player);
 
 		return level > 0 && level >= powerLevel;
 	}
@@ -39,8 +39,9 @@ public class McMMOPowerLevelRequirement extends Requirement {
 	@Override
 	public String getProgress(final Player player) {
 		String progress = "";
-		int level = ((McMMOHandler) this.getAutorank().getDependencyManager()
-				.getDependency(dependency.MCMMO)).getPowerLevel(player);
+		final int level = ((McMMOHandler) this.getAutorank()
+				.getDependencyManager().getDependency(dependency.MCMMO))
+				.getPowerLevel(player);
 
 		progress = progress.concat(level + "/" + powerLevel);
 		return progress;

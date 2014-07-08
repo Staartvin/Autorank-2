@@ -22,13 +22,13 @@ public class WorldGuardRegionRequirement extends Requirement {
 	public boolean setOptions(final String[] options) {
 		if (options.length > 0)
 			regionName = options[0].trim();
-		
+
 		return (regionName != null);
 	}
 
 	@Override
 	public boolean meetsRequirement(final Player player) {
-		WorldGuardHandler wgH = (WorldGuardHandler) this.getAutorank()
+		final WorldGuardHandler wgH = (WorldGuardHandler) this.getAutorank()
 				.getDependencyManager().getDependency(dependency.WORLDGUARD);
 
 		return wgH.isInRegion(player, regionName);
@@ -42,7 +42,7 @@ public class WorldGuardRegionRequirement extends Requirement {
 
 	@Override
 	public String getProgress(final Player player) {
-		String progress = "Cannot show progress";
+		final String progress = "Cannot show progress";
 		return progress;
 	}
 }
