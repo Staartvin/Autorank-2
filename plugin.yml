@@ -74,3 +74,6 @@ permissions:
     autorank.convert.data:
         description: Allows a player to convert the data.yml to UUID format.
         default: op
+    autorank.help:
+        description: Allows a player to view a list of commands
+        default: true
