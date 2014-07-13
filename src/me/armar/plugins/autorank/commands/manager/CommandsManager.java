@@ -2,6 +2,7 @@ package me.armar.plugins.autorank.commands.manager;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -26,7 +27,6 @@ import me.armar.plugins.autorank.language.Lang;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 
@@ -77,7 +77,8 @@ public class CommandsManager implements TabExecutor {
 				new ConvertUUIDCommand(plugin));
 	}
 
-	private final HashMap<List<String>, CommandExecutor> registeredCommands = new HashMap<List<String>, CommandExecutor>();
+	// Use linked hashmap so that input order is kept
+	private final LinkedHashMap<List<String>, AutorankCommand> registeredCommands = new LinkedHashMap<List<String>, AutorankCommand>();
 
 	public boolean hasPermission(final String permission,
 			final CommandSender sender) {
@@ -109,7 +110,7 @@ public class CommandsManager implements TabExecutor {
 		final String action = args[0];
 
 		// Go through every list and check if that action is in there.
-		for (final Entry<List<String>, CommandExecutor> entry : registeredCommands
+		for (final Entry<List<String>, AutorankCommand> entry : registeredCommands
 				.entrySet()) {
 
 			for (final String actionString : entry.getKey()) {
@@ -156,5 +157,9 @@ public class CommandsManager implements TabExecutor {
 
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public HashMap<List<String>, AutorankCommand> getRegisteredCommands() {
+		return registeredCommands;
 	}
 }
