@@ -1,6 +1,7 @@
 package me.armar.plugins.autorank.commands;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
@@ -10,11 +11,15 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-public class ArchiveCommand implements CommandExecutor {
+public class ArchiveCommand extends AutorankCommand implements CommandExecutor {
 
 	private final Autorank plugin;
 
 	public ArchiveCommand(final Autorank instance) {
+		this.setUsage("/ar archive <minimum>");
+		this.setDesc("Archive data with a minimum");
+		this.setPermission("autorank.archive");
+		
 		plugin = instance;
 	}
 

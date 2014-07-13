@@ -1,6 +1,7 @@
 package me.armar.plugins.autorank.commands;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
@@ -11,11 +12,15 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class GlobalCheckCommand implements CommandExecutor {
+public class GlobalCheckCommand extends AutorankCommand implements CommandExecutor {
 
 	private final Autorank plugin;
 
 	public GlobalCheckCommand(final Autorank instance) {
+		this.setUsage("/ar gcheck [player]");
+		this.setDesc("Check [player]'s global playtime.");
+		this.setPermission("autorank.check");
+		
 		plugin = instance;
 	}
 

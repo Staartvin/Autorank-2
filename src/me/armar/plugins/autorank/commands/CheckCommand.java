@@ -5,6 +5,7 @@ import java.util.List;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.api.events.CheckCommandEvent;
+import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.playerchecker.RankChange;
 import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
@@ -18,11 +19,15 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class CheckCommand implements CommandExecutor {
+public class CheckCommand extends AutorankCommand implements CommandExecutor {
 
 	private final Autorank plugin;
 
 	public CheckCommand(final Autorank instance) {
+		this.setUsage("/ar check [player]");
+		this.setDesc("Check [player]'s status");
+		this.setPermission("autorank.check");
+		
 		plugin = instance;
 	}
 

@@ -3,6 +3,7 @@ package me.armar.plugins.autorank.commands;
 import java.util.UUID;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
@@ -12,11 +13,15 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-public class SetCommand implements CommandExecutor {
+public class SetCommand extends AutorankCommand implements CommandExecutor {
 
 	private final Autorank plugin;
 
 	public SetCommand(final Autorank instance) {
+		this.setUsage("/ar set [player] [value]");
+		this.setDesc("Set [player]'s time to [value].");
+		this.setPermission("autorank.set.other");
+		
 		plugin = instance;
 	}
 

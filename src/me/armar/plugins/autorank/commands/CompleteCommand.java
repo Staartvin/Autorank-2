@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.playerchecker.RankChange;
 import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
@@ -17,11 +18,15 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class CompleteCommand implements CommandExecutor {
+public class CompleteCommand extends AutorankCommand implements CommandExecutor {
 
 	private final Autorank plugin;
 
 	public CompleteCommand(final Autorank instance) {
+		this.setUsage("/ar complete #");
+		this.setDesc("Complete a requirement at this moment");
+		this.setPermission("autorank.complete");
+		
 		plugin = instance;
 	}
 
