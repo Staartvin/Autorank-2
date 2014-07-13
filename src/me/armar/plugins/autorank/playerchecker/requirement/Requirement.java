@@ -111,7 +111,7 @@ public abstract class Requirement {
 	 * Check if the requirement is completed already.
 	 * 
 	 * @param reqID Requirement id.
-	 * @param playerName Player to check for
+	 * @param uuid Player to check for
 	 * @return true if completed, false otherwise.
 	 */
 	public final boolean isCompleted(final int reqID, final UUID uuid) {
