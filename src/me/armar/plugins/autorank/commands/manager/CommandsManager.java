@@ -158,7 +158,7 @@ public class CommandsManager implements TabExecutor {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 	public HashMap<List<String>, AutorankCommand> getRegisteredCommands() {
 		return registeredCommands;
 	}

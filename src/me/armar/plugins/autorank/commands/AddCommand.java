@@ -10,10 +10,9 @@ import me.armar.plugins.autorank.util.AutorankTools.Time;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-public class AddCommand extends AutorankCommand implements CommandExecutor {
+public class AddCommand extends AutorankCommand {
 
 	private final Autorank plugin;
 
@@ -21,7 +20,7 @@ public class AddCommand extends AutorankCommand implements CommandExecutor {
 		this.setUsage("/ar add [player] [value]");
 		this.setDesc("Add [value] to [player]'s time");
 		this.setPermission("autorank.add");
-		
+
 		plugin = instance;
 	}
 

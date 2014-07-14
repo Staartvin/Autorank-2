@@ -6,10 +6,9 @@ import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
 
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-public class ImportCommand extends AutorankCommand implements CommandExecutor {
+public class ImportCommand extends AutorankCommand {
 
 	private final Autorank plugin;
 
@@ -17,7 +16,7 @@ public class ImportCommand extends AutorankCommand implements CommandExecutor {
 		this.setUsage("/ar import");
 		this.setDesc("Import old data.");
 		this.setPermission("autorank.import");
-		
+
 		plugin = instance;
 	}
 

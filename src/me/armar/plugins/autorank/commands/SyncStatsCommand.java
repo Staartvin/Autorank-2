@@ -8,10 +8,9 @@ import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-public class SyncStatsCommand extends AutorankCommand implements CommandExecutor {
+public class SyncStatsCommand extends AutorankCommand {
 
 	private final Autorank plugin;
 
@@ -19,7 +18,7 @@ public class SyncStatsCommand extends AutorankCommand implements CommandExecutor
 		this.setUsage("/ar syncstats");
 		this.setDesc("Sync Autorank's time to Stats' time.");
 		this.setPermission("autorank.syncstats");
-		
+
 		plugin = instance;
 	}
 

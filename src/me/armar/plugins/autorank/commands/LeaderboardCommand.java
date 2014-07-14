@@ -4,10 +4,9 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-public class LeaderboardCommand extends AutorankCommand implements CommandExecutor {
+public class LeaderboardCommand extends AutorankCommand {
 
 	private final Autorank plugin;
 
@@ -15,7 +14,7 @@ public class LeaderboardCommand extends AutorankCommand implements CommandExecut
 		this.setUsage("/ar leaderboard");
 		this.setDesc("Show the leaderboard.");
 		this.setPermission("autorank.leaderboard");
-		
+
 		plugin = instance;
 	}
 
@@ -26,6 +25,11 @@ public class LeaderboardCommand extends AutorankCommand implements CommandExecut
 		if (!plugin.getCommandsManager().hasPermission("autorank.leaderboard",
 				sender)) {
 			return true;
+		}
+		
+		if (args.length > 1 && args[1].equalsIgnoreCase("force")) {
+			// We should force to update the leaderboard first
+			plugin.getLeaderboard().updateLeaderboard();
 		}
 
 		plugin.getLeaderboard().sendLeaderboard(sender);

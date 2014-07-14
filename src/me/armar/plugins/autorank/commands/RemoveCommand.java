@@ -10,10 +10,9 @@ import me.armar.plugins.autorank.util.AutorankTools.Time;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-public class RemoveCommand extends AutorankCommand implements CommandExecutor {
+public class RemoveCommand extends AutorankCommand {
 
 	private final Autorank plugin;
 
@@ -21,7 +20,7 @@ public class RemoveCommand extends AutorankCommand implements CommandExecutor {
 		this.setUsage("/ar remove [player] [value]");
 		this.setDesc("Remove [value] from [player]'s time.");
 		this.setPermission("autorank.remove");
-		
+
 		plugin = instance;
 	}
 

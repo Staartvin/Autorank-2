@@ -8,11 +8,10 @@ import me.armar.plugins.autorank.util.AutorankTools.Time;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class GlobalCheckCommand extends AutorankCommand implements CommandExecutor {
+public class GlobalCheckCommand extends AutorankCommand {
 
 	private final Autorank plugin;
 
@@ -20,7 +19,7 @@ public class GlobalCheckCommand extends AutorankCommand implements CommandExecut
 		this.setUsage("/ar gcheck [player]");
 		this.setDesc("Check [player]'s global playtime.");
 		this.setPermission("autorank.check");
-		
+
 		plugin = instance;
 	}
 

@@ -8,10 +8,9 @@ import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-public class SyncCommand extends AutorankCommand implements CommandExecutor {
+public class SyncCommand extends AutorankCommand {
 
 	private final Autorank plugin;
 
@@ -19,7 +18,7 @@ public class SyncCommand extends AutorankCommand implements CommandExecutor {
 		this.setUsage("/ar sync");
 		this.setDesc("Sync MySQL database with server (Use only once per server).");
 		this.setPermission("autorank.sync");
-		
+
 		plugin = instance;
 	}
 

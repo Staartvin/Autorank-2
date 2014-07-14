@@ -6,10 +6,9 @@ import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
 
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-public class ReloadCommand extends AutorankCommand implements CommandExecutor {
+public class ReloadCommand extends AutorankCommand {
 
 	private final Autorank plugin;
 
@@ -17,7 +16,7 @@ public class ReloadCommand extends AutorankCommand implements CommandExecutor {
 		this.setUsage("/ar reload");
 		this.setDesc("Reload Autorank.");
 		this.setPermission("autorank.reload");
-		
+
 		plugin = instance;
 	}
 

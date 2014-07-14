@@ -14,11 +14,10 @@ import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class CompleteCommand extends AutorankCommand implements CommandExecutor {
+public class CompleteCommand extends AutorankCommand {
 
 	private final Autorank plugin;
 
@@ -26,7 +25,7 @@ public class CompleteCommand extends AutorankCommand implements CommandExecutor 
 		this.setUsage("/ar complete #");
 		this.setDesc("Complete a requirement at this moment");
 		this.setPermission("autorank.complete");
-		
+
 		plugin = instance;
 	}
 

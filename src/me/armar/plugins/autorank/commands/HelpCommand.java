@@ -9,10 +9,9 @@ import me.armar.plugins.autorank.language.Lang;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-public class HelpCommand extends AutorankCommand implements CommandExecutor {
+public class HelpCommand extends AutorankCommand {
 
 	private final Autorank plugin;
 
@@ -55,9 +54,9 @@ public class HelpCommand extends AutorankCommand implements CommandExecutor {
 			// If sender is OP then all commands are available, no need to refactor.
 			if (!sender.isOp()) {
 
-				List<AutorankCommand> newList = new ArrayList<AutorankCommand>();
+				final List<AutorankCommand> newList = new ArrayList<AutorankCommand>();
 
-				for (AutorankCommand cmd : commands) {
+				for (final AutorankCommand cmd : commands) {
 					// Check if player has permission to do this, before presenting this command
 					if (sender.hasPermission(cmd.getPermission())) {
 						newList.add(cmd);
@@ -68,10 +67,11 @@ public class HelpCommand extends AutorankCommand implements CommandExecutor {
 			}
 		}
 
-		int listSize = commands.size();
+		final int listSize = commands.size();
 
 		// Don't show more than 6 commands per page
-		int maxPages = (int) Math.ceil(listSize / 6D);
+		// (Does she want the D?)
+		final int maxPages = (int) Math.ceil(listSize / 6D);
 
 		if (page > maxPages || page == 0)
 			page = maxPages;
@@ -80,7 +80,7 @@ public class HelpCommand extends AutorankCommand implements CommandExecutor {
 		int end = 6;
 
 		if (page != 1) {
-			int pageDifference = page - 1;
+			final int pageDifference = page - 1;
 
 			// Because we need 7, not 6.
 			start += 1;
@@ -96,7 +96,7 @@ public class HelpCommand extends AutorankCommand implements CommandExecutor {
 			if (i >= listSize)
 				break;
 
-			AutorankCommand command = (AutorankCommand) commands.get(i);
+			final AutorankCommand command = commands.get(i);
 
 			sender.sendMessage(ChatColor.AQUA + command.getUsage()
 					+ ChatColor.GRAY + " - " + command.getDescription());

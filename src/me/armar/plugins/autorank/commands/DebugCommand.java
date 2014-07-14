@@ -5,10 +5,9 @@ import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-public class DebugCommand extends AutorankCommand implements CommandExecutor {
+public class DebugCommand extends AutorankCommand {
 
 	private final Autorank plugin;
 
@@ -16,7 +15,7 @@ public class DebugCommand extends AutorankCommand implements CommandExecutor {
 		this.setUsage("/ar debug");
 		this.setDesc("Shows debug information.");
 		this.setPermission("autorank.debug");
-		
+
 		plugin = instance;
 	}
 

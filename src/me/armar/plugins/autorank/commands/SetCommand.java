@@ -10,10 +10,9 @@ import me.armar.plugins.autorank.util.AutorankTools.Time;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-public class SetCommand extends AutorankCommand implements CommandExecutor {
+public class SetCommand extends AutorankCommand {
 
 	private final Autorank plugin;
 
@@ -21,7 +20,7 @@ public class SetCommand extends AutorankCommand implements CommandExecutor {
 		this.setUsage("/ar set [player] [value]");
 		this.setDesc("Set [player]'s time to [value].");
 		this.setPermission("autorank.set.other");
-		
+
 		plugin = instance;
 	}
 
@@ -70,6 +69,8 @@ public class SetCommand extends AutorankCommand implements CommandExecutor {
 			}
 
 			final UUID uuid = UUIDManager.getUUIDFromPlayer(args[1]);
+			
+			//System.out.print("Name of UUID: " + UUIDManager.getPlayerFromUUID(UUID.fromString("fc914960-7aa1-3ae2-a3ee-70f5ac1e81e5")));
 
 			if (uuid == null) {
 				sender.sendMessage(Lang.UNKNOWN_PLAYER.getConfigValue(args[1]));

@@ -5,10 +5,9 @@ import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-public class ConvertUUIDCommand extends AutorankCommand implements CommandExecutor {
+public class ConvertUUIDCommand extends AutorankCommand {
 
 	private final Autorank plugin;
 
@@ -16,7 +15,7 @@ public class ConvertUUIDCommand extends AutorankCommand implements CommandExecut
 		this.setUsage("/ar convert <file>");
 		this.setDesc("Convert a file to UUID format.");
 		this.setPermission("autorank.convert.data");
-		
+
 		plugin = instance;
 	}
 

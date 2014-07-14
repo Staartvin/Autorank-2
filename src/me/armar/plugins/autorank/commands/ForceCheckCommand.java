@@ -7,11 +7,10 @@ import me.armar.plugins.autorank.util.AutorankTools;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class ForceCheckCommand extends AutorankCommand implements CommandExecutor {
+public class ForceCheckCommand extends AutorankCommand {
 
 	private final Autorank plugin;
 
@@ -19,7 +18,7 @@ public class ForceCheckCommand extends AutorankCommand implements CommandExecuto
 		this.setUsage("/ar forcecheck <player>");
 		this.setDesc("Do a manual silent check.");
 		this.setPermission("autorank.forcecheck");
-		
+
 		plugin = instance;
 	}
 

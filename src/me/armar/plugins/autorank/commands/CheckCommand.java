@@ -15,11 +15,10 @@ import me.armar.plugins.autorank.util.AutorankTools.Time;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class CheckCommand extends AutorankCommand implements CommandExecutor {
+public class CheckCommand extends AutorankCommand {
 
 	private final Autorank plugin;
 
@@ -27,7 +26,7 @@ public class CheckCommand extends AutorankCommand implements CommandExecutor {
 		this.setUsage("/ar check [player]");
 		this.setDesc("Check [player]'s status");
 		this.setPermission("autorank.check");
-		
+
 		plugin = instance;
 	}
 
@@ -282,7 +281,7 @@ public class CheckCommand extends AutorankCommand implements CommandExecutor {
 
 		if (plugin.getRequirementHandler().hasCompletedRank(
 				player.getUniqueId(), nextRankChange.getRankFrom())) {
-			reqMessage2 = " but has no rankup.";
+			reqMessage2 = " but has no (new) rankup.";
 		} else {
 			reqMessage2 = Lang.RANKED_UP_NOW.getConfigValue();
 		}
