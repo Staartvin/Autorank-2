@@ -98,6 +98,7 @@ public class Updater {
 		 */
 		UPDATE_AVAILABLE
 	}
+
 	private class UpdateRunnable implements Runnable {
 
 		@Override
@@ -127,6 +128,7 @@ public class Updater {
 			}
 		}
 	}
+
 	/**
 	 * Allows the dev to specify the type of update that will be run.
 	 */
@@ -147,6 +149,7 @@ public class Updater {
 		 */
 		NO_VERSION_CHECK
 	}
+
 	private static final int BYTE_SIZE = 1024; // Used for downloading files
 	private static final String HOST = "https://api.curseforge.com"; // Slugs will be appended to this to get to the project's RSS feed
 	private static final String LINK_VALUE = "downloadUrl"; // Gets remote file's download link

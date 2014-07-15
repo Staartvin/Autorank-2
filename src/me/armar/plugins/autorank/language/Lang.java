@@ -258,6 +258,7 @@ public enum Lang {
 	WORLD_REQUIREMENT("world-requirement", "Be in {0}."), ;
 
 	private static FileConfiguration LANG;
+
 	/**
 	 * Set the {@code FileConfiguration} to use.
 	 * 

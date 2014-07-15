@@ -18,6 +18,7 @@ public class CheckCommandEvent extends Event implements Cancellable {
 	public static HandlerList getHandlerList() {
 		return handlers;
 	}
+
 	private boolean isCancelled;
 
 	private final Player player;

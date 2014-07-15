@@ -9,6 +9,7 @@ public class UpdateHandler {
 	private final Autorank plugin;
 
 	private Updater updater;
+
 	public UpdateHandler(final Autorank instance) {
 		plugin = instance;
 	}

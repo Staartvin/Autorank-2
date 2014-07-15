@@ -29,6 +29,7 @@ import com.google.common.collect.ImmutableList;
 public class UUIDFetcher implements Callable<Map<String, UUID>> {
 	private static final String PROFILE_URL = "https://api.mojang.com/profiles/minecraft";
 	private static final double PROFILES_PER_REQUEST = 100;
+
 	private static HttpURLConnection createConnection() throws Exception {
 		final URL url = new URL(PROFILE_URL);
 		final HttpURLConnection connection = (HttpURLConnection) url
@@ -40,6 +41,7 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
 		connection.setDoOutput(true);
 		return connection;
 	}
+
 	public static UUID fromBytes(final byte[] array) {
 		if (array.length != 16) {
 			throw new IllegalArgumentException("Illegal byte array length: "
@@ -50,6 +52,7 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
 		final long leastSignificant = byteBuffer.getLong();
 		return new UUID(mostSignificant, leastSignificant);
 	}
+
 	private static UUID getUUID(final String id) {
 		return UUID.fromString(id.substring(0, 8) + "-" + id.substring(8, 12)
 				+ "-" + id.substring(12, 16) + "-" + id.substring(16, 20) + "-"

@@ -59,6 +59,7 @@ public class Leaderboard {
 
 		return sortedMap;
 	}
+
 	private long lastUpdatedTime;
 	private String layout = "&6&r | &b&p - &7&d day(s), &h hour(s) and &m minute(s).";
 	private int leaderboardLength = 10;

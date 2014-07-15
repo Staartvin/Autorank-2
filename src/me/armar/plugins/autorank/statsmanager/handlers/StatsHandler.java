@@ -9,6 +9,7 @@ public class StatsHandler implements StatsPlugin {
 	public static enum statTypes {
 		BLOCKS_BROKEN, BLOCKS_MOVED, BLOCKS_PLACED, DAMAGE_TAKEN, FISH_CAUGHT, ITEMS_CRAFTED, MOBS_KILLED, PLAYERS_KILLED, TIME_PLAYED, TIMES_SHEARED, TOTAL_BLOCKS_BROKEN, TOTAL_BLOCKS_PLACED, VOTES
 	}
+
 	private final Autorank plugin;
 
 	private final StatsAPIHandler statsApi;;

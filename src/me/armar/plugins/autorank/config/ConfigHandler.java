@@ -22,6 +22,7 @@ public class ConfigHandler {
 	public enum MySQLOptions {
 		DATABASE, HOSTNAME, PASSWORD, TABLE, USERNAME
 	}
+
 	private final SimpleYamlConfiguration advancedConfig;
 	private final Autorank plugin;
 

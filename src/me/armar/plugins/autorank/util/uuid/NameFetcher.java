@@ -28,6 +28,7 @@ import com.google.common.collect.ImmutableList;
  */
 public class NameFetcher implements Callable<Map<UUID, String>> {
 	private static final String PROFILE_URL = "https://sessionserver.mojang.com/session/minecraft/profile/";
+
 	public static String fromStream(final InputStream in) throws IOException {
 		final BufferedReader reader = new BufferedReader(new InputStreamReader(
 				in));
@@ -42,6 +43,7 @@ public class NameFetcher implements Callable<Map<UUID, String>> {
 		}
 		return out.toString();
 	}
+
 	private final JSONParser jsonParser = new JSONParser();
 
 	private final List<UUID> uuids;

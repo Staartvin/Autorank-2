@@ -166,8 +166,8 @@ public class API {
 		final List<String> groups = getPermissionGroups(player);
 
 		if (groups.size() < 1) {
-			throw new IllegalArgumentException("Groups of player '" 
-					+ player.getName() + "' are empty."); 
+			throw new IllegalArgumentException("Groups of player '"
+					+ player.getName() + "' are empty.");
 		}
 
 		return groups.get(0);
@@ -198,7 +198,7 @@ public class API {
 	 */
 	public void registerRequirement(final String uniqueName,
 			final Class<? extends Requirement> clazz) {
-		plugin.getLogger().info("Loaded custom requirement: " + uniqueName); 
+		plugin.getLogger().info("Loaded custom requirement: " + uniqueName);
 
 		plugin.registerRequirement(uniqueName, clazz);
 	}
@@ -215,7 +215,7 @@ public class API {
 	 */
 	public void registerResult(final String uniqueName,
 			final Class<? extends Result> clazz) {
-		plugin.getLogger().info("Loaded custom result: " + uniqueName); 
+		plugin.getLogger().info("Loaded custom result: " + uniqueName);
 
 		plugin.registerResult(uniqueName, clazz);
 	}
