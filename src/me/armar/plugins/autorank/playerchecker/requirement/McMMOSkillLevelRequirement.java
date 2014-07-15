@@ -12,29 +12,6 @@ public class McMMOSkillLevelRequirement extends Requirement {
 	private String skillName = "all";
 
 	@Override
-	public boolean setOptions(final String[] options) {
-		if (options.length > 0) {
-			skillLevel = Integer.parseInt(options[0]);
-		}
-		if (options.length > 1) {
-			skillName = options[1];
-		}
-
-		return true;
-	}
-
-	@Override
-	public boolean meetsRequirement(final Player player) {
-
-		final McMMOHandler handler = (McMMOHandler) this.getAutorank()
-				.getDependencyManager().getDependency(dependency.MCMMO);
-
-		final int level = handler.getSkillLevel(player, skillName);
-
-		return level > 0 && level >= skillLevel;
-	}
-
-	@Override
 	public String getDescription() {
 		String skill = skillName;
 
@@ -55,5 +32,28 @@ public class McMMOSkillLevelRequirement extends Requirement {
 
 		progress = progress.concat(level + "/" + skillLevel);
 		return progress;
+	}
+
+	@Override
+	public boolean meetsRequirement(final Player player) {
+
+		final McMMOHandler handler = (McMMOHandler) this.getAutorank()
+				.getDependencyManager().getDependency(dependency.MCMMO);
+
+		final int level = handler.getSkillLevel(player, skillName);
+
+		return level > 0 && level >= skillLevel;
+	}
+
+	@Override
+	public boolean setOptions(final String[] options) {
+		if (options.length > 0) {
+			skillLevel = Integer.parseInt(options[0]);
+		}
+		if (options.length > 1) {
+			skillName = options[1];
+		}
+
+		return true;
 	}
 }

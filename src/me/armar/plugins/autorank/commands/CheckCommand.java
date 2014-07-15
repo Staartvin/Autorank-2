@@ -30,65 +30,6 @@ public class CheckCommand extends AutorankCommand {
 		plugin = instance;
 	}
 
-	@Override
-	public boolean onCommand(final CommandSender sender, final Command cmd,
-			final String label, final String[] args) {
-
-		// This is a local check. It will not show you the database numbers
-		if (args.length > 1) {
-
-			if (!plugin.getCommandsManager().hasPermission(
-					"autorank.checkothers", sender)) {
-				return true;
-			}
-
-			@SuppressWarnings("deprecation")
-			final Player player = plugin.getServer().getPlayer(args[1]);
-			if (player == null) {
-
-				final int time = plugin.getPlaytimes().getTimeOfPlayer(args[1]);
-
-				if (time <= 0) {
-					sender.sendMessage(Lang.PLAYER_IS_INVALID
-							.getConfigValue(args[1]));
-					return true;
-				}
-
-				AutorankTools.sendColoredMessage(
-						sender,
-						args[1]
-								+ " has played for "
-								+ AutorankTools
-										.timeToString(time, Time.SECONDS));
-			} else {
-				if (AutorankTools.isExcluded(player)) {
-					sender.sendMessage(ChatColor.RED
-							+ Lang.PLAYER_IS_EXCLUDED.getConfigValue(args[1]));
-					return true;
-				}
-				check(sender, player);
-			}
-		} else if (sender instanceof Player) {
-			if (!plugin.getCommandsManager().hasPermission("autorank.check",
-					sender)) {
-				return true;
-			}
-
-			if (AutorankTools.isExcluded((Player) sender)) {
-				sender.sendMessage(ChatColor.RED
-						+ Lang.PLAYER_IS_EXCLUDED.getConfigValue(sender
-								.getName()));
-				return true;
-			}
-			final Player player = (Player) sender;
-			check(sender, player);
-		} else {
-			AutorankTools.sendColoredMessage(sender,
-					Lang.CANNOT_CHECK_CONSOLE.getConfigValue());
-		}
-		return true;
-	}
-
 	public void check(final CommandSender sender, final Player player) {
 		// Call event to let other plugins know that a player wants to check itself.
 
@@ -339,5 +280,64 @@ public class CheckCommand extends AutorankCommand {
 
 		return messages;
 
+	}
+
+	@Override
+	public boolean onCommand(final CommandSender sender, final Command cmd,
+			final String label, final String[] args) {
+
+		// This is a local check. It will not show you the database numbers
+		if (args.length > 1) {
+
+			if (!plugin.getCommandsManager().hasPermission(
+					"autorank.checkothers", sender)) {
+				return true;
+			}
+
+			@SuppressWarnings("deprecation")
+			final Player player = plugin.getServer().getPlayer(args[1]);
+			if (player == null) {
+
+				final int time = plugin.getPlaytimes().getTimeOfPlayer(args[1]);
+
+				if (time <= 0) {
+					sender.sendMessage(Lang.PLAYER_IS_INVALID
+							.getConfigValue(args[1]));
+					return true;
+				}
+
+				AutorankTools.sendColoredMessage(
+						sender,
+						args[1]
+								+ " has played for "
+								+ AutorankTools
+										.timeToString(time, Time.SECONDS));
+			} else {
+				if (AutorankTools.isExcluded(player)) {
+					sender.sendMessage(ChatColor.RED
+							+ Lang.PLAYER_IS_EXCLUDED.getConfigValue(args[1]));
+					return true;
+				}
+				check(sender, player);
+			}
+		} else if (sender instanceof Player) {
+			if (!plugin.getCommandsManager().hasPermission("autorank.check",
+					sender)) {
+				return true;
+			}
+
+			if (AutorankTools.isExcluded((Player) sender)) {
+				sender.sendMessage(ChatColor.RED
+						+ Lang.PLAYER_IS_EXCLUDED.getConfigValue(sender
+								.getName()));
+				return true;
+			}
+			final Player player = (Player) sender;
+			check(sender, player);
+		} else {
+			AutorankTools.sendColoredMessage(sender,
+					Lang.CANNOT_CHECK_CONSOLE.getConfigValue());
+		}
+		return true;
 	}
 }

@@ -8,12 +8,12 @@ import java.sql.Statement;
 
 public class SQLDataStorage {
 
-	private final String hostname;
-	private final String username;
-	private final String password;
-	private final String database;
-
 	private Connection conn = null;
+	private final String database;
+	private final String hostname;
+	private final String password;
+
+	private final String username;
 
 	/**
 	 * Create a new MySQL Connection
@@ -29,6 +29,34 @@ public class SQLDataStorage {
 		this.username = username;
 		this.password = password;
 		this.database = database;
+	}
+
+	/**
+	 * Open a new MySQL connection
+	 * 
+	 * @return true if connection was successfully set up.
+	 */
+	public boolean connect() {
+		try {
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+
+			//System.out.println("jdbc:mysql://" + hostname + "/" + database
+			//	+ "?" + "user=" + username + "&password=" + password);
+
+			conn = DriverManager.getConnection("jdbc:mysql://" + hostname + "/"
+					+ database + "?" + "user=" + username + "&password="
+					+ password);
+
+		} catch (final SQLException ex) {
+			System.out.println("SQLDataStorage.connect");
+			System.out.println("SQLException: " + ex.getMessage());
+			System.out.println("SQLState: " + ex.getSQLState());
+			System.out.println("VendorError: " + ex.getErrorCode());
+		} catch (final Exception e) {
+
+			e.printStackTrace();
+		}
+		return conn != null;
 	}
 
 	/**
@@ -112,34 +140,6 @@ public class SQLDataStorage {
 			} */
 		}
 		return rs;
-	}
-
-	/**
-	 * Open a new MySQL connection
-	 * 
-	 * @return true if connection was successfully set up.
-	 */
-	public boolean connect() {
-		try {
-			Class.forName("com.mysql.jdbc.Driver").newInstance();
-
-			//System.out.println("jdbc:mysql://" + hostname + "/" + database
-			//	+ "?" + "user=" + username + "&password=" + password);
-
-			conn = DriverManager.getConnection("jdbc:mysql://" + hostname + "/"
-					+ database + "?" + "user=" + username + "&password="
-					+ password);
-
-		} catch (final SQLException ex) {
-			System.out.println("SQLDataStorage.connect");
-			System.out.println("SQLException: " + ex.getMessage());
-			System.out.println("SQLState: " + ex.getSQLState());
-			System.out.println("VendorError: " + ex.getErrorCode());
-		} catch (final Exception e) {
-
-			e.printStackTrace();
-		}
-		return conn != null;
 	}
 
 	/**

@@ -19,11 +19,32 @@ public class StatsPluginManager {
 
 	private final Autorank plugin;
 
+	private StatsPlugin statsPlugin;
+
 	public StatsPluginManager(final Autorank instance) {
 		plugin = instance;
 	}
 
-	private StatsPlugin statsPlugin;
+	public boolean findStats() {
+		final Plugin x = plugin.getServer().getPluginManager()
+				.getPlugin("Stats");
+		// Main == Stats main class
+		if (x != null && x instanceof JavaPlugin) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Get the current stats plugin running on this server
+	 * 
+	 * @return returns the JavaPlugin that is responsible for stats. Null if
+	 *         there is none.
+	 */
+	public StatsPlugin getStatsPlugin() {
+		return statsPlugin;
+	}
 
 	public void searchStatsPlugin() {
 		if (findStats()) {
@@ -54,26 +75,5 @@ public class StatsPluginManager {
 					"No stats plugin found! Most requirements cannot be used!");
 
 		}
-	}
-
-	public boolean findStats() {
-		final Plugin x = plugin.getServer().getPluginManager()
-				.getPlugin("Stats");
-		// Main == Stats main class
-		if (x != null && x instanceof JavaPlugin) {
-			return true;
-		}
-
-		return false;
-	}
-
-	/**
-	 * Get the current stats plugin running on this server
-	 * 
-	 * @return returns the JavaPlugin that is responsible for stats. Null if
-	 *         there is none.
-	 */
-	public StatsPlugin getStatsPlugin() {
-		return statsPlugin;
 	}
 }

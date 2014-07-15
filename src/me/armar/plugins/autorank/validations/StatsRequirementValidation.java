@@ -14,6 +14,31 @@ public class StatsRequirementValidation {
 		plugin = instance;
 	}
 
+	private boolean requiresStats(final String req) {
+		final String correctName = AutorankTools.getCorrectName(req);
+
+		if (correctName == null) {
+			return false;
+		}
+
+		if (correctName.equalsIgnoreCase("blocks broken")) {
+			return true;
+		} else if (correctName.equalsIgnoreCase("blocks placed")) {
+			return true;
+		} else if (correctName.equalsIgnoreCase("votes")) {
+			return true;
+		} else if (correctName.equalsIgnoreCase("damage taken")) {
+			return true;
+		} else if (correctName.equalsIgnoreCase("mobs killed")) {
+			return true;
+		} else if (correctName.equalsIgnoreCase("players killed")) {
+			return true;
+		} else if (correctName.equalsIgnoreCase("blocks moved")) {
+			return true;
+		} else
+			return false;
+	}
+
 	/**
 	 * Checks if there are Stats required requirements and if Stats is required.
 	 * When Stats required requirements are found but Stats is not, it will warn
@@ -49,30 +74,5 @@ public class StatsRequirementValidation {
 		}
 
 		return true;
-	}
-
-	private boolean requiresStats(final String req) {
-		final String correctName = AutorankTools.getCorrectName(req);
-
-		if (correctName == null) {
-			return false;
-		}
-
-		if (correctName.equalsIgnoreCase("blocks broken")) {
-			return true;
-		} else if (correctName.equalsIgnoreCase("blocks placed")) {
-			return true;
-		} else if (correctName.equalsIgnoreCase("votes")) {
-			return true;
-		} else if (correctName.equalsIgnoreCase("damage taken")) {
-			return true;
-		} else if (correctName.equalsIgnoreCase("mobs killed")) {
-			return true;
-		} else if (correctName.equalsIgnoreCase("players killed")) {
-			return true;
-		} else if (correctName.equalsIgnoreCase("blocks moved")) {
-			return true;
-		} else
-			return false;
 	}
 }

@@ -17,21 +17,11 @@ import org.royaldev.royalcommands.RoyalCommands;
  */
 public class RoyalCommandsHandler implements DependencyHandler {
 
-	private final Autorank plugin;
 	private RoyalCommands api;
+	private final Autorank plugin;
 
 	public RoyalCommandsHandler(final Autorank instance) {
 		plugin = instance;
-	}
-
-	public boolean isAFK(final Player player) {
-		if (!isAvailable())
-			return false;
-
-		if (!plugin.getConfigHandler().useAFKIntegration())
-			return false;
-
-		return api.getAPI().getPlayerAPI().isAfk(player);
 	}
 
 	/* (non-Javadoc)
@@ -48,6 +38,34 @@ public class RoyalCommandsHandler implements DependencyHandler {
 		}
 
 		return plugin;
+	}
+
+	public boolean isAFK(final Player player) {
+		if (!isAvailable())
+			return false;
+
+		if (!plugin.getConfigHandler().useAFKIntegration())
+			return false;
+
+		return api.getAPI().getPlayerAPI().isAfk(player);
+	}
+
+	/* (non-Javadoc)
+	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#isAvailable()
+	 */
+	@Override
+	public boolean isAvailable() {
+		return api != null;
+	}
+
+	/* (non-Javadoc)
+	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#isInstalled()
+	 */
+	@Override
+	public boolean isInstalled() {
+		final RoyalCommands plugin = (RoyalCommands) get();
+
+		return plugin != null && plugin.isEnabled();
 	}
 
 	/* (non-Javadoc)
@@ -77,23 +95,5 @@ public class RoyalCommandsHandler implements DependencyHandler {
 				return false;
 			}
 		}
-	}
-
-	/* (non-Javadoc)
-	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#isInstalled()
-	 */
-	@Override
-	public boolean isInstalled() {
-		final RoyalCommands plugin = (RoyalCommands) get();
-
-		return plugin != null && plugin.isEnabled();
-	}
-
-	/* (non-Javadoc)
-	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#isAvailable()
-	 */
-	@Override
-	public boolean isAvailable() {
-		return api != null;
 	}
 }

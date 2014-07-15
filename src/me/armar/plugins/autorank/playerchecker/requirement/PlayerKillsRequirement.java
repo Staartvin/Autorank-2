@@ -10,25 +10,6 @@ public class PlayerKillsRequirement extends Requirement {
 	private int totalPlayersKilled = 0;
 
 	@Override
-	public boolean setOptions(final String[] options) {
-		try {
-			totalPlayersKilled = Integer.parseInt(options[0]);
-			return true;
-		} catch (final Exception e) {
-			totalPlayersKilled = 0;
-			return false;
-		}
-	}
-
-	@Override
-	public boolean meetsRequirement(final Player player) {
-		return getStatsPlugin().isEnabled()
-				&& getStatsPlugin().getNormalStat(
-						StatsHandler.statTypes.PLAYERS_KILLED.toString(),
-						player.getName(), null) >= totalPlayersKilled;
-	}
-
-	@Override
 	public String getDescription() {
 		return Lang.PLAYER_KILLS_REQUIREMENT
 				.getConfigValue(new String[] { totalPlayersKilled + "" });
@@ -42,5 +23,24 @@ public class PlayerKillsRequirement extends Requirement {
 				player.getName(), null)
 				+ "/" + totalPlayersKilled);
 		return progress;
+	}
+
+	@Override
+	public boolean meetsRequirement(final Player player) {
+		return getStatsPlugin().isEnabled()
+				&& getStatsPlugin().getNormalStat(
+						StatsHandler.statTypes.PLAYERS_KILLED.toString(),
+						player.getName(), null) >= totalPlayersKilled;
+	}
+
+	@Override
+	public boolean setOptions(final String[] options) {
+		try {
+			totalPlayersKilled = Integer.parseInt(options[0]);
+			return true;
+		} catch (final Exception e) {
+			totalPlayersKilled = 0;
+			return false;
+		}
 	}
 }

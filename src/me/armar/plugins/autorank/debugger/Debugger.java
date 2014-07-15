@@ -24,11 +24,11 @@ import me.armar.plugins.autorank.Autorank;
  */
 public class Debugger {
 
-	private final Autorank plugin;
 	private final static DateFormat dateFormat = new SimpleDateFormat(
 			"yyyyMMddHHmmss");
 	private final static DateFormat humanDateFormat = new SimpleDateFormat(
 			"yyyy-MM-dd HH:mm:ss");
+	private final Autorank plugin;
 
 	public Debugger(final Autorank instance) {
 		plugin = instance;

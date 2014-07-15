@@ -11,52 +11,11 @@ public class BlocksMovedRequirement extends Requirement {
 	private int movementType = 0;
 
 	@Override
-	public boolean setOptions(final String[] options) {
-		try {
-			if (options.length > 0) {
-				blocksMoved = Integer.parseInt(options[0].trim());
-			}
-			if (options.length > 1) {
-				movementType = Integer.parseInt(options[1].trim());
-			}
-		} catch (final Exception e) {
-			blocksMoved = 0;
-			return false;
-		}
-
-		return true;
-
-	}
-
-	@Override
-	public boolean meetsRequirement(final Player player) {
-
-		final boolean enabled = getStatsPlugin().isEnabled();
-
-		boolean sufficient = false;
-		sufficient = this.getStatsPlugin().getNormalStat(
-				StatsHandler.statTypes.BLOCKS_MOVED.toString(),
-				player.getName(), player.getWorld().getName(), movementType) > blocksMoved;
-
-		return enabled && sufficient;
-	}
-
-	@Override
 	public String getDescription() {
 		final String moveType = getMovementString();
 
 		return Lang.BLOCKS_MOVED_REQUIREMENT.getConfigValue(new String[] {
 				blocksMoved + " blocks", moveType });
-	}
-
-	@Override
-	public String getProgress(final Player player) {
-		String progress = "";
-		progress = progress.concat(getStatsPlugin().getNormalStat(
-				StatsHandler.statTypes.BLOCKS_MOVED.toString(),
-				player.getName(), player.getWorld().getName(), movementType)
-				+ "/" + blocksMoved + " (" + getMovementString() + ")");
-		return progress;
 	}
 
 	private String getMovementString() {
@@ -76,5 +35,46 @@ public class BlocksMovedRequirement extends Requirement {
 		default:
 			return "by foot";
 		}
+	}
+
+	@Override
+	public String getProgress(final Player player) {
+		String progress = "";
+		progress = progress.concat(getStatsPlugin().getNormalStat(
+				StatsHandler.statTypes.BLOCKS_MOVED.toString(),
+				player.getName(), player.getWorld().getName(), movementType)
+				+ "/" + blocksMoved + " (" + getMovementString() + ")");
+		return progress;
+	}
+
+	@Override
+	public boolean meetsRequirement(final Player player) {
+
+		final boolean enabled = getStatsPlugin().isEnabled();
+
+		boolean sufficient = false;
+		sufficient = this.getStatsPlugin().getNormalStat(
+				StatsHandler.statTypes.BLOCKS_MOVED.toString(),
+				player.getName(), player.getWorld().getName(), movementType) > blocksMoved;
+
+		return enabled && sufficient;
+	}
+
+	@Override
+	public boolean setOptions(final String[] options) {
+		try {
+			if (options.length > 0) {
+				blocksMoved = Integer.parseInt(options[0].trim());
+			}
+			if (options.length > 1) {
+				movementType = Integer.parseInt(options[1].trim());
+			}
+		} catch (final Exception e) {
+			blocksMoved = 0;
+			return false;
+		}
+
+		return true;
+
 	}
 }

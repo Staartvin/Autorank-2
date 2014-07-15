@@ -34,6 +34,25 @@ public class LanguageHandler {
 		plugin.getLogger().info("Language file loaded (lang.yml)");
 	}
 
+	public FileConfiguration getConfig() {
+		if (languageConfig == null) {
+			this.reloadConfig();
+		}
+		return languageConfig;
+	}
+
+	public void loadConfig() {
+
+		languageConfig.options().header("Language file");
+
+		for (final Lang value : Lang.values()) {
+			languageConfig.addDefault(value.getPath(), value.getDefault());
+		}
+
+		languageConfig.options().copyDefaults(true);
+		saveConfig();
+	}
+
 	@SuppressWarnings("deprecation")
 	public void reloadConfig() {
 		if (languageConfigFile == null) {
@@ -52,13 +71,6 @@ public class LanguageHandler {
 		}
 	}
 
-	public FileConfiguration getConfig() {
-		if (languageConfig == null) {
-			this.reloadConfig();
-		}
-		return languageConfig;
-	}
-
 	public void saveConfig() {
 		if (languageConfig == null || languageConfigFile == null) {
 			return;
@@ -69,17 +81,5 @@ public class LanguageHandler {
 			plugin.getLogger().log(Level.SEVERE,
 					"Could not save config to " + languageConfigFile, ex);
 		}
-	}
-
-	public void loadConfig() {
-
-		languageConfig.options().header("Language file");
-
-		for (final Lang value : Lang.values()) {
-			languageConfig.addDefault(value.getPath(), value.getDefault());
-		}
-
-		languageConfig.options().copyDefaults(true);
-		saveConfig();
 	}
 }

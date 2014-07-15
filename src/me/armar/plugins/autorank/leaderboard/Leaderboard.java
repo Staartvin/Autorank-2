@@ -31,11 +31,41 @@ import org.bukkit.command.CommandSender;
  */
 public class Leaderboard {
 
-	private String[] messages;
+	private static Map<UUID, Integer> sortByComparator(
+			final Map<UUID, Integer> unsortMap, final boolean order) {
+
+		final List<Entry<UUID, Integer>> list = new LinkedList<Entry<UUID, Integer>>(
+				unsortMap.entrySet());
+
+		// Sorting the list based on values
+		Collections.sort(list, new Comparator<Entry<UUID, Integer>>() {
+			@Override
+			public int compare(final Entry<UUID, Integer> o1,
+					final Entry<UUID, Integer> o2) {
+				if (order) {
+					return o1.getValue().compareTo(o2.getValue());
+				} else {
+					return o2.getValue().compareTo(o1.getValue());
+
+				}
+			}
+		});
+
+		// Maintaining insertion order with the help of LinkedList
+		final Map<UUID, Integer> sortedMap = new LinkedHashMap<UUID, Integer>();
+		for (final Entry<UUID, Integer> entry : list) {
+			sortedMap.put(entry.getKey(), entry.getValue());
+		}
+
+		return sortedMap;
+	}
 	private long lastUpdatedTime;
-	private final Autorank plugin;
-	private int leaderboardLength = 10;
 	private String layout = "&6&r | &b&p - &7&d day(s), &h hour(s) and &m minute(s).";
+	private int leaderboardLength = 10;
+	private String[] messages;
+	private final Autorank plugin;
+
+	private final double validTime = 10D; // In minutes
 
 	public Leaderboard(final Autorank plugin) {
 		this.plugin = plugin;
@@ -55,8 +85,27 @@ public class Leaderboard {
 				});
 	}
 
+	private Map<UUID, Integer> getSortedPlaytimes() {
+
+		final List<UUID> uuids = plugin.getPlaytimes().getUUIDKeys();
+
+		final HashMap<UUID, Integer> times = new HashMap<UUID, Integer>();
+
+		// Fill unsorted lists
+		for (int i = 0; i < uuids.size(); i++) {
+			times.put(uuids.get(i),
+			// We should use getTimeOfPlayer(), but that requires a lot of rewrites, so I'll leave it at the moment.
+					plugin.getPlaytimes().getLocalTime(uuids.get(i)));
+		}
+
+		// Sort all values
+		final Map<UUID, Integer> sortedMap = sortByComparator(times, false);
+
+		return sortedMap;
+	}
+
 	public void sendLeaderboard(final CommandSender sender) {
-		if (System.currentTimeMillis() - lastUpdatedTime > 600000
+		if (System.currentTimeMillis() - lastUpdatedTime > (60000 * validTime)
 				|| messages == null) {
 			// Update leaderboard because it is not valid anymore.
 			// Run async because it uses UUID lookup
@@ -81,7 +130,7 @@ public class Leaderboard {
 
 	}
 
-	private void updateLeaderboard() {
+	public void updateLeaderboard() {
 		plugin.debugMessage("Updating leaderboard...");
 
 		lastUpdatedTime = System.currentTimeMillis();
@@ -129,54 +178,6 @@ public class Leaderboard {
 		messages = stringList.toArray(new String[stringList.size()]);
 
 		//System.out.print("Took: " + (System.currentTimeMillis() - lastUpdatedTime)  + " ms."); 
-	}
-
-	private Map<UUID, Integer> getSortedPlaytimes() {
-
-		final List<UUID> uuids = plugin.getPlaytimes().getUUIDKeys();
-
-		final HashMap<UUID, Integer> times = new HashMap<UUID, Integer>();
-
-		// Fill unsorted lists
-		for (int i = 0; i < uuids.size(); i++) {
-			times.put(uuids.get(i),
-			// We should use getTimeOfPlayer(), but that requires a lot of rewrites, so I'll leave it at the moment.
-					plugin.getPlaytimes().getLocalTime(uuids.get(i)));
-		}
-
-		// Sort all values
-		final Map<UUID, Integer> sortedMap = sortByComparator(times, false);
-
-		return sortedMap;
-	}
-
-	private static Map<UUID, Integer> sortByComparator(
-			final Map<UUID, Integer> unsortMap, final boolean order) {
-
-		final List<Entry<UUID, Integer>> list = new LinkedList<Entry<UUID, Integer>>(
-				unsortMap.entrySet());
-
-		// Sorting the list based on values
-		Collections.sort(list, new Comparator<Entry<UUID, Integer>>() {
-			@Override
-			public int compare(final Entry<UUID, Integer> o1,
-					final Entry<UUID, Integer> o2) {
-				if (order) {
-					return o1.getValue().compareTo(o2.getValue());
-				} else {
-					return o2.getValue().compareTo(o1.getValue());
-
-				}
-			}
-		});
-
-		// Maintaining insertion order with the help of LinkedList
-		final Map<UUID, Integer> sortedMap = new LinkedHashMap<UUID, Integer>();
-		for (final Entry<UUID, Integer> entry : list) {
-			sortedMap.put(entry.getKey(), entry.getValue());
-		}
-
-		return sortedMap;
 	}
 
 }

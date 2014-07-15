@@ -18,9 +18,13 @@ public class RequirementCompleteEvent extends Event implements Cancellable {
 
 	private static final HandlerList handlers = new HandlerList();
 
-	private final Player player;
-	private final Requirement requirement;
+	public static HandlerList getHandlerList() {
+		return handlers;
+	}
 	private boolean isCancelled;
+	private final Player player;
+
+	private final Requirement requirement;
 
 	/**
 	 * Create a new RequirementCompleteEvent.
@@ -34,6 +38,11 @@ public class RequirementCompleteEvent extends Event implements Cancellable {
 		this.requirement = req;
 	}
 
+	@Override
+	public HandlerList getHandlers() {
+		return handlers;
+	}
+
 	/**
 	 * Gets the player involved in this event.
 	 * 
@@ -43,13 +52,13 @@ public class RequirementCompleteEvent extends Event implements Cancellable {
 		return player;
 	}
 
-	@Override
-	public HandlerList getHandlers() {
-		return handlers;
-	}
-
-	public static HandlerList getHandlerList() {
-		return handlers;
+	/**
+	 * Get the requirement that has been completed.
+	 * 
+	 * @return Requirement that has been completed.
+	 */
+	public Requirement getRequirement() {
+		return requirement;
 	}
 
 	/* (non-Javadoc)
@@ -66,14 +75,5 @@ public class RequirementCompleteEvent extends Event implements Cancellable {
 	@Override
 	public void setCancelled(final boolean cancel) {
 		isCancelled = cancel;
-	}
-
-	/**
-	 * Get the requirement that has been completed.
-	 * 
-	 * @return Requirement that has been completed.
-	 */
-	public Requirement getRequirement() {
-		return requirement;
 	}
 }

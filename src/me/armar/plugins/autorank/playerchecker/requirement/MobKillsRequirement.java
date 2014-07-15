@@ -8,31 +8,8 @@ import org.bukkit.entity.Player;
 
 public class MobKillsRequirement extends Requirement {
 
-	private int totalMobsKilled = 0;
 	private String mobType = null;
-
-	@Override
-	public boolean setOptions(final String[] options) {
-		try {
-			totalMobsKilled = Integer.parseInt(options[0]);
-
-			if (options.length > 1) {
-				mobType = options[1].trim().replace(" ", "_");
-			}
-			return true;
-		} catch (final Exception e) {
-			totalMobsKilled = 0;
-			return false;
-		}
-	}
-
-	@Override
-	public boolean meetsRequirement(final Player player) {
-		return getStatsPlugin().isEnabled()
-				&& getStatsPlugin().getNormalStat(
-						StatsHandler.statTypes.MOBS_KILLED.toString(),
-						player.getName(), null, mobType) >= totalMobsKilled;
-	}
+	private int totalMobsKilled = 0;
 
 	@Override
 	public String getDescription() {
@@ -57,5 +34,28 @@ public class MobKillsRequirement extends Requirement {
 				player.getName(), null, mobType)
 				+ "/" + totalMobsKilled);
 		return progress;
+	}
+
+	@Override
+	public boolean meetsRequirement(final Player player) {
+		return getStatsPlugin().isEnabled()
+				&& getStatsPlugin().getNormalStat(
+						StatsHandler.statTypes.MOBS_KILLED.toString(),
+						player.getName(), null, mobType) >= totalMobsKilled;
+	}
+
+	@Override
+	public boolean setOptions(final String[] options) {
+		try {
+			totalMobsKilled = Integer.parseInt(options[0]);
+
+			if (options.length > 1) {
+				mobType = options[1].trim().replace(" ", "_");
+			}
+			return true;
+		} catch (final Exception e) {
+			totalMobsKilled = 0;
+			return false;
+		}
 	}
 }

@@ -19,9 +19,9 @@ import org.bukkit.plugin.RegisteredServiceProvider;
  */
 public class VaultHandler implements DependencyHandler {
 
-	private final Autorank plugin;
-	private Vault api;
 	public static Economy economy = null;
+	private Vault api;
+	private final Autorank plugin;
 
 	public VaultHandler(final Autorank instance) {
 		plugin = instance;
@@ -41,6 +41,24 @@ public class VaultHandler implements DependencyHandler {
 		}
 
 		return plugin;
+	}
+
+	/* (non-Javadoc)
+	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#isAvailable()
+	 */
+	@Override
+	public boolean isAvailable() {
+		return api != null;
+	}
+
+	/* (non-Javadoc)
+	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#isInstalled()
+	 */
+	@Override
+	public boolean isInstalled() {
+		final Vault plugin = (Vault) get();
+
+		return plugin != null && plugin.isEnabled();
 	}
 
 	/* (non-Javadoc)
@@ -70,24 +88,6 @@ public class VaultHandler implements DependencyHandler {
 				return false;
 			}
 		}
-	}
-
-	/* (non-Javadoc)
-	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#isInstalled()
-	 */
-	@Override
-	public boolean isInstalled() {
-		final Vault plugin = (Vault) get();
-
-		return plugin != null && plugin.isEnabled();
-	}
-
-	/* (non-Javadoc)
-	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#isAvailable()
-	 */
-	@Override
-	public boolean isAvailable() {
-		return api != null;
 	}
 
 	private boolean setupEconomy() {

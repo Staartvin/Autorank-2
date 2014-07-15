@@ -21,27 +21,6 @@ public class TotalTimeRequirement extends Requirement {
 	int time = -1;
 
 	@Override
-	public boolean setOptions(final String[] options) {
-		if (options.length > 0)
-			this.time = AutorankTools.stringToTime(options[0], Time.MINUTES);
-
-		return (time != -1);
-	}
-
-	@Override
-	public boolean meetsRequirement(final Player player) {
-		// the time he first joined the server
-		final long joinTime = player.getFirstPlayed();
-
-		final long currentTime = System.currentTimeMillis();
-
-		// Difference in minutes
-		final long difference = (currentTime - joinTime) / 60000;
-
-		return time != -1 && difference >= time;
-	}
-
-	@Override
 	public String getDescription() {
 		return Lang.TOTAL_TIME_REQUIREMENT
 				.getConfigValue(new String[] { AutorankTools.timeToString(time,
@@ -62,5 +41,26 @@ public class TotalTimeRequirement extends Requirement {
 		String progress = "";
 		progress = progress.concat(difference + " min" + "/" + time + " min");
 		return progress;
+	}
+
+	@Override
+	public boolean meetsRequirement(final Player player) {
+		// the time he first joined the server
+		final long joinTime = player.getFirstPlayed();
+
+		final long currentTime = System.currentTimeMillis();
+
+		// Difference in minutes
+		final long difference = (currentTime - joinTime) / 60000;
+
+		return time != -1 && difference >= time;
+	}
+
+	@Override
+	public boolean setOptions(final String[] options) {
+		if (options.length > 0)
+			this.time = AutorankTools.stringToTime(options[0], Time.MINUTES);
+
+		return (time != -1);
 	}
 }

@@ -6,12 +6,12 @@ import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 
 public class StatsHandler implements StatsPlugin {
 
-	private final Autorank plugin;
-	private final StatsAPIHandler statsApi;
-
 	public static enum statTypes {
-		BLOCKS_BROKEN, BLOCKS_PLACED, TOTAL_BLOCKS_BROKEN, TOTAL_BLOCKS_PLACED, VOTES, PLAYERS_KILLED, MOBS_KILLED, DAMAGE_TAKEN, TIME_PLAYED, BLOCKS_MOVED, FISH_CAUGHT, ITEMS_CRAFTED, TIMES_SHEARED
-	};
+		BLOCKS_BROKEN, BLOCKS_MOVED, BLOCKS_PLACED, DAMAGE_TAKEN, FISH_CAUGHT, ITEMS_CRAFTED, MOBS_KILLED, PLAYERS_KILLED, TIME_PLAYED, TIMES_SHEARED, TOTAL_BLOCKS_BROKEN, TOTAL_BLOCKS_PLACED, VOTES
+	}
+	private final Autorank plugin;
+
+	private final StatsAPIHandler statsApi;;
 
 	public StatsHandler(final Autorank instance, final StatsAPIHandler statsAPI) {
 		this.plugin = instance;
@@ -20,32 +20,17 @@ public class StatsHandler implements StatsPlugin {
 	}
 
 	@Override
-	public boolean isEnabled() {
-		if (statsApi == null) {
-			plugin.getLogger().info(
-					"Stats (by Lolmewn) api library was not found!");
-			return false;
+	public String getCorrectStatName(String statType) {
+
+		statType = statType.replace(" ", "_");
+
+		for (final statTypes t : statTypes.values()) {
+			if (t.name().equalsIgnoreCase(statType)) {
+				return t.name();
+			}
 		}
 
-		if (!statsApi.isAvailable()) {
-			plugin.getLogger().info("Stats (by Lolmewn) is not enabled!");
-			return false;
-		}
-
-		if (!statsApi.areBetaFunctionsEnabled()) {
-			plugin.getLogger().info(
-					"Stats (by Lolmewn) does not have beta functions enabled!");
-			return false;
-		}
-
-		/*if (!statsApi.compatibleStatsVersion(plugin.getServer()
-				.getPluginManager().getPlugin("Stats").getDescription()
-				.getVersion())) {
-			plugin.getLogger().info("This version of Stats (by Lolmewn) is not supported by Autorank!"); 
-			return false;
-		}*/
-
-		return true;
+		return null;
 	}
 
 	@Override
@@ -130,17 +115,32 @@ public class StatsHandler implements StatsPlugin {
 	}
 
 	@Override
-	public String getCorrectStatName(String statType) {
-
-		statType = statType.replace(" ", "_");
-
-		for (final statTypes t : statTypes.values()) {
-			if (t.name().equalsIgnoreCase(statType)) {
-				return t.name();
-			}
+	public boolean isEnabled() {
+		if (statsApi == null) {
+			plugin.getLogger().info(
+					"Stats (by Lolmewn) api library was not found!");
+			return false;
 		}
 
-		return null;
+		if (!statsApi.isAvailable()) {
+			plugin.getLogger().info("Stats (by Lolmewn) is not enabled!");
+			return false;
+		}
+
+		if (!statsApi.areBetaFunctionsEnabled()) {
+			plugin.getLogger().info(
+					"Stats (by Lolmewn) does not have beta functions enabled!");
+			return false;
+		}
+
+		/*if (!statsApi.compatibleStatsVersion(plugin.getServer()
+				.getPluginManager().getPlugin("Stats").getDescription()
+				.getVersion())) {
+			plugin.getLogger().info("This version of Stats (by Lolmewn) is not supported by Autorank!"); 
+			return false;
+		}*/
+
+		return true;
 	}
 
 }

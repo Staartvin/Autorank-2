@@ -29,16 +29,6 @@ public class PlaytimesUpdate implements Runnable {
 		updateMinutesPlayed(onlinePlayers);
 	}
 
-	private void updateMinutesPlayed(final Player[] players) {
-		plugin.debugMessage("Checking players for automatic ranking");
-
-		for (int i = 0; i < players.length; i++) {
-			if (players[i] != null) {
-				updateMinutesPlayed(players[i]);
-			}
-		}
-	}
-
 	private void updateMinutesPlayed(final Player player) {
 		// Changed this so it is readable ;)
 		// OP's should also get time added. 
@@ -67,6 +57,16 @@ public class PlaytimesUpdate implements Runnable {
 			// Check if player meets requirements
 			plugin.getPlayerChecker().checkPlayer(player);
 
+		}
+	}
+
+	private void updateMinutesPlayed(final Player[] players) {
+		plugin.debugMessage("Checking players for automatic ranking");
+
+		for (int i = 0; i < players.length; i++) {
+			if (players[i] != null) {
+				updateMinutesPlayed(players[i]);
+			}
 		}
 	}
 

@@ -15,8 +15,12 @@ import org.bukkit.event.HandlerList;
 public class CheckCommandEvent extends Event implements Cancellable {
 	private static final HandlerList handlers = new HandlerList();
 
-	private final Player player;
+	public static HandlerList getHandlerList() {
+		return handlers;
+	}
 	private boolean isCancelled;
+
+	private final Player player;
 
 	/**
 	 * @param player Player that performs the command
@@ -25,17 +29,13 @@ public class CheckCommandEvent extends Event implements Cancellable {
 		this.player = player;
 	}
 
-	public Player getPlayer() {
-		return player;
-	}
-
 	@Override
 	public HandlerList getHandlers() {
 		return handlers;
 	}
 
-	public static HandlerList getHandlerList() {
-		return handlers;
+	public Player getPlayer() {
+		return player;
 	}
 
 	/* (non-Javadoc)

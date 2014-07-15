@@ -9,23 +9,6 @@ public class PermissionRequirement extends Requirement {
 	private String permission = null;
 
 	@Override
-	public boolean setOptions(final String[] options) {
-		try {
-			permission = options[0];
-			return true;
-		} catch (final Exception e) {
-			permission = null;
-			return false;
-		}
-	}
-
-	@Override
-	public boolean meetsRequirement(final Player player) {
-
-		return permission != null && player.hasPermission(permission);
-	}
-
-	@Override
 	public String getDescription() {
 		return Lang.PERMISSION_REQUIREMENT
 				.getConfigValue(new String[] { permission });
@@ -35,5 +18,22 @@ public class PermissionRequirement extends Requirement {
 	public String getProgress(final Player player) {
 		final String progress = "unknown";
 		return progress;
+	}
+
+	@Override
+	public boolean meetsRequirement(final Player player) {
+
+		return permission != null && player.hasPermission(permission);
+	}
+
+	@Override
+	public boolean setOptions(final String[] options) {
+		try {
+			permission = options[0];
+			return true;
+		} catch (final Exception e) {
+			permission = null;
+			return false;
+		}
 	}
 }

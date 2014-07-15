@@ -26,7 +26,7 @@ public class LeaderboardCommand extends AutorankCommand {
 				sender)) {
 			return true;
 		}
-		
+
 		if (args.length > 1 && args[1].equalsIgnoreCase("force")) {
 			// We should force to update the leaderboard first
 			plugin.getLeaderboard().updateLeaderboard();

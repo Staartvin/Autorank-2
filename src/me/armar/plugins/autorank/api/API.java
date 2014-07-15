@@ -33,50 +33,14 @@ public class API {
 	}
 
 	/**
-	 * Gets the local play time (playtime on this server) of a player. <br>
-	 * The time given depends on what plugin is used for keeping track of time. <br>
-	 * The time is always given in seconds.
+	 * Get the addon manager of Autorank.
 	 * <p>
+	 * This class stores information about the loaded addons
 	 * 
-	 * @param player Player to get the time for
-	 * @return play time of a player. 0 when has never played before.
+	 * @return {@link me.armar.plugins.autorank.addons.AddOnManager} class
 	 */
-	public int getTimeOfPlayer(final Player player) {
-		return plugin.getPlaytimes().getTimeOfPlayer(player.getName());
-	}
-
-	/**
-	 * Gets the local play time of this player on this server according to
-	 * Autorank. <br>
-	 * This method will grab the time from the data.yml used by Autorank and <br>
-	 * this is not dependend on other plugins.
-	 * 
-	 * @param player Player to get the time for.
-	 * @return play time of this player or 0 if not found.
-	 */
-	public int getLocalTime(final Player player) {
-		return plugin.getPlaytimes().getLocalTime(player.getUniqueId());
-	}
-
-	/**
-	 * Gets the database name Autorank stores its global times in.
-	 * 
-	 * @return name of database
-	 */
-	public String getMySQLDatabase() {
-		return plugin.getMySQLWrapper().getDatabaseName();
-	}
-
-	/**
-	 * Gets the global play time (playtime across all servers with the same
-	 * MySQL database linked) of a player.
-	 * <p>
-	 * 
-	 * @param player Player to check for.
-	 * @return play time of a player. -1 if no entry was found.
-	 */
-	public int getGlobalPlayTime(final Player player) {
-		return plugin.getPlaytimes().getGlobalTime(player.getUniqueId());
+	public AddOnManager getAddonManager() {
+		return plugin.getAddonManager();
 	}
 
 	/**
@@ -122,20 +86,54 @@ public class API {
 	}
 
 	/**
-	 * Gets the primary permissions group of a player.
+	 * Gets the global play time (playtime across all servers with the same
+	 * MySQL database linked) of a player.
+	 * <p>
 	 * 
-	 * @param player Player to get the primary group of
-	 * @return Name of the group that appears first.
+	 * @param player Player to check for.
+	 * @return play time of a player. -1 if no entry was found.
 	 */
-	public String getPrimaryGroup(final Player player) {
-		final List<String> groups = getPermissionGroups(player);
+	public int getGlobalPlayTime(final Player player) {
+		return plugin.getPlaytimes().getGlobalTime(player.getUniqueId());
+	}
 
-		if (groups.size() < 1) {
-			throw new IllegalArgumentException("Groups of player '"
-					+ player.getName() + "' are empty.");
-		}
+	/**
+	 * Gets the local play time of this player on this server according to
+	 * Autorank. <br>
+	 * This method will grab the time from the data.yml used by Autorank and <br>
+	 * this is not dependend on other plugins.
+	 * 
+	 * @param player Player to get the time for.
+	 * @return play time of this player or 0 if not found.
+	 */
+	public int getLocalTime(final Player player) {
+		return plugin.getPlaytimes().getLocalTime(player.getUniqueId());
+	}
 
-		return groups.get(0);
+	/**
+	 * Gets the database name Autorank stores its global times in.
+	 * 
+	 * @return name of database
+	 */
+	public String getMySQLDatabase() {
+		return plugin.getMySQLWrapper().getDatabaseName();
+	}
+
+	/**
+	 * Gets the permission group that the player will be ranked up to after
+	 * he completes all requirements.
+	 * <p>
+	 * <b>NOTE:</b> This does not mean the player will always be ranked up to
+	 * this group. If a requirement has its own <i>'rank change'</i> result, the
+	 * player will be ranked up to that group and not the 'global results'
+	 * group.
+	 * 
+	 * @param player Player to get the next rank up for.
+	 * @return The name of the group the player will be ranked to; null when no
+	 *         rank up.
+	 */
+	public String getNextRankupGroup(final Player player) {
+		return plugin.getPlayerChecker().getNextRankupGroup(player);
 	}
 
 	/**
@@ -159,20 +157,33 @@ public class API {
 	}
 
 	/**
-	 * Gets the permission group that the player will be ranked up to after
-	 * he completes all requirements.
-	 * <p>
-	 * <b>NOTE:</b> This does not mean the player will always be ranked up to
-	 * this group. If a requirement has its own <i>'rank change'</i> result, the
-	 * player will be ranked up to that group and not the 'global results'
-	 * group.
+	 * Gets the primary permissions group of a player.
 	 * 
-	 * @param player Player to get the next rank up for.
-	 * @return The name of the group the player will be ranked to; null when no
-	 *         rank up.
+	 * @param player Player to get the primary group of
+	 * @return Name of the group that appears first.
 	 */
-	public String getNextRankupGroup(final Player player) {
-		return plugin.getPlayerChecker().getNextRankupGroup(player);
+	public String getPrimaryGroup(final Player player) {
+		final List<String> groups = getPermissionGroups(player);
+
+		if (groups.size() < 1) {
+			throw new IllegalArgumentException("Groups of player '" 
+					+ player.getName() + "' are empty."); 
+		}
+
+		return groups.get(0);
+	}
+
+	/**
+	 * Gets the local play time (playtime on this server) of a player. <br>
+	 * The time given depends on what plugin is used for keeping track of time. <br>
+	 * The time is always given in seconds.
+	 * <p>
+	 * 
+	 * @param player Player to get the time for
+	 * @return play time of a player. 0 when has never played before.
+	 */
+	public int getTimeOfPlayer(final Player player) {
+		return plugin.getPlaytimes().getTimeOfPlayer(player.getName());
 	}
 
 	/**
@@ -187,7 +198,7 @@ public class API {
 	 */
 	public void registerRequirement(final String uniqueName,
 			final Class<? extends Requirement> clazz) {
-		plugin.getLogger().info("Loaded custom requirement: " + uniqueName);
+		plugin.getLogger().info("Loaded custom requirement: " + uniqueName); 
 
 		plugin.registerRequirement(uniqueName, clazz);
 	}
@@ -204,19 +215,8 @@ public class API {
 	 */
 	public void registerResult(final String uniqueName,
 			final Class<? extends Result> clazz) {
-		plugin.getLogger().info("Loaded custom result: " + uniqueName);
+		plugin.getLogger().info("Loaded custom result: " + uniqueName); 
 
 		plugin.registerResult(uniqueName, clazz);
-	}
-
-	/**
-	 * Get the addon manager of Autorank.
-	 * <p>
-	 * This class stores information about the loaded addons
-	 * 
-	 * @return {@link me.armar.plugins.autorank.addons.AddOnManager} class
-	 */
-	public AddOnManager getAddonManager() {
-		return plugin.getAddonManager();
 	}
 }

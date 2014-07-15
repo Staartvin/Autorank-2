@@ -13,9 +13,9 @@ import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 public class DummyHandler implements StatsPlugin {
 
 	@Override
-	public boolean isEnabled() {
+	public String getCorrectStatName(final String statType) {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 	@Override
@@ -25,9 +25,9 @@ public class DummyHandler implements StatsPlugin {
 	}
 
 	@Override
-	public String getCorrectStatName(final String statType) {
+	public boolean isEnabled() {
 		// TODO Auto-generated method stub
-		return null;
+		return false;
 	}
 
 }

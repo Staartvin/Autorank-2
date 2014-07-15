@@ -19,9 +19,13 @@ import com.google.common.collect.Lists;
  */
 public class ConfigHandler {
 
-	private final Autorank plugin;
-	private final SimpleYamlConfiguration settingsConfig;
+	public enum MySQLOptions {
+		DATABASE, HOSTNAME, PASSWORD, TABLE, USERNAME
+	}
 	private final SimpleYamlConfiguration advancedConfig;
+	private final Autorank plugin;
+
+	private final SimpleYamlConfiguration settingsConfig;
 
 	public ConfigHandler(final Autorank instance) {
 		plugin = instance;
@@ -29,45 +33,81 @@ public class ConfigHandler {
 		this.advancedConfig = plugin.getAdvancedConfig();
 	}
 
-	public enum MySQLOptions {
-		HOSTNAME, USERNAME, PASSWORD, DATABASE, TABLE
+	public boolean doBaseHelpPageOnPermission() {
+		return settingsConfig.getBoolean(
+				"show help command based on permission", false);
 	}
 
-	public boolean useAdvancedConfig() {
-		return settingsConfig.getBoolean("use advanced config");
+	public boolean doCheckForNewerVersion() {
+		return settingsConfig.getBoolean("auto-updater.check-for-new-versions",
+				true);
 	}
 
-	/**
-	 * Gets whether a requirement is optional for a certain group
-	 * 
-	 * @param requirement
-	 * @param group
-	 * @return true if optional; false otherwise
-	 */
-	public boolean isOptional(final String requirement, final String group) {
-		final boolean optional = advancedConfig.getBoolean("ranks." + group
-				+ ".requirements." + requirement + ".options.optional", false);
-
-		return optional;
+	public String getCheckCommandLayout() {
+		return settingsConfig
+				.getString(
+						"check command layout",
+						"&p has played for &time and is in group(s) &groups. Requirements to be ranked up: &reqs");
 	}
 
-	public Set<String> getRequirements(final String group) {
-		final Set<String> requirements = advancedConfig
-				.getConfigurationSection("ranks." + group + ".requirements")
-				.getKeys(false);
-
-		return requirements;
+	public int getIntervalTime() {
+		return settingsConfig.getInt("interval check", 5);
 	}
 
-	public Set<String> getResults(final String group) {
-		final Set<String> results = advancedConfig.getConfigurationSection(
-				"ranks." + group + ".results").getKeys(false);
+	public String getLeaderboardLayout() {
+		return settingsConfig.getString("leaderboard layout",
+				"&6&r | &b&p - &7&d day(s), &h hour(s) and &m minute(s).");
+	}
 
-		return results;
+	public int getLeaderboardLength() {
+		return settingsConfig.getInt("leaderboard length", 10);
+	}
+
+	public String getMySQLSettings(final MySQLOptions option) {
+		switch (option) {
+		case HOSTNAME:
+			return settingsConfig.getString("sql.hostname");
+		case USERNAME:
+			return settingsConfig.getString("sql.username");
+		case PASSWORD:
+			return settingsConfig.getString("sql.password");
+		case DATABASE:
+			return settingsConfig.getString("sql.database");
+		case TABLE:
+			return settingsConfig.getString("sql.table");
+		default:
+			return null;
+		}
+	}
+
+	public String getRankChange(final String group) {
+		return advancedConfig.getString("ranks." + group
+				+ ".results.rank change");
 	}
 
 	public Set<String> getRanks() {
 		return advancedConfig.getConfigurationSection("ranks").getKeys(false);
+	}
+
+	/**
+	 * Gets the requirement's id.
+	 * 
+	 * @param requirement Requirement name exactly as it is in the config
+	 * @param group Group the requirement is from
+	 * @return requirement id, -1 if nothing found
+	 */
+	public int getReqId(final String requirement, final String group) {
+		final Object[] reqs = getRequirements(group).toArray();
+
+		for (int i = 0; i < reqs.length; i++) {
+			final String req2 = (String) reqs[i];
+
+			if (requirement.equalsIgnoreCase(req2)) {
+				return i;
+			}
+		}
+
+		return -1;
 	}
 
 	public String getRequirement(final String requirement, final String group) {
@@ -83,14 +123,31 @@ public class ConfigHandler {
 		return result;
 	}
 
+	public Set<String> getRequirements(final String group) {
+		final Set<String> requirements = advancedConfig
+				.getConfigurationSection("ranks." + group + ".requirements")
+				.getKeys(false);
+
+		return requirements;
+	}
+
 	public String getResult(final String result, final String group) {
 		return advancedConfig.get("ranks." + group + ".results." + result)
 				.toString();
 	}
 
-	public String getRankChange(final String group) {
-		return advancedConfig.getString("ranks." + group
-				+ ".results.rank change");
+	public String getResultOfRequirement(final String requirement,
+			final String group, final String result) {
+		return advancedConfig.get(
+				"ranks." + group + ".requirements." + requirement + ".results."
+						+ result).toString();
+	}
+
+	public Set<String> getResults(final String group) {
+		final Set<String> results = advancedConfig.getConfigurationSection(
+				"ranks." + group + ".results").getKeys(false);
+
+		return results;
 	}
 
 	public List<String> getResultsOfRequirement(final String requirement,
@@ -107,19 +164,48 @@ public class ConfigHandler {
 		return Lists.newArrayList(results);
 	}
 
-	public String getResultOfRequirement(final String requirement,
-			final String group, final String result) {
-		return advancedConfig.get(
-				"ranks." + group + ".requirements." + requirement + ".results."
-						+ result).toString();
+	/**
+	 * Gets whether a requirement is optional for a certain group
+	 * 
+	 * @param requirement
+	 * @param group
+	 * @return true if optional; false otherwise
+	 */
+	public boolean isOptional(final String requirement, final String group) {
+		final boolean optional = advancedConfig.getBoolean("ranks." + group
+				+ ".requirements." + requirement + ".options.optional", false);
+
+		return optional;
 	}
 
-	public boolean usePartialCompletion() {
-		return settingsConfig.getBoolean("use partial completion", false);
+	public boolean useAdvancedConfig() {
+		return settingsConfig.getBoolean("use advanced config");
 	}
 
-	public boolean useMySQL() {
-		return settingsConfig.getBoolean("sql.enabled");
+	/**
+	 * Check whether Autorank should log detailed information about <br>
+	 * the found dependencies.
+	 * 
+	 * @return true if has to, false otherwise.
+	 */
+	public boolean useAdvancedDependencyLogs() {
+		if (!useAdvancedConfig())
+			return false;
+
+		return settingsConfig.getBoolean("advanced dependency output", false);
+	}
+
+	/**
+	 * Whether Autorank should care about players that are AFK or not. <br>
+	 * If the SimpleConfig is used, this will always be true.
+	 * 
+	 * @return true when AFK integration should be used; false otherwise.
+	 */
+	public boolean useAFKIntegration() {
+		if (!useAdvancedConfig())
+			return true;
+
+		return settingsConfig.getBoolean("afk integration", false);
 	}
 
 	public boolean useAutoCompletion(final String group,
@@ -160,25 +246,16 @@ public class ConfigHandler {
 		}
 	}
 
-	/**
-	 * Gets the requirement's id.
-	 * 
-	 * @param requirement Requirement name exactly as it is in the config
-	 * @param group Group the requirement is from
-	 * @return requirement id, -1 if nothing found
-	 */
-	public int getReqId(final String requirement, final String group) {
-		final Object[] reqs = getRequirements(group).toArray();
+	public boolean useDebugOutput() {
+		return settingsConfig.getBoolean("use debug", false);
+	}
 
-		for (int i = 0; i < reqs.length; i++) {
-			final String req2 = (String) reqs[i];
+	public boolean useMySQL() {
+		return settingsConfig.getBoolean("sql.enabled");
+	}
 
-			if (requirement.equalsIgnoreCase(req2)) {
-				return i;
-			}
-		}
-
-		return -1;
+	public boolean usePartialCompletion() {
+		return settingsConfig.getBoolean("use partial completion", false);
 	}
 
 	/**
@@ -201,82 +278,5 @@ public class ConfigHandler {
 			return dependency.ONTIME;
 		else
 			return dependency.AUTORANK;
-	}
-
-	/**
-	 * Whether Autorank should care about players that are AFK or not. <br>
-	 * If the SimpleConfig is used, this will always be true.
-	 * 
-	 * @return true when AFK integration should be used; false otherwise.
-	 */
-	public boolean useAFKIntegration() {
-		if (!useAdvancedConfig())
-			return true;
-
-		return settingsConfig.getBoolean("afk integration", false);
-	}
-
-	/**
-	 * Check whether Autorank should log detailed information about <br>
-	 * the found dependencies.
-	 * 
-	 * @return true if has to, false otherwise.
-	 */
-	public boolean useAdvancedDependencyLogs() {
-		if (!useAdvancedConfig())
-			return false;
-
-		return settingsConfig.getBoolean("advanced dependency output", false);
-	}
-
-	public String getCheckCommandLayout() {
-		return settingsConfig
-				.getString(
-						"check command layout",
-						"&p has played for &time and is in group(s) &groups. Requirements to be ranked up: &reqs");
-	}
-
-	public int getLeaderboardLength() {
-		return settingsConfig.getInt("leaderboard length", 10);
-	}
-
-	public String getLeaderboardLayout() {
-		return settingsConfig.getString("leaderboard layout",
-				"&6&r | &b&p - &7&d day(s), &h hour(s) and &m minute(s).");
-	}
-
-	public String getMySQLSettings(final MySQLOptions option) {
-		switch (option) {
-		case HOSTNAME:
-			return settingsConfig.getString("sql.hostname");
-		case USERNAME:
-			return settingsConfig.getString("sql.username");
-		case PASSWORD:
-			return settingsConfig.getString("sql.password");
-		case DATABASE:
-			return settingsConfig.getString("sql.database");
-		case TABLE:
-			return settingsConfig.getString("sql.table");
-		default:
-			return null;
-		}
-	}
-
-	public int getIntervalTime() {
-		return settingsConfig.getInt("interval check", 5);
-	}
-
-	public boolean doCheckForNewerVersion() {
-		return settingsConfig.getBoolean("auto-updater.check-for-new-versions",
-				true);
-	}
-
-	public boolean doBaseHelpPageOnPermission() {
-		return settingsConfig.getBoolean(
-				"show help command based on permission", false);
-	}
-
-	public boolean useDebugOutput() {
-		return settingsConfig.getBoolean("use debug", false);
 	}
 }

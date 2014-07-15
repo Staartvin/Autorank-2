@@ -13,25 +13,6 @@ public class FactionPowerRequirement extends Requirement {
 	private double factionPower = 0;
 
 	@Override
-	public boolean setOptions(final String[] options) {
-		try {
-			factionPower = Double.parseDouble(options[0]);
-			return true;
-		} catch (final Exception e) {
-			factionPower = 0;
-			return false;
-		}
-	}
-
-	@Override
-	public boolean meetsRequirement(final Player player) {
-		final FactionsHandler fHandler = (FactionsHandler) this.getAutorank()
-				.getDependencyManager().getDependency(dependency.FACTIONS);
-
-		return fHandler.getFactionPower(player) > factionPower;
-	}
-
-	@Override
 	public String getDescription() {
 		return Lang.FACTIONS_POWER_REQUIREMENT
 				.getConfigValue(new String[] { factionPower + "" });
@@ -47,5 +28,24 @@ public class FactionPowerRequirement extends Requirement {
 
 		progress = progress.concat(doubleRounded + "/" + factionPower);
 		return progress;
+	}
+
+	@Override
+	public boolean meetsRequirement(final Player player) {
+		final FactionsHandler fHandler = (FactionsHandler) this.getAutorank()
+				.getDependencyManager().getDependency(dependency.FACTIONS);
+
+		return fHandler.getFactionPower(player) > factionPower;
+	}
+
+	@Override
+	public boolean setOptions(final String[] options) {
+		try {
+			factionPower = Double.parseDouble(options[0]);
+			return true;
+		} catch (final Exception e) {
+			factionPower = 0;
+			return false;
+		}
 	}
 }

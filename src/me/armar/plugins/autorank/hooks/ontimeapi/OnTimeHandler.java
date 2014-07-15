@@ -18,19 +18,11 @@ import org.bukkit.plugin.Plugin;
  */
 public class OnTimeHandler implements DependencyHandler {
 
-	private final Autorank plugin;
 	private OnTime api;
+	private final Autorank plugin;
 
 	public OnTimeHandler(final Autorank instance) {
 		plugin = instance;
-	}
-
-	public int getPlayTime(final String playerName) {
-		if (!isAvailable())
-			return 0;
-
-		// Divide by 60000 because time is in milliseconds
-		return (int) (OnTimeAPI.getPlayerTimeData(playerName, data.TOTALPLAY) / 60000);
 	}
 
 	/* (non-Javadoc)
@@ -47,6 +39,32 @@ public class OnTimeHandler implements DependencyHandler {
 		}
 
 		return plugin;
+	}
+
+	public int getPlayTime(final String playerName) {
+		if (!isAvailable())
+			return 0;
+
+		// Divide by 60000 because time is in milliseconds
+		return (int) (OnTimeAPI.getPlayerTimeData(playerName, data.TOTALPLAY) / 60000);
+	}
+
+	/* (non-Javadoc)
+	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#isAvailable()
+	 */
+	@Override
+	public boolean isAvailable() {
+		return api != null;
+	}
+
+	/* (non-Javadoc)
+	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#isInstalled()
+	 */
+	@Override
+	public boolean isInstalled() {
+		final Plugin plugin = get();
+
+		return plugin != null && plugin.isEnabled();
 	}
 
 	/* (non-Javadoc)
@@ -76,23 +94,5 @@ public class OnTimeHandler implements DependencyHandler {
 				return false;
 			}
 		}
-	}
-
-	/* (non-Javadoc)
-	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#isInstalled()
-	 */
-	@Override
-	public boolean isInstalled() {
-		final Plugin plugin = get();
-
-		return plugin != null && plugin.isEnabled();
-	}
-
-	/* (non-Javadoc)
-	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#isAvailable()
-	 */
-	@Override
-	public boolean isAvailable() {
-		return api != null;
 	}
 }

@@ -36,6 +36,9 @@ public class CommandsManager implements TabExecutor {
 
 	private final Autorank plugin;
 
+	// Use linked hashmap so that input order is kept
+	private final LinkedHashMap<List<String>, AutorankCommand> registeredCommands = new LinkedHashMap<List<String>, AutorankCommand>();
+
 	/**
 	 * This class will manage all incoming command request.
 	 * Commands are not performed here, they are only send to the correct place.
@@ -77,8 +80,9 @@ public class CommandsManager implements TabExecutor {
 				new ConvertUUIDCommand(plugin));
 	}
 
-	// Use linked hashmap so that input order is kept
-	private final LinkedHashMap<List<String>, AutorankCommand> registeredCommands = new LinkedHashMap<List<String>, AutorankCommand>();
+	public HashMap<List<String>, AutorankCommand> getRegisteredCommands() {
+		return registeredCommands;
+	}
 
 	public boolean hasPermission(final String permission,
 			final CommandSender sender) {
@@ -157,9 +161,5 @@ public class CommandsManager implements TabExecutor {
 
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	public HashMap<List<String>, AutorankCommand> getRegisteredCommands() {
-		return registeredCommands;
 	}
 }

@@ -33,38 +33,9 @@ public abstract class Requirement {
 	private int reqId;
 	private List<Result> results = new ArrayList<Result>();
 
-	public final void setAutorank(final Autorank autorank) {
-		this.autorank = autorank;
-	}
-
 	public final Autorank getAutorank() {
 		return autorank;
 	}
-
-	/**
-	 * Setup requirement specific objects.
-	 * 
-	 * This method is called when Autorank sets up its config. <br>
-	 * The requirement id, auto completion and optional values are assigned
-	 * automatically.
-	 * 
-	 * @param options String[] containing values of the config
-	 * @return true if everything was setup correctly; false otherwise
-	 */
-	public abstract boolean setOptions(String[] options);
-
-	/**
-	 * Does it meet the requirements?
-	 * This method gets called when someone does /ar check or /ar complete.
-	 * It should always contain the following line:
-	 * 
-	 * <p>
-	 * if (isCompleted(getReqId(), player.getName())) { return true; }
-	 * 
-	 * @param player Player to check for
-	 * @return true if it meets the requirements; false otherwise
-	 */
-	public abstract boolean meetsRequirement(Player player);
 
 	/**
 	 * Gets the description of the requirement
@@ -73,51 +44,6 @@ public abstract class Requirement {
 	 * @return string containing description (in locale language)
 	 */
 	public abstract String getDescription();
-
-	/**
-	 * Is this an optional requirement?
-	 * (Not a main requirement)
-	 * 
-	 * @return true when optional; false otherwise.
-	 */
-	public boolean isOptional() {
-		return optional;
-	}
-
-	/**
-	 * Gets the results when this requirement is finished
-	 * 
-	 * @return A list of results that has to be done.
-	 */
-	public List<Result> getResults() {
-		return results;
-	}
-
-	/**
-	 * Use auto completion for this?
-	 * 
-	 * @return true when auto complete; false otherwise
-	 */
-	public boolean useAutoCompletion() {
-		return autoComplete;
-	}
-
-	@Override
-	public String toString() {
-		return this.getClass().getSimpleName();
-	}
-
-	/**
-	 * Check if the requirement is completed already.
-	 * 
-	 * @param reqID Requirement id.
-	 * @param uuid Player to check for
-	 * @return true if completed, false otherwise.
-	 */
-	public final boolean isCompleted(final int reqID, final UUID uuid) {
-		return autorank.getRequirementHandler().hasCompletedRequirement(reqID,
-				uuid);
-	}
 
 	/**
 	 * Gets the current progress of a player on a certain requirement.
@@ -139,6 +65,15 @@ public abstract class Requirement {
 	}
 
 	/**
+	 * Gets the results when this requirement is finished
+	 * 
+	 * @return A list of results that has to be done.
+	 */
+	public List<Result> getResults() {
+		return results;
+	}
+
+	/**
 	 * Get the current running stats plugin.
 	 * 
 	 * @return stats plugin that Autorank uses for stat data
@@ -148,12 +83,51 @@ public abstract class Requirement {
 	}
 
 	/**
-	 * Set the requirement id of this requirement
+	 * Check if the requirement is completed already.
 	 * 
-	 * @param reqId id to set it to
+	 * @param reqID Requirement id.
+	 * @param uuid Player to check for
+	 * @return true if completed, false otherwise.
 	 */
-	public void setReqId(final int reqId) {
-		this.reqId = reqId;
+	public final boolean isCompleted(final int reqID, final UUID uuid) {
+		return autorank.getRequirementHandler().hasCompletedRequirement(reqID,
+				uuid);
+	}
+
+	/**
+	 * Is this an optional requirement?
+	 * (Not a main requirement)
+	 * 
+	 * @return true when optional; false otherwise.
+	 */
+	public boolean isOptional() {
+		return optional;
+	}
+
+	/**
+	 * Does it meet the requirements?
+	 * This method gets called when someone does /ar check or /ar complete.
+	 * It should always contain the following line:
+	 * 
+	 * <p>
+	 * if (isCompleted(getReqId(), player.getName())) { return true; }
+	 * 
+	 * @param player Player to check for
+	 * @return true if it meets the requirements; false otherwise
+	 */
+	public abstract boolean meetsRequirement(Player player);
+
+	/**
+	 * Set whether this requirement auto completes itself
+	 * 
+	 * @param autoComplete true if auto complete; false otherwise
+	 */
+	public void setAutoComplete(final boolean autoComplete) {
+		this.autoComplete = autoComplete;
+	}
+
+	public final void setAutorank(final Autorank autorank) {
+		this.autorank = autorank;
 	}
 
 	/**
@@ -166,12 +140,24 @@ public abstract class Requirement {
 	}
 
 	/**
-	 * Set whether this requirement auto completes itself
+	 * Setup requirement specific objects.
 	 * 
-	 * @param autoComplete true if auto complete; false otherwise
+	 * This method is called when Autorank sets up its config. <br>
+	 * The requirement id, auto completion and optional values are assigned
+	 * automatically.
+	 * 
+	 * @param options String[] containing values of the config
+	 * @return true if everything was setup correctly; false otherwise
 	 */
-	public void setAutoComplete(final boolean autoComplete) {
-		this.autoComplete = autoComplete;
+	public abstract boolean setOptions(String[] options);
+
+	/**
+	 * Set the requirement id of this requirement
+	 * 
+	 * @param reqId id to set it to
+	 */
+	public void setReqId(final int reqId) {
+		this.reqId = reqId;
 	}
 
 	/**
@@ -182,5 +168,19 @@ public abstract class Requirement {
 	 */
 	public void setResults(final List<Result> results) {
 		this.results = results;
+	}
+
+	@Override
+	public String toString() {
+		return this.getClass().getSimpleName();
+	}
+
+	/**
+	 * Use auto completion for this?
+	 * 
+	 * @return true when auto complete; false otherwise
+	 */
+	public boolean useAutoCompletion() {
+		return autoComplete;
 	}
 }

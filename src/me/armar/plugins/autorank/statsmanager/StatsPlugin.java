@@ -3,11 +3,12 @@ package me.armar.plugins.autorank.statsmanager;
 public interface StatsPlugin {
 
 	/**
-	 * Check whether the current stats plugin is enabled or not.
+	 * Get the correct name of this stat
 	 * 
-	 * @return true if enabled; false otherwise
+	 * @param statType stat name that can be incorrect
+	 * @return official name of the stat or null if not valid
 	 */
-	public boolean isEnabled();
+	public String getCorrectStatName(String statType);
 
 	/**
 	 * Get the value of a stat. You can only get stats that are of a certain
@@ -26,11 +27,10 @@ public interface StatsPlugin {
 	public int getNormalStat(String statType, Object... arguments);
 
 	/**
-	 * Get the correct name of this stat
+	 * Check whether the current stats plugin is enabled or not.
 	 * 
-	 * @param statType stat name that can be incorrect
-	 * @return official name of the stat or null if not valid
+	 * @return true if enabled; false otherwise
 	 */
-	public String getCorrectStatName(String statType);
+	public boolean isEnabled();
 
 }

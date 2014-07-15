@@ -11,11 +11,11 @@ import org.bukkit.entity.Player;
 
 public class RankChange {
 
+	private final Autorank plugin;
 	private final String rankFrom;
+	private final String rankTo;
 	private final List<Requirement> req;
 	private final List<Result> res;
-	private final String rankTo;
-	private final Autorank plugin;
 
 	public RankChange(final Autorank plugin, final String rankFrom,
 			final String rankTo, final List<Requirement> req,
@@ -27,24 +27,34 @@ public class RankChange {
 		this.plugin = plugin;
 	}
 
-	public String getRankFrom() {
-		return rankFrom;
-	}
+	public boolean applyChange(final Player player) {
+		boolean result = true;
 
-	public List<Requirement> getReq() {
-		return req;
-	}
+		if (checkRequirements(player)) {
+			// Apply all 'main' results
 
-	public List<Result> getRes() {
-		return res;
-	}
+			// Player already got this rank
+			if (plugin.getRequirementHandler()
+					.getCompletedRanks(player.getUniqueId()).contains(rankFrom)) {
+				return false;
+			}
 
-	public String getRankTo() {
-		return rankTo;
-	}
+			// Add progress of completed requirements
+			plugin.getRequirementHandler().addCompletedRanks(
+					player.getUniqueId(), rankFrom);
 
-	public boolean hasRankUp() {
-		return rankTo != null;
+			for (final Result r : res) {
+				if (r != null) {
+					if (!r.applyResult(player)) {
+						result = false;
+					}
+				}
+			}
+		} else {
+			result = false;
+		}
+
+		return result;
 	}
 
 	public boolean checkRequirements(final Player player) {
@@ -134,34 +144,24 @@ public class RankChange {
 		return failed;
 	}
 
-	public boolean applyChange(final Player player) {
-		boolean result = true;
+	public String getRankFrom() {
+		return rankFrom;
+	}
 
-		if (checkRequirements(player)) {
-			// Apply all 'main' results
+	public String getRankTo() {
+		return rankTo;
+	}
 
-			// Player already got this rank
-			if (plugin.getRequirementHandler()
-					.getCompletedRanks(player.getUniqueId()).contains(rankFrom)) {
-				return false;
-			}
+	public List<Requirement> getReq() {
+		return req;
+	}
 
-			// Add progress of completed requirements
-			plugin.getRequirementHandler().addCompletedRanks(
-					player.getUniqueId(), rankFrom);
+	public List<Result> getRes() {
+		return res;
+	}
 
-			for (final Result r : res) {
-				if (r != null) {
-					if (!r.applyResult(player)) {
-						result = false;
-					}
-				}
-			}
-		} else {
-			result = false;
-		}
-
-		return result;
+	public boolean hasRankUp() {
+		return rankTo != null;
 	}
 
 	@Override

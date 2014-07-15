@@ -21,102 +21,34 @@ import org.bukkit.plugin.Plugin;
  */
 public class StatsAPIHandler implements DependencyHandler {
 
-	private final Autorank plugin;
 	private StatsAPI api;
+	private final Autorank plugin;
 
 	public StatsAPIHandler(final Autorank instance) {
 		plugin = instance;
 	}
 
-	public int getTotalBlocksBroken(final String playerName,
-			final String worldName) {
-		if (!isAvailable())
-			return 0;
-
-		if (worldName != null) {
-			return (int) Math.round(api.getTotalBlocksBroken(playerName,
-					worldName));
-		} else {
-			return (int) Math.round(api.getTotalBlocksBroken(playerName));
+	public boolean areBetaFunctionsEnabled() {
+		if (api != null) {
+			return api.isUsingBetaFunctions();
 		}
+		return false;
 	}
 
-	public int getTotalBlocksPlaced(final String playerName,
-			final String worldName) {
-		if (!isAvailable())
-			return 0;
-
-		if (worldName != null) {
-			return (int) Math.round(api.getTotalBlocksPlaced(playerName,
-					worldName));
-		} else {
-			return (int) Math.round(api.getTotalBlocksPlaced(playerName));
-		}
-	}
-
-	public int getTotalPlayTime(final String playerName, final String worldName) {
-		if (!isAvailable())
-			return 0;
-
-		if (worldName != null) {
-			return (int) Math.round(api.getPlaytime(playerName, worldName));
-		} else {
-			return (int) Math.round(api.getPlaytime(playerName));
-		}
-	}
-
-	public StatsPlayer getStats(final String playerName) {
-		return api.getPlayer(playerName);
-	}
-
-	public Stat getStat(final String name) {
-		return api.getStat(name);
-	}
-
-	/**
-	 * Get the stats of a player, a new stat will be created if it didn't exist
-	 * yet.
-	 * 
-	 * @param statName Name of the stat to get
-	 * @param playerName Player to get the stats of.
-	 * @param worldName World to check for.
-	 * @return Requested stat of the player
+	/* (non-Javadoc)
+	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#get()
 	 */
-	public StatData getStatType(final String statName, final String playerName,
-			final String worldName) {
-		final StatsPlayer sPlayer = getStats(playerName);
+	@Override
+	public Plugin get() {
+		final Plugin plugin = this.plugin.getServer().getPluginManager()
+				.getPlugin("Stats");
 
-		final Stat stat = getStat(statName);
-
-		if (stat == null)
-			throw new IllegalArgumentException("Unknown stat '" + statName
-					+ "'!");
-
-		StatData data = null;
-
-		if (worldName != null) {
-			data = sPlayer.getStatData(stat, worldName, true);
-		} else {
-			data = sPlayer.getGlobalStatData(stat);
+		// WorldGuard may not be loaded
+		if (plugin == null || !(plugin instanceof Main)) {
+			return null; // Maybe you want throw an exception instead
 		}
 
-		return data;
-	}
-
-	public int getNormalStat(final String playerName, final String statName,
-			final String worldName) {
-		if (!isAvailable())
-			return 0;
-
-		final StatData stat = getStatType(statName, playerName, worldName);
-
-		int value = 0;
-
-		for (final Object[] vars : stat.getAllVariables()) {
-			value += stat.getValue(vars);
-		}
-
-		return value;
+		return plugin;
 	}
 
 	/**
@@ -163,6 +95,114 @@ public class StatsAPIHandler implements DependencyHandler {
 		return value;
 	}
 
+	public EntityType getEntityType(final String entityName) {
+		try {
+			return EntityType.valueOf(entityName.toUpperCase());
+		} catch (final Exception e) {
+			return null;
+		}
+	}
+
+	public int getNormalStat(final String playerName, final String statName,
+			final String worldName) {
+		if (!isAvailable())
+			return 0;
+
+		final StatData stat = getStatType(statName, playerName, worldName);
+
+		int value = 0;
+
+		for (final Object[] vars : stat.getAllVariables()) {
+			value += stat.getValue(vars);
+		}
+
+		return value;
+	}
+
+	public Stat getStat(final String name) {
+		return api.getStat(name);
+	}
+
+	public StatsPlayer getStats(final String playerName) {
+		return api.getPlayer(playerName);
+	}
+
+	/**
+	 * Get the stats of a player, a new stat will be created if it didn't exist
+	 * yet.
+	 * 
+	 * @param statName Name of the stat to get
+	 * @param playerName Player to get the stats of.
+	 * @param worldName World to check for.
+	 * @return Requested stat of the player
+	 */
+	public StatData getStatType(final String statName, final String playerName,
+			final String worldName) {
+		final StatsPlayer sPlayer = getStats(playerName);
+
+		final Stat stat = getStat(statName);
+
+		if (stat == null)
+			throw new IllegalArgumentException("Unknown stat '" + statName
+					+ "'!");
+
+		StatData data = null;
+
+		if (worldName != null) {
+			data = sPlayer.getStatData(stat, worldName, true);
+		} else {
+			data = sPlayer.getGlobalStatData(stat);
+		}
+
+		return data;
+	}
+
+	public int getTotalBlocksBroken(final String playerName,
+			final String worldName) {
+		if (!isAvailable())
+			return 0;
+
+		if (worldName != null) {
+			return (int) Math.round(api.getTotalBlocksBroken(playerName,
+					worldName));
+		} else {
+			return (int) Math.round(api.getTotalBlocksBroken(playerName));
+		}
+	}
+
+	public int getTotalBlocksMoved(final String playerName, final int type,
+			final String worldName) {
+		if (!isAvailable())
+			return 0;
+
+		final String statName = "Move";
+
+		final StatData stat = getStatType(statName, playerName, worldName);
+
+		int value = 0;
+
+		for (final Object[] vars : stat.getAllVariables()) {
+			if ((Integer) vars[0] == type) {
+				value += stat.getValue(vars);
+			}
+		}
+
+		return value;
+	}
+
+	public int getTotalBlocksPlaced(final String playerName,
+			final String worldName) {
+		if (!isAvailable())
+			return 0;
+
+		if (worldName != null) {
+			return (int) Math.round(api.getTotalBlocksPlaced(playerName,
+					worldName));
+		} else {
+			return (int) Math.round(api.getTotalBlocksPlaced(playerName));
+		}
+	}
+
 	public int getTotalMobsKilled(final String playerName,
 			final String mobName, final String worldName) {
 		if (!isAvailable())
@@ -197,55 +237,33 @@ public class StatsAPIHandler implements DependencyHandler {
 		return value;
 	}
 
-	public int getTotalBlocksMoved(final String playerName, final int type,
-			final String worldName) {
+	public int getTotalPlayTime(final String playerName, final String worldName) {
 		if (!isAvailable())
 			return 0;
 
-		final String statName = "Move";
-
-		final StatData stat = getStatType(statName, playerName, worldName);
-
-		int value = 0;
-
-		for (final Object[] vars : stat.getAllVariables()) {
-			if ((Integer) vars[0] == type) {
-				value += stat.getValue(vars);
-			}
+		if (worldName != null) {
+			return (int) Math.round(api.getPlaytime(playerName, worldName));
+		} else {
+			return (int) Math.round(api.getPlaytime(playerName));
 		}
-
-		return value;
-	}
-
-	public EntityType getEntityType(final String entityName) {
-		try {
-			return EntityType.valueOf(entityName.toUpperCase());
-		} catch (final Exception e) {
-			return null;
-		}
-	}
-
-	public boolean areBetaFunctionsEnabled() {
-		if (api != null) {
-			return api.isUsingBetaFunctions();
-		}
-		return false;
 	}
 
 	/* (non-Javadoc)
-	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#get()
+	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#isAvailable()
 	 */
 	@Override
-	public Plugin get() {
-		final Plugin plugin = this.plugin.getServer().getPluginManager()
-				.getPlugin("Stats");
+	public boolean isAvailable() {
+		return api != null;
+	}
 
-		// WorldGuard may not be loaded
-		if (plugin == null || !(plugin instanceof Main)) {
-			return null; // Maybe you want throw an exception instead
-		}
+	/* (non-Javadoc)
+	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#isInstalled()
+	 */
+	@Override
+	public boolean isInstalled() {
+		final Plugin plugin = get();
 
-		return plugin;
+		return plugin != null && plugin.isEnabled();
 	}
 
 	/* (non-Javadoc)
@@ -277,23 +295,5 @@ public class StatsAPIHandler implements DependencyHandler {
 				return false;
 			}
 		}
-	}
-
-	/* (non-Javadoc)
-	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#isInstalled()
-	 */
-	@Override
-	public boolean isInstalled() {
-		final Plugin plugin = get();
-
-		return plugin != null && plugin.isEnabled();
-	}
-
-	/* (non-Javadoc)
-	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#isAvailable()
-	 */
-	@Override
-	public boolean isAvailable() {
-		return api != null;
 	}
 }

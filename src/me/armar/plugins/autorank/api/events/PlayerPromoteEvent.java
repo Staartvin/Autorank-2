@@ -14,9 +14,13 @@ import org.bukkit.event.HandlerList;
 public class PlayerPromoteEvent extends Event implements Cancellable {
 	private static final HandlerList handlers = new HandlerList();
 
-	private final Player player;
-	private final String worldName, groupFrom, groupTo;
+	public static HandlerList getHandlerList() {
+		return handlers;
+	}
 	private boolean isCancelled;
+	private final Player player;
+
+	private final String worldName, groupFrom, groupTo;
 
 	/**
 	 * @param player Player
@@ -30,29 +34,6 @@ public class PlayerPromoteEvent extends Event implements Cancellable {
 		this.worldName = worldName;
 		this.groupFrom = groupFrom;
 		this.groupTo = groupTo;
-	}
-
-	public Player getPlayer() {
-		return player;
-	}
-
-	@Override
-	public HandlerList getHandlers() {
-		return handlers;
-	}
-
-	public static HandlerList getHandlerList() {
-		return handlers;
-	}
-
-	/**
-	 * Gets the world a player is ranked upon.
-	 * If world is null, player will be ranked globally.
-	 * 
-	 * @return worldName or null if ranked globally
-	 */
-	public String getWorld() {
-		return worldName;
 	}
 
 	/**
@@ -71,6 +52,25 @@ public class PlayerPromoteEvent extends Event implements Cancellable {
 	 */
 	public String getGroupTo() {
 		return groupTo;
+	}
+
+	@Override
+	public HandlerList getHandlers() {
+		return handlers;
+	}
+
+	public Player getPlayer() {
+		return player;
+	}
+
+	/**
+	 * Gets the world a player is ranked upon.
+	 * If world is null, player will be ranked globally.
+	 * 
+	 * @return worldName or null if ranked globally
+	 */
+	public String getWorld() {
+		return worldName;
 	}
 
 	/* (non-Javadoc)

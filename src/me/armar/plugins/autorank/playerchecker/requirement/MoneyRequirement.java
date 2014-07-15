@@ -10,25 +10,6 @@ public class MoneyRequirement extends Requirement {
 	private double minMoney = 999999999;
 
 	@Override
-	public boolean setOptions(final String[] options) {
-		try {
-			minMoney = Integer.parseInt(options[0]);
-			return true;
-		} catch (final Exception e) {
-			minMoney = 999999999;
-			return false;
-		}
-	}
-
-	@Override
-	public boolean meetsRequirement(final Player player) {
-
-		return VaultHandler.economy != null
-				&& VaultHandler.economy.has(this.getAutorank().getServer()
-						.getOfflinePlayer(player.getUniqueId()), minMoney);
-	}
-
-	@Override
 	public String getDescription() {
 		return Lang.MONEY_REQUIREMENT.getConfigValue(new String[] { minMoney
 				+ " " + VaultHandler.economy.currencyNamePlural() });
@@ -42,5 +23,24 @@ public class MoneyRequirement extends Requirement {
 				.getOfflinePlayer(player.getUniqueId()))
 				+ "/" + minMoney);
 		return progress;
+	}
+
+	@Override
+	public boolean meetsRequirement(final Player player) {
+
+		return VaultHandler.economy != null
+				&& VaultHandler.economy.has(this.getAutorank().getServer()
+						.getOfflinePlayer(player.getUniqueId()), minMoney);
+	}
+
+	@Override
+	public boolean setOptions(final String[] options) {
+		try {
+			minMoney = Integer.parseInt(options[0]);
+			return true;
+		} catch (final Exception e) {
+			minMoney = 999999999;
+			return false;
+		}
 	}
 }

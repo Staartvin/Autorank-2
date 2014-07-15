@@ -19,8 +19,8 @@ import com.gmail.nossr50.api.ExperienceAPI;
  */
 public class McMMOHandler implements DependencyHandler {
 
-	private final Autorank plugin;
 	private mcMMO api;
+	private final Autorank plugin;
 
 	public McMMOHandler(final Autorank instance) {
 		plugin = instance;
@@ -37,6 +37,59 @@ public class McMMOHandler implements DependencyHandler {
 		}
 
 		return plugin;
+	}
+
+	public int getPowerLevel(final Player player) {
+		int powerLevel = 0;
+
+		if (!isAvailable())
+			return powerLevel;
+
+		powerLevel = ExperienceAPI.getPowerLevel(player);
+
+		return powerLevel;
+	}
+
+	/**
+	 * Get the level of a certain skill of a player that is using mcMMO.
+	 * 
+	 * @param player Player to get the skill from
+	 * @param skillName Name of the skill
+	 * @return level of requested skill, or -1 if the skill is invalid.
+	 */
+	public int getSkillLevel(final Player player, final String skillName) {
+		int skillLevel = 0;
+
+		if (!isAvailable())
+			return skillLevel;
+
+		try {
+			skillLevel = ExperienceAPI.getLevel(player, skillName);
+		} catch (final Exception e) {
+			plugin.getLogger().warning(
+					"Skill '" + skillName + "' is not a valid skill!");
+			return -1;
+		}
+
+		return skillLevel;
+	}
+
+	/* (non-Javadoc)
+	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#isAvailable()
+	 */
+	@Override
+	public boolean isAvailable() {
+		return api != null;
+	}
+
+	/* (non-Javadoc)
+	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#isInstalled()
+	 */
+	@Override
+	public boolean isInstalled() {
+		final mcMMO plugin = (mcMMO) get();
+
+		return plugin != null && plugin.isEnabled();
 	}
 
 	/* (non-Javadoc)
@@ -67,59 +120,6 @@ public class McMMOHandler implements DependencyHandler {
 				return false;
 			}
 		}
-	}
-
-	/* (non-Javadoc)
-	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#isInstalled()
-	 */
-	@Override
-	public boolean isInstalled() {
-		final mcMMO plugin = (mcMMO) get();
-
-		return plugin != null && plugin.isEnabled();
-	}
-
-	/* (non-Javadoc)
-	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#isAvailable()
-	 */
-	@Override
-	public boolean isAvailable() {
-		return api != null;
-	}
-
-	/**
-	 * Get the level of a certain skill of a player that is using mcMMO.
-	 * 
-	 * @param player Player to get the skill from
-	 * @param skillName Name of the skill
-	 * @return level of requested skill, or -1 if the skill is invalid.
-	 */
-	public int getSkillLevel(final Player player, final String skillName) {
-		int skillLevel = 0;
-
-		if (!isAvailable())
-			return skillLevel;
-
-		try {
-			skillLevel = ExperienceAPI.getLevel(player, skillName);
-		} catch (final Exception e) {
-			plugin.getLogger().warning(
-					"Skill '" + skillName + "' is not a valid skill!");
-			return -1;
-		}
-
-		return skillLevel;
-	}
-
-	public int getPowerLevel(final Player player) {
-		int powerLevel = 0;
-
-		if (!isAvailable())
-			return powerLevel;
-
-		powerLevel = ExperienceAPI.getPowerLevel(player);
-
-		return powerLevel;
 	}
 
 }

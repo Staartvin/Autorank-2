@@ -27,33 +27,13 @@ import org.bukkit.entity.Player;
  */
 public class PlayerChecker {
 
-	private final Map<String, List<RankChange>> rankChanges = new HashMap<String, List<RankChange>>();
 	private RankChangeBuilder builder;
 	private final Autorank plugin;
+	private final Map<String, List<RankChange>> rankChanges = new HashMap<String, List<RankChange>>();
 
 	public PlayerChecker(final Autorank plugin) {
 		setBuilder(new RankChangeBuilder(plugin));
 		this.plugin = plugin;
-	}
-
-	public void initialiseFromConfigs() {
-		final SimpleYamlConfiguration simpleConfig = plugin.getSimpleConfig();
-
-		List<RankChange> ranks;
-		if (plugin.getConfigHandler().useAdvancedConfig()) {
-			ranks = builder
-					.createFromAdvancedConfig(plugin.getAdvancedConfig());
-		} else {
-			ranks = builder.createFromSimpleConfig(simpleConfig);
-		}
-
-		// Clear all rank changes, so nothing is left behind.
-		rankChanges.clear();
-
-		for (final RankChange rank : ranks) {
-			addRankChange(rank.getRankFrom(), rank);
-		}
-
 	}
 
 	public void addRankChange(final String name, final RankChange change) {
@@ -91,25 +71,6 @@ public class PlayerChecker {
 		return result;
 	}
 
-	public Map<RankChange, List<Requirement>> getFailedRequirements(
-			final Player player) {
-		final Map<RankChange, List<Requirement>> result = new HashMap<RankChange, List<Requirement>>();
-
-		final String[] groups = plugin.getPermPlugHandler()
-				.getPermissionPlugin().getPlayerGroups(player);
-
-		for (final String group : groups) {
-			final List<RankChange> changes = rankChanges.get(group);
-			if (changes != null) {
-				for (final RankChange change : changes) {
-					result.put(change, change.getFailedRequirements(player));
-				}
-			}
-		}
-
-		return result;
-	}
-
 	public Map<RankChange, List<Requirement>> getAllRequirements(
 			final Player player) {
 		final Map<RankChange, List<Requirement>> result = new HashMap<RankChange, List<Requirement>>();
@@ -129,20 +90,27 @@ public class PlayerChecker {
 		return result;
 	}
 
-	/**
-	 * Get the next rank up permission group
-	 * 
-	 * @param player Player to check for
-	 * @return name of the permission group the player will be ranked to; null
-	 *         if no rank up
-	 */
-	public String getNextRankupGroup(final Player player) {
-		final RankChange change = getNextRank(player);
+	public RankChangeBuilder getBuilder() {
+		return builder;
+	}
 
-		if (change == null)
-			return null;
+	public Map<RankChange, List<Requirement>> getFailedRequirements(
+			final Player player) {
+		final Map<RankChange, List<Requirement>> result = new HashMap<RankChange, List<Requirement>>();
 
-		return change.getRankTo();
+		final String[] groups = plugin.getPermPlugHandler()
+				.getPermissionPlugin().getPlayerGroups(player);
+
+		for (final String group : groups) {
+			final List<RankChange> changes = rankChanges.get(group);
+			if (changes != null) {
+				for (final RankChange change : changes) {
+					result.put(change, change.getFailedRequirements(player));
+				}
+			}
+		}
+
+		return result;
 	}
 
 	/**
@@ -171,6 +139,22 @@ public class PlayerChecker {
 	}
 
 	/**
+	 * Get the next rank up permission group
+	 * 
+	 * @param player Player to check for
+	 * @return name of the permission group the player will be ranked to; null
+	 *         if no rank up
+	 */
+	public String getNextRankupGroup(final Player player) {
+		final RankChange change = getNextRank(player);
+
+		if (change == null)
+			return null;
+
+		return change.getRankTo();
+	}
+
+	/**
 	 * Get all requirements for a player to rank up.
 	 * All requirements are included, even if they are completed.
 	 * 
@@ -187,8 +171,24 @@ public class PlayerChecker {
 		return getAllRequirements(player).get(rank);
 	}
 
-	public RankChangeBuilder getBuilder() {
-		return builder;
+	public void initialiseFromConfigs() {
+		final SimpleYamlConfiguration simpleConfig = plugin.getSimpleConfig();
+
+		List<RankChange> ranks;
+		if (plugin.getConfigHandler().useAdvancedConfig()) {
+			ranks = builder
+					.createFromAdvancedConfig(plugin.getAdvancedConfig());
+		} else {
+			ranks = builder.createFromSimpleConfig(simpleConfig);
+		}
+
+		// Clear all rank changes, so nothing is left behind.
+		rankChanges.clear();
+
+		for (final RankChange rank : ranks) {
+			addRankChange(rank.getRankFrom(), rank);
+		}
+
 	}
 
 	private void setBuilder(final RankChangeBuilder builder) {

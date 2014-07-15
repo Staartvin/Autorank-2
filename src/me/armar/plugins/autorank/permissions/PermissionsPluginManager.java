@@ -26,8 +26,8 @@ import org.bukkit.plugin.Plugin;
  */
 public class PermissionsPluginManager {
 
-	private final Autorank plugin;
 	private PermissionsHandler permissionPlugin;
+	private final Autorank plugin;
 
 	public PermissionsPluginManager(final Autorank plugin) {
 		this.plugin = plugin;
@@ -37,23 +37,6 @@ public class PermissionsPluginManager {
 			plugin.getLogger().severe("Vault was not found!");
 		}*/
 		searchPermPlugin();
-	}
-
-	private void searchPermPlugin() {
-		if (findGroupManager(plugin)) {
-			// use Groupmanager
-			permissionPlugin = new GroupManagerHandler(plugin);
-		} else if (findPermissionsBukkit(plugin)) {
-			// Use PermissionsBukkit
-			permissionPlugin = new PermissionsBukkitHandler(plugin);
-		} else {
-			// use Vault
-			permissionPlugin = new VaultPermissionsHandler(plugin);
-		}
-	}
-
-	public PermissionsHandler getPermissionPlugin() {
-		return permissionPlugin;
 	}
 
 	protected boolean findGroupManager(final Autorank plugin) {
@@ -72,5 +55,22 @@ public class PermissionsPluginManager {
 			return true;
 		}
 		return false;
+	}
+
+	public PermissionsHandler getPermissionPlugin() {
+		return permissionPlugin;
+	}
+
+	private void searchPermPlugin() {
+		if (findGroupManager(plugin)) {
+			// use Groupmanager
+			permissionPlugin = new GroupManagerHandler(plugin);
+		} else if (findPermissionsBukkit(plugin)) {
+			// Use PermissionsBukkit
+			permissionPlugin = new PermissionsBukkitHandler(plugin);
+		} else {
+			// use Vault
+			permissionPlugin = new VaultPermissionsHandler(plugin);
+		}
 	}
 }

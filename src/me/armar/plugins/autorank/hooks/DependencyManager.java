@@ -40,14 +40,14 @@ public class DependencyManager {
 	 * 
 	 */
 	public enum dependency {
-		AUTORANK, FACTIONS, STATS, WORLDGUARD, MCMMO, ESSENTIALS, VAULT, ROYALCOMMANDS, ONTIME
+		AUTORANK, ESSENTIALS, FACTIONS, MCMMO, ONTIME, ROYALCOMMANDS, STATS, VAULT, WORLDGUARD
 	};
+
+	private final HashMap<dependency, DependencyHandler> handlers = new HashMap<dependency, DependencyHandler>();
 
 	private final Autorank plugin;
 
 	private final StatsPluginManager statsPluginManager;
-
-	private final HashMap<dependency, DependencyHandler> handlers = new HashMap<dependency, DependencyHandler>();
 
 	public DependencyManager(final Autorank instance) {
 		plugin = instance;
@@ -64,6 +64,36 @@ public class DependencyManager {
 		handlers.put(dependency.STATS, new StatsAPIHandler(instance));
 
 		statsPluginManager = new StatsPluginManager(instance);
+	}
+
+	public DependencyHandler getDependency(final dependency dep) {
+
+		if (!handlers.containsKey(dep)) {
+			throw new IllegalArgumentException("Unknown dependency '"
+					+ dep.toString() + "'");
+		} else {
+			return handlers.get(dep);
+		}
+	}
+
+	public StatsPlugin getStatsPlugin() {
+		return statsPluginManager.getStatsPlugin();
+	}
+
+	public boolean isAFK(final Player player) {
+		if (!plugin.getConfigHandler().useAFKIntegration())
+			return false;
+
+		if (handlers.get(dependency.ESSENTIALS).isAvailable()) {
+			return ((EssentialsHandler) handlers.get(dependency.ESSENTIALS))
+					.isAFK(player);
+		} else if (handlers.get(dependency.ROYALCOMMANDS).isAvailable()) {
+			return ((RoyalCommandsHandler) handlers
+					.get(dependency.ROYALCOMMANDS)).isAFK(player);
+		}
+
+		// No suitable plugin found
+		return false;
 	}
 
 	/**
@@ -102,36 +132,6 @@ public class DependencyManager {
 		}
 
 		plugin.getLogger().info("Loaded libraries and dependencies");
-	}
-
-	public DependencyHandler getDependency(final dependency dep) {
-
-		if (!handlers.containsKey(dep)) {
-			throw new IllegalArgumentException("Unknown dependency '"
-					+ dep.toString() + "'");
-		} else {
-			return handlers.get(dep);
-		}
-	}
-
-	public StatsPlugin getStatsPlugin() {
-		return statsPluginManager.getStatsPlugin();
-	}
-
-	public boolean isAFK(final Player player) {
-		if (!plugin.getConfigHandler().useAFKIntegration())
-			return false;
-
-		if (handlers.get(dependency.ESSENTIALS).isAvailable()) {
-			return ((EssentialsHandler) handlers.get(dependency.ESSENTIALS))
-					.isAFK(player);
-		} else if (handlers.get(dependency.ROYALCOMMANDS).isAvailable()) {
-			return ((RoyalCommandsHandler) handlers
-					.get(dependency.ROYALCOMMANDS)).isAFK(player);
-		}
-
-		// No suitable plugin found
-		return false;
 	}
 
 }

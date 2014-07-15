@@ -19,20 +19,6 @@ public class GlobalTimeRequirement extends Requirement {
 	int time = -1;
 
 	@Override
-	public boolean setOptions(final String[] options) {
-		if (options.length > 0)
-			this.time = AutorankTools.stringToTime(options[0], Time.MINUTES);
-		return (time != -1);
-	}
-
-	@Override
-	public boolean meetsRequirement(final Player player) {
-		final double playtime = this.getAutorank().getPlaytimes()
-				.getGlobalTime(player.getUniqueId());
-		return time != -1 && time <= playtime;
-	}
-
-	@Override
 	public String getDescription() {
 		return Lang.GLOBAL_TIME_REQUIREMENT
 				.getConfigValue(new String[] { AutorankTools.timeToString(time,
@@ -46,5 +32,19 @@ public class GlobalTimeRequirement extends Requirement {
 				player.getUniqueId())
 				+ " min" + "/" + time + " min");
 		return progress;
+	}
+
+	@Override
+	public boolean meetsRequirement(final Player player) {
+		final double playtime = this.getAutorank().getPlaytimes()
+				.getGlobalTime(player.getUniqueId());
+		return time != -1 && time <= playtime;
+	}
+
+	@Override
+	public boolean setOptions(final String[] options) {
+		if (options.length > 0)
+			this.time = AutorankTools.stringToTime(options[0], Time.MINUTES);
+		return (time != -1);
 	}
 }

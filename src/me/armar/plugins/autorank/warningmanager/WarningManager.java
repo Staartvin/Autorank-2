@@ -46,24 +46,37 @@ public class WarningManager {
 	private String highestPriorityWarn = "none";
 	private final List<String> warnings = new ArrayList<String>();
 
-	/**
-	 * Register a new warning.
-	 * Priority level will be capped if this number is too high or too low.
-	 * 
-	 * @param message Warning message description
-	 * @param priority Priority level (1 - 10).
-	 */
-	public void registerWarning(final String message, int priority) {
-		// Set priority limits
-		if (priority > 10) {
-			priority = 10;
-		} else if (priority < 1) {
-			priority = 1;
+	private String findHighestPriorityWarning() {
+		String highestWarning = null;
+		int highestPriority = 0;
+
+		for (final String warning : warnings) {
+			if (findPriority(warning) > highestPriority) {
+				highestPriority = findPriority(warning);
+
+				highestWarning = findMessage(warning);
+			}
 		}
 
-		final String fullString = message + ">" + priority;
+		return highestWarning;
+	}
 
-		warnings.add(fullString);
+	private String findMessage(final String warning) {
+		if (!warning.contains(">"))
+			return warning;
+
+		final String[] splitter = warning.split(">");
+
+		return splitter[0];
+	}
+
+	private int findPriority(final String warning) {
+		if (!warning.contains(">"))
+			return 1;
+
+		final String[] splitter = warning.split(">");
+
+		return Integer.parseInt(splitter[1]);
 	}
 
 	/**
@@ -88,36 +101,23 @@ public class WarningManager {
 		return highestPriorityWarn;
 	}
 
-	private String findHighestPriorityWarning() {
-		String highestWarning = null;
-		int highestPriority = 0;
-
-		for (final String warning : warnings) {
-			if (findPriority(warning) > highestPriority) {
-				highestPriority = findPriority(warning);
-
-				highestWarning = findMessage(warning);
-			}
+	/**
+	 * Register a new warning.
+	 * Priority level will be capped if this number is too high or too low.
+	 * 
+	 * @param message Warning message description
+	 * @param priority Priority level (1 - 10).
+	 */
+	public void registerWarning(final String message, int priority) {
+		// Set priority limits
+		if (priority > 10) {
+			priority = 10;
+		} else if (priority < 1) {
+			priority = 1;
 		}
 
-		return highestWarning;
-	}
+		final String fullString = message + ">" + priority;
 
-	private int findPriority(final String warning) {
-		if (!warning.contains(">"))
-			return 1;
-
-		final String[] splitter = warning.split(">");
-
-		return Integer.parseInt(splitter[1]);
-	}
-
-	private String findMessage(final String warning) {
-		if (!warning.contains(">"))
-			return warning;
-
-		final String[] splitter = warning.split(">");
-
-		return splitter[0];
+		warnings.add(fullString);
 	}
 }
