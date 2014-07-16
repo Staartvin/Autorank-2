@@ -53,7 +53,7 @@ public class PlayerChecker {
 		// Do not rank a player when he is excluded
 		if (AutorankTools.isExcluded(player))
 			return result;
-
+		
 		final String[] groups = plugin.getPermPlugHandler()
 				.getPermissionPlugin().getPlayerGroups(player);
 

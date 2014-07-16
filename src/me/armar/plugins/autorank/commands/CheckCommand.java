@@ -32,7 +32,6 @@ public class CheckCommand extends AutorankCommand {
 
 	public void check(final CommandSender sender, final Player player) {
 		// Call event to let other plugins know that a player wants to check itself.
-
 		// Create the event here
 		final CheckCommandEvent event = new CheckCommandEvent(player);
 		// Call the event
