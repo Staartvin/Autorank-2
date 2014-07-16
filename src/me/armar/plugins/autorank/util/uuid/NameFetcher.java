@@ -69,29 +69,38 @@ public class NameFetcher implements Callable<Map<UUID, String>> {
 
 			String fromStream = null;
 			// Ping code 204 == No content (Request was sent, but UUID was invalid)
-			final int pingCode = connection.getResponseCode();
+			//final int pingCode = connection.getResponseCode();
 
 			/*if (pingCode == 204) {
 				Bukkit.getLogger().warning("Tried to get UUID: " + uuid.toString() + " but this invalid.");
 				continue;
 			}*/
 
-			System.out.print("Ping: " + pingCode);
+			System.out.print("--------------------");
+			System.out.print("Trying UUID: " + uuid.toString());
+			
+			/*if (pingCode == 204) {
+				System.out.print("Got 204 code - no content.");
+				continue;
+			}*/
+			
+			//System.out.print("Ping: " + pingCode);
 
 			try {
-				response = (JSONObject) jsonParser.parse(new InputStreamReader(
-						connection.getInputStream()));
+				while (name == null) {
+					response = (JSONObject) jsonParser
+							.parse(new InputStreamReader(connection
+									.getInputStream()));
 
-				System.out.print("Response: " + response);
+					System.out.print("Response: " + response);
 
-				name = (String) response.get("name");
+					name = (String) response.get("name");
 
-				System.out.print("Name: " + name);
+					System.out.print("Name: " + name);
 
-				if (name == null) {
-					continue;
 				}
 
+			} catch (ParseException e) {
 				// Try converting the stream to a string and removing all the spaces. 
 				fromStream = fromStream(connection.getInputStream())
 						.replaceAll(" ", "");
@@ -109,6 +118,8 @@ public class NameFetcher implements Callable<Map<UUID, String>> {
 							+ "' to name!");
 					continue;
 				}
+				
+				System.out.print("Could not identify returned values!");
 
 				final String cause = (String) response.get("cause");
 				final String errorMessage = (String) response
@@ -116,8 +127,6 @@ public class NameFetcher implements Callable<Map<UUID, String>> {
 				if (cause != null && cause.length() > 0) {
 					throw new IllegalStateException(errorMessage);
 				}
-			} catch (final ParseException e) {
-				System.out.print("Could not identify returned values!");
 			}
 
 			/*try {
