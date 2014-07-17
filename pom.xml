@@ -201,5 +201,12 @@
 			<type>jar</type>
 		</dependency>
 
+		<dependency>
+			<groupId>UltimateCore</groupId>
+			<artifactId>UltimateCore</artifactId>
+			<version>1.0.3</version>
+		</dependency>
+
+
 	</dependencies>
 </project>
