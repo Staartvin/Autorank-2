@@ -14,7 +14,7 @@ use advanced config: false
 afk integration: true
 # If a compatible AFK plugin is found Autorank will not count online time for AFK players
 # This option is always on when using the SimpleConfig
-# Currently supports: Essentials and RoyalCommands
+# Currently supports: Essentials, RoyalCommands and UltimateCore
 # Autorank automatically chooses what plugin to use for AFK integration.
 
 use partial completion: true
