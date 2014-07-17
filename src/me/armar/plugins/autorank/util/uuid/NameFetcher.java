@@ -75,9 +75,6 @@ public class NameFetcher implements Callable<Map<UUID, String>> {
 				Bukkit.getLogger().warning("Tried to get UUID: " + uuid.toString() + " but this invalid.");
 				continue;
 			}*/
-
-			System.out.print("--------------------");
-			System.out.print("Trying UUID: " + uuid.toString());
 			
 			/*if (pingCode == 204) {
 				System.out.print("Got 204 code - no content.");
@@ -92,11 +89,7 @@ public class NameFetcher implements Callable<Map<UUID, String>> {
 							.parse(new InputStreamReader(connection
 									.getInputStream()));
 
-					System.out.print("Response: " + response);
-
 					name = (String) response.get("name");
-
-					System.out.print("Name: " + name);
 
 				}
 
@@ -105,8 +98,6 @@ public class NameFetcher implements Callable<Map<UUID, String>> {
 				fromStream = fromStream(connection.getInputStream())
 						.replaceAll(" ", "");
 
-				System.out.print("from Stream: " + fromStream);
-
 				// Parse again
 				response = (JSONObject) jsonParser.parse(fromStream);
 
@@ -114,12 +105,10 @@ public class NameFetcher implements Callable<Map<UUID, String>> {
 				name = (String) response.get("name");
 
 				if (name == null) {
-					System.out.print("Could not parse uuid '" + uuid.toString()
+					System.out.print("[Autorank] Could not parse uuid '" + uuid.toString()
 							+ "' to name!");
 					continue;
 				}
-				
-				System.out.print("Could not identify returned values!");
 
 				final String cause = (String) response.get("cause");
 				final String errorMessage = (String) response
@@ -128,25 +117,6 @@ public class NameFetcher implements Callable<Map<UUID, String>> {
 					throw new IllegalStateException(errorMessage);
 				}
 			}
-
-			/*try {
-				response = (JSONObject) jsonParser.parse(new InputStreamReader(
-						connection.getInputStream()));
-
-				name = (String) response.get("name");
-				if (name == null) {
-					continue;
-				}
-				
-				System.out.print("Name: " + name);
-				
-				final String cause = (String) response.get("cause");
-				final String errorMessage = (String) response
-						.get("errorMessage");
-				if (cause != null && cause.length() > 0) {
-					throw new IllegalStateException(errorMessage);
-				}
-			}*/
 
 			uuidStringMap.put(uuid, name);
 		}
