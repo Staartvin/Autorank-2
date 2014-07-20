@@ -34,8 +34,6 @@ public class CompleteCommand extends AutorankCommand {
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command cmd,
 			final String label, final String[] args) {
-
-		
 		
 		// Implemented /ar complete #
 		if (args.length != 2) {

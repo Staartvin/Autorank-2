@@ -42,10 +42,10 @@ public class SQLDataStorage {
 
 			//System.out.println("jdbc:mysql://" + hostname + "/" + database
 			//	+ "?" + "user=" + username + "&password=" + password);
+			
+			String url = "jdbc:mysql://" + hostname + "/" + database;
 
-			conn = DriverManager.getConnection("jdbc:mysql://" + hostname + "/"
-					+ database + "?" + "user=" + username + "&password="
-					+ password);
+			conn = DriverManager.getConnection(url, username, password);
 
 		} catch (final SQLException ex) {
 			System.out.println("SQLDataStorage.connect");
