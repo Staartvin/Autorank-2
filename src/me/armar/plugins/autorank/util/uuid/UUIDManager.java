@@ -67,7 +67,7 @@ public class UUIDManager {
 		if (!useCache)
 			return;
 		
-		System.out.print("Cached " + uuid + " of " + playerName);
+		//System.out.print("Cached " + uuid + " of " + playerName);
 		
 		cachedUUIDs.put(playerName, uuid);
 		lastCached.put(playerName, System.currentTimeMillis());
