@@ -1,7 +1,10 @@
 package me.armar.plugins.autorank.playtimes;
 
+import java.util.UUID;
+
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.DependencyManager;
+import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -43,14 +46,16 @@ public class PlaytimesUpdate implements Runnable {
 			if (depManager.isAFK(player)) {
 				return;
 			}
+			
+			UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
 
 			// Modify local time
-			playtimes.modifyLocalTime(player.getUniqueId(),
+			playtimes.modifyLocalTime(uuid,
 					Playtimes.INTERVAL_MINUTES);
 
 			// Modify global time
 			if (playtimes.isMySQLEnabled()) {
-				playtimes.modifyGlobalTime(player.getUniqueId(),
+				playtimes.modifyGlobalTime(uuid,
 						Playtimes.INTERVAL_MINUTES);
 			}
 

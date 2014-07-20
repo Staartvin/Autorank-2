@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.addons.AddOnManager;
 import me.armar.plugins.autorank.playerchecker.RankChange;
 import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 import me.armar.plugins.autorank.playerchecker.result.Result;
+import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
 import org.bukkit.entity.Player;
 
@@ -90,11 +92,18 @@ public class API {
 	 * MySQL database linked) of a player.
 	 * <p>
 	 * 
+	 * @deprecated use getGlobalPlayTime(UUID uuid) instead.
 	 * @param player Player to check for.
 	 * @return play time of a player. -1 if no entry was found.
 	 */
 	public int getGlobalPlayTime(final Player player) {
-		return plugin.getPlaytimes().getGlobalTime(player.getUniqueId());
+		UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
+		
+		return getGlobalPlayTime(uuid);
+	}
+	
+	public int getGlobalPlayTime(final UUID uuid) {
+		return plugin.getPlaytimes().getGlobalTime(uuid);
 	}
 
 	/**
@@ -103,11 +112,18 @@ public class API {
 	 * This method will grab the time from the data.yml used by Autorank and <br>
 	 * this is not dependend on other plugins.
 	 * 
+	 * @deprecated use getLocalPlayTime(UUID uuid) instead.
 	 * @param player Player to get the time for.
 	 * @return play time of this player or 0 if not found.
 	 */
 	public int getLocalTime(final Player player) {
-		return plugin.getPlaytimes().getLocalTime(player.getUniqueId());
+		UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
+		
+		return plugin.getPlaytimes().getLocalTime(uuid);
+	}
+	
+	public int getLocalPlayTime(final UUID uuid) {
+		return plugin.getPlaytimes().getLocalTime(uuid);
 	}
 
 	/**

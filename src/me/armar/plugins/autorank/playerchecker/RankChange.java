@@ -1,11 +1,13 @@
 package me.armar.plugins.autorank.playerchecker;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 import me.armar.plugins.autorank.playerchecker.result.Result;
+import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
 import org.bukkit.entity.Player;
 
@@ -31,17 +33,20 @@ public class RankChange {
 		boolean result = true;
 
 		if (checkRequirements(player)) {
+			
+			UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
+			
 			// Apply all 'main' results
 
 			// Player already got this rank
 			if (plugin.getRequirementHandler()
-					.getCompletedRanks(player.getUniqueId()).contains(rankFrom)) {
+					.getCompletedRanks(uuid).contains(rankFrom)) {
 				return false;
 			}
 
 			// Add progress of completed requirements
 			plugin.getRequirementHandler().addCompletedRanks(
-					player.getUniqueId(), rankFrom);
+					uuid, rankFrom);
 
 			for (final Result r : res) {
 				if (r != null) {
@@ -60,9 +65,11 @@ public class RankChange {
 	public boolean checkRequirements(final Player player) {
 		boolean result = true;
 
+		UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
+		
 		// Player already got this rank
 		if (plugin.getRequirementHandler()
-				.getCompletedRanks(player.getUniqueId()).contains(rankFrom)) {
+				.getCompletedRanks(uuid).contains(rankFrom)) {
 			return false;
 		}
 
@@ -88,7 +95,7 @@ public class RankChange {
 			// If this requirement doesn't auto complete and hasn't already been completed, return false;
 			if (!r.useAutoCompletion()
 					&& !plugin.getRequirementHandler().hasCompletedRequirement(
-							reqID, player.getUniqueId())) {
+							reqID, uuid)) {
 				return false;
 			}
 
@@ -96,7 +103,7 @@ public class RankChange {
 
 				// Player does not meet requirement, but has completed it already
 				if (plugin.getRequirementHandler().hasCompletedRequirement(
-						reqID, player.getUniqueId())) {
+						reqID, uuid)) {
 					continue;
 				}
 
@@ -108,9 +115,9 @@ public class RankChange {
 
 				// Player has not completed this requirement -> perform results
 				if (!plugin.getRequirementHandler().hasCompletedRequirement(
-						reqID, player.getUniqueId())) {
+						reqID, uuid)) {
 					plugin.getRequirementHandler().addPlayerProgress(
-							player.getUniqueId(), reqID);
+							uuid, reqID);
 				} else {
 					// Player already completed this -> do nothing
 					continue;

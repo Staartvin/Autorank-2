@@ -1,10 +1,13 @@
 package me.armar.plugins.autorank.commands;
 
+import java.util.UUID;
+
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
+import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -53,9 +56,11 @@ public class GlobalCheckCommand extends AutorankCommand {
 							+ Lang.PLAYER_IS_EXCLUDED.getConfigValue(args[1]));
 					return true;
 				}
-
+				
+				UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
+				
 				final int minutes = plugin.getPlaytimes().getGlobalTime(
-						player.getUniqueId());
+						uuid);
 
 				if (minutes < 0) {
 					sender.sendMessage(Lang.PLAYER_IS_INVALID
@@ -85,11 +90,14 @@ public class GlobalCheckCommand extends AutorankCommand {
 				return true;
 			}
 			final Player player = (Player) sender;
+			
+			UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
+			
 			AutorankTools.sendColoredMessage(
 					sender,
 					"You have played for "
 							+ AutorankTools.timeToString(plugin.getPlaytimes()
-									.getGlobalTime(player.getUniqueId()),
+									.getGlobalTime(uuid),
 									Time.MINUTES) + " across all servers.");
 
 		} else {

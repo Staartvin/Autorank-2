@@ -1,8 +1,11 @@
 package me.armar.plugins.autorank.playerchecker.requirement;
 
+import java.util.UUID;
+
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
+import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
 import org.bukkit.entity.Player;
 
@@ -27,17 +30,21 @@ public class GlobalTimeRequirement extends Requirement {
 
 	@Override
 	public String getProgress(final Player player) {
+		
+		UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
 		String progress = "";
 		progress = progress.concat(getAutorank().getPlaytimes().getGlobalTime(
-				player.getUniqueId())
+				uuid)
 				+ " min" + "/" + time + " min");
 		return progress;
 	}
 
 	@Override
 	public boolean meetsRequirement(final Player player) {
+		UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
+		
 		final double playtime = this.getAutorank().getPlaytimes()
-				.getGlobalTime(player.getUniqueId());
+				.getGlobalTime(uuid);
 		return time != -1 && time <= playtime;
 	}
 

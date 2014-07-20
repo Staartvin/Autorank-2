@@ -1,7 +1,10 @@
 package me.armar.plugins.autorank.playerchecker.requirement;
 
+import java.util.UUID;
+
 import me.armar.plugins.autorank.hooks.vaultapi.VaultHandler;
 import me.armar.plugins.autorank.language.Lang;
+import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
 import org.bukkit.entity.Player;
 
@@ -17,10 +20,12 @@ public class MoneyRequirement extends Requirement {
 
 	@Override
 	public String getProgress(final Player player) {
+		UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
+		
 		String progress = "";
 		progress = progress.concat(VaultHandler.economy.getBalance(this
 				.getAutorank().getServer()
-				.getOfflinePlayer(player.getUniqueId()))
+				.getOfflinePlayer(uuid))
 				+ "/" + minMoney);
 		return progress;
 	}
@@ -28,9 +33,11 @@ public class MoneyRequirement extends Requirement {
 	@Override
 	public boolean meetsRequirement(final Player player) {
 
+		UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
+		
 		return VaultHandler.economy != null
 				&& VaultHandler.economy.has(this.getAutorank().getServer()
-						.getOfflinePlayer(player.getUniqueId()), minMoney);
+						.getOfflinePlayer(uuid), minMoney);
 	}
 
 	@Override

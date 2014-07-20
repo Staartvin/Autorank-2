@@ -2,6 +2,7 @@ package me.armar.plugins.autorank.commands;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.api.events.CheckCommandEvent;
@@ -11,6 +12,7 @@ import me.armar.plugins.autorank.playerchecker.RankChange;
 import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
+import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -36,6 +38,8 @@ public class CheckCommand extends AutorankCommand {
 		final CheckCommandEvent event = new CheckCommandEvent(player);
 		// Call the event
 		Bukkit.getServer().getPluginManager().callEvent(event);
+		
+		UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
 
 		// Check if event is cancelled.
 		if (event.isCancelled())
@@ -46,20 +50,20 @@ public class CheckCommand extends AutorankCommand {
 				.getPermissionPlugin()
 				.getWorldGroups(player, player.getWorld().getName())[0];
 		String latestKnownGroup = plugin.getRequirementHandler()
-				.getLastKnownGroup(player.getUniqueId());
+				.getLastKnownGroup(uuid);
 
 		if (latestKnownGroup == null) {
 			plugin.getRequirementHandler().setLastKnownGroup(
-					player.getUniqueId(), currentGroup);
+					uuid, currentGroup);
 
 			latestKnownGroup = currentGroup;
 		}
 		if (!latestKnownGroup.equalsIgnoreCase(currentGroup)) {
 			// Reset progress and update latest known group
 			plugin.getRequirementHandler().setPlayerProgress(
-					player.getUniqueId(), new ArrayList<Integer>());
+					uuid, new ArrayList<Integer>());
 			plugin.getRequirementHandler().setLastKnownGroup(
-					player.getUniqueId(), currentGroup);
+					uuid, currentGroup);
 		}
 
 		final String[] groups = plugin.getPermPlugHandler()
@@ -109,7 +113,7 @@ public class CheckCommand extends AutorankCommand {
 		/*stringBuilder.append(player.getName()
 				+ Lang.HAS_PLAYED_FOR.getConfigValue(null)
 				+ AutorankTools.minutesToString(plugin.getPlaytimes()
-						.getLocalTime(player.getUniqueId())) + ", ");*/
+						.getLocalTime(uuid)) + ", ");*/
 
 		// is in
 		//stringBuilder.append(Lang.IS_IN.getConfigValue(null));
@@ -124,7 +128,7 @@ public class CheckCommand extends AutorankCommand {
 		/*String nextRankup = plugin.getPlayerChecker()
 				.getNextRankupGroup(player);
 
-		if (nextRankup == null || plugin.getRequirementHandler().getCompletedRanks(player.getUniqueId()).contains(nextRankChange.getRankFrom())) {
+		if (nextRankup == null || plugin.getRequirementHandler().getCompletedRanks(uuid).contains(nextRankChange.getRankFrom())) {
 			AutorankTools.sendColoredMessage(sender,
 					Lang.NO_NEXT_RANK.getConfigValue());
 		}*/
@@ -160,9 +164,9 @@ public class CheckCommand extends AutorankCommand {
 
 					if (!plugin.getRequirementHandler()
 							.hasCompletedRequirement(reqID,
-									player.getUniqueId())) {
+									uuid)) {
 						plugin.getRequirementHandler().addPlayerProgress(
-								player.getUniqueId(), reqID);
+								uuid, reqID);
 
 						// Run results
 						plugin.getRequirementHandler().runResults(req, player);
@@ -176,7 +180,7 @@ public class CheckCommand extends AutorankCommand {
 						// Player does not meet requirements, but has done this already
 						if (plugin.getRequirementHandler()
 								.hasCompletedRequirement(reqID,
-										player.getUniqueId())) {
+										uuid)) {
 							metRequirements.add(reqID);
 							continue;
 						}
@@ -203,7 +207,7 @@ public class CheckCommand extends AutorankCommand {
 
 				// Do not auto complete
 				if (plugin.getRequirementHandler().hasCompletedRequirement(
-						reqID, player.getUniqueId())) {
+						reqID, uuid)) {
 					// Player has completed requirement already
 					metRequirements.add(reqID);
 					continue;
@@ -220,7 +224,7 @@ public class CheckCommand extends AutorankCommand {
 		String reqMessage2 = "";
 
 		if (plugin.getRequirementHandler().hasCompletedRank(
-				player.getUniqueId(), nextRankChange.getRankFrom())) {
+				uuid, nextRankChange.getRankFrom())) {
 			reqMessage2 = " but has no (new) rankup.";
 		} else {
 			reqMessage2 = Lang.RANKED_UP_NOW.getConfigValue();
