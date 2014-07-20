@@ -84,14 +84,11 @@ public class NameFetcher implements Callable<Map<UUID, String>> {
 			//System.out.print("Ping: " + pingCode);
 
 			try {
-				while (name == null) {
 					response = (JSONObject) jsonParser
 							.parse(new InputStreamReader(connection
 									.getInputStream()));
 
 					name = (String) response.get("name");
-
-				}
 
 			} catch (ParseException e) {
 				// Try converting the stream to a string and removing all the spaces. 
@@ -115,6 +112,11 @@ public class NameFetcher implements Callable<Map<UUID, String>> {
 						.get("errorMessage");
 				if (cause != null && cause.length() > 0) {
 					throw new IllegalStateException(errorMessage);
+				}
+			} finally {
+				if (name == null || response == null) {
+					System.out.print("[Autorank] Could not find name of account with uuid: '" + uuid.toString()
+							+ "'");
 				}
 			}
 

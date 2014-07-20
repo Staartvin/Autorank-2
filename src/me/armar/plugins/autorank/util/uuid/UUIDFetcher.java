@@ -109,16 +109,14 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
 				array = (JSONArray) jsonParser.parse(new InputStreamReader(
 						connection.getInputStream()));
 			} catch (final Exception e) {
-				throw new Exception("Could not parse name to uuid!");
+				System.out.print("[Autorank] Could not fetch UUID of player '" + names.get(i) + "'!");
+				continue;
 			}
 
 			for (final Object profile : array) {
 				final JSONObject jsonProfile = (JSONObject) profile;
 				final String id = (String) jsonProfile.get("id");
 				final String name = (String) jsonProfile.get("name");
-
-				System.out.print("UUID FOUND: " + getUUID(id).toString());
-				System.out.print("UUID befor: " + id);
 
 				final UUID uuid = UUIDFetcher.getUUID(id);
 
