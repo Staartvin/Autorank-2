@@ -1,10 +1,7 @@
 package me.armar.plugins.autorank.playerchecker.requirement;
 
-import java.util.UUID;
-
 import me.armar.plugins.autorank.hooks.vaultapi.VaultHandler;
 import me.armar.plugins.autorank.language.Lang;
-import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
 import org.bukkit.entity.Player;
 
@@ -18,26 +15,25 @@ public class MoneyRequirement extends Requirement {
 				+ " " + VaultHandler.economy.currencyNamePlural() });
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public String getProgress(final Player player) {
-		UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
+		//UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
 		
 		String progress = "";
-		progress = progress.concat(VaultHandler.economy.getBalance(this
-				.getAutorank().getServer()
-				.getOfflinePlayer(uuid))
+		progress = progress.concat(VaultHandler.economy.getBalance(player.getName())
 				+ "/" + minMoney);
 		return progress;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean meetsRequirement(final Player player) {
 
-		UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
+		//UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
 		
 		return VaultHandler.economy != null
-				&& VaultHandler.economy.has(this.getAutorank().getServer()
-						.getOfflinePlayer(uuid), minMoney);
+				&& VaultHandler.economy.has(player.getName(), minMoney);
 	}
 
 	@Override
