@@ -38,22 +38,37 @@ public class UUIDManager {
 	// This is the time that one cached value is valid (in hours).
 	private static final int maxLifeTime = 12;
 
+	// Whether to use cache or not
+	private static final boolean useCache = true;
+
 	/**
 	 * Add a player to the cache storage.<br>
 	 * This can used when a player joins the server, because we know that the <br>
 	 * name will always be the same for that session.
 	 * 
+	 * @deprecated Use addCachedPlayer(String, UUID) instead.
 	 * @param player Player to cache.
 	 */
 	public static void addCachedPlayer(final Player player) {
+
+		if (!useCache)
+			return;
+
 		// Do not update if we still have one that is valid
 		if (!shouldUpdateValue(player.getName()))
 			return;
 
-		addCachedPlayer(player.getName(), player.getUniqueId());
+		UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
+		
+		addCachedPlayer(player.getName(), uuid);
 	}
 
-	private static void addCachedPlayer(final String playerName, final UUID uuid) {
+	public static void addCachedPlayer(final String playerName, final UUID uuid) {
+		if (!useCache)
+			return;
+		
+		System.out.print("Cached " + uuid + " of " + playerName);
+		
 		cachedUUIDs.put(playerName, uuid);
 		lastCached.put(playerName, System.currentTimeMillis());
 	}
@@ -141,45 +156,48 @@ public class UUIDManager {
 		// This is used to check if we need to use the lookup from the mojang website.
 		boolean useInternetLookup = true;
 
-		// Check if we have cached values
-		for (final UUID uuid : uuids) {
+		if (useCache) {
+			// Check if we have cached values
+			for (final UUID uuid : uuids) {
 
-			String playerName = null;
+				String playerName = null;
 
-			for (final Entry<String, UUID> entry : cachedUUIDs.entrySet()) {
-				if (entry.getValue().equals(uuid)) {
-					playerName = entry.getKey();
+				for (final Entry<String, UUID> entry : cachedUUIDs.entrySet()) {
+					if (entry.getValue().equals(uuid)) {
+						playerName = entry.getKey();
+					}
+				}
+
+				if (playerName != null) {
+					// If cached value is still valid, use it.
+					if (!shouldUpdateValue(playerName)) {
+						players.put(uuid, playerName);
+					}
 				}
 			}
 
-			if (playerName != null) {
-				// If cached value is still valid, use it.
-				if (!shouldUpdateValue(playerName)) {
-					players.put(uuid, playerName);
-				}
+			// All names were retrieved from cached values
+			// So we don't need to do a lookup to the Mojang website.
+			if (players.entrySet().size() == uuids.size()) {
+				useInternetLookup = false;
 			}
-		}
 
-		// All names were retrieved from cached values
-		// So we don't need to do a lookup to the Mojang website.
-		if (players.entrySet().size() == uuids.size()) {
-			useInternetLookup = false;
-		}
+			// No internet lookup needed.
+			if (!useInternetLookup) {
+				// Return all cached values.
+				return players;
+			}
 
-		// No internet lookup needed.
-		if (!useInternetLookup) {
-			// Return all cached values.
-			return players;
-		}
+			// From here on we know that didn't have all uuids as cached values.
+			// So we need to do a lookup.
+			// We have to make sure we only lookup the players that we haven't got cached values of yet.
 
-		// From here on we know that didn't have all uuids as cached values.
-		// So we need to do a lookup.
-		// We have to make sure we only lookup the players that we haven't got cached values of yet.
+			// Remove uuids that don't need to be looked up anymore. 
+			// Just for performance sake.
+			for (final UUID entry : players.keySet()) {
+				uuids.remove(entry);
+			}
 
-		// Remove uuids that don't need to be looked up anymore. 
-		// Just for performance sake.
-		for (final UUID entry : players.keySet()) {
-			uuids.remove(entry);
 		}
 
 		// Now we need to lookup the other players
@@ -231,7 +249,6 @@ public class UUIDManager {
 			if (shouldUpdateValue(playerName)) {
 				// Update cached values
 				addCachedPlayer(playerName, uuid);
-				removeCachedPlayer(playerName);
 			} else {
 				// Do not update if it is not needed.
 				continue;
@@ -295,35 +312,38 @@ public class UUIDManager {
 		// This is used to check if we need to use the lookup from the mojang website.
 		boolean useInternetLookup = true;
 
-		// Check if we have cached values
-		for (final String playerName : names) {
+		if (useCache) {
+			// Check if we have cached values
+			for (final String playerName : names) {
 
-			// If cached value is still valid, use it.
-			if (!shouldUpdateValue(playerName)) {
-				uuids.put(playerName, getCachedUUID(playerName));
+				// If cached value is still valid, use it.
+				if (!shouldUpdateValue(playerName)) {
+					uuids.put(playerName, getCachedUUID(playerName));
+				}
 			}
-		}
 
-		// All names were retrieved from cached values
-		// So we don't need to do a lookup to the Mojang website.
-		if (uuids.entrySet().size() == names.size()) {
-			useInternetLookup = false;
-		}
+			// All names were retrieved from cached values
+			// So we don't need to do a lookup to the Mojang website.
+			if (uuids.entrySet().size() == names.size()) {
+				useInternetLookup = false;
+			}
 
-		// No internet lookup needed.
-		if (!useInternetLookup) {
-			// Return all cached values.
-			return uuids;
-		}
+			// No internet lookup needed.
+			if (!useInternetLookup) {
+				// Return all cached values.
+				return uuids;
+			}
 
-		// From here on we know that didn't have all uuids as cached values.
-		// So we need to do a lookup.
-		// We have to make sure we only lookup the players that we haven't got cached values of yet.
+			// From here on we know that didn't have all uuids as cached values.
+			// So we need to do a lookup.
+			// We have to make sure we only lookup the players that we haven't got cached values of yet.
 
-		// Remove players that don't need to be looked up anymore. 
-		// Just for performance sake.
-		for (final Entry<String, UUID> entry : uuids.entrySet()) {
-			names.remove(entry.getKey());
+			// Remove players that don't need to be looked up anymore. 
+			// Just for performance sake.
+			for (final Entry<String, UUID> entry : uuids.entrySet()) {
+				names.remove(entry.getKey());
+			}
+
 		}
 
 		// Now we need to lookup the other players
@@ -375,7 +395,6 @@ public class UUIDManager {
 			if (shouldUpdateValue(playerName)) {
 				// Update cached values
 				addCachedPlayer(playerName, uuid);
-				removeCachedPlayer(playerName);
 			} else {
 				// Do not update if it is not needed.
 				continue;
