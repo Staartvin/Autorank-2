@@ -98,9 +98,12 @@ public class Leaderboard {
 
 			Player p = plugin.getServer().getPlayer(uuids.get(i));
 
-			// Do not add show this player, because he is exempted.
-			if (p.hasPermission("autorank.leaderboard.exempt")) {
-				continue;
+			System.out.print("UUID: " + uuids.get(i));
+			if (p != null) {
+				// Do not add show this player, because he is exempted.
+				if (p.hasPermission("autorank.leaderboard.exempt")) {
+					continue;
+				}
 			}
 
 			times.put(uuids.get(i),
@@ -150,14 +153,17 @@ public class Leaderboard {
 
 							// Send them afterwards, not at the same time.
 							for (final String msg : messages) {
-								plugin.getServer().broadcastMessage(ChatColor.translateAlternateColorCodes('&', msg));
+								plugin.getServer().broadcastMessage(
+										ChatColor.translateAlternateColorCodes(
+												'&', msg));
 							}
 						}
 					});
 		} else {
 			// send them instantly
 			for (final String msg : messages) {
-				plugin.getServer().broadcastMessage(ChatColor.translateAlternateColorCodes('&', msg));
+				plugin.getServer().broadcastMessage(
+						ChatColor.translateAlternateColorCodes('&', msg));
 			}
 		}
 	}
@@ -182,7 +188,7 @@ public class Leaderboard {
 		plugin.debugMessage("Size leaderboard: " + sortedPlaytimes.size());
 
 		final List<String> stringList = new ArrayList<String>();
-		stringList.add("-------- Autorank Leaderboard --------");
+		stringList.add("&a-------- Autorank Leaderboard --------");
 
 		for (int i = 0; i < leaderboardLength && itr.hasNext(); i++) {
 			final Entry<UUID, Integer> entry = itr.next();
@@ -213,7 +219,7 @@ public class Leaderboard {
 
 		}
 
-		stringList.add("------------------------------------");
+		stringList.add("&a------------------------------------");
 
 		messages = stringList.toArray(new String[stringList.size()]);
 

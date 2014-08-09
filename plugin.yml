@@ -79,4 +79,10 @@ permissions:
         default: true
     autorank.leaderboard.exempt:
         description: Exempts a player from the leaderboard.
-        default: false    
+        default: false
+    autorank.leaderboard.broadcast:
+        description: Allows a player to broadcast the leaderboard.
+        default: op
+    autorank.leaderboard.force:
+        description: Allows a player to force-update the leaderboard.
+        default: op
