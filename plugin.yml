@@ -77,3 +77,6 @@ permissions:
     autorank.help:
         description: Allows a player to view a list of commands
         default: true
+    autorank.leaderboard.exempt:
+        description: Exempts a player from the leaderboard.
+        default: false    

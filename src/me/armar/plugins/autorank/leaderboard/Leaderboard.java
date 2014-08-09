@@ -18,6 +18,7 @@ import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 /**
  * Leaderboard stores how when the last update was and if someone wants to<br>
@@ -94,6 +95,14 @@ public class Leaderboard {
 
 		// Fill unsorted lists
 		for (int i = 0; i < uuids.size(); i++) {
+			
+			Player p = plugin.getServer().getPlayer(uuids.get(i));
+			
+			// Do not add show this player, because he is exempted.
+			if (p.hasPermission("autorank.leaderboard.exempt")) {
+				continue;
+			}
+			
 			times.put(uuids.get(i),
 			// We should use getTimeOfPlayer(), but that requires a lot of rewrites, so I'll leave it at the moment.
 					plugin.getPlaytimes().getLocalTime(uuids.get(i)));
