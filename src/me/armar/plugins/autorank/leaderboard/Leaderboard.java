@@ -98,7 +98,6 @@ public class Leaderboard {
 
 			Player p = plugin.getServer().getPlayer(uuids.get(i));
 
-			System.out.print("UUID: " + uuids.get(i));
 			if (p != null) {
 				// Do not add show this player, because he is exempted.
 				if (p.hasPermission("autorank.leaderboard.exempt")) {
