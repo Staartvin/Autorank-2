@@ -95,14 +95,14 @@ public class Leaderboard {
 
 		// Fill unsorted lists
 		for (int i = 0; i < uuids.size(); i++) {
-			
+
 			Player p = plugin.getServer().getPlayer(uuids.get(i));
-			
+
 			// Do not add show this player, because he is exempted.
 			if (p.hasPermission("autorank.leaderboard.exempt")) {
 				continue;
 			}
-			
+
 			times.put(uuids.get(i),
 			// We should use getTimeOfPlayer(), but that requires a lot of rewrites, so I'll leave it at the moment.
 					plugin.getPlaytimes().getLocalTime(uuids.get(i)));
@@ -115,8 +115,7 @@ public class Leaderboard {
 	}
 
 	public void sendLeaderboard(final CommandSender sender) {
-		if (System.currentTimeMillis() - lastUpdatedTime > (60000 * validTime)
-				|| messages == null) {
+		if (shouldUpdateLeaderboard()) {
 			// Update leaderboard because it is not valid anymore.
 			// Run async because it uses UUID lookup
 			plugin.getServer().getScheduler()
@@ -137,7 +136,38 @@ public class Leaderboard {
 				AutorankTools.sendColoredMessage(sender, msg);
 			}
 		}
+	}
 
+	public void broadcastLeaderboard() {
+		if (shouldUpdateLeaderboard()) {
+			// Update leaderboard because it is not valid anymore.
+			// Run async because it uses UUID lookup
+			plugin.getServer().getScheduler()
+					.runTaskAsynchronously(plugin, new Runnable() {
+						@Override
+						public void run() {
+							updateLeaderboard();
+
+							// Send them afterwards, not at the same time.
+							for (final String msg : messages) {
+								plugin.getServer().broadcastMessage(ChatColor.translateAlternateColorCodes('&', msg));
+							}
+						}
+					});
+		} else {
+			// send them instantly
+			for (final String msg : messages) {
+				plugin.getServer().broadcastMessage(ChatColor.translateAlternateColorCodes('&', msg));
+			}
+		}
+	}
+
+	private boolean shouldUpdateLeaderboard() {
+		if (System.currentTimeMillis() - lastUpdatedTime > (60000 * validTime)
+				|| messages == null)
+			return true;
+		else
+			return false;
 	}
 
 	public void updateLeaderboard() {

@@ -27,12 +27,26 @@ public class LeaderboardCommand extends AutorankCommand {
 			return true;
 		}
 
-		if (args.length > 1 && args[1].equalsIgnoreCase("force")) {
-			// We should force to update the leaderboard first
-			plugin.getLeaderboard().updateLeaderboard();
+		// Whether to broadcast
+		boolean broadcast = false;
+
+		if (args.length > 1) {
+
+			if (args[1].equalsIgnoreCase("force")) {
+				// We should force to update the leaderboard first
+				plugin.getLeaderboard().updateLeaderboard();
+			} else if (args[1].equalsIgnoreCase("broadcast")) {
+				// Broadcast the command across the server.
+				broadcast = true;
+			}
 		}
 
-		plugin.getLeaderboard().sendLeaderboard(sender);
+		if (!broadcast) {
+			plugin.getLeaderboard().sendLeaderboard(sender);	
+		} else {
+			plugin.getLeaderboard().broadcastLeaderboard();
+		}
+		
 		return true;
 	}
 
