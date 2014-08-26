@@ -133,6 +133,10 @@ public class UUIDManager {
 		if (players.isEmpty())
 			return null;
 
+		if (players.get(uuid) == null) {
+			throw new NullPointerException("Could not get player from UUID " + uuid + "!");
+		}
+		
 		return players.get(uuid);
 	}
 
@@ -288,7 +292,7 @@ public class UUIDManager {
 			}
 		}
 
-		return null;
+		throw new NullPointerException("Could not UUID from player " + playerName + "!");
 	}
 
 	/**
