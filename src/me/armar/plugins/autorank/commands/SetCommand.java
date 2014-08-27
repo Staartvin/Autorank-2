@@ -9,6 +9,7 @@ import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
@@ -46,9 +47,18 @@ public class SetCommand extends AutorankCommand {
 
 			if (!builder.toString().contains("m")
 					&& !builder.toString().contains("h")
-					&& !builder.toString().contains("d")) {
+					&& !builder.toString().contains("d")
+					&& !builder.toString().contains("s")) {
 				value = AutorankTools.stringtoInt(builder.toString().trim());
 			} else {
+
+				if (builder.toString().contains("s")) {
+					sender.sendMessage(ChatColor.RED
+							+ Lang.INVALID_FORMAT
+									.getConfigValue("(h)ours, (m)inutes or (d)ays"));
+					return true;
+				}
+
 				value = AutorankTools.stringToTime(builder.toString(),
 						Time.MINUTES);
 			}
