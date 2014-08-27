@@ -28,8 +28,9 @@ public class TimeRequirement extends Requirement {
 	@Override
 	public String getProgress(final Player player) {
 		String progress = "";
-		progress = progress.concat(getAutorank().getPlaytimes()
-				.getTimeOfPlayer(player.getName())
+		// Divide by sixty because get play time is in seconds.
+		progress = progress.concat((getAutorank().getPlaytimes()
+				.getTimeOfPlayer(player.getName()) / 60)
 				+ " min"
 				+ "/"
 				+ time
