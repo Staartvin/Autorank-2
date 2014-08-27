@@ -86,3 +86,6 @@ permissions:
     autorank.leaderboard.force:
         description: Allows a player to force-update the leaderboard.
         default: op
+    autorank.track:
+        description: Allows a player to view their requirement progress.
+        default: true

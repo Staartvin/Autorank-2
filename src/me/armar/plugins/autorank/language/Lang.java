@@ -255,7 +255,11 @@ public enum Lang {
 	/**
 	 * Be in {0}.
 	 */
-	WORLD_REQUIREMENT("world-requirement", "Be in {0}."), ;
+	WORLD_REQUIREMENT("world-requirement", "Be in {0}."),
+	/**
+	 * Progress of requirement {0}:
+	 */
+	REQUIREMENT_PROGRESS("requirement-progress", "Progress of requirement {0}:"),;
 
 	private static FileConfiguration LANG;
 

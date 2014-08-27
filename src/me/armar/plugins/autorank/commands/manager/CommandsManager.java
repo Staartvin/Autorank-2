@@ -23,6 +23,7 @@ import me.armar.plugins.autorank.commands.RemoveCommand;
 import me.armar.plugins.autorank.commands.SetCommand;
 import me.armar.plugins.autorank.commands.SyncCommand;
 import me.armar.plugins.autorank.commands.SyncStatsCommand;
+import me.armar.plugins.autorank.commands.TrackCommand;
 import me.armar.plugins.autorank.language.Lang;
 
 import org.bukkit.ChatColor;
@@ -78,6 +79,8 @@ public class CommandsManager implements TabExecutor {
 				new ForceCheckCommand(plugin));
 		registeredCommands.put(Arrays.asList("convert"),
 				new ConvertUUIDCommand(plugin));
+		registeredCommands.put(Arrays.asList("track"),
+				new TrackCommand(plugin));
 	}
 
 	public HashMap<List<String>, AutorankCommand> getRegisteredCommands() {
@@ -142,7 +145,7 @@ public class CommandsManager implements TabExecutor {
 			return Lists.newArrayList("help", "check", "leaderboard", "set",
 					"add", "remove", "debug", "reload", "import", "archive",
 					"gcheck", "complete", "sync", "syncstats", "forcecheck",
-					"convert");
+					"convert", "track");
 		}
 
 		if (args.length > 1) {
