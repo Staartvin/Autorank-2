@@ -23,7 +23,7 @@ public class AutorankTools {
 		DAYS, HOURS, MINUTES, SECONDS
 	}
 
-	static List<String> reqTypes = new ArrayList<String>();
+	private static List<String> reqTypes = new ArrayList<String>();
 
 	/**
 	 * This will return the correct type of the requirement.
@@ -34,12 +34,31 @@ public class AutorankTools {
 	 * @param oldName Name of the requirement to search for.
 	 * @return correct requirement name or old name if none was found.
 	 */
-	public static String getCorrectName(final String oldName) {
+	public static String getCorrectName(String oldName) {
 
-		for (final String type : reqTypes) {
-			if (oldName.contains(type)) {
+		// Remove all numbers from string
+		oldName = oldName.replaceAll("[^a-zA-Z\\s]", "").trim();
+
+		for (String type : reqTypes) {
+			if (!oldName.contains(type)) {
+				continue;
+			}
+			// Contains word
+
+			int fIndex = oldName.indexOf(type);
+
+			try {
+				oldName.charAt(fIndex + (type.length()));
+			} catch (IndexOutOfBoundsException e) {
+				//System.out.print("'" + type + "' perfectly matched '" + oldName + "'!");
+				// Perfectly matched as there are no other characters.
 				return type;
 			}
+			//System.out.print("'" + type + "' almost matched '" + oldName + "'!");
+			
+			// Did not match correctly, search for next word.
+			continue;
+
 		}
 
 		return null;

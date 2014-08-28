@@ -334,6 +334,7 @@ public class Autorank extends JavaPlugin {
 		req.registerRequirement("has item", HasItemRequirement.class);
 		req.registerRequirement("blocks broken", BlocksBrokenRequirement.class);
 		req.registerRequirement("blocks placed", BlocksPlacedRequirement.class);
+		req.registerRequirement("blocks moved", BlocksMovedRequirement.class);
 		req.registerRequirement("votes", TotalVotesRequirement.class);
 		req.registerRequirement("damage taken", DamageTakenRequirement.class);
 		req.registerRequirement("mobs killed", MobKillsRequirement.class);
@@ -342,10 +343,9 @@ public class Autorank extends JavaPlugin {
 		req.registerRequirement("players killed", PlayerKillsRequirement.class);
 		req.registerRequirement("global time", GlobalTimeRequirement.class);
 		req.registerRequirement("total time", TotalTimeRequirement.class);
-		req.registerRequirement("blocks moved", BlocksMovedRequirement.class);
+		req.registerRequirement("world", WorldRequirement.class);
 		req.registerRequirement("worldguard region",
 				WorldGuardRegionRequirement.class);
-		req.registerRequirement("world", WorldRequirement.class);
 		req.registerRequirement("mcmmo skill level",
 				McMMOSkillLevelRequirement.class);
 		req.registerRequirement("mcmmo power level",
@@ -353,8 +353,10 @@ public class Autorank extends JavaPlugin {
 		req.registerRequirement("permission", PermissionRequirement.class);
 		req.registerRequirement("fish caught", FishCaughtRequirement.class);
 		req.registerRequirement("items crafted", ItemsCraftedRequirement.class);
-		req.registerRequirement("times sheared", TimesShearedRequirement.class);
+		
 		req.registerRequirement("time", TimeRequirement.class);
+		req.registerRequirement("times sheared", TimesShearedRequirement.class);
+		
 
 		// REGISTER PLURALS IN AUTORANKTOOLS AS WELL!
 
