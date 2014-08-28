@@ -68,6 +68,7 @@ public class PermissionsBukkitHandler implements PermissionsHandler {
 
 	@Override
 	public String[] getPlayerGroups(final Player player) {
+		@SuppressWarnings("deprecation")
 		final List<Group> groups = permissionsBukkit
 				.getGroups(player.getName());
 		final String[] newGroups = new String[groups.size()];
@@ -81,6 +82,7 @@ public class PermissionsBukkitHandler implements PermissionsHandler {
 
 	@Override
 	public String[] getWorldGroups(final Player player, final String world) {
+		@SuppressWarnings("deprecation")
 		final List<Group> groups = permissionsBukkit
 				.getGroups(player.getName());
 		final String[] arrayGroups = new String[groups.size()];
