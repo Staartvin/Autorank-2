@@ -353,7 +353,6 @@ public class Autorank extends JavaPlugin {
 		req.registerRequirement("permission", PermissionRequirement.class);
 		req.registerRequirement("fish caught", FishCaughtRequirement.class);
 		req.registerRequirement("items crafted", ItemsCraftedRequirement.class);
-		
 		req.registerRequirement("time", TimeRequirement.class);
 		req.registerRequirement("times sheared", TimesShearedRequirement.class);
 		
