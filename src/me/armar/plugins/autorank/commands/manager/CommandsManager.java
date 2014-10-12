@@ -15,6 +15,7 @@ import me.armar.plugins.autorank.commands.ConvertUUIDCommand;
 import me.armar.plugins.autorank.commands.DebugCommand;
 import me.armar.plugins.autorank.commands.ForceCheckCommand;
 import me.armar.plugins.autorank.commands.GlobalCheckCommand;
+import me.armar.plugins.autorank.commands.GlobalSetCommand;
 import me.armar.plugins.autorank.commands.HelpCommand;
 import me.armar.plugins.autorank.commands.ImportCommand;
 import me.armar.plugins.autorank.commands.LeaderboardCommand;
@@ -79,8 +80,10 @@ public class CommandsManager implements TabExecutor {
 				new ForceCheckCommand(plugin));
 		registeredCommands.put(Arrays.asList("convert"),
 				new ConvertUUIDCommand(plugin));
-		registeredCommands.put(Arrays.asList("track"),
-				new TrackCommand(plugin));
+		registeredCommands
+				.put(Arrays.asList("track"), new TrackCommand(plugin));
+		registeredCommands.put(Arrays.asList("gset", "globalset"),
+				new GlobalSetCommand(plugin));
 	}
 
 	public HashMap<List<String>, AutorankCommand> getRegisteredCommands() {
@@ -145,7 +148,7 @@ public class CommandsManager implements TabExecutor {
 			return Lists.newArrayList("help", "check", "leaderboard", "set",
 					"add", "remove", "debug", "reload", "import", "archive",
 					"gcheck", "complete", "sync", "syncstats", "forcecheck",
-					"convert", "track");
+					"convert", "track", "gset");
 		}
 
 		if (args.length > 1) {
