@@ -89,3 +89,9 @@ permissions:
     autorank.track:
         description: Allows a player to view their requirement progress.
         default: true
+    autorank.gset.self:
+        description: Allows changing own global playtime.
+        default: op
+    autorank.gset.other:
+        description: Allows changing others global playtime.
+        default: op    
