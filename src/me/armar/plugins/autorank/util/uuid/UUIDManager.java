@@ -8,8 +8,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 
+import me.armar.plugins.autorank.Autorank;
+
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
 /**
  * This class allows developers to easily get UUIDs from names <br>
@@ -24,56 +25,37 @@ import org.bukkit.entity.Player;
  */
 public class UUIDManager {
 
-	// This hashmap stores the cached values of uuids for players. 
-	private static HashMap<String, UUID> cachedUUIDs = new HashMap<String, UUID>();
+	private static Autorank plugin;
+	
+	static {
+		plugin = (Autorank) Bukkit.getPluginManager().getPlugin("Autorank");
+	}
+	
 	private static Map<UUID, String> foundPlayers = new HashMap<UUID, String>();
 
 	private static Map<String, UUID> foundUUIDs = new HashMap<String, UUID>();
 
-	// This hashmap stores the latest cache time for a certain player.
-	// This is used to see if the cached UUID was older than 12 hours. If it is older than 12 hours,
-	// it will be renewed.
-	private static HashMap<String, Long> lastCached = new HashMap<String, Long>();
-
-	// This is the time that one cached value is valid (in hours).
-	private static final int maxLifeTime = 12;
-
 	// Whether to use cache or not
 	private static final boolean useCache = true;
-
-	/**
-	 * Add a player to the cache storage.<br>
-	 * This can used when a player joins the server, because we know that the <br>
-	 * name will always be the same for that session.
-	 * 
-	 * @deprecated Use addCachedPlayer(String, UUID) instead.
-	 * @param player Player to cache.
-	 */
-	public static void addCachedPlayer(final Player player) {
-
-		if (!useCache)
-			return;
-
-		// Do not update if we still have one that is valid
-		if (!shouldUpdateValue(player.getName()))
-			return;
-
-		UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
-		
-		addCachedPlayer(player.getName(), uuid);
-	}
 
 	public static void addCachedPlayer(final String playerName, final UUID uuid) {
 		if (!useCache)
 			return;
 		
-		//System.out.print("Cached " + uuid + " of " + playerName);
+		plugin.getUUIDStorage().storeUUID(playerName, uuid);
 		
+		//System.out.print("Cached " + uuid + " of " + playerName);
+		/*
 		cachedUUIDs.put(playerName, uuid);
-		lastCached.put(playerName, System.currentTimeMillis());
+		lastCached.put(playerName, System.currentTimeMillis());*/
 	}
 
 	private static UUID getCachedUUID(String playerName) {
+		
+		return plugin.getUUIDStorage().getStoredUUID(playerName);
+		
+		/*
+		
 		// Already found
 		if (cachedUUIDs.containsKey(playerName))
 			return cachedUUIDs.get(playerName);
@@ -90,27 +72,7 @@ public class UUIDManager {
 			return null;
 
 		// Grab UUID
-		return cachedUUIDs.get(playerName);
-	}
-
-	private static long getLastCached(String playerName) {
-		// Already found
-		if (lastCached.containsKey(playerName))
-			return lastCached.get(playerName);
-
-		// Search for lowercase matches
-		for (final String loggedName : lastCached.keySet()) {
-			if (loggedName.equalsIgnoreCase(playerName)) {
-				playerName = loggedName;
-				break;
-			}
-		}
-
-		if (!lastCached.containsKey(playerName))
-			return -1;
-
-		// Grab last changed
-		return lastCached.get(playerName);
+		return cachedUUIDs.get(playerName);(*/
 	}
 
 	/**
@@ -164,17 +126,11 @@ public class UUIDManager {
 			// Check if we have cached values
 			for (final UUID uuid : uuids) {
 
-				String playerName = null;
-
-				for (final Entry<String, UUID> entry : cachedUUIDs.entrySet()) {
-					if (entry.getValue().equals(uuid)) {
-						playerName = entry.getKey();
-					}
-				}
+				String playerName = plugin.getUUIDStorage().getPlayerName(uuid);
 
 				if (playerName != null) {
 					// If cached value is still valid, use it.
-					if (!shouldUpdateValue(playerName)) {
+					if (!plugin.getUUIDStorage().isOutdated(playerName)) {
 						players.put(uuid, playerName);
 					}
 				}
@@ -250,7 +206,7 @@ public class UUIDManager {
 			// Add found players to the list of players to return
 			players.put(uuid, playerName);
 
-			if (shouldUpdateValue(playerName)) {
+			if (plugin.getUUIDStorage().isOutdated(playerName)) {
 				// Update cached values
 				addCachedPlayer(playerName, uuid);
 			} else {
@@ -321,7 +277,7 @@ public class UUIDManager {
 			for (final String playerName : names) {
 
 				// If cached value is still valid, use it.
-				if (!shouldUpdateValue(playerName)) {
+				if (!plugin.getUUIDStorage().isOutdated(playerName)) {
 					uuids.put(playerName, getCachedUUID(playerName));
 				}
 			}
@@ -396,7 +352,7 @@ public class UUIDManager {
 			// Add found uuids to the list of uuids to return
 			uuids.put(playerName, uuid);
 
-			if (shouldUpdateValue(playerName)) {
+			if (plugin.getUUIDStorage().isOutdated(playerName)) {
 				// Update cached values
 				addCachedPlayer(playerName, uuid);
 			} else {
@@ -407,58 +363,5 @@ public class UUIDManager {
 
 		// Thread stopped now, collect results
 		return uuids;
-	}
-
-	private static boolean isCachedUUID(final String playerName) {
-		return getCachedUUID(playerName) != null;
-	}
-
-	private static boolean isLastCached(final String playerName) {
-		return getLastCached(playerName) > 0;
-	}
-
-	/**
-	 * Remove a player from the cache storage.<br>
-	 * This can used when a you want to make sure that you get a non-cached
-	 * value.
-	 * 
-	 * @param player Player to remove.
-	 */
-	public static void removeCachedPlayer(final Player player) {
-		// There is no cached value for this player
-		if (!isCachedUUID(player.getName()))
-			return;
-
-		removeCachedPlayer(player.getName());
-	}
-
-	private static void removeCachedPlayer(final String playerName) {
-		cachedUUIDs.remove(playerName);
-		lastCached.remove(playerName);
-	}
-
-	private static boolean shouldUpdateValue(final String playerName) {
-
-		// Incorrectly cached, so cache now.
-		if (!isLastCached(playerName) || !isCachedUUID(playerName))
-			return true;
-
-		final long lastCacheTime = getLastCached(playerName);
-
-		// No cache time
-		if (lastCacheTime <= 0) {
-			return true;
-		}
-
-		final long currentTime = System.currentTimeMillis();
-
-		final long lifeTime = currentTime - lastCacheTime;
-
-		// The cached value is older than it ought to be.
-		if ((lifeTime / 3600000) > maxLifeTime) {
-			return true;
-		}
-
-		return false;
 	}
 }
