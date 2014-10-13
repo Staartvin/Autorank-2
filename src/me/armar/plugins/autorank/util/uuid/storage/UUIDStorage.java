@@ -45,12 +45,12 @@ public class UUIDStorage {
 
 		desFolder = plugin.getDataFolder() + "/uuids";
 
-		// Start requirement saver task
-		// Run save task every minute
-		/*plugin.getServer()
-				.getScheduler()
-				.runTaskTimerAsynchronously(plugin,
-						new RequirementHandlerSaver(this), 1200, 1200);*/
+		//Run save task every 2 minutes
+		plugin.getServer().getScheduler().runTaskTimer(plugin, new Runnable() {
+			public void run() {
+				saveAllFiles();
+			}
+		}, 1200, 2400);
 	}
 
 	public void createNewFiles() {
@@ -191,13 +191,13 @@ public class UUIDStorage {
 		if (isAlreadyStored(uuid)) {
 			// Change name to new name
 			String oldUser = getPlayerName(uuid);
-			
+
 			// Change config pointer to correct config
 			config = findCorrectConfig(oldUser);
-			
+
 			config.set(oldUser, null);
 		}
-		
+
 		config = findCorrectConfig(playerName);
 
 		config.set(playerName + ".uuid", uuid.toString());

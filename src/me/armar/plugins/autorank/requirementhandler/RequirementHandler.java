@@ -46,7 +46,7 @@ public class RequirementHandler {
 		// Run save task every minute
 		plugin.getServer()
 				.getScheduler()
-				.runTaskTimerAsynchronously(plugin,
+				.runTaskTimer(plugin,
 						new RequirementHandlerSaver(this), 1200, 1200);
 	}
 
