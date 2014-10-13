@@ -56,6 +56,7 @@ import me.armar.plugins.autorank.requirementhandler.RequirementHandler;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.armar.plugins.autorank.updater.UpdateHandler;
 import me.armar.plugins.autorank.updater.Updater;
+import me.armar.plugins.autorank.util.uuid.storage.UUIDStorage;
 import me.armar.plugins.autorank.validations.ValidateHandler;
 import me.armar.plugins.autorank.warningmanager.WarningManager;
 import me.armar.plugins.autorank.warningmanager.WarningNoticeTask;
@@ -92,6 +93,7 @@ public class Autorank extends JavaPlugin {
 	private RequirementHandler requirementHandler;
 	private SimpleYamlConfiguration settingsConfig;
 	private SimpleYamlConfiguration simpleConfig;
+	private UUIDStorage uuidStorage;
 
 	private UpdateHandler updateHandler;
 
@@ -215,6 +217,8 @@ public class Autorank extends JavaPlugin {
 		getServer().getScheduler().cancelTasks(this);
 
 		playtimes.save();
+		
+		getUUIDStorage().saveAllFiles();
 
 		setPlaytimes(null);
 
@@ -251,6 +255,8 @@ public class Autorank extends JavaPlugin {
 		setAdvancedConfig(null);
 
 		setSettingsConfig(null);
+		
+		setUUIDStorage(null);
 
 		getLogger().info(
 				String.format("Autorank %s has been disabled!",
@@ -261,7 +267,7 @@ public class Autorank extends JavaPlugin {
 	public void onEnable() {
 
 		// TODO: Add our own Stats logger which keeps track of (a lot of) things
-
+		
 		// Register configs
 		setSimpleConfig(new SimpleYamlConfiguration(this, "SimpleConfig.yml",
 				null, "Simple config"));
@@ -269,6 +275,15 @@ public class Autorank extends JavaPlugin {
 				"AdvancedConfig.yml", null, "Advanced config"));
 		setSettingsConfig(new SimpleYamlConfiguration(this, "Settings.yml",
 				null, "Settings config"));
+		
+		// Create config handler
+		setConfigHandler(new ConfigHandler(this));
+		
+		// Create uuid storage
+		setUUIDStorage(new UUIDStorage(this));
+		
+		// Load uuids - ready for new ones
+		getUUIDStorage().createNewFiles();
 
 		// Create warning manager
 		setWarningManager(new WarningManager());
@@ -278,9 +293,6 @@ public class Autorank extends JavaPlugin {
 
 		// Create files
 		requirementHandler.createNewFile();
-
-		// Create config handler
-		setConfigHandler(new ConfigHandler(this));
 
 		// Create update handler
 		setUpdateHandler(new UpdateHandler(this));
@@ -321,6 +333,7 @@ public class Autorank extends JavaPlugin {
 
 		// Create commands manager
 		setCommandsManager(new CommandsManager(this));
+
 
 		final RequirementBuilder req = this.getPlayerChecker().getBuilder()
 				.getRequirementBuilder();
@@ -543,5 +556,13 @@ public class Autorank extends JavaPlugin {
 			// Failed to submit the stats :-(
 			return false;
 		}
+	}
+
+	public UUIDStorage getUUIDStorage() {
+		return uuidStorage;
+	}
+
+	public void setUUIDStorage(UUIDStorage uuidStorage) {
+		this.uuidStorage = uuidStorage;
 	}
 }
