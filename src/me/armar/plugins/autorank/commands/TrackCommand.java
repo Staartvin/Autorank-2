@@ -76,7 +76,7 @@ public class TrackCommand extends AutorankCommand {
 			return true;
 		}
 
-		UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
+		final UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
 
 		final Map<RankChange, List<Requirement>> failed = plugin
 				.getPlayerChecker().getAllRequirements(player);
@@ -89,9 +89,9 @@ public class TrackCommand extends AutorankCommand {
 		}
 
 		List<Requirement> requirements;
-		
+
 		player.sendMessage(ChatColor.GRAY + " ------------ ");
-		
+
 		for (final Iterator<RankChange> it = keySet.iterator(); it.hasNext();) {
 			final RankChange rank = it.next();
 			requirements = failed.get(rank);
@@ -117,10 +117,10 @@ public class TrackCommand extends AutorankCommand {
 									.getConfigValue());
 					return true;
 				}
-				
+
 				player.sendMessage(ChatColor.RED
-						+ Lang.REQUIREMENT_PROGRESS
-								.getConfigValue(completionID + ""));
+						+ Lang.REQUIREMENT_PROGRESS.getConfigValue(completionID
+								+ ""));
 				player.sendMessage(ChatColor.AQUA + req.getDescription());
 				player.sendMessage(ChatColor.GREEN + "Current: "
 						+ ChatColor.GOLD + req.getProgress(player));

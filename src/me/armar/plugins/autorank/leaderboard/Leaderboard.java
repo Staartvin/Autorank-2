@@ -96,7 +96,7 @@ public class Leaderboard {
 		// Fill unsorted lists
 		for (int i = 0; i < uuids.size(); i++) {
 
-			Player p = plugin.getServer().getPlayer(uuids.get(i));
+			final Player p = plugin.getServer().getPlayer(uuids.get(i));
 
 			if (p != null) {
 				// Do not add show this player, because he is exempted.

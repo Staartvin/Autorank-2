@@ -93,7 +93,8 @@ public class DependencyManager {
 			return ((RoyalCommandsHandler) handlers
 					.get(dependency.ROYALCOMMANDS)).isAFK(player);
 		} else if (handlers.get(dependency.ULTIMATECORE).isAvailable()) {
-			return ((UltimateCoreHandler) handlers.get(dependency.ULTIMATECORE)).isAFK(player);
+			return ((UltimateCoreHandler) handlers.get(dependency.ULTIMATECORE))
+					.isAFK(player);
 		}
 
 		// No suitable plugin found

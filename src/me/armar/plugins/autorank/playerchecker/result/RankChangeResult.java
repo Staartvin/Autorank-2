@@ -46,15 +46,14 @@ public class RankChangeResult extends Result {
 		// Check if event is cancelled.
 		if (event.isCancelled())
 			return false;
-		
-		UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
+
+		final UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
 
 		// When rank is changed: reset progress and update last known group
-		getAutorank().getRequirementHandler().setPlayerProgress(
-				uuid, new ArrayList<Integer>());
+		getAutorank().getRequirementHandler().setPlayerProgress(uuid,
+				new ArrayList<Integer>());
 
-		getAutorank().getRequirementHandler().setLastKnownGroup(
-				uuid, to);
+		getAutorank().getRequirementHandler().setLastKnownGroup(uuid, to);
 
 		return this.getAutorank().getPermPlugHandler().getPermissionPlugin()
 				.replaceGroup(player, world, oldrank, to);

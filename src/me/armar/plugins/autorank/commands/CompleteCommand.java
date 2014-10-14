@@ -34,7 +34,7 @@ public class CompleteCommand extends AutorankCommand {
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command cmd,
 			final String label, final String[] args) {
-		
+
 		// Implemented /ar complete #
 		if (args.length != 2) {
 			sender.sendMessage(ChatColor.RED + "Incorrect command usage!");
@@ -74,8 +74,8 @@ public class CompleteCommand extends AutorankCommand {
 							.getConfigValue(new String[] { args[1] }));
 			return true;
 		}
-		
-		UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
+
+		final UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
 
 		// Check if the latest known group is the current group. Otherwise, reset progress
 		final String currentGroup = plugin.getPermPlugHandler()
@@ -84,18 +84,18 @@ public class CompleteCommand extends AutorankCommand {
 				.getLastKnownGroup(uuid);
 
 		if (latestKnownGroup == null) {
-			plugin.getRequirementHandler().setLastKnownGroup(
-					uuid, currentGroup);
+			plugin.getRequirementHandler()
+					.setLastKnownGroup(uuid, currentGroup);
 
 			latestKnownGroup = currentGroup;
 		}
 
 		if (!latestKnownGroup.equalsIgnoreCase(currentGroup)) {
 			// Reset progress and update latest known group
-			plugin.getRequirementHandler().setPlayerProgress(
-					uuid, new ArrayList<Integer>());
-			plugin.getRequirementHandler().setLastKnownGroup(
-					uuid, currentGroup);
+			plugin.getRequirementHandler().setPlayerProgress(uuid,
+					new ArrayList<Integer>());
+			plugin.getRequirementHandler()
+					.setLastKnownGroup(uuid, currentGroup);
 		}
 
 		final Map<RankChange, List<Requirement>> failed = plugin
@@ -145,8 +145,8 @@ public class CompleteCommand extends AutorankCommand {
 					plugin.getRequirementHandler().runResults(req, player);
 
 					// Log that a player has passed this requirement
-					plugin.getRequirementHandler().addPlayerProgress(
-							uuid, (completionID - 1));
+					plugin.getRequirementHandler().addPlayerProgress(uuid,
+							(completionID - 1));
 
 				} else {
 					// player does not meet requirements

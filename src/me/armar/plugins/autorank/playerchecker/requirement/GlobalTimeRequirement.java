@@ -30,8 +30,8 @@ public class GlobalTimeRequirement extends Requirement {
 
 	@Override
 	public String getProgress(final Player player) {
-		
-		UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
+
+		final UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
 		String progress = "";
 		progress = progress.concat(getAutorank().getPlaytimes().getGlobalTime(
 				uuid)
@@ -41,8 +41,8 @@ public class GlobalTimeRequirement extends Requirement {
 
 	@Override
 	public boolean meetsRequirement(final Player player) {
-		UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
-		
+		final UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
+
 		final double playtime = this.getAutorank().getPlaytimes()
 				.getGlobalTime(uuid);
 		return time != -1 && time <= playtime;

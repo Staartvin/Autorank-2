@@ -96,12 +96,13 @@ public class API {
 	 * @param player Player to check for.
 	 * @return play time of a player. -1 if no entry was found.
 	 */
+	@Deprecated
 	public int getGlobalPlayTime(final Player player) {
-		UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
-		
+		final UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
+
 		return getGlobalPlayTime(uuid);
 	}
-	
+
 	public int getGlobalPlayTime(final UUID uuid) {
 		return plugin.getPlaytimes().getGlobalTime(uuid);
 	}
@@ -116,12 +117,13 @@ public class API {
 	 * @param player Player to get the time for.
 	 * @return play time of this player or 0 if not found.
 	 */
+	@Deprecated
 	public int getLocalTime(final Player player) {
-		UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
-		
+		final UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
+
 		return plugin.getPlaytimes().getLocalTime(uuid);
 	}
-	
+
 	public int getLocalPlayTime(final UUID uuid) {
 		return plugin.getPlaytimes().getLocalTime(uuid);
 	}

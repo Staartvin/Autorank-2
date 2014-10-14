@@ -46,8 +46,8 @@ public class RequirementHandler {
 		// Run save task every minute
 		plugin.getServer()
 				.getScheduler()
-				.runTaskTimer(plugin,
-						new RequirementHandlerSaver(this), 1200, 1200);
+				.runTaskTimer(plugin, new RequirementHandlerSaver(this), 1200,
+						1200);
 	}
 
 	public void addCompletedRanks(final UUID uuid, final String rank) {
@@ -144,8 +144,9 @@ public class RequirementHandler {
 	public String getLastKnownGroup(final UUID uuid) {
 		//UUID uuid = UUIDManager.getUUIDFromPlayer(playerName);
 
-		plugin.debugMessage("Config - Last known group: "  + config);
-		plugin.debugMessage("Config - Last known group (uuid): "  + uuid.toString());
+		plugin.debugMessage("Config - Last known group: " + config);
+		plugin.debugMessage("Config - Last known group (uuid): "
+				+ uuid.toString());
 		return config.getString(uuid.toString() + ".last group");
 	}
 

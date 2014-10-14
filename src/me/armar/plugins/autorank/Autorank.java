@@ -217,7 +217,7 @@ public class Autorank extends JavaPlugin {
 		getServer().getScheduler().cancelTasks(this);
 
 		playtimes.save();
-		
+
 		getUUIDStorage().saveAllFiles();
 
 		setPlaytimes(null);
@@ -255,7 +255,7 @@ public class Autorank extends JavaPlugin {
 		setAdvancedConfig(null);
 
 		setSettingsConfig(null);
-		
+
 		setUUIDStorage(null);
 
 		getLogger().info(
@@ -267,7 +267,7 @@ public class Autorank extends JavaPlugin {
 	public void onEnable() {
 
 		// TODO: Add our own Stats logger which keeps track of (a lot of) things
-		
+
 		// Register configs
 		setSimpleConfig(new SimpleYamlConfiguration(this, "SimpleConfig.yml",
 				null, "Simple config"));
@@ -275,13 +275,13 @@ public class Autorank extends JavaPlugin {
 				"AdvancedConfig.yml", null, "Advanced config"));
 		setSettingsConfig(new SimpleYamlConfiguration(this, "Settings.yml",
 				null, "Settings config"));
-		
+
 		// Create config handler
 		setConfigHandler(new ConfigHandler(this));
-		
+
 		// Create uuid storage
 		setUUIDStorage(new UUIDStorage(this));
-		
+
 		// Load uuids - ready for new ones
 		getUUIDStorage().createNewFiles();
 
@@ -334,7 +334,6 @@ public class Autorank extends JavaPlugin {
 		// Create commands manager
 		setCommandsManager(new CommandsManager(this));
 
-
 		final RequirementBuilder req = this.getPlayerChecker().getBuilder()
 				.getRequirementBuilder();
 		final ResultBuilder res = this.getPlayerChecker().getBuilder()
@@ -368,7 +367,6 @@ public class Autorank extends JavaPlugin {
 		req.registerRequirement("items crafted", ItemsCraftedRequirement.class);
 		req.registerRequirement("time", TimeRequirement.class);
 		req.registerRequirement("times sheared", TimesShearedRequirement.class);
-		
 
 		// REGISTER PLURALS IN AUTORANKTOOLS AS WELL!
 
@@ -562,7 +560,7 @@ public class Autorank extends JavaPlugin {
 		return uuidStorage;
 	}
 
-	public void setUUIDStorage(UUIDStorage uuidStorage) {
+	public void setUUIDStorage(final UUIDStorage uuidStorage) {
 		this.uuidStorage = uuidStorage;
 	}
 }

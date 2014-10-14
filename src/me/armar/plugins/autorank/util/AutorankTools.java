@@ -39,23 +39,23 @@ public class AutorankTools {
 		// Remove all numbers from string
 		oldName = oldName.replaceAll("[^a-zA-Z\\s]", "").trim();
 
-		for (String type : reqTypes) {
+		for (final String type : reqTypes) {
 			if (!oldName.contains(type)) {
 				continue;
 			}
 			// Contains word
 
-			int fIndex = oldName.indexOf(type);
+			final int fIndex = oldName.indexOf(type);
 
 			try {
 				oldName.charAt(fIndex + (type.length()));
-			} catch (IndexOutOfBoundsException e) {
+			} catch (final IndexOutOfBoundsException e) {
 				//System.out.print("'" + type + "' perfectly matched '" + oldName + "'!");
 				// Perfectly matched as there are no other characters.
 				return type;
 			}
 			//System.out.print("'" + type + "' almost matched '" + oldName + "'!");
-			
+
 			// Did not match correctly, search for next word.
 			continue;
 

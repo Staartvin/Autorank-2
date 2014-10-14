@@ -259,7 +259,7 @@ public enum Lang {
 	/**
 	 * Progress of requirement {0}:
 	 */
-	REQUIREMENT_PROGRESS("requirement-progress", "Progress of requirement {0}:"),;
+	REQUIREMENT_PROGRESS("requirement-progress", "Progress of requirement {0}:"), ;
 
 	private static FileConfiguration LANG;
 

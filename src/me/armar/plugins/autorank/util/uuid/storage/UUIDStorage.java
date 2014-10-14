@@ -26,8 +26,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
  */
 public class UUIDStorage {
 
-	private HashMap<String, FileConfiguration> configs = new HashMap<String, FileConfiguration>();
-	private HashMap<String, File> configFiles = new HashMap<String, File>();
+	private final HashMap<String, FileConfiguration> configs = new HashMap<String, FileConfiguration>();
+	private final HashMap<String, File> configFiles = new HashMap<String, File>();
 
 	private final Autorank plugin;
 
@@ -36,9 +36,9 @@ public class UUIDStorage {
 	// Expiration date in hours
 	private final int expirationDate = 24;
 
-	private List<String> fileSuffixes = Arrays.asList("a", "b", "c", "d", "e",
-			"f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r",
-			"s", "t", "u", "v", "w", "x", "y", "z", "other");
+	private final List<String> fileSuffixes = Arrays.asList("a", "b", "c", "d",
+			"e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q",
+			"r", "s", "t", "u", "v", "w", "x", "y", "z", "other");
 
 	public UUIDStorage(final Autorank instance) {
 		this.plugin = instance;
@@ -47,6 +47,7 @@ public class UUIDStorage {
 
 		//Run save task every 2 minutes
 		plugin.getServer().getScheduler().runTaskTimer(plugin, new Runnable() {
+			@Override
 			public void run() {
 				saveAllFiles();
 			}
@@ -55,7 +56,7 @@ public class UUIDStorage {
 
 	public void createNewFiles() {
 
-		for (String suffix : fileSuffixes) {
+		for (final String suffix : fileSuffixes) {
 			plugin.debugMessage("Loading uuids_" + suffix + " ...");
 
 			reloadConfig(suffix);
@@ -69,13 +70,13 @@ public class UUIDStorage {
 	}
 
 	public void saveAllFiles() {
-		for (String suffix : fileSuffixes) {
+		for (final String suffix : fileSuffixes) {
 			saveConfig(suffix);
 		}
 	}
 
-	public FileConfiguration getConfig(String key) {
-		FileConfiguration config = configs.get(key);
+	public FileConfiguration getConfig(final String key) {
+		final FileConfiguration config = configs.get(key);
 
 		if (config == null) {
 			this.reloadConfig(key);
@@ -84,9 +85,9 @@ public class UUIDStorage {
 		return config;
 	}
 
-	public void loadConfig(String key) {
+	public void loadConfig(final String key) {
 
-		FileConfiguration config = configs.get(key);
+		final FileConfiguration config = configs.get(key);
 
 		config.options()
 				.header("This file stores all uuids of players that Autorank has looked up before."
@@ -96,7 +97,7 @@ public class UUIDStorage {
 		saveConfig(key);
 	}
 
-	public void reloadConfig(String key) {
+	public void reloadConfig(final String key) {
 		File configFile = null;
 		FileConfiguration config = null;
 
@@ -110,9 +111,9 @@ public class UUIDStorage {
 		configFiles.put(key, configFile);
 	}
 
-	public void saveConfig(String key) {
-		File configFile = configFiles.get(key);
-		FileConfiguration config = configs.get(key);
+	public void saveConfig(final String key) {
+		final File configFile = configFiles.get(key);
+		final FileConfiguration config = configs.get(key);
 
 		if (config == null || configFile == null) {
 			return;
@@ -129,7 +130,7 @@ public class UUIDStorage {
 	public String findMatchingKey(String text) {
 		text = text.toLowerCase();
 
-		for (String key : fileSuffixes) {
+		for (final String key : fileSuffixes) {
 			// Don't check for that one.
 			if (key.equals("other"))
 				continue;
@@ -144,22 +145,22 @@ public class UUIDStorage {
 		return "other";
 	}
 
-	public FileConfiguration findCorrectConfig(String playerName) {
-		String key = findMatchingKey(playerName);
+	public FileConfiguration findCorrectConfig(final String playerName) {
+		final String key = findMatchingKey(playerName);
 
-		FileConfiguration config = configs.get(key);
+		final FileConfiguration config = configs.get(key);
 
 		return config;
 	}
 
-	public boolean isOutdated(String playerName) {
-		int time = getLastUpdateTime(playerName);
+	public boolean isOutdated(final String playerName) {
+		final int time = getLastUpdateTime(playerName);
 		return (time > expirationDate || time < 0);
 	}
 
-	public UUID getStoredUUID(String playerName) {
+	public UUID getStoredUUID(final String playerName) {
 
-		String uuidString = findCorrectConfig(playerName).getString(
+		final String uuidString = findCorrectConfig(playerName).getString(
 				playerName + ".uuid", null);
 
 		if (uuidString == null) {
@@ -169,28 +170,28 @@ public class UUIDStorage {
 		return UUID.fromString(uuidString);
 	}
 
-	public int getLastUpdateTime(String playerName) {
-		long lastUpdateTime = findCorrectConfig(playerName).getLong(
+	public int getLastUpdateTime(final String playerName) {
+		final long lastUpdateTime = findCorrectConfig(playerName).getLong(
 				playerName + ".updateTime", -1);
 
 		if (lastUpdateTime < 0) {
 			return -1;
 		}
 
-		long difference = System.currentTimeMillis() - lastUpdateTime;
+		final long difference = System.currentTimeMillis() - lastUpdateTime;
 
-		int timeDifference = Math.round(difference / 3600000);
+		final int timeDifference = Math.round(difference / 3600000);
 
 		return timeDifference;
 	}
 
-	public void storeUUID(String playerName, UUID uuid) {
+	public void storeUUID(final String playerName, final UUID uuid) {
 		FileConfiguration config;
 
 		// Remove old name and uuid because apparently name was changed.
 		if (isAlreadyStored(uuid)) {
 			// Change name to new name
-			String oldUser = getPlayerName(uuid);
+			final String oldUser = getPlayerName(uuid);
 
 			// Change config pointer to correct config
 			config = findCorrectConfig(oldUser);
@@ -204,11 +205,11 @@ public class UUIDStorage {
 		config.set(playerName + ".updateTime", System.currentTimeMillis());
 	}
 
-	public String getPlayerName(UUID uuid, String key) {
-		FileConfiguration config = configs.get(key);
+	public String getPlayerName(final UUID uuid, final String key) {
+		final FileConfiguration config = configs.get(key);
 
-		for (String fPlayerName : config.getKeys(false)) {
-			String fuuid = config.getString(fPlayerName + ".uuid");
+		for (final String fPlayerName : config.getKeys(false)) {
+			final String fuuid = config.getString(fPlayerName + ".uuid");
 
 			if (fuuid.equals(uuid.toString())) {
 				return fPlayerName;
@@ -218,12 +219,12 @@ public class UUIDStorage {
 		return null;
 	}
 
-	public String getPlayerName(UUID uuid) {
-		for (String suffix : fileSuffixes) {
-			FileConfiguration config = getConfig(suffix);
+	public String getPlayerName(final UUID uuid) {
+		for (final String suffix : fileSuffixes) {
+			final FileConfiguration config = getConfig(suffix);
 
-			for (String fPlayerName : config.getKeys(false)) {
-				String fuuid = config.getString(fPlayerName + ".uuid");
+			for (final String fPlayerName : config.getKeys(false)) {
+				final String fuuid = config.getString(fPlayerName + ".uuid");
 
 				if (fuuid.equals(uuid.toString())) {
 					return fPlayerName;
@@ -234,11 +235,11 @@ public class UUIDStorage {
 		return null;
 	}
 
-	public boolean isAlreadyStored(UUID uuid, String key) {
+	public boolean isAlreadyStored(final UUID uuid, final String key) {
 		return getPlayerName(uuid, key) != null;
 	}
 
-	public boolean isAlreadyStored(UUID uuid) {
+	public boolean isAlreadyStored(final UUID uuid) {
 		return getPlayerName(uuid) != null;
 	}
 

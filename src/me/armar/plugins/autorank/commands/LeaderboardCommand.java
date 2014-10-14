@@ -34,19 +34,20 @@ public class LeaderboardCommand extends AutorankCommand {
 		if (args.length > 1) {
 
 			if (args[1].equalsIgnoreCase("force")) {
-				
+
 				if (!sender.hasPermission("autorank.leaderboard.force")) {
-					sender.sendMessage(Lang.NO_PERMISSION.getConfigValue("autorank.leaderboard.force"));
+					sender.sendMessage(Lang.NO_PERMISSION
+							.getConfigValue("autorank.leaderboard.force"));
 					return true;
 				}
-				
+
 				// We should force to update the leaderboard first
 				plugin.getLeaderboard().updateLeaderboard();
 			} else if (args[1].equalsIgnoreCase("broadcast")) {
-				
-				
+
 				if (!sender.hasPermission("autorank.leaderboard.broadcast")) {
-					sender.sendMessage(Lang.NO_PERMISSION.getConfigValue("autorank.leaderboard.broadcast"));
+					sender.sendMessage(Lang.NO_PERMISSION
+							.getConfigValue("autorank.leaderboard.broadcast"));
 					return true;
 				}
 				// Broadcast the command across the server.
@@ -55,11 +56,11 @@ public class LeaderboardCommand extends AutorankCommand {
 		}
 
 		if (!broadcast) {
-			plugin.getLeaderboard().sendLeaderboard(sender);	
+			plugin.getLeaderboard().sendLeaderboard(sender);
 		} else {
 			plugin.getLeaderboard().broadcastLeaderboard();
 		}
-		
+
 		return true;
 	}
 

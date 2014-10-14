@@ -33,20 +33,19 @@ public class RankChange {
 		boolean result = true;
 
 		if (checkRequirements(player)) {
-			
-			UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
-			
+
+			final UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
+
 			// Apply all 'main' results
 
 			// Player already got this rank
-			if (plugin.getRequirementHandler()
-					.getCompletedRanks(uuid).contains(rankFrom)) {
+			if (plugin.getRequirementHandler().getCompletedRanks(uuid)
+					.contains(rankFrom)) {
 				return false;
 			}
 
 			// Add progress of completed requirements
-			plugin.getRequirementHandler().addCompletedRanks(
-					uuid, rankFrom);
+			plugin.getRequirementHandler().addCompletedRanks(uuid, rankFrom);
 
 			for (final Result r : res) {
 				if (r != null) {
@@ -65,11 +64,11 @@ public class RankChange {
 	public boolean checkRequirements(final Player player) {
 		boolean result = true;
 
-		UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
-		
+		final UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
+
 		// Player already got this rank
-		if (plugin.getRequirementHandler()
-				.getCompletedRanks(uuid).contains(rankFrom)) {
+		if (plugin.getRequirementHandler().getCompletedRanks(uuid)
+				.contains(rankFrom)) {
 			return false;
 		}
 
@@ -116,8 +115,8 @@ public class RankChange {
 				// Player has not completed this requirement -> perform results
 				if (!plugin.getRequirementHandler().hasCompletedRequirement(
 						reqID, uuid)) {
-					plugin.getRequirementHandler().addPlayerProgress(
-							uuid, reqID);
+					plugin.getRequirementHandler().addPlayerProgress(uuid,
+							reqID);
 				} else {
 					// Player already completed this -> do nothing
 					continue;

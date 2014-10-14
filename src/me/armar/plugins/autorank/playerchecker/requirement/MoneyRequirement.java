@@ -19,10 +19,10 @@ public class MoneyRequirement extends Requirement {
 	@Override
 	public String getProgress(final Player player) {
 		//UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
-		
+
 		String progress = "";
-		progress = progress.concat(VaultHandler.economy.getBalance(player.getName())
-				+ "/" + minMoney);
+		progress = progress.concat(VaultHandler.economy.getBalance(player
+				.getName()) + "/" + minMoney);
 		return progress;
 	}
 
@@ -31,7 +31,7 @@ public class MoneyRequirement extends Requirement {
 	public boolean meetsRequirement(final Player player) {
 
 		//UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
-		
+
 		return VaultHandler.economy != null
 				&& VaultHandler.economy.has(player.getName(), minMoney);
 	}

@@ -156,7 +156,7 @@
 		<dependency>
 			<groupId>com.sk89q</groupId>
 			<artifactId>worldedit</artifactId>
-			<version>LATEST</version>
+			<version>5.6.2</version>
 			<scope>provided</scope>
 			<type>jar</type>
 		</dependency>
@@ -172,7 +172,7 @@
 		<dependency>
 			<groupId>com.sk89q</groupId>
 			<artifactId>worldguard</artifactId>
-			<version>LATEST</version>
+			<version>5.9</version>
 			<scope>provided</scope>
 			<type>jar</type>
 		</dependency>

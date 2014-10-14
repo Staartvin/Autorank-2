@@ -27,13 +27,14 @@ public class PlayerJoinListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerJoin(final PlayerJoinEvent event) {
 		final Player player = event.getPlayer();
-		
+
 		// Add cached player
 		//UUIDManager.addCachedPlayer(player);
-	
+
 		// Store uuid of player
 		if (plugin.getUUIDStorage().isOutdated(player.getName())) {
-			plugin.getUUIDStorage().storeUUID(player.getName(), player.getUniqueId());
+			plugin.getUUIDStorage().storeUUID(player.getName(),
+					player.getUniqueId());
 			plugin.debugMessage("Stored uuid of " + player.getName());
 		}
 

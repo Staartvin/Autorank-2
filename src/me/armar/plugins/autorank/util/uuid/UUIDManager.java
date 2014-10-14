@@ -26,11 +26,11 @@ import org.bukkit.Bukkit;
 public class UUIDManager {
 
 	private static Autorank plugin;
-	
+
 	static {
 		plugin = (Autorank) Bukkit.getPluginManager().getPlugin("Autorank");
 	}
-	
+
 	private static Map<UUID, String> foundPlayers = new HashMap<UUID, String>();
 
 	private static Map<String, UUID> foundUUIDs = new HashMap<String, UUID>();
@@ -41,19 +41,19 @@ public class UUIDManager {
 	public static void addCachedPlayer(final String playerName, final UUID uuid) {
 		if (!useCache)
 			return;
-		
+
 		plugin.getUUIDStorage().storeUUID(playerName, uuid);
-		
+
 		//System.out.print("Cached " + uuid + " of " + playerName);
 		/*
 		cachedUUIDs.put(playerName, uuid);
 		lastCached.put(playerName, System.currentTimeMillis());*/
 	}
 
-	private static UUID getCachedUUID(String playerName) {
-		
+	private static UUID getCachedUUID(final String playerName) {
+
 		return plugin.getUUIDStorage().getStoredUUID(playerName);
-		
+
 		/*
 		
 		// Already found
@@ -96,9 +96,10 @@ public class UUIDManager {
 			return null;
 
 		if (players.get(uuid) == null) {
-			throw new NullPointerException("Could not get player from UUID " + uuid + "!");
+			throw new NullPointerException("Could not get player from UUID "
+					+ uuid + "!");
 		}
-		
+
 		return players.get(uuid);
 	}
 
@@ -126,7 +127,8 @@ public class UUIDManager {
 			// Check if we have cached values
 			for (final UUID uuid : uuids) {
 
-				String playerName = plugin.getUUIDStorage().getPlayerName(uuid);
+				final String playerName = plugin.getUUIDStorage()
+						.getPlayerName(uuid);
 
 				if (playerName != null) {
 					// If cached value is still valid, use it.
@@ -248,7 +250,8 @@ public class UUIDManager {
 			}
 		}
 
-		throw new NullPointerException("Could not UUID from player " + playerName + "!");
+		throw new NullPointerException("Could not UUID from player "
+				+ playerName + "!");
 	}
 
 	/**

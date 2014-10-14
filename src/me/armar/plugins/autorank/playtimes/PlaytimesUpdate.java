@@ -46,17 +46,15 @@ public class PlaytimesUpdate implements Runnable {
 			if (depManager.isAFK(player)) {
 				return;
 			}
-			
-			UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
+
+			final UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
 
 			// Modify local time
-			playtimes.modifyLocalTime(uuid,
-					Playtimes.INTERVAL_MINUTES);
+			playtimes.modifyLocalTime(uuid, Playtimes.INTERVAL_MINUTES);
 
 			// Modify global time
 			if (playtimes.isMySQLEnabled()) {
-				playtimes.modifyGlobalTime(uuid,
-						Playtimes.INTERVAL_MINUTES);
+				playtimes.modifyGlobalTime(uuid, Playtimes.INTERVAL_MINUTES);
 			}
 
 			// Check if player meets requirements

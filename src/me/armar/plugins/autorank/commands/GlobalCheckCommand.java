@@ -56,11 +56,11 @@ public class GlobalCheckCommand extends AutorankCommand {
 							+ Lang.PLAYER_IS_EXCLUDED.getConfigValue(args[1]));
 					return true;
 				}
-				
-				UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
-				
-				final int minutes = plugin.getPlaytimes().getGlobalTime(
-						uuid);
+
+				final UUID uuid = UUIDManager.getUUIDFromPlayer(player
+						.getName());
+
+				final int minutes = plugin.getPlaytimes().getGlobalTime(uuid);
 
 				if (minutes < 0) {
 					sender.sendMessage(Lang.PLAYER_IS_INVALID
@@ -90,15 +90,15 @@ public class GlobalCheckCommand extends AutorankCommand {
 				return true;
 			}
 			final Player player = (Player) sender;
-			
-			UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
-			
+
+			final UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
+
 			AutorankTools.sendColoredMessage(
 					sender,
 					"You have played for "
 							+ AutorankTools.timeToString(plugin.getPlaytimes()
-									.getGlobalTime(uuid),
-									Time.MINUTES) + " across all servers.");
+									.getGlobalTime(uuid), Time.MINUTES)
+							+ " across all servers.");
 
 		} else {
 			AutorankTools.sendColoredMessage(sender,

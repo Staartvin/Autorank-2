@@ -89,7 +89,7 @@ public class UltimateCoreHandler implements DependencyHandler {
 			}
 		}
 	}
-	
+
 	public boolean isAFK(final Player player) {
 		if (!isAvailable())
 			return false;
@@ -97,7 +97,7 @@ public class UltimateCoreHandler implements DependencyHandler {
 		if (!plugin.getConfigHandler().useAFKIntegration())
 			return false;
 
-		UCplayer user = UC.getPlayer(player);
+		final UCplayer user = UC.getPlayer(player);
 
 		if (user == null) {
 			return false;

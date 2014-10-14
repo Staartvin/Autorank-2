@@ -75,22 +75,21 @@ public class NameFetcher implements Callable<Map<UUID, String>> {
 				Bukkit.getLogger().warning("Tried to get UUID: " + uuid.toString() + " but this invalid.");
 				continue;
 			}*/
-			
+
 			/*if (pingCode == 204) {
 				System.out.print("Got 204 code - no content.");
 				continue;
 			}*/
-			
+
 			//System.out.print("Ping: " + pingCode);
 
 			try {
-					response = (JSONObject) jsonParser
-							.parse(new InputStreamReader(connection
-									.getInputStream()));
+				response = (JSONObject) jsonParser.parse(new InputStreamReader(
+						connection.getInputStream()));
 
-					name = (String) response.get("name");
+				name = (String) response.get("name");
 
-			} catch (ParseException e) {
+			} catch (final ParseException e) {
 				// Try converting the stream to a string and removing all the spaces. 
 				fromStream = fromStream(connection.getInputStream())
 						.replaceAll(" ", "");
@@ -102,8 +101,8 @@ public class NameFetcher implements Callable<Map<UUID, String>> {
 				name = (String) response.get("name");
 
 				if (name == null) {
-					System.out.print("[Autorank] Could not parse uuid '" + uuid.toString()
-							+ "' to name!");
+					System.out.print("[Autorank] Could not parse uuid '"
+							+ uuid.toString() + "' to name!");
 					continue;
 				}
 
@@ -115,8 +114,9 @@ public class NameFetcher implements Callable<Map<UUID, String>> {
 				}
 			} finally {
 				if (name == null || response == null) {
-					System.out.print("[Autorank] Could not find name of account with uuid: '" + uuid.toString()
-							+ "'");
+					System.out
+							.print("[Autorank] Could not find name of account with uuid: '"
+									+ uuid.toString() + "'");
 				}
 			}
 

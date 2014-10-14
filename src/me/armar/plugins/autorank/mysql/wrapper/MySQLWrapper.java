@@ -188,7 +188,7 @@ public class MySQLWrapper {
 						mysql.execute(statement);
 					}
 				});
-		
+
 		// Update cache records
 		this.lastChecked.put(uuid, System.currentTimeMillis());
 		this.lastReceivedTime.put(uuid, time);

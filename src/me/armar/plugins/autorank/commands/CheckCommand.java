@@ -38,8 +38,8 @@ public class CheckCommand extends AutorankCommand {
 		final CheckCommandEvent event = new CheckCommandEvent(player);
 		// Call the event
 		Bukkit.getServer().getPluginManager().callEvent(event);
-		
-		UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
+
+		final UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
 
 		// Check if event is cancelled.
 		if (event.isCancelled())
@@ -53,17 +53,17 @@ public class CheckCommand extends AutorankCommand {
 				.getLastKnownGroup(uuid);
 
 		if (latestKnownGroup == null) {
-			plugin.getRequirementHandler().setLastKnownGroup(
-					uuid, currentGroup);
+			plugin.getRequirementHandler()
+					.setLastKnownGroup(uuid, currentGroup);
 
 			latestKnownGroup = currentGroup;
 		}
 		if (!latestKnownGroup.equalsIgnoreCase(currentGroup)) {
 			// Reset progress and update latest known group
-			plugin.getRequirementHandler().setPlayerProgress(
-					uuid, new ArrayList<Integer>());
-			plugin.getRequirementHandler().setLastKnownGroup(
-					uuid, currentGroup);
+			plugin.getRequirementHandler().setPlayerProgress(uuid,
+					new ArrayList<Integer>());
+			plugin.getRequirementHandler()
+					.setLastKnownGroup(uuid, currentGroup);
 		}
 
 		final String[] groups = plugin.getPermPlugHandler()
@@ -163,10 +163,9 @@ public class CheckCommand extends AutorankCommand {
 						continue;
 
 					if (!plugin.getRequirementHandler()
-							.hasCompletedRequirement(reqID,
-									uuid)) {
-						plugin.getRequirementHandler().addPlayerProgress(
-								uuid, reqID);
+							.hasCompletedRequirement(reqID, uuid)) {
+						plugin.getRequirementHandler().addPlayerProgress(uuid,
+								reqID);
 
 						// Run results
 						plugin.getRequirementHandler().runResults(req, player);
@@ -179,8 +178,7 @@ public class CheckCommand extends AutorankCommand {
 					if (plugin.getConfigHandler().usePartialCompletion()) {
 						// Player does not meet requirements, but has done this already
 						if (plugin.getRequirementHandler()
-								.hasCompletedRequirement(reqID,
-										uuid)) {
+								.hasCompletedRequirement(reqID, uuid)) {
 							metRequirements.add(reqID);
 							continue;
 						}
@@ -223,8 +221,8 @@ public class CheckCommand extends AutorankCommand {
 
 		String reqMessage2 = "";
 
-		if (plugin.getRequirementHandler().hasCompletedRank(
-				uuid, nextRankChange.getRankFrom())) {
+		if (plugin.getRequirementHandler().hasCompletedRank(uuid,
+				nextRankChange.getRankFrom())) {
 			reqMessage2 = " but has no (new) rankup.";
 		} else {
 			reqMessage2 = Lang.RANKED_UP_NOW.getConfigValue();

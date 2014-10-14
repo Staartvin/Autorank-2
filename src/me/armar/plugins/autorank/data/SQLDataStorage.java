@@ -42,8 +42,8 @@ public class SQLDataStorage {
 
 			//System.out.println("jdbc:mysql://" + hostname + "/" + database
 			//	+ "?" + "user=" + username + "&password=" + password);
-			
-			String url = "jdbc:mysql://" + hostname + "/" + database;
+
+			final String url = "jdbc:mysql://" + hostname + "/" + database;
 
 			conn = DriverManager.getConnection(url, username, password);
 
