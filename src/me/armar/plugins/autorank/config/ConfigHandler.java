@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Set;
 
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
 import me.armar.plugins.autorank.hooks.DependencyManager.dependency;
 
 import com.google.common.collect.Lists;
@@ -22,72 +21,67 @@ public class ConfigHandler {
 	public enum MySQLOptions {
 		DATABASE, HOSTNAME, PASSWORD, TABLE, USERNAME
 	}
-
-	private final SimpleYamlConfiguration advancedConfig;
+	
 	private final Autorank plugin;
-
-	private final SimpleYamlConfiguration settingsConfig;
 
 	public ConfigHandler(final Autorank instance) {
 		plugin = instance;
-		this.settingsConfig = plugin.getSettingsConfig();
-		this.advancedConfig = plugin.getAdvancedConfig();
 	}
 
 	public boolean doBaseHelpPageOnPermission() {
-		return settingsConfig.getBoolean(
+		return plugin.getSettingsConfig().getBoolean(
 				"show help command based on permission", false);
 	}
 
 	public boolean doCheckForNewerVersion() {
-		return settingsConfig.getBoolean("auto-updater.check-for-new-versions",
+		return plugin.getSettingsConfig().getBoolean("auto-updater.check-for-new-versions",
 				true);
 	}
 
 	public String getCheckCommandLayout() {
-		return settingsConfig
+		return plugin.getSettingsConfig()
 				.getString(
 						"check command layout",
 						"&p has played for &time and is in group(s) &groups. Requirements to be ranked up: &reqs");
 	}
 
 	public int getIntervalTime() {
-		return settingsConfig.getInt("interval check", 5);
+		return plugin.getSettingsConfig().getInt("interval check", 5);
 	}
 
 	public String getLeaderboardLayout() {
-		return settingsConfig.getString("leaderboard layout",
+		return plugin.getSettingsConfig().getString("leaderboard layout",
 				"&6&r | &b&p - &7&d day(s), &h hour(s) and &m minute(s).");
 	}
 
 	public int getLeaderboardLength() {
-		return settingsConfig.getInt("leaderboard length", 10);
+		return plugin.getSettingsConfig().getInt("leaderboard length", 10);
 	}
 
 	public String getMySQLSettings(final MySQLOptions option) {
 		switch (option) {
 		case HOSTNAME:
-			return settingsConfig.getString("sql.hostname");
+			return plugin.getSettingsConfig().getString("sql.hostname");
 		case USERNAME:
-			return settingsConfig.getString("sql.username");
+			return plugin.getSettingsConfig().getString("sql.username");
 		case PASSWORD:
-			return settingsConfig.getString("sql.password");
+			return plugin.getSettingsConfig().getString("sql.password");
 		case DATABASE:
-			return settingsConfig.getString("sql.database");
+			return plugin.getSettingsConfig().getString("sql.database");
 		case TABLE:
-			return settingsConfig.getString("sql.table");
+			return plugin.getSettingsConfig().getString("sql.table");
 		default:
 			return null;
 		}
 	}
 
 	public String getRankChange(final String group) {
-		return advancedConfig.getString("ranks." + group
+		return plugin.getAdvancedConfig().getString("ranks." + group
 				+ ".results.rank change");
 	}
 
 	public Set<String> getRanks() {
-		return advancedConfig.getConfigurationSection("ranks").getKeys(false);
+		return plugin.getAdvancedConfig().getConfigurationSection("ranks").getKeys(false);
 	}
 
 	/**
@@ -115,17 +109,17 @@ public class ConfigHandler {
 
 		// Correct config
 		String result;
-		result = (advancedConfig.get("ranks." + group + ".requirements."
-				+ requirement + ".value") != null) ? advancedConfig.get(
+		result = (plugin.getAdvancedConfig().get("ranks." + group + ".requirements."
+				+ requirement + ".value") != null) ? plugin.getAdvancedConfig().get(
 				"ranks." + group + ".requirements." + requirement + ".value")
-				.toString() : advancedConfig.getString(
+				.toString() : plugin.getAdvancedConfig().getString(
 				"ranks." + group + ".requirements." + requirement).toString();
 
 		return result;
 	}
 
 	public Set<String> getRequirements(final String group) {
-		final Set<String> requirements = advancedConfig
+		final Set<String> requirements = plugin.getAdvancedConfig()
 				.getConfigurationSection("ranks." + group + ".requirements")
 				.getKeys(false);
 
@@ -133,19 +127,19 @@ public class ConfigHandler {
 	}
 
 	public String getResult(final String result, final String group) {
-		return advancedConfig.get("ranks." + group + ".results." + result)
+		return plugin.getAdvancedConfig().get("ranks." + group + ".results." + result)
 				.toString();
 	}
 
 	public String getResultOfRequirement(final String requirement,
 			final String group, final String result) {
-		return advancedConfig.get(
+		return plugin.getAdvancedConfig().get(
 				"ranks." + group + ".requirements." + requirement + ".results."
 						+ result).toString();
 	}
 
 	public Set<String> getResults(final String group) {
-		final Set<String> results = advancedConfig.getConfigurationSection(
+		final Set<String> results = plugin.getAdvancedConfig().getConfigurationSection(
 				"ranks." + group + ".results").getKeys(false);
 
 		return results;
@@ -155,8 +149,8 @@ public class ConfigHandler {
 			final String group) {
 		Set<String> results = new HashSet<String>();
 
-		results = (advancedConfig.getConfigurationSection("ranks." + group
-				+ ".requirements." + requirement + ".results") != null) ? advancedConfig
+		results = (plugin.getAdvancedConfig().getConfigurationSection("ranks." + group
+				+ ".requirements." + requirement + ".results") != null) ? plugin.getAdvancedConfig()
 				.getConfigurationSection(
 						"ranks." + group + ".requirements." + requirement
 								+ ".results").getKeys(false)
@@ -173,14 +167,14 @@ public class ConfigHandler {
 	 * @return true if optional; false otherwise
 	 */
 	public boolean isOptional(final String requirement, final String group) {
-		final boolean optional = advancedConfig.getBoolean("ranks." + group
+		final boolean optional = plugin.getAdvancedConfig().getBoolean("ranks." + group
 				+ ".requirements." + requirement + ".options.optional", false);
 
 		return optional;
 	}
 
 	public boolean useAdvancedConfig() {
-		return settingsConfig.getBoolean("use advanced config");
+		return plugin.getSettingsConfig().getBoolean("use advanced config");
 	}
 
 	/**
@@ -193,7 +187,7 @@ public class ConfigHandler {
 		if (!useAdvancedConfig())
 			return false;
 
-		return settingsConfig.getBoolean("advanced dependency output", false);
+		return plugin.getSettingsConfig().getBoolean("advanced dependency output", false);
 	}
 
 	/**
@@ -206,7 +200,7 @@ public class ConfigHandler {
 		if (!useAdvancedConfig())
 			return true;
 
-		return settingsConfig.getBoolean("afk integration", false);
+		return plugin.getSettingsConfig().getBoolean("afk integration", false);
 	}
 
 	public boolean useAutoCompletion(final String group,
@@ -215,20 +209,20 @@ public class ConfigHandler {
 
 		if (optional) {
 			// Not defined (Optional + not defined = false)
-			if (advancedConfig.get("ranks." + group + ".requirements."
+			if (plugin.getAdvancedConfig().get("ranks." + group + ".requirements."
 					+ requirement + ".options.auto complete") == null) {
 				//System.out.print("Return false for " + group + " requirement " + requirement);
 				return false;
 			} else {
 				// Defined (Optional + defined = defined)
 				//System.out.print("Return defined for " + group + " requirement " + requirement);
-				return advancedConfig.getBoolean("ranks." + group
+				return plugin.getAdvancedConfig().getBoolean("ranks." + group
 						+ ".requirements." + requirement
 						+ ".options.auto complete");
 			}
 		} else {
 			// Not defined (Not optional + not defined = true)
-			if (advancedConfig.get("ranks." + group + ".requirements."
+			if (plugin.getAdvancedConfig().get("ranks." + group + ".requirements."
 					+ requirement + ".options.auto complete") == null) {
 
 				// If partial completion is false, we do not auto complete
@@ -240,7 +234,7 @@ public class ConfigHandler {
 			} else {
 				// Defined (Not optional + defined = defined)
 				//System.out.print("Return defined for " + group + " requirement " + requirement);
-				return advancedConfig.getBoolean("ranks." + group
+				return plugin.getAdvancedConfig().getBoolean("ranks." + group
 						+ ".requirements." + requirement
 						+ ".options.auto complete");
 			}
@@ -248,15 +242,15 @@ public class ConfigHandler {
 	}
 
 	public boolean useDebugOutput() {
-		return settingsConfig.getBoolean("use debug", false);
+		return plugin.getSettingsConfig().getBoolean("use debug", false);
 	}
 
 	public boolean useMySQL() {
-		return settingsConfig.getBoolean("sql.enabled");
+		return plugin.getSettingsConfig().getBoolean("sql.enabled");
 	}
 
 	public boolean usePartialCompletion() {
-		return settingsConfig.getBoolean("use partial completion", false);
+		return plugin.getSettingsConfig().getBoolean("use partial completion", false);
 	}
 
 	/**
@@ -270,7 +264,7 @@ public class ConfigHandler {
 	 */
 	public dependency useTimeOf() {
 
-		final String timePlugin = settingsConfig.getString("use time of",
+		final String timePlugin = plugin.getSettingsConfig().getString("use time of",
 				"Autorank");
 
 		if (timePlugin.equalsIgnoreCase("Stats"))
