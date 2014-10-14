@@ -17,6 +17,7 @@ import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -97,6 +98,7 @@ public class Leaderboard {
 		for (int i = 0; i < uuids.size(); i++) {
 
 			final Player p = plugin.getServer().getPlayer(uuids.get(i));
+			//OfflinePlayer oP = plugin.getServer().getOfflinePlayer(uuids.get(i));
 
 			if (p != null) {
 				// Do not add show this player, because he is exempted.
