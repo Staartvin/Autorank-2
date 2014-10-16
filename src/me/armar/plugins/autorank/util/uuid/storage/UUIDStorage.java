@@ -197,12 +197,16 @@ public class UUIDStorage {
 			config = findCorrectConfig(oldUser);
 
 			config.set(oldUser, null);
+			
+			plugin.debugMessage("Deleting old user '" + oldUser + "'!");
 		}
 
 		config = findCorrectConfig(playerName);
 
 		config.set(playerName + ".uuid", uuid.toString());
 		config.set(playerName + ".updateTime", System.currentTimeMillis());
+		
+		plugin.debugMessage("Stored user '" + playerName + "' with uuid " + uuid + "!");
 	}
 
 	public String getPlayerName(final UUID uuid, final String key) {
