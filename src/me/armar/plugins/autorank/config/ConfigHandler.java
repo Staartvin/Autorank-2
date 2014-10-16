@@ -125,9 +125,6 @@ public class ConfigHandler {
 	}
 
 	public Set<String> getRequirements(final String group) {
-		plugin.debugMessage("Config: " + plugin.getAdvancedConfig());
-		plugin.debugMessage("Rank section: " + plugin.getAdvancedConfig()
-				.getConfigurationSection("ranks." + group + ".requirements"));
 		final Set<String> requirements = plugin.getAdvancedConfig()
 				.getConfigurationSection("ranks." + group + ".requirements")
 				.getKeys(false);
