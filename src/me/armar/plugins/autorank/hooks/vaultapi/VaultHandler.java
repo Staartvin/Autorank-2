@@ -4,6 +4,7 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.DependencyHandler;
 import net.milkbowl.vault.Vault;
 import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
@@ -20,6 +21,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 public class VaultHandler implements DependencyHandler {
 
 	public static Economy economy = null;
+	public static Permission permission = null;
 	private Vault api;
 	private final Autorank plugin;
 
@@ -74,7 +76,7 @@ public class VaultHandler implements DependencyHandler {
 		} else {
 			api = (Vault) get();
 
-			if (api != null && setupEconomy()) {
+			if (api != null && setupEconomy() && setupPermissions()) {
 				if (verbose) {
 					plugin.getLogger().info(
 							"Vault has been found and can be used!");
@@ -99,5 +101,15 @@ public class VaultHandler implements DependencyHandler {
 		}
 
 		return (economy != null);
+	}
+
+	private boolean setupPermissions() {
+		RegisteredServiceProvider<Permission> permissionProvider = Bukkit.getServer()
+				.getServicesManager().getRegistration(
+						net.milkbowl.vault.permission.Permission.class);
+		if (permissionProvider != null) {
+			permission = permissionProvider.getProvider();
+		}
+		return (permission != null);
 	}
 }
