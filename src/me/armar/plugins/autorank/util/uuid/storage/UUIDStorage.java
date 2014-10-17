@@ -196,8 +196,19 @@ public class UUIDStorage {
 			// Change config pointer to correct config
 			config = findCorrectConfig(oldUser);
 
+			// Name didn't change, it was just out of date.
+			if (oldUser.equals(playerName)) {
+				// Don't do anything besides updating updateTime.
+				config.set(playerName + ".updateTime",
+						System.currentTimeMillis());
+				
+				plugin.debugMessage("Refreshed user '" + playerName + "' with uuid "
+						+ uuid + "!");
+				return;
+			}
+
 			config.set(oldUser, null);
-			
+
 			plugin.debugMessage("Deleting old user '" + oldUser + "'!");
 		}
 
@@ -205,8 +216,9 @@ public class UUIDStorage {
 
 		config.set(playerName + ".uuid", uuid.toString());
 		config.set(playerName + ".updateTime", System.currentTimeMillis());
-		
-		plugin.debugMessage("Stored user '" + playerName + "' with uuid " + uuid + "!");
+
+		plugin.debugMessage("Stored user '" + playerName + "' with uuid "
+				+ uuid + "!");
 	}
 
 	public String getPlayerName(final UUID uuid, final String key) {
