@@ -101,7 +101,7 @@ public class CheckCommand extends AutorankCommand {
 		boolean showReqs = false;
 
 		if (nextRankChange == null) {
-			layout = layout.replace("&reqs", "none");
+			layout = layout.replace("&reqs", "none (last rankup group)");
 		} else {
 			layout = layout.replace("&reqs", "");
 			showReqs = true;
