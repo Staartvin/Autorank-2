@@ -195,7 +195,7 @@ public class UUIDStorage {
 
 			// Change config pointer to correct config
 			config = findCorrectConfig(oldUser);
-
+			
 			// Name didn't change, it was just out of date.
 			if (oldUser.equals(playerName)) {
 				// Don't do anything besides updating updateTime.
