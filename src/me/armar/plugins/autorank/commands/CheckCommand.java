@@ -223,7 +223,7 @@ public class CheckCommand extends AutorankCommand {
 
 		if (plugin.getRequirementHandler().hasCompletedRank(uuid,
 				nextRankChange.getRankFrom())) {
-			reqMessage2 = " but has no (new) rankup.";
+			reqMessage2 = " but has already completed this rankup before.";
 		} else {
 			reqMessage2 = Lang.RANKED_UP_NOW.getConfigValue();
 		}
