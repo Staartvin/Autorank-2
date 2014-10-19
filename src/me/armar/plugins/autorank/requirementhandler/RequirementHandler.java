@@ -43,11 +43,13 @@ public class RequirementHandler {
 		this.plugin = instance;
 
 		// Start requirement saver task
-		// Run save task every minute
-		plugin.getServer()
-				.getScheduler()
-				.runTaskTimer(plugin, new RequirementHandlerSaver(this), 1200,
-						1200);
+		//Run save task every 2 minutes
+		plugin.getServer().getScheduler().runTaskTimer(plugin, new Runnable() {
+			@Override
+			public void run() {
+				saveConfig();
+			}
+		}, 1200, 2400);			
 	}
 
 	public void addCompletedRanks(final UUID uuid, final String rank) {
@@ -127,7 +129,7 @@ public class RequirementHandler {
 		plugin.getLogger().info("Loaded playerdata.");
 	}
 
-	public List<String> getCompletedRanks(final UUID uuid) {
+	private List<String> getCompletedRanks(final UUID uuid) {
 		final List<String> completed = config.getStringList(uuid.toString()
 				+ ".completed ranks");
 
