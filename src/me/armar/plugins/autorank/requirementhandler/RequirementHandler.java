@@ -162,6 +162,7 @@ public class RequirementHandler {
 
 	public boolean hasCompletedRank(final UUID uuid, final String rank) {
 		// If player can rank up forever on the same rank, we will always return false.
+		// Fixed issue #134
 		if (plugin.getConfigHandler().allowInfiniteRanking()) {
 			return false;
 		}
