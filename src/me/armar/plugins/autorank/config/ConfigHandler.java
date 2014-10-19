@@ -288,4 +288,8 @@ public class ConfigHandler {
 		else
 			return dependency.AUTORANK;
 	}
+	
+	public boolean allowInfiniteRanking() {
+		return plugin.getSettingsConfig().getBoolean("allow infinite ranking", false);
+	}
 }
