@@ -39,8 +39,7 @@ public class RankChange {
 			// Apply all 'main' results
 
 			// Player already got this rank
-			if (plugin.getRequirementHandler().getCompletedRanks(uuid)
-					.contains(rankFrom)) {
+			if (plugin.getRequirementHandler().hasCompletedRank(uuid, rankFrom)) {
 				return false;
 			}
 
@@ -67,8 +66,7 @@ public class RankChange {
 		final UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
 
 		// Player already got this rank
-		if (plugin.getRequirementHandler().getCompletedRanks(uuid)
-				.contains(rankFrom)) {
+		if (plugin.getRequirementHandler().hasCompletedRank(uuid, rankFrom)) {
 			return false;
 		}
 
