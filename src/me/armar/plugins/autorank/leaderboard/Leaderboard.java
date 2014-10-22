@@ -72,11 +72,9 @@ public class Leaderboard {
 
 	public Leaderboard(final Autorank plugin) {
 		this.plugin = plugin;
-		if (plugin.getConfigHandler().useAdvancedConfig()) {
-			leaderboardLength = plugin.getConfigHandler()
-					.getLeaderboardLength();
-			layout = plugin.getConfigHandler().getLeaderboardLayout();
-		}
+		
+		leaderboardLength = plugin.getConfigHandler().getLeaderboardLength();
+		layout = plugin.getConfigHandler().getLeaderboardLayout();
 
 		// Run async because it uses UUID lookup
 		plugin.getServer().getScheduler()
@@ -102,9 +100,9 @@ public class Leaderboard {
 
 			// Do not show this player, because he is exempted.
 			// We check Vault for permissions because the player might be offline.
-			
+
 			String name = UUIDManager.getPlayerFromUUID(uuids.get(i));
-			
+
 			if (VaultHandler.permission.playerHas((World) null, name,
 					"autorank.leaderboard.exempt"))
 				continue;
