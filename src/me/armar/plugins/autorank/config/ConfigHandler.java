@@ -194,9 +194,6 @@ public class ConfigHandler {
 	 * @return true if has to, false otherwise.
 	 */
 	public boolean useAdvancedDependencyLogs() {
-		if (!useAdvancedConfig())
-			return false;
-
 		return plugin.getSettingsConfig().getBoolean(
 				"advanced dependency output", false);
 	}
@@ -208,9 +205,6 @@ public class ConfigHandler {
 	 * @return true when AFK integration should be used; false otherwise.
 	 */
 	public boolean useAFKIntegration() {
-		if (!useAdvancedConfig())
-			return true;
-
 		return plugin.getSettingsConfig().getBoolean("afk integration", false);
 	}
 
