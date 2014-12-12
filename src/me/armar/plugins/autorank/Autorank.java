@@ -444,6 +444,13 @@ public class Autorank extends JavaPlugin {
 		}
 
 		debugMessage("Autorank debug is turned on!");
+		
+		// Extra warning for dev users
+		if (this.getDescription().getVersion().toLowerCase().contains("dev")) {
+			this.getLogger().warning("You're running a DEV version, be sure to backup your Autorank folder!");
+			this.getLogger().warning("DEV versions are not guaranteed to be stable.");
+		}
+			
 	}
 
 	public void registerRequirement(final String name,
