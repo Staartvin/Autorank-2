@@ -86,6 +86,9 @@ public class RequirementHandler {
 
 					@Override
 					public void run() {
+						// Backup beforehand
+						plugin.getBackupManager().backupFile("/playerdata/playerdata.yml");
+						
 						for (final String name : getConfig().getKeys(false)) {
 
 							// Probably UUID because names don't have dashes.

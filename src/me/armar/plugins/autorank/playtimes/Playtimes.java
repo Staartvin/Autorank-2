@@ -88,7 +88,7 @@ public class Playtimes {
 	 * 
 	 */
 	public void convertToUUIDStorage() {
-
+		
 		// Run async to prevent load-time problems.
 		plugin.getServer().getScheduler()
 				.runTaskAsynchronously(plugin, new Runnable() {
@@ -96,6 +96,11 @@ public class Playtimes {
 					@Override
 					public void run() {
 
+						
+						// Before running, backup stuff.
+						plugin.getBackupManager().backupFile("Data.yml");
+						
+						
 						// First archive all names below 1
 						archive(1);
 
