@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import me.armar.plugins.autorank.addons.AddOnManager;
 import me.armar.plugins.autorank.api.API;
+import me.armar.plugins.autorank.backup.BackupManager;
 import me.armar.plugins.autorank.commands.manager.CommandsManager;
 import me.armar.plugins.autorank.config.ConfigHandler;
 import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
@@ -94,6 +95,8 @@ public class Autorank extends JavaPlugin {
 	private SimpleYamlConfiguration settingsConfig;
 	private SimpleYamlConfiguration simpleConfig;
 	private UUIDStorage uuidStorage;
+	
+	private BackupManager backupManager;
 
 	private UpdateHandler updateHandler;
 
@@ -257,6 +260,8 @@ public class Autorank extends JavaPlugin {
 		setSettingsConfig(null);
 
 		setUUIDStorage(null);
+		
+		setBackupManager(null);
 
 		getLogger().info(
 				String.format("Autorank %s has been disabled!",
@@ -278,6 +283,9 @@ public class Autorank extends JavaPlugin {
 
 		// Create config handler
 		setConfigHandler(new ConfigHandler(this));
+		
+		// Create backup manager
+		setBackupManager(new BackupManager(this));
 
 		// Create uuid storage
 		setUUIDStorage(new UUIDStorage(this));
@@ -562,5 +570,13 @@ public class Autorank extends JavaPlugin {
 
 	public void setUUIDStorage(final UUIDStorage uuidStorage) {
 		this.uuidStorage = uuidStorage;
+	}
+
+	public BackupManager getBackupManager() {
+		return backupManager;
+	}
+
+	public void setBackupManager(BackupManager backupManager) {
+		this.backupManager = backupManager;
 	}
 }
