@@ -46,7 +46,7 @@ public class UUIDStorage {
 		desFolder = plugin.getDataFolder() + "/uuids";
 
 		//Run save task every 2 minutes
-		plugin.getServer().getScheduler().runTaskTimer(plugin, new Runnable() {
+		plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new Runnable() {
 			@Override
 			public void run() {
 				saveAllFiles();
