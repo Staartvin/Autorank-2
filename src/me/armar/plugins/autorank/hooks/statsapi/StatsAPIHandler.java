@@ -43,9 +43,15 @@ public class StatsAPIHandler implements DependencyHandler {
 		final Plugin plugin = this.plugin.getServer().getPluginManager()
 				.getPlugin("Stats");
 
-		// WorldGuard may not be loaded
-		if (plugin == null || !(plugin instanceof Main)) {
-			return null; // Maybe you want throw an exception instead
+		try {
+			// WorldGuard may not be loaded
+			if (plugin == null || !(plugin instanceof Main)) {
+				return null; // Maybe you want throw an exception instead
+			}
+		} catch (NoClassDefFoundError exception) {
+			this.plugin.getLogger()
+					.info("Could not find Stats because it's probably disabled! Does Stats properly connect to your MySQL database?");
+			return null;
 		}
 
 		return plugin;

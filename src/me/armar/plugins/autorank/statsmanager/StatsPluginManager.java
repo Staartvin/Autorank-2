@@ -62,7 +62,7 @@ public class StatsPluginManager {
 
 			if (!statsPlugin.isEnabled()) {
 				plugin.getLogger()
-						.info("Couldn't hook into Stats! Make sure the version is correct.");
+						.info("Couldn't hook into Stats! Make sure the version is correct and Stats properly connect to your MySQL database.");
 				return;
 			}
 
