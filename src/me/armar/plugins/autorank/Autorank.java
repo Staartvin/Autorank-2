@@ -95,7 +95,7 @@ public class Autorank extends JavaPlugin {
 	private SimpleYamlConfiguration settingsConfig;
 	private SimpleYamlConfiguration simpleConfig;
 	private UUIDStorage uuidStorage;
-	
+
 	private BackupManager backupManager;
 
 	private UpdateHandler updateHandler;
@@ -260,7 +260,7 @@ public class Autorank extends JavaPlugin {
 		setSettingsConfig(null);
 
 		setUUIDStorage(null);
-		
+
 		setBackupManager(null);
 
 		getLogger().info(
@@ -283,7 +283,7 @@ public class Autorank extends JavaPlugin {
 
 		// Create config handler
 		setConfigHandler(new ConfigHandler(this));
-		
+
 		// Create backup manager
 		setBackupManager(new BackupManager(this));
 
@@ -444,13 +444,16 @@ public class Autorank extends JavaPlugin {
 		}
 
 		debugMessage("Autorank debug is turned on!");
-		
+
 		// Extra warning for dev users
 		if (this.getDescription().getVersion().toLowerCase().contains("dev")) {
-			this.getLogger().warning("You're running a DEV version, be sure to backup your Autorank folder!");
-			this.getLogger().warning("DEV versions are not guaranteed to be stable.");
+			this.getLogger()
+					.warning(
+							"You're running a DEV version, be sure to backup your Autorank folder!");
+			this.getLogger().warning(
+					"DEV versions are not guaranteed to be stable.");
 		}
-			
+
 	}
 
 	public void registerRequirement(final String name,
@@ -583,7 +586,7 @@ public class Autorank extends JavaPlugin {
 		return backupManager;
 	}
 
-	public void setBackupManager(BackupManager backupManager) {
+	public void setBackupManager(final BackupManager backupManager) {
 		this.backupManager = backupManager;
 	}
 }

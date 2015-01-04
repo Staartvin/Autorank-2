@@ -46,12 +46,13 @@ public class UUIDStorage {
 		desFolder = plugin.getDataFolder() + "/uuids";
 
 		//Run save task every 2 minutes
-		plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new Runnable() {
-			@Override
-			public void run() {
-				saveAllFiles();
-			}
-		}, 1200, 2400);
+		plugin.getServer().getScheduler()
+				.runTaskTimerAsynchronously(plugin, new Runnable() {
+					@Override
+					public void run() {
+						saveAllFiles();
+					}
+				}, 1200, 2400);
 	}
 
 	public void createNewFiles() {
@@ -195,15 +196,15 @@ public class UUIDStorage {
 
 			// Change config pointer to correct config
 			config = findCorrectConfig(oldUser);
-			
+
 			// Name didn't change, it was just out of date.
 			if (oldUser.equals(playerName)) {
 				// Don't do anything besides updating updateTime.
 				config.set(playerName + ".updateTime",
 						System.currentTimeMillis());
-				
-				plugin.debugMessage("Refreshed user '" + playerName + "' with uuid "
-						+ uuid + "!");
+
+				plugin.debugMessage("Refreshed user '" + playerName
+						+ "' with uuid " + uuid + "!");
 				return;
 			}
 

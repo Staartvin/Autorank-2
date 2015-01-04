@@ -44,12 +44,13 @@ public class RequirementHandler {
 
 		// Start requirement saver task
 		//Run save task every 2 minutes
-		plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new Runnable() {
-			@Override
-			public void run() {
-				saveConfig();
-			}
-		}, 1200, 2400);			
+		plugin.getServer().getScheduler()
+				.runTaskTimerAsynchronously(plugin, new Runnable() {
+					@Override
+					public void run() {
+						saveConfig();
+					}
+				}, 1200, 2400);
 	}
 
 	public void addCompletedRanks(final UUID uuid, final String rank) {
@@ -87,8 +88,9 @@ public class RequirementHandler {
 					@Override
 					public void run() {
 						// Backup beforehand
-						plugin.getBackupManager().backupFile("/playerdata/playerdata.yml");
-						
+						plugin.getBackupManager().backupFile(
+								"/playerdata/playerdata.yml");
+
 						for (final String name : getConfig().getKeys(false)) {
 
 							// Probably UUID because names don't have dashes.
@@ -169,7 +171,7 @@ public class RequirementHandler {
 		if (plugin.getConfigHandler().allowInfiniteRanking()) {
 			return false;
 		}
-		
+
 		return getCompletedRanks(uuid).contains(rank);
 	}
 
