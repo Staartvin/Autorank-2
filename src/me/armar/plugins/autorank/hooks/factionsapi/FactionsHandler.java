@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import com.massivecraft.factions.Factions;
-import com.massivecraft.factions.entity.UPlayer;
+import com.massivecraft.factions.entity.MPlayer;
 
 /**
  * Handles all connections with Factions
@@ -46,7 +46,7 @@ public class FactionsHandler implements DependencyHandler {
 		if (!isAvailable())
 			return 0.0d;
 
-		final UPlayer uPlayer = UPlayer.get(player);
+		final MPlayer uPlayer = MPlayer.get(player);
 
 		if (!uPlayer.hasFaction()) {
 			return 0.0d;
