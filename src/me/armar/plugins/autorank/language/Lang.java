@@ -259,7 +259,12 @@ public enum Lang {
 	/**
 	 * Progress of requirement {0}:
 	 */
-	REQUIREMENT_PROGRESS("requirement-progress", "Progress of requirement {0}:"), ;
+	REQUIREMENT_PROGRESS("requirement-progress", "Progress of requirement {0}:"),
+	/**
+	 * Be from area '{0}'.
+	 */
+	ESSENTIALS_GEOIP_LOCATION_REQUIREMENT("essentials-geoip-location-requirement",
+			"Be from area '{0}'."),;
 
 	private static FileConfiguration LANG;
 

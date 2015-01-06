@@ -68,6 +68,7 @@ ranks:
 #       fish caught: 10 (Player has to have caught at least 10 fish) (requires Stats)
 #       items crafted: 7 (Player has to have crafted at least 7 items) (requires Stats)
 #       times sheared: 15 (Player has to have sheared at least 15 sheep) (requires Stats)
+#       essentials geoip location: Netherlands (Player has to be in the area 'Netherlands') (requires Essentials GeoIP)
 #
 #   results:
 #       rank change: new-rank
