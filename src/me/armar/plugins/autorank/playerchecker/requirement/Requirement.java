@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.hooks.DependencyManager;
 import me.armar.plugins.autorank.playerchecker.result.Result;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 
@@ -35,6 +36,15 @@ public abstract class Requirement {
 
 	public final Autorank getAutorank() {
 		return autorank;
+	}
+	
+	/**
+	 * Gets the dependency manager of Autorank that is used to connect to other plugins.
+	 * <br>Can be used to get other information off of other plugins. 
+	 * @return DependencyManager class
+	 */
+	public final DependencyManager getDependencyManager() {
+		return autorank.getDependencyManager();
 	}
 
 	/**
