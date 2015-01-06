@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 public class McMMOPowerLevelRequirement extends Requirement {
 
 	private int powerLevel = 0;
+	private McMMOHandler handler = null;
 
 	@Override
 	public String getDescription() {
@@ -20,9 +21,7 @@ public class McMMOPowerLevelRequirement extends Requirement {
 	@Override
 	public String getProgress(final Player player) {
 		String progress = "";
-		final int level = ((McMMOHandler) this.getAutorank()
-				.getDependencyManager().getDependency(dependency.MCMMO))
-				.getPowerLevel(player);
+		final int level = handler.getPowerLevel(player);
 
 		progress = progress.concat(level + "/" + powerLevel);
 		return progress;
@@ -30,8 +29,6 @@ public class McMMOPowerLevelRequirement extends Requirement {
 
 	@Override
 	public boolean meetsRequirement(final Player player) {
-		final McMMOHandler handler = (McMMOHandler) this.getAutorank()
-				.getDependencyManager().getDependency(dependency.MCMMO);
 
 		final int level = handler.getPowerLevel(player);
 
@@ -42,6 +39,9 @@ public class McMMOPowerLevelRequirement extends Requirement {
 	public boolean setOptions(final String[] options) {
 		if (options.length > 0) {
 			powerLevel = Integer.parseInt(options[0]);
+
+			handler = (McMMOHandler) this.getDependencyManager()
+					.getDependency(dependency.MCMMO);
 		}
 
 		return true;
