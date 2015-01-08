@@ -179,14 +179,20 @@ public class RankChangeBuilder {
 
 		if (res != null) {
 			res.setAutorank(autorank);
-			
+
+			String errorMessage = "Could not setup requirement '" + type
+					+ "'! It's invalid: check the wiki for documentation.";
+
 			// Check if setOptions is valid
 			try {
 				if (!res.setOptions(arg.split(";"))) {
-					autorank.getLogger().severe("Could not setup requirement '" + type + "'! It's invalid: check the wiki for documentation.");
+					autorank.getLogger().severe(errorMessage);
+					autorank.getWarningManager().registerWarning(errorMessage,
+							10);
 				}
 			} catch (Exception e) {
-				autorank.getLogger().severe("Could not setup requirement '" + type + "'! It's invalid: check the wiki for documentation.");
+				autorank.getLogger().severe(errorMessage);
+				autorank.getWarningManager().registerWarning(errorMessage, 10);
 			}
 
 			res.setOptional(optional);
