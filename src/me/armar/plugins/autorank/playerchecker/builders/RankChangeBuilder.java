@@ -179,7 +179,16 @@ public class RankChangeBuilder {
 
 		if (res != null) {
 			res.setAutorank(autorank);
-			res.setOptions(arg.split(";"));
+			
+			// Check if setOptions is valid
+			try {
+				if (!res.setOptions(arg.split(";"))) {
+					autorank.getLogger().severe("Could not setup requirement '" + type + "'! It's invalid: check the wiki for documentation.");
+				}
+			} catch (Exception e) {
+				autorank.getLogger().severe("Could not setup requirement '" + type + "'! It's invalid: check the wiki for documentation.");
+			}
+
 			res.setOptional(optional);
 			res.setAutoComplete(autoComplete);
 			res.setReqId(reqId);
