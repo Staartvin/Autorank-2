@@ -32,8 +32,9 @@ public class ExpRequirement extends Requirement {
 		try {
 			minExp = AutorankTools.stringtoInt(options[0]);
 		} catch (final Exception e) {
+			return false;
 		}
 
-		return minExp == 999999999;
+		return minExp != 999999999;
 	}
 }
