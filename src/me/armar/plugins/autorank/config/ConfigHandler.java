@@ -1,5 +1,6 @@
 package me.armar.plugins.autorank.config;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -125,9 +126,18 @@ public class ConfigHandler {
 	}
 
 	public Set<String> getRequirements(final String group) {
-		final Set<String> requirements = plugin.getAdvancedConfig()
-				.getConfigurationSection("ranks." + group + ".requirements")
-				.getKeys(false);
+		Set<String> requirements;
+		try {
+			requirements = plugin
+					.getAdvancedConfig()
+					.getConfigurationSection("ranks." + group + ".requirements")
+					.getKeys(false);
+		} catch (NullPointerException e) {
+			plugin.getLogger().severe(
+					"Error occured when trying to get requirements for group '"
+							+ group + "'!");
+			return Collections.emptySet();
+		}
 
 		return requirements;
 	}
