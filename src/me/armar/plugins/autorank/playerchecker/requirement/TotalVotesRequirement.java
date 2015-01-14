@@ -20,7 +20,7 @@ public class TotalVotesRequirement extends Requirement {
 		String progress = "";
 		progress = progress.concat(getStatsPlugin()
 				.getNormalStat(StatsHandler.statTypes.VOTES.toString(),
-						player.getName(), null)
+						player.getUniqueId())
 				+ "/" + totalVotes);
 		return progress;
 	}
@@ -30,7 +30,7 @@ public class TotalVotesRequirement extends Requirement {
 		return getStatsPlugin().isEnabled()
 				&& getStatsPlugin().getNormalStat(
 						StatsHandler.statTypes.VOTES.toString(),
-						player.getName(), null) >= totalVotes;
+						player.getUniqueId()) >= totalVotes;
 	}
 
 	@Override

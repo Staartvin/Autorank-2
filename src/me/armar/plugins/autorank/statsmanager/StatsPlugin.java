@@ -1,5 +1,7 @@
 package me.armar.plugins.autorank.statsmanager;
 
+import java.util.UUID;
+
 public interface StatsPlugin {
 
 	/**
@@ -18,13 +20,13 @@ public interface StatsPlugin {
 	 * this stat.
 	 * 
 	 * @param statType Stat you want to get
-	 * @param arguments Provide arguments for the stat (playerName, worldName).
-	 *            1st argument has to be the playername, 2nd argument must be
-	 *            world (can be null)
+	 * @param uuid UUID of the player you want information of
+	 * @param arguments Provide arguments for the stat (worldName).
+	 *            1st argument has to be the world (can be null)
 	 * @return value of the stat; -1 when the current stats plugin doesn't
 	 *         support this stat; -2 if stat name is invalid
 	 */
-	public int getNormalStat(String statType, Object... arguments);
+	public int getNormalStat(String statType, UUID uuid, Object... arguments);
 
 	/**
 	 * Check whether the current stats plugin is enabled or not.

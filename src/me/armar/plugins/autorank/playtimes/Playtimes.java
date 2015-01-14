@@ -259,6 +259,7 @@ public class Playtimes {
 		int playTime = 0;
 
 		UUID uuid = null;
+		uuid = UUIDManager.getUUIDFromPlayer(playerName);
 
 		// Determine what plugin to use for getting the time.
 		if (timePlugin.equals(dependency.STATS)) {
@@ -268,10 +269,8 @@ public class Playtimes {
 				// In seconds
 				playTime = ((StatsAPIHandler) plugin.getDependencyManager()
 						.getDependency(dependency.STATS)).getTotalPlayTime(
-						playerName, null);
+						uuid, null);
 			} else {
-
-				uuid = UUIDManager.getUUIDFromPlayer(playerName);
 
 				if (uuid == null)
 					return playTime;

@@ -2,8 +2,10 @@ package me.armar.plugins.autorank.statsmanager;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.DependencyManager.dependency;
+import me.armar.plugins.autorank.hooks.statisticsapi.StatisticsAPIHandler;
 import me.armar.plugins.autorank.hooks.statsapi.StatsAPIHandler;
 import me.armar.plugins.autorank.statsmanager.handlers.DummyHandler;
+import me.armar.plugins.autorank.statsmanager.handlers.StatisticsHandler;
 import me.armar.plugins.autorank.statsmanager.handlers.StatsHandler;
 
 import org.bukkit.plugin.Plugin;
@@ -28,6 +30,17 @@ public class StatsPluginManager {
 	public boolean findStats() {
 		final Plugin x = plugin.getServer().getPluginManager()
 				.getPlugin("Stats");
+		// Main == Stats main class
+		if (x != null && x instanceof JavaPlugin) {
+			return true;
+		}
+
+		return false;
+	}
+	
+	public boolean findStatistics() {
+		final Plugin x = plugin.getServer().getPluginManager()
+				.getPlugin("Statistics");
 		// Main == Stats main class
 		if (x != null && x instanceof JavaPlugin) {
 			return true;
@@ -62,11 +75,31 @@ public class StatsPluginManager {
 
 			if (!statsPlugin.isEnabled()) {
 				plugin.getLogger()
-						.info("Couldn't hook into Stats! Make sure the version is correct and Stats properly connect to your MySQL database.");
+						.info("Couldn't hook into Stats! Make sure the version is correct and Stats properly connects to your MySQL database.");
 				return;
 			}
 
 			plugin.getLogger().info("Hooked into Stats (by Lolmewn)");
+		} else if (findStatistics()) {
+
+			plugin.getLogger().info("Found Stats plugin: Statistics (by bitWolfy)");
+
+			statsPlugin = new StatisticsHandler(plugin, (StatisticsAPIHandler) plugin
+					.getDependencyManager().getDependency(dependency.STATISTICS));
+
+			if (statsPlugin == null) {
+				plugin.getLogger()
+						.info("Couldn't hook into Statistics! StatisticsHandler was unable to hook.");
+				return;
+			}
+
+			if (!statsPlugin.isEnabled()) {
+				plugin.getLogger()
+						.info("Couldn't hook into Statistics! Make sure the version is correct and Statistics properly connects to your MySQL database.");
+				return;
+			}
+
+			plugin.getLogger().info("Hooked into Statistics (by bitWolfy)");
 		} else {
 			// Use dummy handler if no stats plugin was found
 			statsPlugin = new DummyHandler();

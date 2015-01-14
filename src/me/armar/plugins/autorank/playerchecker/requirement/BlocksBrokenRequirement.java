@@ -42,7 +42,7 @@ public class BlocksBrokenRequirement extends Requirement {
 		String progress = "";
 		progress = progress.concat(getStatsPlugin().getNormalStat(
 				StatsHandler.statTypes.BLOCKS_BROKEN.toString(),
-				player.getName(), null, blockID + "", damageValue + "")
+				player.getUniqueId(), null, blockID + "", damageValue + "")
 				+ "/" + blocksBroken);
 		return progress;
 	}
@@ -56,11 +56,11 @@ public class BlocksBrokenRequirement extends Requirement {
 		if (blockID > 0) {
 			sufficient = getStatsPlugin().getNormalStat(
 					StatsHandler.statTypes.BLOCKS_BROKEN.toString(),
-					player.getName(), null, blockID + "", damageValue + "") >= blocksBroken;
+					player.getUniqueId(), null, blockID + "", damageValue + "") >= blocksBroken;
 		} else {
 			sufficient = getStatsPlugin().getNormalStat(
 					StatsHandler.statTypes.TOTAL_BLOCKS_BROKEN.toString(),
-					player.getName(), null) >= blocksBroken;
+					player.getUniqueId()) >= blocksBroken;
 		}
 
 		return enabled && sufficient;

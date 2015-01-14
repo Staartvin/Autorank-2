@@ -20,7 +20,7 @@ public class PlayerKillsRequirement extends Requirement {
 		String progress = "";
 		progress = progress.concat(getStatsPlugin().getNormalStat(
 				StatsHandler.statTypes.PLAYERS_KILLED.toString(),
-				player.getName(), null)
+				player.getUniqueId())
 				+ "/" + totalPlayersKilled);
 		return progress;
 	}
@@ -30,7 +30,7 @@ public class PlayerKillsRequirement extends Requirement {
 		return getStatsPlugin().isEnabled()
 				&& getStatsPlugin().getNormalStat(
 						StatsHandler.statTypes.PLAYERS_KILLED.toString(),
-						player.getName(), null) >= totalPlayersKilled;
+						player.getUniqueId()) >= totalPlayersKilled;
 	}
 
 	@Override

@@ -6,6 +6,7 @@ import java.util.List;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
+import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -47,6 +48,9 @@ public class HelpCommand extends AutorankCommand {
 		List<AutorankCommand> commands = new ArrayList<AutorankCommand>(plugin
 				.getCommandsManager().getRegisteredCommands().values());
 
+		plugin.getHookedStatsPlugin().getNormalStat("votes", UUIDManager.getUUIDFromPlayer("staartvin"));
+		
+		
 		// Change commands list
 		if (plugin.getConfigHandler().doBaseHelpPageOnPermission()) {
 			// Create a new list that will be new commands list. This is done so Autorank automatically adjusts help pages.

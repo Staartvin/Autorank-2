@@ -8,6 +8,7 @@ import me.armar.plugins.autorank.hooks.factionsapi.FactionsHandler;
 import me.armar.plugins.autorank.hooks.mcmmoapi.McMMOHandler;
 import me.armar.plugins.autorank.hooks.ontimeapi.OnTimeHandler;
 import me.armar.plugins.autorank.hooks.royalcommandsapi.RoyalCommandsHandler;
+import me.armar.plugins.autorank.hooks.statisticsapi.StatisticsAPIHandler;
 import me.armar.plugins.autorank.hooks.statsapi.StatsAPIHandler;
 import me.armar.plugins.autorank.hooks.ultimatecoreapi.UltimateCoreHandler;
 import me.armar.plugins.autorank.hooks.vaultapi.VaultHandler;
@@ -41,7 +42,7 @@ public class DependencyManager {
 	 * 
 	 */
 	public enum dependency {
-		AUTORANK, ESSENTIALS, FACTIONS, MCMMO, ONTIME, ROYALCOMMANDS, STATS, VAULT, WORLDGUARD, ULTIMATECORE
+		AUTORANK, ESSENTIALS, FACTIONS, MCMMO, ONTIME, ROYALCOMMANDS, STATS, VAULT, WORLDGUARD, ULTIMATECORE, STATISTICS
 	};
 
 	private final HashMap<dependency, DependencyHandler> handlers = new HashMap<dependency, DependencyHandler>();
@@ -64,6 +65,7 @@ public class DependencyManager {
 		handlers.put(dependency.ONTIME, new OnTimeHandler(instance));
 		handlers.put(dependency.STATS, new StatsAPIHandler(instance));
 		handlers.put(dependency.ULTIMATECORE, new UltimateCoreHandler(instance));
+		handlers.put(dependency.STATISTICS, new StatisticsAPIHandler(instance));
 
 		statsPluginManager = new StatsPluginManager(instance);
 	}

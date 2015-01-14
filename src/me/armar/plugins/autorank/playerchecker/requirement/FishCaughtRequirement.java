@@ -20,7 +20,7 @@ public class FishCaughtRequirement extends Requirement {
 
 		final int progressBar = this.getStatsPlugin().getNormalStat(
 				StatsHandler.statTypes.FISH_CAUGHT.toString(),
-				player.getName(), null);
+				player.getUniqueId());
 
 		progress = progress.concat(progressBar + "/" + fishCaught);
 		return progress;
@@ -31,7 +31,7 @@ public class FishCaughtRequirement extends Requirement {
 
 		return this.getStatsPlugin().getNormalStat(
 				StatsHandler.statTypes.FISH_CAUGHT.toString(),
-				player.getName(), null) > fishCaught;
+				player.getUniqueId()) > fishCaught;
 	}
 
 	@Override

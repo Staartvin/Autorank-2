@@ -42,6 +42,10 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/Statistics.jar"/>
+	<classpathentry kind="lib" path="lib/Statistics.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/Autorank2/lib/Statistics.jar!/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="output"/>
 </classpath>

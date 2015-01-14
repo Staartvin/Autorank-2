@@ -1,5 +1,7 @@
 package me.armar.plugins.autorank.statsmanager.handlers;
 
+import java.util.UUID;
+
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 
 /**
@@ -19,7 +21,7 @@ public class DummyHandler implements StatsPlugin {
 	}
 
 	@Override
-	public int getNormalStat(final String statType, final Object... arguments) {
+	public int getNormalStat(final String statType, UUID uuid, final Object... arguments) {
 		// TODO Auto-generated method stub
 		return 0;
 	}

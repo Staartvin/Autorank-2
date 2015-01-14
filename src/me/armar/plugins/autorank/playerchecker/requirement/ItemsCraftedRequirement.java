@@ -20,7 +20,7 @@ public class ItemsCraftedRequirement extends Requirement {
 
 		final int progressBar = this.getStatsPlugin().getNormalStat(
 				StatsHandler.statTypes.ITEMS_CRAFTED.toString(),
-				player.getName(), null);
+				player.getUniqueId());
 
 		progress = progress.concat(progressBar + "/" + itemsCrafted);
 		return progress;
@@ -31,7 +31,7 @@ public class ItemsCraftedRequirement extends Requirement {
 
 		return this.getStatsPlugin().getNormalStat(
 				StatsHandler.statTypes.ITEMS_CRAFTED.toString(),
-				player.getName(), null) > itemsCrafted;
+				player.getUniqueId()) > itemsCrafted;
 	}
 
 	@Override

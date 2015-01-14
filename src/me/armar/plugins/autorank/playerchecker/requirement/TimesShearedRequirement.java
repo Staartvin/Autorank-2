@@ -20,7 +20,7 @@ public class TimesShearedRequirement extends Requirement {
 
 		final int progressBar = this.getStatsPlugin().getNormalStat(
 				StatsHandler.statTypes.TIMES_SHEARED.toString(),
-				player.getName(), null);
+				player.getUniqueId());
 
 		progress = progress.concat(progressBar + "/" + timesSheared);
 		return progress;
@@ -31,7 +31,7 @@ public class TimesShearedRequirement extends Requirement {
 
 		return this.getStatsPlugin().getNormalStat(
 				StatsHandler.statTypes.TIMES_SHEARED.toString(),
-				player.getName(), null) > timesSheared;
+				player.getUniqueId()) > timesSheared;
 	}
 
 	@Override

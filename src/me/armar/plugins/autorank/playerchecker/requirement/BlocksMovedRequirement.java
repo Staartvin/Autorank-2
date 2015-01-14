@@ -42,7 +42,7 @@ public class BlocksMovedRequirement extends Requirement {
 		String progress = "";
 		progress = progress.concat(getStatsPlugin().getNormalStat(
 				StatsHandler.statTypes.BLOCKS_MOVED.toString(),
-				player.getName(), player.getWorld().getName(), movementType)
+				player.getUniqueId(), player.getWorld().getName(), movementType)
 				+ "/" + blocksMoved + " (" + getMovementString() + ")");
 		return progress;
 	}
@@ -55,7 +55,7 @@ public class BlocksMovedRequirement extends Requirement {
 		boolean sufficient = false;
 		sufficient = this.getStatsPlugin().getNormalStat(
 				StatsHandler.statTypes.BLOCKS_MOVED.toString(),
-				player.getName(), player.getWorld().getName(), movementType) > blocksMoved;
+				player.getUniqueId(), player.getWorld().getName(), movementType) > blocksMoved;
 
 		return enabled && sufficient;
 	}
