@@ -42,5 +42,6 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="lib/Statistics.jar"/>
 	<classpathentry kind="output" path="output"/>
 </classpath>
