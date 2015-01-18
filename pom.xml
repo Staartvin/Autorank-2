@@ -1,5 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	xsi:schemaLocation="http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>Autorank</groupId>
 	<artifactId>Autorank</artifactId>
@@ -69,7 +69,8 @@
 
 		<repository>
 			<id>stats-repo</id>
-			<url>http://centrility.nl:8081/nexus/content/repositories/releases/</url>
+			<url>http://centrility.nl:8081/nexus/content/repositories/releases/
+			</url>
 		</repository>
 
 		<repository>
@@ -78,14 +79,17 @@
 		</repository>
 
 		<repository>
+			<id>Spigot repo</id>
+			<url>https://hub.spigotmc.org/nexus/</url>
+		</repository>
+
+		<repository>
 			<id>staartvin-repo</id>
 			<url>http://62.131.38.74:8081/artifactory/ext-release-local/</url>
 		</repository>
 
-		<repository>
-			<id>Spigot repo</id>
-			<url>http://hub.spigotmc.org/nexus/</url>
-		</repository>
+
+
 	</repositories>
 
 	<dependencies>
