@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" output="output" path="src">
+	<classpathentry excluding="D:/Users/Vincent/Java Projects/workspace/Autorank2/Javadocs|D:/Users/Vincent/Java Projects/workspace/Autorank2/lib" kind="src" output="target/classes" path="src">
 		<attributes>
 			<attribute name="optional" value="true"/>
 			<attribute name="maven.pomderived" value="true"/>
@@ -26,26 +26,26 @@
 	<classpathentry kind="lib" path="lib/WorldGuard.jar"/>
 	<classpathentry kind="lib" path="lib/RoyalCommands.jar"/>
 	<classpathentry kind="lib" path="lib/OnTime.jar"/>
-	<classpathentry kind="lib" path="lib/bukkit-1.7.9.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="http://jd.bukkit.org/dev/apidocs/"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="lib" path="lib/Stats.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="http://ci.lolmewn.nl/job/Stats/javadoc/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/UltimateCore.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.7.0_71">
-		<attributes>
-			<attribute name="maven.pomderived" value="true"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="lib" path="lib/Statistics.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="jar:platform:/resource/Autorank2/lib/Statistics.jar!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="output" path="output"/>
+	<classpathentry kind="lib" path="lib/spigot-1.8.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="https://hub.spigotmc.org/javadocs/spigot/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="output" path="target/classes"/>
 </classpath>

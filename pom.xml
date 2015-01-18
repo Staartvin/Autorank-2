@@ -85,16 +85,22 @@
 			<id>staartvin-repo</id>
 			<url>http://62.131.38.74:8081/artifactory/ext-release-local/</url>
 		</repository>
+
+		<repository>
+			<id>Spigot repo</id>
+			<url>https://hub.spigotmc.org/nexus</url>
+		</repository>
 	</repositories>
 
 	<dependencies>
 
+		<!-- <dependency> <groupId>org.bukkit</groupId> <artifactId>bukkit</artifactId> 
+			<version>1.7.9-R0.2</version> <scope>provided</scope> <type>jar</type> </dependency> -->
+
 		<dependency>
-			<groupId>org.bukkit</groupId>
-			<artifactId>bukkit</artifactId>
-			<version>1.7.9-R0.2</version>
-			<scope>provided</scope>
-			<type>jar</type>
+			<groupId>org.spigotmc</groupId>
+			<artifactId>spigot-api</artifactId>
+			<version>1.8-R0.1-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
