@@ -117,17 +117,17 @@ public class EssentialsHandler implements DependencyHandler {
 			}
 		}
 	}
-	
-	public String getGeoIPLocation(Player player) {
+
+	public String getGeoIPLocation(final Player player) {
 		if (!isAvailable())
 			return null;
-		
+
 		final User user = api.getUser(player);
 
 		if (user == null) {
 			return null;
 		}
-		
+
 		return user.getGeoLocation();
 	}
 }

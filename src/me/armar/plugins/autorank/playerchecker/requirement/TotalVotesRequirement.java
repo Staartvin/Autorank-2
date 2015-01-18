@@ -18,9 +18,8 @@ public class TotalVotesRequirement extends Requirement {
 	@Override
 	public String getProgress(final Player player) {
 		String progress = "";
-		progress = progress.concat(getStatsPlugin()
-				.getNormalStat(StatsHandler.statTypes.VOTES.toString(),
-						player.getUniqueId())
+		progress = progress.concat(getStatsPlugin().getNormalStat(
+				StatsHandler.statTypes.VOTES.toString(), player.getUniqueId())
 				+ "/" + totalVotes);
 		return progress;
 	}

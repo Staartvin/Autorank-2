@@ -180,7 +180,7 @@ public class RankChangeBuilder {
 		if (res != null) {
 			res.setAutorank(autorank);
 
-			String errorMessage = "Could not setup requirement '" + type
+			final String errorMessage = "Could not setup requirement '" + type
 					+ "'! It's invalid: check the wiki for documentation.";
 
 			// Check if setOptions is valid
@@ -190,7 +190,7 @@ public class RankChangeBuilder {
 					autorank.getWarningManager().registerWarning(errorMessage,
 							10);
 				}
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				autorank.getLogger().severe(errorMessage);
 				autorank.getWarningManager().registerWarning(errorMessage, 10);
 			}

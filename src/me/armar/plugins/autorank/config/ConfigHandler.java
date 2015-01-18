@@ -132,7 +132,7 @@ public class ConfigHandler {
 					.getAdvancedConfig()
 					.getConfigurationSection("ranks." + group + ".requirements")
 					.getKeys(false);
-		} catch (NullPointerException e) {
+		} catch (final NullPointerException e) {
 			plugin.getLogger().severe(
 					"Error occured when trying to get requirements for group '"
 							+ group + "'!");

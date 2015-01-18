@@ -40,8 +40,8 @@ public class McMMOPowerLevelRequirement extends Requirement {
 		if (options.length > 0) {
 			powerLevel = Integer.parseInt(options[0]);
 
-			handler = (McMMOHandler) this.getDependencyManager()
-					.getDependency(dependency.MCMMO);
+			handler = (McMMOHandler) this.getDependencyManager().getDependency(
+					dependency.MCMMO);
 		}
 
 		return true;

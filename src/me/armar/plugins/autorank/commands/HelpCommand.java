@@ -48,9 +48,9 @@ public class HelpCommand extends AutorankCommand {
 		List<AutorankCommand> commands = new ArrayList<AutorankCommand>(plugin
 				.getCommandsManager().getRegisteredCommands().values());
 
-		plugin.getHookedStatsPlugin().getNormalStat("votes", UUIDManager.getUUIDFromPlayer("staartvin"));
-		
-		
+		plugin.getHookedStatsPlugin().getNormalStat("votes",
+				UUIDManager.getUUIDFromPlayer("staartvin"));
+
 		// Change commands list
 		if (plugin.getConfigHandler().doBaseHelpPageOnPermission()) {
 			// Create a new list that will be new commands list. This is done so Autorank automatically adjusts help pages.

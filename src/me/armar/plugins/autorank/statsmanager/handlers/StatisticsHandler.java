@@ -38,7 +38,7 @@ public class StatisticsHandler implements StatsPlugin {
 	}
 
 	@Override
-	public int getNormalStat(final String statType, UUID uuid,
+	public int getNormalStat(final String statType, final UUID uuid,
 			final Object... arguments) {
 		// First argument is always the name, second arg is always the world
 

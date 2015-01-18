@@ -4,14 +4,11 @@ import java.util.UUID;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.DependencyHandler;
-import nl.lolmewn.stats.api.Stat;
 
 import org.bukkit.plugin.Plugin;
 
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.StatisticsAPI;
-import com.wolvencraft.yasp.db.data.DataStore.DataStoreType;
-import com.wolvencraft.yasp.db.data.blocks.DetailedBlockStats;
 import com.wolvencraft.yasp.session.OfflineSession;
 import com.wolvencraft.yasp.session.OnlineSession;
 
@@ -45,8 +42,9 @@ public class StatisticsAPIHandler implements DependencyHandler {
 			if (plugin == null || !(plugin instanceof Statistics)) {
 				return null; // Maybe you want throw an exception instead
 			}
-		} catch (NoClassDefFoundError exception) {
-			this.plugin.getLogger()
+		} catch (final NoClassDefFoundError exception) {
+			this.plugin
+					.getLogger()
 					.info("Could not find Statistics because it's probably disabled! Does Statistics properly connect to your MySQL database?");
 			return null;
 		}
@@ -248,28 +246,28 @@ public class StatisticsAPIHandler implements DependencyHandler {
 	}
 	
 	*/
-	public int getNormalStat(UUID uuid, String statType, String worldName) {
-		OfflineSession offlineSession = StatisticsAPI.getSession(uuid);
+	public int getNormalStat(final UUID uuid, final String statType,
+			final String worldName) {
+		final OfflineSession offlineSession = StatisticsAPI.getSession(uuid);
 		OnlineSession onlineSession = null;
-		
+
 		if (plugin.getServer().getPlayer(uuid) != null) {
-			onlineSession = StatisticsAPI.getSession(plugin.getServer().getPlayer(uuid));
+			onlineSession = StatisticsAPI.getSession(plugin.getServer()
+					.getPlayer(uuid));
 		}
-		
+
 		/*System.out.print(session.getPlayerTotals().getValue(PlayerVariable.BLOCKS_PLACED));
 		
 		System.out.print(((BlockData) session.getDataStore(DataStoreType.Blocks)).getNormalData().isEmpty());
 		*/
 		// TODO: Finish shit
-		
+
 		/*for (Object store: session.getPlayerTotals().getBlocksBroken().getValue()) {
 			System.out.print("Store: " + store);
 		}*/
-		
-		
+
 		//System.out.print(o);
-		
-		
+
 		return 0;
 	}
 

@@ -19,15 +19,15 @@ public class EssentialsGeoIPRequirement extends Requirement {
 
 	@Override
 	public String getProgress(final Player player) {
-		
-		String realLocation = essHandler.getGeoIPLocation(player);
-		
+
+		final String realLocation = essHandler.getGeoIPLocation(player);
+
 		return realLocation + "/" + location;
 	}
 
 	@Override
 	public boolean meetsRequirement(final Player player) {
-		String realLocation = essHandler.getGeoIPLocation(player);
+		final String realLocation = essHandler.getGeoIPLocation(player);
 
 		return (location != null && realLocation != null && location
 				.equalsIgnoreCase(realLocation));

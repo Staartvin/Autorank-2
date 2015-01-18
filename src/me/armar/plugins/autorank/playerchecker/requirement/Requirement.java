@@ -37,10 +37,12 @@ public abstract class Requirement {
 	public final Autorank getAutorank() {
 		return autorank;
 	}
-	
+
 	/**
-	 * Gets the dependency manager of Autorank that is used to connect to other plugins.
-	 * <br>Can be used to get other information off of other plugins. 
+	 * Gets the dependency manager of Autorank that is used to connect to other
+	 * plugins. <br>
+	 * Can be used to get other information off of other plugins.
+	 * 
 	 * @return DependencyManager class
 	 */
 	public final DependencyManager getDependencyManager() {

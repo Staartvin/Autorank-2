@@ -76,7 +76,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class Autorank extends JavaPlugin {
 
-	// Using MySQL
+	// Using MySQL - test
 	public static boolean usingMySQL = false;
 	private AddOnManager addonManager;
 	private SimpleYamlConfiguration advancedConfig;
@@ -376,7 +376,8 @@ public class Autorank extends JavaPlugin {
 		req.registerRequirement("items crafted", ItemsCraftedRequirement.class);
 		req.registerRequirement("time", TimeRequirement.class);
 		req.registerRequirement("times sheared", TimesShearedRequirement.class);
-		req.registerRequirement("essentials geoip location", EssentialsGeoIPRequirement.class);
+		req.registerRequirement("essentials geoip location",
+				EssentialsGeoIPRequirement.class);
 
 		// REGISTER PLURALS IN AUTORANKTOOLS AS WELL!
 

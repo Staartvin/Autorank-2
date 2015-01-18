@@ -35,7 +35,7 @@ public class AutorankTools {
 	 * @return correct requirement name or old name if none was found.
 	 */
 	public static String getCorrectName(String oldName) {
-		
+
 		// Remove all numbers from string
 		oldName = oldName.replaceAll("[^a-zA-Z\\s]", "").trim();
 
@@ -44,10 +44,10 @@ public class AutorankTools {
 				continue;
 			}
 			// Contains word
-			
+
 			if (type.length() == oldName.length()) {
 				//System.out.print(type + " & " + oldName + " are equal.");
-				
+
 				return type;
 			}
 

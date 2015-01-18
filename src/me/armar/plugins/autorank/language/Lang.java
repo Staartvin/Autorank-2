@@ -263,8 +263,8 @@ public enum Lang {
 	/**
 	 * Be from area '{0}'.
 	 */
-	ESSENTIALS_GEOIP_LOCATION_REQUIREMENT("essentials-geoip-location-requirement",
-			"Be from area '{0}'."),;
+	ESSENTIALS_GEOIP_LOCATION_REQUIREMENT(
+			"essentials-geoip-location-requirement", "Be from area '{0}'."), ;
 
 	private static FileConfiguration LANG;
 

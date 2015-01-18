@@ -61,10 +61,10 @@
 	</properties>
 
 	<repositories>
-		<repository>
+		<!-- <repository>
 			<id>bukkit-repo</id>
 			<url>http://repo.bukkit.org/content/groups/public/</url>
-		</repository>
+		</repository> -->
 
 		<repository>
 			<id>Plugin Metrics</id>
@@ -88,7 +88,7 @@
 
 		<repository>
 			<id>Spigot repo</id>
-			<url>https://hub.spigotmc.org/nexus</url>
+			<url>http://hub.spigotmc.org/nexus/</url>
 		</repository>
 	</repositories>
 

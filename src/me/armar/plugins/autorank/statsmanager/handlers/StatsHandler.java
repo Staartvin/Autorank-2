@@ -37,7 +37,8 @@ public class StatsHandler implements StatsPlugin {
 	}
 
 	@Override
-	public int getNormalStat(final String statType, UUID uuid, final Object... arguments) {
+	public int getNormalStat(final String statType, final UUID uuid,
+			final Object... arguments) {
 		// First argument is the world (or null)
 
 		final String correctName = getCorrectStatName(statType).toLowerCase();
@@ -61,17 +62,15 @@ public class StatsHandler implements StatsPlugin {
 			value = statsApi.getNormalStat(uuid, "Votes", worldName);
 		} else if (correctName.equals("players_killed")) {
 			// Handle players killed
-			value = statsApi
-					.getTotalMobsKilled(uuid, "player", worldName);
+			value = statsApi.getTotalMobsKilled(uuid, "player", worldName);
 		} else if (correctName.equals("mobs_killed")) {
 			// Handle mobs killed
 			// arg[2] == mobType
-			value = statsApi.getTotalMobsKilled(uuid,
-					(String) arguments[1], worldName);
+			value = statsApi.getTotalMobsKilled(uuid, (String) arguments[1],
+					worldName);
 		} else if (correctName.equals("damage_taken")) {
 			// Handle damage taken
-			value = statsApi.getNormalStat(uuid, "Damage taken",
-					worldName);
+			value = statsApi.getNormalStat(uuid, "Damage taken", worldName);
 		} else if (correctName.equals("blocks_placed")) {
 			// Handle blocks placed
 			value = statsApi.getBlocksStat(uuid,
@@ -95,18 +94,16 @@ public class StatsHandler implements StatsPlugin {
 			value = statsApi.getTotalPlayTime(uuid, worldName);
 		} else if (correctName.equals("blocks_moved")) {
 			// Handle time played
-			value = statsApi.getTotalBlocksMoved(uuid,
-					(Integer) arguments[1], worldName);
+			value = statsApi.getTotalBlocksMoved(uuid, (Integer) arguments[1],
+					worldName);
 		} else if (correctName.equals("fish_caught")) {
 			// Handle time played
 			// Fish catched is the proper spelling of the stat
-			value = statsApi.getNormalStat(uuid, "Fish catched",
-					worldName);
+			value = statsApi.getNormalStat(uuid, "Fish catched", worldName);
 		} else if (correctName.equals("items_crafted")) {
 			// Handle time played
 			// Fish catched is the proper spelling of the stat
-			value = statsApi.getNormalStat(uuid, "Items crafted",
-					worldName);
+			value = statsApi.getNormalStat(uuid, "Items crafted", worldName);
 		} else if (correctName.equals("times_sheared")) {
 			// Handle time played
 			// Fish catched is the proper spelling of the stat

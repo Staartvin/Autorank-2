@@ -50,7 +50,7 @@ public class StatsAPIHandler implements DependencyHandler {
 			if (plugin == null || !(plugin instanceof Main)) {
 				return null; // Maybe you want throw an exception instead
 			}
-		} catch (NoClassDefFoundError exception) {
+		} catch (final NoClassDefFoundError exception) {
 			this.plugin
 					.getLogger()
 					.info("Could not find Stats because it's probably disabled! Does Stats properly connect to your MySQL database?");
@@ -71,8 +71,8 @@ public class StatsAPIHandler implements DependencyHandler {
 	 * @param statType Either "Block break" or "Block place"
 	 * @return amount player placed/broke of a block
 	 */
-	public int getBlocksStat(UUID uuid, final int id, final int damageValue,
-			final String worldName, final String statType) {
+	public int getBlocksStat(final UUID uuid, final int id,
+			final int damageValue, final String worldName, final String statType) {
 		if (!isAvailable())
 			return 0;
 
@@ -83,7 +83,7 @@ public class StatsAPIHandler implements DependencyHandler {
 		if (damageValue > 0) {
 			checkDamageValue = true;
 		}
-		
+
 		for (final Object[] vars : blockStat.getAllVariables()) {
 
 			if (checkDamageValue) {
@@ -91,8 +91,7 @@ public class StatsAPIHandler implements DependencyHandler {
 
 				final byte byteValue = (Byte) vars[1];
 
-				if ((Integer) vars[0] == id
-						&& byteValue == damageValue) {
+				if ((Integer) vars[0] == id && byteValue == damageValue) {
 					value += blockStat.getValue(vars);
 				}
 			} else {
@@ -113,7 +112,7 @@ public class StatsAPIHandler implements DependencyHandler {
 		}
 	}
 
-	public int getNormalStat(UUID uuid, final String statName,
+	public int getNormalStat(final UUID uuid, final String statName,
 			final String worldName) {
 		if (!isAvailable())
 			return 0;
@@ -133,7 +132,7 @@ public class StatsAPIHandler implements DependencyHandler {
 		return api.getStat(name);
 	}
 
-	public StatsPlayer getStats(UUID uuid) {
+	public StatsPlayer getStats(final UUID uuid) {
 		return api.getPlayer(uuid);
 	}
 
@@ -146,7 +145,7 @@ public class StatsAPIHandler implements DependencyHandler {
 	 * @param worldName World to check for.
 	 * @return Requested stat of the player
 	 */
-	public StatData getStatType(final String statName, UUID uuid,
+	public StatData getStatType(final String statName, final UUID uuid,
 			final String worldName) {
 		final StatsPlayer sPlayer = getStats(uuid);
 
@@ -167,23 +166,23 @@ public class StatsAPIHandler implements DependencyHandler {
 		return data;
 	}
 
-	public int getTotalBlocksBroken(UUID uuid,
-			final String worldName) {
+	public int getTotalBlocksBroken(final UUID uuid, final String worldName) {
 		if (!isAvailable())
 			return 0;
 
-		StatData data = getStatType("Block break", uuid, worldName);
-		
-		if (data == null) return 0;
-		
+		final StatData data = getStatType("Block break", uuid, worldName);
+
+		if (data == null)
+			return 0;
+
 		double value = 0;
-        for (Object[] vars : data.getAllVariables()) {
-            value += data.getValue(vars);
-        }
-        return (int) value;
+		for (final Object[] vars : data.getAllVariables()) {
+			value += data.getValue(vars);
+		}
+		return (int) value;
 	}
 
-	public int getTotalBlocksMoved(UUID uuid, final int type,
+	public int getTotalBlocksMoved(final UUID uuid, final int type,
 			final String worldName) {
 		if (!isAvailable())
 			return 0;
@@ -203,23 +202,23 @@ public class StatsAPIHandler implements DependencyHandler {
 		return value;
 	}
 
-	public int getTotalBlocksPlaced(UUID uuid,
-			final String worldName) {
+	public int getTotalBlocksPlaced(final UUID uuid, final String worldName) {
 		if (!isAvailable())
 			return 0;
 
-		StatData data = getStatType("Block place", uuid, worldName);
-		
-		if (data == null) return 0;
-		
+		final StatData data = getStatType("Block place", uuid, worldName);
+
+		if (data == null)
+			return 0;
+
 		double value = 0;
-        for (Object[] vars : data.getAllVariables()) {
-            value += data.getValue(vars);
-        }
-        return (int) value;
+		for (final Object[] vars : data.getAllVariables()) {
+			value += data.getValue(vars);
+		}
+		return (int) value;
 	}
 
-	public int getTotalMobsKilled(UUID uuid, final String mobName,
+	public int getTotalMobsKilled(final UUID uuid, final String mobName,
 			final String worldName) {
 		if (!isAvailable())
 			return 0;
@@ -252,19 +251,20 @@ public class StatsAPIHandler implements DependencyHandler {
 		return value;
 	}
 
-	public int getTotalPlayTime(UUID uuid, final String worldName) {
+	public int getTotalPlayTime(final UUID uuid, final String worldName) {
 		if (!isAvailable())
 			return 0;
 
-		StatData data = getStatType("Playtime", uuid, worldName);
-		
-		if (data == null) return 0;
-		
+		final StatData data = getStatType("Playtime", uuid, worldName);
+
+		if (data == null)
+			return 0;
+
 		double value = 0;
-        for (Object[] vars : data.getAllVariables()) {
-            value += data.getValue(vars);
-        }
-        return (int) value;
+		for (final Object[] vars : data.getAllVariables()) {
+			value += data.getValue(vars);
+		}
+		return (int) value;
 	}
 
 	/* (non-Javadoc)

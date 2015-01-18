@@ -37,7 +37,7 @@ public class StatsPluginManager {
 
 		return false;
 	}
-	
+
 	public boolean findStatistics() {
 		final Plugin x = plugin.getServer().getPluginManager()
 				.getPlugin("Statistics");
@@ -82,10 +82,12 @@ public class StatsPluginManager {
 			plugin.getLogger().info("Hooked into Stats (by Lolmewn)");
 		} else if (findStatistics()) {
 
-			plugin.getLogger().info("Found Stats plugin: Statistics (by bitWolfy)");
+			plugin.getLogger().info(
+					"Found Stats plugin: Statistics (by bitWolfy)");
 
-			statsPlugin = new StatisticsHandler(plugin, (StatisticsAPIHandler) plugin
-					.getDependencyManager().getDependency(dependency.STATISTICS));
+			statsPlugin = new StatisticsHandler(plugin,
+					(StatisticsAPIHandler) plugin.getDependencyManager()
+							.getDependency(dependency.STATISTICS));
 
 			if (statsPlugin == null) {
 				plugin.getLogger()
