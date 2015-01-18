@@ -214,6 +214,8 @@
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot-api</artifactId>
 			<version>1.8-R0.1-SNAPSHOT</version>
+			<scope>provided</scope>
+			<type>jar</type>
 		</dependency>
 
 	</dependencies>
