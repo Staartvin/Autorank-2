@@ -1,6 +1,5 @@
 package me.armar.plugins.autorank.playtimes;
 
-import java.util.List;
 import java.util.UUID;
 
 import me.armar.plugins.autorank.Autorank;
@@ -29,6 +28,7 @@ public class PlaytimesUpdate implements Runnable {
 
 	@Override
 	public void run() {
+		@SuppressWarnings("deprecation")
 		Player[] onlinePlayers = Bukkit.getServer().getOnlinePlayers();
 		updateMinutesPlayed(onlinePlayers);
 	}

@@ -14,6 +14,7 @@ public class WarningNoticeTask extends BukkitRunnable {
 		plugin = instance;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void run() {
 		// Get all players -> Check if they have a certain permission -> send the most important warning
