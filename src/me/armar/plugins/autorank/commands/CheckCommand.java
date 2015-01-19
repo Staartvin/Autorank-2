@@ -295,7 +295,6 @@ public class CheckCommand extends AutorankCommand {
 				return true;
 			}
 
-			@SuppressWarnings("deprecation")
 			final Player player = plugin.getServer().getPlayer(args[1]);
 			if (player == null) {
 

@@ -31,6 +31,7 @@ import me.armar.plugins.autorank.playerchecker.requirement.FishCaughtRequirement
 import me.armar.plugins.autorank.playerchecker.requirement.GamemodeRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.GlobalTimeRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.HasItemRequirement;
+import me.armar.plugins.autorank.playerchecker.requirement.InBiomeRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.ItemsCraftedRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.LocationRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.McMMOPowerLevelRequirement;
@@ -76,7 +77,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class Autorank extends JavaPlugin {
 
-	// Using MySQL - test
+	// Using MySQL
 	public static boolean usingMySQL = false;
 	private AddOnManager addonManager;
 	private SimpleYamlConfiguration advancedConfig;
@@ -269,6 +270,7 @@ public class Autorank extends JavaPlugin {
 						getDescription().getVersion()));
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onEnable() {
 
@@ -378,6 +380,7 @@ public class Autorank extends JavaPlugin {
 		req.registerRequirement("times sheared", TimesShearedRequirement.class);
 		req.registerRequirement("essentials geoip location",
 				EssentialsGeoIPRequirement.class);
+		req.registerRequirement("in biome", InBiomeRequirement.class);
 
 		// REGISTER PLURALS IN AUTORANKTOOLS AS WELL!
 
@@ -434,8 +437,7 @@ public class Autorank extends JavaPlugin {
 						.getVersion()));
 
 		// Create a new task that runs every 30 seconds (will show a warning every 30 seconds)
-		getServer().getScheduler().runTaskTimer(this,
-				new WarningNoticeTask(this), 5 * 20, 30 * 20);
+		getServer().getScheduler().runTaskTimer(this, new WarningNoticeTask(this), 5L*20L, 30L * 20L);
 
 		// Check if using MySQL
 		usingMySQL = this.getMySQLWrapper().isMySQLEnabled();

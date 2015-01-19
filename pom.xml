@@ -63,6 +63,11 @@
 	<repositories>
 
 		<repository>
+			<id>bukkit-repo</id>
+			<url>http://repo.bukkit.org/content/groups/public/</url>
+		</repository>
+
+		<repository>
 			<id>Plugin Metrics</id>
 			<url>http://repo.mcstats.org/content/repositories/public/</url>
 		</repository>
@@ -79,7 +84,7 @@
 		</repository>
 
 		<repository>
-			<id>Spigot repo</id>
+			<id>Spigot-repo</id>
 			<url>https://hub.spigotmc.org/nexus/</url>
 		</repository>
 
@@ -87,8 +92,6 @@
 			<id>staartvin-repo</id>
 			<url>http://62.131.38.74:8081/artifactory/ext-release-local/</url>
 		</repository>
-
-
 
 	</repositories>
 
@@ -216,6 +219,13 @@
 			<version>1.8-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 			<type>jar</type>
+		</dependency>
+
+		<dependency>
+			<groupId>org.bukkit</groupId>
+			<artifactId>bukkit</artifactId>
+			<version>1.7.9-R0.2</version>
+			<scope>provided</scope>
 		</dependency>
 
 	</dependencies>

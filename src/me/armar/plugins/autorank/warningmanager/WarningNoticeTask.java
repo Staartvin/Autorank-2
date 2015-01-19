@@ -18,7 +18,7 @@ public class WarningNoticeTask extends BukkitRunnable {
 	public void run() {
 		// Get all players -> Check if they have a certain permission -> send the most important warning
 
-		for (final Player p : plugin.getServer().getOnlinePlayers()) {
+		for (Player p : plugin.getServer().getOnlinePlayers()) {
 			// If player has notice on warning permission
 			if (p.hasPermission("autorank.warning.notice")) {
 

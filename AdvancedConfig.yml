@@ -69,6 +69,7 @@ ranks:
 #       items crafted: 7 (Player has to have crafted at least 7 items) (requires Stats)
 #       times sheared: 15 (Player has to have sheared at least 15 sheep) (requires Stats)
 #       essentials geoip location: Netherlands (Player has to be in the area 'Netherlands') (requires Essentials GeoIP)
+#       in biome: river (Player has to be in biome 'river') (a list of all biomes: https://hub.spigotmc.org/javadocs/spigot/)
 #
 #   results:
 #       rank change: new-rank

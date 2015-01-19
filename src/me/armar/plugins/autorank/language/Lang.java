@@ -264,7 +264,12 @@ public enum Lang {
 	 * Be from area '{0}'.
 	 */
 	ESSENTIALS_GEOIP_LOCATION_REQUIREMENT(
-			"essentials-geoip-location-requirement", "Be from area '{0}'."), ;
+			"essentials-geoip-location-requirement", "Be from area '{0}'."),
+	/**
+	 * Be in biome '{0}'.
+	 */
+	IN_BIOME_REQUIREMENT(
+			"in-biome-requirement", "Be in biome '{0}'."), ;
 
 	private static FileConfiguration LANG;
 
