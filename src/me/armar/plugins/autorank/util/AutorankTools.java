@@ -274,7 +274,7 @@ public class AutorankTools {
 	 * @param endDivider Last word used for dividing the second last and last word.
 	 * @return string with all elements.
 	 */
-	public static String seperateList(Collection<String> c, String endDivider) {
+	public static String seperateList(Collection<?> c, String endDivider) {
 		Object[] array = c.toArray();
 		if (array.length == 1) return array[0].toString();
 		
@@ -295,5 +295,24 @@ public class AutorankTools {
 		}
 		
 		return string.toString();
+	}
+	
+	public static String makeProgressString(Collection<?> c, String wordBetween, String valueBetween) {
+		Object[] array = c.toArray();
+		
+		String progress = "";
+		
+		for (int i=0;i<c.size();i++) {
+			
+			String object = array[i].toString();
+			
+			if (i==0) {
+				progress += valueBetween + " " + wordBetween + "/" + object + " " + wordBetween;
+			} else {
+				progress += "or " + valueBetween + " " + wordBetween + "/" + object + " " + wordBetween;
+			}
+		}
+		
+		return progress;
 	}
 }

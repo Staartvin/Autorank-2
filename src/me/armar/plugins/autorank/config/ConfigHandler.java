@@ -1,5 +1,6 @@
 package me.armar.plugins.autorank.config;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -296,5 +297,22 @@ public class ConfigHandler {
 	public boolean allowInfiniteRanking() {
 		return plugin.getSettingsConfig().getBoolean("allow infinite ranking",
 				false);
+	}
+	
+	public List<String[]> getOptions(final String requirement, final String group) {
+		// Grab options from string
+		String org = this.getRequirement(requirement, group);
+		
+		List<String[]> list = new ArrayList<String[]>();
+		
+		String[] split = org.split(",");
+		
+		for (String sp: split) {
+			String newString = sp.replace("[", "").replace("]", "").trim();
+			String[] splitArray = newString.split(";");
+			list.add(splitArray);
+		}
+		
+		return list;
 	}
 }

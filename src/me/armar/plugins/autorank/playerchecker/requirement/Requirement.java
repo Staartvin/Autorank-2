@@ -158,10 +158,10 @@ public abstract class Requirement {
 	 * The requirement id, auto completion and optional values are assigned
 	 * automatically.
 	 * 
-	 * @param options String[] containing values of the config
+	 * @param options Each element in the list contains an array that has all variables in it.
 	 * @return true if everything was setup correctly; false otherwise
 	 */
-	public abstract boolean setOptions(String[] options);
+	public abstract boolean setOptions(List<String[]> options);
 
 	/**
 	 * Set the requirement id of this requirement

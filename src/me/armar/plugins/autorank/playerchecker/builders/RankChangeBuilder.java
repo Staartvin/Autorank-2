@@ -84,7 +84,7 @@ public class RankChangeBuilder {
 
 				req.add(createRequirement(
 						AutorankTools.getCorrectName(requirement),
-						configHandler.getRequirement(requirement, group),
+						configHandler.getOptions(requirement, group),
 						optional, realResults,
 						configHandler.useAutoCompletion(group, requirement),
 						reqId));
@@ -141,10 +141,18 @@ public class RankChangeBuilder {
 				return null;
 			}
 
+			@SuppressWarnings("serial")
+			List<String[]> optionsArray = new ArrayList<String[]>() {
+
+				{
+					add(new String[] { options[1] });
+				}
+			};
+
 			// Time requirement
 			final List<Requirement> req = new ArrayList<Requirement>();
 			final Requirement timeReq = new TimeRequirement();
-			timeReq.setOptions(new String[] { options[1] });
+			timeReq.setOptions(optionsArray);
 			timeReq.setOptional(false);
 			timeReq.setResults(new ArrayList<Result>());
 			timeReq.setAutoComplete(true);
@@ -172,9 +180,10 @@ public class RankChangeBuilder {
 		return result;
 	}
 
-	private Requirement createRequirement(final String type, final String arg,
-			final boolean optional, final List<Result> results,
-			final boolean autoComplete, final int reqId) {
+	private Requirement createRequirement(final String type,
+			List<String[]> args, final boolean optional,
+			final List<Result> results, final boolean autoComplete,
+			final int reqId) {
 		final Requirement res = requirementBuilder.create(type);
 
 		if (res != null) {
@@ -185,7 +194,7 @@ public class RankChangeBuilder {
 
 			// Check if setOptions is valid
 			try {
-				if (!res.setOptions(arg.split(";"))) {
+				if (!res.setOptions(args)) {
 					autorank.getLogger().severe(errorMessage);
 					autorank.getWarningManager().registerWarning(errorMessage,
 							10);
