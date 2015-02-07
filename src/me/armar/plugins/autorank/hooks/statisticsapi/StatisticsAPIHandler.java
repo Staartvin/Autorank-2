@@ -248,6 +248,7 @@ public class StatisticsAPIHandler implements DependencyHandler {
 	*/
 	public int getNormalStat(final UUID uuid, final String statType,
 			final String worldName) {
+		
 		final OfflineSession offlineSession = StatisticsAPI.getSession(uuid);
 		OnlineSession onlineSession = null;
 
