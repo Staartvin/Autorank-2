@@ -1,7 +1,6 @@
 package me.armar.plugins.autorank.hooks;
 
 import java.util.HashMap;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.essentialsapi.EssentialsHandler;
 import me.armar.plugins.autorank.hooks.factionsapi.FactionsHandler;
@@ -15,7 +14,6 @@ import me.armar.plugins.autorank.hooks.vaultapi.VaultHandler;
 import me.armar.plugins.autorank.hooks.worldguardapi.WorldGuardHandler;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.armar.plugins.autorank.statsmanager.StatsPluginManager;
-
 import org.bukkit.entity.Player;
 
 /**
@@ -23,122 +21,133 @@ import org.bukkit.entity.Player;
  * Not all dependencies are required, some are optional.
  * <p>
  * Date created: 18:18:43 2 mrt. 2014
- * 
+ *
  * @author Staartvin
- * 
+ *
  */
 public class DependencyManager {
 
-	/**
-	 * Enum containing all dependencies Autorank has.<br>
-	 * Some are optional, some not. This enumeration is used to dynamically load
-	 * the dependencies.<br>
-	 * Autorank is also included because this enum is used for methods that
-	 * require the own plugin.
-	 * <p>
-	 * Date created: 16:48:08 6 mrt. 2014
-	 * 
-	 * @author Staartvin
-	 * 
-	 */
-	public enum dependency {
-		AUTORANK, ESSENTIALS, FACTIONS, MCMMO, ONTIME, ROYALCOMMANDS, STATS, VAULT, WORLDGUARD, ULTIMATECORE, STATISTICS
-	};
+    /**
+     * Enum containing all dependencies Autorank has.<br>
+     * Some are optional, some not. This enumeration is used to dynamically load
+     * the dependencies.<br>
+     * Autorank is also included because this enum is used for methods that
+     * require the own plugin.
+     * <p>
+     * Date created: 16:48:08 6 mrt. 2014
+     *
+     * @author Staartvin
+     *
+     */
+    public enum dependency {
 
-	private final HashMap<dependency, DependencyHandler> handlers = new HashMap<dependency, DependencyHandler>();
+        AUTORANK,
+        ESSENTIALS,
+        FACTIONS,
+        MCMMO,
+        ONTIME,
+        ROYALCOMMANDS,
+        STATS,
+        VAULT,
+        WORLDGUARD,
+        ULTIMATECORE,
+        STATISTICS
+    };
 
-	private final Autorank plugin;
+    private final HashMap<dependency, DependencyHandler> handlers = new HashMap<dependency, DependencyHandler>();
 
-	private final StatsPluginManager statsPluginManager;
+    private final Autorank plugin;
 
-	public DependencyManager(final Autorank instance) {
-		plugin = instance;
+    private final StatsPluginManager statsPluginManager;
 
-		// Register handlers
-		handlers.put(dependency.FACTIONS, new FactionsHandler(instance));
-		handlers.put(dependency.WORLDGUARD, new WorldGuardHandler(instance));
-		handlers.put(dependency.MCMMO, new McMMOHandler(instance));
-		handlers.put(dependency.ESSENTIALS, new EssentialsHandler(instance));
-		handlers.put(dependency.VAULT, new VaultHandler(instance));
-		handlers.put(dependency.ROYALCOMMANDS, new RoyalCommandsHandler(
-				instance));
-		handlers.put(dependency.ONTIME, new OnTimeHandler(instance));
-		handlers.put(dependency.STATS, new StatsAPIHandler(instance));
-		handlers.put(dependency.ULTIMATECORE, new UltimateCoreHandler(instance));
-		handlers.put(dependency.STATISTICS, new StatisticsAPIHandler(instance));
+    public DependencyManager(final Autorank instance) {
+        plugin = instance;
 
-		statsPluginManager = new StatsPluginManager(instance);
-	}
+        // Register handlers
+        handlers.put(dependency.FACTIONS, new FactionsHandler(instance));
+        handlers.put(dependency.WORLDGUARD, new WorldGuardHandler(instance));
+        handlers.put(dependency.MCMMO, new McMMOHandler(instance));
+        handlers.put(dependency.ESSENTIALS, new EssentialsHandler(instance));
+        handlers.put(dependency.VAULT, new VaultHandler(instance));
+        handlers.put(dependency.ROYALCOMMANDS, new RoyalCommandsHandler(
+                instance));
+        handlers.put(dependency.ONTIME, new OnTimeHandler(instance));
+        handlers.put(dependency.STATS, new StatsAPIHandler(instance));
+        handlers.put(dependency.ULTIMATECORE, new UltimateCoreHandler(instance));
+        handlers.put(dependency.STATISTICS, new StatisticsAPIHandler(instance));
 
-	public DependencyHandler getDependency(final dependency dep) {
+        statsPluginManager = new StatsPluginManager(instance);
+    }
 
-		if (!handlers.containsKey(dep)) {
-			throw new IllegalArgumentException("Unknown dependency '"
-					+ dep.toString() + "'");
-		} else {
-			return handlers.get(dep);
-		}
-	}
+    public DependencyHandler getDependency(final dependency dep) {
 
-	public StatsPlugin getStatsPlugin() {
-		return statsPluginManager.getStatsPlugin();
-	}
+        if (!handlers.containsKey(dep)) {
+            throw new IllegalArgumentException("Unknown dependency '"
+                    + dep.toString() + "'");
+        } else {
+            return handlers.get(dep);
+        }
+    }
 
-	public boolean isAFK(final Player player) {
-		if (!plugin.getConfigHandler().useAFKIntegration())
-			return false;
+    public StatsPlugin getStatsPlugin() {
+        return statsPluginManager.getStatsPlugin();
+    }
 
-		if (handlers.get(dependency.ESSENTIALS).isAvailable()) {
-			return ((EssentialsHandler) handlers.get(dependency.ESSENTIALS))
-					.isAFK(player);
-		} else if (handlers.get(dependency.ROYALCOMMANDS).isAvailable()) {
-			return ((RoyalCommandsHandler) handlers
-					.get(dependency.ROYALCOMMANDS)).isAFK(player);
-		} else if (handlers.get(dependency.ULTIMATECORE).isAvailable()) {
-			return ((UltimateCoreHandler) handlers.get(dependency.ULTIMATECORE))
-					.isAFK(player);
-		}
+    public boolean isAFK(final Player player) {
+        if (!plugin.getConfigHandler().useAFKIntegration()) {
+            return false;
+        }
 
-		// No suitable plugin found
-		return false;
-	}
+        if (handlers.get(dependency.ESSENTIALS).isAvailable()) {
+            return ((EssentialsHandler) handlers.get(dependency.ESSENTIALS))
+                    .isAFK(player);
+        } else if (handlers.get(dependency.ROYALCOMMANDS).isAvailable()) {
+            return ((RoyalCommandsHandler) handlers
+                    .get(dependency.ROYALCOMMANDS)).isAFK(player);
+        } else if (handlers.get(dependency.ULTIMATECORE).isAvailable()) {
+            return ((UltimateCoreHandler) handlers.get(dependency.ULTIMATECORE))
+                    .isAFK(player);
+        }
+        // No suitable plugin found
+        return false;
+    }
 
-	/**
-	 * Loads all dependencies used for Autorank. <br>
-	 * Autorank will check for dependencies and shows the output on the console.
-	 * 
-	 */
-	public void loadDependencies() {
+    /**
+     * Loads all dependencies used for Autorank. <br>
+     * Autorank will check for dependencies and shows the output on the console.
+     *
+     */
+    public void loadDependencies() {
 
-		// Make seperate loading bar
-		if (plugin.getConfigHandler().useAdvancedDependencyLogs()) {
-			plugin.getLogger().info(
-					"---------------[Autorank Dependencies]---------------");
-			plugin.getLogger().info("Searching dependencies...");
-		}
+        // Make seperate loading bar
+        if (plugin.getConfigHandler().useAdvancedDependencyLogs()) {
+            plugin.getLogger().info(
+                    "---------------[Autorank Dependencies]---------------");
+            plugin.getLogger().info("Searching dependencies...");
+        }
 
-		// Load all dependencies
-		for (final DependencyHandler depHandler : handlers.values()) {
-			// Make sure to respect settings
-			depHandler.setup(plugin.getConfigHandler()
-					.useAdvancedDependencyLogs());
-		}
+        // Load all dependencies
+        for (final DependencyHandler depHandler : handlers.values()) {
+            // Make sure to respect settings
+            depHandler.setup(plugin.getConfigHandler()
+                    .useAdvancedDependencyLogs());
+        }
 
-		if (plugin.getConfigHandler().useAdvancedDependencyLogs()) {
-			plugin.getLogger().info("Searching stats plugin...");
-			plugin.getLogger().info("");
-		}
+        if (plugin.getConfigHandler().useAdvancedDependencyLogs()) {
+            plugin.getLogger().info("Searching stats plugin...");
+            plugin.getLogger().info("");
+        }
 
-		// Search a stats plugin.
-		statsPluginManager.searchStatsPlugin();
+        // Search a stats plugin.
+        statsPluginManager.searchStatsPlugin();
 
-		if (plugin.getConfigHandler().useAdvancedDependencyLogs()) {
-			// Make seperate stop loading bar
-			plugin.getLogger().info(
-					"---------------[Autorank Dependencies]---------------");
-		}
+        if (plugin.getConfigHandler().useAdvancedDependencyLogs()) {
+            // Make seperate stop loading bar
+            plugin.getLogger().info(
+                    "---------------[Autorank Dependencies]---------------");
+        }
 
-		plugin.getLogger().info("Loaded libraries and dependencies");
-	}
+        plugin.getLogger().info("Loaded libraries and dependencies");
+    }
 
 }
