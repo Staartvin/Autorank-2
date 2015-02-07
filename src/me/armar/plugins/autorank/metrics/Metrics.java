@@ -583,7 +583,7 @@ public class Metrics {
 		appendJSONPair(json, "guid", guid);
 		appendJSONPair(json, "plugin_version", pluginVersion);
 		appendJSONPair(json, "server_version", serverVersion);
-		appendJSONPair(json, "players_online", Integer.toString(Bukkit.getServer().getOnlinePlayers().length));
+		appendJSONPair(json, "players_online", Integer.toString(Bukkit.getServer().getOnlinePlayers().size());
 
 		// New data as of R6
 		final String osname = System.getProperty("os.name");
