@@ -102,7 +102,7 @@ public class DependencyManager {
 		} else if (handlers.get(dependency.ULTIMATECORE2).isAvailable()) {
 			return ((UltimateCore2Handler) handlers.get(dependency.ULTIMATECORE2))
 					.isAFK(player);
-
+		}
 		// No suitable plugin found
 		return false;
 	}
