@@ -11,7 +11,7 @@ import org.bukkit.plugin.Plugin;
 /**
  * Handles all connections with Ultimate Core 2.x
  * <p>
- * Date created: 21:02:20 15 mrt. 2014
+ * Date created: 9:41:11 7 feb. 2015
  *
  * @author Staartvin
  *
