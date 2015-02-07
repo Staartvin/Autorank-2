@@ -2,11 +2,12 @@ package me.armar.plugins.autorank.playtimes;
 
 import java.util.UUID;
 
+import org.bukkit.entity.Player;
+
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.DependencyManager;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
-import org.bukkit.entity.Player;
 
 /*
  * PlaytimesUpdate does an update on all online players 
