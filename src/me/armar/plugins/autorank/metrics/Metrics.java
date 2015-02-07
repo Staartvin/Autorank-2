@@ -571,7 +571,7 @@ public class Metrics {
 		final String pluginVersion = description.getVersion();
 		final String serverVersion = Bukkit.getVersion();
 	
-		//final int playersOnline = Bukkit.getServer().getOnlinePlayers().length;
+		final int playersOnline =  Bukkit.getOnlinePlayers().length;
 
 		// END server software specific section -- all code below does not use any code outside of this class / Java
 
@@ -583,7 +583,7 @@ public class Metrics {
 		appendJSONPair(json, "guid", guid);
 		appendJSONPair(json, "plugin_version", pluginVersion);
 		appendJSONPair(json, "server_version", serverVersion);
-		appendJSONPair(json, "players_online", Integer.toString(Bukkit.getServer().getOnlinePlayers().size());
+		appendJSONPair(json, "players_online", Integer.toString(playersOnline));
 
 		// New data as of R6
 		final String osname = System.getProperty("os.name");

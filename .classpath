@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="D:/Users/Vincent/Java Projects/workspace/Autorank2/Javadocs|D:/Users/Vincent/Java Projects/workspace/Autorank2/lib" kind="src" path="src">
+	<classpathentry excluding="D:/Users/Vincent/Java Projects/workspace/Autorank2/Javadocs|D:/Users/Vincent/Java Projects/workspace/Autorank2/lib" kind="src" output="target/classes" path="src">
 		<attributes>
 			<attribute name="optional" value="true"/>
 			<attribute name="maven.pomderived" value="true"/>
@@ -47,5 +47,5 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="output" path="output"/>
+	<classpathentry kind="output" path="target/classes"/>
 </classpath>
