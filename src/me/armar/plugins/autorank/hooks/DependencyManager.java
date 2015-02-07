@@ -10,6 +10,7 @@ import me.armar.plugins.autorank.hooks.ontimeapi.OnTimeHandler;
 import me.armar.plugins.autorank.hooks.royalcommandsapi.RoyalCommandsHandler;
 import me.armar.plugins.autorank.hooks.statisticsapi.StatisticsAPIHandler;
 import me.armar.plugins.autorank.hooks.statsapi.StatsAPIHandler;
+import me.armar.plugins.autorank.hooks.ultimatecoreapi.UltimateCore2Handler;
 import me.armar.plugins.autorank.hooks.ultimatecoreapi.UltimateCoreHandler;
 import me.armar.plugins.autorank.hooks.vaultapi.VaultHandler;
 import me.armar.plugins.autorank.hooks.worldguardapi.WorldGuardHandler;
@@ -42,7 +43,7 @@ public class DependencyManager {
 	 * 
 	 */
 	public enum dependency {
-		AUTORANK, ESSENTIALS, FACTIONS, MCMMO, ONTIME, ROYALCOMMANDS, STATS, VAULT, WORLDGUARD, ULTIMATECORE, STATISTICS
+		AUTORANK, ESSENTIALS, FACTIONS, MCMMO, ONTIME, ROYALCOMMANDS, STATS, VAULT, WORLDGUARD, ULTIMATECORE, ULTIMATECORE2, STATISTICS
 	};
 
 	private final HashMap<dependency, DependencyHandler> handlers = new HashMap<dependency, DependencyHandler>();
@@ -65,6 +66,7 @@ public class DependencyManager {
 		handlers.put(dependency.ONTIME, new OnTimeHandler(instance));
 		handlers.put(dependency.STATS, new StatsAPIHandler(instance));
 		handlers.put(dependency.ULTIMATECORE, new UltimateCoreHandler(instance));
+		handlers.put(dependency.ULTIMATECORE2, new UltimateCore2Handler(instance));
 		handlers.put(dependency.STATISTICS, new StatisticsAPIHandler(instance));
 
 		statsPluginManager = new StatsPluginManager(instance);
@@ -97,7 +99,9 @@ public class DependencyManager {
 		} else if (handlers.get(dependency.ULTIMATECORE).isAvailable()) {
 			return ((UltimateCoreHandler) handlers.get(dependency.ULTIMATECORE))
 					.isAFK(player);
-		}
+		} else if (handlers.get(dependency.ULTIMATECORE2).isAvailable()) {
+			return ((UltimateCore2Handler) handlers.get(dependency.ULTIMATECORE2))
+					.isAFK(player);
 
 		// No suitable plugin found
 		return false;
