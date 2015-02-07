@@ -7,6 +7,7 @@ import me.armar.plugins.autorank.hooks.DependencyManager;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 /*
@@ -28,8 +29,7 @@ public class PlaytimesUpdate implements Runnable {
 
 	@Override
 	public void run() {
-		@SuppressWarnings("deprecation")
-		Player[] onlinePlayers = Bukkit.getServer().getOnlinePlayers();
+		OfflinePlayer[] onlinePlayers = Bukkit.getServer().getOfflinePlayers();
 		updateMinutesPlayed(onlinePlayers);
 	}
 
@@ -38,6 +38,7 @@ public class PlaytimesUpdate implements Runnable {
 		// OP's should also get time added. 
 		// When a player has a wildcard permission ('*') it should still update.
 
+		
 		if (player.hasPermission("autorank.rsefrxsgtse")
 				|| !player.hasPermission("autorank.timeexclude")) {
 
@@ -64,12 +65,20 @@ public class PlaytimesUpdate implements Runnable {
 		}
 	}
 
-	private void updateMinutesPlayed(final Player[] players) {
+	private void updateMinutesPlayed(final OfflinePlayer[] players) {
 		plugin.debugMessage("Checking players for automatic ranking");
 
 		for (int i = 0; i < players.length; i++) {
 			if (players[i] != null) {
-				updateMinutesPlayed(players[i]);
+				
+				Player player = players[i].getPlayer();
+			
+				if (player == null) {
+					plugin.debugMessage("Could not update play time of " + players[i].getName() + " as (s)he is not online!");
+					continue;
+				}
+				
+				updateMinutesPlayed(players[i].getPlayer());
 			}
 		}
 	}
