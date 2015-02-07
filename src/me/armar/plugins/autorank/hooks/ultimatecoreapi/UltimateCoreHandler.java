@@ -2,107 +2,136 @@ package me.armar.plugins.autorank.hooks.ultimatecoreapi;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.DependencyHandler;
-
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-
-import Bammerbom.UltimateCore.UltimateCore;
-import Bammerbom.UltimateCore.API.UC;
-import Bammerbom.UltimateCore.API.UCplayer;
 
 /**
  * Handles all connections with Ultimate Core
  * <p>
  * Date created: 21:02:20 15 mrt. 2014
- * 
+ *
  * @author Staartvin
- * 
+ *
  */
 public class UltimateCoreHandler implements DependencyHandler {
 
-	private UltimateCore api;
-	private final Autorank plugin;
+    private Plugin api;
+    private final Autorank instance;
+    private Object UC;
 
-	public UltimateCoreHandler(final Autorank instance) {
-		plugin = instance;
-	}
+    public UltimateCoreHandler(final Autorank instance) {
+        this.instance = instance;
+    }
 
-	/* (non-Javadoc)
-	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#get()
-	 */
-	@Override
-	public Plugin get() {
-		final Plugin plugin = this.plugin.getServer().getPluginManager()
-				.getPlugin("UltimateCore");
+    /* (non-Javadoc)
+     * @see me.armar.plugins.autorank.hooks.DependencyHandler#get()
+     */
+    @Override
+    public Plugin get() {
+        final Plugin plugin = this.instance.getServer().getPluginManager()
+                .getPlugin("UltimateCore");
 
-		// WorldGuard may not be loaded
-		if (plugin == null || !(plugin instanceof UltimateCore)) {
-			return null; // Maybe you want throw an exception instead
-		}
+        // UltimateCore may not be loaded
+        try { //Avoid ClassNotFound
+            if (plugin != null && plugin instanceof Bammerbom.UltimateCore.UltimateCore) {
+                return plugin;
+            }
+        } catch (Exception ex) {
+        }
+        try { //Avoid ClassNotFound
+            if (plugin != null && plugin instanceof bammerbom.ultimatecore.bukkit.UltimateCore) {
+                return plugin;
+            }
+        } catch (Exception ex) {
+        }
 
-		return plugin;
-	}
+        return plugin;
+    }
 
-	/* (non-Javadoc)
-	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#isAvailable()
-	 */
-	@Override
-	public boolean isAvailable() {
-		return api != null;
-	}
+    /* (non-Javadoc)
+     * @see me.armar.plugins.autorank.hooks.DependencyHandler#isAvailable()
+     */
+    @Override
+    public boolean isAvailable() {
+        return api != null;
+    }
 
-	/* (non-Javadoc)
-	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#isInstalled()
-	 */
-	@Override
-	public boolean isInstalled() {
-		final UltimateCore plugin = (UltimateCore) get();
+    /* (non-Javadoc)
+     * @see me.armar.plugins.autorank.hooks.DependencyHandler#isInstalled()
+     */
+    @Override
+    public boolean isInstalled() {
+        final Plugin plugin = (Plugin) get();
+        return plugin != null && plugin.isEnabled();
+    }
 
-		return plugin != null && plugin.isEnabled();
-	}
+    /* (non-Javadoc)
+     * @see me.armar.plugins.autorank.hooks.DependencyHandler#setup()
+     */
+    @Override
+    public boolean setup(final boolean verbose) {
+        if (!isInstalled()) {
+            if (verbose) {
+                instance.getLogger().info("UltimateCore has not been found!");
+            }
+            return false;
+        } else {
+            api = get();
 
-	/* (non-Javadoc)
-	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#setup()
-	 */
-	@Override
-	public boolean setup(final boolean verbose) {
-		if (!isInstalled()) {
-			if (verbose) {
-				plugin.getLogger().info("UltimateCore has not been found!");
-			}
-			return false;
-		} else {
-			api = (UltimateCore) get();
+            if (api != null) {
+                if (verbose) {
+                    instance.getLogger().info(
+                            "UltimateCore has been found and can be used!");
+                }
+                return true;
+            } else {
+                if (verbose) {
+                    instance.getLogger().info(
+                            "UltimateCore has been found but cannot be used!");
+                }
+                return false;
+            }
+        }
+    }
 
-			if (api != null) {
-				if (verbose) {
-					plugin.getLogger().info(
-							"UltimateCore has been found and can be used!");
-				}
-				return true;
-			} else {
-				if (verbose) {
-					plugin.getLogger().info(
-							"UltimateCore has been found but cannot be used!");
-				}
-				return false;
-			}
-		}
-	}
+    public Integer getVersion() {
+        if (api.getDescription().getVersion().startsWith("1")) {
+            return 1;
+        }
+        if (api.getDescription().getVersion().startsWith("2")) {
+            return 2;
+        }
+        return null;
+    }
 
-	public boolean isAFK(final Player player) {
-		if (!isAvailable())
-			return false;
+    public boolean isAFK(final Player player) {
+        if (!isAvailable()) {
+            return false;
+        }
 
-		if (!plugin.getConfigHandler().useAFKIntegration())
-			return false;
+        if (!instance.getConfigHandler().useAFKIntegration()) {
+            return false;
+        }
 
-		final UCplayer user = UC.getPlayer(player);
+        if (getVersion().equals(1)) {
+            final Bammerbom.UltimateCore.API.UCplayer user = Bammerbom.UltimateCore.API.UC.getPlayer(player);
 
-		if (user == null) {
-			return false;
-		}
+            if (user == null) {
+                return false;
+            }
 
-		return user.isAFK();
-	}
+            return user.isAFK();
+        }
+        if (getVersion().equals(2)) {
+            final bammerbom.ultimatecore.bukkit.api.UPlayer user = bammerbom.ultimatecore.bukkit.api.UC.getPlayer(player);
+
+            if (user == null) {
+                return false;
+            }
+
+            return user.isAfk();
+        }
+        return false;
+
+    }
 }
