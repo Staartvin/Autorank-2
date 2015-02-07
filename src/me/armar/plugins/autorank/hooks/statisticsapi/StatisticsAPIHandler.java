@@ -246,6 +246,7 @@ public class StatisticsAPIHandler implements DependencyHandler {
 	}
 	
 	*/
+	@SuppressWarnings("unused")
 	public int getNormalStat(final UUID uuid, final String statType,
 			final String worldName) {
 		
@@ -293,6 +294,7 @@ public class StatisticsAPIHandler implements DependencyHandler {
 	/* (non-Javadoc)
 	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#setup()
 	 */
+	@SuppressWarnings("unused")
 	@Override
 	public boolean setup(final boolean verbose) {
 		if (!isInstalled()) {

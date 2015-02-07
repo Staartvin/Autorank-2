@@ -51,6 +51,7 @@ import java.util.zip.GZIPOutputStream;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.scheduler.BukkitTask;
@@ -571,7 +572,13 @@ public class Metrics {
 		final String pluginVersion = description.getVersion();
 		final String serverVersion = Bukkit.getVersion();
 	
-		final int playersOnline =  Bukkit.getOnlinePlayers().length;
+		int count = 0;
+		
+		for (@SuppressWarnings("unused") Player player: Bukkit.getServer().getOnlinePlayers()) {
+			count++;
+		}
+		
+		final int playersOnline = count;
 
 		// END server software specific section -- all code below does not use any code outside of this class / Java
 
