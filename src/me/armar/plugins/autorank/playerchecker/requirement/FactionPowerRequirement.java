@@ -1,21 +1,24 @@
 package me.armar.plugins.autorank.playerchecker.requirement;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import me.armar.plugins.autorank.hooks.DependencyManager.dependency;
 import me.armar.plugins.autorank.hooks.factionsapi.FactionsHandler;
 import me.armar.plugins.autorank.language.Lang;
+import me.armar.plugins.autorank.util.AutorankTools;
 
 import org.bukkit.entity.Player;
 
 public class FactionPowerRequirement extends Requirement {
 
-	private double factionPower = 0;
+	private List<Double> factionPowers = new ArrayList<Double>();
 
 	@Override
 	public String getDescription() {
-		return Lang.FACTIONS_POWER_REQUIREMENT
-				.getConfigValue(new String[] { factionPower + "" });
+		return Lang.FACTIONS_POWER_REQUIREMENT.getConfigValue(AutorankTools
+				.seperateList(factionPowers, "or"));
 	}
 
 	@Override
@@ -26,7 +29,8 @@ public class FactionPowerRequirement extends Requirement {
 				.getDependencyManager().getDependency(dependency.FACTIONS))
 				.getFactionPower(player));
 
-		progress = progress.concat(doubleRounded + "/" + factionPower);
+		progress = AutorankTools.makeProgressString(factionPowers, "",
+				doubleRounded);
 		return progress;
 	}
 
@@ -35,17 +39,24 @@ public class FactionPowerRequirement extends Requirement {
 		final FactionsHandler fHandler = (FactionsHandler) this.getAutorank()
 				.getDependencyManager().getDependency(dependency.FACTIONS);
 
-		return fHandler.getFactionPower(player) > factionPower;
+		double factionPower = fHandler.getFactionPower(player);
+
+		for (double facPower : factionPowers) {
+			if (factionPower >= facPower) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	@Override
-	public boolean setOptions(final String[] options) {
-		try {
-			factionPower = Double.parseDouble(options[0]);
-			return true;
-		} catch (final Exception e) {
-			factionPower = 0;
-			return false;
+	public boolean setOptions(List<String[]> optionsList) {
+
+		for (String[] options : optionsList) {
+			factionPowers.add(Double.parseDouble(options[0]));
 		}
+		
+		return !factionPowers.isEmpty();
 	}
 }

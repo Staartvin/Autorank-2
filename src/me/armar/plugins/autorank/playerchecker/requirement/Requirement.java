@@ -161,7 +161,7 @@ public abstract class Requirement {
 	 * @param options Each element in the list contains an array that has all variables in it.
 	 * @return true if everything was setup correctly; false otherwise
 	 */
-	public abstract boolean setOptions(List<String[]> options);
+	public abstract boolean setOptions(List<String[]> optionsList);
 
 	/**
 	 * Set the requirement id of this requirement

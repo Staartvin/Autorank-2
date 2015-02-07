@@ -1,5 +1,8 @@
 package me.armar.plugins.autorank.playerchecker.requirement;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.statsmanager.handlers.StatsHandler;
 
@@ -7,19 +10,118 @@ import org.bukkit.entity.Player;
 
 public class BlocksMovedRequirement extends Requirement {
 
-	private int blocksMoved = 0;
-	private int movementType = 0;
+	private List<BlocksMovedWrapper> wrappers = new ArrayList<BlocksMovedWrapper>();
 
 	@Override
 	public String getDescription() {
-		final String moveType = getMovementString();
 
-		return Lang.BLOCKS_MOVED_REQUIREMENT.getConfigValue(new String[] {
-				blocksMoved + " blocks", moveType });
+		List<String> names = new ArrayList<String>();
+
+		for (BlocksMovedWrapper wrapper : wrappers) {
+			names.add(wrapper.getBlocksMoved() + " blocks "
+					+ wrapper.getMovementType());
+		}
+
+		String desc = Lang.BLOCKS_MOVED_REQUIREMENT.toString()
+				.replace("{0}", "").replace("{1}", "").trim();
+
+		for (int i = 0; i < names.size(); i++) {
+
+			if (i == 0) {
+				desc = desc.concat(names.get(i));
+			} else {
+				desc = desc.concat(" or " + names.get(i));
+			}
+		}
+
+		return desc;
 	}
 
-	private String getMovementString() {
-		switch (movementType) {
+	@Override
+	public String getProgress(final Player player) {
+		String progress = "";
+
+		for (int i = 0; i < wrappers.size(); i++) {
+			BlocksMovedWrapper wrapper = wrappers.get(i);
+
+			int progressBar = getStatsPlugin().getNormalStat(
+					StatsHandler.statTypes.BLOCKS_MOVED.toString(),
+					player.getUniqueId(), player.getWorld().getName(),
+					wrapper.getRawMovementType());
+
+			if (i == 0) {
+				progress = progress.concat(progressBar + "/"
+						+ wrapper.getBlocksMoved() + " ("
+						+ wrapper.getMovementType() + ")");
+			} else {
+				progress = progress.concat(" or " + progressBar + "/"
+						+ wrapper.getBlocksMoved() + " ("
+						+ wrapper.getMovementType() + ")");
+			}
+
+		}
+
+		return progress;
+	}
+
+	@Override
+	public boolean meetsRequirement(final Player player) {
+
+		final boolean enabled = getStatsPlugin().isEnabled();
+
+		if (!enabled)
+			return false;
+
+		for (BlocksMovedWrapper wrapper : wrappers) {
+
+			int count = this.getStatsPlugin().getNormalStat(
+					StatsHandler.statTypes.BLOCKS_MOVED.toString(),
+					player.getUniqueId(), player.getWorld().getName(),
+					wrapper.getRawMovementType());
+			
+			if (count >= wrapper.getBlocksMoved()) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	@Override
+	public boolean setOptions(List<String[]> optionsList) {
+
+		for (String[] options : optionsList) {
+			int blocksMoved = 0;
+			int movementType = 0;
+
+			if (options.length > 0) {
+				blocksMoved = Integer.parseInt(options[0].trim());
+			}
+			if (options.length > 1) {
+				movementType = Integer.parseInt(options[1].trim());
+			}
+
+			wrappers.add(new BlocksMovedWrapper(blocksMoved, movementType));
+		}
+
+		return !wrappers.isEmpty();
+	}
+}
+
+class BlocksMovedWrapper {
+
+	private int blocksMoved = 0;
+	private String movementType = "";
+	private int rawMovementType = 0;
+
+	public BlocksMovedWrapper(int blocksMoved, int moveType) {
+		this.blocksMoved = blocksMoved;
+		this.movementType = getMovementString(moveType);
+		this.rawMovementType = moveType;
+	}
+
+	private String getMovementString(int moveType) {
+		switch (moveType) {
 		case 0:
 			return "by foot";
 		case 1:
@@ -37,46 +139,15 @@ public class BlocksMovedRequirement extends Requirement {
 		}
 	}
 
-	@Override
-	public String getProgress(final Player player) {
-		String progress = "";
-		progress = progress.concat(getStatsPlugin()
-				.getNormalStat(StatsHandler.statTypes.BLOCKS_MOVED.toString(),
-						player.getUniqueId(), player.getWorld().getName(),
-						movementType)
-				+ "/" + blocksMoved + " (" + getMovementString() + ")");
-		return progress;
+	public int getBlocksMoved() {
+		return blocksMoved;
 	}
 
-	@Override
-	public boolean meetsRequirement(final Player player) {
-
-		final boolean enabled = getStatsPlugin().isEnabled();
-
-		boolean sufficient = false;
-		sufficient = this.getStatsPlugin()
-				.getNormalStat(StatsHandler.statTypes.BLOCKS_MOVED.toString(),
-						player.getUniqueId(), player.getWorld().getName(),
-						movementType) > blocksMoved;
-
-		return enabled && sufficient;
+	public String getMovementType() {
+		return movementType;
 	}
 
-	@Override
-	public boolean setOptions(final String[] options) {
-		try {
-			if (options.length > 0) {
-				blocksMoved = Integer.parseInt(options[0].trim());
-			}
-			if (options.length > 1) {
-				movementType = Integer.parseInt(options[1].trim());
-			}
-		} catch (final Exception e) {
-			blocksMoved = 0;
-			return false;
-		}
-
-		return true;
-
+	public int getRawMovementType() {
+		return rawMovementType;
 	}
 }

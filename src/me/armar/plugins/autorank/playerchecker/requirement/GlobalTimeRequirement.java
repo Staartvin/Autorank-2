@@ -1,5 +1,7 @@
 package me.armar.plugins.autorank.playerchecker.requirement;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import me.armar.plugins.autorank.language.Lang;
@@ -19,23 +21,31 @@ import org.bukkit.entity.Player;
  */
 public class GlobalTimeRequirement extends Requirement {
 
-	int time = -1;
+	private List<Integer> times = new ArrayList<Integer>();
 
 	@Override
 	public String getDescription() {
-		return Lang.GLOBAL_TIME_REQUIREMENT
-				.getConfigValue(new String[] { AutorankTools.timeToString(time,
-						Time.MINUTES) });
+
+		List<String> sTimes = new ArrayList<String>();
+
+		for (int time : times) {
+			sTimes.add(AutorankTools.timeToString(time, Time.MINUTES));
+		}
+
+		return Lang.GLOBAL_TIME_REQUIREMENT.getConfigValue(AutorankTools
+				.seperateList(sTimes, "or"));
 	}
 
 	@Override
 	public String getProgress(final Player player) {
 
-		final UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
 		String progress = "";
-		progress = progress.concat(getAutorank().getPlaytimes().getGlobalTime(
-				uuid)
-				+ " min" + "/" + time + " min");
+
+		int playtime = getAutorank().getPlaytimes().getGlobalTime(
+				UUIDManager.getUUIDFromPlayer(player.getName()));
+
+		progress = AutorankTools
+				.makeProgressString(times, "min", playtime + "");
 		return progress;
 	}
 
@@ -45,13 +55,24 @@ public class GlobalTimeRequirement extends Requirement {
 
 		final double playtime = this.getAutorank().getPlaytimes()
 				.getGlobalTime(uuid);
-		return time != -1 && time <= playtime;
+
+		for (int time : times) {
+			if (time > 0 && playtime >= time) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	@Override
-	public boolean setOptions(final String[] options) {
-		if (options.length > 0)
-			this.time = AutorankTools.stringToTime(options[0], Time.MINUTES);
-		return (time != -1);
+	public boolean setOptions(List<String[]> optionsList) {
+
+		for (String[] options : optionsList) {
+			if (options.length > 0) {
+				times.add(AutorankTools.stringToTime(options[0], Time.MINUTES));
+			}
+		}
+		return !times.isEmpty();
 	}
 }

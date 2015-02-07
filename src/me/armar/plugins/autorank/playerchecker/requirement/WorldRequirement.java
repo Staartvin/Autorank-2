@@ -1,35 +1,53 @@
 package me.armar.plugins.autorank.playerchecker.requirement;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import me.armar.plugins.autorank.language.Lang;
+import me.armar.plugins.autorank.util.AutorankTools;
 
 import org.bukkit.entity.Player;
 
 public class WorldRequirement extends Requirement {
 
-	String world = null;
+	List<String> worlds = new ArrayList<String>();
 
 	@Override
 	public String getDescription() {
-		return Lang.WORLD_REQUIREMENT.getConfigValue(new String[] { world });
+		return Lang.WORLD_REQUIREMENT.getConfigValue(AutorankTools
+				.seperateList(worlds, "or"));
 	}
 
 	@Override
 	public String getProgress(final Player player) {
 		String progress = "";
-		progress = progress.concat(player.getWorld().getName() + "/" + world);
+		String world = player.getWorld().getName();
+
+		progress = AutorankTools.makeProgressString(worlds, "", world);
 		return progress;
 	}
 
 	@Override
 	public boolean meetsRequirement(final Player player) {
-		return world != null && world.equals(player.getWorld().getName());
+
+		String world = player.getWorld().getName();
+
+		for (String realWorld : worlds) {
+			if (realWorld != null && realWorld.equals(world))
+				return true;
+		}
+
+		return false;
 	}
 
 	@Override
-	public boolean setOptions(final String[] options) {
-		if (options.length > 0)
-			this.world = options[0];
+	public boolean setOptions(List<String[]> optionsList) {
 
-		return (world != null);
+		for (String[] options : optionsList) {
+			if (options.length > 0)
+				worlds.add(options[0]);
+		}
+		
+		return !worlds.isEmpty();
 	}
 }

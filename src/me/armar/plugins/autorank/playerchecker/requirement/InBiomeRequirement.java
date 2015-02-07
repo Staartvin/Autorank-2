@@ -12,18 +12,22 @@ import org.bukkit.entity.Player;
 public class InBiomeRequirement extends Requirement {
 
 	List<String> biomes = new ArrayList<String>();
-	
+
 	@Override
 	public String getDescription() {
 		String arg = AutorankTools.seperateList(biomes, "or");
-		
-		return Lang.IN_BIOME_REQUIREMENT
-				.getConfigValue(arg);
+
+		return Lang.IN_BIOME_REQUIREMENT.getConfigValue(arg);
 	}
 
 	@Override
 	public String getProgress(final Player player) {
-		String progress = player.getLocation().getBlock().getBiome().toString() + "/" + biomes.get(0);
+		String currentBiome = player.getLocation().getBlock().getBiome()
+				.toString();
+
+		String progress = AutorankTools.makeProgressString(biomes, "",
+				currentBiome);
+
 		return progress;
 	}
 
@@ -31,7 +35,7 @@ public class InBiomeRequirement extends Requirement {
 	public boolean meetsRequirement(final Player player) {
 		final Location pLocation = player.getLocation();
 
-		for (String biome: biomes) {
+		for (String biome : biomes) {
 			if (pLocation.getBlock().getBiome().toString().equals(biome)) {
 				return true;
 			}
@@ -41,18 +45,19 @@ public class InBiomeRequirement extends Requirement {
 	}
 
 	@Override
-	public boolean setOptions(final String[] options) {
+	public boolean setOptions(List<String[]> optionsList) {
 
-		// biomes
-		if (options.length != 1) {
-			return false;
-		}
+		for (String[] options : optionsList) {
 
-		try {
+			// biomes
+			if (options.length != 1) {
+				return false;
+			}
+
 			biomes.add(options[0].toUpperCase().replace(" ", "_"));
-			return true;
-		} catch (final Exception e) {
-			return false;
+
 		}
+
+		return !biomes.isEmpty();
 	}
 }

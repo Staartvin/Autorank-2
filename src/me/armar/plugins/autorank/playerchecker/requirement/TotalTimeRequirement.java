@@ -83,6 +83,6 @@ public class TotalTimeRequirement extends Requirement {
 			}
 		}
 
-		return true;
+		return !times.isEmpty();
 	}
 }

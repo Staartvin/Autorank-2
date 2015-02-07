@@ -1,49 +1,61 @@
 package me.armar.plugins.autorank.playerchecker.requirement;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import me.armar.plugins.autorank.hooks.vaultapi.VaultHandler;
 import me.armar.plugins.autorank.language.Lang;
+import me.armar.plugins.autorank.util.AutorankTools;
 
 import org.bukkit.entity.Player;
 
 public class MoneyRequirement extends Requirement {
 
-	private double minMoney = 999999999;
+	private List<Double> minMoney = new ArrayList<Double>();
 
 	@Override
 	public String getDescription() {
-		return Lang.MONEY_REQUIREMENT.getConfigValue(new String[] { minMoney
-				+ " " + VaultHandler.economy.currencyNamePlural() });
+		return Lang.MONEY_REQUIREMENT.getConfigValue(AutorankTools
+				.seperateList(minMoney, "or")
+				+ " "
+				+ VaultHandler.economy.currencyNamePlural());
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public String getProgress(final Player player) {
 		//UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
-
 		String progress = "";
-		progress = progress.concat(VaultHandler.economy.getBalance(player
-				.getName()) + "/" + minMoney);
+		
+		double money = VaultHandler.economy.getBalance(player.getPlayer());
+		
+		progress = AutorankTools.makeProgressString(minMoney, VaultHandler.economy.currencyNamePlural(), money + "");
 		return progress;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public boolean meetsRequirement(final Player player) {
 
 		//UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
+		if (VaultHandler.economy == null) return false;
+		
+		for (double minMoneys: minMoney) {
+			if (VaultHandler.economy.has(player.getPlayer(), minMoneys)) return true;
+		}
 
-		return VaultHandler.economy != null
-				&& VaultHandler.economy.has(player.getName(), minMoney);
+		return false;
 	}
 
 	@Override
-	public boolean setOptions(final String[] options) {
-		try {
-			minMoney = Integer.parseInt(options[0]);
-			return true;
-		} catch (final Exception e) {
-			minMoney = 999999999;
-			return false;
+	public boolean setOptions(List<String[]> optionsList) {
+		
+		for (String[] options: optionsList) {
+			try {
+				minMoney.add(Double.parseDouble(options[0]));
+			} catch (final Exception e) {
+				return false;
+			}	
 		}
+		
+		return !minMoney.isEmpty();
 	}
 }
