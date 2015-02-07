@@ -116,17 +116,17 @@ public enum Lang {
 	/**
 	 * Be at {0}.
 	 */
-	LOCATION_REQUIREMENT("location-requirement", "Be at {0}."),
+	LOCATION_REQUIREMENT("location-requirement", "Be at {0}"),
 	/**
 	 * Have at least power level {0}.
 	 */
 	MCMMO_POWER_LEVEL_REQUIREMENT("mcmmo-power-level-requirement",
-			"Have at least power level {0}."),
+			"Have at least power level {0}"),
 	/**
 	 * Have at least level {0} in {1}.
 	 */
 	MCMMO_SKILL_LEVEL_REQUIREMENT("mcmmo-skill-level-requirement",
-			"Have at least level {0} in {1}."),
+			"Have at least level {0} in {1}"),
 	/**
 	 * meets all the requirements for rank {0}
 	 */
@@ -149,7 +149,7 @@ public enum Lang {
 	/**
 	 * Have at least {0}.
 	 */
-	MONEY_REQUIREMENT("money-requirement", "Have at least {0}."),
+	MONEY_REQUIREMENT("money-requirement", "Have at least {0}"),
 	/**
 	 * MySQL is not enabled and therefore global time does not exist!
 	 */
@@ -174,7 +174,7 @@ public enum Lang {
 	/**
 	 * Have permission '{0}'.
 	 */
-	PERMISSION_REQUIREMENT("permission-requirement", "Have permission '{0}'."),
+	PERMISSION_REQUIREMENT("permission-requirement", "Have permission {0}"),
 	/**
 	 * Place at least {0}.
 	 */
@@ -193,7 +193,7 @@ public enum Lang {
 	 * Kill at least {0} player(s).
 	 */
 	PLAYER_KILLS_REQUIREMENT("player-kills-requirement",
-			"Kill at least {0} player(s)."),
+			"Kill at least {0} player(s)"),
 	/**
 	 * {0} is not online!
 	 */
@@ -222,22 +222,22 @@ public enum Lang {
 	/**
 	 * Play for at least {0}.
 	 */
-	TIME_REQUIREMENT("time-requirement", "Play for at least {0}."),
+	TIME_REQUIREMENT("time-requirement", "Play for at least {0}"),
 	/**
 	 * Shear at least {0} sheep.
 	 */
 	TIMES_SHEARED_REQUIREMENT("times-sheared-requirement",
-			"Shear at least {0} sheep."),
+			"Shear at least {0} sheep"),
 	/**
 	 * Kill at least {0}.
 	 */
 	TOTAL_MOBS_KILLED_REQUIREMENT("total-mobs-killed-requirement",
-			"Kill at least {0}."),
+			"Kill at least {0}"),
 	/**
 	 * Be with this server for at least {0}.
 	 */
 	TOTAL_TIME_REQUIREMENT("total-time-requirement",
-			"Be with this server for at least {0}."),
+			"Be with this server for at least {0}"),
 	/**
 	 * Player {0} is unknown and couldn't be identified.
 	 */
@@ -246,16 +246,16 @@ public enum Lang {
 	/**
 	 * Vote at least {0} times.
 	 */
-	VOTE_REQUIREMENT("vote-requirement", "Vote at least {0} times."),
+	VOTE_REQUIREMENT("vote-requirement", "Vote at least {0} times"),
 	/**
 	 * Be in region '{0}'.
 	 */
 	WORLD_GUARD_REGION_REQUIREMENT("world-guard-region-requirement",
-			"Be in region '{0}'."),
+			"Be in region {0}"),
 	/**
 	 * Be in {0}.
 	 */
-	WORLD_REQUIREMENT("world-requirement", "Be in {0}."),
+	WORLD_REQUIREMENT("world-requirement", "Be in {0}"),
 	/**
 	 * Progress of requirement {0}:
 	 */
@@ -264,12 +264,12 @@ public enum Lang {
 	 * Be from area '{0}'.
 	 */
 	ESSENTIALS_GEOIP_LOCATION_REQUIREMENT(
-			"essentials-geoip-location-requirement", "Be from area '{0}'."),
+			"essentials-geoip-location-requirement", "Be from area {0}"),
 	/**
 	 * Be in biome '{0}'.
 	 */
 	IN_BIOME_REQUIREMENT(
-			"in-biome-requirement", "Be in biome '{0}'."), ;
+			"in-biome-requirement", "Be in biome {0}"), ;
 
 	private static FileConfiguration LANG;
 
