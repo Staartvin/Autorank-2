@@ -6,8 +6,6 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.DependencyManager;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 /*
@@ -27,9 +25,10 @@ public class PlaytimesUpdate implements Runnable {
 
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void run() {
-		OfflinePlayer[] onlinePlayers = Bukkit.getServer().getOfflinePlayers();
+		Player[] onlinePlayers = plugin.getServer().getOnlinePlayers();
 		updateMinutesPlayed(onlinePlayers);
 	}
 
@@ -65,7 +64,7 @@ public class PlaytimesUpdate implements Runnable {
 		}
 	}
 
-	private void updateMinutesPlayed(final OfflinePlayer[] players) {
+	private void updateMinutesPlayed(final Player[] players) {
 		plugin.debugMessage("Checking players for automatic ranking");
 
 		for (int i = 0; i < players.length; i++) {
