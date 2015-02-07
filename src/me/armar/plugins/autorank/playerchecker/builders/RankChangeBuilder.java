@@ -18,66 +18,14 @@ import me.armar.plugins.autorank.util.AutorankTools;
 
 public class RankChangeBuilder {
 
-	private ResultBuilder resultBuilder;
-	private RequirementBuilder requirementBuilder;
 	private final Autorank autorank;
+	private RequirementBuilder requirementBuilder;
+	private ResultBuilder resultBuilder;
 
 	public RankChangeBuilder(final Autorank autorank) {
 		this.autorank = autorank;
 		setResultBuilder(new ResultBuilder());
 		setRequirementBuilder(new RequirementBuilder());
-	}
-
-	public List<RankChange> createFromSimpleConfig(
-			final SimpleYamlConfiguration config) {
-		// TODO logging errors and not making faulty RankChanges
-		final List<RankChange> result = new ArrayList<RankChange>();
-
-		final Set<String> ranks = config.getKeys(false);
-		final Iterator<String> it = ranks.iterator();
-
-		while (it.hasNext()) {
-			final String rank = it.next();
-			final String value = (String) config.get(rank);
-
-			final String[] options = value.split(" after ");
-
-			if (options.length <= 0) {
-				System.out
-						.print("[AutoRank] Simple Config is not configured correctly!");
-				autorank.getServer().getPluginManager().disablePlugin(autorank);
-				return null;
-			}
-
-			// Time requirement
-			final List<Requirement> req = new ArrayList<Requirement>();
-			final Requirement timeReq = new TimeRequirement();
-			timeReq.setOptions(new String[] { options[1] });
-			timeReq.setOptional(false);
-			timeReq.setResults(new ArrayList<Result>());
-			timeReq.setAutoComplete(true);
-			timeReq.setReqId(0);
-			timeReq.setAutorank(autorank);
-			req.add(timeReq);
-
-			// Change the rank
-			final List<Result> res = new ArrayList<Result>();
-			final Result change = new RankChangeResult();
-			change.setOptions(new String[] { rank, options[0] });
-			change.setAutorank(autorank);
-			res.add(change);
-
-			// Change the message
-			final Result message = new MessageResult();
-			message.setOptions(new String[] { "&2You got ranked to "
-					+ options[0] });
-			message.setAutorank(autorank);
-			res.add(message);
-
-			result.add(new RankChange(autorank, rank, options[0], req, res));
-		}
-
-		return result;
 	}
 
 	public List<RankChange> createFromAdvancedConfig(
@@ -136,7 +84,7 @@ public class RankChangeBuilder {
 
 				req.add(createRequirement(
 						AutorankTools.getCorrectName(requirement),
-						configHandler.getRequirement(requirement, group),
+						configHandler.getOptions(requirement, group),
 						optional, realResults,
 						configHandler.useAutoCompletion(group, requirement),
 						reqId));
@@ -172,6 +120,98 @@ public class RankChangeBuilder {
 		return result;
 	}
 
+	public List<RankChange> createFromSimpleConfig(
+			final SimpleYamlConfiguration config) {
+		// TODO logging errors and not making faulty RankChanges
+		final List<RankChange> result = new ArrayList<RankChange>();
+
+		final Set<String> ranks = config.getKeys(false);
+		final Iterator<String> it = ranks.iterator();
+
+		while (it.hasNext()) {
+			final String rank = it.next();
+			final String value = (String) config.get(rank);
+
+			final String[] options = value.split(" after ");
+
+			if (options.length <= 0) {
+				System.out
+						.print("[AutoRank] Simple Config is not configured correctly!");
+				autorank.getServer().getPluginManager().disablePlugin(autorank);
+				return null;
+			}
+
+			@SuppressWarnings("serial")
+			List<String[]> optionsArray = new ArrayList<String[]>() {
+
+				{
+					add(new String[] { options[1] });
+				}
+			};
+
+			// Time requirement
+			final List<Requirement> req = new ArrayList<Requirement>();
+			final Requirement timeReq = new TimeRequirement();
+			timeReq.setOptions(optionsArray);
+			timeReq.setOptional(false);
+			timeReq.setResults(new ArrayList<Result>());
+			timeReq.setAutoComplete(true);
+			timeReq.setReqId(0);
+			timeReq.setAutorank(autorank);
+			req.add(timeReq);
+
+			// Change the rank
+			final List<Result> res = new ArrayList<Result>();
+			final Result change = new RankChangeResult();
+			change.setOptions(new String[] { rank, options[0] });
+			change.setAutorank(autorank);
+			res.add(change);
+
+			// Change the message
+			final Result message = new MessageResult();
+			message.setOptions(new String[] { "&2You got ranked to "
+					+ options[0] });
+			message.setAutorank(autorank);
+			res.add(message);
+
+			result.add(new RankChange(autorank, rank, options[0], req, res));
+		}
+
+		return result;
+	}
+
+	private Requirement createRequirement(final String type,
+			List<String[]> args, final boolean optional,
+			final List<Result> results, final boolean autoComplete,
+			final int reqId) {
+		final Requirement res = requirementBuilder.create(type);
+
+		if (res != null) {
+			res.setAutorank(autorank);
+
+			final String errorMessage = "Could not setup requirement '" + type
+					+ "'! It's invalid: check the wiki for documentation.";
+
+			// Check if setOptions is valid
+			try {
+				if (!res.setOptions(args)) {
+					autorank.getLogger().severe(errorMessage);
+					autorank.getWarningManager().registerWarning(errorMessage,
+							10);
+				}
+			} catch (final Exception e) {
+				autorank.getLogger().severe(errorMessage);
+				autorank.getWarningManager().registerWarning(errorMessage, 10);
+			}
+
+			res.setOptional(optional);
+			res.setAutoComplete(autoComplete);
+			res.setReqId(reqId);
+			res.setResults(results);
+		}
+		return res;
+	}
+
 	private Result createResult(final String type, final String object) {
 		final Result res = resultBuilder.create(type);
 
@@ -183,37 +223,21 @@ public class RankChangeBuilder {
 		return res;
 	}
 
-	private Requirement createRequirement(final String type, final String arg,
-			final boolean optional, final List<Result> results,
-			final boolean autoComplete, final int reqId) {
-		final Requirement res = requirementBuilder.create(type);
-
-		if (res != null) {
-			res.setAutorank(autorank);
-			res.setOptions(arg.split(";"));
-			res.setOptional(optional);
-			res.setAutoComplete(autoComplete);
-			res.setReqId(reqId);
-			res.setResults(results);
-		}
-		return res;
+	public RequirementBuilder getRequirementBuilder() {
+		return requirementBuilder;
 	}
 
 	public ResultBuilder getResultBuilder() {
 		return resultBuilder;
 	}
 
-	private void setResultBuilder(final ResultBuilder resultBuilder) {
-		this.resultBuilder = resultBuilder;
-	}
-
-	public RequirementBuilder getRequirementBuilder() {
-		return requirementBuilder;
-	}
-
 	private void setRequirementBuilder(
 			final RequirementBuilder requirementBuilder) {
 		this.requirementBuilder = requirementBuilder;
+	}
+
+	private void setResultBuilder(final ResultBuilder resultBuilder) {
+		this.resultBuilder = resultBuilder;
 	}
 
 }

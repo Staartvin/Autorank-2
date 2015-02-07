@@ -1,21 +1,23 @@
 package me.armar.plugins.autorank.playerchecker;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 import me.armar.plugins.autorank.playerchecker.result.Result;
+import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
 import org.bukkit.entity.Player;
 
 public class RankChange {
 
+	private final Autorank plugin;
 	private final String rankFrom;
+	private final String rankTo;
 	private final List<Requirement> req;
 	private final List<Result> res;
-	private final String rankTo;
-	private final Autorank plugin;
 
 	public RankChange(final Autorank plugin, final String rankFrom,
 			final String rankTo, final List<Requirement> req,
@@ -27,32 +29,44 @@ public class RankChange {
 		this.plugin = plugin;
 	}
 
-	public String getRankFrom() {
-		return rankFrom;
-	}
+	public boolean applyChange(final Player player) {
+		boolean result = true;
 
-	public List<Requirement> getReq() {
-		return req;
-	}
+		if (checkRequirements(player)) {
 
-	public List<Result> getRes() {
-		return res;
-	}
+			final UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
 
-	public String getRankTo() {
-		return rankTo;
-	}
+			// Apply all 'main' results
 
-	public boolean hasRankUp() {
-		return rankTo != null;
+			// Player already got this rank
+			if (plugin.getRequirementHandler().hasCompletedRank(uuid, rankFrom)) {
+				return false;
+			}
+
+			// Add progress of completed requirements
+			plugin.getRequirementHandler().addCompletedRanks(uuid, rankFrom);
+
+			for (final Result r : res) {
+				if (r != null) {
+					if (!r.applyResult(player)) {
+						result = false;
+					}
+				}
+			}
+		} else {
+			result = false;
+		}
+
+		return result;
 	}
 
 	public boolean checkRequirements(final Player player) {
 		boolean result = true;
 
+		final UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
+
 		// Player already got this rank
-		if (plugin.getRequirementHandler()
-				.getCompletedRanks(player.getUniqueId()).contains(rankFrom)) {
+		if (plugin.getRequirementHandler().hasCompletedRank(uuid, rankFrom)) {
 			return false;
 		}
 
@@ -78,7 +92,7 @@ public class RankChange {
 			// If this requirement doesn't auto complete and hasn't already been completed, return false;
 			if (!r.useAutoCompletion()
 					&& !plugin.getRequirementHandler().hasCompletedRequirement(
-							reqID, player.getUniqueId())) {
+							reqID, uuid)) {
 				return false;
 			}
 
@@ -86,7 +100,7 @@ public class RankChange {
 
 				// Player does not meet requirement, but has completed it already
 				if (plugin.getRequirementHandler().hasCompletedRequirement(
-						reqID, player.getUniqueId())) {
+						reqID, uuid)) {
 					continue;
 				}
 
@@ -98,9 +112,9 @@ public class RankChange {
 
 				// Player has not completed this requirement -> perform results
 				if (!plugin.getRequirementHandler().hasCompletedRequirement(
-						reqID, player.getUniqueId())) {
-					plugin.getRequirementHandler().addPlayerProgress(
-							player.getUniqueId(), reqID);
+						reqID, uuid)) {
+					plugin.getRequirementHandler().addPlayerProgress(uuid,
+							reqID);
 				} else {
 					// Player already completed this -> do nothing
 					continue;
@@ -134,34 +148,24 @@ public class RankChange {
 		return failed;
 	}
 
-	public boolean applyChange(final Player player) {
-		boolean result = true;
+	public String getRankFrom() {
+		return rankFrom;
+	}
 
-		if (checkRequirements(player)) {
-			// Apply all 'main' results
+	public String getRankTo() {
+		return rankTo;
+	}
 
-			// Player already got this rank
-			if (plugin.getRequirementHandler()
-					.getCompletedRanks(player.getUniqueId()).contains(rankFrom)) {
-				return false;
-			}
+	public List<Requirement> getReq() {
+		return req;
+	}
 
-			// Add progress of completed requirements
-			plugin.getRequirementHandler().addCompletedRanks(
-					player.getUniqueId(), rankFrom);
+	public List<Result> getRes() {
+		return res;
+	}
 
-			for (final Result r : res) {
-				if (r != null) {
-					if (!r.applyResult(player)) {
-						result = false;
-					}
-				}
-			}
-		} else {
-			result = false;
-		}
-
-		return result;
+	public boolean hasRankUp() {
+		return rankTo != null;
 	}
 
 	@Override

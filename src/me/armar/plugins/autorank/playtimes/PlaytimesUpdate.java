@@ -1,7 +1,10 @@
 package me.armar.plugins.autorank.playtimes;
 
+import java.util.UUID;
+
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.DependencyManager;
+import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -25,18 +28,9 @@ public class PlaytimesUpdate implements Runnable {
 
 	@Override
 	public void run() {
-		final Player[] onlinePlayers = Bukkit.getServer().getOnlinePlayers();
+		@SuppressWarnings("deprecation")
+		Player[] onlinePlayers = Bukkit.getServer().getOnlinePlayers();
 		updateMinutesPlayed(onlinePlayers);
-	}
-
-	private void updateMinutesPlayed(final Player[] players) {
-		plugin.debugMessage("Checking players for automatic ranking");
-
-		for (int i = 0; i < players.length; i++) {
-			if (players[i] != null) {
-				updateMinutesPlayed(players[i]);
-			}
-		}
 	}
 
 	private void updateMinutesPlayed(final Player player) {
@@ -54,19 +48,29 @@ public class PlaytimesUpdate implements Runnable {
 				return;
 			}
 
+			final UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
+
 			// Modify local time
-			playtimes.modifyLocalTime(player.getUniqueId(),
-					Playtimes.INTERVAL_MINUTES);
+			playtimes.modifyLocalTime(uuid, Playtimes.INTERVAL_MINUTES);
 
 			// Modify global time
 			if (playtimes.isMySQLEnabled()) {
-				playtimes.modifyGlobalTime(player.getUniqueId(),
-						Playtimes.INTERVAL_MINUTES);
+				playtimes.modifyGlobalTime(uuid, Playtimes.INTERVAL_MINUTES);
 			}
 
 			// Check if player meets requirements
 			plugin.getPlayerChecker().checkPlayer(player);
 
+		}
+	}
+
+	private void updateMinutesPlayed(final Player[] players) {
+		plugin.debugMessage("Checking players for automatic ranking");
+
+		for (int i = 0; i < players.length; i++) {
+			if (players[i] != null) {
+				updateMinutesPlayed(players[i]);
+			}
 		}
 	}
 

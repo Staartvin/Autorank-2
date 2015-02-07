@@ -1,5 +1,8 @@
 package me.armar.plugins.autorank.playerchecker.requirement;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
@@ -18,34 +21,19 @@ import org.bukkit.entity.Player;
  */
 public class TotalTimeRequirement extends Requirement {
 
-	int time = -1;
-
-	@Override
-	public boolean setOptions(final String[] options) {
-		if (options.length > 0)
-			this.time = AutorankTools.stringToTime(options[0], Time.MINUTES);
-
-		return (time != -1);
-	}
-
-	@Override
-	public boolean meetsRequirement(final Player player) {
-		// the time he first joined the server
-		final long joinTime = player.getFirstPlayed();
-
-		final long currentTime = System.currentTimeMillis();
-
-		// Difference in minutes
-		final long difference = (currentTime - joinTime) / 60000;
-
-		return time != -1 && difference >= time;
-	}
+	List<Integer> times = new ArrayList<Integer>();
 
 	@Override
 	public String getDescription() {
-		return Lang.TOTAL_TIME_REQUIREMENT
-				.getConfigValue(new String[] { AutorankTools.timeToString(time,
-						Time.MINUTES) });
+
+		List<String> sTimes = new ArrayList<String>();
+
+		for (int time : times) {
+			sTimes.add(AutorankTools.timeToString(time, Time.MINUTES));
+		}
+
+		return Lang.TOTAL_TIME_REQUIREMENT.getConfigValue(AutorankTools
+				.seperateList(sTimes, "or"));
 	}
 
 	@Override
@@ -60,7 +48,41 @@ public class TotalTimeRequirement extends Requirement {
 		final long difference = (currentTime - joinTime) / 60000;
 
 		String progress = "";
-		progress = progress.concat(difference + " min" + "/" + time + " min");
+		//progress = progress.concat(difference + " min" + "/" + time + " min");
+
+		progress = AutorankTools.makeProgressString(times, "min", ""
+				+ difference);
 		return progress;
+	}
+
+	@Override
+	public boolean meetsRequirement(final Player player) {
+		// the time he first joined the server
+		final long joinTime = player.getFirstPlayed();
+
+		final long currentTime = System.currentTimeMillis();
+
+		// Difference in minutes
+		final long difference = (currentTime - joinTime) / 60000;
+
+		for (int time : times) {
+			if (time != -1 && difference >= time) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public boolean setOptions(List<String[]> optionsList) {
+		for (String[] options : optionsList) {
+			if (options.length > 0) {
+				times.add(AutorankTools.stringToTime(options[0], Time.MINUTES));
+			} else {
+				return false;
+			}
+		}
+
+		return true;
 	}
 }

@@ -1,5 +1,8 @@
 package me.armar.plugins.autorank.playerchecker.requirement;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
@@ -16,14 +19,40 @@ import org.bukkit.entity.Player;
  */
 public class TimeRequirement extends Requirement {
 
-	int time = -1;
+	List<Integer> times = new ArrayList<Integer>();
 
 	@Override
-	public boolean setOptions(final String[] options) {
-		if (options.length > 0)
-			this.time = AutorankTools.stringToTime(options[0], Time.MINUTES);
+	public String getDescription() {
+		List<String> sTimes = new ArrayList<String>();
 
-		return (time != -1);
+		for (int time : times) {
+			sTimes.add(AutorankTools.timeToString(time, Time.MINUTES));
+		}
+
+		return Lang.TIME_REQUIREMENT.getConfigValue(AutorankTools.seperateList(
+				sTimes, "or"));
+	}
+
+	@Override
+	public String getProgress(final Player player) {
+		String progress = "";
+
+		int playtime = (getAutorank().getPlaytimes().getTimeOfPlayer(
+				player.getName()) / 60);
+
+		/*for (int i=0;i<times.size();i++) {
+			int time = times.get(i);
+			
+			if (i==0) {
+				progress += playtime + " min/" + time + " min";
+			} else {
+				progress += "or " + playtime + " min/" + time + " min";
+			}
+		}*/
+		progress = AutorankTools
+				.makeProgressString(times, "min", "" + playtime);
+
+		return progress;
 	}
 
 	@Override
@@ -32,25 +61,26 @@ public class TimeRequirement extends Requirement {
 		// getTimeOfPlayer() is in seconds, so convert.
 		final double playtime = this.getAutorank().getPlaytimes()
 				.getTimeOfPlayer(player.getName()) / 60;
-		return time != -1 && time <= playtime;
+
+		for (int time : times) {
+			if (time != -1 && time <= playtime) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override
-	public String getDescription() {
-		return Lang.TIME_REQUIREMENT
-				.getConfigValue(new String[] { AutorankTools.timeToString(time,
-						Time.MINUTES) });
-	}
+	public boolean setOptions(List<String[]> optionsList) {
 
-	@Override
-	public String getProgress(final Player player) {
-		String progress = "";
-		progress = progress.concat(getAutorank().getPlaytimes()
-				.getTimeOfPlayer(player.getName())
-				+ " min"
-				+ "/"
-				+ time
-				+ " min");
-		return progress;
+		for (String[] options : optionsList) {
+			if (options.length > 0) {
+				times.add(AutorankTools.stringToTime(options[0], Time.MINUTES));
+			} else {
+				return false;
+			}
+		}
+
+		return true;
 	}
 }

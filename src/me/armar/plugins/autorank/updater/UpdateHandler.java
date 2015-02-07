@@ -4,27 +4,22 @@ import me.armar.plugins.autorank.Autorank;
 
 public class UpdateHandler {
 
+	long latestCheck = 0;
+
 	private final Autorank plugin;
+
+	private Updater updater;
 
 	public UpdateHandler(final Autorank instance) {
 		plugin = instance;
 	}
 
-	private Updater updater;
-	long latestCheck = 0;
-
-	public void setUpdater(final Updater updater) {
-		// Store latest check time
-		latestCheck = System.currentTimeMillis();
-		this.updater = updater;
+	public boolean doCheckForNewVersion() {
+		return plugin.getConfigHandler().doCheckForNewerVersion();
 	}
 
 	public Updater getUpdater() {
 		return updater;
-	}
-
-	public boolean doCheckForNewVersion() {
-		return plugin.getConfigHandler().doCheckForNewerVersion();
 	}
 
 	public boolean isUpdateAvailable() {
@@ -37,5 +32,11 @@ public class UpdateHandler {
 			return (updater.getResult()
 					.equals(Updater.UpdateResult.UPDATE_AVAILABLE));
 		}
+	}
+
+	public void setUpdater(final Updater updater) {
+		// Store latest check time
+		latestCheck = System.currentTimeMillis();
+		this.updater = updater;
 	}
 }

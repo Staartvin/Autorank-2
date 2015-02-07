@@ -14,7 +14,7 @@ use advanced config: false
 afk integration: true
 # If a compatible AFK plugin is found Autorank will not count online time for AFK players
 # This option is always on when using the SimpleConfig
-# Currently supports: Essentials and RoyalCommands
+# Currently supports: Essentials, RoyalCommands and UltimateCore
 # Autorank automatically chooses what plugin to use for AFK integration.
 
 use partial completion: true
@@ -81,3 +81,8 @@ show help command based on permission: false
 use debug: false
 # Only set this to true when you want to debug Autorank
 # When this is true, Autorank will spit out debug messages
+
+allow infinite ranking: false
+# When this is false, players will only be able to rank up a certain rank once. 
+# When a player ranks up, and gets deranked manually by a staff member, he will be stuck on that rank forever, as he has already completed that rank before.
+# Set this to true when you're having problems with players not ranking up.

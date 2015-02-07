@@ -8,50 +8,9 @@ import org.bukkit.inventory.ItemStack;
 
 public class BlocksBrokenRequirement extends Requirement {
 
-	private int blocksBroken = 0;
 	private int blockID = -1;
+	private int blocksBroken = 0;
 	private int damageValue = -1;
-
-	@Override
-	public boolean setOptions(final String[] options) {
-		try {
-			if (options.length > 0) {
-				blocksBroken = Integer.parseInt(options[0].trim());
-			}
-			if (options.length > 1) {
-				blockID = Integer.parseInt(options[0].trim());
-				blocksBroken = Integer.parseInt(options[1].trim());
-			}
-			if (options.length > 2) {
-				damageValue = Integer.parseInt(options[2].trim());
-			}
-		} catch (final Exception e) {
-			blocksBroken = 0;
-			return false;
-		}
-
-		return true;
-
-	}
-
-	@Override
-	public boolean meetsRequirement(final Player player) {
-
-		final boolean enabled = getStatsPlugin().isEnabled();
-
-		boolean sufficient = false;
-		if (blockID > 0) {
-			sufficient = getStatsPlugin().getNormalStat(
-					StatsHandler.statTypes.BLOCKS_BROKEN.toString(),
-					player.getName(), null, blockID + "", damageValue + "") >= blocksBroken;
-		} else {
-			sufficient = getStatsPlugin().getNormalStat(
-					StatsHandler.statTypes.TOTAL_BLOCKS_BROKEN.toString(),
-					player.getName(), null) >= blocksBroken;
-		}
-
-		return enabled && sufficient;
-	}
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -83,8 +42,49 @@ public class BlocksBrokenRequirement extends Requirement {
 		String progress = "";
 		progress = progress.concat(getStatsPlugin().getNormalStat(
 				StatsHandler.statTypes.BLOCKS_BROKEN.toString(),
-				player.getName(), null, blockID + "", damageValue + "")
+				player.getUniqueId(), null, blockID + "", damageValue + "")
 				+ "/" + blocksBroken);
 		return progress;
+	}
+
+	@Override
+	public boolean meetsRequirement(final Player player) {
+
+		final boolean enabled = getStatsPlugin().isEnabled();
+
+		boolean sufficient = false;
+		if (blockID > 0) {
+			sufficient = getStatsPlugin().getNormalStat(
+					StatsHandler.statTypes.BLOCKS_BROKEN.toString(),
+					player.getUniqueId(), null, blockID + "", damageValue + "") >= blocksBroken;
+		} else {
+			sufficient = getStatsPlugin().getNormalStat(
+					StatsHandler.statTypes.TOTAL_BLOCKS_BROKEN.toString(),
+					player.getUniqueId()) >= blocksBroken;
+		}
+
+		return enabled && sufficient;
+	}
+
+	@Override
+	public boolean setOptions(final String[] options) {
+		try {
+			if (options.length > 0) {
+				blocksBroken = Integer.parseInt(options[0].trim());
+			}
+			if (options.length > 1) {
+				blockID = Integer.parseInt(options[0].trim());
+				blocksBroken = Integer.parseInt(options[1].trim());
+			}
+			if (options.length > 2) {
+				damageValue = Integer.parseInt(options[2].trim());
+			}
+		} catch (final Exception e) {
+			blocksBroken = 0;
+			return false;
+		}
+
+		return true;
+
 	}
 }

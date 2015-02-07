@@ -1,7 +1,6 @@
 package me.armar.plugins.autorank.listeners;
 
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -30,7 +29,13 @@ public class PlayerJoinListener implements Listener {
 		final Player player = event.getPlayer();
 
 		// Add cached player
-		UUIDManager.addCachedPlayer(player);
+		//UUIDManager.addCachedPlayer(player);
+
+		// Store uuid of player
+		if (plugin.getUUIDStorage().isOutdated(player.getName())) {
+			plugin.getUUIDStorage().storeUUID(player.getName(),
+					player.getUniqueId());
+		}
 
 		// Perform check for player on login
 		plugin.getPlayerChecker().checkPlayer(player);

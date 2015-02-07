@@ -1,20 +1,24 @@
 package me.armar.plugins.autorank.commands;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class ForceCheckCommand implements CommandExecutor {
+public class ForceCheckCommand extends AutorankCommand {
 
 	private final Autorank plugin;
 
 	public ForceCheckCommand(final Autorank instance) {
+		this.setUsage("/ar forcecheck <player>");
+		this.setDesc("Do a manual silent check.");
+		this.setPermission("autorank.forcecheck");
+
 		plugin = instance;
 	}
 
@@ -34,7 +38,6 @@ public class ForceCheckCommand implements CommandExecutor {
 		}
 
 		final String target = args[1];
-		@SuppressWarnings("deprecation")
 		final Player targetPlayer = plugin.getServer().getPlayer(target);
 
 		if (targetPlayer == null) {

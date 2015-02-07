@@ -29,6 +29,30 @@ public class WorldGuardHandler implements DependencyHandler {
 		plugin = instance;
 	}
 
+	/* (non-Javadoc)
+	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#get()
+	 */
+	@Override
+	public Plugin get() {
+		final Plugin wgPlugin = plugin.getServer().getPluginManager()
+				.getPlugin("WorldGuard");
+
+		// WorldGuard may not be loaded
+		if (wgPlugin == null || !(wgPlugin instanceof WorldGuardPlugin)) {
+			return null; // Maybe you want throw an exception instead
+		}
+
+		return wgPlugin;
+	}
+
+	/* (non-Javadoc)
+	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#isAvailable()
+	 */
+	@Override
+	public boolean isAvailable() {
+		return worldGuardAPI != null;
+	}
+
 	/**
 	 * Check to see if a player is in a specific region
 	 * 
@@ -68,6 +92,16 @@ public class WorldGuardHandler implements DependencyHandler {
 	}
 
 	/* (non-Javadoc)
+	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#isInstalled()
+	 */
+	@Override
+	public boolean isInstalled() {
+		final WorldGuardPlugin wg = (WorldGuardPlugin) get();
+
+		return wg != null && wg.isEnabled();
+	}
+
+	/* (non-Javadoc)
 	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#setup()
 	 */
 	@Override
@@ -93,40 +127,6 @@ public class WorldGuardHandler implements DependencyHandler {
 				return false;
 			}
 		}
-	}
-
-	/* (non-Javadoc)
-	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#isInstalled()
-	 */
-	@Override
-	public boolean isInstalled() {
-		final WorldGuardPlugin wg = (WorldGuardPlugin) get();
-
-		return wg != null && wg.isEnabled();
-	}
-
-	/* (non-Javadoc)
-	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#isAvailable()
-	 */
-	@Override
-	public boolean isAvailable() {
-		return worldGuardAPI != null;
-	}
-
-	/* (non-Javadoc)
-	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#get()
-	 */
-	@Override
-	public Plugin get() {
-		final Plugin wgPlugin = plugin.getServer().getPluginManager()
-				.getPlugin("WorldGuard");
-
-		// WorldGuard may not be loaded
-		if (wgPlugin == null || !(wgPlugin instanceof WorldGuardPlugin)) {
-			return null; // Maybe you want throw an exception instead
-		}
-
-		return wgPlugin;
 	}
 
 }

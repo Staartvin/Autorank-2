@@ -13,6 +13,7 @@ import java.util.Map.Entry;
 import java.util.UUID;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.hooks.vaultapi.VaultHandler;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
@@ -31,19 +32,48 @@ import org.bukkit.command.CommandSender;
  */
 public class Leaderboard {
 
-	private String[] messages;
+	private static Map<UUID, Integer> sortByComparator(
+			final Map<UUID, Integer> unsortMap, final boolean order) {
+
+		final List<Entry<UUID, Integer>> list = new LinkedList<Entry<UUID, Integer>>(
+				unsortMap.entrySet());
+
+		// Sorting the list based on values
+		Collections.sort(list, new Comparator<Entry<UUID, Integer>>() {
+			@Override
+			public int compare(final Entry<UUID, Integer> o1,
+					final Entry<UUID, Integer> o2) {
+				if (order) {
+					return o1.getValue().compareTo(o2.getValue());
+				} else {
+					return o2.getValue().compareTo(o1.getValue());
+
+				}
+			}
+		});
+
+		// Maintaining insertion order with the help of LinkedList
+		final Map<UUID, Integer> sortedMap = new LinkedHashMap<UUID, Integer>();
+		for (final Entry<UUID, Integer> entry : list) {
+			sortedMap.put(entry.getKey(), entry.getValue());
+		}
+
+		return sortedMap;
+	}
+
 	private long lastUpdatedTime;
-	private final Autorank plugin;
-	private int leaderboardLength = 10;
 	private String layout = "&6&r | &b&p - &7&d day(s), &h hour(s) and &m minute(s).";
+	private int leaderboardLength = 10;
+	private String[] messages;
+	private final Autorank plugin;
+
+	private final double validTime = 10D; // In minutes
 
 	public Leaderboard(final Autorank plugin) {
 		this.plugin = plugin;
-		if (plugin.getConfigHandler().useAdvancedConfig()) {
-			leaderboardLength = plugin.getConfigHandler()
-					.getLeaderboardLength();
-			layout = plugin.getConfigHandler().getLeaderboardLayout();
-		}
+
+		leaderboardLength = plugin.getConfigHandler().getLeaderboardLength();
+		layout = plugin.getConfigHandler().getLeaderboardLayout();
 
 		// Run async because it uses UUID lookup
 		plugin.getServer().getScheduler()
@@ -55,9 +85,39 @@ public class Leaderboard {
 				});
 	}
 
+	private Map<UUID, Integer> getSortedPlaytimes() {
+
+		final List<UUID> uuids = plugin.getPlaytimes().getUUIDKeys();
+
+		final HashMap<UUID, Integer> times = new HashMap<UUID, Integer>();
+
+		//String firstWorld = plugin.getServer().getWorlds().get(0).getName();
+
+		// Fill unsorted lists
+		for (int i = 0; i < uuids.size(); i++) {
+
+			//final String name = UUIDManager.getPlayerFromUUID(uuids.get(i));
+
+			// Do not show this player, because he is exempted.
+			// Check if player is exempted.
+			if (VaultHandler.permission.playerHas(null, plugin.getServer()
+					.getOfflinePlayer(uuids.get(i)),
+					"autorank.leaderboard.exempt"))
+				continue;
+
+			// We should use getTimeOfPlayer(), but that requires a lot of rewrites, so I'll leave it at the moment.
+			times.put(uuids.get(i),
+					plugin.getPlaytimes().getLocalTime(uuids.get(i)));
+		}
+
+		// Sort all values
+		final Map<UUID, Integer> sortedMap = sortByComparator(times, false);
+
+		return sortedMap;
+	}
+
 	public void sendLeaderboard(final CommandSender sender) {
-		if (System.currentTimeMillis() - lastUpdatedTime > 600000
-				|| messages == null) {
+		if (shouldUpdateLeaderboard()) {
 			// Update leaderboard because it is not valid anymore.
 			// Run async because it uses UUID lookup
 			plugin.getServer().getScheduler()
@@ -78,10 +138,44 @@ public class Leaderboard {
 				AutorankTools.sendColoredMessage(sender, msg);
 			}
 		}
-
 	}
 
-	private void updateLeaderboard() {
+	public void broadcastLeaderboard() {
+		if (shouldUpdateLeaderboard()) {
+			// Update leaderboard because it is not valid anymore.
+			// Run async because it uses UUID lookup
+			plugin.getServer().getScheduler()
+					.runTaskAsynchronously(plugin, new Runnable() {
+						@Override
+						public void run() {
+							updateLeaderboard();
+
+							// Send them afterwards, not at the same time.
+							for (final String msg : messages) {
+								plugin.getServer().broadcastMessage(
+										ChatColor.translateAlternateColorCodes(
+												'&', msg));
+							}
+						}
+					});
+		} else {
+			// send them instantly
+			for (final String msg : messages) {
+				plugin.getServer().broadcastMessage(
+						ChatColor.translateAlternateColorCodes('&', msg));
+			}
+		}
+	}
+
+	private boolean shouldUpdateLeaderboard() {
+		if (System.currentTimeMillis() - lastUpdatedTime > (60000 * validTime)
+				|| messages == null)
+			return true;
+		else
+			return false;
+	}
+
+	public void updateLeaderboard() {
 		plugin.debugMessage("Updating leaderboard...");
 
 		lastUpdatedTime = System.currentTimeMillis();
@@ -93,7 +187,7 @@ public class Leaderboard {
 		plugin.debugMessage("Size leaderboard: " + sortedPlaytimes.size());
 
 		final List<String> stringList = new ArrayList<String>();
-		stringList.add("-------- Autorank Leaderboard --------");
+		stringList.add("&a-------- Autorank Leaderboard --------");
 
 		for (int i = 0; i < leaderboardLength && itr.hasNext(); i++) {
 			final Entry<UUID, Integer> entry = itr.next();
@@ -124,59 +218,11 @@ public class Leaderboard {
 
 		}
 
-		stringList.add("------------------------------------");
+		stringList.add("&a------------------------------------");
 
 		messages = stringList.toArray(new String[stringList.size()]);
 
 		//System.out.print("Took: " + (System.currentTimeMillis() - lastUpdatedTime)  + " ms."); 
-	}
-
-	private Map<UUID, Integer> getSortedPlaytimes() {
-
-		final List<UUID> uuids = plugin.getPlaytimes().getUUIDKeys();
-
-		final HashMap<UUID, Integer> times = new HashMap<UUID, Integer>();
-
-		// Fill unsorted lists
-		for (int i = 0; i < uuids.size(); i++) {
-			times.put(uuids.get(i),
-			// We should use getTimeOfPlayer(), but that requires a lot of rewrites, so I'll leave it at the moment.
-					plugin.getPlaytimes().getLocalTime(uuids.get(i)));
-		}
-
-		// Sort all values
-		final Map<UUID, Integer> sortedMap = sortByComparator(times, false);
-
-		return sortedMap;
-	}
-
-	private static Map<UUID, Integer> sortByComparator(
-			final Map<UUID, Integer> unsortMap, final boolean order) {
-
-		final List<Entry<UUID, Integer>> list = new LinkedList<Entry<UUID, Integer>>(
-				unsortMap.entrySet());
-
-		// Sorting the list based on values
-		Collections.sort(list, new Comparator<Entry<UUID, Integer>>() {
-			@Override
-			public int compare(final Entry<UUID, Integer> o1,
-					final Entry<UUID, Integer> o2) {
-				if (order) {
-					return o1.getValue().compareTo(o2.getValue());
-				} else {
-					return o2.getValue().compareTo(o1.getValue());
-
-				}
-			}
-		});
-
-		// Maintaining insertion order with the help of LinkedList
-		final Map<UUID, Integer> sortedMap = new LinkedHashMap<UUID, Integer>();
-		for (final Entry<UUID, Integer> entry : list) {
-			sortedMap.put(entry.getKey(), entry.getValue());
-		}
-
-		return sortedMap;
 	}
 
 }

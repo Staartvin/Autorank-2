@@ -9,11 +9,6 @@ import org.bukkit.entity.Player;
  */
 public interface PermissionsHandler {
 
-	public String[] getPlayerGroups(Player player);
-
-	public boolean replaceGroup(Player player, String world, String groupFrom,
-			String groupTo);
-
 	/**
 	 * Get all defined groups
 	 * 
@@ -21,6 +16,8 @@ public interface PermissionsHandler {
 	 *         plugin.
 	 */
 	public String[] getGroups();
+
+	public String[] getPlayerGroups(Player player);
 
 	/**
 	 * Gets the groups of the player in a world
@@ -30,5 +27,8 @@ public interface PermissionsHandler {
 	 * @return an array containing all groups that the player is in.
 	 */
 	public String[] getWorldGroups(Player player, String world);
+
+	public boolean replaceGroup(Player player, String world, String groupFrom,
+			String groupTo);
 
 }

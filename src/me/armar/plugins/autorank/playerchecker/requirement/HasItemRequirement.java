@@ -8,43 +8,9 @@ import org.bukkit.inventory.ItemStack;
 
 public class HasItemRequirement extends Requirement {
 
+	private String displayName = null;
 	ItemStack item = null;
 	private boolean showShortValue = false;
-	private String displayName = null;
-
-	@SuppressWarnings("deprecation")
-	@Override
-	public boolean setOptions(final String[] options) {
-		int id = 0;
-		int amount = 1;
-		short data = 0;
-
-		if (options.length > 0)
-			id = AutorankTools.stringtoInt(options[0]);
-		if (options.length > 1)
-			amount = AutorankTools.stringtoInt(options[1]);
-		if (options.length > 2) {
-			data = (short) AutorankTools.stringtoInt(options[2]);
-			// Short value can make a difference, thus we show it.
-			showShortValue = true;
-		}
-		if (options.length > 3) {
-			// Displayname
-			displayName = options[3];
-		}
-
-		//item = new ItemStack(id, 1, (short) 0, data);
-		item = new ItemStack(id, amount, data);
-
-		return item != null;
-	}
-
-	@Override
-	public boolean meetsRequirement(final Player player) {
-		return item != null
-				&& player.getInventory()
-						.containsAtLeast(item, item.getAmount());
-	}
 
 	@Override
 	public String getDescription() {
@@ -78,5 +44,39 @@ public class HasItemRequirement extends Requirement {
 		String progress = "";
 		progress = progress.concat(slotAmount + "/" + item.getAmount());
 		return progress;
+	}
+
+	@Override
+	public boolean meetsRequirement(final Player player) {
+		return item != null
+				&& player.getInventory()
+						.containsAtLeast(item, item.getAmount());
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public boolean setOptions(final String[] options) {
+		int id = 0;
+		int amount = 1;
+		short data = 0;
+
+		if (options.length > 0)
+			id = AutorankTools.stringtoInt(options[0]);
+		if (options.length > 1)
+			amount = AutorankTools.stringtoInt(options[1]);
+		if (options.length > 2) {
+			data = (short) AutorankTools.stringtoInt(options[2]);
+			// Short value can make a difference, thus we show it.
+			showShortValue = true;
+		}
+		if (options.length > 3) {
+			// Displayname
+			displayName = options[3];
+		}
+
+		//item = new ItemStack(id, 1, (short) 0, data);
+		item = new ItemStack(id, amount, data);
+
+		return item != null;
 	}
 }

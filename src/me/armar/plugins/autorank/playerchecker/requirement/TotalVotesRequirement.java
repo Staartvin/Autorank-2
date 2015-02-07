@@ -10,25 +10,6 @@ public class TotalVotesRequirement extends Requirement {
 	private int totalVotes = 0;
 
 	@Override
-	public boolean setOptions(final String[] options) {
-		try {
-			totalVotes = Integer.parseInt(options[0]);
-			return true;
-		} catch (final Exception e) {
-			totalVotes = 0;
-			return false;
-		}
-	}
-
-	@Override
-	public boolean meetsRequirement(final Player player) {
-		return getStatsPlugin().isEnabled()
-				&& getStatsPlugin().getNormalStat(
-						StatsHandler.statTypes.VOTES.toString(),
-						player.getName(), null) >= totalVotes;
-	}
-
-	@Override
 	public String getDescription() {
 		return Lang.VOTE_REQUIREMENT.getConfigValue(new String[] { totalVotes
 				+ "" });
@@ -37,10 +18,28 @@ public class TotalVotesRequirement extends Requirement {
 	@Override
 	public String getProgress(final Player player) {
 		String progress = "";
-		progress = progress.concat(getStatsPlugin()
-				.getNormalStat(StatsHandler.statTypes.VOTES.toString(),
-						player.getName(), null)
+		progress = progress.concat(getStatsPlugin().getNormalStat(
+				StatsHandler.statTypes.VOTES.toString(), player.getUniqueId())
 				+ "/" + totalVotes);
 		return progress;
+	}
+
+	@Override
+	public boolean meetsRequirement(final Player player) {
+		return getStatsPlugin().isEnabled()
+				&& getStatsPlugin().getNormalStat(
+						StatsHandler.statTypes.VOTES.toString(),
+						player.getUniqueId()) >= totalVotes;
+	}
+
+	@Override
+	public boolean setOptions(final String[] options) {
+		try {
+			totalVotes = Integer.parseInt(options[0]);
+			return true;
+		} catch (final Exception e) {
+			totalVotes = 0;
+			return false;
+		}
 	}
 }

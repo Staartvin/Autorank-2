@@ -12,17 +12,6 @@ public class CommandResult extends Result {
 	private Server server = null;
 
 	@Override
-	public boolean setOptions(final String[] commands) {
-		this.server = this.getAutorank().getServer();
-		final List<String> replace = new ArrayList<String>();
-		for (final String command : commands) {
-			replace.add(command.trim());
-		}
-		this.commands = replace;
-		return true;
-	}
-
-	@Override
 	public boolean applyResult(final Player player) {
 		if (server != null) {
 			for (final String command : commands) {
@@ -32,5 +21,16 @@ public class CommandResult extends Result {
 
 		}
 		return server != null;
+	}
+
+	@Override
+	public boolean setOptions(final String[] commands) {
+		this.server = this.getAutorank().getServer();
+		final List<String> replace = new ArrayList<String>();
+		for (final String command : commands) {
+			replace.add(command.trim());
+		}
+		this.commands = replace;
+		return true;
 	}
 }

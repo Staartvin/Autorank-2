@@ -1,8 +1,10 @@
 package me.armar.plugins.autorank.playerchecker.result;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import me.armar.plugins.autorank.api.events.PlayerPromoteEvent;
+import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -12,27 +14,6 @@ public class RankChangeResult extends Result {
 	String from = null;
 	String to = null;
 	String world = null;
-
-	@Override
-	public boolean setOptions(final String[] options) {
-		//1 arg -> from group that the rank is being applied for to arg 0
-		if (options.length == 1) {
-			to = options[0].trim();
-		}
-		//2 args -> from arg 0 to arg 1
-		if (options.length == 2) {
-			from = options[0].trim();
-			to = options[1].trim();
-		}
-		//3 args -> from arg 0 to arg 1 in world arg 2
-		if (options.length == 3) {
-			from = options[0].trim();
-			to = options[1].trim();
-			world = options[2].trim();
-		}
-
-		return to != null;
-	}
 
 	@Override
 	public boolean applyResult(final Player player) {
@@ -66,15 +47,37 @@ public class RankChangeResult extends Result {
 		if (event.isCancelled())
 			return false;
 
-		// When rank is changed: reset progress and update last known group
-		getAutorank().getRequirementHandler().setPlayerProgress(
-				player.getUniqueId(), new ArrayList<Integer>());
+		final UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
 
-		getAutorank().getRequirementHandler().setLastKnownGroup(
-				player.getUniqueId(), to);
+		// When rank is changed: reset progress and update last known group
+		getAutorank().getRequirementHandler().setPlayerProgress(uuid,
+				new ArrayList<Integer>());
+
+		getAutorank().getRequirementHandler().setLastKnownGroup(uuid, to);
 
 		return this.getAutorank().getPermPlugHandler().getPermissionPlugin()
 				.replaceGroup(player, world, oldrank, to);
+	}
+
+	@Override
+	public boolean setOptions(final String[] options) {
+		//1 arg -> from group that the rank is being applied for to arg 0
+		if (options.length == 1) {
+			to = options[0].trim();
+		}
+		//2 args -> from arg 0 to arg 1
+		if (options.length == 2) {
+			from = options[0].trim();
+			to = options[1].trim();
+		}
+		//3 args -> from arg 0 to arg 1 in world arg 2
+		if (options.length == 3) {
+			from = options[0].trim();
+			to = options[1].trim();
+			world = options[2].trim();
+		}
+
+		return to != null;
 	}
 
 }

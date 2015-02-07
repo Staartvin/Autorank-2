@@ -19,11 +19,15 @@ public class WorldGuardRegionRequirement extends Requirement {
 	private String regionName = "";
 
 	@Override
-	public boolean setOptions(final String[] options) {
-		if (options.length > 0)
-			regionName = options[0].trim();
+	public String getDescription() {
+		return Lang.WORLD_GUARD_REGION_REQUIREMENT
+				.getConfigValue(new String[] { regionName });
+	}
 
-		return (regionName != null);
+	@Override
+	public String getProgress(final Player player) {
+		final String progress = "Cannot show progress";
+		return progress;
 	}
 
 	@Override
@@ -35,14 +39,10 @@ public class WorldGuardRegionRequirement extends Requirement {
 	}
 
 	@Override
-	public String getDescription() {
-		return Lang.WORLD_GUARD_REGION_REQUIREMENT
-				.getConfigValue(new String[] { regionName });
-	}
+	public boolean setOptions(final String[] options) {
+		if (options.length > 0)
+			regionName = options[0].trim();
 
-	@Override
-	public String getProgress(final Player player) {
-		final String progress = "Cannot show progress";
-		return progress;
+		return (regionName != null);
 	}
 }

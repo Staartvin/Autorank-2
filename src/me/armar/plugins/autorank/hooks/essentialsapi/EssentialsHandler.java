@@ -19,11 +19,27 @@ import com.earth2me.essentials.User;
  */
 public class EssentialsHandler implements DependencyHandler {
 
-	private final Autorank plugin;
 	private Essentials api;
+	private final Autorank plugin;
 
 	public EssentialsHandler(final Autorank instance) {
 		plugin = instance;
+	}
+
+	/* (non-Javadoc)
+	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#get()
+	 */
+	@Override
+	public Plugin get() {
+		final Plugin plugin = this.plugin.getServer().getPluginManager()
+				.getPlugin("Essentials");
+
+		// WorldGuard may not be loaded
+		if (plugin == null || !(plugin instanceof Essentials)) {
+			return null; // Maybe you want throw an exception instead
+		}
+
+		return plugin;
 	}
 
 	public boolean isAFK(final Player player) {
@@ -42,6 +58,24 @@ public class EssentialsHandler implements DependencyHandler {
 		return user.isAfk();
 	}
 
+	/* (non-Javadoc)
+	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#isAvailable()
+	 */
+	@Override
+	public boolean isAvailable() {
+		return api != null;
+	}
+
+	/* (non-Javadoc)
+	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#isInstalled()
+	 */
+	@Override
+	public boolean isInstalled() {
+		final Plugin plugin = get();
+
+		return plugin != null && plugin.isEnabled();
+	}
+
 	public boolean isJailed(final Player player) {
 		if (!isAvailable())
 			return false;
@@ -53,22 +87,6 @@ public class EssentialsHandler implements DependencyHandler {
 		}
 
 		return user.isJailed();
-	}
-
-	/* (non-Javadoc)
-	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#get()
-	 */
-	@Override
-	public Plugin get() {
-		final Plugin plugin = this.plugin.getServer().getPluginManager()
-				.getPlugin("Essentials");
-
-		// WorldGuard may not be loaded
-		if (plugin == null || !(plugin instanceof Essentials)) {
-			return null; // Maybe you want throw an exception instead
-		}
-
-		return plugin;
 	}
 
 	/* (non-Javadoc)
@@ -100,21 +118,16 @@ public class EssentialsHandler implements DependencyHandler {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#isInstalled()
-	 */
-	@Override
-	public boolean isInstalled() {
-		final Plugin plugin = get();
+	public String getGeoIPLocation(final Player player) {
+		if (!isAvailable())
+			return null;
 
-		return plugin != null && plugin.isEnabled();
-	}
+		final User user = api.getUser(player);
 
-	/* (non-Javadoc)
-	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#isAvailable()
-	 */
-	@Override
-	public boolean isAvailable() {
-		return api != null;
+		if (user == null) {
+			return null;
+		}
+
+		return user.getGeoLocation();
 	}
 }

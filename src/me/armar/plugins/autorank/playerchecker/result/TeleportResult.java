@@ -9,6 +9,15 @@ public class TeleportResult extends Result {
 	private Location location;
 
 	@Override
+	public boolean applyResult(final Player player) {
+		if (player == null)
+			return false;
+
+		player.teleport(location);
+		return location != null;
+	}
+
+	@Override
 	public boolean setOptions(final String[] options) {
 		// x;y;z;world;yaw;pitch
 
@@ -25,15 +34,6 @@ public class TeleportResult extends Result {
 					Integer.parseInt(options[0]), Integer.parseInt(options[1]),
 					Integer.parseInt(options[2]));
 		}
-		return location != null;
-	}
-
-	@Override
-	public boolean applyResult(final Player player) {
-		if (player == null)
-			return false;
-
-		player.teleport(location);
 		return location != null;
 	}
 

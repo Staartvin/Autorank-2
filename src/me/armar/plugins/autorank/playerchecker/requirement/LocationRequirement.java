@@ -9,37 +9,46 @@ import org.bukkit.entity.Player;
 
 public class LocationRequirement extends Requirement {
 
-	private int xLocation = 0, yLocation = 0, zLocation = 0;
-	private String world;
 	private int radius = 1;
+	private String world;
+	private int xLocation = 0, yLocation = 0, zLocation = 0;
 
 	@Override
-	public boolean setOptions(final String[] options) {
+	public String getDescription() {
+		return Lang.LOCATION_REQUIREMENT
+				.getConfigValue(new String[] { xLocation + ", " + yLocation
+						+ ", " + zLocation + " in " + world });
+	}
 
-		// Location = x;y;z;world;radius
-		if (options.length != 5) {
-			return false;
+	@Override
+	public String getProgress(final Player player) {
+		// Distance between two points:
+		// d = sqrt((x2 - x1)^2 + (y2 - y1)^2 + (z2 - z1)^2)
+		// See for info: http://www.calculatorsoup.com/calculators/geometry-solids/distance-two-points.php
+
+		final Location playerLoc = player.getLocation();
+
+		// Player coords
+		int pX, pY, pZ;
+
+		pX = playerLoc.getBlockX();
+		pY = playerLoc.getBlockY();
+		pZ = playerLoc.getBlockZ();
+
+		final int distance = (int) Math
+				.sqrt(Math.pow((pX - xLocation), 2)
+						+ Math.pow((pY - yLocation), 2)
+						+ Math.pow((pZ - zLocation), 2));
+
+		String progress = "";
+
+		String plurOrSing = "meter";
+
+		if (distance > 1) {
+			plurOrSing = "meters";
 		}
-
-		try {
-			// Save x,y,z
-			xLocation = Integer.parseInt(options[0]);
-			yLocation = Integer.parseInt(options[1]);
-			zLocation = Integer.parseInt(options[2]);
-
-			// Save world
-			world = options[3].trim();
-
-			// Save radius
-			radius = Integer.parseInt(options[4]);
-
-			if (radius < 0) {
-				radius = 0;
-			}
-			return true;
-		} catch (final Exception e) {
-			return false;
-		}
+		progress = progress.concat(distance + " " + plurOrSing + " away.");
+		return progress;
 	}
 
 	@Override
@@ -81,40 +90,31 @@ public class LocationRequirement extends Requirement {
 	}
 
 	@Override
-	public String getDescription() {
-		return Lang.LOCATION_REQUIREMENT
-				.getConfigValue(new String[] { xLocation + ", " + yLocation
-						+ ", " + zLocation + " in " + world });
-	}
+	public boolean setOptions(final String[] options) {
 
-	@Override
-	public String getProgress(final Player player) {
-		// Distance between two points:
-		// d = sqrt((x2 - x1)^2 + (y2 - y1)^2 + (z2 - z1)^2)
-		// See for info: http://www.calculatorsoup.com/calculators/geometry-solids/distance-two-points.php
-
-		final Location playerLoc = player.getLocation();
-
-		// Player coords
-		int pX, pY, pZ;
-
-		pX = playerLoc.getBlockX();
-		pY = playerLoc.getBlockY();
-		pZ = playerLoc.getBlockZ();
-
-		final int distance = (int) Math
-				.sqrt(Math.pow((pX - xLocation), 2)
-						+ Math.pow((pY - yLocation), 2)
-						+ Math.pow((pZ - zLocation), 2));
-
-		String progress = "";
-
-		String plurOrSing = "meter";
-
-		if (distance > 1) {
-			plurOrSing = "meters";
+		// Location = x;y;z;world;radius
+		if (options.length != 5) {
+			return false;
 		}
-		progress = progress.concat(distance + " " + plurOrSing + " away.");
-		return progress;
+
+		try {
+			// Save x,y,z
+			xLocation = Integer.parseInt(options[0]);
+			yLocation = Integer.parseInt(options[1]);
+			zLocation = Integer.parseInt(options[2]);
+
+			// Save world
+			world = options[3].trim();
+
+			// Save radius
+			radius = Integer.parseInt(options[4]);
+
+			if (radius < 0) {
+				radius = 0;
+			}
+			return true;
+		} catch (final Exception e) {
+			return false;
+		}
 	}
 }

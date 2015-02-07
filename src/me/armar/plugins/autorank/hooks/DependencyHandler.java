@@ -22,12 +22,11 @@ public interface DependencyHandler {
 	public Plugin get();
 
 	/**
-	 * Setup the hook between this dependency and Autorank
+	 * Check whether Autorank has hooked this dependency and thus can use it.
 	 * 
-	 * @param verbose Whether to show output or not
-	 * @return true if correctly setup, false otherwise.
+	 * @return true if Autorank hooked into it, false otherwise.
 	 */
-	public boolean setup(boolean verbose);
+	public boolean isAvailable();
 
 	/**
 	 * Check to see if this dependency is running on this server
@@ -37,9 +36,10 @@ public interface DependencyHandler {
 	public boolean isInstalled();
 
 	/**
-	 * Check whether Autorank has hooked this dependency and thus can use it.
+	 * Setup the hook between this dependency and Autorank
 	 * 
-	 * @return true if Autorank hooked into it, false otherwise.
+	 * @param verbose Whether to show output or not
+	 * @return true if correctly setup, false otherwise.
 	 */
-	public boolean isAvailable();
+	public boolean setup(boolean verbose);
 }

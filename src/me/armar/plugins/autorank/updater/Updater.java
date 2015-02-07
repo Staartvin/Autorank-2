@@ -50,81 +50,83 @@ import org.json.simple.JSONValue;
 
 public class Updater {
 
-	private Plugin plugin;
-	private UpdateType type;
-	private String versionName;
-	private String versionLink;
-	private String versionType;
-	private String versionGameVersion;
-
-	private boolean announce; // Whether to announce file downloads
-
-	private URL url; // Connecting to RSS
-	private File file; // The plugin's file
-	private Thread thread; // Updater thread
-
-	private int id = -1; // Project's Curse ID
-	private String apiKey = null; // BukkitDev ServerMods API key
-	private static final String TITLE_VALUE = "name"; // Gets remote file's title
-	private static final String LINK_VALUE = "downloadUrl"; // Gets remote file's download link
-	private static final String TYPE_VALUE = "releaseType"; // Gets remote file's release type
-	private static final String VERSION_VALUE = "gameVersion"; // Gets remote file's build version
-	private static final String QUERY = "/servermods/files?projectIds="; // Path to GET
-	private static final String HOST = "https://api.curseforge.com"; // Slugs will be appended to this to get to the project's RSS feed
-
-	private static final String[] NO_UPDATE_TAG = { "-DEV", "-PRE", "-SNAPSHOT" }; // If the version number contains one of these, don't update.
-	private static final int BYTE_SIZE = 1024; // Used for downloading files
-	private YamlConfiguration config; // Config file
-	private String updateFolder;// The folder that downloads will be placed in
-	private Updater.UpdateResult result = Updater.UpdateResult.SUCCESS; // Used for determining the outcome of the update process
-
 	/**
 	 * Gives the dev the result of the update process. Can be obtained by called
 	 * getResult().
 	 */
 	public enum UpdateResult {
 		/**
-		 * The updater found an update, and has readied it to be loaded the next
-		 * time the server restarts/reloads.
-		 */
-		SUCCESS,
-		/**
-		 * The updater did not find an update, and nothing was downloaded.
-		 */
-		NO_UPDATE,
-		/**
 		 * The server administrator has disabled the updating system
 		 */
 		DISABLED,
-		/**
-		 * The updater found an update, but was unable to download it.
-		 */
-		FAIL_DOWNLOAD,
-		/**
-		 * For some reason, the updater was unable to contact dev.bukkit.org to
-		 * download the file.
-		 */
-		FAIL_DBO,
-		/**
-		 * When running the version check, the file on DBO did not contain the a
-		 * version in the format 'vVersion' such as 'v1.0'.
-		 */
-		FAIL_NOVERSION,
-		/**
-		 * The id provided by the plugin running the updater was invalid and
-		 * doesn't exist on DBO.
-		 */
-		FAIL_BADID,
 		/**
 		 * The server administrator has improperly configured their API key in
 		 * the configuration
 		 */
 		FAIL_APIKEY,
 		/**
+		 * The id provided by the plugin running the updater was invalid and
+		 * doesn't exist on DBO.
+		 */
+		FAIL_BADID,
+		/**
+		 * For some reason, the updater was unable to contact dev.bukkit.org to
+		 * download the file.
+		 */
+		FAIL_DBO,
+		/**
+		 * The updater found an update, but was unable to download it.
+		 */
+		FAIL_DOWNLOAD,
+		/**
+		 * When running the version check, the file on DBO did not contain the a
+		 * version in the format 'vVersion' such as 'v1.0'.
+		 */
+		FAIL_NOVERSION,
+		/**
+		 * The updater did not find an update, and nothing was downloaded.
+		 */
+		NO_UPDATE,
+		/**
+		 * The updater found an update, and has readied it to be loaded the next
+		 * time the server restarts/reloads.
+		 */
+		SUCCESS,
+		/**
 		 * The updater found an update, but because of the UpdateType being set
 		 * to NO_DOWNLOAD, it wasn't downloaded.
 		 */
 		UPDATE_AVAILABLE
+	}
+
+	private class UpdateRunnable implements Runnable {
+
+		@Override
+		public void run() {
+			if (Updater.this.url != null) {
+				// Obtain the results of the project's file feed
+				if (Updater.this.read()) {
+					if (Updater.this.versionCheck(Updater.this.versionName)) {
+						if ((Updater.this.versionLink != null)
+								&& (Updater.this.type != UpdateType.NO_DOWNLOAD)) {
+							String name = Updater.this.file.getName();
+							// If it's a zip file, it shouldn't be downloaded as the plugin's name
+							if (Updater.this.versionLink.endsWith(".zip")) {
+								final String[] split = Updater.this.versionLink
+										.split("/");
+								name = split[split.length - 1];
+							}
+							Updater.this.saveFile(new File(Updater.this.plugin
+									.getDataFolder().getParent(),
+									Updater.this.updateFolder), name,
+									Updater.this.versionLink);
+						} else {
+							Updater.this.result = UpdateResult.UPDATE_AVAILABLE;
+						}
+					}
+				}
+			}
+		}
 	}
 
 	/**
@@ -137,16 +139,47 @@ public class Updater {
 		 */
 		DEFAULT,
 		/**
-		 * Don't run a version check, just find the latest update and download
-		 * it.
-		 */
-		NO_VERSION_CHECK,
-		/**
 		 * Get information about the version and the download size, but don't
 		 * actually download anything.
 		 */
-		NO_DOWNLOAD
+		NO_DOWNLOAD,
+		/**
+		 * Don't run a version check, just find the latest update and download
+		 * it.
+		 */
+		NO_VERSION_CHECK
 	}
+
+	private static final int BYTE_SIZE = 1024; // Used for downloading files
+	private static final String HOST = "https://api.curseforge.com"; // Slugs will be appended to this to get to the project's RSS feed
+	private static final String LINK_VALUE = "downloadUrl"; // Gets remote file's download link
+
+	private static final String[] NO_UPDATE_TAG = { "-DEV", "-PRE", "-SNAPSHOT" }; // If the version number contains one of these, don't update.
+
+	private static final String QUERY = "/servermods/files?projectIds="; // Path to GET
+	private static final String TITLE_VALUE = "name"; // Gets remote file's title
+	private static final String TYPE_VALUE = "releaseType"; // Gets remote file's release type
+
+	private static final String VERSION_VALUE = "gameVersion"; // Gets remote file's build version
+	private boolean announce; // Whether to announce file downloads
+	private String apiKey = null; // BukkitDev ServerMods API key
+	private YamlConfiguration config; // Config file
+	private File file; // The plugin's file
+	private int id = -1; // Project's Curse ID
+	private Plugin plugin;
+	private Updater.UpdateResult result = Updater.UpdateResult.SUCCESS; // Used for determining the outcome of the update process
+
+	private Thread thread; // Updater thread
+	private UpdateType type;
+	private String updateFolder;// The folder that downloads will be placed in
+	private URL url; // Connecting to RSS
+	private String versionGameVersion;
+
+	private String versionLink;
+
+	private String versionName;
+
+	private String versionType;
 
 	/**
 	 * Initialize the updater
@@ -237,19 +270,11 @@ public class Updater {
 	}
 
 	/**
-	 * Get the result of the update process.
+	 * Get the latest version's file link.
 	 */
-	public Updater.UpdateResult getResult() {
+	public String getLatestFileLink() {
 		this.waitForThread();
-		return this.result;
-	}
-
-	/**
-	 * Get the latest version's release type (release, beta, or alpha).
-	 */
-	public String getLatestType() {
-		this.waitForThread();
-		return this.versionType;
+		return this.versionLink;
 	}
 
 	/**
@@ -269,25 +294,107 @@ public class Updater {
 	}
 
 	/**
-	 * Get the latest version's file link.
+	 * Get the latest version's release type (release, beta, or alpha).
 	 */
-	public String getLatestFileLink() {
+	public String getLatestType() {
 		this.waitForThread();
-		return this.versionLink;
+		return this.versionType;
 	}
 
 	/**
-	 * As the result of Updater output depends on the thread's completion, it is
-	 * necessary to wait for the thread to finish
-	 * before allowing anyone to check the result.
+	 * Get the result of the update process.
 	 */
-	private void waitForThread() {
-		if ((this.thread != null) && this.thread.isAlive()) {
-			try {
-				this.thread.join();
-			} catch (final InterruptedException e) {
-				e.printStackTrace();
+	public Updater.UpdateResult getResult() {
+		this.waitForThread();
+		return this.result;
+	}
+
+	/**
+	 * Evaluate whether the version number is marked showing that it should not
+	 * be updated by this program
+	 */
+	private boolean hasTag(final String version) {
+		for (final String string : Updater.NO_UPDATE_TAG) {
+			if (version.contains(string)) {
+				return true;
 			}
+		}
+		return false;
+	}
+
+	/**
+	 * Check if the name of a jar is one of the plugins currently installed,
+	 * used for extracting the correct files out of a zip.
+	 */
+	private boolean pluginFile(final String name) {
+		for (final File file : new File("plugins").listFiles()) {
+			if (file.getName().equals(name)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean read() {
+		try {
+			final URLConnection conn = this.url.openConnection();
+			conn.setConnectTimeout(5000);
+
+			if (this.apiKey != null) {
+				conn.addRequestProperty("X-API-Key", this.apiKey);
+			}
+			conn.addRequestProperty("User-Agent", "Updater (by Gravity)");
+
+			conn.setDoOutput(true);
+
+			final BufferedReader reader = new BufferedReader(
+					new InputStreamReader(conn.getInputStream()));
+			final String response = reader.readLine();
+
+			final JSONArray array = (JSONArray) JSONValue.parse(response);
+
+			if (array.size() == 0) {
+				this.plugin.getLogger().warning(
+						"The updater could not find any files for the project id "
+								+ this.id);
+				this.result = UpdateResult.FAIL_BADID;
+				return false;
+			}
+
+			this.versionName = (String) ((JSONObject) array
+					.get(array.size() - 1)).get(Updater.TITLE_VALUE);
+			this.versionLink = (String) ((JSONObject) array
+					.get(array.size() - 1)).get(Updater.LINK_VALUE);
+			this.versionType = (String) ((JSONObject) array
+					.get(array.size() - 1)).get(Updater.TYPE_VALUE);
+			this.versionGameVersion = (String) ((JSONObject) array.get(array
+					.size() - 1)).get(Updater.VERSION_VALUE);
+
+			return true;
+		} catch (final IOException e) {
+			if (e.getMessage().contains("HTTP response code: 403")) {
+				this.plugin
+						.getLogger()
+						.warning(
+								"dev.bukkit.org rejected the API key provided in plugins/Updater/config.yml");
+				this.plugin
+						.getLogger()
+						.warning(
+								"Please double-check your configuration to ensure it is correct.");
+				this.result = UpdateResult.FAIL_APIKEY;
+			} else {
+				this.plugin
+						.getLogger()
+						.warning(
+								"The updater could not contact dev.bukkit.org for updating.");
+				this.plugin
+						.getLogger()
+						.warning(
+								"If you have not recently modified your configuration and this is the first time you are seeing this message, the site may be experiencing temporary downtime.");
+				this.result = UpdateResult.FAIL_DBO;
+			}
+			e.printStackTrace();
+			return false;
 		}
 	}
 
@@ -449,19 +556,6 @@ public class Updater {
 	}
 
 	/**
-	 * Check if the name of a jar is one of the plugins currently installed,
-	 * used for extracting the correct files out of a zip.
-	 */
-	private boolean pluginFile(final String name) {
-		for (final File file : new File("plugins").listFiles()) {
-			if (file.getName().equals(name)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/**
 	 * Check to see if the program should continue by evaluation whether the
 	 * plugin is already updated, or shouldn't be updated
 	 */
@@ -517,107 +611,16 @@ public class Updater {
 	}
 
 	/**
-	 * Evaluate whether the version number is marked showing that it should not
-	 * be updated by this program
+	 * As the result of Updater output depends on the thread's completion, it is
+	 * necessary to wait for the thread to finish
+	 * before allowing anyone to check the result.
 	 */
-	private boolean hasTag(final String version) {
-		for (final String string : Updater.NO_UPDATE_TAG) {
-			if (version.contains(string)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	private boolean read() {
-		try {
-			final URLConnection conn = this.url.openConnection();
-			conn.setConnectTimeout(5000);
-
-			if (this.apiKey != null) {
-				conn.addRequestProperty("X-API-Key", this.apiKey);
-			}
-			conn.addRequestProperty("User-Agent", "Updater (by Gravity)");
-
-			conn.setDoOutput(true);
-
-			final BufferedReader reader = new BufferedReader(
-					new InputStreamReader(conn.getInputStream()));
-			final String response = reader.readLine();
-
-			final JSONArray array = (JSONArray) JSONValue.parse(response);
-
-			if (array.size() == 0) {
-				this.plugin.getLogger().warning(
-						"The updater could not find any files for the project id "
-								+ this.id);
-				this.result = UpdateResult.FAIL_BADID;
-				return false;
-			}
-
-			this.versionName = (String) ((JSONObject) array
-					.get(array.size() - 1)).get(Updater.TITLE_VALUE);
-			this.versionLink = (String) ((JSONObject) array
-					.get(array.size() - 1)).get(Updater.LINK_VALUE);
-			this.versionType = (String) ((JSONObject) array
-					.get(array.size() - 1)).get(Updater.TYPE_VALUE);
-			this.versionGameVersion = (String) ((JSONObject) array.get(array
-					.size() - 1)).get(Updater.VERSION_VALUE);
-
-			return true;
-		} catch (final IOException e) {
-			if (e.getMessage().contains("HTTP response code: 403")) {
-				this.plugin
-						.getLogger()
-						.warning(
-								"dev.bukkit.org rejected the API key provided in plugins/Updater/config.yml");
-				this.plugin
-						.getLogger()
-						.warning(
-								"Please double-check your configuration to ensure it is correct.");
-				this.result = UpdateResult.FAIL_APIKEY;
-			} else {
-				this.plugin
-						.getLogger()
-						.warning(
-								"The updater could not contact dev.bukkit.org for updating.");
-				this.plugin
-						.getLogger()
-						.warning(
-								"If you have not recently modified your configuration and this is the first time you are seeing this message, the site may be experiencing temporary downtime.");
-				this.result = UpdateResult.FAIL_DBO;
-			}
-			e.printStackTrace();
-			return false;
-		}
-	}
-
-	private class UpdateRunnable implements Runnable {
-
-		@Override
-		public void run() {
-			if (Updater.this.url != null) {
-				// Obtain the results of the project's file feed
-				if (Updater.this.read()) {
-					if (Updater.this.versionCheck(Updater.this.versionName)) {
-						if ((Updater.this.versionLink != null)
-								&& (Updater.this.type != UpdateType.NO_DOWNLOAD)) {
-							String name = Updater.this.file.getName();
-							// If it's a zip file, it shouldn't be downloaded as the plugin's name
-							if (Updater.this.versionLink.endsWith(".zip")) {
-								final String[] split = Updater.this.versionLink
-										.split("/");
-								name = split[split.length - 1];
-							}
-							Updater.this.saveFile(new File(Updater.this.plugin
-									.getDataFolder().getParent(),
-									Updater.this.updateFolder), name,
-									Updater.this.versionLink);
-						} else {
-							Updater.this.result = UpdateResult.UPDATE_AVAILABLE;
-						}
-					}
-				}
+	private void waitForThread() {
+		if ((this.thread != null) && this.thread.isAlive()) {
+			try {
+				this.thread.join();
+			} catch (final InterruptedException e) {
+				e.printStackTrace();
 			}
 		}
 	}

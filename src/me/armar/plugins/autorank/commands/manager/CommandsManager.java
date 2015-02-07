@@ -2,6 +2,7 @@ package me.armar.plugins.autorank.commands.manager;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -14,6 +15,7 @@ import me.armar.plugins.autorank.commands.ConvertUUIDCommand;
 import me.armar.plugins.autorank.commands.DebugCommand;
 import me.armar.plugins.autorank.commands.ForceCheckCommand;
 import me.armar.plugins.autorank.commands.GlobalCheckCommand;
+import me.armar.plugins.autorank.commands.GlobalSetCommand;
 import me.armar.plugins.autorank.commands.HelpCommand;
 import me.armar.plugins.autorank.commands.ImportCommand;
 import me.armar.plugins.autorank.commands.LeaderboardCommand;
@@ -22,11 +24,11 @@ import me.armar.plugins.autorank.commands.RemoveCommand;
 import me.armar.plugins.autorank.commands.SetCommand;
 import me.armar.plugins.autorank.commands.SyncCommand;
 import me.armar.plugins.autorank.commands.SyncStatsCommand;
+import me.armar.plugins.autorank.commands.TrackCommand;
 import me.armar.plugins.autorank.language.Lang;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 
@@ -35,6 +37,9 @@ import com.google.common.collect.Lists;
 public class CommandsManager implements TabExecutor {
 
 	private final Autorank plugin;
+
+	// Use linked hashmap so that input order is kept
+	private final LinkedHashMap<List<String>, AutorankCommand> registeredCommands = new LinkedHashMap<List<String>, AutorankCommand>();
 
 	/**
 	 * This class will manage all incoming command request.
@@ -75,9 +80,15 @@ public class CommandsManager implements TabExecutor {
 				new ForceCheckCommand(plugin));
 		registeredCommands.put(Arrays.asList("convert"),
 				new ConvertUUIDCommand(plugin));
+		registeredCommands
+				.put(Arrays.asList("track"), new TrackCommand(plugin));
+		registeredCommands.put(Arrays.asList("gset", "globalset"),
+				new GlobalSetCommand(plugin));
 	}
 
-	private final HashMap<List<String>, CommandExecutor> registeredCommands = new HashMap<List<String>, CommandExecutor>();
+	public HashMap<List<String>, AutorankCommand> getRegisteredCommands() {
+		return registeredCommands;
+	}
 
 	public boolean hasPermission(final String permission,
 			final CommandSender sender) {
@@ -109,7 +120,7 @@ public class CommandsManager implements TabExecutor {
 		final String action = args[0];
 
 		// Go through every list and check if that action is in there.
-		for (final Entry<List<String>, CommandExecutor> entry : registeredCommands
+		for (final Entry<List<String>, AutorankCommand> entry : registeredCommands
 				.entrySet()) {
 
 			for (final String actionString : entry.getKey()) {
@@ -137,7 +148,7 @@ public class CommandsManager implements TabExecutor {
 			return Lists.newArrayList("help", "check", "leaderboard", "set",
 					"add", "remove", "debug", "reload", "import", "archive",
 					"gcheck", "complete", "sync", "syncstats", "forcecheck",
-					"convert");
+					"convert", "track", "gset");
 		}
 
 		if (args.length > 1) {

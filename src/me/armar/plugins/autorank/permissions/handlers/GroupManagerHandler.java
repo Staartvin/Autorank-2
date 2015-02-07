@@ -23,25 +23,12 @@ import org.bukkit.plugin.PluginManager;
  */
 public class GroupManagerHandler implements PermissionsHandler {
 
-	private final Autorank plugin;
 	private GroupManager groupManager;
+	private final Autorank plugin;
 
 	public GroupManagerHandler(final Autorank plugin) {
 		this.plugin = plugin;
 		setupGroupManager();
-	}
-
-	public boolean setupGroupManager() {
-		final PluginManager pluginManager = plugin.getServer()
-				.getPluginManager();
-		final Plugin GMplugin = pluginManager.getPlugin("GroupManager");
-
-		if (GMplugin != null && GMplugin.isEnabled()) {
-			groupManager = (GroupManager) GMplugin;
-
-		}
-
-		return groupManager != null;
 	}
 
 	public String getGroup(final Player player) {
@@ -53,20 +40,26 @@ public class GroupManagerHandler implements PermissionsHandler {
 		return handler.getGroup(player.getName());
 	}
 
-	public boolean setGroup(final Player player, final String group,
-			final String world) {
-		OverloadedWorldHolder handler;
+	@Override
+	public String[] getGroups() {
+		final List<String> groups = new ArrayList<String>();
 
-		if (world != null) {
-			handler = groupManager.getWorldsHolder().getWorldData(world);
-		} else {
-			handler = groupManager.getWorldsHolder().getWorldData(player);
+		for (final World world : plugin.getServer().getWorlds()) {
+			final String worldName = world.getName();
+			final Collection<Group> worldGroup = groupManager.getWorldsHolder()
+					.getWorldData(worldName).getGroupList();
+			final List<Group> list = new ArrayList<Group>(worldGroup);
+			for (final Group group : list) {
+				groups.add(group.getName());
+			}
 		}
-		if (handler == null) {
-			return false;
+		final String[] groupArray = new String[groups.size()];
+
+		// Repopulate the empty array.
+		for (int i = 0; i < groups.size(); i++) {
+			groupArray[i] = groups.get(i);
 		}
-		handler.getUser(player.getName()).setGroup(handler.getGroup(group));
-		return true;
+		return groupArray;
 	}
 
 	@Override
@@ -101,6 +94,12 @@ public class GroupManagerHandler implements PermissionsHandler {
 		return handler.getUserSuffix(player.getName());
 	}
 
+	@Override
+	public String[] getWorldGroups(final Player player, final String world) {
+		return groupManager.getWorldsHolder().getWorldPermissions(world)
+				.getGroups(player.getName());
+	}
+
 	public boolean hasPermission(final Player player, final String node) {
 		final AnjoPermissionsHandler handler = groupManager.getWorldsHolder()
 				.getWorldPermissions(player);
@@ -117,31 +116,32 @@ public class GroupManagerHandler implements PermissionsHandler {
 
 	}
 
-	@Override
-	public String[] getGroups() {
-		final List<String> groups = new ArrayList<String>();
+	public boolean setGroup(final Player player, final String group,
+			final String world) {
+		OverloadedWorldHolder handler;
 
-		for (final World world : plugin.getServer().getWorlds()) {
-			final String worldName = world.getName();
-			final Collection<Group> worldGroup = groupManager.getWorldsHolder()
-					.getWorldData(worldName).getGroupList();
-			final List<Group> list = new ArrayList<Group>(worldGroup);
-			for (final Group group : list) {
-				groups.add(group.getName());
-			}
+		if (world != null) {
+			handler = groupManager.getWorldsHolder().getWorldData(world);
+		} else {
+			handler = groupManager.getWorldsHolder().getWorldData(player);
 		}
-		final String[] groupArray = new String[groups.size()];
-
-		// Repopulate the empty array.
-		for (int i = 0; i < groups.size(); i++) {
-			groupArray[i] = groups.get(i);
+		if (handler == null) {
+			return false;
 		}
-		return groupArray;
+		handler.getUser(player.getName()).setGroup(handler.getGroup(group));
+		return true;
 	}
 
-	@Override
-	public String[] getWorldGroups(final Player player, final String world) {
-		return groupManager.getWorldsHolder().getWorldPermissions(world)
-				.getGroups(player.getName());
+	public boolean setupGroupManager() {
+		final PluginManager pluginManager = plugin.getServer()
+				.getPluginManager();
+		final Plugin GMplugin = pluginManager.getPlugin("GroupManager");
+
+		if (GMplugin != null && GMplugin.isEnabled()) {
+			groupManager = (GroupManager) GMplugin;
+
+		}
+
+		return groupManager != null;
 	}
 }

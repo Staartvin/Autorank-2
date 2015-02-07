@@ -1,21 +1,28 @@
 package me.armar.plugins.autorank.commands;
 
+import java.util.UUID;
+
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
+import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class GlobalCheckCommand implements CommandExecutor {
+public class GlobalCheckCommand extends AutorankCommand {
 
 	private final Autorank plugin;
 
 	public GlobalCheckCommand(final Autorank instance) {
+		this.setUsage("/ar gcheck [player]");
+		this.setDesc("Check [player]'s global playtime.");
+		this.setPermission("autorank.check");
+
 		plugin = instance;
 	}
 
@@ -37,7 +44,6 @@ public class GlobalCheckCommand implements CommandExecutor {
 				return true;
 			}
 
-			@SuppressWarnings("deprecation")
 			final Player player = plugin.getServer().getPlayer(args[1]);
 			if (player == null) {
 				sender.sendMessage(Lang.PLAYER_NOT_ONLINE
@@ -50,8 +56,10 @@ public class GlobalCheckCommand implements CommandExecutor {
 					return true;
 				}
 
-				final int minutes = plugin.getPlaytimes().getGlobalTime(
-						player.getUniqueId());
+				final UUID uuid = UUIDManager.getUUIDFromPlayer(player
+						.getName());
+
+				final int minutes = plugin.getPlaytimes().getGlobalTime(uuid);
 
 				if (minutes < 0) {
 					sender.sendMessage(Lang.PLAYER_IS_INVALID
@@ -81,12 +89,15 @@ public class GlobalCheckCommand implements CommandExecutor {
 				return true;
 			}
 			final Player player = (Player) sender;
+
+			final UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
+
 			AutorankTools.sendColoredMessage(
 					sender,
 					"You have played for "
 							+ AutorankTools.timeToString(plugin.getPlaytimes()
-									.getGlobalTime(player.getUniqueId()),
-									Time.MINUTES) + " across all servers.");
+									.getGlobalTime(uuid), Time.MINUTES)
+							+ " across all servers.");
 
 		} else {
 			AutorankTools.sendColoredMessage(sender,

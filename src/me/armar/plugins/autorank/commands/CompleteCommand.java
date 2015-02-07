@@ -5,23 +5,29 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.playerchecker.RankChange;
 import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
+import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class CompleteCommand implements CommandExecutor {
+public class CompleteCommand extends AutorankCommand {
 
 	private final Autorank plugin;
 
 	public CompleteCommand(final Autorank instance) {
+		this.setUsage("/ar complete #");
+		this.setDesc("Complete a requirement at this moment");
+		this.setPermission("autorank.complete");
+
 		plugin = instance;
 	}
 
@@ -69,25 +75,27 @@ public class CompleteCommand implements CommandExecutor {
 			return true;
 		}
 
+		final UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
+
 		// Check if the latest known group is the current group. Otherwise, reset progress
 		final String currentGroup = plugin.getPermPlugHandler()
 				.getPermissionPlugin().getPlayerGroups(player)[0];
 		String latestKnownGroup = plugin.getRequirementHandler()
-				.getLastKnownGroup(player.getUniqueId());
+				.getLastKnownGroup(uuid);
 
 		if (latestKnownGroup == null) {
-			plugin.getRequirementHandler().setLastKnownGroup(
-					player.getUniqueId(), currentGroup);
+			plugin.getRequirementHandler()
+					.setLastKnownGroup(uuid, currentGroup);
 
 			latestKnownGroup = currentGroup;
 		}
 
 		if (!latestKnownGroup.equalsIgnoreCase(currentGroup)) {
 			// Reset progress and update latest known group
-			plugin.getRequirementHandler().setPlayerProgress(
-					player.getUniqueId(), new ArrayList<Integer>());
-			plugin.getRequirementHandler().setLastKnownGroup(
-					player.getUniqueId(), currentGroup);
+			plugin.getRequirementHandler().setPlayerProgress(uuid,
+					new ArrayList<Integer>());
+			plugin.getRequirementHandler()
+					.setLastKnownGroup(uuid, currentGroup);
 		}
 
 		final Map<RankChange, List<Requirement>> failed = plugin
@@ -119,7 +127,7 @@ public class CompleteCommand implements CommandExecutor {
 				final Requirement req = requirements.get((completionID - 1));
 
 				if (plugin.getRequirementHandler().hasCompletedRequirement(
-						(completionID - 1), player.getUniqueId())) {
+						(completionID - 1), uuid)) {
 					player.sendMessage(ChatColor.RED
 							+ Lang.ALREADY_COMPLETED_REQUIREMENT
 									.getConfigValue());
@@ -137,8 +145,8 @@ public class CompleteCommand implements CommandExecutor {
 					plugin.getRequirementHandler().runResults(req, player);
 
 					// Log that a player has passed this requirement
-					plugin.getRequirementHandler().addPlayerProgress(
-							player.getUniqueId(), (completionID - 1));
+					plugin.getRequirementHandler().addPlayerProgress(uuid,
+							(completionID - 1));
 
 				} else {
 					// player does not meet requirements

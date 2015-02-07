@@ -2,96 +2,44 @@ package me.armar.plugins.autorank.commands;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.api.events.CheckCommandEvent;
+import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.playerchecker.RankChange;
 import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
+import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class CheckCommand implements CommandExecutor {
+public class CheckCommand extends AutorankCommand {
 
 	private final Autorank plugin;
 
 	public CheckCommand(final Autorank instance) {
+		this.setUsage("/ar check [player]");
+		this.setDesc("Check [player]'s status");
+		this.setPermission("autorank.check");
+
 		plugin = instance;
-	}
-
-	@Override
-	public boolean onCommand(final CommandSender sender, final Command cmd,
-			final String label, final String[] args) {
-
-		// This is a local check. It will not show you the database numbers
-		if (args.length > 1) {
-
-			if (!plugin.getCommandsManager().hasPermission(
-					"autorank.checkothers", sender)) {
-				return true;
-			}
-
-			@SuppressWarnings("deprecation")
-			final Player player = plugin.getServer().getPlayer(args[1]);
-			if (player == null) {
-
-				final int time = plugin.getPlaytimes().getTimeOfPlayer(args[1]);
-
-				if (time <= 0) {
-					sender.sendMessage(Lang.PLAYER_IS_INVALID
-							.getConfigValue(args[1]));
-					return true;
-				}
-
-				AutorankTools.sendColoredMessage(
-						sender,
-						args[1]
-								+ " has played for "
-								+ AutorankTools
-										.timeToString(time, Time.SECONDS));
-			} else {
-				if (AutorankTools.isExcluded(player)) {
-					sender.sendMessage(ChatColor.RED
-							+ Lang.PLAYER_IS_EXCLUDED.getConfigValue(args[1]));
-					return true;
-				}
-				check(sender, player);
-			}
-		} else if (sender instanceof Player) {
-			if (!plugin.getCommandsManager().hasPermission("autorank.check",
-					sender)) {
-				return true;
-			}
-
-			if (AutorankTools.isExcluded((Player) sender)) {
-				sender.sendMessage(ChatColor.RED
-						+ Lang.PLAYER_IS_EXCLUDED.getConfigValue(sender
-								.getName()));
-				return true;
-			}
-			final Player player = (Player) sender;
-			check(sender, player);
-		} else {
-			AutorankTools.sendColoredMessage(sender,
-					Lang.CANNOT_CHECK_CONSOLE.getConfigValue());
-		}
-		return true;
 	}
 
 	public void check(final CommandSender sender, final Player player) {
 		// Call event to let other plugins know that a player wants to check itself.
-
 		// Create the event here
 		final CheckCommandEvent event = new CheckCommandEvent(player);
 		// Call the event
 		Bukkit.getServer().getPluginManager().callEvent(event);
+
+		final UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
 
 		// Check if event is cancelled.
 		if (event.isCancelled())
@@ -102,20 +50,20 @@ public class CheckCommand implements CommandExecutor {
 				.getPermissionPlugin()
 				.getWorldGroups(player, player.getWorld().getName())[0];
 		String latestKnownGroup = plugin.getRequirementHandler()
-				.getLastKnownGroup(player.getUniqueId());
+				.getLastKnownGroup(uuid);
 
 		if (latestKnownGroup == null) {
-			plugin.getRequirementHandler().setLastKnownGroup(
-					player.getUniqueId(), currentGroup);
+			plugin.getRequirementHandler()
+					.setLastKnownGroup(uuid, currentGroup);
 
 			latestKnownGroup = currentGroup;
 		}
 		if (!latestKnownGroup.equalsIgnoreCase(currentGroup)) {
 			// Reset progress and update latest known group
-			plugin.getRequirementHandler().setPlayerProgress(
-					player.getUniqueId(), new ArrayList<Integer>());
-			plugin.getRequirementHandler().setLastKnownGroup(
-					player.getUniqueId(), currentGroup);
+			plugin.getRequirementHandler().setPlayerProgress(uuid,
+					new ArrayList<Integer>());
+			plugin.getRequirementHandler()
+					.setLastKnownGroup(uuid, currentGroup);
 		}
 
 		final String[] groups = plugin.getPermPlugHandler()
@@ -153,7 +101,7 @@ public class CheckCommand implements CommandExecutor {
 		boolean showReqs = false;
 
 		if (nextRankChange == null) {
-			layout = layout.replace("&reqs", "none");
+			layout = layout.replace("&reqs", "none (last rankup group)");
 		} else {
 			layout = layout.replace("&reqs", "");
 			showReqs = true;
@@ -165,7 +113,7 @@ public class CheckCommand implements CommandExecutor {
 		/*stringBuilder.append(player.getName()
 				+ Lang.HAS_PLAYED_FOR.getConfigValue(null)
 				+ AutorankTools.minutesToString(plugin.getPlaytimes()
-						.getLocalTime(player.getUniqueId())) + ", ");*/
+						.getLocalTime(uuid)) + ", ");*/
 
 		// is in
 		//stringBuilder.append(Lang.IS_IN.getConfigValue(null));
@@ -180,7 +128,7 @@ public class CheckCommand implements CommandExecutor {
 		/*String nextRankup = plugin.getPlayerChecker()
 				.getNextRankupGroup(player);
 
-		if (nextRankup == null || plugin.getRequirementHandler().getCompletedRanks(player.getUniqueId()).contains(nextRankChange.getRankFrom())) {
+		if (nextRankup == null || plugin.getRequirementHandler().getCompletedRanks(uuid).contains(nextRankChange.getRankFrom())) {
 			AutorankTools.sendColoredMessage(sender,
 					Lang.NO_NEXT_RANK.getConfigValue());
 		}*/
@@ -215,10 +163,9 @@ public class CheckCommand implements CommandExecutor {
 						continue;
 
 					if (!plugin.getRequirementHandler()
-							.hasCompletedRequirement(reqID,
-									player.getUniqueId())) {
-						plugin.getRequirementHandler().addPlayerProgress(
-								player.getUniqueId(), reqID);
+							.hasCompletedRequirement(reqID, uuid)) {
+						plugin.getRequirementHandler().addPlayerProgress(uuid,
+								reqID);
 
 						// Run results
 						plugin.getRequirementHandler().runResults(req, player);
@@ -231,8 +178,7 @@ public class CheckCommand implements CommandExecutor {
 					if (plugin.getConfigHandler().usePartialCompletion()) {
 						// Player does not meet requirements, but has done this already
 						if (plugin.getRequirementHandler()
-								.hasCompletedRequirement(reqID,
-										player.getUniqueId())) {
+								.hasCompletedRequirement(reqID, uuid)) {
 							metRequirements.add(reqID);
 							continue;
 						}
@@ -259,7 +205,7 @@ public class CheckCommand implements CommandExecutor {
 
 				// Do not auto complete
 				if (plugin.getRequirementHandler().hasCompletedRequirement(
-						reqID, player.getUniqueId())) {
+						reqID, uuid)) {
 					// Player has completed requirement already
 					metRequirements.add(reqID);
 					continue;
@@ -275,9 +221,9 @@ public class CheckCommand implements CommandExecutor {
 
 		String reqMessage2 = "";
 
-		if (plugin.getRequirementHandler().hasCompletedRank(
-				player.getUniqueId(), nextRankChange.getRankFrom())) {
-			reqMessage2 = " but has no rankup.";
+		if (plugin.getRequirementHandler().hasCompletedRank(uuid,
+				nextRankChange.getRankFrom())) {
+			reqMessage2 = " but has already completed this rankup before.";
 		} else {
 			reqMessage2 = Lang.RANKED_UP_NOW.getConfigValue();
 		}
@@ -335,5 +281,63 @@ public class CheckCommand implements CommandExecutor {
 
 		return messages;
 
+	}
+
+	@Override
+	public boolean onCommand(final CommandSender sender, final Command cmd,
+			final String label, final String[] args) {
+
+		// This is a local check. It will not show you the database numbers
+		if (args.length > 1) {
+
+			if (!plugin.getCommandsManager().hasPermission(
+					"autorank.checkothers", sender)) {
+				return true;
+			}
+
+			final Player player = plugin.getServer().getPlayer(args[1]);
+			if (player == null) {
+
+				final int time = plugin.getPlaytimes().getTimeOfPlayer(args[1]);
+
+				if (time <= 0) {
+					sender.sendMessage(Lang.PLAYER_IS_INVALID
+							.getConfigValue(args[1]));
+					return true;
+				}
+
+				AutorankTools.sendColoredMessage(
+						sender,
+						args[1]
+								+ " has played for "
+								+ AutorankTools
+										.timeToString(time, Time.SECONDS));
+			} else {
+				if (AutorankTools.isExcluded(player)) {
+					sender.sendMessage(ChatColor.RED
+							+ Lang.PLAYER_IS_EXCLUDED.getConfigValue(args[1]));
+					return true;
+				}
+				check(sender, player);
+			}
+		} else if (sender instanceof Player) {
+			if (!plugin.getCommandsManager().hasPermission("autorank.check",
+					sender)) {
+				return true;
+			}
+
+			if (AutorankTools.isExcluded((Player) sender)) {
+				sender.sendMessage(ChatColor.RED
+						+ Lang.PLAYER_IS_EXCLUDED.getConfigValue(sender
+								.getName()));
+				return true;
+			}
+			final Player player = (Player) sender;
+			check(sender, player);
+		} else {
+			AutorankTools.sendColoredMessage(sender,
+					Lang.CANNOT_CHECK_CONSOLE.getConfigValue());
+		}
+		return true;
 	}
 }

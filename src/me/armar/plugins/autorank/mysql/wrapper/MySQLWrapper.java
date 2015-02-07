@@ -27,14 +27,14 @@ import me.armar.plugins.autorank.data.SQLDataStorage;
  */
 public class MySQLWrapper {
 
-	private final Autorank plugin;
-	private SQLDataStorage mysql;
 	String hostname, username, password, database, table;
-
 	// Keeps track of when a call to the database was for this player
 	private final HashMap<UUID, Long> lastChecked = new HashMap<UUID, Long>();
 	// Stores the last received global time for a player
 	private final HashMap<UUID, Integer> lastReceivedTime = new HashMap<UUID, Integer>();
+
+	private SQLDataStorage mysql;
+	private final Autorank plugin;
 
 	public MySQLWrapper(final Autorank instance) {
 		plugin = instance;
@@ -46,56 +46,29 @@ public class MySQLWrapper {
 		}
 	}
 
-	public void setupTable() {
-		// Check if connection is still alive
-		if (mysql.isClosed()) {
-			mysql.connect();
+	/**
+	 * Get the cached value of the global time.
+	 * 
+	 * @param uuid UUID to get the time for
+	 * @return cached global time or -1 if nothing was cached.
+	 */
+	public Integer getCachedGlobalTime(final UUID uuid) {
+		if (!lastReceivedTime.containsKey(uuid)) {
+			return -1;
 		}
 
-		final String statement = "CREATE TABLE  IF NOT EXISTS " + table + " "
-				+ "(uuid VARCHAR(255) not NULL, " + " time INTEGER not NULL, "
-				+ " modified TIMESTAMP not NULL, " + " PRIMARY KEY ( uuid ))";
+		final int cached = lastReceivedTime.get(uuid);
 
-		// Run async to prevent load issues.
-		plugin.getServer().getScheduler()
-				.runTaskAsynchronously(plugin, new Runnable() {
+		// Weird cached
+		if (cached <= 0) {
+			return -1;
+		}
 
-					@Override
-					public void run() {
-						mysql.execute(statement);
-					}
-				});
-
+		return cached;
 	}
 
-	public void sqlSetup() {
-
-		final ConfigHandler configHandler = plugin.getConfigHandler();
-		/*final ConfigurationSection s = config.getConfigurationSection("sql");
-
-		if (s == null) {
-			plugin.getLogger().warning(
-					"MySQL options are missing in the advancedconfig.yml!");
-			return;
-		}*/
-
-		if (configHandler.useMySQL()) {
-
-			hostname = configHandler.getMySQLSettings(MySQLOptions.HOSTNAME);
-			username = configHandler.getMySQLSettings(MySQLOptions.USERNAME);
-			password = configHandler.getMySQLSettings(MySQLOptions.PASSWORD);
-			database = configHandler.getMySQLSettings(MySQLOptions.DATABASE);
-			table = configHandler.getMySQLSettings(MySQLOptions.TABLE);
-
-			mysql = new SQLDataStorage(hostname, username, password, database);
-			if (!mysql.connect()) {
-				mysql = null;
-				plugin.getLogger().severe("Could not connect to " + hostname);
-			} else {
-				plugin.getLogger().info(
-						"Successfully established connection to " + hostname);
-			}
-		}
+	public String getDatabaseName() {
+		return database;
 	}
 
 	/**
@@ -154,6 +127,10 @@ public class MySQLWrapper {
 		return value;
 	}
 
+	public boolean isMySQLEnabled() {
+		return mysql != null;
+	}
+
 	public boolean isOutOfDate(final UUID uuid) {
 		// Checks whether the last check was five minutes ago.
 		// When the last check was more than five minutes ago,
@@ -179,27 +156,6 @@ public class MySQLWrapper {
 		} else {
 			return false;
 		}
-	}
-
-	/**
-	 * Get the cached value of the global time.
-	 * 
-	 * @param uuid UUID to get the time for
-	 * @return cached global time or -1 if nothing was cached.
-	 */
-	public Integer getCachedGlobalTime(final UUID uuid) {
-		if (!lastReceivedTime.containsKey(uuid)) {
-			return -1;
-		}
-
-		final int cached = lastReceivedTime.get(uuid);
-
-		// Weird cached
-		if (cached <= 0) {
-			return -1;
-		}
-
-		return cached;
 	}
 
 	/**
@@ -232,13 +188,61 @@ public class MySQLWrapper {
 						mysql.execute(statement);
 					}
 				});
+
+		// Update cache records
+		this.lastChecked.put(uuid, System.currentTimeMillis());
+		this.lastReceivedTime.put(uuid, time);
 	}
 
-	public boolean isMySQLEnabled() {
-		return mysql != null;
+	public void setupTable() {
+		// Check if connection is still alive
+		if (mysql.isClosed()) {
+			mysql.connect();
+		}
+
+		final String statement = "CREATE TABLE  IF NOT EXISTS " + table + " "
+				+ "(uuid VARCHAR(255) not NULL, " + " time INTEGER not NULL, "
+				+ " modified TIMESTAMP not NULL, " + " PRIMARY KEY ( uuid ))";
+
+		// Run async to prevent load issues.
+		plugin.getServer().getScheduler()
+				.runTaskAsynchronously(plugin, new Runnable() {
+
+					@Override
+					public void run() {
+						mysql.execute(statement);
+					}
+				});
+
 	}
 
-	public String getDatabaseName() {
-		return database;
+	public void sqlSetup() {
+
+		final ConfigHandler configHandler = plugin.getConfigHandler();
+		/*final ConfigurationSection s = config.getConfigurationSection("sql");
+
+		if (s == null) {
+			plugin.getLogger().warning(
+					"MySQL options are missing in the advancedconfig.yml!");
+			return;
+		}*/
+
+		if (configHandler.useMySQL()) {
+
+			hostname = configHandler.getMySQLSettings(MySQLOptions.HOSTNAME);
+			username = configHandler.getMySQLSettings(MySQLOptions.USERNAME);
+			password = configHandler.getMySQLSettings(MySQLOptions.PASSWORD);
+			database = configHandler.getMySQLSettings(MySQLOptions.DATABASE);
+			table = configHandler.getMySQLSettings(MySQLOptions.TABLE);
+
+			mysql = new SQLDataStorage(hostname, username, password, database);
+			if (!mysql.connect()) {
+				mysql = null;
+				plugin.getLogger().severe("Could not connect to " + hostname);
+			} else {
+				plugin.getLogger().info(
+						"Successfully established connection to " + hostname);
+			}
+		}
 	}
 }

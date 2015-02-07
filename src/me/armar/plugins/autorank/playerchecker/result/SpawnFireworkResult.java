@@ -11,28 +11,11 @@ import org.bukkit.inventory.meta.FireworkMeta;
 
 public class SpawnFireworkResult extends Result {
 
+	private Color colour = Color.ORANGE;
 	private Location location;
 	private int power = 1;
-	private Type type = Type.BALL;
-	private Color colour = Color.ORANGE;
 	private String target = "player";
-
-	@Override
-	public boolean setOptions(final String[] options) {
-		// target;power;type;R;G;B
-
-		if (options.length < 6)
-			return false;
-
-		target = options[0];
-		power = Integer.parseInt(options[1]);
-		type = Type.valueOf(options[2].toUpperCase().replace(" ", "_"));
-		colour = Color.fromRGB(Integer.parseInt(options[3]),
-				Integer.parseInt(options[4]), Integer.parseInt(options[5]));
-		// Colour is RGB code
-
-		return target != null;
-	}
+	private Type type = Type.BALL;
 
 	@Override
 	public boolean applyResult(final Player player) {
@@ -55,6 +38,23 @@ public class SpawnFireworkResult extends Result {
 
 		player.teleport(location);
 		return location != null;
+	}
+
+	@Override
+	public boolean setOptions(final String[] options) {
+		// target;power;type;R;G;B
+
+		if (options.length < 6)
+			return false;
+
+		target = options[0];
+		power = Integer.parseInt(options[1]);
+		type = Type.valueOf(options[2].toUpperCase().replace(" ", "_"));
+		colour = Color.fromRGB(Integer.parseInt(options[3]),
+				Integer.parseInt(options[4]), Integer.parseInt(options[5]));
+		// Colour is RGB code
+
+		return target != null;
 	}
 
 }

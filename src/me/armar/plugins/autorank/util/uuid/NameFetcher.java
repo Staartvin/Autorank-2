@@ -14,6 +14,7 @@ import java.util.concurrent.Callable;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import com.google.common.collect.ImmutableList;
 
@@ -27,7 +28,24 @@ import com.google.common.collect.ImmutableList;
  */
 public class NameFetcher implements Callable<Map<UUID, String>> {
 	private static final String PROFILE_URL = "https://sessionserver.mojang.com/session/minecraft/profile/";
+
+	public static String fromStream(final InputStream in) throws IOException {
+		final BufferedReader reader = new BufferedReader(new InputStreamReader(
+				in));
+		final StringBuilder out = new StringBuilder();
+		final String newLine = System.getProperty("line.separator");
+		String line;
+
+		while ((line = reader.readLine()) != null) {
+
+			out.append(line);
+			out.append(newLine);
+		}
+		return out.toString();
+	}
+
 	private final JSONParser jsonParser = new JSONParser();
+
 	private final List<UUID> uuids;
 
 	public NameFetcher(final List<UUID> uuids) {
@@ -45,60 +63,65 @@ public class NameFetcher implements Callable<Map<UUID, String>> {
 					PROFILE_URL + uuid.toString().replace("-", ""))
 					.openConnection();
 
-			JSONObject response;
+			JSONObject response = null;
 
 			String name = null;
+
+			String fromStream = null;
+			// Ping code 204 == No content (Request was sent, but UUID was invalid)
+			//final int pingCode = connection.getResponseCode();
+
+			/*if (pingCode == 204) {
+				Bukkit.getLogger().warning("Tried to get UUID: " + uuid.toString() + " but this invalid.");
+				continue;
+			}*/
+
+			/*if (pingCode == 204) {
+				System.out.print("Got 204 code - no content.");
+				continue;
+			}*/
+
+			//System.out.print("Ping: " + pingCode);
 
 			try {
 				response = (JSONObject) jsonParser.parse(new InputStreamReader(
 						connection.getInputStream()));
 
 				name = (String) response.get("name");
-				if (name == null) {
-					continue;
-				}
-				final String cause = (String) response.get("cause");
-				final String errorMessage = (String) response
-						.get("errorMessage");
-				if (cause != null && cause.length() > 0) {
-					throw new IllegalStateException(errorMessage);
-				}
-			} catch (final Exception e) {
+
+			} catch (final ParseException e) {
 				// Try converting the stream to a string and removing all the spaces. 
-				String fromStream = fromStream(connection.getInputStream()).replaceAll(" ", "");
+				fromStream = fromStream(connection.getInputStream())
+						.replaceAll(" ", "");
 
 				// Parse again
 				response = (JSONObject) jsonParser.parse(fromStream);
 
 				// Should work now!
 				name = (String) response.get("name");
-				
+
 				if (name == null) {
-					throw new Exception("Could not parse uuid '" + uuid.toString() + "' to name!");
+					System.out.print("[Autorank] Could not parse uuid '"
+							+ uuid.toString() + "' to name!");
+					continue;
 				}
+
 				final String cause = (String) response.get("cause");
 				final String errorMessage = (String) response
 						.get("errorMessage");
 				if (cause != null && cause.length() > 0) {
 					throw new IllegalStateException(errorMessage);
 				}
+			} finally {
+				if (name == null || response == null) {
+					System.out
+							.print("[Autorank] Could not find name of account with uuid: '"
+									+ uuid.toString() + "'");
+				}
 			}
 
 			uuidStringMap.put(uuid, name);
 		}
 		return uuidStringMap;
-	}
-
-	public static String fromStream(final InputStream in) throws IOException {
-		final BufferedReader reader = new BufferedReader(new InputStreamReader(
-				in));
-		final StringBuilder out = new StringBuilder();
-		final String newLine = System.getProperty("line.separator");
-		String line;
-		while ((line = reader.readLine()) != null) {
-			out.append(line);
-			out.append(newLine);
-		}
-		return out.toString();
 	}
 }

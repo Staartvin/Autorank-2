@@ -1,6 +1,7 @@
 package me.armar.plugins.autorank.util;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,10 +20,159 @@ import org.bukkit.entity.Player;
 
 public class AutorankTools {
 
-	static List<String> reqTypes = new ArrayList<String>();
-
 	public static enum Time {
-		SECONDS, MINUTES, HOURS, DAYS
+		DAYS, HOURS, MINUTES, SECONDS
+	}
+
+	private static List<String> reqTypes = new ArrayList<String>();
+
+	/**
+	 * This will return the correct type of the requirement.
+	 * As admins might want to use multiple requirements of the same type, they
+	 * only have to specify the name of it with a unique identifier.
+	 * E.g. time1, time2 or exp1, exp2, etc.
+	 * 
+	 * @param oldName Name of the requirement to search for.
+	 * @return correct requirement name or old name if none was found.
+	 */
+	public static String getCorrectName(String oldName) {
+
+		// Remove all numbers from string
+		oldName = oldName.replaceAll("[^a-zA-Z\\s]", "").trim();
+
+		for (final String type : reqTypes) {
+			if (!oldName.contains(type)) {
+				continue;
+			}
+			// Contains word
+
+			if (type.length() == oldName.length()) {
+				//System.out.print(type + " & " + oldName + " are equal.");
+
+				return type;
+			}
+
+			// Did not match correctly, search for next word.
+			continue;
+
+		}
+
+		//System.out.print("Returned: null");
+		return null;
+	}
+
+	/**
+	 * Elaborate method to check whether a player is excluded from ranking.
+	 * <p>
+	 * When a player has a wildcard permission but is an OP, it will return
+	 * false; When a player has a wildcard permission but is not an OP, it will
+	 * return true; When a player only has autorank.exclude, it will return
+	 * true;
+	 * 
+	 * @param player Player to check for
+	 * @return whether a player is excluded from ranking or not.
+	 */
+	public static boolean isExcluded(final Player player) {
+		if (player.hasPermission("autorank.askdjaslkdj")) {
+			// Op's have all permissions, but if he is a OP, he isn't excluded
+			if (player.isOp()) {
+				return false;
+			}
+
+			// Player uses wildcard permission, so excluded
+			return true;
+		}
+
+		if (player.hasPermission("autorank.exclude")) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Register requirement name so it can be used to get the correct name.
+	 * If a requirement is not passed through this method, it will not show up
+	 * in {@link #getCorrectName(String)}.
+	 * 
+	 * @param type Requirement name
+	 */
+	public static void registerRequirement(final String type) {
+		if (!reqTypes.contains(type)) {
+			reqTypes.add(type);
+		}
+	}
+
+	public static void sendColoredMessage(final CommandSender sender,
+			final String msg) {
+		sender.sendMessage(ChatColor.translateAlternateColorCodes('&',
+				ChatColor.GREEN + msg));
+	}
+
+	public static void sendColoredMessage(final Player player, final String msg) {
+		player.sendMessage(ChatColor.translateAlternateColorCodes('&',
+				ChatColor.GREEN + msg));
+	}
+
+	public static double stringtoDouble(final String string)
+			throws NumberFormatException {
+		double res = 0;
+
+		if (string != null)
+
+			res = Double.parseDouble(string);
+
+		return res;
+	}
+
+	public static int stringtoInt(final String string)
+			throws NumberFormatException {
+		int res = 0;
+
+		if (string != null)
+			res = Integer.parseInt(string);
+
+		return res;
+	}
+
+	/**
+	 * Convert a string to an integer.
+	 * 
+	 * @param string input; this must be in the format '10d 14h 15m'
+	 * @param time the time type of the output
+	 * @return the integer representing the number of seconds/minutes/hours/days
+	 */
+	public static int stringToTime(String string, final Time time) {
+		int res = 0;
+
+		string = string.trim();
+
+		final Pattern pattern = Pattern
+				.compile("((\\d+)d)?((\\d+)h)?((\\d+)m)?");
+		final Matcher matcher = pattern.matcher(string);
+
+		matcher.find();
+		final String days = matcher.group(2);
+		final String hours = matcher.group(4);
+		final String minutes = matcher.group(6);
+
+		res += stringtoDouble(minutes);
+		res += stringtoDouble(hours) * 60;
+		res += stringtoDouble(days) * 60 * 24;
+
+		// Res time is in minutes
+
+		if (time.equals(Time.SECONDS)) {
+			return res * 60;
+		} else if (time.equals(Time.MINUTES)) {
+			return res;
+		} else if (time.equals(Time.HOURS)) {
+			return res / 60;
+		} else if (time.equals(Time.DAYS)) {
+			return res / 1440;
+		} else {
+			return 0;
+		}
 	}
 
 	/**
@@ -114,138 +264,55 @@ public class AutorankTools {
 
 		return b.toString();
 	}
-
-	/**
-	 * Convert a string to an integer.
-	 * 
-	 * @param string input; this must be in the format '10d 14h 15m'
-	 * @param time the time type of the output
-	 * @return the integer representing the number of seconds/minutes/hours/days
+	
+	/** 
+	 * Create a string that shows all elements of the given list
+	 * <br>The end divider is the last word used for the second last element.
+	 * <br>Example: a list with {1,2,3,4,5,6,7,8,9,0} and end divider 'or'.
+	 * <br>Would show: 1, 2, 3, 4, 5, 6, 7, 8, 9 or 0.
+	 * @param array Array to get the elements from.
+	 * @param endDivider Last word used for dividing the second last and last word.
+	 * @return string with all elements.
 	 */
-	public static int stringToTime(String string, final Time time) {
-		int res = 0;
-
-		string = string.trim();
-
-		final Pattern pattern = Pattern
-				.compile("((\\d+)d)?((\\d+)h)?((\\d+)m)?");
-		final Matcher matcher = pattern.matcher(string);
-
-		matcher.find();
-		final String days = matcher.group(2);
-		final String hours = matcher.group(4);
-		final String minutes = matcher.group(6);
-
-		res += stringtoDouble(minutes);
-		res += stringtoDouble(hours) * 60;
-		res += stringtoDouble(days) * 60 * 24;
-
-		// Res time is in minutes
-
-		if (time.equals(Time.SECONDS)) {
-			return res * 60;
-		} else if (time.equals(Time.MINUTES)) {
-			return res;
-		} else if (time.equals(Time.HOURS)) {
-			return res / 60;
-		} else if (time.equals(Time.DAYS)) {
-			return res / 1440;
-		} else {
-			return 0;
-		}
-	}
-
-	public static double stringtoDouble(final String string)
-			throws NumberFormatException {
-		double res = 0;
-
-		if (string != null)
-
-			res = Double.parseDouble(string);
-
-		return res;
-	}
-
-	public static int stringtoInt(final String string)
-			throws NumberFormatException {
-		int res = 0;
-
-		if (string != null)
-			res = Integer.parseInt(string);
-
-		return res;
-	}
-
-	public static void sendColoredMessage(final CommandSender sender,
-			final String msg) {
-		sender.sendMessage(ChatColor.translateAlternateColorCodes('&',
-				ChatColor.GREEN + msg));
-	}
-
-	public static void sendColoredMessage(final Player player, final String msg) {
-		player.sendMessage(ChatColor.translateAlternateColorCodes('&',
-				ChatColor.GREEN + msg));
-	}
-
-	/**
-	 * Elaborate method to check whether a player is excluded from ranking.
-	 * <p>
-	 * When a player has a wildcard permission but is an OP, it will return
-	 * false; When a player has a wildcard permission but is not an OP, it will
-	 * return true; When a player only has autorank.exclude, it will return
-	 * true;
-	 * 
-	 * @param player Player to check for
-	 * @return whether a player is excluded from ranking or not.
-	 */
-	public static boolean isExcluded(final Player player) {
-		if (player.hasPermission("autorank.askdjaslkdj")) {
-			// Op's have all permissions, but if he is a OP, he isn't excluded
-			if (player.isOp()) {
-				return false;
-			}
-
-			// Player uses wildcard permission, so excluded
-			return true;
-		}
-
-		if (player.hasPermission("autorank.exclude")) {
-			return true;
-		}
-
-		return false;
-	}
-
-	/**
-	 * This will return the correct type of the requirement.
-	 * As admins might want to use multiple requirements of the same type, they
-	 * only have to specify the name of it with a unique identifier.
-	 * E.g. time1, time2 or exp1, exp2, etc.
-	 * 
-	 * @param oldName Name of the requirement to search for.
-	 * @return correct requirement name or old name if none was found.
-	 */
-	public static String getCorrectName(final String oldName) {
-
-		for (final String type : reqTypes) {
-			if (oldName.contains(type)) {
-				return type;
+	public static String seperateList(Collection<?> c, String endDivider) {
+		Object[] array = c.toArray();
+		if (array.length == 1) return array[0].toString();
+		
+		if (array.length == 0) return null;
+		
+		StringBuilder string = new StringBuilder("");
+		
+		for (int i=0;i<array.length;i++) {
+			
+			if (i == (array.length - 1)) {
+				string.append(array[i]);
+			} else if (i == (array.length - 2)) {
+				// Second last
+				string.append(array[i] + " " + endDivider + " ");
+			} else {
+				string.append(array[i] + ", ");	
 			}
 		}
-
-		return null;
+		
+		return string.toString();
 	}
-
-	/**
-	 * Register requirement name so it can be used to get the correct name.
-	 * If a requirement is not passed through this method, it will not show up
-	 * in {@link #getCorrectName(String)}.
-	 * 
-	 * @param type Requirement name
-	 */
-	public static void registerRequirement(final String type) {
-		if (!reqTypes.contains(type)) {
-			reqTypes.add(type);
+	
+	public static String makeProgressString(Collection<?> c, String wordBetween, String valueBetween) {
+		Object[] array = c.toArray();
+		
+		String progress = "";
+		
+		for (int i=0;i<c.size();i++) {
+			
+			String object = array[i].toString();
+			
+			if (i==0) {
+				progress += valueBetween + " " + wordBetween + "/" + object + " " + wordBetween;
+			} else {
+				progress += "or " + valueBetween + " " + wordBetween + "/" + object + " " + wordBetween;
+			}
 		}
+		
+		return progress;
 	}
 }

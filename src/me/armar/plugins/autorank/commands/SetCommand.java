@@ -3,20 +3,25 @@ package me.armar.plugins.autorank.commands;
 import java.util.UUID;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-public class SetCommand implements CommandExecutor {
+public class SetCommand extends AutorankCommand {
 
 	private final Autorank plugin;
 
 	public SetCommand(final Autorank instance) {
+		this.setUsage("/ar set [player] [value]");
+		this.setDesc("Set [player]'s time to [value].");
+		this.setPermission("autorank.set.other");
+
 		plugin = instance;
 	}
 
@@ -42,9 +47,18 @@ public class SetCommand implements CommandExecutor {
 
 			if (!builder.toString().contains("m")
 					&& !builder.toString().contains("h")
-					&& !builder.toString().contains("d")) {
+					&& !builder.toString().contains("d")
+					&& !builder.toString().contains("s")) {
 				value = AutorankTools.stringtoInt(builder.toString().trim());
 			} else {
+
+				if (builder.toString().contains("s")) {
+					sender.sendMessage(ChatColor.RED
+							+ Lang.INVALID_FORMAT
+									.getConfigValue("(h)ours, (m)inutes or (d)ays"));
+					return true;
+				}
+
 				value = AutorankTools.stringToTime(builder.toString(),
 						Time.MINUTES);
 			}
@@ -65,6 +79,8 @@ public class SetCommand implements CommandExecutor {
 			}
 
 			final UUID uuid = UUIDManager.getUUIDFromPlayer(args[1]);
+
+			//System.out.print("Name of UUID: " + UUIDManager.getPlayerFromUUID(UUID.fromString("fc914960-7aa1-3ae2-a3ee-70f5ac1e81e5")));
 
 			if (uuid == null) {
 				sender.sendMessage(Lang.UNKNOWN_PLAYER.getConfigValue(args[1]));

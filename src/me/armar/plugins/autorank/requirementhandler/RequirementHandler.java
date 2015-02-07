@@ -33,93 +33,32 @@ import org.bukkit.entity.Player;
  */
 public class RequirementHandler {
 
-	private final Autorank plugin;
 	private FileConfiguration config;
 	private File configFile;
-
 	private boolean convertingData = false;
+
+	private final Autorank plugin;
 
 	public RequirementHandler(final Autorank instance) {
 		this.plugin = instance;
 
 		// Start requirement saver task
-		// Run save task every minute
-		plugin.getServer()
-				.getScheduler()
-				.runTaskTimerAsynchronously(plugin,
-						new RequirementHandlerSaver(this), 1200, 1200);
+		//Run save task every 2 minutes
+		plugin.getServer().getScheduler()
+				.runTaskTimerAsynchronously(plugin, new Runnable() {
+					@Override
+					public void run() {
+						saveConfig();
+					}
+				}, 1200, 2400);
 	}
 
-	public void createNewFile() {
-		reloadConfig();
-		saveConfig();
-		loadConfig();
+	public void addCompletedRanks(final UUID uuid, final String rank) {
+		final List<String> completed = getCompletedRanks(uuid);
 
-		// Convert old format to new UUID storage format
-		//convertNamesToUUIDs();
+		completed.add(rank);
 
-		plugin.getLogger().info("Loaded playerdata.");
-	}
-
-	@SuppressWarnings("deprecation")
-	public void reloadConfig() {
-		if (configFile == null) {
-			configFile = new File(plugin.getDataFolder() + "/playerdata",
-					"playerdata.yml");
-		}
-		config = YamlConfiguration.loadConfiguration(configFile);
-
-		// Look for defaults in the jar
-		final InputStream defConfigStream = plugin
-				.getResource("playerdata.yml");
-		if (defConfigStream != null) {
-			final YamlConfiguration defConfig = YamlConfiguration
-					.loadConfiguration(defConfigStream);
-			config.setDefaults(defConfig);
-		}
-	}
-
-	public FileConfiguration getConfig() {
-		if (config == null) {
-			this.reloadConfig();
-		}
-		return config;
-	}
-
-	public void saveConfig() {
-		if (config == null || configFile == null) {
-			return;
-		}
-		try {
-			getConfig().save(configFile);
-		} catch (final IOException ex) {
-			plugin.getLogger().log(Level.SEVERE,
-					"Could not save config to " + configFile, ex);
-		}
-	}
-
-	public void loadConfig() {
-
-		config.options().header(
-				"This file saves all progress of players."
-						+ "\nIt stores their progress of /ar complete");
-
-		config.options().copyDefaults(true);
-		saveConfig();
-	}
-
-	public void setPlayerProgress(final UUID uuid, final List<Integer> progress) {
-		//UUID uuid = UUIDManager.getUUIDFromPlayer(playerName);
-
-		config.set(uuid.toString() + ".progress", progress);
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<Integer> getProgress(final UUID uuid) {
-		//UUID uuid = UUIDManager.getUUIDFromPlayer(playerName);
-
-		return (List<Integer>) config.getList(uuid.toString() + ".progress",
-				new ArrayList<Integer>());
+		setCompletedRanks(uuid, completed);
 	}
 
 	public void addPlayerProgress(final UUID uuid, final int reqID) {
@@ -131,69 +70,6 @@ public class RequirementHandler {
 		progress.add(reqID);
 
 		setPlayerProgress(uuid, progress);
-	}
-
-	public String getLastKnownGroup(final UUID uuid) {
-		//UUID uuid = UUIDManager.getUUIDFromPlayer(playerName);
-
-		return config.getString(uuid.toString() + ".last group");
-	}
-
-	public void setLastKnownGroup(final UUID uuid, final String group) {
-		//UUID uuid = UUIDManager.getUUIDFromPlayer(playerName);
-		config.set(uuid.toString() + ".last group", group);
-	}
-
-	public boolean hasCompletedRequirement(final int reqID, final UUID uuid) {
-		final List<Integer> progress = getProgress(uuid);
-
-		return progress.contains(reqID);
-	}
-
-	public void runResults(final Requirement req, final Player player) {
-
-		// Fire event so it can be cancelled
-		// Create the event here
-		final RequirementCompleteEvent event = new RequirementCompleteEvent(
-				player, req);
-		// Call the event
-		Bukkit.getServer().getPluginManager().callEvent(event);
-
-		// Check if event is cancelled.
-		if (event.isCancelled())
-			return;
-
-		// Run results
-		final List<Result> results = req.getResults();
-
-		// Apply result
-		for (final Result realResult : results) {
-			realResult.applyResult(player);
-		}
-	}
-
-	public void addCompletedRanks(final UUID uuid, final String rank) {
-		final List<String> completed = getCompletedRanks(uuid);
-
-		completed.add(rank);
-
-		setCompletedRanks(uuid, completed);
-	}
-
-	public void setCompletedRanks(final UUID uuid,
-			final List<String> completedRanks) {
-		config.set(uuid.toString() + ".completed ranks", completedRanks);
-	}
-
-	public boolean hasCompletedRank(final UUID uuid, final String rank) {
-		return getCompletedRanks(uuid).contains(rank);
-	}
-
-	public List<String> getCompletedRanks(final UUID uuid) {
-		final List<String> completed = config.getStringList(uuid.toString()
-				+ ".completed ranks");
-
-		return completed;
 	}
 
 	public void convertNamesToUUIDs() {
@@ -211,6 +87,10 @@ public class RequirementHandler {
 
 					@Override
 					public void run() {
+						// Backup beforehand
+						plugin.getBackupManager().backupFile(
+								"/playerdata/playerdata.yml");
+
 						for (final String name : getConfig().getKeys(false)) {
 
 							// Probably UUID because names don't have dashes.
@@ -241,5 +121,141 @@ public class RequirementHandler {
 								"Converted playerdata.yml to UUID format");
 					}
 				});
+	}
+
+	public void createNewFile() {
+		reloadConfig();
+		saveConfig();
+		loadConfig();
+
+		// Convert old format to new UUID storage format
+		//convertNamesToUUIDs();
+
+		plugin.getLogger().info("Loaded playerdata.");
+	}
+
+	private List<String> getCompletedRanks(final UUID uuid) {
+		final List<String> completed = config.getStringList(uuid.toString()
+				+ ".completed ranks");
+
+		return completed;
+	}
+
+	public FileConfiguration getConfig() {
+		if (config == null) {
+			this.reloadConfig();
+		}
+		return config;
+	}
+
+	public String getLastKnownGroup(final UUID uuid) {
+		//UUID uuid = UUIDManager.getUUIDFromPlayer(playerName);
+
+		plugin.debugMessage("Config - Last known group: " + config);
+		plugin.debugMessage("Config - Last known group (uuid): "
+				+ uuid.toString());
+		return config.getString(uuid.toString() + ".last group");
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Integer> getProgress(final UUID uuid) {
+		//UUID uuid = UUIDManager.getUUIDFromPlayer(playerName);
+
+		return (List<Integer>) config.getList(uuid.toString() + ".progress",
+				new ArrayList<Integer>());
+	}
+
+	public boolean hasCompletedRank(final UUID uuid, final String rank) {
+		// If player can rank up forever on the same rank, we will always return false.
+		// Fixed issue #134
+		if (plugin.getConfigHandler().allowInfiniteRanking()) {
+			return false;
+		}
+
+		return getCompletedRanks(uuid).contains(rank);
+	}
+
+	public boolean hasCompletedRequirement(final int reqID, final UUID uuid) {
+		final List<Integer> progress = getProgress(uuid);
+
+		return progress.contains(reqID);
+	}
+
+	public void loadConfig() {
+
+		config.options().header(
+				"This file saves all progress of players."
+						+ "\nIt stores their progress of /ar complete");
+
+		config.options().copyDefaults(true);
+		saveConfig();
+	}
+
+	@SuppressWarnings("deprecation")
+	public void reloadConfig() {
+		if (configFile == null) {
+			configFile = new File(plugin.getDataFolder() + "/playerdata",
+					"playerdata.yml");
+		}
+		config = YamlConfiguration.loadConfiguration(configFile);
+
+		// Look for defaults in the jar
+		final InputStream defConfigStream = plugin
+				.getResource("playerdata.yml");
+		if (defConfigStream != null) {
+			final YamlConfiguration defConfig = YamlConfiguration
+					.loadConfiguration(defConfigStream);
+			config.setDefaults(defConfig);
+		}
+	}
+
+	public void runResults(final Requirement req, final Player player) {
+
+		// Fire event so it can be cancelled
+		// Create the event here
+		final RequirementCompleteEvent event = new RequirementCompleteEvent(
+				player, req);
+		// Call the event
+		Bukkit.getServer().getPluginManager().callEvent(event);
+
+		// Check if event is cancelled.
+		if (event.isCancelled())
+			return;
+
+		// Run results
+		final List<Result> results = req.getResults();
+
+		// Apply result
+		for (final Result realResult : results) {
+			realResult.applyResult(player);
+		}
+	}
+
+	public void saveConfig() {
+		if (config == null || configFile == null) {
+			return;
+		}
+		try {
+			getConfig().save(configFile);
+		} catch (final IOException ex) {
+			plugin.getLogger().log(Level.SEVERE,
+					"Could not save config to " + configFile, ex);
+		}
+	}
+
+	public void setCompletedRanks(final UUID uuid,
+			final List<String> completedRanks) {
+		config.set(uuid.toString() + ".completed ranks", completedRanks);
+	}
+
+	public void setLastKnownGroup(final UUID uuid, final String group) {
+		//UUID uuid = UUIDManager.getUUIDFromPlayer(playerName);
+		config.set(uuid.toString() + ".last group", group);
+	}
+
+	public void setPlayerProgress(final UUID uuid, final List<Integer> progress) {
+		//UUID uuid = UUIDManager.getUUIDFromPlayer(playerName);
+
+		config.set(uuid.toString() + ".progress", progress);
 	}
 }

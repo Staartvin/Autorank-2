@@ -10,6 +10,33 @@ public class MoneyRequirement extends Requirement {
 	private double minMoney = 999999999;
 
 	@Override
+	public String getDescription() {
+		return Lang.MONEY_REQUIREMENT.getConfigValue(new String[] { minMoney
+				+ " " + VaultHandler.economy.currencyNamePlural() });
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public String getProgress(final Player player) {
+		//UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
+
+		String progress = "";
+		progress = progress.concat(VaultHandler.economy.getBalance(player
+				.getName()) + "/" + minMoney);
+		return progress;
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public boolean meetsRequirement(final Player player) {
+
+		//UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
+
+		return VaultHandler.economy != null
+				&& VaultHandler.economy.has(player.getName(), minMoney);
+	}
+
+	@Override
 	public boolean setOptions(final String[] options) {
 		try {
 			minMoney = Integer.parseInt(options[0]);
@@ -18,29 +45,5 @@ public class MoneyRequirement extends Requirement {
 			minMoney = 999999999;
 			return false;
 		}
-	}
-
-	@Override
-	public boolean meetsRequirement(final Player player) {
-
-		return VaultHandler.economy != null
-				&& VaultHandler.economy.has(this.getAutorank().getServer()
-						.getOfflinePlayer(player.getUniqueId()), minMoney);
-	}
-
-	@Override
-	public String getDescription() {
-		return Lang.MONEY_REQUIREMENT.getConfigValue(new String[] { minMoney
-				+ " " + VaultHandler.economy.currencyNamePlural() });
-	}
-
-	@Override
-	public String getProgress(final Player player) {
-		String progress = "";
-		progress = progress.concat(VaultHandler.economy.getBalance(this
-				.getAutorank().getServer()
-				.getOfflinePlayer(player.getUniqueId()))
-				+ "/" + minMoney);
-		return progress;
 	}
 }

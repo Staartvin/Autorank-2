@@ -8,17 +8,17 @@ public abstract class Result {
 
 	private Autorank autorank;
 
-	public final void setAutorank(final Autorank autorank) {
-		this.autorank = autorank;
-	}
+	public abstract boolean applyResult(Player player);
 
 	public final Autorank getAutorank() {
 		return autorank;
 	}
 
-	public abstract boolean setOptions(String[] options);
+	public final void setAutorank(final Autorank autorank) {
+		this.autorank = autorank;
+	}
 
-	public abstract boolean applyResult(Player player);
+	public abstract boolean setOptions(String[] options);
 
 	/*public boolean applyResult(final Player player, final String group) {
 		return applyResult(player);

@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import com.massivecraft.factions.Factions;
-import com.massivecraft.factions.entity.UPlayer;
+import com.massivecraft.factions.entity.MPlayer;
 
 /**
  * Handles all connections with Factions
@@ -19,24 +19,11 @@ import com.massivecraft.factions.entity.UPlayer;
  */
 public class FactionsHandler implements DependencyHandler {
 
-	private final Autorank plugin;
 	private Factions api;
+	private final Autorank plugin;
 
 	public FactionsHandler(final Autorank instance) {
 		plugin = instance;
-	}
-
-	public double getFactionPower(final Player player) {
-		if (!isAvailable())
-			return 0.0d;
-
-		final UPlayer uPlayer = UPlayer.get(player);
-
-		if (!uPlayer.hasFaction()) {
-			return 0.0d;
-		}
-
-		return uPlayer.getFaction().getPower();
 	}
 
 	/* (non-Javadoc)
@@ -53,6 +40,37 @@ public class FactionsHandler implements DependencyHandler {
 		}
 
 		return plugin;
+	}
+
+	public double getFactionPower(final Player player) {
+		if (!isAvailable())
+			return 0.0d;
+
+		final MPlayer uPlayer = MPlayer.get(player);
+
+		if (!uPlayer.hasFaction()) {
+			return 0.0d;
+		}
+
+		return uPlayer.getFaction().getPower();
+	}
+
+	/* (non-Javadoc)
+	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#isAvailable()
+	 */
+	@Override
+	public boolean isAvailable() {
+		return api != null;
+	}
+
+	/* (non-Javadoc)
+	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#isInstalled()
+	 */
+	@Override
+	public boolean isInstalled() {
+		final Factions plugin = (Factions) get();
+
+		return plugin != null && plugin.isEnabled();
 	}
 
 	/* (non-Javadoc)
@@ -83,23 +101,5 @@ public class FactionsHandler implements DependencyHandler {
 				return false;
 			}
 		}
-	}
-
-	/* (non-Javadoc)
-	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#isInstalled()
-	 */
-	@Override
-	public boolean isInstalled() {
-		final Factions plugin = (Factions) get();
-
-		return plugin != null && plugin.isEnabled();
-	}
-
-	/* (non-Javadoc)
-	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#isAvailable()
-	 */
-	@Override
-	public boolean isAvailable() {
-		return api != null;
 	}
 }

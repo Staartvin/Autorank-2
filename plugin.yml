@@ -1,6 +1,6 @@
 main: me.armar.plugins.autorank.Autorank
 name: Autorank
-softdepend: [Vault, Essentials, GroupManager, Stats, WorldEdit, WorldGuard, Factions, mcMMO, RoyalCommands, OnTime, Privileges, bPermissions, PermissionsEx, PermissionsBukkit, DroxPerms]
+softdepend: [Vault, Essentials, GroupManager, Stats, WorldEdit, WorldGuard, Factions, mcMMO, RoyalCommands, OnTime, Privileges, bPermissions, PermissionsEx, PermissionsBukkit, DroxPerms, UltimateCore, Statistics]
 url: http://dev.bukkit.org/bukkit-plugins/autorank/
 version: ${project.version}
 authors: [Idrrp, Armarr, Staartvin]
@@ -74,3 +74,24 @@ permissions:
     autorank.convert.data:
         description: Allows a player to convert the data.yml to UUID format.
         default: op
+    autorank.help:
+        description: Allows a player to view a list of commands
+        default: true
+    autorank.leaderboard.exempt:
+        description: Exempts a player from the leaderboard.
+        default: false
+    autorank.leaderboard.broadcast:
+        description: Allows a player to broadcast the leaderboard.
+        default: op
+    autorank.leaderboard.force:
+        description: Allows a player to force-update the leaderboard.
+        default: op
+    autorank.track:
+        description: Allows a player to view their requirement progress.
+        default: true
+    autorank.gset.self:
+        description: Allows changing own global playtime.
+        default: op
+    autorank.gset.other:
+        description: Allows changing others global playtime.
+        default: op    

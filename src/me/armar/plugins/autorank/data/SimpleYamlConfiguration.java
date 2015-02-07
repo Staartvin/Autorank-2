@@ -61,16 +61,6 @@ public class SimpleYamlConfiguration extends YamlConfiguration {
 
 	}
 
-	public void save() {
-		try {
-			this.save(file);
-		} catch (final ConcurrentModificationException e) {
-			save();
-		} catch (final IOException e) {
-			e.printStackTrace();
-		}
-	}
-
 	public void load() {
 		try {
 			this.load(file);
@@ -86,5 +76,15 @@ public class SimpleYamlConfiguration extends YamlConfiguration {
 	public void reload() {
 		load();
 		save();
+	}
+
+	public void save() {
+		try {
+			this.save(file);
+		} catch (final ConcurrentModificationException e) {
+			save();
+		} catch (final IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import me.armar.plugins.autorank.addons.AddOnManager;
 import me.armar.plugins.autorank.api.API;
+import me.armar.plugins.autorank.backup.BackupManager;
 import me.armar.plugins.autorank.commands.manager.CommandsManager;
 import me.armar.plugins.autorank.config.ConfigHandler;
 import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
@@ -23,12 +24,14 @@ import me.armar.plugins.autorank.playerchecker.requirement.BlocksBrokenRequireme
 import me.armar.plugins.autorank.playerchecker.requirement.BlocksMovedRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.BlocksPlacedRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.DamageTakenRequirement;
+import me.armar.plugins.autorank.playerchecker.requirement.EssentialsGeoIPRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.ExpRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.FactionPowerRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.FishCaughtRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.GamemodeRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.GlobalTimeRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.HasItemRequirement;
+import me.armar.plugins.autorank.playerchecker.requirement.InBiomeRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.ItemsCraftedRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.LocationRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.McMMOPowerLevelRequirement;
@@ -56,6 +59,7 @@ import me.armar.plugins.autorank.requirementhandler.RequirementHandler;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.armar.plugins.autorank.updater.UpdateHandler;
 import me.armar.plugins.autorank.updater.Updater;
+import me.armar.plugins.autorank.util.uuid.storage.UUIDStorage;
 import me.armar.plugins.autorank.validations.ValidateHandler;
 import me.armar.plugins.autorank.warningmanager.WarningManager;
 import me.armar.plugins.autorank.warningmanager.WarningNoticeTask;
@@ -73,32 +77,200 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class Autorank extends JavaPlugin {
 
-	private Leaderboard leaderboard;
-	private Playtimes playtimes;
-	private PlayerChecker playerChecker;
-	private SimpleYamlConfiguration simpleConfig;
-	private SimpleYamlConfiguration advancedConfig;
-	private SimpleYamlConfiguration settingsConfig;
-	private PermissionsPluginManager permPlugHandler;
-	private LanguageHandler languageHandler;
-	private ValidateHandler validateHandler;
-	private MySQLWrapper mysqlWrapper;
-	private UpdateHandler updateHandler;
-	private ConfigHandler configHandler;
-	private RequirementHandler requirementHandler;
-	private Debugger debugger;
-	private WarningManager warningManager;
-	private CommandsManager commandsManager;
-	private AddOnManager addonManager;
-
-	private DependencyManager dependencyManager;
-
-	// Metrics (for custom data)
-	private me.armar.plugins.autorank.metrics.Metrics metrics;
-
 	// Using MySQL
 	public static boolean usingMySQL = false;
+	private AddOnManager addonManager;
+	private SimpleYamlConfiguration advancedConfig;
+	private CommandsManager commandsManager;
+	private ConfigHandler configHandler;
+	private Debugger debugger;
+	private DependencyManager dependencyManager;
+	private LanguageHandler languageHandler;
+	private Leaderboard leaderboard;
+	// Metrics (for custom data)
+	private me.armar.plugins.autorank.metrics.Metrics metrics;
+	private MySQLWrapper mysqlWrapper;
+	private PermissionsPluginManager permPlugHandler;
+	private PlayerChecker playerChecker;
+	private Playtimes playtimes;
+	private RequirementHandler requirementHandler;
+	private SimpleYamlConfiguration settingsConfig;
+	private SimpleYamlConfiguration simpleConfig;
+	private UUIDStorage uuidStorage;
 
+	private BackupManager backupManager;
+
+	private UpdateHandler updateHandler;
+
+	private ValidateHandler validateHandler;
+
+	private WarningManager warningManager;
+
+	/**
+	 * This method can only be performed from the main class as it tries to do
+	 * {@link #getFile()}
+	 * 
+	 * @return Whether an update is available
+	 */
+	public boolean checkForUpdate() {
+
+		// We are not allowed to check for new versions. 
+		if (!updateHandler.doCheckForNewVersion())
+			return false;
+
+		final Updater updater = new Updater(this, 34447, this.getFile(),
+				Updater.UpdateType.NO_DOWNLOAD, false);
+		updateHandler.setUpdater(updater);
+
+		return (updater.getResult()
+				.equals(Updater.UpdateResult.UPDATE_AVAILABLE));
+
+	}
+
+	public void debugMessage(final String message) {
+		// Don't put out debug message when it is not needed.
+		if (!this.getConfigHandler().useDebugOutput())
+			return;
+
+		System.out.print("[Autorank debug] " + message);
+	}
+
+	public AddOnManager getAddonManager() {
+		return addonManager;
+	}
+
+	public SimpleYamlConfiguration getAdvancedConfig() {
+		return advancedConfig;
+	}
+
+	public API getAPI() {
+		return new API(this);
+	}
+
+	public CommandsManager getCommandsManager() {
+		return commandsManager;
+	}
+
+	public ConfigHandler getConfigHandler() {
+		return configHandler;
+	}
+
+	public Debugger getDebugger() {
+		return debugger;
+	}
+
+	public DependencyManager getDependencyManager() {
+		return dependencyManager;
+	}
+
+	public StatsPlugin getHookedStatsPlugin() {
+		return getDependencyManager().getStatsPlugin();
+	}
+
+	public LanguageHandler getLanguageHandler() {
+		return languageHandler;
+	}
+
+	public Leaderboard getLeaderboard() {
+		return leaderboard;
+	}
+
+	public MySQLWrapper getMySQLWrapper() {
+		return mysqlWrapper;
+	}
+
+	public PermissionsPluginManager getPermPlugHandler() {
+		return permPlugHandler;
+	}
+
+	public PlayerChecker getPlayerChecker() {
+		return playerChecker;
+	}
+
+	public Playtimes getPlaytimes() {
+		return playtimes;
+	}
+
+	public RequirementHandler getRequirementHandler() {
+		return requirementHandler;
+	}
+
+	public SimpleYamlConfiguration getSettingsConfig() {
+		return settingsConfig;
+	}
+
+	public SimpleYamlConfiguration getSimpleConfig() {
+		return simpleConfig;
+	}
+
+	public UpdateHandler getUpdateHandler() {
+		return updateHandler;
+	}
+
+	public ValidateHandler getValidateHandler() {
+		return validateHandler;
+	}
+
+	public WarningManager getWarningManager() {
+		return warningManager;
+	}
+
+	@Override
+	public void onDisable() {
+
+		// Make sure all tasks are cancelled after shutdown. This seems obvious, but when a player /reloads, the server creates an instance of the plugin which causes duplicate tasks to run. 
+		getServer().getScheduler().cancelTasks(this);
+
+		playtimes.save();
+
+		getUUIDStorage().saveAllFiles();
+
+		setPlaytimes(null);
+
+		setWarningManager(null);
+
+		setLanguageHandler(null);
+
+		setLeaderboard(null);
+
+		setAddonManager(null);
+
+		setDebugger(null);
+
+		setCommandsManager(null);
+
+		setValidateHandler(null);
+
+		setPlayerChecker(null);
+
+		setPermPlugHandler(null);
+
+		setDependencyManager(null);
+
+		setMySQLWrapper(null);
+
+		setUpdateHandler(null);
+
+		setConfigHandler(null);
+
+		setRequirementHandler(null);
+
+		setSimpleConfig(null);
+
+		setAdvancedConfig(null);
+
+		setSettingsConfig(null);
+
+		setUUIDStorage(null);
+
+		setBackupManager(null);
+
+		getLogger().info(
+				String.format("Autorank %s has been disabled!",
+						getDescription().getVersion()));
+	}
+
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onEnable() {
 
@@ -112,6 +284,18 @@ public class Autorank extends JavaPlugin {
 		setSettingsConfig(new SimpleYamlConfiguration(this, "Settings.yml",
 				null, "Settings config"));
 
+		// Create config handler
+		setConfigHandler(new ConfigHandler(this));
+
+		// Create backup manager
+		setBackupManager(new BackupManager(this));
+
+		// Create uuid storage
+		setUUIDStorage(new UUIDStorage(this));
+
+		// Load uuids - ready for new ones
+		getUUIDStorage().createNewFiles();
+
 		// Create warning manager
 		setWarningManager(new WarningManager());
 
@@ -120,9 +304,6 @@ public class Autorank extends JavaPlugin {
 
 		// Create files
 		requirementHandler.createNewFile();
-
-		// Create config handler
-		setConfigHandler(new ConfigHandler(this));
 
 		// Create update handler
 		setUpdateHandler(new UpdateHandler(this));
@@ -176,6 +357,7 @@ public class Autorank extends JavaPlugin {
 		req.registerRequirement("has item", HasItemRequirement.class);
 		req.registerRequirement("blocks broken", BlocksBrokenRequirement.class);
 		req.registerRequirement("blocks placed", BlocksPlacedRequirement.class);
+		req.registerRequirement("blocks moved", BlocksMovedRequirement.class);
 		req.registerRequirement("votes", TotalVotesRequirement.class);
 		req.registerRequirement("damage taken", DamageTakenRequirement.class);
 		req.registerRequirement("mobs killed", MobKillsRequirement.class);
@@ -184,11 +366,9 @@ public class Autorank extends JavaPlugin {
 		req.registerRequirement("players killed", PlayerKillsRequirement.class);
 		req.registerRequirement("global time", GlobalTimeRequirement.class);
 		req.registerRequirement("total time", TotalTimeRequirement.class);
-		req.registerRequirement("time", TimeRequirement.class);
-		req.registerRequirement("blocks moved", BlocksMovedRequirement.class);
+		req.registerRequirement("world", WorldRequirement.class);
 		req.registerRequirement("worldguard region",
 				WorldGuardRegionRequirement.class);
-		req.registerRequirement("world", WorldRequirement.class);
 		req.registerRequirement("mcmmo skill level",
 				McMMOSkillLevelRequirement.class);
 		req.registerRequirement("mcmmo power level",
@@ -196,7 +376,11 @@ public class Autorank extends JavaPlugin {
 		req.registerRequirement("permission", PermissionRequirement.class);
 		req.registerRequirement("fish caught", FishCaughtRequirement.class);
 		req.registerRequirement("items crafted", ItemsCraftedRequirement.class);
+		req.registerRequirement("time", TimeRequirement.class);
 		req.registerRequirement("times sheared", TimesShearedRequirement.class);
+		req.registerRequirement("essentials geoip location",
+				EssentialsGeoIPRequirement.class);
+		req.registerRequirement("in biome", InBiomeRequirement.class);
 
 		// REGISTER PLURALS IN AUTORANKTOOLS AS WELL!
 
@@ -253,8 +437,7 @@ public class Autorank extends JavaPlugin {
 						.getVersion()));
 
 		// Create a new task that runs every 30 seconds (will show a warning every 30 seconds)
-		getServer().getScheduler().runTaskTimer(this,
-				new WarningNoticeTask(this), 5 * 20, 30 * 20);
+		getServer().getScheduler().runTaskTimer(this, new WarningNoticeTask(this), 5L*20L, 30L * 20L);
 
 		// Check if using MySQL
 		usingMySQL = this.getMySQLWrapper().isMySQLEnabled();
@@ -266,55 +449,107 @@ public class Autorank extends JavaPlugin {
 		}
 
 		debugMessage("Autorank debug is turned on!");
+
+		// Extra warning for dev users
+		if (this.getDescription().getVersion().toLowerCase().contains("dev")) {
+			this.getLogger()
+					.warning(
+							"You're running a DEV version, be sure to backup your Autorank folder!");
+			this.getLogger().warning(
+					"DEV versions are not guaranteed to be stable.");
+		}
+
 	}
 
-	@Override
-	public void onDisable() {
+	public void registerRequirement(final String name,
+			final Class<? extends Requirement> requirement) {
+		playerChecker.getBuilder().getRequirementBuilder()
+				.registerRequirement(name, requirement);
+	}
 
-		// Make sure all tasks are cancelled after shutdown. This seems obvious, but when a player /reloads, the server creates an instance of the plugin which causes duplicate tasks to run. 
-		getServer().getScheduler().cancelTasks(this);
+	public void registerResult(final String name,
+			final Class<? extends Result> result) {
+		playerChecker.getBuilder().getResultBuilder()
+				.registerResult(name, result);
+	}
 
-		playtimes.save();
+	public void reload() {
+		getServer().getPluginManager().disablePlugin(this);
+		getServer().getPluginManager().enablePlugin(this);
+	}
 
-		setPlaytimes(null);
+	public void setAddonManager(final AddOnManager addonManager) {
+		this.addonManager = addonManager;
+	}
 
-		setWarningManager(null);
+	private void setAdvancedConfig(final SimpleYamlConfiguration advancedConfig) {
+		this.advancedConfig = advancedConfig;
+	}
 
-		setLanguageHandler(null);
+	public void setCommandsManager(final CommandsManager commandsManager) {
+		this.commandsManager = commandsManager;
+	}
 
-		setLeaderboard(null);
+	public void setConfigHandler(final ConfigHandler configHandler) {
+		this.configHandler = configHandler;
+	}
 
-		setAddonManager(null);
+	public void setDebugger(final Debugger debugger) {
+		this.debugger = debugger;
+	}
 
-		setDebugger(null);
+	public void setDependencyManager(final DependencyManager dependencyManager) {
+		this.dependencyManager = dependencyManager;
+	}
 
-		setCommandsManager(null);
+	private void setLanguageHandler(final LanguageHandler lHandler) {
+		this.languageHandler = lHandler;
+	}
 
-		setValidateHandler(null);
+	private void setLeaderboard(final Leaderboard leaderboard) {
+		this.leaderboard = leaderboard;
+	}
 
-		setPlayerChecker(null);
+	public void setMySQLWrapper(final MySQLWrapper mysqlWrapper) {
+		this.mysqlWrapper = mysqlWrapper;
+	}
 
-		setPermPlugHandler(null);
+	public void setPermPlugHandler(
+			final PermissionsPluginManager permPlugHandler) {
+		this.permPlugHandler = permPlugHandler;
+	}
 
-		setDependencyManager(null);
+	private void setPlayerChecker(final PlayerChecker playerChecker) {
+		this.playerChecker = playerChecker;
+	}
 
-		setMySQLWrapper(null);
+	private void setPlaytimes(final Playtimes playtimes) {
+		this.playtimes = playtimes;
+	}
 
-		setUpdateHandler(null);
+	public void setRequirementHandler(
+			final RequirementHandler requirementHandler) {
+		this.requirementHandler = requirementHandler;
+	}
 
-		setConfigHandler(null);
+	public void setSettingsConfig(final SimpleYamlConfiguration settingsConfig) {
+		this.settingsConfig = settingsConfig;
+	}
 
-		setRequirementHandler(null);
+	private void setSimpleConfig(final SimpleYamlConfiguration simpleConfig) {
+		this.simpleConfig = simpleConfig;
+	}
 
-		setSimpleConfig(null);
+	public void setUpdateHandler(final UpdateHandler updateHandler) {
+		this.updateHandler = updateHandler;
+	}
 
-		setAdvancedConfig(null);
+	public void setValidateHandler(final ValidateHandler validateHandler) {
+		this.validateHandler = validateHandler;
+	}
 
-		setSettingsConfig(null);
-
-		getLogger().info(
-				String.format("Autorank %s has been disabled!",
-						getDescription().getVersion()));
+	public void setWarningManager(final WarningManager warningManager) {
+		this.warningManager = warningManager;
 	}
 
 	private boolean startMetrics() {
@@ -344,203 +579,19 @@ public class Autorank extends JavaPlugin {
 		}
 	}
 
-	public void debugMessage(final String message) {
-		// Don't put out debug message when it is not needed.
-		if (!this.getConfigHandler().useDebugOutput())
-			return;
-
-		System.out.print("[Autorank debug] " + message);
+	public UUIDStorage getUUIDStorage() {
+		return uuidStorage;
 	}
 
-	public LanguageHandler getLanguageHandler() {
-		return languageHandler;
+	public void setUUIDStorage(final UUIDStorage uuidStorage) {
+		this.uuidStorage = uuidStorage;
 	}
 
-	private void setLanguageHandler(final LanguageHandler lHandler) {
-		this.languageHandler = lHandler;
+	public BackupManager getBackupManager() {
+		return backupManager;
 	}
 
-	public void reload() {
-		getServer().getPluginManager().disablePlugin(this);
-		getServer().getPluginManager().enablePlugin(this);
-	}
-
-	public void registerRequirement(final String name,
-			final Class<? extends Requirement> requirement) {
-		playerChecker.getBuilder().getRequirementBuilder()
-				.registerRequirement(name, requirement);
-	}
-
-	public void registerResult(final String name,
-			final Class<? extends Result> result) {
-		playerChecker.getBuilder().getResultBuilder()
-				.registerResult(name, result);
-	}
-
-	public Leaderboard getLeaderboard() {
-		return leaderboard;
-	}
-
-	private void setLeaderboard(final Leaderboard leaderboard) {
-		this.leaderboard = leaderboard;
-	}
-
-	public Playtimes getPlaytimes() {
-		return playtimes;
-	}
-
-	private void setPlaytimes(final Playtimes playtimes) {
-		this.playtimes = playtimes;
-	}
-
-	public SimpleYamlConfiguration getSimpleConfig() {
-		return simpleConfig;
-	}
-
-	private void setSimpleConfig(final SimpleYamlConfiguration simpleConfig) {
-		this.simpleConfig = simpleConfig;
-	}
-
-	public SimpleYamlConfiguration getAdvancedConfig() {
-		return advancedConfig;
-	}
-
-	private void setAdvancedConfig(final SimpleYamlConfiguration advancedConfig) {
-		this.advancedConfig = advancedConfig;
-	}
-
-	public PlayerChecker getPlayerChecker() {
-		return playerChecker;
-	}
-
-	private void setPlayerChecker(final PlayerChecker playerChecker) {
-		this.playerChecker = playerChecker;
-	}
-
-	public PermissionsPluginManager getPermPlugHandler() {
-		return permPlugHandler;
-	}
-
-	public void setPermPlugHandler(
-			final PermissionsPluginManager permPlugHandler) {
-		this.permPlugHandler = permPlugHandler;
-	}
-
-	public ValidateHandler getValidateHandler() {
-		return validateHandler;
-	}
-
-	public void setValidateHandler(final ValidateHandler validateHandler) {
-		this.validateHandler = validateHandler;
-	}
-
-	public MySQLWrapper getMySQLWrapper() {
-		return mysqlWrapper;
-	}
-
-	public void setMySQLWrapper(final MySQLWrapper mysqlWrapper) {
-		this.mysqlWrapper = mysqlWrapper;
-	}
-
-	/**
-	 * This method can only be performed from the main class as it tries to do
-	 * {@link #getFile()}
-	 * 
-	 * @return Whether an update is available
-	 */
-	public boolean checkForUpdate() {
-
-		// We are not allowed to check for new versions. 
-		if (!updateHandler.doCheckForNewVersion())
-			return false;
-
-		final Updater updater = new Updater(this, 34447, this.getFile(),
-				Updater.UpdateType.NO_DOWNLOAD, false);
-		updateHandler.setUpdater(updater);
-
-		return (updater.getResult()
-				.equals(Updater.UpdateResult.UPDATE_AVAILABLE));
-
-	}
-
-	public UpdateHandler getUpdateHandler() {
-		return updateHandler;
-	}
-
-	public void setUpdateHandler(final UpdateHandler updateHandler) {
-		this.updateHandler = updateHandler;
-	}
-
-	public ConfigHandler getConfigHandler() {
-		return configHandler;
-	}
-
-	public void setConfigHandler(final ConfigHandler configHandler) {
-		this.configHandler = configHandler;
-	}
-
-	public RequirementHandler getRequirementHandler() {
-		return requirementHandler;
-	}
-
-	public void setRequirementHandler(
-			final RequirementHandler requirementHandler) {
-		this.requirementHandler = requirementHandler;
-	}
-
-	public API getAPI() {
-		return new API(this);
-	}
-
-	public Debugger getDebugger() {
-		return debugger;
-	}
-
-	public void setDebugger(final Debugger debugger) {
-		this.debugger = debugger;
-	}
-
-	public WarningManager getWarningManager() {
-		return warningManager;
-	}
-
-	public void setWarningManager(final WarningManager warningManager) {
-		this.warningManager = warningManager;
-	}
-
-	public CommandsManager getCommandsManager() {
-		return commandsManager;
-	}
-
-	public void setCommandsManager(final CommandsManager commandsManager) {
-		this.commandsManager = commandsManager;
-	}
-
-	public StatsPlugin getHookedStatsPlugin() {
-		return getDependencyManager().getStatsPlugin();
-	}
-
-	public AddOnManager getAddonManager() {
-		return addonManager;
-	}
-
-	public void setAddonManager(final AddOnManager addonManager) {
-		this.addonManager = addonManager;
-	}
-
-	public DependencyManager getDependencyManager() {
-		return dependencyManager;
-	}
-
-	public void setDependencyManager(final DependencyManager dependencyManager) {
-		this.dependencyManager = dependencyManager;
-	}
-
-	public SimpleYamlConfiguration getSettingsConfig() {
-		return settingsConfig;
-	}
-
-	public void setSettingsConfig(final SimpleYamlConfiguration settingsConfig) {
-		this.settingsConfig = settingsConfig;
+	public void setBackupManager(final BackupManager backupManager) {
+		this.backupManager = backupManager;
 	}
 }

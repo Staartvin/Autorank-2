@@ -17,9 +17,9 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class AddOnManager {
 
-	private final Autorank plugin;
-
 	private final HashMap<String, JavaPlugin> loadedAddons = new HashMap<String, JavaPlugin>();
+
+	private final Autorank plugin;
 
 	/**
 	 * AddOnManager handlers all actions between addons and Autorank. You can
@@ -29,6 +29,19 @@ public class AddOnManager {
 	 */
 	public AddOnManager(final Autorank instance) {
 		plugin = instance;
+	}
+
+	/**
+	 * Get the main class of an addon
+	 * 
+	 * @param addonName name of the addon
+	 * @return main class of the addon, or null if non-existent.
+	 */
+	public JavaPlugin getLoadedAddon(final String addonName) {
+		if (!isAddonLoaded(addonName))
+			return null;
+
+		return loadedAddons.get(addonName);
 	}
 
 	/**
@@ -83,19 +96,6 @@ public class AddOnManager {
 
 		// Announce
 		plugin.getLogger().info("Unloaded addon " + addonName);
-	}
-
-	/**
-	 * Get the main class of an addon
-	 * 
-	 * @param addonName name of the addon
-	 * @return main class of the addon, or null if non-existent.
-	 */
-	public JavaPlugin getLoadedAddon(final String addonName) {
-		if (!isAddonLoaded(addonName))
-			return null;
-
-		return loadedAddons.get(addonName);
 	}
 
 	/**

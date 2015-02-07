@@ -8,7 +8,9 @@ import me.armar.plugins.autorank.hooks.factionsapi.FactionsHandler;
 import me.armar.plugins.autorank.hooks.mcmmoapi.McMMOHandler;
 import me.armar.plugins.autorank.hooks.ontimeapi.OnTimeHandler;
 import me.armar.plugins.autorank.hooks.royalcommandsapi.RoyalCommandsHandler;
+import me.armar.plugins.autorank.hooks.statisticsapi.StatisticsAPIHandler;
 import me.armar.plugins.autorank.hooks.statsapi.StatsAPIHandler;
+import me.armar.plugins.autorank.hooks.ultimatecoreapi.UltimateCoreHandler;
 import me.armar.plugins.autorank.hooks.vaultapi.VaultHandler;
 import me.armar.plugins.autorank.hooks.worldguardapi.WorldGuardHandler;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
@@ -40,14 +42,14 @@ public class DependencyManager {
 	 * 
 	 */
 	public enum dependency {
-		AUTORANK, FACTIONS, STATS, WORLDGUARD, MCMMO, ESSENTIALS, VAULT, ROYALCOMMANDS, ONTIME
+		AUTORANK, ESSENTIALS, FACTIONS, MCMMO, ONTIME, ROYALCOMMANDS, STATS, VAULT, WORLDGUARD, ULTIMATECORE, STATISTICS
 	};
+
+	private final HashMap<dependency, DependencyHandler> handlers = new HashMap<dependency, DependencyHandler>();
 
 	private final Autorank plugin;
 
 	private final StatsPluginManager statsPluginManager;
-
-	private final HashMap<dependency, DependencyHandler> handlers = new HashMap<dependency, DependencyHandler>();
 
 	public DependencyManager(final Autorank instance) {
 		plugin = instance;
@@ -62,8 +64,43 @@ public class DependencyManager {
 				instance));
 		handlers.put(dependency.ONTIME, new OnTimeHandler(instance));
 		handlers.put(dependency.STATS, new StatsAPIHandler(instance));
+		handlers.put(dependency.ULTIMATECORE, new UltimateCoreHandler(instance));
+		handlers.put(dependency.STATISTICS, new StatisticsAPIHandler(instance));
 
 		statsPluginManager = new StatsPluginManager(instance);
+	}
+
+	public DependencyHandler getDependency(final dependency dep) {
+
+		if (!handlers.containsKey(dep)) {
+			throw new IllegalArgumentException("Unknown dependency '"
+					+ dep.toString() + "'");
+		} else {
+			return handlers.get(dep);
+		}
+	}
+
+	public StatsPlugin getStatsPlugin() {
+		return statsPluginManager.getStatsPlugin();
+	}
+
+	public boolean isAFK(final Player player) {
+		if (!plugin.getConfigHandler().useAFKIntegration())
+			return false;
+
+		if (handlers.get(dependency.ESSENTIALS).isAvailable()) {
+			return ((EssentialsHandler) handlers.get(dependency.ESSENTIALS))
+					.isAFK(player);
+		} else if (handlers.get(dependency.ROYALCOMMANDS).isAvailable()) {
+			return ((RoyalCommandsHandler) handlers
+					.get(dependency.ROYALCOMMANDS)).isAFK(player);
+		} else if (handlers.get(dependency.ULTIMATECORE).isAvailable()) {
+			return ((UltimateCoreHandler) handlers.get(dependency.ULTIMATECORE))
+					.isAFK(player);
+		}
+
+		// No suitable plugin found
+		return false;
 	}
 
 	/**
@@ -102,36 +139,6 @@ public class DependencyManager {
 		}
 
 		plugin.getLogger().info("Loaded libraries and dependencies");
-	}
-
-	public DependencyHandler getDependency(final dependency dep) {
-
-		if (!handlers.containsKey(dep)) {
-			throw new IllegalArgumentException("Unknown dependency '"
-					+ dep.toString() + "'");
-		} else {
-			return handlers.get(dep);
-		}
-	}
-
-	public StatsPlugin getStatsPlugin() {
-		return statsPluginManager.getStatsPlugin();
-	}
-
-	public boolean isAFK(final Player player) {
-		if (!plugin.getConfigHandler().useAFKIntegration())
-			return false;
-
-		if (handlers.get(dependency.ESSENTIALS).isAvailable()) {
-			return ((EssentialsHandler) handlers.get(dependency.ESSENTIALS))
-					.isAFK(player);
-		} else if (handlers.get(dependency.ROYALCOMMANDS).isAvailable()) {
-			return ((RoyalCommandsHandler) handlers
-					.get(dependency.ROYALCOMMANDS)).isAFK(player);
-		}
-
-		// No suitable plugin found
-		return false;
 	}
 
 }

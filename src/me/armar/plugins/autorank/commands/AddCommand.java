@@ -3,20 +3,24 @@ package me.armar.plugins.autorank.commands;
 import java.util.UUID;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-public class AddCommand implements CommandExecutor {
+public class AddCommand extends AutorankCommand {
 
 	private final Autorank plugin;
 
 	public AddCommand(final Autorank instance) {
+		this.setUsage("/ar add [player] [value]");
+		this.setDesc("Add [value] to [player]'s time");
+		this.setPermission("autorank.add");
+
 		plugin = instance;
 	}
 

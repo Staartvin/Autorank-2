@@ -3,18 +3,22 @@ package me.armar.plugins.autorank.commands;
 import java.util.UUID;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-public class SyncStatsCommand implements CommandExecutor {
+public class SyncStatsCommand extends AutorankCommand {
 
 	private final Autorank plugin;
 
 	public SyncStatsCommand(final Autorank instance) {
+		this.setUsage("/ar syncstats");
+		this.setDesc("Sync Autorank's time to Stats' time.");
+		this.setPermission("autorank.syncstats");
+
 		plugin = instance;
 	}
 
@@ -40,7 +44,7 @@ public class SyncStatsCommand implements CommandExecutor {
 
 			// Time is stored in seconds
 			final int statsPlayTime = plugin.getHookedStatsPlugin()
-					.getNormalStat("time_played", p.getName(), null);
+					.getNormalStat("time_played", p.getUniqueId());
 
 			if (statsPlayTime <= 0) {
 				continue;

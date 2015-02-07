@@ -16,61 +16,6 @@ public class PermissionGroupValidation {
 	}
 
 	/**
-	 * This will check if the groups defined in the advanced config are correct.
-	 * 
-	 * @param config Advanced Config
-	 * @return true if correct; false otherwise
-	 */
-	public boolean validateAdvancedGroups(final SimpleYamlConfiguration config) {
-
-		if (config == null)
-			return false;
-
-		boolean isMissing = false;
-		final String[] groups = autorank.getPermPlugHandler()
-				.getPermissionPlugin().getGroups();
-		Set<String> ranks;
-
-		final ConfigurationSection section = config
-				.getConfigurationSection("ranks");
-		ranks = section.getKeys(false);
-
-		for (final String rank : ranks) {
-			for (int i = 0; i < groups.length; i++) {
-				final String group = groups[i];
-				if (rank.equals(group)) {
-					break;
-				}
-
-				if (rank.equalsIgnoreCase(group)) {
-					// Do not log but register warning
-					autorank.getWarningManager().registerWarning(
-							"Permissions group '" + rank + "' should be '"
-									+ group + "'", 10);
-					isMissing = true;
-					break;
-				}
-
-				if ((i == (groups.length - 1))) {
-					// If this is the last group and is not equal to the rank defined in the config:
-					autorank.getWarningManager().registerWarning(
-							"Permissions group is not defined in permissions file: "
-									+ rank, 10);
-					isMissing = true;
-				}
-			}
-
-			if (!isValidChange(rank)) {
-				//autorank.getWarningManager().registerWarning("Rank change of rank '" + rank + "' is invalid. (Do the groups used exist?)", 10);
-				isMissing = true;
-			}
-		}
-
-		// If all is okay, then do nothing. Else, disable AR.
-		return (!isMissing);
-	}
-
-	/**
 	 * Checks whether the @group variable is the same as rankFrom group.
 	 * It also checks whether the rankTo group is defined as a group in the
 	 * permission plugin
@@ -175,6 +120,61 @@ public class PermissionGroupValidation {
 		}
 
 		return (rankFrom.equals(group) && !isMissingRankTo && !isMissingRankFrom);
+	}
+
+	/**
+	 * This will check if the groups defined in the advanced config are correct.
+	 * 
+	 * @param config Advanced Config
+	 * @return true if correct; false otherwise
+	 */
+	public boolean validateAdvancedGroups(final SimpleYamlConfiguration config) {
+
+		if (config == null)
+			return false;
+
+		boolean isMissing = false;
+		final String[] groups = autorank.getPermPlugHandler()
+				.getPermissionPlugin().getGroups();
+		Set<String> ranks;
+
+		final ConfigurationSection section = config
+				.getConfigurationSection("ranks");
+		ranks = section.getKeys(false);
+
+		for (final String rank : ranks) {
+			for (int i = 0; i < groups.length; i++) {
+				final String group = groups[i];
+				if (rank.equals(group)) {
+					break;
+				}
+
+				if (rank.equalsIgnoreCase(group)) {
+					// Do not log but register warning
+					autorank.getWarningManager().registerWarning(
+							"Permissions group '" + rank + "' should be '"
+									+ group + "'", 10);
+					isMissing = true;
+					break;
+				}
+
+				if ((i == (groups.length - 1))) {
+					// If this is the last group and is not equal to the rank defined in the config:
+					autorank.getWarningManager().registerWarning(
+							"Permissions group is not defined in permissions file: "
+									+ rank, 10);
+					isMissing = true;
+				}
+			}
+
+			if (!isValidChange(rank)) {
+				//autorank.getWarningManager().registerWarning("Rank change of rank '" + rank + "' is invalid. (Do the groups used exist?)", 10);
+				isMissing = true;
+			}
+		}
+
+		// If all is okay, then do nothing. Else, disable AR.
+		return (!isMissing);
 	}
 
 	/**

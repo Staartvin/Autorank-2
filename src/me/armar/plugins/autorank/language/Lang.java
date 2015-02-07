@@ -17,37 +17,116 @@ import org.bukkit.configuration.file.FileConfiguration;
  */
 public enum Lang {
 	/**
-	 * {0} is not online!
+	 * You have already completed this requirement!
 	 */
-	PLAYER_NOT_ONLINE("player-not-online", "&6{0}&4 is not online!"),
+	ALREADY_COMPLETED_REQUIREMENT("already-completed-requirement",
+			"You have already completed this requirement!"),
 	/**
 	 * Autorank has been reloaded.
 	 */
 	AUTORANK_RELOADED("autorank-reloaded", "&3Autorank has been reloaded."),
 	/**
-	 * Invalid format, use {0}.
+	 * Travel at least {0} {1}.
 	 */
-	INVALID_FORMAT("invalid-format", "&cInvalid format, use {0}."),
+	BLOCKS_MOVED_REQUIREMENT("blocks-moved-requirement",
+			"Travel at least {0} {1}."),
 	/**
-	 * Changed playtime of {0} to {1}.
+	 * Break at least {0}.
 	 */
-	PLAYTIME_CHANGED("playtime-changed", "Changed playtime of {0} to {1}."),
+	BROKEN_BLOCKS_REQUIREMENT("broken-blocks-requirement",
+			"Break at least {0}."),
 	/**
 	 * Cannot check for console!
 	 */
 	CANNOT_CHECK_CONSOLE("cannot-check-console", "&cCannot check for console!"),
 	/**
-	 * You need ({0}) for that!
+	 * Take at least {0} damage
 	 */
-	NO_PERMISSION("no-permission", "&cYou need ({0}) for that!"),
+	DAMAGE_TAKEN_REQUIREMENT("damage-taken-requirement",
+			"Take at least {0} damage."),
 	/**
-	 * no groups
+	 * New data has been imported!
 	 */
-	NO_GROUPS("no-groups", "no groups"),
+	DATA_IMPORTED("data-imported", "New data has been imported!"),
 	/**
-	 * and does not have a next rankup
+	 * days
 	 */
-	NO_NEXT_RANK("no-next-rankup", "Does not have a next rankup."),
+	DAY_PLURAL("day-plural", "days"),
+	/**
+	 * day
+	 */
+	DAY_SINGULAR("day-singular", "day"),
+	/**
+	 * You do not meet requirements for #{0}:
+	 */
+	DO_NOT_MEET_REQUIREMENTS_FOR("do-not-meet-requirements-for",
+			"You do not meet requirements for #&6{0}&c:"),
+	/**
+	 * Done
+	 */
+	DONE_MARKER("done-marker", "Done"),
+	/**
+	 * Have at least level {0} in exp.
+	 */
+	EXP_REQUIREMENT("exp-requirement", "Have at least level {0} in exp."),
+	/**
+	 * Have at least {0} power in your faction.
+	 */
+	FACTIONS_POWER_REQUIREMENT("factions-power-requirement",
+			"Have at least {0} power in your faction."),
+	/**
+	 * Catch at least {0} fish.
+	 */
+	FISH_CAUGHT_REQUIREMENT("fish-caught-requirement",
+			"Catch at least {0} fish."),
+	/**
+	 * Be in gamemode {0}.
+	 */
+	GAMEMODE_REQUIREMENT("gamemode-requirement", "Be in gamemode {0}."),
+	/**
+	 * Play for at least {0} on any of the servers.
+	 */
+	GLOBAL_TIME_REQUIREMENT("global-time-requirement",
+			"Play for at least {0} on any of the servers."),
+	/**
+	 * hours
+	 */
+	HOUR_PLURAL("hour-plural", "hours"),
+	/**
+	 * hour
+	 */
+	HOUR_SINGULAR("hour-singular", "hour"),
+	/**
+	 * Invalid format, use {0}.
+	 */
+	INVALID_FORMAT("invalid-format", "&cInvalid format, use {0}."),
+	/**
+	 * {0} is not a valid number!
+	 */
+	INVALID_NUMBER("invalid-number", "{0} is not a valid number!"),
+	/**
+	 * Obtain {0}.
+	 */
+	ITEM_REQUIREMENT("item-requirement", "Obtain {0}."),
+	/**
+	 * Craft at least {0} item(s).
+	 */
+	ITEMS_CRAFTED_REQUIREMENT("items-crafted-requirement",
+			"Craft at least {0} item(s)."),
+	/**
+	 * Be at {0}.
+	 */
+	LOCATION_REQUIREMENT("location-requirement", "Be at {0}."),
+	/**
+	 * Have at least power level {0}.
+	 */
+	MCMMO_POWER_LEVEL_REQUIREMENT("mcmmo-power-level-requirement",
+			"Have at least power level {0}."),
+	/**
+	 * Have at least level {0} in {1}.
+	 */
+	MCMMO_SKILL_LEVEL_REQUIREMENT("mcmmo-skill-level-requirement",
+			"Have at least level {0} in {1}."),
 	/**
 	 * meets all the requirements for rank {0}
 	 */
@@ -60,55 +139,73 @@ public enum Lang {
 			"meets-all-requirements-without-rank-up",
 			"meets all the requirements"),
 	/**
-	 * and will now be ranked up.
+	 * minutes
 	 */
-	RANKED_UP_NOW("ranked-up-now", " and will now be ranked up."),
+	MINUTE_PLURAL("minute-plural", "minutes"),
 	/**
-	 * New data has been imported!
+	 * minute
 	 */
-	DATA_IMPORTED("data-imported", "New data has been imported!"),
-	/**
-	 * Play for at least {0}.
-	 */
-	TIME_REQUIREMENT("time-requirement", "Play for at least {0}."),
-	/**
-	 * Be in {0}.
-	 */
-	WORLD_REQUIREMENT("world-requirement", "Be in {0}."),
-	/**
-	 * Vote at least {0} times.
-	 */
-	VOTE_REQUIREMENT("vote-requirement", "Vote at least {0} times."),
+	MINUTE_SINGULAR("minute-singular", "minute"),
 	/**
 	 * Have at least {0}.
 	 */
 	MONEY_REQUIREMENT("money-requirement", "Have at least {0}."),
 	/**
-	 * Break at least {0}.
+	 * MySQL is not enabled and therefore global time does not exist!
 	 */
-	BROKEN_BLOCKS_REQUIREMENT("broken-blocks-requirement",
-			"Break at least {0}."),
+	MYSQL_IS_NOT_ENABLED("mysql-is-not-enabled",
+			"MySQL is not enabled and therefore global time does not exist!"),
+	/**
+	 * no groups
+	 */
+	NO_GROUPS("no-groups", "no groups"),
+	/**
+	 * and does not have a next rankup
+	 */
+	NO_NEXT_RANK("no-next-rankup", "Does not have a next rankup."),
+	/**
+	 * You need ({0}) for that!
+	 */
+	NO_PERMISSION("no-permission", "&cYou need ({0}) for that!"),
+	/**
+	 * Optional
+	 */
+	OPTIONAL_MARKER("optional-marker", "Optional"),
+	/**
+	 * Have permission '{0}'.
+	 */
+	PERMISSION_REQUIREMENT("permission-requirement", "Have permission '{0}'."),
 	/**
 	 * Place at least {0}.
 	 */
 	PLACED_BLOCKS_REQUIREMENT("placed-blocks-requirement",
 			"Place at least {0}."),
 	/**
-	 * Have at least level {0} in exp.
+	 * {0} is excluded from ranking!
 	 */
-	EXP_REQUIREMENT("exp-requirement", "Have at least level {0} in exp."),
+	PLAYER_IS_EXCLUDED("player-is-excluded", "{0} is excluded from ranking!"),
 	/**
-	 * Be in gamemode {0}.
+	 * {0} has never been logged before.
 	 */
-	GAMEMODE_REQUIREMENT("gamemode-requirement", "Be in gamemode {0}."),
+	PLAYER_IS_INVALID("player-is-invalid",
+			"&6{0}&4 has never been logged before."),
 	/**
-	 * Obtain {0}.
+	 * Kill at least {0} player(s).
 	 */
-	ITEM_REQUIREMENT("item-requirement", "Obtain {0}."),
+	PLAYER_KILLS_REQUIREMENT("player-kills-requirement",
+			"Kill at least {0} player(s)."),
 	/**
-	 * minute
+	 * {0} is not online!
 	 */
-	SECOND_SINGULAR("second-singular", "second"),
+	PLAYER_NOT_ONLINE("player-not-online", "&6{0}&4 is not online!"),
+	/**
+	 * Changed playtime of {0} to {1}.
+	 */
+	PLAYTIME_CHANGED("playtime-changed", "Changed playtime of {0} to {1}."),
+	/**
+	 * and will now be ranked up.
+	 */
+	RANKED_UP_NOW("ranked-up-now", " and will now be ranked up."),
 	/**
 	 * minutes
 	 */
@@ -116,149 +213,76 @@ public enum Lang {
 	/**
 	 * minute
 	 */
-	MINUTE_SINGULAR("minute-singular", "minute"),
-	/**
-	 * minutes
-	 */
-	MINUTE_PLURAL("minute-plural", "minutes"),
-	/**
-	 * hour
-	 */
-	HOUR_SINGULAR("hour-singular", "hour"),
-	/**
-	 * hours
-	 */
-	HOUR_PLURAL("hour-plural", "hours"),
-	/**
-	 * day
-	 */
-	DAY_SINGULAR("day-singular", "day"),
-	/**
-	 * days
-	 */
-	DAY_PLURAL("day-plural", "days"),
-	/**
-	 * {0} is not a valid number!
-	 */
-	INVALID_NUMBER("invalid-number", "{0} is not a valid number!"),
-	/**
-	 * {0} is excluded from ranking!
-	 */
-	PLAYER_IS_EXCLUDED("player-is-excluded", "{0} is excluded from ranking!"),
-	/**
-	 * MySQL is not enabled and therefore global time does not exist!
-	 */
-	MYSQL_IS_NOT_ENABLED("mysql-is-not-enabled",
-			"MySQL is not enabled and therefore global time does not exist!"),
-	/**
-	 * You have already completed this requirement!
-	 */
-	ALREADY_COMPLETED_REQUIREMENT("already-completed-requirement",
-			"You have already completed this requirement!"),
+	SECOND_SINGULAR("second-singular", "second"),
 	/**
 	 * You have successfully completed requirement #{0}:
 	 */
 	SUCCESSFULLY_COMPLETED_REQUIREMENT("successfully-completed-requirement",
 			"You have successfully completed requirement &6{0}&a:"),
 	/**
-	 * You do not meet requirements for #{0}:
+	 * Play for at least {0}.
 	 */
-	DO_NOT_MEET_REQUIREMENTS_FOR("do-not-meet-requirements-for",
-			"You do not meet requirements for #&6{0}&c:"),
+	TIME_REQUIREMENT("time-requirement", "Play for at least {0}."),
 	/**
-	 * Done
+	 * Shear at least {0} sheep.
 	 */
-	DONE_MARKER("done-marker", "Done"),
-	/**
-	 * Optional
-	 */
-	OPTIONAL_MARKER("optional-marker", "Optional"),
-	/**
-	 * Take at least {0} damage
-	 */
-	DAMAGE_TAKEN_REQUIREMENT("damage-taken-requirement",
-			"Take at least {0} damage."),
+	TIMES_SHEARED_REQUIREMENT("times-sheared-requirement",
+			"Shear at least {0} sheep."),
 	/**
 	 * Kill at least {0}.
 	 */
 	TOTAL_MOBS_KILLED_REQUIREMENT("total-mobs-killed-requirement",
 			"Kill at least {0}."),
 	/**
-	 * Be at {0}.
-	 */
-	LOCATION_REQUIREMENT("location-requirement", "Be at {0}."),
-	/**
-	 * Have at least {0} power in your faction.
-	 */
-	FACTIONS_POWER_REQUIREMENT("factions-power-requirement",
-			"Have at least {0} power in your faction."),
-	/**
-	 * Kill at least {0} player(s).
-	 */
-	PLAYER_KILLS_REQUIREMENT("player-kills-requirement",
-			"Kill at least {0} player(s)."),
-	/**
-	 * Play for at least {0} on any of the servers.
-	 */
-	GLOBAL_TIME_REQUIREMENT("global-time-requirement",
-			"Play for at least {0} on any of the servers."),
-	/**
-	 * {0} has never been logged before.
-	 */
-	PLAYER_IS_INVALID("player-is-invalid",
-			"&6{0}&4 has never been logged before."),
-	/**
 	 * Be with this server for at least {0}.
 	 */
 	TOTAL_TIME_REQUIREMENT("total-time-requirement",
 			"Be with this server for at least {0}."),
-	/**
-	 * Travel at least {0} {1}.
-	 */
-	BLOCKS_MOVED_REQUIREMENT("blocks-moved-requirement",
-			"Travel at least {0} {1}."),
-	/**
-	 * Be in region '{0}'.
-	 */
-	WORLD_GUARD_REGION_REQUIREMENT("world-guard-region-requirement",
-			"Be in region '{0}'."),
-	/**
-	 * Have at least level {0} in {1}.
-	 */
-	MCMMO_SKILL_LEVEL_REQUIREMENT("mcmmo-skill-level-requirement",
-			"Have at least level {0} in {1}."),
-	/**
-	 * Have at least power level {0}.
-	 */
-	MCMMO_POWER_LEVEL_REQUIREMENT("mcmmo-power-level-requirement",
-			"Have at least power level {0}."),
-	/**
-	 * Have permission '{0}'.
-	 */
-	PERMISSION_REQUIREMENT("permission-requirement", "Have permission '{0}'."),
 	/**
 	 * Player {0} is unknown and couldn't be identified.
 	 */
 	UNKNOWN_PLAYER("unknown-player",
 			"&cPlayer {0} is unknown and couldn't be identified."),
 	/**
-	 * Catch at least {0} fish.
+	 * Vote at least {0} times.
 	 */
-	FISH_CAUGHT_REQUIREMENT("fish-caught-requirement",
-			"Catch at least {0} fish."),
+	VOTE_REQUIREMENT("vote-requirement", "Vote at least {0} times."),
 	/**
-	 * Craft at least {0} item(s).
+	 * Be in region '{0}'.
 	 */
-	ITEMS_CRAFTED_REQUIREMENT("items-crafted-requirement",
-			"Craft at least {0} item(s)."),
+	WORLD_GUARD_REGION_REQUIREMENT("world-guard-region-requirement",
+			"Be in region '{0}'."),
 	/**
-	 * Shear at least {0} sheep.
+	 * Be in {0}.
 	 */
-	TIMES_SHEARED_REQUIREMENT("times-sheared-requirement",
-			"Shear at least {0} sheep."), ;
+	WORLD_REQUIREMENT("world-requirement", "Be in {0}."),
+	/**
+	 * Progress of requirement {0}:
+	 */
+	REQUIREMENT_PROGRESS("requirement-progress", "Progress of requirement {0}:"),
+	/**
+	 * Be from area '{0}'.
+	 */
+	ESSENTIALS_GEOIP_LOCATION_REQUIREMENT(
+			"essentials-geoip-location-requirement", "Be from area '{0}'."),
+	/**
+	 * Be in biome '{0}'.
+	 */
+	IN_BIOME_REQUIREMENT(
+			"in-biome-requirement", "Be in biome '{0}'."), ;
+
+	private static FileConfiguration LANG;
+
+	/**
+	 * Set the {@code FileConfiguration} to use.
+	 * 
+	 * @param config The config to set.
+	 */
+	public static void setFile(final FileConfiguration config) {
+		LANG = config;
+	}
 
 	private String path, def;
-	private static FileConfiguration LANG;
 
 	/**
 	 * Lang enum constructor.
@@ -269,15 +293,6 @@ public enum Lang {
 	Lang(final String path, final String start) {
 		this.path = path;
 		this.def = start;
-	}
-
-	/**
-	 * Set the {@code FileConfiguration} to use.
-	 * 
-	 * @param config The config to set.
-	 */
-	public static void setFile(final FileConfiguration config) {
-		LANG = config;
 	}
 
 	/**
