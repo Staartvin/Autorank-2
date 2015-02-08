@@ -22,13 +22,13 @@ public class BlocksMovedRequirement extends Requirement {
 					+ wrapper.getMovementType());
 		}
 
-		String desc = Lang.BLOCKS_MOVED_REQUIREMENT.toString()
-				.replace("{0}", "").replace("{1}", "").trim();
+		String desc = "";
 
 		for (int i = 0; i < names.size(); i++) {
 
 			if (i == 0) {
-				desc = desc.concat(names.get(i));
+				desc = Lang.BLOCKS_MOVED_REQUIREMENT.getConfigValue()
+						.replace("{0}", "").replace("{1}", "").trim() + " " + names.get(i);
 			} else {
 				desc = desc.concat(" or " + names.get(i));
 			}

@@ -29,12 +29,12 @@ public enum Lang {
 	 * Travel at least {0} {1}.
 	 */
 	BLOCKS_MOVED_REQUIREMENT("blocks-moved-requirement",
-			"Travel at least {0} {1}."),
+			"Travel at least {0} {1}"),
 	/**
 	 * Break at least {0}.
 	 */
 	BROKEN_BLOCKS_REQUIREMENT("broken-blocks-requirement",
-			"Break at least {0}."),
+			"Break at least {0}"),
 	/**
 	 * Cannot check for console!
 	 */
@@ -43,7 +43,7 @@ public enum Lang {
 	 * Take at least {0} damage
 	 */
 	DAMAGE_TAKEN_REQUIREMENT("damage-taken-requirement",
-			"Take at least {0} damage."),
+			"Take at least {0} damage"),
 	/**
 	 * New data has been imported!
 	 */
@@ -73,12 +73,12 @@ public enum Lang {
 	 * Have at least {0} power in your faction.
 	 */
 	FACTIONS_POWER_REQUIREMENT("factions-power-requirement",
-			"Have at least {0} power in your faction."),
+			"Have at least {0} power in your faction"),
 	/**
 	 * Catch at least {0} fish.
 	 */
 	FISH_CAUGHT_REQUIREMENT("fish-caught-requirement",
-			"Catch at least {0} fish."),
+			"Catch at least {0} fish"),
 	/**
 	 * Be in gamemode {0}.
 	 */
@@ -87,7 +87,7 @@ public enum Lang {
 	 * Play for at least {0} on any of the servers.
 	 */
 	GLOBAL_TIME_REQUIREMENT("global-time-requirement",
-			"Play for at least {0} on any of the servers."),
+			"Play for at least {0} on any of the servers"),
 	/**
 	 * hours
 	 */
@@ -112,7 +112,7 @@ public enum Lang {
 	 * Craft at least {0} item(s).
 	 */
 	ITEMS_CRAFTED_REQUIREMENT("items-crafted-requirement",
-			"Craft at least {0} item(s)."),
+			"Craft at least {0} item(s)"),
 	/**
 	 * Be at {0}.
 	 */
@@ -179,7 +179,7 @@ public enum Lang {
 	 * Place at least {0}.
 	 */
 	PLACED_BLOCKS_REQUIREMENT("placed-blocks-requirement",
-			"Place at least {0}."),
+			"Place at least {0}"),
 	/**
 	 * {0} is excluded from ranking!
 	 */

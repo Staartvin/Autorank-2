@@ -303,12 +303,17 @@ public class ConfigHandler {
 		// Grab options from string
 		String org = this.getRequirement(requirement, group);
 		
+		System.out.print("Org: " + org);
+		
 		List<String[]> list = new ArrayList<String[]>();
 		
 		String[] split = org.split(",");
 		
 		for (String sp: split) {
-			String newString = sp.replace("[", "").replace("]", "").trim();
+			System.out.print("Sp: " + sp);
+			
+			
+			String newString = sp.replace("(", "").replace(")", "").trim();
 			String[] splitArray = newString.split(";");
 			list.add(splitArray);
 		}

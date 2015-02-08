@@ -44,11 +44,13 @@ public class HasItemRequirement extends Requirement {
 				}
 			}
 
-			if (i == 0) {
+			
+			names.add(arg.toString());
+			/*if (i == 0) {
 				names.add(arg.toString());
 			} else {
 				names.add(" or " + arg.toString());
-			}
+			}*/
 		}
 
 		return Lang.ITEM_REQUIREMENT.getConfigValue(AutorankTools.seperateList(

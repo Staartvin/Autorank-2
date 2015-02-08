@@ -305,6 +305,12 @@ public class AutorankTools {
 			String wordBetween, Object currentValue) {
 		Object[] array = c.toArray();
 
+		String extraSpace = " ";
+		
+		if (wordBetween == null || wordBetween.equals("")) {
+			extraSpace = "";
+		}
+		
 		String progress = "";
 
 		for (int i = 0; i < c.size(); i++) {
@@ -312,11 +318,11 @@ public class AutorankTools {
 			String object = array[i].toString();
 
 			if (i == 0) {
-				progress += currentValue + " " + wordBetween + "/" + object
-						+ " " + wordBetween;
+				progress += currentValue + extraSpace + wordBetween + "/" + object
+						+ extraSpace + wordBetween;
 			} else {
-				progress += "or " + currentValue + " " + wordBetween + "/"
-						+ object + " " + wordBetween;
+				progress += " or " + currentValue + extraSpace + wordBetween + "/"
+						+ object + extraSpace + wordBetween;
 			}
 		}
 

@@ -21,7 +21,7 @@ public class McMMOSkillLevelRequirement extends Requirement {
 	@Override
 	public String getDescription() {
 
-		String desc = Lang.MCMMO_SKILL_LEVEL_REQUIREMENT.toString();
+		String desc = Lang.MCMMO_SKILL_LEVEL_REQUIREMENT.getConfigValue();
 
 		for (int i = 0; i < skillsCombined.size(); i++) {
 			//String skillCombined = skillsCombined.get(i);
