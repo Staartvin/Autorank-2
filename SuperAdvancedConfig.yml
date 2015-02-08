@@ -56,6 +56,9 @@ ranks:
                 value: 0
             has item:
                 value: 50
+            blocks broken: 
+                value: (24;100;2),(30;100;2)
+                # Break 100 sandstone blocks OR 100 webs
         results:
             rank change: member;veteran
             command: 'say &p has just been promoted to Veteran!; give &p 1 100; tell &p You have just earned 100 stone!'
