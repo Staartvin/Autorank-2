@@ -456,7 +456,7 @@ public class Autorank extends JavaPlugin {
 					.warning(
 							"You're running a DEV version, be sure to backup your Autorank folder!");
 			this.getLogger().warning(
-					"DEV versions are not guaranteed to be stable.");
+					"DEV versions are not guaranteed to be stable and generally shouldn't be used on big production servers with lots of players.");
 		}
 
 	}
