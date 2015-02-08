@@ -572,6 +572,7 @@ public class Metrics {
 		final String pluginVersion = description.getVersion();
 		final String serverVersion = Bukkit.getVersion();
 	
+		// Trick to get the count as Bukkit.getOnlinePlayers() isn't properly working with Spigot and Bukkit
 		int count = 0;
 		
 		for (@SuppressWarnings("unused") Player player: Bukkit.getServer().getOnlinePlayers()) {
