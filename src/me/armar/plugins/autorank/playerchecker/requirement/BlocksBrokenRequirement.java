@@ -62,10 +62,18 @@ public class BlocksBrokenRequirement extends Requirement {
 		for (int i = 0; i < wrappers.size(); i++) {
 			final BlocksWrapper wrapper = wrappers.get(i);
 
-			final int progressBar = getStatsPlugin().getNormalStat(
-					StatsHandler.statTypes.BLOCKS_BROKEN.toString(),
-					player.getUniqueId(), null, wrapper.getBlockId() + "",
-					wrapper.getDamageValue() + "");
+			int progressBar = 0;
+			
+			if (wrapper.getBlockId() < 0) {
+				progressBar = getStatsPlugin().getNormalStat(
+						StatsHandler.statTypes.TOTAL_BLOCKS_BROKEN.toString(),
+						player.getUniqueId());
+			} else {
+				progressBar = getStatsPlugin().getNormalStat(
+						StatsHandler.statTypes.BLOCKS_BROKEN.toString(),
+						player.getUniqueId(), null, wrapper.getBlockId() + "",
+						wrapper.getDamageValue() + "");	
+			}
 
 			if (i == 0) {
 				progress = progress.concat(progressBar + "/"
