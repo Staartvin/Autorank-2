@@ -33,7 +33,7 @@ public class UltimateCoreHandler implements DependencyHandler {
 		// UltimateCore may not be loaded
 		try { //Avoid ClassNotFound
 			if (plugin != null
-					&& plugin instanceof bammerbom.ultimatecore.UltimateCore) {
+					&& plugin instanceof Bammerbom.Ultimatecore.UltimateCore) {
 				return plugin;
 			}
 		} catch (Exception ex) {
@@ -116,14 +116,13 @@ public class UltimateCoreHandler implements DependencyHandler {
 		}
 
 		if (getVersion().equals(1)) {
-			final bammerbom.ultimatecore.bukkit.api.UPlayer user = bammerbom.ultimatecore.bukkit.api.UC
-					.getPlayer(player);
+			final Bammerbom.UltimateCore.API.UCplayer user = Bammerbom.UltimateCore.API.UC.getPlayer(player);
 
 			if (user == null) {
 				return false;
 			}
 
-			return user.isAfk();
+			return user.isAFK();
 		}
 		if (getVersion().equals(2)) {
 			final bammerbom.ultimatecore.bukkit.api.UPlayer user = bammerbom.ultimatecore.bukkit.api.UC
