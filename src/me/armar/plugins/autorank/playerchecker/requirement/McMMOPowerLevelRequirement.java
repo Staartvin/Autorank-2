@@ -12,13 +12,13 @@ import org.bukkit.entity.Player;
 
 public class McMMOPowerLevelRequirement extends Requirement {
 
-	private List<Integer> powerLevels = new ArrayList<Integer>();
+	private final List<Integer> powerLevels = new ArrayList<Integer>();
 	private McMMOHandler handler = null;
 
 	@Override
 	public String getDescription() {
-		return Lang.MCMMO_POWER_LEVEL_REQUIREMENT
-				.getConfigValue(AutorankTools.seperateList(powerLevels, "or"));
+		return Lang.MCMMO_POWER_LEVEL_REQUIREMENT.getConfigValue(AutorankTools
+				.seperateList(powerLevels, "or"));
 	}
 
 	@Override
@@ -26,31 +26,34 @@ public class McMMOPowerLevelRequirement extends Requirement {
 		String progress = "";
 		final int level = handler.getPowerLevel(player);
 
-		progress = AutorankTools.makeProgressString(powerLevels, "", level + "");
+		progress = AutorankTools
+				.makeProgressString(powerLevels, "", level + "");
 		return progress;
 	}
 
 	@Override
 	public boolean meetsRequirement(final Player player) {
 
-		if (!handler.isAvailable()) return false;
-		
+		if (!handler.isAvailable())
+			return false;
+
 		final int level = handler.getPowerLevel(player);
 
-		for (int realLevel: powerLevels) {
-			if (level > 0 && level >= realLevel) return true;
+		for (final int realLevel : powerLevels) {
+			if (level > 0 && level >= realLevel)
+				return true;
 		}
-		
+
 		return false;
 	}
 
 	@Override
-	public boolean setOptions(List<String[]> optionsList) {
+	public boolean setOptions(final List<String[]> optionsList) {
 
 		handler = (McMMOHandler) this.getDependencyManager().getDependency(
 				dependency.MCMMO);
 
-		for (String[] options : optionsList) {
+		for (final String[] options : optionsList) {
 
 			if (options.length > 0) {
 				powerLevels.add(Integer.parseInt(options[0]));

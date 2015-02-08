@@ -23,9 +23,9 @@ public class TimeRequirement extends Requirement {
 
 	@Override
 	public String getDescription() {
-		List<String> sTimes = new ArrayList<String>();
+		final List<String> sTimes = new ArrayList<String>();
 
-		for (int time : times) {
+		for (final int time : times) {
 			sTimes.add(AutorankTools.timeToString(time, Time.MINUTES));
 		}
 
@@ -37,7 +37,7 @@ public class TimeRequirement extends Requirement {
 	public String getProgress(final Player player) {
 		String progress = "";
 
-		int playtime = (getAutorank().getPlaytimes().getTimeOfPlayer(
+		final int playtime = (getAutorank().getPlaytimes().getTimeOfPlayer(
 				player.getName()) / 60);
 
 		/*for (int i=0;i<times.size();i++) {
@@ -62,7 +62,7 @@ public class TimeRequirement extends Requirement {
 		final double playtime = this.getAutorank().getPlaytimes()
 				.getTimeOfPlayer(player.getName()) / 60;
 
-		for (int time : times) {
+		for (final int time : times) {
 			if (time != -1 && time <= playtime) {
 				return true;
 			}
@@ -71,9 +71,9 @@ public class TimeRequirement extends Requirement {
 	}
 
 	@Override
-	public boolean setOptions(List<String[]> optionsList) {
+	public boolean setOptions(final List<String[]> optionsList) {
 
-		for (String[] options : optionsList) {
+		for (final String[] options : optionsList) {
 			if (options.length > 0) {
 				times.add(AutorankTools.stringToTime(options[0], Time.MINUTES));
 			} else {

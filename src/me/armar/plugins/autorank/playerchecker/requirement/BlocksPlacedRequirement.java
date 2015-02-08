@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class BlocksPlacedRequirement extends Requirement {
 
-	private List<BlocksPlacedWrapper> wrappers = new ArrayList<BlocksPlacedWrapper>();
+	private final List<BlocksPlacedWrapper> wrappers = new ArrayList<BlocksPlacedWrapper>();
 
 	//private int blockID = -1;
 	//private int blocksPlaced = 0;
@@ -21,13 +21,13 @@ public class BlocksPlacedRequirement extends Requirement {
 	@SuppressWarnings("deprecation")
 	@Override
 	public String getDescription() {
-		List<String> names = new ArrayList<String>();
+		final List<String> names = new ArrayList<String>();
 
 		for (int i = 0; i < wrappers.size(); i++) {
-			BlocksPlacedWrapper wrapper = wrappers.get(i);
+			final BlocksPlacedWrapper wrapper = wrappers.get(i);
 
-			int blockID = wrapper.getBlockId();
-			int damageValue = wrapper.getDamageValue();
+			final int blockID = wrapper.getBlockId();
+			final int damageValue = wrapper.getDamageValue();
 
 			String message = wrapper.getBlocksPlaced() + " ";
 
@@ -60,9 +60,9 @@ public class BlocksPlacedRequirement extends Requirement {
 		String progress = "";
 
 		for (int i = 0; i < wrappers.size(); i++) {
-			BlocksPlacedWrapper wrapper = wrappers.get(i);
+			final BlocksPlacedWrapper wrapper = wrappers.get(i);
 
-			int progressBar = getStatsPlugin().getNormalStat(
+			final int progressBar = getStatsPlugin().getNormalStat(
 					StatsHandler.statTypes.BLOCKS_PLACED.toString(),
 					player.getUniqueId(), null, wrapper.getBlockId() + "",
 					wrapper.getDamageValue() + "");
@@ -86,11 +86,11 @@ public class BlocksPlacedRequirement extends Requirement {
 		if (!enabled)
 			return false;
 
-		for (BlocksPlacedWrapper wrapper : wrappers) {
+		for (final BlocksPlacedWrapper wrapper : wrappers) {
 
-			int blockID = wrapper.getBlockId();
-			int damageValue = wrapper.getDamageValue();
-			int blocksPlaced = wrapper.getBlocksPlaced();
+			final int blockID = wrapper.getBlockId();
+			final int damageValue = wrapper.getDamageValue();
+			final int blocksPlaced = wrapper.getBlocksPlaced();
 
 			int progress = 0;
 
@@ -113,9 +113,9 @@ public class BlocksPlacedRequirement extends Requirement {
 	}
 
 	@Override
-	public boolean setOptions(List<String[]> optionsList) {
+	public boolean setOptions(final List<String[]> optionsList) {
 
-		for (String[] options : optionsList) {
+		for (final String[] options : optionsList) {
 			int blocksPlaced = 0;
 			int blockId = -1;
 			int damageValue = -1;
@@ -131,7 +131,8 @@ public class BlocksPlacedRequirement extends Requirement {
 				damageValue = Integer.parseInt(options[2].trim());
 			}
 
-			wrappers.add(new BlocksPlacedWrapper(blockId, blocksPlaced, damageValue));
+			wrappers.add(new BlocksPlacedWrapper(blockId, blocksPlaced,
+					damageValue));
 		}
 
 		return !wrappers.isEmpty();
@@ -142,7 +143,8 @@ class BlocksPlacedWrapper {
 
 	private int blockId, blocksPlaced, damageValue;
 
-	public BlocksPlacedWrapper(int blockId, int blocksPlaced, int damageValue) {
+	public BlocksPlacedWrapper(final int blockId, final int blocksPlaced,
+			final int damageValue) {
 		this.setBlockId(blockId);
 		this.setBlocksPlaced(blocksPlaced);
 		this.setDamageValue(damageValue);
@@ -152,7 +154,7 @@ class BlocksPlacedWrapper {
 		return blockId;
 	}
 
-	public void setBlockId(int blockId) {
+	public void setBlockId(final int blockId) {
 		this.blockId = blockId;
 	}
 
@@ -160,7 +162,7 @@ class BlocksPlacedWrapper {
 		return blocksPlaced;
 	}
 
-	public void setBlocksPlaced(int blocksPlaced) {
+	public void setBlocksPlaced(final int blocksPlaced) {
 		this.blocksPlaced = blocksPlaced;
 	}
 
@@ -168,7 +170,7 @@ class BlocksPlacedWrapper {
 		return damageValue;
 	}
 
-	public void setDamageValue(int damageValue) {
+	public void setDamageValue(final int damageValue) {
 		this.damageValue = damageValue;
 	}
 

@@ -437,7 +437,8 @@ public class Autorank extends JavaPlugin {
 						.getVersion()));
 
 		// Create a new task that runs every 30 seconds (will show a warning every 30 seconds)
-		getServer().getScheduler().runTaskTimer(this, new WarningNoticeTask(this), 5L*20L, 30L * 20L);
+		getServer().getScheduler().runTaskTimer(this,
+				new WarningNoticeTask(this), 5L * 20L, 30L * 20L);
 
 		// Check if using MySQL
 		usingMySQL = this.getMySQLWrapper().isMySQLEnabled();
@@ -455,8 +456,9 @@ public class Autorank extends JavaPlugin {
 			this.getLogger()
 					.warning(
 							"You're running a DEV version, be sure to backup your Autorank folder!");
-			this.getLogger().warning(
-					"DEV versions are not guaranteed to be stable and generally shouldn't be used on big production servers with lots of players.");
+			this.getLogger()
+					.warning(
+							"DEV versions are not guaranteed to be stable and generally shouldn't be used on big production servers with lots of players.");
 		}
 
 	}

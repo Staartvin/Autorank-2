@@ -276,15 +276,16 @@ public class AutorankTools {
 	 *            word.
 	 * @return string with all elements.
 	 */
-	public static String seperateList(Collection<?> c, String endDivider) {
-		Object[] array = c.toArray();
+	public static String seperateList(final Collection<?> c,
+			final String endDivider) {
+		final Object[] array = c.toArray();
 		if (array.length == 1)
 			return array[0].toString();
 
 		if (array.length == 0)
 			return null;
 
-		StringBuilder string = new StringBuilder("");
+		final StringBuilder string = new StringBuilder("");
 
 		for (int i = 0; i < array.length; i++) {
 
@@ -301,28 +302,28 @@ public class AutorankTools {
 		return string.toString();
 	}
 
-	public static String makeProgressString(Collection<?> c,
-			String wordBetween, Object currentValue) {
-		Object[] array = c.toArray();
+	public static String makeProgressString(final Collection<?> c,
+			final String wordBetween, final Object currentValue) {
+		final Object[] array = c.toArray();
 
 		String extraSpace = " ";
-		
+
 		if (wordBetween == null || wordBetween.equals("")) {
 			extraSpace = "";
 		}
-		
+
 		String progress = "";
 
 		for (int i = 0; i < c.size(); i++) {
 
-			String object = array[i].toString();
+			final String object = array[i].toString();
 
 			if (i == 0) {
-				progress += currentValue + extraSpace + wordBetween + "/" + object
-						+ extraSpace + wordBetween;
-			} else {
-				progress += " or " + currentValue + extraSpace + wordBetween + "/"
+				progress += currentValue + extraSpace + wordBetween + "/"
 						+ object + extraSpace + wordBetween;
+			} else {
+				progress += " or " + currentValue + extraSpace + wordBetween
+						+ "/" + object + extraSpace + wordBetween;
 			}
 		}
 
@@ -337,9 +338,9 @@ public class AutorankTools {
 	 * @param element element to get
 	 * @return String that was at the given splitted element
 	 */
-	public static String getStringFromSplitString(String splitString,
-			String splitterCharacter, int element) {
-		String[] split = splitString.split(splitterCharacter);
+	public static String getStringFromSplitString(final String splitString,
+			final String splitterCharacter, final int element) {
+		final String[] split = splitString.split(splitterCharacter);
 
 		String returnString = null;
 
@@ -348,8 +349,8 @@ public class AutorankTools {
 
 			if (returnString.trim().equals(""))
 				return null;
-			
-		} catch (ArrayIndexOutOfBoundsException e) {
+
+		} catch (final ArrayIndexOutOfBoundsException e) {
 			return null;
 		}
 

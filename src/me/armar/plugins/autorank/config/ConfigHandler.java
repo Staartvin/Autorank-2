@@ -298,21 +298,23 @@ public class ConfigHandler {
 		return plugin.getSettingsConfig().getBoolean("allow infinite ranking",
 				false);
 	}
-	
-	public List<String[]> getOptions(final String requirement, final String group) {
+
+	public List<String[]> getOptions(final String requirement,
+			final String group) {
 		// Grab options from string
-		String org = this.getRequirement(requirement, group);
-		
-		List<String[]> list = new ArrayList<String[]>();
-		
-		String[] split = org.split(",");
-		
-		for (String sp: split) {
-			String newString = sp.replace("(", "").replace(")", "").trim();
-			String[] splitArray = newString.split(";");
+		final String org = this.getRequirement(requirement, group);
+
+		final List<String[]> list = new ArrayList<String[]>();
+
+		final String[] split = org.split(",");
+
+		for (final String sp : split) {
+			final String newString = sp.replace("(", "").replace(")", "")
+					.trim();
+			final String[] splitArray = newString.split(";");
 			list.add(splitArray);
 		}
-		
+
 		return list;
 	}
 }

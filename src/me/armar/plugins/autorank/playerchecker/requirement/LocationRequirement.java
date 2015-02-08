@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 public class LocationRequirement extends Requirement {
 
 	// x;y;z;world;radius
-	private List<String> locations = new ArrayList<String>();
+	private final List<String> locations = new ArrayList<String>();
 
 	//private int radius = 1;
 	//private String world;
@@ -23,20 +23,20 @@ public class LocationRequirement extends Requirement {
 	@Override
 	public String getDescription() {
 
-		List<String> stringLocs = new ArrayList<String>();
+		final List<String> stringLocs = new ArrayList<String>();
 
-		for (String loc : locations) {
+		for (final String loc : locations) {
 			// Save x,y,z
-			int xLocation = Integer.parseInt(AutorankTools
+			final int xLocation = Integer.parseInt(AutorankTools
 					.getStringFromSplitString(loc, ";", 0));
-			int yLocation = Integer.parseInt(AutorankTools
+			final int yLocation = Integer.parseInt(AutorankTools
 					.getStringFromSplitString(loc, ";", 1));
-			int zLocation = Integer.parseInt(AutorankTools
+			final int zLocation = Integer.parseInt(AutorankTools
 					.getStringFromSplitString(loc, ";", 2));
 
 			// Save world
-			String world = AutorankTools.getStringFromSplitString(loc, ";", 3)
-					.trim();
+			final String world = AutorankTools.getStringFromSplitString(loc,
+					";", 3).trim();
 
 			// Save radius
 			//int radius = Integer.parseInt(AutorankTools.getStringFromSplitString(loc, ";", 4));
@@ -66,29 +66,31 @@ public class LocationRequirement extends Requirement {
 
 		String progress = "";
 		String plurOrSing = "meter";
-		
-		for (int i=0;i<locations.size();i++) {
-			
-			String loc = locations.get(i);
-			
-			final int distance = (int) Math
-					.sqrt(Math.pow((pX - Integer.parseInt(AutorankTools
-							.getStringFromSplitString(loc, ";", 0))), 2)
-							+ Math.pow((pY - Integer.parseInt(AutorankTools
-									.getStringFromSplitString(loc, ";", 1))), 2)
-							+ Math.pow((pZ - Integer.parseInt(AutorankTools
-									.getStringFromSplitString(loc, ";", 2))), 2));
-			
+
+		for (int i = 0; i < locations.size(); i++) {
+
+			final String loc = locations.get(i);
+
+			final int distance = (int) Math.sqrt(Math.pow((pX - Integer
+					.parseInt(AutorankTools.getStringFromSplitString(loc, ";",
+							0))), 2)
+					+ Math.pow((pY - Integer.parseInt(AutorankTools
+							.getStringFromSplitString(loc, ";", 1))), 2)
+					+ Math.pow((pZ - Integer.parseInt(AutorankTools
+							.getStringFromSplitString(loc, ";", 2))), 2));
+
 			if (distance > 1) {
 				plurOrSing = "meters";
 			} else {
 				plurOrSing = "meter";
 			}
-			
+
 			if (i == 0) {
-				progress = progress.concat(distance + " " + plurOrSing + " away");
+				progress = progress.concat(distance + " " + plurOrSing
+						+ " away");
 			} else {
-				progress = progress.concat(" or " + distance + " " + plurOrSing + " away");
+				progress = progress.concat(" or " + distance + " " + plurOrSing
+						+ " away");
 			}
 		}
 
@@ -99,23 +101,23 @@ public class LocationRequirement extends Requirement {
 	public boolean meetsRequirement(final Player player) {
 		final Location pLocation = player.getLocation();
 
-		for (String loc: locations) {
+		for (final String loc : locations) {
 			// Positive and negative values
 			int xRadiusP, yRadiusP, zRadiusP, xRadiusN, yRadiusN, zRadiusN;
-			
-			int xLocation = Integer.parseInt(AutorankTools
+
+			final int xLocation = Integer.parseInt(AutorankTools
 					.getStringFromSplitString(loc, ";", 0));
-			int yLocation = Integer.parseInt(AutorankTools
+			final int yLocation = Integer.parseInt(AutorankTools
 					.getStringFromSplitString(loc, ";", 1));
-			int zLocation = Integer.parseInt(AutorankTools
+			final int zLocation = Integer.parseInt(AutorankTools
 					.getStringFromSplitString(loc, ";", 2));
-			
-			int radius = Integer.parseInt(AutorankTools
+
+			final int radius = Integer.parseInt(AutorankTools
 					.getStringFromSplitString(loc, ";", 4));
-			
-			String world = AutorankTools
-					.getStringFromSplitString(loc, ";", 3);
-			
+
+			final String world = AutorankTools.getStringFromSplitString(loc,
+					";", 3);
+
 			xRadiusN = xLocation - radius;
 			yRadiusN = yLocation - radius;
 			zRadiusN = zLocation - radius;
@@ -145,27 +147,26 @@ public class LocationRequirement extends Requirement {
 				}
 			}
 		}
-		
-		
+
 		return false;
 	}
 
 	@Override
-	public boolean setOptions(List<String[]> optionsList) {
+	public boolean setOptions(final List<String[]> optionsList) {
 
-		for (String[] options : optionsList) {
+		for (final String[] options : optionsList) {
 			// Location = x;y;z;world;radius
 			if (options.length != 5) {
 				return false;
 			}
 
 			// Save x,y,z
-			int xLocation = Integer.parseInt(options[0]);
-			int yLocation = Integer.parseInt(options[1]);
-			int zLocation = Integer.parseInt(options[2]);
+			final int xLocation = Integer.parseInt(options[0]);
+			final int yLocation = Integer.parseInt(options[1]);
+			final int zLocation = Integer.parseInt(options[2]);
 
 			// Save world
-			String world = options[3].trim();
+			final String world = options[3].trim();
 
 			// Save radius
 			int radius = Integer.parseInt(options[4]);

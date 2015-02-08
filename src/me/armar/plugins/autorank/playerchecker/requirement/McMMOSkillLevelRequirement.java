@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 public class McMMOSkillLevelRequirement extends Requirement {
 
 	// [0] skillName, [1] skillLevel
-	private List<String> skillsCombined = new ArrayList<String>();
+	private final List<String> skillsCombined = new ArrayList<String>();
 	//private int skillLevel = 0;
 	//private String skillName = "all";
 	private McMMOHandler handler = null;
@@ -28,7 +28,7 @@ public class McMMOSkillLevelRequirement extends Requirement {
 			//String[] split = skillCombined.split(";");
 			String skillName = AutorankTools.getStringFromSplitString(
 					skillsCombined.get(i), ";", 0);
-			String skillLevel = AutorankTools.getStringFromSplitString(
+			final String skillLevel = AutorankTools.getStringFromSplitString(
 					skillsCombined.get(i), ";", 1);
 
 			if (skillName.equals("all") || skillName.equals("none")) {
@@ -39,7 +39,8 @@ public class McMMOSkillLevelRequirement extends Requirement {
 				desc = desc.replace("{0}", skillLevel)
 						.replace("{1}", skillName);
 			} else {
-				desc = desc.concat(" or level " + skillLevel + " in " + skillName);
+				desc = desc.concat(" or level " + skillLevel + " in "
+						+ skillName);
 			}
 		}
 
@@ -51,11 +52,11 @@ public class McMMOSkillLevelRequirement extends Requirement {
 		String progress = "";
 
 		for (int i = 0; i < skillsCombined.size(); i++) {
-			String skillCombined = skillsCombined.get(i);
+			final String skillCombined = skillsCombined.get(i);
 
 			final int level = handler.getSkillLevel(player, AutorankTools
 					.getStringFromSplitString(skillCombined, ";", 0));
-			String skillLevel = AutorankTools.getStringFromSplitString(
+			final String skillLevel = AutorankTools.getStringFromSplitString(
 					skillCombined, ";", 1);
 
 			if (i == 0) {
@@ -72,11 +73,11 @@ public class McMMOSkillLevelRequirement extends Requirement {
 	public boolean meetsRequirement(final Player player) {
 
 		for (int i = 0; i < skillsCombined.size(); i++) {
-			String skillCombined = skillsCombined.get(i);
+			final String skillCombined = skillsCombined.get(i);
 
 			final int level = handler.getSkillLevel(player, AutorankTools
 					.getStringFromSplitString(skillCombined, ";", 0));
-			String skillLevel = AutorankTools.getStringFromSplitString(
+			final String skillLevel = AutorankTools.getStringFromSplitString(
 					skillCombined, ";", 1);
 
 			if (level > 0 && level >= Integer.parseInt(skillLevel))
@@ -88,12 +89,12 @@ public class McMMOSkillLevelRequirement extends Requirement {
 	}
 
 	@Override
-	public boolean setOptions(List<String[]> optionsList) {
+	public boolean setOptions(final List<String[]> optionsList) {
 
 		handler = (McMMOHandler) this.getDependencyManager().getDependency(
 				dependency.MCMMO);
 
-		for (String[] options : optionsList) {
+		for (final String[] options : optionsList) {
 			String skillName = "all";
 			int skillLevel = 0;
 

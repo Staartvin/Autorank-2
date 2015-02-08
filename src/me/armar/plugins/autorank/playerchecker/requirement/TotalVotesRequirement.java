@@ -22,7 +22,7 @@ public class TotalVotesRequirement extends Requirement {
 	@Override
 	public String getProgress(final Player player) {
 		String progress = "";
-		int votes = getStatsPlugin().getNormalStat(
+		final int votes = getStatsPlugin().getNormalStat(
 				StatsHandler.statTypes.VOTES.toString(), player.getUniqueId());
 
 		progress = AutorankTools.makeProgressString(totalVotes, "", "" + votes);
@@ -35,10 +35,10 @@ public class TotalVotesRequirement extends Requirement {
 			return false;
 		}
 
-		int votes = getStatsPlugin().getNormalStat(
+		final int votes = getStatsPlugin().getNormalStat(
 				StatsHandler.statTypes.VOTES.toString(), player.getUniqueId());
 
-		for (int totalVote : totalVotes) {
+		for (final int totalVote : totalVotes) {
 			if (votes >= totalVote)
 				return true;
 		}
@@ -47,16 +47,16 @@ public class TotalVotesRequirement extends Requirement {
 	}
 
 	@Override
-	public boolean setOptions(List<String[]> optionsList) {
-		
-		for (String[] options: optionsList) {
+	public boolean setOptions(final List<String[]> optionsList) {
+
+		for (final String[] options : optionsList) {
 			try {
 				totalVotes.add(Integer.parseInt(options[0]));
 			} catch (final Exception e) {
 				return false;
 			}
 		}
-		
+
 		return !totalVotes.isEmpty();
 	}
 }

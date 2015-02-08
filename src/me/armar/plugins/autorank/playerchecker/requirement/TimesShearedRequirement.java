@@ -28,13 +28,14 @@ public class TimesShearedRequirement extends Requirement {
 				player.getUniqueId());
 
 		//progress = progress.concat(progressBar + "/" + timesSheared);
-		progress = AutorankTools.makeProgressString(timesShorn, "", "" + progressBar);
+		progress = AutorankTools.makeProgressString(timesShorn, "", ""
+				+ progressBar);
 		return progress;
 	}
 
 	@Override
 	public boolean meetsRequirement(final Player player) {
-		for (int times : timesShorn) {
+		for (final int times : timesShorn) {
 			if (this.getStatsPlugin().getNormalStat(
 					StatsHandler.statTypes.TIMES_SHEARED.toString(),
 					player.getUniqueId()) > times) {
@@ -46,16 +47,16 @@ public class TimesShearedRequirement extends Requirement {
 	}
 
 	@Override
-	public boolean setOptions(List<String[]> optionsList) {
+	public boolean setOptions(final List<String[]> optionsList) {
 
-		for (String[] options : optionsList) {
+		for (final String[] options : optionsList) {
 			try {
 				timesShorn.add(Integer.parseInt(options[0]));
 			} catch (final Exception e) {
 				return false;
 			}
 		}
-		
+
 		return !timesShorn.isEmpty();
 	}
 }

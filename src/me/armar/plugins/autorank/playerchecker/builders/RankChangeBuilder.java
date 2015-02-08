@@ -84,8 +84,8 @@ public class RankChangeBuilder {
 
 				req.add(createRequirement(
 						AutorankTools.getCorrectName(requirement),
-						configHandler.getOptions(requirement, group),
-						optional, realResults,
+						configHandler.getOptions(requirement, group), optional,
+						realResults,
 						configHandler.useAutoCompletion(group, requirement),
 						reqId));
 
@@ -142,7 +142,7 @@ public class RankChangeBuilder {
 			}
 
 			@SuppressWarnings("serial")
-			List<String[]> optionsArray = new ArrayList<String[]>() {
+			final List<String[]> optionsArray = new ArrayList<String[]>() {
 
 				{
 					add(new String[] { options[1] });
@@ -181,7 +181,7 @@ public class RankChangeBuilder {
 	}
 
 	private Requirement createRequirement(final String type,
-			List<String[]> args, final boolean optional,
+			final List<String[]> args, final boolean optional,
 			final List<Result> results, final boolean autoComplete,
 			final int reqId) {
 		final Requirement res = requirementBuilder.create(type);

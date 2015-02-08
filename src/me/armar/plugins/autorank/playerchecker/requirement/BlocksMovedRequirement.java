@@ -10,14 +10,14 @@ import org.bukkit.entity.Player;
 
 public class BlocksMovedRequirement extends Requirement {
 
-	private List<BlocksMovedWrapper> wrappers = new ArrayList<BlocksMovedWrapper>();
+	private final List<BlocksMovedWrapper> wrappers = new ArrayList<BlocksMovedWrapper>();
 
 	@Override
 	public String getDescription() {
 
-		List<String> names = new ArrayList<String>();
+		final List<String> names = new ArrayList<String>();
 
-		for (BlocksMovedWrapper wrapper : wrappers) {
+		for (final BlocksMovedWrapper wrapper : wrappers) {
 			names.add(wrapper.getBlocksMoved() + " blocks "
 					+ wrapper.getMovementType());
 		}
@@ -28,7 +28,8 @@ public class BlocksMovedRequirement extends Requirement {
 
 			if (i == 0) {
 				desc = Lang.BLOCKS_MOVED_REQUIREMENT.getConfigValue()
-						.replace("{0}", "").replace("{1}", "").trim() + " " + names.get(i);
+						.replace("{0}", "").replace("{1}", "").trim()
+						+ " " + names.get(i);
 			} else {
 				desc = desc.concat(" or " + names.get(i));
 			}
@@ -42,9 +43,9 @@ public class BlocksMovedRequirement extends Requirement {
 		String progress = "";
 
 		for (int i = 0; i < wrappers.size(); i++) {
-			BlocksMovedWrapper wrapper = wrappers.get(i);
+			final BlocksMovedWrapper wrapper = wrappers.get(i);
 
-			int progressBar = getStatsPlugin().getNormalStat(
+			final int progressBar = getStatsPlugin().getNormalStat(
 					StatsHandler.statTypes.BLOCKS_MOVED.toString(),
 					player.getUniqueId(), player.getWorld().getName(),
 					wrapper.getRawMovementType());
@@ -72,13 +73,13 @@ public class BlocksMovedRequirement extends Requirement {
 		if (!enabled)
 			return false;
 
-		for (BlocksMovedWrapper wrapper : wrappers) {
+		for (final BlocksMovedWrapper wrapper : wrappers) {
 
-			int count = this.getStatsPlugin().getNormalStat(
+			final int count = this.getStatsPlugin().getNormalStat(
 					StatsHandler.statTypes.BLOCKS_MOVED.toString(),
 					player.getUniqueId(), player.getWorld().getName(),
 					wrapper.getRawMovementType());
-			
+
 			if (count >= wrapper.getBlocksMoved()) {
 				return true;
 			}
@@ -88,9 +89,9 @@ public class BlocksMovedRequirement extends Requirement {
 	}
 
 	@Override
-	public boolean setOptions(List<String[]> optionsList) {
+	public boolean setOptions(final List<String[]> optionsList) {
 
-		for (String[] options : optionsList) {
+		for (final String[] options : optionsList) {
 			int blocksMoved = 0;
 			int movementType = 0;
 
@@ -114,13 +115,13 @@ class BlocksMovedWrapper {
 	private String movementType = "";
 	private int rawMovementType = 0;
 
-	public BlocksMovedWrapper(int blocksMoved, int moveType) {
+	public BlocksMovedWrapper(final int blocksMoved, final int moveType) {
 		this.blocksMoved = blocksMoved;
 		this.movementType = getMovementString(moveType);
 		this.rawMovementType = moveType;
 	}
 
-	private String getMovementString(int moveType) {
+	private String getMovementString(final int moveType) {
 		switch (moveType) {
 		case 0:
 			return "by foot";

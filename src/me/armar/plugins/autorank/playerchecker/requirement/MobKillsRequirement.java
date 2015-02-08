@@ -24,11 +24,11 @@ public class MobKillsRequirement extends Requirement {
 		String desc = "";
 
 		for (int i = 0; i < mobsKilledCombined.size(); i++) {
-			String mobsKilledCombinedString = mobsKilledCombined.get(i);
+			final String mobsKilledCombinedString = mobsKilledCombined.get(i);
 			//String[] split = skillCombined.split(";");
-			String total = AutorankTools.getStringFromSplitString(
+			final String total = AutorankTools.getStringFromSplitString(
 					mobsKilledCombinedString, ";", 0);
-			String mobType = AutorankTools.getStringFromSplitString(
+			final String mobType = AutorankTools.getStringFromSplitString(
 					mobsKilledCombinedString, ";", 1);
 
 			if (i == 0) {
@@ -66,10 +66,10 @@ public class MobKillsRequirement extends Requirement {
 		String progress = "";
 
 		for (int i = 0; i < mobsKilledCombined.size(); i++) {
-			String mobKilledCombined = mobsKilledCombined.get(i);
+			final String mobKilledCombined = mobsKilledCombined.get(i);
 			String mobType = AutorankTools.getStringFromSplitString(
 					mobKilledCombined, ";", 1);
-			String total = AutorankTools.getStringFromSplitString(
+			final String total = AutorankTools.getStringFromSplitString(
 					mobKilledCombined, ";", 0);
 
 			final int killed = getStatsPlugin().getNormalStat(
@@ -81,9 +81,11 @@ public class MobKillsRequirement extends Requirement {
 			}
 
 			if (i == 0) {
-				progress = progress.concat(killed + "/" + total + " " + mobType);
+				progress = progress
+						.concat(killed + "/" + total + " " + mobType);
 			} else {
-				progress = progress.concat(" or " + killed + "/" + total + " " + mobType);
+				progress = progress.concat(" or " + killed + "/" + total + " "
+						+ mobType);
 			}
 
 		}
@@ -97,10 +99,10 @@ public class MobKillsRequirement extends Requirement {
 			return false;
 
 		for (int i = 0; i < mobsKilledCombined.size(); i++) {
-			String mobKilledCombined = mobsKilledCombined.get(i);
-			String mobType = AutorankTools.getStringFromSplitString(
+			final String mobKilledCombined = mobsKilledCombined.get(i);
+			final String mobType = AutorankTools.getStringFromSplitString(
 					mobKilledCombined, ";", 1);
-			String total = AutorankTools.getStringFromSplitString(
+			final String total = AutorankTools.getStringFromSplitString(
 					mobKilledCombined, ";", 0);
 
 			final int killed = getStatsPlugin().getNormalStat(
@@ -116,17 +118,17 @@ public class MobKillsRequirement extends Requirement {
 	}
 
 	@Override
-	public boolean setOptions(List<String[]> optionsList) {
+	public boolean setOptions(final List<String[]> optionsList) {
 
-		for (String[] options : optionsList) {
-				int total = Integer.parseInt(options[0]);
-				String mobType = null;
-				
-				if (options.length > 1) {
-					mobType = options[1].trim().replace(" ", "_");
-				}
-				
-				mobsKilledCombined.add(total + ";" + mobType);
+		for (final String[] options : optionsList) {
+			final int total = Integer.parseInt(options[0]);
+			String mobType = null;
+
+			if (options.length > 1) {
+				mobType = options[1].trim().replace(" ", "_");
+			}
+
+			mobsKilledCombined.add(total + ";" + mobType);
 		}
 
 		return !mobsKilledCombined.isEmpty();

@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 
 public class ExpRequirement extends Requirement {
 
-	private List<Integer> minExps = new ArrayList<Integer>();
+	private final List<Integer> minExps = new ArrayList<Integer>();
 
 	@Override
 	public String getDescription() {
@@ -22,17 +22,17 @@ public class ExpRequirement extends Requirement {
 	public String getProgress(final Player player) {
 		String progress = "";
 
-		int expLevel = player.getLevel();
-		
+		final int expLevel = player.getLevel();
+
 		progress = AutorankTools.makeProgressString(minExps, "", expLevel);
 		return progress;
 	}
 
 	@Override
 	public boolean meetsRequirement(final Player player) {
-		int expLevel = player.getLevel();
+		final int expLevel = player.getLevel();
 
-		for (int expMin : minExps) {
+		for (final int expMin : minExps) {
 			if (expLevel >= expMin)
 				return true;
 		}
@@ -41,10 +41,10 @@ public class ExpRequirement extends Requirement {
 	}
 
 	@Override
-	public boolean setOptions(List<String[]> optionsList) {
-		
-		for (String[] options: optionsList) {
-			minExps.add(AutorankTools.stringtoInt(options[0]));	
+	public boolean setOptions(final List<String[]> optionsList) {
+
+		for (final String[] options : optionsList) {
+			minExps.add(AutorankTools.stringtoInt(options[0]));
 		}
 
 		return !minExps.isEmpty();

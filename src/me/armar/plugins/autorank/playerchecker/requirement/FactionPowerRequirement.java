@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 
 public class FactionPowerRequirement extends Requirement {
 
-	private List<Double> factionPowers = new ArrayList<Double>();
+	private final List<Double> factionPowers = new ArrayList<Double>();
 
 	@Override
 	public String getDescription() {
@@ -39,9 +39,9 @@ public class FactionPowerRequirement extends Requirement {
 		final FactionsHandler fHandler = (FactionsHandler) this.getAutorank()
 				.getDependencyManager().getDependency(dependency.FACTIONS);
 
-		double factionPower = fHandler.getFactionPower(player);
+		final double factionPower = fHandler.getFactionPower(player);
 
-		for (double facPower : factionPowers) {
+		for (final double facPower : factionPowers) {
 			if (factionPower >= facPower) {
 				return true;
 			}
@@ -51,12 +51,12 @@ public class FactionPowerRequirement extends Requirement {
 	}
 
 	@Override
-	public boolean setOptions(List<String[]> optionsList) {
+	public boolean setOptions(final List<String[]> optionsList) {
 
-		for (String[] options : optionsList) {
+		for (final String[] options : optionsList) {
 			factionPowers.add(Double.parseDouble(options[0]));
 		}
-		
+
 		return !factionPowers.isEmpty();
 	}
 }

@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 
 public class ItemsCraftedRequirement extends Requirement {
 
-	private List<Integer> itemsCrafted = new ArrayList<Integer>();
+	private final List<Integer> itemsCrafted = new ArrayList<Integer>();
 
 	@Override
 	public String getDescription() {
@@ -27,18 +27,19 @@ public class ItemsCraftedRequirement extends Requirement {
 				StatsHandler.statTypes.ITEMS_CRAFTED.toString(),
 				player.getUniqueId());
 
-		progress = AutorankTools.makeProgressString(itemsCrafted, "", progressBar + "");
+		progress = AutorankTools.makeProgressString(itemsCrafted, "",
+				progressBar + "");
 		return progress;
 	}
 
 	@Override
 	public boolean meetsRequirement(final Player player) {
 
-		int realItemsCrafted = this.getStatsPlugin().getNormalStat(
+		final int realItemsCrafted = this.getStatsPlugin().getNormalStat(
 				StatsHandler.statTypes.ITEMS_CRAFTED.toString(),
 				player.getUniqueId());
 
-		for (int items : itemsCrafted) {
+		for (final int items : itemsCrafted) {
 			if (realItemsCrafted >= items)
 				return true;
 		}
@@ -47,12 +48,12 @@ public class ItemsCraftedRequirement extends Requirement {
 	}
 
 	@Override
-	public boolean setOptions(List<String[]> optionsList) {
+	public boolean setOptions(final List<String[]> optionsList) {
 
-		for (String[] options : optionsList) {
+		for (final String[] options : optionsList) {
 			itemsCrafted.add(Integer.parseInt(options[0]));
 		}
-		
+
 		return !itemsCrafted.isEmpty();
 	}
 }

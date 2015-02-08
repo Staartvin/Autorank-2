@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack;
 public class HasItemRequirement extends Requirement {
 
 	// id;amount;data;name
-	private List<ItemWrapper> neededItems = new ArrayList<ItemWrapper>();
+	private final List<ItemWrapper> neededItems = new ArrayList<ItemWrapper>();
 
 	//List<String> neededItems = new ArrayList<String>();
 
@@ -23,12 +23,12 @@ public class HasItemRequirement extends Requirement {
 	@Override
 	public String getDescription() {
 
-		List<String> names = new ArrayList<String>();
+		final List<String> names = new ArrayList<String>();
 
 		for (int i = 0; i < neededItems.size(); i++) {
-			ItemWrapper wrapper = neededItems.get(i);
+			final ItemWrapper wrapper = neededItems.get(i);
 
-			ItemStack item = wrapper.getItem();
+			final ItemStack item = wrapper.getItem();
 
 			final StringBuilder arg = new StringBuilder(item.getAmount() + " ");
 
@@ -44,7 +44,6 @@ public class HasItemRequirement extends Requirement {
 				}
 			}
 
-			
 			names.add(arg.toString());
 			/*if (i == 0) {
 				names.add(arg.toString());
@@ -63,8 +62,8 @@ public class HasItemRequirement extends Requirement {
 		String progress = "";
 
 		for (int i = 0; i < neededItems.size(); i++) {
-			ItemWrapper wrapper = neededItems.get(i);
-			ItemStack item = wrapper.getItem();
+			final ItemWrapper wrapper = neededItems.get(i);
+			final ItemStack item = wrapper.getItem();
 
 			final int firstSlot = player.getInventory().first(item.getType());
 			int slotAmount = 0;
@@ -88,8 +87,8 @@ public class HasItemRequirement extends Requirement {
 	@Override
 	public boolean meetsRequirement(final Player player) {
 
-		for (ItemWrapper wrapper : neededItems) {
-			ItemStack item = wrapper.getItem();
+		for (final ItemWrapper wrapper : neededItems) {
+			final ItemStack item = wrapper.getItem();
 
 			if (item != null
 					&& player.getInventory().containsAtLeast(item,
@@ -97,15 +96,15 @@ public class HasItemRequirement extends Requirement {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public boolean setOptions(List<String[]> optionsList) {
+	public boolean setOptions(final List<String[]> optionsList) {
 
-		for (String[] options : optionsList) {
+		for (final String[] options : optionsList) {
 			int id = 0;
 			int amount = 1;
 			short data = 0;
@@ -128,7 +127,7 @@ public class HasItemRequirement extends Requirement {
 			}
 
 			//item = new ItemStack(id, 1, (short) 0, data);
-			ItemStack item = new ItemStack(id, amount, data);
+			final ItemStack item = new ItemStack(id, amount, data);
 
 			neededItems.add(new ItemWrapper(item, displayName, showShortValue));
 		}
@@ -143,8 +142,8 @@ class ItemWrapper {
 	private String displayName;
 	private boolean showShortValue = false;
 
-	public ItemWrapper(ItemStack item, String displayName,
-			boolean showShortValue) {
+	public ItemWrapper(final ItemStack item, final String displayName,
+			final boolean showShortValue) {
 		this.setItem(item);
 		this.setDisplayName(displayName);
 		this.setShowShortValue(showShortValue);
@@ -154,7 +153,7 @@ class ItemWrapper {
 		return item;
 	}
 
-	public void setItem(ItemStack item) {
+	public void setItem(final ItemStack item) {
 		this.item = item;
 	}
 
@@ -162,7 +161,7 @@ class ItemWrapper {
 		return displayName;
 	}
 
-	public void setDisplayName(String displayName) {
+	public void setDisplayName(final String displayName) {
 		this.displayName = displayName;
 	}
 
@@ -170,7 +169,7 @@ class ItemWrapper {
 		return showShortValue;
 	}
 
-	public void setShowShortValue(boolean showShortValue) {
+	public void setShowShortValue(final boolean showShortValue) {
 		this.showShortValue = showShortValue;
 	}
 }

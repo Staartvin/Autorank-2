@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 
 public class MoneyRequirement extends Requirement {
 
-	private List<Double> minMoney = new ArrayList<Double>();
+	private final List<Double> minMoney = new ArrayList<Double>();
 
 	@Override
 	public String getDescription() {
@@ -25,10 +25,12 @@ public class MoneyRequirement extends Requirement {
 	public String getProgress(final Player player) {
 		//UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
 		String progress = "";
-		
-		double money = VaultHandler.economy.getBalance(player.getPlayer());
-		
-		progress = AutorankTools.makeProgressString(minMoney, VaultHandler.economy.currencyNamePlural(), money + "");
+
+		final double money = VaultHandler.economy
+				.getBalance(player.getPlayer());
+
+		progress = AutorankTools.makeProgressString(minMoney,
+				VaultHandler.economy.currencyNamePlural(), money + "");
 		return progress;
 	}
 
@@ -36,26 +38,28 @@ public class MoneyRequirement extends Requirement {
 	public boolean meetsRequirement(final Player player) {
 
 		//UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
-		if (VaultHandler.economy == null) return false;
-		
-		for (double minMoneys: minMoney) {
-			if (VaultHandler.economy.has(player.getPlayer(), minMoneys)) return true;
+		if (VaultHandler.economy == null)
+			return false;
+
+		for (final double minMoneys : minMoney) {
+			if (VaultHandler.economy.has(player.getPlayer(), minMoneys))
+				return true;
 		}
 
 		return false;
 	}
 
 	@Override
-	public boolean setOptions(List<String[]> optionsList) {
-		
-		for (String[] options: optionsList) {
+	public boolean setOptions(final List<String[]> optionsList) {
+
+		for (final String[] options : optionsList) {
 			try {
 				minMoney.add(Double.parseDouble(options[0]));
 			} catch (final Exception e) {
 				return false;
-			}	
+			}
 		}
-		
+
 		return !minMoney.isEmpty();
 	}
 }

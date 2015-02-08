@@ -14,8 +14,8 @@ public class PermissionRequirement extends Requirement {
 
 	@Override
 	public String getDescription() {
-		return Lang.PERMISSION_REQUIREMENT
-				.getConfigValue(AutorankTools.seperateList(permissions, "or"));
+		return Lang.PERMISSION_REQUIREMENT.getConfigValue(AutorankTools
+				.seperateList(permissions, "or"));
 	}
 
 	@Override
@@ -27,24 +27,25 @@ public class PermissionRequirement extends Requirement {
 	@Override
 	public boolean meetsRequirement(final Player player) {
 
-		for (String perm: permissions) {
-			if (player.hasPermission(perm)) return true;
+		for (final String perm : permissions) {
+			if (player.hasPermission(perm))
+				return true;
 		}
-		
+
 		return false;
 	}
 
 	@Override
-	public boolean setOptions(List<String[]> optionsList) {
-		
-		for (String[] options: optionsList) {
+	public boolean setOptions(final List<String[]> optionsList) {
+
+		for (final String[] options : optionsList) {
 			try {
 				permissions.add(options[0]);
 			} catch (final Exception e) {
 				return false;
-			}	
+			}
 		}
-		
+
 		return !permissions.isEmpty();
 	}
 }

@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 
 public class FishCaughtRequirement extends Requirement {
 
-	private List<Integer> fishCaught = new ArrayList<Integer>();
+	private final List<Integer> fishCaught = new ArrayList<Integer>();
 
 	@Override
 	public String getDescription() {
@@ -36,11 +36,11 @@ public class FishCaughtRequirement extends Requirement {
 	@Override
 	public boolean meetsRequirement(final Player player) {
 
-		int fish = this.getStatsPlugin().getNormalStat(
+		final int fish = this.getStatsPlugin().getNormalStat(
 				StatsHandler.statTypes.FISH_CAUGHT.toString(),
 				player.getUniqueId());
 
-		for (int fishC : fishCaught) {
+		for (final int fishC : fishCaught) {
 			if (fish >= fishC)
 				return true;
 		}
@@ -49,12 +49,12 @@ public class FishCaughtRequirement extends Requirement {
 	}
 
 	@Override
-	public boolean setOptions(List<String[]> optionsList) {
+	public boolean setOptions(final List<String[]> optionsList) {
 
-		for (String[] options: optionsList) {
-			fishCaught.add(Integer.parseInt(options[0]));	
+		for (final String[] options : optionsList) {
+			fishCaught.add(Integer.parseInt(options[0]));
 		}
-		
+
 		return !fishCaught.isEmpty();
 	}
 }

@@ -15,17 +15,17 @@ public class InBiomeRequirement extends Requirement {
 
 	@Override
 	public String getDescription() {
-		String arg = AutorankTools.seperateList(biomes, "or");
+		final String arg = AutorankTools.seperateList(biomes, "or");
 
 		return Lang.IN_BIOME_REQUIREMENT.getConfigValue(arg);
 	}
 
 	@Override
 	public String getProgress(final Player player) {
-		String currentBiome = player.getLocation().getBlock().getBiome()
+		final String currentBiome = player.getLocation().getBlock().getBiome()
 				.toString();
 
-		String progress = AutorankTools.makeProgressString(biomes, "",
+		final String progress = AutorankTools.makeProgressString(biomes, "",
 				currentBiome);
 
 		return progress;
@@ -35,7 +35,7 @@ public class InBiomeRequirement extends Requirement {
 	public boolean meetsRequirement(final Player player) {
 		final Location pLocation = player.getLocation();
 
-		for (String biome : biomes) {
+		for (final String biome : biomes) {
 			if (pLocation.getBlock().getBiome().toString().equals(biome)) {
 				return true;
 			}
@@ -45,9 +45,9 @@ public class InBiomeRequirement extends Requirement {
 	}
 
 	@Override
-	public boolean setOptions(List<String[]> optionsList) {
+	public boolean setOptions(final List<String[]> optionsList) {
 
-		for (String[] options : optionsList) {
+		for (final String[] options : optionsList) {
 
 			// biomes
 			if (options.length != 1) {

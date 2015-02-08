@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 
 public class DamageTakenRequirement extends Requirement {
 
-	private List<Integer> damageTaken = new ArrayList<Integer>();
+	private final List<Integer> damageTaken = new ArrayList<Integer>();
 
 	@Override
 	public String getDescription() {
@@ -23,7 +23,7 @@ public class DamageTakenRequirement extends Requirement {
 	public String getProgress(final Player player) {
 		String progress = "";
 
-		int damTaken = getStatsPlugin().getNormalStat(
+		final int damTaken = getStatsPlugin().getNormalStat(
 				StatsHandler.statTypes.DAMAGE_TAKEN.toString(),
 				player.getUniqueId());
 
@@ -35,11 +35,11 @@ public class DamageTakenRequirement extends Requirement {
 	@Override
 	public boolean meetsRequirement(final Player player) {
 
-		int damTaken = getStatsPlugin().getNormalStat(
+		final int damTaken = getStatsPlugin().getNormalStat(
 				StatsHandler.statTypes.DAMAGE_TAKEN.toString(),
 				player.getUniqueId());
 
-		for (int damageTake : damageTaken) {
+		for (final int damageTake : damageTaken) {
 			if (damTaken >= damageTake)
 				return true;
 		}
@@ -48,12 +48,12 @@ public class DamageTakenRequirement extends Requirement {
 	}
 
 	@Override
-	public boolean setOptions(List<String[]> optionsList) {
+	public boolean setOptions(final List<String[]> optionsList) {
 
-		for (String[] options : optionsList) {
+		for (final String[] options : optionsList) {
 			damageTaken.add(Integer.parseInt(options[0]));
 		}
-		
+
 		return !damageTaken.isEmpty();
 	}
 }

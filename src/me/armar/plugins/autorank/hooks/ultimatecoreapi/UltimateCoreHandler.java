@@ -40,14 +40,14 @@ public class UltimateCoreHandler implements DependencyHandler {
 			/*&& plugin instanceof bammerbom.ultimatecore.UltimateCore*/) {
 				return plugin;
 			}
-		} catch (Exception ex) {
+		} catch (final Exception ex) {
 		}
 		try { //Avoid ClassNotFound
 			if (plugin != null
 					&& plugin instanceof bammerbom.ultimatecore.bukkit.UltimateCore) {
 				return plugin;
 			}
-		} catch (Exception ex) {
+		} catch (final Exception ex) {
 		}
 
 		return plugin;
@@ -66,7 +66,7 @@ public class UltimateCoreHandler implements DependencyHandler {
 	 */
 	@Override
 	public boolean isInstalled() {
-		final Plugin plugin = (Plugin) get();
+		final Plugin plugin = get();
 		return plugin != null && plugin.isEnabled();
 	}
 

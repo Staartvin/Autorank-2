@@ -33,8 +33,7 @@ public enum Lang {
 	/**
 	 * Break at least {0}.
 	 */
-	BROKEN_BLOCKS_REQUIREMENT("broken-blocks-requirement",
-			"Break at least {0}"),
+	BROKEN_BLOCKS_REQUIREMENT("broken-blocks-requirement", "Break at least {0}"),
 	/**
 	 * Cannot check for console!
 	 */
@@ -178,8 +177,7 @@ public enum Lang {
 	/**
 	 * Place at least {0}.
 	 */
-	PLACED_BLOCKS_REQUIREMENT("placed-blocks-requirement",
-			"Place at least {0}"),
+	PLACED_BLOCKS_REQUIREMENT("placed-blocks-requirement", "Place at least {0}"),
 	/**
 	 * {0} is excluded from ranking!
 	 */
@@ -268,8 +266,7 @@ public enum Lang {
 	/**
 	 * Be in biome '{0}'.
 	 */
-	IN_BIOME_REQUIREMENT(
-			"in-biome-requirement", "Be in biome {0}"), ;
+	IN_BIOME_REQUIREMENT("in-biome-requirement", "Be in biome {0}"), ;
 
 	private static FileConfiguration LANG;
 

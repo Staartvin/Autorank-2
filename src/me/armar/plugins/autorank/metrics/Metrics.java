@@ -571,14 +571,15 @@ public class Metrics {
 		final boolean onlineMode = Bukkit.getServer().getOnlineMode(); // TRUE if online mode is enabled
 		final String pluginVersion = description.getVersion();
 		final String serverVersion = Bukkit.getVersion();
-	
+
 		// Trick to get the count as Bukkit.getOnlinePlayers() isn't properly working with Spigot and Bukkit
 		int count = 0;
-		
-		for (@SuppressWarnings("unused") Player player: Bukkit.getServer().getOnlinePlayers()) {
+
+		for (@SuppressWarnings("unused")
+		final Player player : Bukkit.getServer().getOnlinePlayers()) {
 			count++;
 		}
-		
+
 		final int playersOnline = count;
 
 		// END server software specific section -- all code below does not use any code outside of this class / Java

@@ -39,7 +39,7 @@ public class WorldGuardRegionRequirement extends Requirement {
 		final WorldGuardHandler wgH = (WorldGuardHandler) this.getAutorank()
 				.getDependencyManager().getDependency(dependency.WORLDGUARD);
 
-		for (String region : regionNames) {
+		for (final String region : regionNames) {
 			if (wgH.isInRegion(player, region))
 				return true;
 		}
@@ -48,14 +48,14 @@ public class WorldGuardRegionRequirement extends Requirement {
 	}
 
 	@Override
-	public boolean setOptions(List<String[]> optionsList) {
-		
-		for (String[] options: optionsList) {
+	public boolean setOptions(final List<String[]> optionsList) {
+
+		for (final String[] options : optionsList) {
 			if (options.length > 0) {
 				regionNames.add(options[0].trim());
 			}
 		}
-		
+
 		return !regionNames.isEmpty();
 	}
 }

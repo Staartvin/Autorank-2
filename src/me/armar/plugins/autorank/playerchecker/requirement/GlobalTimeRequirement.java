@@ -21,14 +21,14 @@ import org.bukkit.entity.Player;
  */
 public class GlobalTimeRequirement extends Requirement {
 
-	private List<Integer> times = new ArrayList<Integer>();
+	private final List<Integer> times = new ArrayList<Integer>();
 
 	@Override
 	public String getDescription() {
 
-		List<String> sTimes = new ArrayList<String>();
+		final List<String> sTimes = new ArrayList<String>();
 
-		for (int time : times) {
+		for (final int time : times) {
 			sTimes.add(AutorankTools.timeToString(time, Time.MINUTES));
 		}
 
@@ -41,7 +41,7 @@ public class GlobalTimeRequirement extends Requirement {
 
 		String progress = "";
 
-		int playtime = getAutorank().getPlaytimes().getGlobalTime(
+		final int playtime = getAutorank().getPlaytimes().getGlobalTime(
 				UUIDManager.getUUIDFromPlayer(player.getName()));
 
 		progress = AutorankTools
@@ -56,7 +56,7 @@ public class GlobalTimeRequirement extends Requirement {
 		final double playtime = this.getAutorank().getPlaytimes()
 				.getGlobalTime(uuid);
 
-		for (int time : times) {
+		for (final int time : times) {
 			if (time > 0 && playtime >= time) {
 				return true;
 			}
@@ -66,9 +66,9 @@ public class GlobalTimeRequirement extends Requirement {
 	}
 
 	@Override
-	public boolean setOptions(List<String[]> optionsList) {
+	public boolean setOptions(final List<String[]> optionsList) {
 
-		for (String[] options : optionsList) {
+		for (final String[] options : optionsList) {
 			if (options.length > 0) {
 				times.add(AutorankTools.stringToTime(options[0], Time.MINUTES));
 			}

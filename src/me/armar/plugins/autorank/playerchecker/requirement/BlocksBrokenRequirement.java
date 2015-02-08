@@ -12,8 +12,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class BlocksBrokenRequirement extends Requirement {
 
-	private List<BlocksWrapper> wrappers = new ArrayList<BlocksWrapper>();
-	
+	private final List<BlocksWrapper> wrappers = new ArrayList<BlocksWrapper>();
+
 	//private int blockID = -1;
 	//private int blocksBroken = 0;
 	//private int damageValue = -1;
@@ -21,13 +21,13 @@ public class BlocksBrokenRequirement extends Requirement {
 	@SuppressWarnings("deprecation")
 	@Override
 	public String getDescription() {
-		List<String> names = new ArrayList<String>();
+		final List<String> names = new ArrayList<String>();
 
 		for (int i = 0; i < wrappers.size(); i++) {
-			BlocksWrapper wrapper = wrappers.get(i);
+			final BlocksWrapper wrapper = wrappers.get(i);
 
-			int blockID = wrapper.getBlockId();
-			int damageValue = wrapper.getDamageValue();
+			final int blockID = wrapper.getBlockId();
+			final int damageValue = wrapper.getDamageValue();
 
 			String message = wrapper.getBlocksBroken() + " ";
 
@@ -51,8 +51,8 @@ public class BlocksBrokenRequirement extends Requirement {
 			names.add(message);
 		}
 
-		return Lang.BROKEN_BLOCKS_REQUIREMENT
-				.getConfigValue(AutorankTools.seperateList(names, "or"));
+		return Lang.BROKEN_BLOCKS_REQUIREMENT.getConfigValue(AutorankTools
+				.seperateList(names, "or"));
 	}
 
 	@Override
@@ -60,9 +60,9 @@ public class BlocksBrokenRequirement extends Requirement {
 		String progress = "";
 
 		for (int i = 0; i < wrappers.size(); i++) {
-			BlocksWrapper wrapper = wrappers.get(i);
+			final BlocksWrapper wrapper = wrappers.get(i);
 
-			int progressBar = getStatsPlugin().getNormalStat(
+			final int progressBar = getStatsPlugin().getNormalStat(
 					StatsHandler.statTypes.BLOCKS_BROKEN.toString(),
 					player.getUniqueId(), null, wrapper.getBlockId() + "",
 					wrapper.getDamageValue() + "");
@@ -80,17 +80,17 @@ public class BlocksBrokenRequirement extends Requirement {
 	}
 
 	@Override
-	public boolean meetsRequirement(final Player player) {		
+	public boolean meetsRequirement(final Player player) {
 		final boolean enabled = getStatsPlugin().isEnabled();
 
 		if (!enabled)
 			return false;
 
-		for (BlocksWrapper wrapper : wrappers) {
+		for (final BlocksWrapper wrapper : wrappers) {
 
-			int blockID = wrapper.getBlockId();
-			int damageValue = wrapper.getDamageValue();
-			int blocksBroken = wrapper.getBlocksBroken();
+			final int blockID = wrapper.getBlockId();
+			final int damageValue = wrapper.getDamageValue();
+			final int blocksBroken = wrapper.getBlocksBroken();
 
 			int progress = 0;
 
@@ -113,8 +113,8 @@ public class BlocksBrokenRequirement extends Requirement {
 	}
 
 	@Override
-	public boolean setOptions(List<String[]> optionsList) {
-		for (String[] options : optionsList) {
+	public boolean setOptions(final List<String[]> optionsList) {
+		for (final String[] options : optionsList) {
 			int blocksBroken = 0;
 			int blockId = -1;
 			int damageValue = -1;
@@ -141,7 +141,8 @@ class BlocksWrapper {
 
 	private int blockId, blocksBroken, damageValue;
 
-	public BlocksWrapper(int blockId, int blocksBroken, int damageValue) {
+	public BlocksWrapper(final int blockId, final int blocksBroken,
+			final int damageValue) {
 		this.setBlockId(blockId);
 		this.setBlocksBroken(blocksBroken);
 		this.setDamageValue(damageValue);
@@ -151,7 +152,7 @@ class BlocksWrapper {
 		return blockId;
 	}
 
-	public void setBlockId(int blockId) {
+	public void setBlockId(final int blockId) {
 		this.blockId = blockId;
 	}
 
@@ -159,7 +160,7 @@ class BlocksWrapper {
 		return blocksBroken;
 	}
 
-	public void setBlocksBroken(int blocksBroken) {
+	public void setBlocksBroken(final int blocksBroken) {
 		this.blocksBroken = blocksBroken;
 	}
 
@@ -167,7 +168,7 @@ class BlocksWrapper {
 		return damageValue;
 	}
 
-	public void setDamageValue(int damageValue) {
+	public void setDamageValue(final int damageValue) {
 		this.damageValue = damageValue;
 	}
 

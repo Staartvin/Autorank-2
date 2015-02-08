@@ -21,7 +21,7 @@ public class WorldRequirement extends Requirement {
 	@Override
 	public String getProgress(final Player player) {
 		String progress = "";
-		String world = player.getWorld().getName();
+		final String world = player.getWorld().getName();
 
 		progress = AutorankTools.makeProgressString(worlds, "", world);
 		return progress;
@@ -30,9 +30,9 @@ public class WorldRequirement extends Requirement {
 	@Override
 	public boolean meetsRequirement(final Player player) {
 
-		String world = player.getWorld().getName();
+		final String world = player.getWorld().getName();
 
-		for (String realWorld : worlds) {
+		for (final String realWorld : worlds) {
 			if (realWorld != null && realWorld.equals(world))
 				return true;
 		}
@@ -41,13 +41,13 @@ public class WorldRequirement extends Requirement {
 	}
 
 	@Override
-	public boolean setOptions(List<String[]> optionsList) {
+	public boolean setOptions(final List<String[]> optionsList) {
 
-		for (String[] options : optionsList) {
+		for (final String[] options : optionsList) {
 			if (options.length > 0)
 				worlds.add(options[0]);
 		}
-		
+
 		return !worlds.isEmpty();
 	}
 }

@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 
 public class GamemodeRequirement extends Requirement {
 
-	private List<Integer> gamemodes = new ArrayList<Integer>();
+	private final List<Integer> gamemodes = new ArrayList<Integer>();
 
 	@Override
 	public String getDescription() {
@@ -23,7 +23,7 @@ public class GamemodeRequirement extends Requirement {
 		String progress = "";
 
 		@SuppressWarnings("deprecation")
-		int gamemode = player.getGameMode().getValue();
+		final int gamemode = player.getGameMode().getValue();
 
 		progress = AutorankTools.makeProgressString(gamemodes, "", gamemode);
 		return progress;
@@ -32,24 +32,24 @@ public class GamemodeRequirement extends Requirement {
 	@Override
 	public boolean meetsRequirement(final Player player) {
 		@SuppressWarnings("deprecation")
-		int gamemode = player.getGameMode().getValue();
-		
-		for (int mode: gamemodes) {
-			if (gamemode == mode) return true;
+		final int gamemode = player.getGameMode().getValue();
+
+		for (final int mode : gamemodes) {
+			if (gamemode == mode)
+				return true;
 		}
-		
+
 		return false;
 	}
 
 	@Override
-	public boolean setOptions(List<String[]> optionsList) {
-		
-		for (String[] options: optionsList) {
+	public boolean setOptions(final List<String[]> optionsList) {
+
+		for (final String[] options : optionsList) {
 			if (options.length > 0)
 				gamemodes.add(AutorankTools.stringtoInt(options[0]));
 		}
-		
-		
+
 		return !gamemodes.isEmpty();
 	}
 }

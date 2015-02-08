@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 
 public class EssentialsGeoIPRequirement extends Requirement {
 
-	private List<String> locations = new ArrayList<String>();
+	private final List<String> locations = new ArrayList<String>();
 	private EssentialsHandler essHandler = null;
 
 	@Override
@@ -36,7 +36,7 @@ public class EssentialsGeoIPRequirement extends Requirement {
 		if (realLocation == null)
 			return false;
 
-		for (String loc : locations) {
+		for (final String loc : locations) {
 			if (loc != null && loc.equalsIgnoreCase(realLocation))
 				return true;
 		}
@@ -45,20 +45,20 @@ public class EssentialsGeoIPRequirement extends Requirement {
 	}
 
 	@Override
-	public boolean setOptions(List<String[]> optionsList) {
-		
+	public boolean setOptions(final List<String[]> optionsList) {
+
 		essHandler = (EssentialsHandler) this.getDependencyManager()
 				.getDependency(dependency.ESSENTIALS);
-		
-		for (String[] options: optionsList) {
+
+		for (final String[] options : optionsList) {
 			if (options.length != 1) {
 				return false;
 			}
 
 			locations.add(options[0]);
 		}
-		
+
 		return !locations.isEmpty();
-		
+
 	}
 }

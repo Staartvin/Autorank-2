@@ -26,9 +26,9 @@ public class TotalTimeRequirement extends Requirement {
 	@Override
 	public String getDescription() {
 
-		List<String> sTimes = new ArrayList<String>();
+		final List<String> sTimes = new ArrayList<String>();
 
-		for (int time : times) {
+		for (final int time : times) {
 			sTimes.add(AutorankTools.timeToString(time, Time.MINUTES));
 		}
 
@@ -65,7 +65,7 @@ public class TotalTimeRequirement extends Requirement {
 		// Difference in minutes
 		final long difference = (currentTime - joinTime) / 60000;
 
-		for (int time : times) {
+		for (final int time : times) {
 			if (time != -1 && difference >= time) {
 				return true;
 			}
@@ -74,8 +74,8 @@ public class TotalTimeRequirement extends Requirement {
 	}
 
 	@Override
-	public boolean setOptions(List<String[]> optionsList) {
-		for (String[] options : optionsList) {
+	public boolean setOptions(final List<String[]> optionsList) {
+		for (final String[] options : optionsList) {
 			if (options.length > 0) {
 				times.add(AutorankTools.stringToTime(options[0], Time.MINUTES));
 			} else {
