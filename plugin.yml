@@ -94,4 +94,7 @@ permissions:
         default: op
     autorank.gset.other:
         description: Allows changing others global playtime.
-        default: op    
+        default: op
+    autorank.hooks:
+        description: Allows viewing the available hooks for Autorank
+        default: op            
