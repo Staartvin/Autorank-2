@@ -56,6 +56,6 @@ public class TimesShearedRequirement extends Requirement {
 			}
 		}
 		
-		return true;
+		return !timesShorn.isEmpty();
 	}
 }

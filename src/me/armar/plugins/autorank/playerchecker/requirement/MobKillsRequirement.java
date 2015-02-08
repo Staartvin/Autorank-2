@@ -1,61 +1,134 @@
 package me.armar.plugins.autorank.playerchecker.requirement;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.statsmanager.handlers.StatsHandler;
+import me.armar.plugins.autorank.util.AutorankTools;
 
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 public class MobKillsRequirement extends Requirement {
 
-	private String mobType = null;
-	private int totalMobsKilled = 0;
+	//private String mobType = null;
+	//private int totalMobsKilled = 0;
+
+	// [0] totalMobsKilled, [1] mobType
+	List<String> mobsKilledCombined = new ArrayList<String>();
 
 	@Override
 	public String getDescription() {
-		if (mobType == null) {
-			return Lang.TOTAL_MOBS_KILLED_REQUIREMENT
-					.getConfigValue(new String[] { totalMobsKilled + " mobs" });
-		} else {
-			final EntityType entity = EntityType.valueOf(mobType.toUpperCase());
-			return Lang.TOTAL_MOBS_KILLED_REQUIREMENT
-					.getConfigValue(new String[] { totalMobsKilled + " "
+
+		String desc = "";
+
+		for (int i = 0; i < mobsKilledCombined.size(); i++) {
+			String mobsKilledCombinedString = mobsKilledCombined.get(i);
+			//String[] split = skillCombined.split(";");
+			String total = AutorankTools.getStringFromSplitString(
+					mobsKilledCombinedString, ";", 0);
+			String mobType = AutorankTools.getStringFromSplitString(
+					mobsKilledCombinedString, ";", 1);
+
+			if (i == 0) {
+				if (mobType == null) {
+					desc = Lang.TOTAL_MOBS_KILLED_REQUIREMENT
+							.getConfigValue(total + " mobs");
+				} else {
+					final EntityType entity = EntityType.valueOf(mobType
+							.toUpperCase());
+					desc = Lang.TOTAL_MOBS_KILLED_REQUIREMENT
+							.getConfigValue(total
+									+ " "
+									+ entity.toString().toLowerCase()
+											.replace("_", " ") + "(s)");
+				}
+			} else {
+				if (mobType == null) {
+					desc = desc.concat(" or " + total + " mobs");
+				} else {
+					final EntityType entity = EntityType.valueOf(mobType
+							.toUpperCase());
+					desc = desc.concat(" or " + total + " "
 							+ entity.toString().toLowerCase().replace("_", " ")
-							+ "(s)" });
+							+ "(s)");
+				}
+			}
 		}
 
+		return desc;
 	}
 
 	@Override
 	public String getProgress(final Player player) {
+
 		String progress = "";
-		progress = progress.concat(getStatsPlugin().getNormalStat(
-				StatsHandler.statTypes.MOBS_KILLED.toString(),
-				player.getUniqueId(), null, mobType)
-				+ "/" + totalMobsKilled);
+
+		for (int i = 0; i < mobsKilledCombined.size(); i++) {
+			String mobKilledCombined = mobsKilledCombined.get(i);
+			String mobType = AutorankTools.getStringFromSplitString(
+					mobKilledCombined, ";", 1);
+			String total = AutorankTools.getStringFromSplitString(
+					mobKilledCombined, ";", 0);
+
+			final int killed = getStatsPlugin().getNormalStat(
+					StatsHandler.statTypes.MOBS_KILLED.toString(),
+					player.getUniqueId(), null, mobType);
+
+			if (mobType == null) {
+				mobType = "mobs";
+			}
+
+			if (i == 0) {
+				progress = progress.concat(killed + "/" + total + " " + mobType);
+			} else {
+				progress = progress.concat(" or " + killed + "/" + total + " " + mobType);
+			}
+
+		}
 		return progress;
 	}
 
 	@Override
 	public boolean meetsRequirement(final Player player) {
-		return getStatsPlugin().isEnabled()
-				&& getStatsPlugin().getNormalStat(
-						StatsHandler.statTypes.MOBS_KILLED.toString(),
-						player.getUniqueId(), null, mobType) >= totalMobsKilled;
+
+		if (!this.getStatsPlugin().isEnabled())
+			return false;
+
+		for (int i = 0; i < mobsKilledCombined.size(); i++) {
+			String mobKilledCombined = mobsKilledCombined.get(i);
+			String mobType = AutorankTools.getStringFromSplitString(
+					mobKilledCombined, ";", 1);
+			String total = AutorankTools.getStringFromSplitString(
+					mobKilledCombined, ";", 0);
+
+			final int killed = getStatsPlugin().getNormalStat(
+					StatsHandler.statTypes.MOBS_KILLED.toString(),
+					player.getUniqueId(), null, mobType);
+
+			if (killed >= Integer.parseInt(total))
+				return true;
+
+		}
+
+		return false;
 	}
 
 	@Override
-	public boolean setOptions(final String[] options) {
-		try {
-			totalMobsKilled = Integer.parseInt(options[0]);
+	public boolean setOptions(List<String[]> optionsList) {
 
-			if (options.length > 1) {
-				mobType = options[1].trim().replace(" ", "_");
-			}
-			return true;
-		} catch (final Exception e) {
-			totalMobsKilled = 0;
-			return false;
+		for (String[] options : optionsList) {
+				int total = Integer.parseInt(options[0]);
+				String mobType = null;
+				
+				if (options.length > 1) {
+					mobType = options[1].trim().replace(" ", "_");
+				}
+				
+				mobsKilledCombined.add(total + ";" + mobType);
 		}
+
+		return !mobsKilledCombined.isEmpty();
 	}
 }

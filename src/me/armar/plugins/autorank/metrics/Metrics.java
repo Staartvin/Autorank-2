@@ -51,6 +51,7 @@ import java.util.zip.GZIPOutputStream;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.scheduler.BukkitTask;
@@ -562,6 +563,7 @@ public class Metrics {
 	/**
 	 * Generic method that posts a plugin to the metrics website
 	 */
+	@SuppressWarnings("deprecation")
 	private void postPlugin(final boolean isPing) throws IOException {
 		// Server software specific section
 		final PluginDescriptionFile description = plugin.getDescription();
@@ -569,8 +571,14 @@ public class Metrics {
 		final boolean onlineMode = Bukkit.getServer().getOnlineMode(); // TRUE if online mode is enabled
 		final String pluginVersion = description.getVersion();
 		final String serverVersion = Bukkit.getVersion();
-		@SuppressWarnings("deprecation")
-		final int playersOnline = Bukkit.getServer().getOnlinePlayers().length;
+	
+		int count = 0;
+		
+		for (@SuppressWarnings("unused") Player player: Bukkit.getServer().getOnlinePlayers()) {
+			count++;
+		}
+		
+		final int playersOnline = count;
 
 		// END server software specific section -- all code below does not use any code outside of this class / Java
 

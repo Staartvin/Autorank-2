@@ -264,55 +264,89 @@ public class AutorankTools {
 
 		return b.toString();
 	}
-	
-	/** 
-	 * Create a string that shows all elements of the given list
-	 * <br>The end divider is the last word used for the second last element.
-	 * <br>Example: a list with {1,2,3,4,5,6,7,8,9,0} and end divider 'or'.
-	 * <br>Would show: 1, 2, 3, 4, 5, 6, 7, 8, 9 or 0.
+
+	/**
+	 * Create a string that shows all elements of the given list <br>
+	 * The end divider is the last word used for the second last element. <br>
+	 * Example: a list with {1,2,3,4,5,6,7,8,9,0} and end divider 'or'. <br>
+	 * Would show: 1, 2, 3, 4, 5, 6, 7, 8, 9 or 0.
+	 * 
 	 * @param array Array to get the elements from.
-	 * @param endDivider Last word used for dividing the second last and last word.
+	 * @param endDivider Last word used for dividing the second last and last
+	 *            word.
 	 * @return string with all elements.
 	 */
 	public static String seperateList(Collection<?> c, String endDivider) {
 		Object[] array = c.toArray();
-		if (array.length == 1) return array[0].toString();
-		
-		if (array.length == 0) return null;
-		
+		if (array.length == 1)
+			return array[0].toString();
+
+		if (array.length == 0)
+			return null;
+
 		StringBuilder string = new StringBuilder("");
-		
-		for (int i=0;i<array.length;i++) {
-			
+
+		for (int i = 0; i < array.length; i++) {
+
 			if (i == (array.length - 1)) {
 				string.append(array[i]);
 			} else if (i == (array.length - 2)) {
 				// Second last
 				string.append(array[i] + " " + endDivider + " ");
 			} else {
-				string.append(array[i] + ", ");	
+				string.append(array[i] + ", ");
 			}
 		}
-		
+
 		return string.toString();
 	}
-	
-	public static String makeProgressString(Collection<?> c, String wordBetween, String valueBetween) {
+
+	public static String makeProgressString(Collection<?> c,
+			String wordBetween, Object currentValue) {
 		Object[] array = c.toArray();
-		
+
 		String progress = "";
-		
-		for (int i=0;i<c.size();i++) {
-			
+
+		for (int i = 0; i < c.size(); i++) {
+
 			String object = array[i].toString();
-			
-			if (i==0) {
-				progress += valueBetween + " " + wordBetween + "/" + object + " " + wordBetween;
+
+			if (i == 0) {
+				progress += currentValue + " " + wordBetween + "/" + object
+						+ " " + wordBetween;
 			} else {
-				progress += "or " + valueBetween + " " + wordBetween + "/" + object + " " + wordBetween;
+				progress += "or " + currentValue + " " + wordBetween + "/"
+						+ object + " " + wordBetween;
 			}
 		}
-		
+
 		return progress;
+	}
+
+	/**
+	 * Split a string with .split() and then get the given element in the array.
+	 * 
+	 * @param splitString String to split
+	 * @param splitterCharacter character to split the string with
+	 * @param element element to get
+	 * @return String that was at the given splitted element
+	 */
+	public static String getStringFromSplitString(String splitString,
+			String splitterCharacter, int element) {
+		String[] split = splitString.split(splitterCharacter);
+
+		String returnString = null;
+
+		try {
+			returnString = split[element];
+
+			if (returnString.trim().equals(""))
+				return null;
+			
+		} catch (ArrayIndexOutOfBoundsException e) {
+			return null;
+		}
+
+		return returnString;
 	}
 }

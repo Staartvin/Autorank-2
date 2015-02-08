@@ -81,6 +81,6 @@ public class TimeRequirement extends Requirement {
 			}
 		}
 
-		return true;
+		return !times.isEmpty();
 	}
 }

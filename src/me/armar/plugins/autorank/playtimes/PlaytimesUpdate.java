@@ -2,12 +2,11 @@ package me.armar.plugins.autorank.playtimes;
 
 import java.util.UUID;
 
+import org.bukkit.entity.Player;
+
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.DependencyManager;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
-
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
 /*
  * PlaytimesUpdate does an update on all online players 
@@ -28,9 +27,7 @@ public class PlaytimesUpdate implements Runnable {
 
 	@Override
 	public void run() {
-		@SuppressWarnings("deprecation")
-		Player[] onlinePlayers = Bukkit.getServer().getOnlinePlayers();
-		updateMinutesPlayed(onlinePlayers);
+		updateMinutesPlayed();
 	}
 
 	private void updateMinutesPlayed(final Player player) {
@@ -64,13 +61,19 @@ public class PlaytimesUpdate implements Runnable {
 		}
 	}
 
-	private void updateMinutesPlayed(final Player[] players) {
+	@SuppressWarnings("deprecation")
+	private void updateMinutesPlayed() {
 		plugin.debugMessage("Checking players for automatic ranking");
 
-		for (int i = 0; i < players.length; i++) {
-			if (players[i] != null) {
-				updateMinutesPlayed(players[i]);
+		for (Player player : plugin.getServer().getOnlinePlayers()) {
+
+			if (player.getPlayer() == null) {
+				plugin.debugMessage("Could not update play time of "
+						+ player.getName() + " as (s)he is not online!");
+				continue;
 			}
+
+			updateMinutesPlayed(player);
 		}
 	}
 

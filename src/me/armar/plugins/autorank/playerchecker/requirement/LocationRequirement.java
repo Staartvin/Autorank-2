@@ -1,6 +1,10 @@
 package me.armar.plugins.autorank.playerchecker.requirement;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import me.armar.plugins.autorank.language.Lang;
+import me.armar.plugins.autorank.util.AutorankTools;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -9,15 +13,40 @@ import org.bukkit.entity.Player;
 
 public class LocationRequirement extends Requirement {
 
-	private int radius = 1;
-	private String world;
-	private int xLocation = 0, yLocation = 0, zLocation = 0;
+	// x;y;z;world;radius
+	private List<String> locations = new ArrayList<String>();
+
+	//private int radius = 1;
+	//private String world;
+	//private int xLocation = 0, yLocation = 0, zLocation = 0;
 
 	@Override
 	public String getDescription() {
-		return Lang.LOCATION_REQUIREMENT
-				.getConfigValue(new String[] { xLocation + ", " + yLocation
-						+ ", " + zLocation + " in " + world });
+
+		List<String> stringLocs = new ArrayList<String>();
+
+		for (String loc : locations) {
+			// Save x,y,z
+			int xLocation = Integer.parseInt(AutorankTools
+					.getStringFromSplitString(loc, ";", 0));
+			int yLocation = Integer.parseInt(AutorankTools
+					.getStringFromSplitString(loc, ";", 1));
+			int zLocation = Integer.parseInt(AutorankTools
+					.getStringFromSplitString(loc, ";", 2));
+
+			// Save world
+			String world = AutorankTools.getStringFromSplitString(loc, ";", 3)
+					.trim();
+
+			// Save radius
+			//int radius = Integer.parseInt(AutorankTools.getStringFromSplitString(loc, ";", 4));
+
+			stringLocs.add(xLocation + ", " + yLocation + ", " + zLocation
+					+ " in " + world);
+		}
+
+		return Lang.LOCATION_REQUIREMENT.getConfigValue(AutorankTools
+				.seperateList(stringLocs, "or"));
 	}
 
 	@Override
@@ -35,19 +64,34 @@ public class LocationRequirement extends Requirement {
 		pY = playerLoc.getBlockY();
 		pZ = playerLoc.getBlockZ();
 
-		final int distance = (int) Math
-				.sqrt(Math.pow((pX - xLocation), 2)
-						+ Math.pow((pY - yLocation), 2)
-						+ Math.pow((pZ - zLocation), 2));
-
 		String progress = "";
-
 		String plurOrSing = "meter";
-
-		if (distance > 1) {
-			plurOrSing = "meters";
+		
+		for (int i=0;i<locations.size();i++) {
+			
+			String loc = locations.get(i);
+			
+			final int distance = (int) Math
+					.sqrt(Math.pow((pX - Integer.parseInt(AutorankTools
+							.getStringFromSplitString(loc, ";", 0))), 2)
+							+ Math.pow((pY - Integer.parseInt(AutorankTools
+									.getStringFromSplitString(loc, ";", 1))), 2)
+							+ Math.pow((pZ - Integer.parseInt(AutorankTools
+									.getStringFromSplitString(loc, ";", 2))), 2));
+			
+			if (distance > 1) {
+				plurOrSing = "meters";
+			} else {
+				plurOrSing = "meter";
+			}
+			
+			if (i == 0) {
+				progress = progress.concat(distance + " " + plurOrSing + " away");
+			} else {
+				progress = progress.concat(" or " + distance + " " + plurOrSing + " away");
+			}
 		}
-		progress = progress.concat(distance + " " + plurOrSing + " away.");
+
 		return progress;
 	}
 
@@ -55,66 +99,86 @@ public class LocationRequirement extends Requirement {
 	public boolean meetsRequirement(final Player player) {
 		final Location pLocation = player.getLocation();
 
-		// Positive and negative values
-		int xRadiusP, yRadiusP, zRadiusP, xRadiusN, yRadiusN, zRadiusN;
+		for (String loc: locations) {
+			// Positive and negative values
+			int xRadiusP, yRadiusP, zRadiusP, xRadiusN, yRadiusN, zRadiusN;
+			
+			int xLocation = Integer.parseInt(AutorankTools
+					.getStringFromSplitString(loc, ";", 0));
+			int yLocation = Integer.parseInt(AutorankTools
+					.getStringFromSplitString(loc, ";", 1));
+			int zLocation = Integer.parseInt(AutorankTools
+					.getStringFromSplitString(loc, ";", 2));
+			
+			int radius = Integer.parseInt(AutorankTools
+					.getStringFromSplitString(loc, ";", 4));
+			
+			String world = AutorankTools
+					.getStringFromSplitString(loc, ";", 3);
+			
+			xRadiusN = xLocation - radius;
+			yRadiusN = yLocation - radius;
+			zRadiusN = zLocation - radius;
 
-		xRadiusN = xLocation - radius;
-		yRadiusN = yLocation - radius;
-		zRadiusN = zLocation - radius;
+			xRadiusP = xLocation + radius;
+			yRadiusP = yLocation + radius;
+			zRadiusP = zLocation + radius;
 
-		xRadiusP = xLocation + radius;
-		yRadiusP = yLocation + radius;
-		zRadiusP = zLocation + radius;
+			final World realWorld = Bukkit.getWorld(world);
 
-		final World realWorld = Bukkit.getWorld(world);
+			if (realWorld == null)
+				continue;
 
-		if (realWorld == null)
-			return false;
+			// Player is not in the correct world
+			if (!realWorld.getName().equals(pLocation.getWorld().getName()))
+				continue;
 
-		// Player is not in the correct world
-		if (!realWorld.getName().equals(pLocation.getWorld().getName()))
-			return false;
-
-		// Check if a player is within the radius
-		if (pLocation.getBlockX() >= xRadiusN
-				&& pLocation.getBlockX() <= xRadiusP) {
-			if (pLocation.getBlockY() >= yRadiusN
-					&& pLocation.getBlockY() <= yRadiusP) {
-				if (pLocation.getBlockZ() >= zRadiusN
-						&& pLocation.getBlockZ() <= zRadiusP) {
-					return true;
+			// Check if a player is within the radius
+			if (pLocation.getBlockX() >= xRadiusN
+					&& pLocation.getBlockX() <= xRadiusP) {
+				if (pLocation.getBlockY() >= yRadiusN
+						&& pLocation.getBlockY() <= yRadiusP) {
+					if (pLocation.getBlockZ() >= zRadiusN
+							&& pLocation.getBlockZ() <= zRadiusP) {
+						return true;
+					}
 				}
 			}
 		}
+		
+		
 		return false;
 	}
 
 	@Override
-	public boolean setOptions(final String[] options) {
+	public boolean setOptions(List<String[]> optionsList) {
 
-		// Location = x;y;z;world;radius
-		if (options.length != 5) {
-			return false;
-		}
+		for (String[] options : optionsList) {
+			// Location = x;y;z;world;radius
+			if (options.length != 5) {
+				return false;
+			}
 
-		try {
 			// Save x,y,z
-			xLocation = Integer.parseInt(options[0]);
-			yLocation = Integer.parseInt(options[1]);
-			zLocation = Integer.parseInt(options[2]);
+			int xLocation = Integer.parseInt(options[0]);
+			int yLocation = Integer.parseInt(options[1]);
+			int zLocation = Integer.parseInt(options[2]);
 
 			// Save world
-			world = options[3].trim();
+			String world = options[3].trim();
 
 			// Save radius
-			radius = Integer.parseInt(options[4]);
+			int radius = Integer.parseInt(options[4]);
 
 			if (radius < 0) {
 				radius = 0;
 			}
-			return true;
-		} catch (final Exception e) {
-			return false;
+
+			locations.add(xLocation + ";" + yLocation + ";" + zLocation + ";"
+					+ world + ";" + radius);
+
 		}
+
+		return !locations.isEmpty();
 	}
 }

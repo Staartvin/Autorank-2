@@ -1,49 +1,81 @@
 package me.armar.plugins.autorank.playerchecker.requirement;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.statsmanager.handlers.StatsHandler;
+import me.armar.plugins.autorank.util.AutorankTools;
 
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public class BlocksPlacedRequirement extends Requirement {
 
-	private int blockID = -1;
-	private int blocksPlaced = 0;
-	private int damageValue = -1;
+	private List<BlocksPlacedWrapper> wrappers = new ArrayList<BlocksPlacedWrapper>();
+
+	//private int blockID = -1;
+	//private int blocksPlaced = 0;
+	//private int damageValue = -1;
 
 	@SuppressWarnings("deprecation")
 	@Override
 	public String getDescription() {
-		String message = blocksPlaced + " ";
+		List<String> names = new ArrayList<String>();
 
-		if (blockID > 0 && damageValue >= 0) {
-			final ItemStack item = new ItemStack(blockID, 1,
-					(short) damageValue);
+		for (int i = 0; i < wrappers.size(); i++) {
+			BlocksPlacedWrapper wrapper = wrappers.get(i);
 
-			message = message.concat(item.getType().name().replace("_", "")
-					.toLowerCase()
-					+ " ");
-		} else if (blockID > 0) {
-			final ItemStack item = new ItemStack(blockID, 1);
+			int blockID = wrapper.getBlockId();
+			int damageValue = wrapper.getDamageValue();
 
-			message = message.concat(item.getType().name().replace("_", "")
-					.toLowerCase()
-					+ " ");
+			String message = wrapper.getBlocksPlaced() + " ";
+
+			if (blockID > 0 && damageValue >= 0) {
+				final ItemStack item = new ItemStack(blockID, 1,
+						(short) damageValue);
+
+				message = message.concat(item.getType().name().replace("_", "")
+						.toLowerCase()
+						+ " ");
+			} else if (blockID > 0) {
+				final ItemStack item = new ItemStack(blockID, 1);
+
+				message = message.concat(item.getType().name().replace("_", "")
+						.toLowerCase()
+						+ " ");
+			}
+
+			message = message.concat("blocks");
+
+			names.add(message);
 		}
 
-		message = message.concat("blocks");
-		return Lang.PLACED_BLOCKS_REQUIREMENT
-				.getConfigValue(new String[] { message });
+		return Lang.PLACED_BLOCKS_REQUIREMENT.getConfigValue(AutorankTools
+				.seperateList(names, "or"));
 	}
 
 	@Override
 	public String getProgress(final Player player) {
 		String progress = "";
-		progress = progress.concat(getStatsPlugin().getNormalStat(
-				StatsHandler.statTypes.BLOCKS_PLACED.toString(),
-				player.getUniqueId(), null, blockID + "", damageValue + "")
-				+ "/" + blocksPlaced);
+
+		for (int i = 0; i < wrappers.size(); i++) {
+			BlocksPlacedWrapper wrapper = wrappers.get(i);
+
+			int progressBar = getStatsPlugin().getNormalStat(
+					StatsHandler.statTypes.BLOCKS_PLACED.toString(),
+					player.getUniqueId(), null, wrapper.getBlockId() + "",
+					wrapper.getDamageValue() + "");
+
+			if (i == 0) {
+				progress = progress.concat(progressBar + "/"
+						+ wrapper.getBlocksPlaced());
+			} else {
+				progress = progress.concat(" or " + progressBar + "/"
+						+ wrapper.getBlocksPlaced());
+			}
+		}
+
 		return progress;
 	}
 
@@ -51,38 +83,93 @@ public class BlocksPlacedRequirement extends Requirement {
 	public boolean meetsRequirement(final Player player) {
 		final boolean enabled = getStatsPlugin().isEnabled();
 
-		boolean sufficient = false;
-		if (blockID > 0) {
-			sufficient = getStatsPlugin().getNormalStat(
-					StatsHandler.statTypes.BLOCKS_PLACED.toString(),
-					player.getUniqueId(), null, blockID + "", damageValue + "") >= blocksPlaced;
-		} else {
-			sufficient = getStatsPlugin().getNormalStat(
-					StatsHandler.statTypes.TOTAL_BLOCKS_PLACED.toString(),
-					player.getUniqueId()) >= blocksPlaced;
+		if (!enabled)
+			return false;
+
+		for (BlocksPlacedWrapper wrapper : wrappers) {
+
+			int blockID = wrapper.getBlockId();
+			int damageValue = wrapper.getDamageValue();
+			int blocksPlaced = wrapper.getBlocksPlaced();
+
+			int progress = 0;
+
+			if (blockID > 0) {
+				progress = getStatsPlugin().getNormalStat(
+						StatsHandler.statTypes.BLOCKS_PLACED.toString(),
+						player.getUniqueId(), null, blockID + "",
+						damageValue + "");
+			} else {
+				progress = getStatsPlugin().getNormalStat(
+						StatsHandler.statTypes.TOTAL_BLOCKS_PLACED.toString(),
+						player.getUniqueId());
+			}
+
+			if (progress >= blocksPlaced)
+				return true;
 		}
 
-		return enabled && sufficient;
+		return false;
 	}
 
 	@Override
-	public boolean setOptions(final String[] options) {
-		try {
+	public boolean setOptions(List<String[]> optionsList) {
+
+		for (String[] options : optionsList) {
+			int blocksPlaced = 0;
+			int blockId = -1;
+			int damageValue = -1;
+
 			if (options.length > 0) {
 				blocksPlaced = Integer.parseInt(options[0].trim());
 			}
 			if (options.length > 1) {
-				blockID = Integer.parseInt(options[0].trim());
+				blockId = Integer.parseInt(options[0].trim());
 				blocksPlaced = Integer.parseInt(options[1].trim());
 			}
 			if (options.length > 2) {
 				damageValue = Integer.parseInt(options[2].trim());
 			}
-		} catch (final Exception e) {
-			blocksPlaced = 0;
-			return false;
+
+			wrappers.add(new BlocksPlacedWrapper(blockId, blocksPlaced, damageValue));
 		}
 
-		return true;
+		return !wrappers.isEmpty();
 	}
+}
+
+class BlocksPlacedWrapper {
+
+	private int blockId, blocksPlaced, damageValue;
+
+	public BlocksPlacedWrapper(int blockId, int blocksPlaced, int damageValue) {
+		this.setBlockId(blockId);
+		this.setBlocksPlaced(blocksPlaced);
+		this.setDamageValue(damageValue);
+	}
+
+	public int getBlockId() {
+		return blockId;
+	}
+
+	public void setBlockId(int blockId) {
+		this.blockId = blockId;
+	}
+
+	public int getBlocksPlaced() {
+		return blocksPlaced;
+	}
+
+	public void setBlocksPlaced(int blocksPlaced) {
+		this.blocksPlaced = blocksPlaced;
+	}
+
+	public int getDamageValue() {
+		return damageValue;
+	}
+
+	public void setDamageValue(int damageValue) {
+		this.damageValue = damageValue;
+	}
+
 }
