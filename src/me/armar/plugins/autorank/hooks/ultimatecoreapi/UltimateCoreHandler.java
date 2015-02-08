@@ -33,7 +33,7 @@ public class UltimateCoreHandler implements DependencyHandler {
 		// UltimateCore may not be loaded
 		try { //Avoid ClassNotFound
 			if (plugin != null
-					&& plugin instanceof Bammerbom.Ultimatecore.UltimateCore) {
+					&& plugin instanceof Bammerbom.UltimateCore.UltimateCore) {
 				return plugin;
 			}
 		} catch (Exception ex) {
