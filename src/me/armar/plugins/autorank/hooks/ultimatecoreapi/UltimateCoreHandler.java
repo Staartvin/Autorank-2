@@ -2,8 +2,12 @@ package me.armar.plugins.autorank.hooks.ultimatecoreapi;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.DependencyHandler;
+
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+
+import Bammerbom.UltimateCore.API.UC;
+import Bammerbom.UltimateCore.API.UCplayer;
 
 /**
  * Handles all connections with Ultimate Core
@@ -33,7 +37,7 @@ public class UltimateCoreHandler implements DependencyHandler {
 		// UltimateCore may not be loaded
 		try { //Avoid ClassNotFound
 			if (plugin != null
-					&& plugin instanceof bammerbom.ultimatecore.UltimateCore) {
+			/*&& plugin instanceof bammerbom.ultimatecore.UltimateCore*/) {
 				return plugin;
 			}
 		} catch (Exception ex) {
@@ -116,14 +120,13 @@ public class UltimateCoreHandler implements DependencyHandler {
 		}
 
 		if (getVersion().equals(1)) {
-			final bammerbom.ultimatecore.bukkit.api.UPlayer user = bammerbom.ultimatecore.bukkit.api.UC
-					.getPlayer(player);
+			final UCplayer user = UC.getPlayer(player);
 
 			if (user == null) {
 				return false;
 			}
 
-			return user.isAfk();
+			return user.isAFK();
 		}
 		if (getVersion().equals(2)) {
 			final bammerbom.ultimatecore.bukkit.api.UPlayer user = bammerbom.ultimatecore.bukkit.api.UC
