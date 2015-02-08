@@ -196,6 +196,12 @@
 			<type>jar</type>
 		</dependency>
 
+                <dependency>
+ 			<groupId>UltimateCore</groupId>
+ 			<artifactId>UltimateCore</artifactId>
+ 			<version>1.1.8</version>
+ 		</dependency>
+ 		
 		<dependency>
 			<groupId>bammerbom</groupId>
 			<artifactId>UltimateCore</artifactId>
