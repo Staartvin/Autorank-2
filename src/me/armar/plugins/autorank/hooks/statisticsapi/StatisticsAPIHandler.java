@@ -9,8 +9,11 @@ import org.bukkit.plugin.Plugin;
 
 import com.wolvencraft.yasp.Statistics;
 import com.wolvencraft.yasp.StatisticsAPI;
+import com.wolvencraft.yasp.db.data.DataStore.DataStoreType;
 import com.wolvencraft.yasp.session.OfflineSession;
 import com.wolvencraft.yasp.session.OnlineSession;
+import com.wolvencraft.yasp.util.NamedInteger;
+import com.wolvencraft.yasp.util.cache.OfflineSessionCache;
 
 /**
  * Handles all connections with Statistics
@@ -257,6 +260,11 @@ public class StatisticsAPIHandler implements DependencyHandler {
 			onlineSession = StatisticsAPI.getSession(plugin.getServer()
 					.getPlayer(uuid));
 		}
+		
+		for (NamedInteger n: OfflineSessionCache.fetch(uuid).getPlayerTotals().getNamedValues()) {
+			System.out.print("n: " + n.getName() + " value: " + n.getValue());
+		}
+		//System.out.print(onlineSession.getDataStore(DataStoreType.Blocks).getNormalData().get(0));
 
 		/*System.out.print(session.getPlayerTotals().getValue(PlayerVariable.BLOCKS_PLACED));
 		

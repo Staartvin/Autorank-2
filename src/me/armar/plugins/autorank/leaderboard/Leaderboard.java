@@ -98,6 +98,8 @@ public class Leaderboard {
 
 			//final String name = UUIDManager.getPlayerFromUUID(uuids.get(i));
 
+			
+			System.out.print("Autorank offline lookup: " + plugin.getServer().getOfflinePlayer(uuids.get(i)).getName());
 			// Do not show this player, because he is exempted.
 			// Check if player is exempted.
 			if (VaultHandler.permission.playerHas(null, plugin.getServer()
