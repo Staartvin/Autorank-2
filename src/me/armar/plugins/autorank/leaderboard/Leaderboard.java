@@ -18,6 +18,7 @@ import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 
 /**
@@ -96,17 +97,19 @@ public class Leaderboard {
 		// Fill unsorted lists
 		for (int i = 0; i < uuids.size(); i++) {
 
-			//final String name = UUIDManager.getPlayerFromUUID(uuids.get(i));
-
+			OfflinePlayer offlinePlayer = plugin.getServer().getOfflinePlayer(uuids.get(i));
 			
-			System.out.print("Autorank offline lookup: " + plugin.getServer().getOfflinePlayer(uuids.get(i)).getName());
-			// Do not show this player, because he is exempted.
-			// Check if player is exempted.
-			if (VaultHandler.permission.playerHas(null, plugin.getServer()
-					.getOfflinePlayer(uuids.get(i)),
-					"autorank.leaderboard.exempt"))
-				continue;
-
+			// If offline player is found, check their permission
+			if (offlinePlayer.getName() != null) {
+				// Do not show this player, because he is exempted.
+				// Check if player is exempted.
+				if (VaultHandler.permission.playerHas(null, offlinePlayer,
+						"autorank.leaderboard.exempt"))
+					continue;
+	
+			}
+			
+			
 			// We should use getTimeOfPlayer(), but that requires a lot of rewrites, so I'll leave it at the moment.
 			times.put(uuids.get(i),
 					plugin.getPlaytimes().getLocalTime(uuids.get(i)));
