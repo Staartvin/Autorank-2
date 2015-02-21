@@ -78,6 +78,11 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 	public String[] getPlayerGroups(final Player player) {
 		if (permission == null)
 			return new String[10];
+		
+		if (permission.getName().toLowerCase().contains("permissionsex")) {
+			// Workaround for PEX, PEX shows old groups for some reason.
+			return new String[]{permission.getPrimaryGroup(player)};
+		}
 
 		return permission.getPlayerGroups(player);
 	}
