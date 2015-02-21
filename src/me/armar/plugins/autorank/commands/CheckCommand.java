@@ -153,6 +153,7 @@ public class CheckCommand extends AutorankCommand {
 		for (final Requirement req : reqs) {
 			final int reqID = req.getReqId();
 
+			// Use auto completion
 			if (req.useAutoCompletion()) {
 				// Do auto complete
 				if (req.meetsRequirement(player)) {
@@ -183,6 +184,11 @@ public class CheckCommand extends AutorankCommand {
 							continue;
 						}
 					}
+					
+					// If requirement is optional, we do not check.
+					if (req.isOptional()) {
+						continue;
+					}
 
 					// Player does not meet requirements -> do nothing
 					meetsAllRequirements = false;
@@ -190,10 +196,17 @@ public class CheckCommand extends AutorankCommand {
 				}
 			} else {
 
-				// Doesn't auto complete and doesn't meet requirement, then continue searching
+				
 				if (!plugin.getConfigHandler().usePartialCompletion()) {
 
+					// Doesn't auto complete and doesn't meet requirement, then continue searching
 					if (!req.meetsRequirement(player)) {
+						
+						// If requirement is optional, we do not check.
+						if (req.isOptional()) {
+							continue;
+						}
+						
 						meetsAllRequirements = false;
 						continue;
 					} else {
@@ -210,11 +223,19 @@ public class CheckCommand extends AutorankCommand {
 					metRequirements.add(reqID);
 					continue;
 				} else {
+					
+					// If requirement is optional, we do not check.
+					if (req.isOptional()) {
+						continue;
+					}
+					
 					meetsAllRequirements = false;
 					continue;
 				}
 			}
 		}
+		
+		
 		final String reqMessage = nextRankChange.getRankTo() == null ? Lang.MEETS_ALL_REQUIREMENTS_WITHOUT_RANK_UP
 				.getConfigValue() : Lang.MEETS_ALL_REQUIREMENTS
 				.getConfigValue(nextRankChange.getRankTo());
