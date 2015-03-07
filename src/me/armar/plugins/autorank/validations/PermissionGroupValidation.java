@@ -104,7 +104,7 @@ public class PermissionGroupValidation {
 					.registerWarning(
 							"Rank change of rank '"
 									+ group
-									+ "' is invalid. The rank to promote to doesn't exist in the perm file.",
+									+ "' is invalid. The rank to 'promote to' doesn't exist in the perm file.",
 							10);
 			return false;
 		}
@@ -114,7 +114,7 @@ public class PermissionGroupValidation {
 					.registerWarning(
 							"Rank change of rank '"
 									+ group
-									+ "' is invalid. The rank to promote from doesn't exist in the perm file.",
+									+ "' is invalid. The rank to 'promote from' doesn't exist in the perm file.",
 							10);
 			return false;
 		}
