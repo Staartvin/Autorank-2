@@ -23,6 +23,10 @@ public class UpdateHandler {
 	}
 
 	public boolean isUpdateAvailable() {
+		
+		// Do not check for updates when DEV version is used.
+		if (plugin.isDevVersion()) return false; 
+		
 		// Latest check was more than 1 hour ago (Check again)
 		if (((System.currentTimeMillis() - latestCheck) / 60000) >= 60) {
 			// Check for new version
