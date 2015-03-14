@@ -17,7 +17,7 @@ import org.bukkit.plugin.Plugin;
  * Handles all connections with Stats
  * <p>
  * Date created: 21:02:34 15 mrt. 2014
- * 
+ * TODO Add support for Stats 3.0
  * @author Staartvin
  * 
  */

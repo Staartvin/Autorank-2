@@ -19,7 +19,7 @@ import com.wolvencraft.yasp.util.cache.OfflineSessionCache;
  * Handles all connections with Statistics
  * <p>
  * Date created: 21:02:34 15 mrt. 2014
- * 
+ * TODO Statistics cannot currently look up custom data. Thus Autorank cannot support it yet.
  * @author Staartvin
  * 
  */
