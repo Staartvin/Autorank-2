@@ -408,12 +408,18 @@ public class Autorank extends JavaPlugin {
 		// Register command
 		getCommand("autorank").setExecutor(getCommandsManager());
 
-		// Validate config files
-		if (configHandler.useAdvancedConfig()) {
-			getValidateHandler().validateConfigGroups(getAdvancedConfig());
-		} else {
-			getValidateHandler().validateConfigGroups(getSimpleConfig());
-		}
+		// Validate config files -- after 20 seconds
+		getServer().getScheduler().runTaskLater(this, new Runnable() {
+			public void run() {
+				if (configHandler.useAdvancedConfig()) {
+					getValidateHandler().validateConfigGroups(
+							getAdvancedConfig());
+				} else {
+					getValidateHandler()
+							.validateConfigGroups(getSimpleConfig());
+				}
+			}
+		}, 20 * 20);
 
 		// Setup language file
 		languageHandler.createNewFile();
@@ -452,7 +458,7 @@ public class Autorank extends JavaPlugin {
 		debugMessage("Autorank debug is turned on!");
 
 		// Extra warning for dev users
-		if (this.getDescription().getVersion().toLowerCase().contains("dev")) {
+		if (isDevVersion()) {
 			this.getLogger()
 					.warning(
 							"You're running a DEV version, be sure to backup your Autorank folder!");
@@ -461,6 +467,10 @@ public class Autorank extends JavaPlugin {
 							"DEV versions are not guaranteed to be stable and generally shouldn't be used on big production servers with lots of players.");
 		}
 
+	}
+
+	public boolean isDevVersion() {
+		return this.getDescription().getVersion().toLowerCase().contains("dev");
 	}
 
 	public void registerRequirement(final String name,
