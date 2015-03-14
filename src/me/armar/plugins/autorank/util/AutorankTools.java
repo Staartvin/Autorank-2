@@ -11,6 +11,7 @@ import me.armar.plugins.autorank.language.Lang;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 /*
  * AutorankTools is a bunch of static methods, I put sendColoredMessage 
@@ -355,5 +356,29 @@ public class AutorankTools {
 		}
 
 		return returnString;
+	}
+	
+	public static boolean containsAtLeast(Player player, ItemStack item, int amount, String displayName) {
+		// Check if player has at least the x of an item WITH proper displayname
+		
+		int count = 0;
+		
+		// Check every slot
+		for (ItemStack itemFound : player.getInventory().getContents()) {
+			
+			if (itemFound == null) continue;
+			
+			// Not the same item
+			if (!itemFound.getType().equals(item.getType())) continue;
+			
+			// Check display name
+			if (!itemFound.hasItemMeta() || !itemFound.getItemMeta().hasDisplayName()) continue;
+			
+			if (itemFound.getItemMeta().getDisplayName().equals(displayName)) {
+				count++;
+			}			
+		}
+		
+		return count >= amount;
 	}
 }
