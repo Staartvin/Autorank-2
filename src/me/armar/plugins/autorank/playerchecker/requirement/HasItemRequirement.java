@@ -90,10 +90,15 @@ public class HasItemRequirement extends Requirement {
 		for (final ItemWrapper wrapper : neededItems) {
 			final ItemStack item = wrapper.getItem();
 
-			if (item != null
-					&& player.getInventory().containsAtLeast(item,
-							item.getAmount())) {
-				return true;
+			if (item == null) return false;
+			
+			if (!wrapper.useDisplayName()) {
+				return player.getInventory().containsAtLeast(item,
+						item.getAmount());
+			} else {
+				// Check if player has items WITH proper displayname
+				return AutorankTools.containsAtLeast(player, item, item.getAmount(), wrapper.getDisplayName());
+				
 			}
 		}
 
@@ -111,6 +116,7 @@ public class HasItemRequirement extends Requirement {
 
 			String displayName = null;
 			boolean showShortValue = false;
+			boolean useDisplayName = false;
 
 			if (options.length > 0)
 				id = AutorankTools.stringtoInt(options[0]);
@@ -125,11 +131,15 @@ public class HasItemRequirement extends Requirement {
 				// Displayname
 				displayName = options[3];
 			}
-
+			if (options.length > 4) {
+				// use display name?
+				useDisplayName = (options[4].equalsIgnoreCase("true") ? true : false);
+			}
+			
 			//item = new ItemStack(id, 1, (short) 0, data);
 			final ItemStack item = new ItemStack(id, amount, data);
 
-			neededItems.add(new ItemWrapper(item, displayName, showShortValue));
+			neededItems.add(new ItemWrapper(item, displayName, showShortValue, useDisplayName));
 		}
 
 		return !neededItems.isEmpty();
@@ -141,12 +151,16 @@ class ItemWrapper {
 	private ItemStack item;
 	private String displayName;
 	private boolean showShortValue = false;
+	
+	// If true, the items should also match with displayname.
+	private boolean useDisplayName = false;
 
 	public ItemWrapper(final ItemStack item, final String displayName,
-			final boolean showShortValue) {
+			final boolean showShortValue, boolean useDisplayName) {
 		this.setItem(item);
 		this.setDisplayName(displayName);
 		this.setShowShortValue(showShortValue);
+		this.setUseDisplayName(useDisplayName);
 	}
 
 	public ItemStack getItem() {
@@ -171,5 +185,13 @@ class ItemWrapper {
 
 	public void setShowShortValue(final boolean showShortValue) {
 		this.showShortValue = showShortValue;
+	}
+
+	public boolean useDisplayName() {
+		return useDisplayName;
+	}
+
+	public void setUseDisplayName(boolean useDisplayName) {
+		this.useDisplayName = useDisplayName;
 	}
 }
