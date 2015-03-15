@@ -94,6 +94,9 @@ public class Leaderboard {
 
 		//String firstWorld = plugin.getServer().getWorlds().get(0).getName();
 
+		// Sometimes Vault doesn't return the proper permissions plugin.
+		boolean isVaultBeingNaughty = false;
+		
 		// Fill unsorted lists
 		for (int i = 0; i < uuids.size(); i++) {
 
@@ -103,16 +106,25 @@ public class Leaderboard {
 			if (offlinePlayer.getName() != null) {
 				// Do not show this player, because he is exempted.
 				// Check if player is exempted.
+				
+				if (VaultHandler.permission == null) {
+					isVaultBeingNaughty = true;
+					continue;
+				}
+				
 				if (VaultHandler.permission.playerHas(null, offlinePlayer,
 						"autorank.leaderboard.exempt"))
 					continue;
-	
 			}
 			
 			
 			// We should use getTimeOfPlayer(), but that requires a lot of rewrites, so I'll leave it at the moment.
 			times.put(uuids.get(i),
 					plugin.getPlaytimes().getLocalTime(uuids.get(i)));
+		}
+		
+		if (isVaultBeingNaughty) {
+			plugin.getLogger().severe("Vault didn't tell what permissions plugin is being used! Autorank's leaderboard might not work properly!");
 		}
 
 		// Sort all values
