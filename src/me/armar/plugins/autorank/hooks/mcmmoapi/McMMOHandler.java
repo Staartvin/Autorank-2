@@ -8,6 +8,8 @@ import org.bukkit.plugin.Plugin;
 
 import com.gmail.nossr50.mcMMO;
 import com.gmail.nossr50.api.ExperienceAPI;
+import com.gmail.nossr50.api.exceptions.InvalidSkillException;
+import com.gmail.nossr50.api.exceptions.McMMOPlayerNotFoundException;
 
 /**
  * Handles all connections with McMMO.
@@ -45,7 +47,11 @@ public class McMMOHandler implements DependencyHandler {
 		if (!isAvailable())
 			return powerLevel;
 
-		powerLevel = ExperienceAPI.getPowerLevel(player);
+		try {
+			powerLevel = ExperienceAPI.getPowerLevel(player);
+		} catch (McMMOPlayerNotFoundException e) {
+			plugin.getLogger().severe("Could not get user '" + player.getName() + "' of McMMO. Report McMMOPlayerNotFoundException to mcmmo devs.");
+		}
 
 		return powerLevel;
 	}
@@ -65,10 +71,12 @@ public class McMMOHandler implements DependencyHandler {
 
 		try {
 			skillLevel = ExperienceAPI.getLevel(player, skillName);
-		} catch (final Exception e) {
+		} catch (InvalidSkillException e) {
 			plugin.getLogger().warning(
 					"Skill '" + skillName + "' is not a valid skill!");
 			return -1;
+		} catch (McMMOPlayerNotFoundException e) {
+			plugin.getLogger().severe("Could not get user '" + player.getName() + "' of McMMO. Report McMMOPlayerNotFoundException to mcmmo devs.");
 		}
 
 		return skillLevel;
