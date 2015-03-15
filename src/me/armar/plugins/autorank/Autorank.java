@@ -77,8 +77,6 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class Autorank extends JavaPlugin {
 
-	// Using MySQL
-	public static boolean usingMySQL = false;
 	private AddOnManager addonManager;
 	private SimpleYamlConfiguration advancedConfig;
 	private CommandsManager commandsManager;
@@ -446,13 +444,10 @@ public class Autorank extends JavaPlugin {
 		getServer().getScheduler().runTaskTimer(this,
 				new WarningNoticeTask(this), 5L * 20L, 30L * 20L);
 
-		// Check if using MySQL
-		usingMySQL = this.getMySQLWrapper().isMySQLEnabled();
-
 		// Start collecting data
 		if (!startMetrics()) {
 			getLogger().info(
-					"Failed to start Metrics, you can ignore this message");
+					"Failed to start Metrics, you can ignore this message.");
 		}
 
 		debugMessage("Autorank debug is turned on!");
@@ -578,7 +573,7 @@ public class Autorank extends JavaPlugin {
 
 				@Override
 				public int getValue() {
-					return usingMySQL ? 1 : 0;
+					return getConfigHandler().useMySQL() ? 1 : 0;
 				}
 
 			});
