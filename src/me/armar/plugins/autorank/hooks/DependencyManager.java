@@ -3,6 +3,7 @@ package me.armar.plugins.autorank.hooks;
 import java.util.HashMap;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.hooks.afkterminator.AFKTerminatorHandler;
 import me.armar.plugins.autorank.hooks.essentialsapi.EssentialsHandler;
 import me.armar.plugins.autorank.hooks.factionsapi.FactionsHandler;
 import me.armar.plugins.autorank.hooks.mcmmoapi.McMMOHandler;
@@ -43,7 +44,7 @@ public class DependencyManager {
 	 */
 	public enum dependency {
 
-		AUTORANK, ESSENTIALS, FACTIONS, MCMMO, ONTIME, ROYALCOMMANDS, STATS, VAULT, WORLDGUARD, ULTIMATECORE, STATISTICS
+		AUTORANK, ESSENTIALS, FACTIONS, MCMMO, ONTIME, ROYALCOMMANDS, STATS, VAULT, WORLDGUARD, ULTIMATECORE, STATISTICS, AFKTERMINATOR
 	};
 
 	private final HashMap<dependency, DependencyHandler> handlers = new HashMap<dependency, DependencyHandler>();
@@ -67,6 +68,8 @@ public class DependencyManager {
 		handlers.put(dependency.STATS, new StatsAPIHandler(instance));
 		handlers.put(dependency.ULTIMATECORE, new UltimateCoreHandler(instance));
 		handlers.put(dependency.STATISTICS, new StatisticsAPIHandler(instance));
+		handlers.put(dependency.AFKTERMINATOR, new AFKTerminatorHandler(
+				instance));
 
 		statsPluginManager = new StatsPluginManager(instance);
 	}
@@ -89,16 +92,23 @@ public class DependencyManager {
 		if (!plugin.getConfigHandler().useAFKIntegration()) {
 			return false;
 		}
-
+		
 		if (handlers.get(dependency.ESSENTIALS).isAvailable()) {
+			plugin.debugMessage("Using Essentials for AFK");
 			return ((EssentialsHandler) handlers.get(dependency.ESSENTIALS))
 					.isAFK(player);
 		} else if (handlers.get(dependency.ROYALCOMMANDS).isAvailable()) {
+			plugin.debugMessage("Using RoyalCommands for AFK");
 			return ((RoyalCommandsHandler) handlers
 					.get(dependency.ROYALCOMMANDS)).isAFK(player);
 		} else if (handlers.get(dependency.ULTIMATECORE).isAvailable()) {
+			plugin.debugMessage("Using UltimateCore for AFK");
 			return ((UltimateCoreHandler) handlers.get(dependency.ULTIMATECORE))
 					.isAFK(player);
+		} else if (handlers.get(dependency.AFKTERMINATOR).isAvailable()) {
+			plugin.debugMessage("Using AFKTerminator for AFK");
+			return ((AFKTerminatorHandler) handlers
+					.get(dependency.AFKTERMINATOR)).isAFK(player);
 		}
 		// No suitable plugin found
 		return false;

@@ -175,7 +175,7 @@
 		<dependency>
 			<groupId>com.gmail.nossr50.mcMMO</groupId>
 			<artifactId>mcMMO</artifactId>
-			<version>1.5.02</version>
+			<version>1.5.03-dev</version>
 			<scope>provided</scope>
 			<type>jar</type>
 		</dependency>
@@ -227,6 +227,13 @@
 			<artifactId>bukkit</artifactId>
 			<version>1.8-R0.1-SNAPSHOT</version>
 		</dependency>
+
+		<dependency>
+			<groupId>afkTerminator</groupId>
+			<artifactId>afkTerminator</artifactId>
+			<version>3.0.2</version>
+		</dependency>
+
 
 	</dependencies>
 </project>
