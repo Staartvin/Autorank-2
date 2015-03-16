@@ -36,6 +36,9 @@ public class PlayerJoinListener implements Listener {
 			plugin.getUUIDStorage().storeUUID(player.getName(),
 					player.getUniqueId());
 		}
+		
+		// Cannot check player at this moment. -> try at next automatic task
+		if (plugin.getPlayerChecker() == null) return;
 
 		// Perform check for player on login
 		plugin.getPlayerChecker().checkPlayer(player);
