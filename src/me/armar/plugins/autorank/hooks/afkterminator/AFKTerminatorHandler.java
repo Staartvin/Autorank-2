@@ -7,7 +7,6 @@ import me.edge209.afkTerminator.AfkTerminatorAPI;
 
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import org.royaldev.royalcommands.RoyalCommands;
 
 /**
  * Handles all connections with AFKTerminator
