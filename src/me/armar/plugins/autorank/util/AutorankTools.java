@@ -363,6 +363,9 @@ public class AutorankTools {
 		
 		int count = 0;
 		
+		// Otherwise we'll not find any colour codes
+		displayName = displayName.replace("&", "§");
+		
 		// Check every slot
 		for (ItemStack itemFound : player.getInventory().getContents()) {
 			
@@ -375,7 +378,7 @@ public class AutorankTools {
 			if (!itemFound.hasItemMeta() || !itemFound.getItemMeta().hasDisplayName()) continue;
 			
 			if (itemFound.getItemMeta().getDisplayName().equals(displayName)) {
-				count++;
+				count += itemFound.getAmount();
 			}			
 		}
 		
