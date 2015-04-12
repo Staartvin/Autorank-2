@@ -8,50 +8,51 @@ import org.bukkit.event.HandlerList;
 /**
  * This event is called when a player wants to check its status via /ar check. <br>
  * This event is cancellable.
- * 
+ *
  * @author Staartvin
- * 
+ *
  */
 public class CheckCommandEvent extends Event implements Cancellable {
-	private static final HandlerList handlers = new HandlerList();
 
-	public static HandlerList getHandlerList() {
-		return handlers;
-	}
+    private static final HandlerList handlers = new HandlerList();
 
-	private boolean isCancelled;
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
 
-	private final Player player;
+    private boolean isCancelled;
 
-	/**
-	 * @param player Player that performs the command
-	 */
-	public CheckCommandEvent(final Player player) {
-		this.player = player;
-	}
+    private final Player player;
 
-	@Override
-	public HandlerList getHandlers() {
-		return handlers;
-	}
+    /**
+     * @param player Player that performs the command
+     */
+    public CheckCommandEvent(final Player player) {
+        this.player = player;
+    }
 
-	public Player getPlayer() {
-		return player;
-	}
+    @Override
+    public HandlerList getHandlers() {
+        return handlers;
+    }
 
-	/* (non-Javadoc)
-	 * @see org.bukkit.event.Cancellable#isCancelled()
-	 */
-	@Override
-	public boolean isCancelled() {
-		return isCancelled;
-	}
+    public Player getPlayer() {
+        return player;
+    }
 
-	/* (non-Javadoc)
-	 * @see org.bukkit.event.Cancellable#setCancelled(boolean)
-	 */
-	@Override
-	public void setCancelled(final boolean cancel) {
-		isCancelled = cancel;
-	}
+    /* (non-Javadoc)
+     * @see org.bukkit.event.Cancellable#isCancelled()
+     */
+    @Override
+    public boolean isCancelled() {
+        return isCancelled;
+    }
+
+    /* (non-Javadoc)
+     * @see org.bukkit.event.Cancellable#setCancelled(boolean)
+     */
+    @Override
+    public void setCancelled(final boolean cancel) {
+        isCancelled = cancel;
+    }
 }

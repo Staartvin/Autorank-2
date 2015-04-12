@@ -2,85 +2,81 @@ package me.armar.plugins.autorank.playerchecker.requirement;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
-
 import org.bukkit.entity.Player;
 
 /**
- * This requirement checks for local play time
- * Date created: 13:49:33
- * 15 jan. 2014
- * 
+ * This requirement checks for local play time Date created: 13:49:33 15 jan. 2014
+ *
  * @author Staartvin
- * 
+ *
  */
 public class TimeRequirement extends Requirement {
 
-	List<Integer> times = new ArrayList<Integer>();
+    List<Integer> times = new ArrayList<Integer>();
 
-	@Override
-	public String getDescription() {
-		final List<String> sTimes = new ArrayList<String>();
+    @Override
+    public String getDescription() {
+        final List<String> sTimes = new ArrayList<String>();
 
-		for (final int time : times) {
-			sTimes.add(AutorankTools.timeToString(time, Time.MINUTES));
-		}
+        for (final int time : times) {
+            sTimes.add(AutorankTools.timeToString(time, Time.MINUTES));
+        }
 
-		return Lang.TIME_REQUIREMENT.getConfigValue(AutorankTools.seperateList(
-				sTimes, "or"));
-	}
+        return Lang.TIME_REQUIREMENT.getConfigValue(AutorankTools.seperateList(
+                sTimes, "or"));
+    }
 
-	@Override
-	public String getProgress(final Player player) {
-		String progress = "";
+    @Override
+    public String getProgress(final Player player) {
+        String progress = "";
 
-		final int playtime = (getAutorank().getPlaytimes().getTimeOfPlayer(
-				player.getName()) / 60);
+        final int playtime = (getAutorank().getPlaytimes().getTimeOfPlayer(
+                player.getName()) / 60);
 
-		/*for (int i=0;i<times.size();i++) {
-			int time = times.get(i);
-			
-			if (i==0) {
-				progress += playtime + " min/" + time + " min";
-			} else {
-				progress += "or " + playtime + " min/" + time + " min";
-			}
-		}*/
-		progress = AutorankTools
-				.makeProgressString(times, "min", "" + playtime);
+        /*for (int i=0;i<times.size();i++) {
+         int time = times.get(i);
 
-		return progress;
-	}
+         if (i==0) {
+         progress += playtime + " min/" + time + " min";
+         } else {
+         progress += "or " + playtime + " min/" + time + " min";
+         }
+         }*/
+        progress = AutorankTools
+                .makeProgressString(times, "min", "" + playtime);
 
-	@Override
-	public boolean meetsRequirement(final Player player) {
-		// Use getTimeOf so that when switched to another time, it'll still work.
-		// getTimeOfPlayer() is in seconds, so convert.
-		final double playtime = this.getAutorank().getPlaytimes()
-				.getTimeOfPlayer(player.getName()) / 60;
+        return progress;
+    }
 
-		for (final int time : times) {
-			if (time != -1 && time <= playtime) {
-				return true;
-			}
-		}
-		return false;
-	}
+    @Override
+    public boolean meetsRequirement(final Player player) {
+        // Use getTimeOf so that when switched to another time, it'll still work.
+        // getTimeOfPlayer() is in seconds, so convert.
+        final double playtime = this.getAutorank().getPlaytimes()
+                .getTimeOfPlayer(player.getName()) / 60;
 
-	@Override
-	public boolean setOptions(final List<String[]> optionsList) {
+        for (final int time : times) {
+            if (time != -1 && time <= playtime) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-		for (final String[] options : optionsList) {
-			if (options.length > 0) {
-				times.add(AutorankTools.stringToTime(options[0], Time.MINUTES));
-			} else {
-				return false;
-			}
-		}
+    @Override
+    public boolean setOptions(final List<String[]> optionsList) {
 
-		return !times.isEmpty();
-	}
+        for (final String[] options : optionsList) {
+            if (options.length > 0) {
+                times.add(AutorankTools.stringToTime(options[0], Time.MINUTES));
+            } else {
+                return false;
+            }
+        }
+
+        return !times.isEmpty();
+    }
 }
