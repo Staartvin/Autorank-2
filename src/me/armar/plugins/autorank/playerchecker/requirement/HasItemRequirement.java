@@ -2,196 +2,196 @@ package me.armar.plugins.autorank.playerchecker.requirement;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
-
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public class HasItemRequirement extends Requirement {
 
-	// id;amount;data;name
-	private final List<ItemWrapper> neededItems = new ArrayList<ItemWrapper>();
+    // id;amount;data;name
+    private final List<ItemWrapper> neededItems = new ArrayList<ItemWrapper>();
 
-	//List<String> neededItems = new ArrayList<String>();
+    //List<String> neededItems = new ArrayList<String>();
+    //private String displayName = null;
+    //ItemStack item = null;
+    //private boolean showShortValue = false;
+    @Override
+    public String getDescription() {
 
-	//private String displayName = null;
-	//ItemStack item = null;
-	//private boolean showShortValue = false;
+        final List<String> names = new ArrayList<String>();
 
-	@Override
-	public String getDescription() {
+        for (int i = 0; i < neededItems.size(); i++) {
+            final ItemWrapper wrapper = neededItems.get(i);
 
-		final List<String> names = new ArrayList<String>();
+            final ItemStack item = wrapper.getItem();
 
-		for (int i = 0; i < neededItems.size(); i++) {
-			final ItemWrapper wrapper = neededItems.get(i);
+            final StringBuilder arg = new StringBuilder(item.getAmount() + " ");
 
-			final ItemStack item = wrapper.getItem();
+            if (wrapper.getDisplayName() != null) {
+                // Show displayname instead of material name
+                arg.append(wrapper.getDisplayName());
+            } else {
 
-			final StringBuilder arg = new StringBuilder(item.getAmount() + " ");
+                arg.append(item.getType().toString());
 
-			if (wrapper.getDisplayName() != null) {
-				// Show displayname instead of material name
-				arg.append(wrapper.getDisplayName());
-			} else {
+                if (wrapper.showShortValue()) {
+                    arg.append(" (Dam. value: " + item.getDurability() + ")");
+                }
+            }
 
-				arg.append(item.getType().toString());
+            names.add(arg.toString());
+            /*if (i == 0) {
+             names.add(arg.toString());
+             } else {
+             names.add(" or " + arg.toString());
+             }*/
+        }
 
-				if (wrapper.showShortValue()) {
-					arg.append(" (Dam. value: " + item.getDurability() + ")");
-				}
-			}
+        return Lang.ITEM_REQUIREMENT.getConfigValue(AutorankTools.seperateList(
+                names, "or"));
+    }
 
-			names.add(arg.toString());
-			/*if (i == 0) {
-				names.add(arg.toString());
-			} else {
-				names.add(" or " + arg.toString());
-			}*/
-		}
+    @Override
+    public String getProgress(final Player player) {
 
-		return Lang.ITEM_REQUIREMENT.getConfigValue(AutorankTools.seperateList(
-				names, "or"));
-	}
+        String progress = "";
 
-	@Override
-	public String getProgress(final Player player) {
+        for (int i = 0; i < neededItems.size(); i++) {
+            final ItemWrapper wrapper = neededItems.get(i);
+            final ItemStack item = wrapper.getItem();
 
-		String progress = "";
+            final int firstSlot = player.getInventory().first(item.getType());
+            int slotAmount = 0;
 
-		for (int i = 0; i < neededItems.size(); i++) {
-			final ItemWrapper wrapper = neededItems.get(i);
-			final ItemStack item = wrapper.getItem();
+            if (firstSlot >= 0) {
+                slotAmount = player.getInventory().getItem(firstSlot)
+                        .getAmount();
+            }
 
-			final int firstSlot = player.getInventory().first(item.getType());
-			int slotAmount = 0;
+            if (i == 0) {
+                progress = progress.concat(slotAmount + "/" + item.getAmount());
+            } else {
+                progress = progress.concat(" or " + slotAmount + "/"
+                        + item.getAmount());
+            }
+        }
 
-			if (firstSlot >= 0) {
-				slotAmount = player.getInventory().getItem(firstSlot)
-						.getAmount();
-			}
+        return progress;
+    }
 
-			if (i == 0) {
-				progress = progress.concat(slotAmount + "/" + item.getAmount());
-			} else {
-				progress = progress.concat(" or " + slotAmount + "/"
-						+ item.getAmount());
-			}
-		}
+    @Override
+    public boolean meetsRequirement(final Player player) {
 
-		return progress;
-	}
+        for (final ItemWrapper wrapper : neededItems) {
+            final ItemStack item = wrapper.getItem();
 
-	@Override
-	public boolean meetsRequirement(final Player player) {
+            if (item == null) {
+                return false;
+            }
 
-		for (final ItemWrapper wrapper : neededItems) {
-			final ItemStack item = wrapper.getItem();
+            if (!wrapper.useDisplayName()) {
+                return player.getInventory().containsAtLeast(item,
+                        item.getAmount());
+            } else {
+                // Check if player has items WITH proper displayname
+                return AutorankTools.containsAtLeast(player, item, item.getAmount(), wrapper.getDisplayName());
 
-			if (item == null) return false;
-			
-			if (!wrapper.useDisplayName()) {
-				return player.getInventory().containsAtLeast(item,
-						item.getAmount());
-			} else {
-				// Check if player has items WITH proper displayname
-				return AutorankTools.containsAtLeast(player, item, item.getAmount(), wrapper.getDisplayName());
-				
-			}
-		}
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	@SuppressWarnings("deprecation")
-	@Override
-	public boolean setOptions(final List<String[]> optionsList) {
+    @SuppressWarnings("deprecation")
+    @Override
+    public boolean setOptions(final List<String[]> optionsList) {
 
-		for (final String[] options : optionsList) {
-			int id = 0;
-			int amount = 1;
-			short data = 0;
+        for (final String[] options : optionsList) {
+            int id = 0;
+            int amount = 1;
+            short data = 0;
 
-			String displayName = null;
-			boolean showShortValue = false;
-			boolean useDisplayName = false;
+            String displayName = null;
+            boolean showShortValue = false;
+            boolean useDisplayName = false;
 
-			if (options.length > 0)
-				id = AutorankTools.stringtoInt(options[0]);
-			if (options.length > 1)
-				amount = AutorankTools.stringtoInt(options[1]);
-			if (options.length > 2) {
-				data = (short) AutorankTools.stringtoInt(options[2]);
-				// Short value can make a difference, thus we show it.
-				showShortValue = true;
-			}
-			if (options.length > 3) {
-				// Displayname
-				displayName = options[3];
-			}
-			if (options.length > 4) {
-				// use display name?
-				useDisplayName = (options[4].equalsIgnoreCase("true") ? true : false);
-			}
-			
-			//item = new ItemStack(id, 1, (short) 0, data);
-			final ItemStack item = new ItemStack(id, amount, data);
+            if (options.length > 0) {
+                id = AutorankTools.stringtoInt(options[0]);
+            }
+            if (options.length > 1) {
+                amount = AutorankTools.stringtoInt(options[1]);
+            }
+            if (options.length > 2) {
+                data = (short) AutorankTools.stringtoInt(options[2]);
+                // Short value can make a difference, thus we show it.
+                showShortValue = true;
+            }
+            if (options.length > 3) {
+                // Displayname
+                displayName = options[3];
+            }
+            if (options.length > 4) {
+                // use display name?
+                useDisplayName = (options[4].equalsIgnoreCase("true") ? true : false);
+            }
 
-			neededItems.add(new ItemWrapper(item, displayName, showShortValue, useDisplayName));
-		}
+            //item = new ItemStack(id, 1, (short) 0, data);
+            final ItemStack item = new ItemStack(id, amount, data);
 
-		return !neededItems.isEmpty();
-	}
+            neededItems.add(new ItemWrapper(item, displayName, showShortValue, useDisplayName));
+        }
+
+        return !neededItems.isEmpty();
+    }
 }
 
 class ItemWrapper {
 
-	private ItemStack item;
-	private String displayName;
-	private boolean showShortValue = false;
-	
-	// If true, the items should also match with displayname.
-	private boolean useDisplayName = false;
+    private ItemStack item;
+    private String displayName;
+    private boolean showShortValue = false;
 
-	public ItemWrapper(final ItemStack item, final String displayName,
-			final boolean showShortValue, boolean useDisplayName) {
-		this.setItem(item);
-		this.setDisplayName(displayName);
-		this.setShowShortValue(showShortValue);
-		this.setUseDisplayName(useDisplayName);
-	}
+    // If true, the items should also match with displayname.
+    private boolean useDisplayName = false;
 
-	public ItemStack getItem() {
-		return item;
-	}
+    public ItemWrapper(final ItemStack item, final String displayName,
+            final boolean showShortValue, boolean useDisplayName) {
+        this.setItem(item);
+        this.setDisplayName(displayName);
+        this.setShowShortValue(showShortValue);
+        this.setUseDisplayName(useDisplayName);
+    }
 
-	public void setItem(final ItemStack item) {
-		this.item = item;
-	}
+    public ItemStack getItem() {
+        return item;
+    }
 
-	public String getDisplayName() {
-		return displayName;
-	}
+    public void setItem(final ItemStack item) {
+        this.item = item;
+    }
 
-	public void setDisplayName(final String displayName) {
-		this.displayName = displayName;
-	}
+    public String getDisplayName() {
+        return displayName;
+    }
 
-	public boolean showShortValue() {
-		return showShortValue;
-	}
+    public void setDisplayName(final String displayName) {
+        this.displayName = displayName;
+    }
 
-	public void setShowShortValue(final boolean showShortValue) {
-		this.showShortValue = showShortValue;
-	}
+    public boolean showShortValue() {
+        return showShortValue;
+    }
 
-	public boolean useDisplayName() {
-		return useDisplayName;
-	}
+    public void setShowShortValue(final boolean showShortValue) {
+        this.showShortValue = showShortValue;
+    }
 
-	public void setUseDisplayName(boolean useDisplayName) {
-		this.useDisplayName = useDisplayName;
-	}
+    public boolean useDisplayName() {
+        return useDisplayName;
+    }
+
+    public void setUseDisplayName(boolean useDisplayName) {
+        this.useDisplayName = useDisplayName;
+    }
 }

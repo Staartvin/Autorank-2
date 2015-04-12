@@ -2,59 +2,58 @@ package me.armar.plugins.autorank.playerchecker.requirement;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.statsmanager.handlers.StatsHandler;
 import me.armar.plugins.autorank.util.AutorankTools;
-
 import org.bukkit.entity.Player;
 
 public class FishCaughtRequirement extends Requirement {
 
-	private final List<Integer> fishCaught = new ArrayList<Integer>();
+    private final List<Integer> fishCaught = new ArrayList<Integer>();
 
-	@Override
-	public String getDescription() {
-		return Lang.FISH_CAUGHT_REQUIREMENT.getConfigValue(AutorankTools
-				.seperateList(fishCaught, "or"));
-	}
+    @Override
+    public String getDescription() {
+        return Lang.FISH_CAUGHT_REQUIREMENT.getConfigValue(AutorankTools
+                .seperateList(fishCaught, "or"));
+    }
 
-	@Override
-	public String getProgress(final Player player) {
-		String progress = "";
+    @Override
+    public String getProgress(final Player player) {
+        String progress = "";
 
-		final int progressBar = this.getStatsPlugin().getNormalStat(
-				StatsHandler.statTypes.FISH_CAUGHT.toString(),
-				player.getUniqueId());
+        final int progressBar = this.getStatsPlugin().getNormalStat(
+                StatsHandler.statTypes.FISH_CAUGHT.toString(),
+                player.getUniqueId());
 
-		progress = AutorankTools
-				.makeProgressString(fishCaught, "", progressBar);
+        progress = AutorankTools
+                .makeProgressString(fishCaught, "", progressBar);
 
-		return progress;
-	}
+        return progress;
+    }
 
-	@Override
-	public boolean meetsRequirement(final Player player) {
+    @Override
+    public boolean meetsRequirement(final Player player) {
 
-		final int fish = this.getStatsPlugin().getNormalStat(
-				StatsHandler.statTypes.FISH_CAUGHT.toString(),
-				player.getUniqueId());
+        final int fish = this.getStatsPlugin().getNormalStat(
+                StatsHandler.statTypes.FISH_CAUGHT.toString(),
+                player.getUniqueId());
 
-		for (final int fishC : fishCaught) {
-			if (fish >= fishC)
-				return true;
-		}
+        for (final int fishC : fishCaught) {
+            if (fish >= fishC) {
+                return true;
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	@Override
-	public boolean setOptions(final List<String[]> optionsList) {
+    @Override
+    public boolean setOptions(final List<String[]> optionsList) {
 
-		for (final String[] options : optionsList) {
-			fishCaught.add(Integer.parseInt(options[0]));
-		}
+        for (final String[] options : optionsList) {
+            fishCaught.add(Integer.parseInt(options[0]));
+        }
 
-		return !fishCaught.isEmpty();
-	}
+        return !fishCaught.isEmpty();
+    }
 }

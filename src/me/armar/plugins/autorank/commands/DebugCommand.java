@@ -2,46 +2,45 @@ package me.armar.plugins.autorank.commands;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
-
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 public class DebugCommand extends AutorankCommand {
 
-	private final Autorank plugin;
+    private final Autorank plugin;
 
-	public DebugCommand(final Autorank instance) {
-		this.setUsage("/ar debug");
-		this.setDesc("Shows debug information.");
-		this.setPermission("autorank.debug");
+    public DebugCommand(final Autorank instance) {
+        this.setUsage("/ar debug");
+        this.setDesc("Shows debug information.");
+        this.setPermission("autorank.debug");
 
-		plugin = instance;
-	}
+        plugin = instance;
+    }
 
-	@Override
-	public boolean onCommand(final CommandSender sender, final Command cmd,
-			final String label, final String[] args) {
+    @Override
+    public boolean onCommand(final CommandSender sender, final Command cmd,
+            final String label, final String[] args) {
 
-		// This will create a 'debug.txt' file containing a lot of information about the plugin
-		if (!plugin.getCommandsManager()
-				.hasPermission("autorank.debug", sender)) {
-			return true;
-		}
+        // This will create a 'debug.txt' file containing a lot of information about the plugin
+        if (!plugin.getCommandsManager()
+                .hasPermission("autorank.debug", sender)) {
+            return true;
+        }
 
-		plugin.getServer().getScheduler()
-				.runTaskAsynchronously(plugin, new Runnable() {
-					@Override
-					public void run() {
-						final String fileName = plugin.getDebugger()
-								.createDebugFile();
+        plugin.getServer().getScheduler()
+                .runTaskAsynchronously(plugin, new Runnable() {
+                    @Override
+                    public void run() {
+                        final String fileName = plugin.getDebugger()
+                        .createDebugFile();
 
-						sender.sendMessage(ChatColor.GREEN + "Debug file '"
-								+ fileName + "' created!");
-					}
-				});
+                        sender.sendMessage(ChatColor.GREEN + "Debug file '"
+                                + fileName + "' created!");
+                    }
+                });
 
-		return true;
-	}
+        return true;
+    }
 
 }

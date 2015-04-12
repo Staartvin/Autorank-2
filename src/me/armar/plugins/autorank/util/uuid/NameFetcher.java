@@ -1,5 +1,6 @@
 package me.armar.plugins.autorank.util.uuid;
 
+import com.google.common.collect.ImmutableList;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,117 +12,113 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.Callable;
-
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
-import com.google.common.collect.ImmutableList;
 
 /**
  * This class is used to get the name of a player from a UUID.
  * <p>
  * Date created: 17:02:13 2 apr. 2014
- * 
+ *
  * @author evilmidget38
- * 
+ *
  */
 public class NameFetcher implements Callable<Map<UUID, String>> {
-	private static final String PROFILE_URL = "https://sessionserver.mojang.com/session/minecraft/profile/";
 
-	public static String fromStream(final InputStream in) throws IOException {
-		final BufferedReader reader = new BufferedReader(new InputStreamReader(
-				in));
-		final StringBuilder out = new StringBuilder();
-		final String newLine = System.getProperty("line.separator");
-		String line;
+    private static final String PROFILE_URL = "https://sessionserver.mojang.com/session/minecraft/profile/";
 
-		while ((line = reader.readLine()) != null) {
+    public static String fromStream(final InputStream in) throws IOException {
+        final BufferedReader reader = new BufferedReader(new InputStreamReader(
+                in));
+        final StringBuilder out = new StringBuilder();
+        final String newLine = System.getProperty("line.separator");
+        String line;
 
-			out.append(line);
-			out.append(newLine);
-		}
-		return out.toString();
-	}
+        while ((line = reader.readLine()) != null) {
 
-	private final JSONParser jsonParser = new JSONParser();
+            out.append(line);
+            out.append(newLine);
+        }
+        return out.toString();
+    }
 
-	private final List<UUID> uuids;
+    private final JSONParser jsonParser = new JSONParser();
 
-	public NameFetcher(final List<UUID> uuids) {
-		this.uuids = ImmutableList.copyOf(uuids);
-	}
+    private final List<UUID> uuids;
 
-	/* (non-Javadoc)
-	 * @see java.util.concurrent.Callable#call()
-	 */
-	@Override
-	public Map<UUID, String> call() throws Exception {
-		final Map<UUID, String> uuidStringMap = new HashMap<UUID, String>();
-		for (final UUID uuid : uuids) {
-			final HttpURLConnection connection = (HttpURLConnection) new URL(
-					PROFILE_URL + uuid.toString().replace("-", ""))
-					.openConnection();
+    public NameFetcher(final List<UUID> uuids) {
+        this.uuids = ImmutableList.copyOf(uuids);
+    }
 
-			JSONObject response = null;
+    /* (non-Javadoc)
+     * @see java.util.concurrent.Callable#call()
+     */
+    @Override
+    public Map<UUID, String> call() throws Exception {
+        final Map<UUID, String> uuidStringMap = new HashMap<UUID, String>();
+        for (final UUID uuid : uuids) {
+            final HttpURLConnection connection = (HttpURLConnection) new URL(
+                    PROFILE_URL + uuid.toString().replace("-", ""))
+                    .openConnection();
 
-			String name = null;
+            JSONObject response = null;
 
-			String fromStream = null;
+            String name = null;
+
+            String fromStream = null;
 			// Ping code 204 == No content (Request was sent, but UUID was invalid)
-			//final int pingCode = connection.getResponseCode();
+            //final int pingCode = connection.getResponseCode();
 
-			/*if (pingCode == 204) {
-				Bukkit.getLogger().warning("Tried to get UUID: " + uuid.toString() + " but this invalid.");
-				continue;
-			}*/
+            /*if (pingCode == 204) {
+             Bukkit.getLogger().warning("Tried to get UUID: " + uuid.toString() + " but this invalid.");
+             continue;
+             }*/
 
-			/*if (pingCode == 204) {
-				System.out.print("Got 204 code - no content.");
-				continue;
-			}*/
+            /*if (pingCode == 204) {
+             System.out.print("Got 204 code - no content.");
+             continue;
+             }*/
+            //System.out.print("Ping: " + pingCode);
+            try {
+                response = (JSONObject) jsonParser.parse(new InputStreamReader(
+                        connection.getInputStream()));
 
-			//System.out.print("Ping: " + pingCode);
+                name = (String) response.get("name");
 
-			try {
-				response = (JSONObject) jsonParser.parse(new InputStreamReader(
-						connection.getInputStream()));
+            } catch (final ParseException e) {
+                // Try converting the stream to a string and removing all the spaces.
+                fromStream = fromStream(connection.getInputStream())
+                        .replaceAll(" ", "");
 
-				name = (String) response.get("name");
+                // Parse again
+                response = (JSONObject) jsonParser.parse(fromStream);
 
-			} catch (final ParseException e) {
-				// Try converting the stream to a string and removing all the spaces. 
-				fromStream = fromStream(connection.getInputStream())
-						.replaceAll(" ", "");
+                // Should work now!
+                name = (String) response.get("name");
 
-				// Parse again
-				response = (JSONObject) jsonParser.parse(fromStream);
+                if (name == null) {
+                    System.out.print("[Autorank] Could not parse uuid '"
+                            + uuid.toString() + "' to name!");
+                    continue;
+                }
 
-				// Should work now!
-				name = (String) response.get("name");
+                final String cause = (String) response.get("cause");
+                final String errorMessage = (String) response
+                        .get("errorMessage");
+                if (cause != null && cause.length() > 0) {
+                    throw new IllegalStateException(errorMessage);
+                }
+            } finally {
+                if (name == null || response == null) {
+                    System.out
+                            .print("[Autorank] Could not find name of account with uuid: '"
+                                    + uuid.toString() + "'");
+                }
+            }
 
-				if (name == null) {
-					System.out.print("[Autorank] Could not parse uuid '"
-							+ uuid.toString() + "' to name!");
-					continue;
-				}
-
-				final String cause = (String) response.get("cause");
-				final String errorMessage = (String) response
-						.get("errorMessage");
-				if (cause != null && cause.length() > 0) {
-					throw new IllegalStateException(errorMessage);
-				}
-			} finally {
-				if (name == null || response == null) {
-					System.out
-							.print("[Autorank] Could not find name of account with uuid: '"
-									+ uuid.toString() + "'");
-				}
-			}
-
-			uuidStringMap.put(uuid, name);
-		}
-		return uuidStringMap;
-	}
+            uuidStringMap.put(uuid, name);
+        }
+        return uuidStringMap;
+    }
 }
