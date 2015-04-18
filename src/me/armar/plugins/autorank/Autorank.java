@@ -55,7 +55,7 @@ import me.armar.plugins.autorank.playerchecker.result.Result;
 import me.armar.plugins.autorank.playerchecker.result.SpawnFireworkResult;
 import me.armar.plugins.autorank.playerchecker.result.TeleportResult;
 import me.armar.plugins.autorank.playtimes.Playtimes;
-import me.armar.plugins.autorank.requirementhandler.RequirementHandler;
+import me.armar.plugins.autorank.requirementhandler.PlayerDataHandler;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.armar.plugins.autorank.updater.UpdateHandler;
 import me.armar.plugins.autorank.updater.Updater;
@@ -91,7 +91,7 @@ public class Autorank extends JavaPlugin {
 	private PermissionsPluginManager permPlugHandler;
 	private PlayerChecker playerChecker;
 	private Playtimes playtimes;
-	private RequirementHandler requirementHandler;
+	private PlayerDataHandler requirementHandler;
 	private SimpleYamlConfiguration settingsConfig;
 	private SimpleYamlConfiguration simpleConfig;
 	private UUIDStorage uuidStorage;
@@ -189,7 +189,7 @@ public class Autorank extends JavaPlugin {
 		return playtimes;
 	}
 
-	public RequirementHandler getRequirementHandler() {
+	public PlayerDataHandler getRequirementHandler() {
 		return requirementHandler;
 	}
 
@@ -298,7 +298,7 @@ public class Autorank extends JavaPlugin {
 		setWarningManager(new WarningManager());
 
 		// Create requirement handler
-		setRequirementHandler(new RequirementHandler(this));
+		setRequirementHandler(new PlayerDataHandler(this));
 
 		// Create files
 		requirementHandler.createNewFile();
@@ -461,11 +461,14 @@ public class Autorank extends JavaPlugin {
 					.warning(
 							"DEV versions are not guaranteed to be stable and generally shouldn't be used on big production servers with lots of players.");
 		}
+		
+		// Start automatic backup
+		this.getBackupManager().startBackupSystem();
 
 	}
 
 	public boolean isDevVersion() {
-		return this.getDescription().getVersion().toLowerCase().contains("dev");
+		return this.getDescription().getVersion().toLowerCase().contains("dev") || this.getDescription().getVersion().toLowerCase().contains("project");
 	}
 
 	public void registerRequirement(final String name,
@@ -535,7 +538,7 @@ public class Autorank extends JavaPlugin {
 	}
 
 	public void setRequirementHandler(
-			final RequirementHandler requirementHandler) {
+			final PlayerDataHandler requirementHandler) {
 		this.requirementHandler = requirementHandler;
 	}
 

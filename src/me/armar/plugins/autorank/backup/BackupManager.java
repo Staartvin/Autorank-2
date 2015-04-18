@@ -24,14 +24,24 @@ public class BackupManager {
 		this.plugin = plugin;
 	}
 
-	public void backupFile(final String sourceFileName) {
+	/** Backup a file to a folder
+	 * @param sourceFileName Path of file to backup
+	 * @param storePath Path to backup the file to, can be null.
+	 */
+	public void backupFile(final String sourceFileName, final String storePath) {
 		// CAN ONLY COPY YML
 		final String folderPath = plugin.getDataFolder().getAbsolutePath()
 				+ File.separator;
 		final File sourceFile = new File(folderPath + sourceFileName);
-		final File copyFile = new File(folderPath
-				+ sourceFileName.replace(".yml", "") + "-backup.yml");
-
+		
+		File copyFile = null;
+		
+		if (storePath == null) {
+			copyFile = new File(folderPath + sourceFileName.replace(".yml", "") + "-backup-" + System.currentTimeMillis() + ".yml");
+		} else {
+			copyFile = new File(storePath.replace(".yml", "") + "-backup-" + System.currentTimeMillis() + ".yml");
+		}
+				
 		try {
 			Files.copy(sourceFile, copyFile);
 			plugin.debugMessage("Made backup of '" + sourceFileName + "'!");
@@ -39,6 +49,22 @@ public class BackupManager {
 			e.printStackTrace();
 		}
 
+	}
+	
+	public void startBackupSystem() {
+		// Makes a backup every day
+		plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new Runnable() {
+			public void run() {
+				
+				plugin.getLogger().info("Making a backup of data.yml and playerdata.yml..");
+				
+				// Before running, backup stuff.
+				plugin.getBackupManager().backupFile("/playerdata/playerdata.yml", plugin.getDataFolder().getAbsolutePath()
+						+ File.separator + "backups" + File.separator + "playerdata.yml");
+				plugin.getBackupManager().backupFile("Data.yml", plugin.getDataFolder().getAbsolutePath()
+						+ File.separator + "backups" + File.separator + "data.yml");
+			}
+		}, 0, 1728000);
 	}
 
 }
