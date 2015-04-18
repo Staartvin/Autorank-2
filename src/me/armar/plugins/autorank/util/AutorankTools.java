@@ -182,7 +182,7 @@ public class AutorankTools {
 	 * seconds</b>
 	 * 
 	 * @param count the value to convert
-	 * @param time the type of time of the value given
+	 * @param the type of time of the value given (DAYS, HOURS, MINUTES, SECONDS)
 	 * @return string in given format
 	 */
 	public static String timeToString(int count, final Time time) {
