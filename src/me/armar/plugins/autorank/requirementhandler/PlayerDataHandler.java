@@ -20,18 +20,18 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 /**
- * RequirementHandler will keep track of the latest known group and progress a
+ * PlayerDataHandler will keep track of the latest known group and progress a
  * player made (via /ar complete)
  * When the last known group is not equal to the current group of a player, all
  * progress should be reset as a player is not longer in the same group.
  * 
- * RequirementHandler uses a file (/playerdata/playerdata.yml) which keeps
+ * PlayerDataHandler uses a file (/playerdata/playerdata.yml) which keeps
  * tracks of these things.
  * 
  * @author Staartvin
  * 
  */
-public class RequirementHandler {
+public class PlayerDataHandler {
 
 	private FileConfiguration config;
 	private File configFile;
@@ -39,7 +39,7 @@ public class RequirementHandler {
 
 	private final Autorank plugin;
 
-	public RequirementHandler(final Autorank instance) {
+	public PlayerDataHandler(final Autorank instance) {
 		this.plugin = instance;
 
 		// Start requirement saver task
@@ -89,7 +89,7 @@ public class RequirementHandler {
 					public void run() {
 						// Backup beforehand
 						plugin.getBackupManager().backupFile(
-								"/playerdata/playerdata.yml");
+								"/playerdata/playerdata.yml", null);
 
 						for (final String name : getConfig().getKeys(false)) {
 
@@ -257,5 +257,13 @@ public class RequirementHandler {
 		//UUID uuid = UUIDManager.getUUIDFromPlayer(playerName);
 
 		config.set(uuid.toString() + ".progress", progress);
+	}
+	
+	public boolean hasLeaderboardExemption(UUID uuid) {
+		return config.getBoolean(uuid.toString()+ ".exempt leaderboard", false);
+	}
+	
+	public void hasLeaderboardExemption(UUID uuid, boolean value) {
+		config.set(uuid.toString() + ".exempt leaderboard", value);
 	}
 }
