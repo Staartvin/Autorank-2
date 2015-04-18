@@ -35,6 +35,9 @@ public class PlaytimesUpdate implements Runnable {
 		// OP's should also get time added. 
 		// When a player has a wildcard permission ('*') it should still update.
 
+		// Check for leaderboard exempt permission -> updates value of leaderboard exemption
+		plugin.getPlayerChecker().doLeaderboardExemptCheck(player);
+		
 		if (player.hasPermission("autorank.rsefrxsgtse")
 				|| !player.hasPermission("autorank.timeexclude")) {
 

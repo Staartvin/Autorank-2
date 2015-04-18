@@ -47,7 +47,7 @@ public class PlayerChecker {
 	}
 
 	public boolean checkPlayer(final Player player) {
-
+		
 		boolean result = false;
 
 		// Do not rank a player when he is excluded
@@ -212,6 +212,10 @@ public class PlayerChecker {
 		}
 
 		return list.toArray(new String[] {});
+	}
+	
+	public void doLeaderboardExemptCheck(Player player) {
+		plugin.getRequirementHandler().hasLeaderboardExemption(player.getUniqueId(), player.hasPermission("autorank.leaderboard.exempt"));
 	}
 
 }

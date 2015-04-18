@@ -13,12 +13,10 @@ import java.util.Map.Entry;
 import java.util.UUID;
 
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.hooks.vaultapi.VaultHandler;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
 import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 
 /**
@@ -93,38 +91,18 @@ public class Leaderboard {
 		final HashMap<UUID, Integer> times = new HashMap<UUID, Integer>();
 
 		//String firstWorld = plugin.getServer().getWorlds().get(0).getName();
-
-		// Sometimes Vault doesn't return the proper permissions plugin.
-		boolean isVaultBeingNaughty = false;
 		
 		// Fill unsorted lists
 		for (int i = 0; i < uuids.size(); i++) {
 
-			OfflinePlayer offlinePlayer = plugin.getServer().getOfflinePlayer(uuids.get(i));
-			
-			// If offline player is found, check their permission
-			if (offlinePlayer.getName() != null) {
-				// Do not show this player, because he is exempted.
-				// Check if player is exempted.
-				
-				if (VaultHandler.permission == null) {
-					isVaultBeingNaughty = true;
-					continue;
-				}
-				
-				if (VaultHandler.permission.playerHas(null, offlinePlayer,
-						"autorank.leaderboard.exempt"))
-					continue;
+			// If player is exempted
+			if (plugin.getRequirementHandler().hasLeaderboardExemption(uuids.get(i))) {
+				continue;
 			}
-			
 			
 			// We should use getTimeOfPlayer(), but that requires a lot of rewrites, so I'll leave it at the moment.
 			times.put(uuids.get(i),
 					plugin.getPlaytimes().getLocalTime(uuids.get(i)));
-		}
-		
-		if (isVaultBeingNaughty) {
-			plugin.getLogger().severe("Vault didn't tell what permissions plugin is being used! Autorank's leaderboard might not work properly!");
 		}
 
 		// Sort all values

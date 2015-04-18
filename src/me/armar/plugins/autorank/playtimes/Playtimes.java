@@ -97,7 +97,7 @@ public class Playtimes {
 					public void run() {
 
 						// Before running, backup stuff.
-						plugin.getBackupManager().backupFile("Data.yml");
+						plugin.getBackupManager().backupFile("Data.yml", null);
 
 						// First archive all names below 1
 						archive(1);
