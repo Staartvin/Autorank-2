@@ -1,4 +1,4 @@
-package me.armar.plugins.autorank.requirementhandler;
+package me.armar.plugins.autorank.playerdatahandler;
 
 import java.io.File;
 import java.io.IOException;
@@ -258,11 +258,12 @@ public class PlayerDataHandler {
 
 		config.set(uuid.toString() + ".progress", progress);
 	}
-	
+
 	public boolean hasLeaderboardExemption(UUID uuid) {
-		return config.getBoolean(uuid.toString()+ ".exempt leaderboard", false);
+		return config
+				.getBoolean(uuid.toString() + ".exempt leaderboard", false);
 	}
-	
+
 	public void hasLeaderboardExemption(UUID uuid, boolean value) {
 		config.set(uuid.toString() + ".exempt leaderboard", value);
 	}
