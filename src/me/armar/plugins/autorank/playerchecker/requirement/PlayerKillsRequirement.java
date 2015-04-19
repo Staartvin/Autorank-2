@@ -15,8 +15,16 @@ public class PlayerKillsRequirement extends Requirement {
 
 	@Override
 	public String getDescription() {
-		return Lang.PLAYER_KILLS_REQUIREMENT.getConfigValue(AutorankTools
-				.seperateList(totalPlayersKilled, "or"));
+		String lang = Lang.PLAYER_KILLS_REQUIREMENT
+				.getConfigValue(AutorankTools.seperateList(totalPlayersKilled,
+						"or"));
+
+		// Check if this requirement is world-specific
+		if (this.isWorldSpecific()) {
+			lang = lang.concat(" (in world '" + this.getWorld() + "')");
+		}
+
+		return lang;
 	}
 
 	@Override
@@ -24,7 +32,7 @@ public class PlayerKillsRequirement extends Requirement {
 		String progress = "";
 		final int killed = getStatsPlugin().getNormalStat(
 				StatsHandler.statTypes.PLAYERS_KILLED.toString(),
-				player.getUniqueId());
+				player.getUniqueId(), this.getWorld());
 
 		progress = AutorankTools.makeProgressString(totalPlayersKilled,
 				"player(s)", killed + "");
@@ -35,7 +43,7 @@ public class PlayerKillsRequirement extends Requirement {
 	public boolean meetsRequirement(final Player player) {
 		final int killed = getStatsPlugin().getNormalStat(
 				StatsHandler.statTypes.PLAYERS_KILLED.toString(),
-				player.getUniqueId());
+				player.getUniqueId(), this.getWorld());
 
 		for (final int killedPlayers : totalPlayersKilled) {
 			if (killed >= killedPlayers)

@@ -15,15 +15,24 @@ public class TotalVotesRequirement extends Requirement {
 
 	@Override
 	public String getDescription() {
-		return Lang.VOTE_REQUIREMENT.getConfigValue(AutorankTools.seperateList(
-				totalVotes, "or"));
+
+		String lang = Lang.VOTE_REQUIREMENT.getConfigValue(AutorankTools
+				.seperateList(totalVotes, "or"));
+
+		// Check if this requirement is world-specific
+		if (this.isWorldSpecific()) {
+			lang = lang.concat(" (in world '" + this.getWorld() + "')");
+		}
+
+		return lang;
 	}
 
 	@Override
 	public String getProgress(final Player player) {
 		String progress = "";
 		final int votes = getStatsPlugin().getNormalStat(
-				StatsHandler.statTypes.VOTES.toString(), player.getUniqueId());
+				StatsHandler.statTypes.VOTES.toString(), player.getUniqueId(),
+				this.getWorld());
 
 		progress = AutorankTools.makeProgressString(totalVotes, "", "" + votes);
 		return progress;
@@ -36,7 +45,8 @@ public class TotalVotesRequirement extends Requirement {
 		}
 
 		final int votes = getStatsPlugin().getNormalStat(
-				StatsHandler.statTypes.VOTES.toString(), player.getUniqueId());
+				StatsHandler.statTypes.VOTES.toString(), player.getUniqueId(),
+				this.getWorld());
 
 		for (final int totalVote : totalVotes) {
 			if (votes >= totalVote)

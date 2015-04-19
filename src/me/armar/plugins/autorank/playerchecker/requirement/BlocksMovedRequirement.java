@@ -35,6 +35,13 @@ public class BlocksMovedRequirement extends Requirement {
 			}
 		}
 
+		
+		
+		// Check if this requirement is world-specific
+		if (this.isWorldSpecific()) {
+			desc = desc.concat(" (in world '" + this.getWorld() + "')");
+		}
+
 		return desc;
 	}
 
@@ -47,7 +54,7 @@ public class BlocksMovedRequirement extends Requirement {
 
 			final int progressBar = getStatsPlugin().getNormalStat(
 					StatsHandler.statTypes.BLOCKS_MOVED.toString(),
-					player.getUniqueId(), player.getWorld().getName(),
+					player.getUniqueId(), this.getWorld(),
 					wrapper.getRawMovementType());
 
 			if (i == 0) {
@@ -77,7 +84,7 @@ public class BlocksMovedRequirement extends Requirement {
 
 			final int count = this.getStatsPlugin().getNormalStat(
 					StatsHandler.statTypes.BLOCKS_MOVED.toString(),
-					player.getUniqueId(), player.getWorld().getName(),
+					player.getUniqueId(), this.getWorld(),
 					wrapper.getRawMovementType());
 
 			if (count >= wrapper.getBlocksMoved()) {

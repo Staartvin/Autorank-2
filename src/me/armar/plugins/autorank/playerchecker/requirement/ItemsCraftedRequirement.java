@@ -15,8 +15,16 @@ public class ItemsCraftedRequirement extends Requirement {
 
 	@Override
 	public String getDescription() {
-		return Lang.ITEMS_CRAFTED_REQUIREMENT.getConfigValue(AutorankTools
-				.seperateList(itemsCrafted, "or"));
+
+		String lang = Lang.ITEMS_CRAFTED_REQUIREMENT
+				.getConfigValue(AutorankTools.seperateList(itemsCrafted, "or"));
+
+		// Check if this requirement is world-specific
+		if (this.isWorldSpecific()) {
+			lang = lang.concat(" (in world '" + this.getWorld() + "')");
+		}
+
+		return lang;
 	}
 
 	@Override
@@ -25,7 +33,7 @@ public class ItemsCraftedRequirement extends Requirement {
 
 		final int progressBar = this.getStatsPlugin().getNormalStat(
 				StatsHandler.statTypes.ITEMS_CRAFTED.toString(),
-				player.getUniqueId());
+				player.getUniqueId(), this.getWorld());
 
 		progress = AutorankTools.makeProgressString(itemsCrafted, "",
 				progressBar + "");
@@ -37,7 +45,7 @@ public class ItemsCraftedRequirement extends Requirement {
 
 		final int realItemsCrafted = this.getStatsPlugin().getNormalStat(
 				StatsHandler.statTypes.ITEMS_CRAFTED.toString(),
-				player.getUniqueId());
+				player.getUniqueId(), this.getWorld());
 
 		for (final int items : itemsCrafted) {
 			if (realItemsCrafted >= items)

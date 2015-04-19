@@ -15,8 +15,16 @@ public class FishCaughtRequirement extends Requirement {
 
 	@Override
 	public String getDescription() {
-		return Lang.FISH_CAUGHT_REQUIREMENT.getConfigValue(AutorankTools
+
+		String lang = Lang.FISH_CAUGHT_REQUIREMENT.getConfigValue(AutorankTools
 				.seperateList(fishCaught, "or"));
+
+		// Check if this requirement is world-specific
+		if (this.isWorldSpecific()) {
+			lang = lang.concat(" (in world '" + this.getWorld() + "')");
+		}
+
+		return lang;
 	}
 
 	@Override
@@ -25,7 +33,7 @@ public class FishCaughtRequirement extends Requirement {
 
 		final int progressBar = this.getStatsPlugin().getNormalStat(
 				StatsHandler.statTypes.FISH_CAUGHT.toString(),
-				player.getUniqueId());
+				player.getUniqueId(), this.getWorld());
 
 		progress = AutorankTools
 				.makeProgressString(fishCaught, "", progressBar);
@@ -38,7 +46,7 @@ public class FishCaughtRequirement extends Requirement {
 
 		final int fish = this.getStatsPlugin().getNormalStat(
 				StatsHandler.statTypes.FISH_CAUGHT.toString(),
-				player.getUniqueId());
+				player.getUniqueId(), this.getWorld());
 
 		for (final int fishC : fishCaught) {
 			if (fish >= fishC)

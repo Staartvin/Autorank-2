@@ -15,8 +15,15 @@ public class TimesShearedRequirement extends Requirement {
 
 	@Override
 	public String getDescription() {
-		return Lang.TIMES_SHEARED_REQUIREMENT.getConfigValue(AutorankTools
-				.seperateList(timesShorn, "or"));
+		String lang = Lang.TIMES_SHEARED_REQUIREMENT
+				.getConfigValue(AutorankTools.seperateList(timesShorn, "or"));
+
+		// Check if this requirement is world-specific
+		if (this.isWorldSpecific()) {
+			lang = lang.concat(" (in world '" + this.getWorld() + "')");
+		}
+
+		return lang;
 	}
 
 	@Override
@@ -25,7 +32,7 @@ public class TimesShearedRequirement extends Requirement {
 
 		final int progressBar = this.getStatsPlugin().getNormalStat(
 				StatsHandler.statTypes.TIMES_SHEARED.toString(),
-				player.getUniqueId());
+				player.getUniqueId(), this.getWorld());
 
 		//progress = progress.concat(progressBar + "/" + timesSheared);
 		progress = AutorankTools.makeProgressString(timesShorn, "", ""
@@ -38,7 +45,7 @@ public class TimesShearedRequirement extends Requirement {
 		for (final int times : timesShorn) {
 			if (this.getStatsPlugin().getNormalStat(
 					StatsHandler.statTypes.TIMES_SHEARED.toString(),
-					player.getUniqueId()) > times) {
+					player.getUniqueId(), this.getWorld()) > times) {
 				return true;
 			}
 		}

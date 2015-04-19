@@ -15,8 +15,16 @@ public class DamageTakenRequirement extends Requirement {
 
 	@Override
 	public String getDescription() {
-		return Lang.DAMAGE_TAKEN_REQUIREMENT.getConfigValue(AutorankTools
-				.seperateList(damageTaken, "or"));
+
+		String lang = Lang.DAMAGE_TAKEN_REQUIREMENT
+				.getConfigValue(AutorankTools.seperateList(damageTaken, "or"));
+
+		// Check if this requirement is world-specific
+		if (this.isWorldSpecific()) {
+			lang = lang.concat(" (in world '" + this.getWorld() + "')");
+		}
+
+		return lang;
 	}
 
 	@Override
@@ -25,7 +33,7 @@ public class DamageTakenRequirement extends Requirement {
 
 		final int damTaken = getStatsPlugin().getNormalStat(
 				StatsHandler.statTypes.DAMAGE_TAKEN.toString(),
-				player.getUniqueId());
+				player.getUniqueId(), this.getWorld());
 
 		progress = AutorankTools.makeProgressString(damageTaken, "", damTaken
 				+ "");
@@ -37,7 +45,7 @@ public class DamageTakenRequirement extends Requirement {
 
 		final int damTaken = getStatsPlugin().getNormalStat(
 				StatsHandler.statTypes.DAMAGE_TAKEN.toString(),
-				player.getUniqueId());
+				player.getUniqueId(), this.getWorld());
 
 		for (final int damageTake : damageTaken) {
 			if (damTaken >= damageTake)

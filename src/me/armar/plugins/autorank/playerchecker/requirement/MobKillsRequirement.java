@@ -57,6 +57,11 @@ public class MobKillsRequirement extends Requirement {
 			}
 		}
 
+		// Check if this requirement is world-specific
+		if (this.isWorldSpecific()) {
+			desc = desc.concat(" (in world '" + this.getWorld() + "')");
+		}
+
 		return desc;
 	}
 
@@ -74,7 +79,7 @@ public class MobKillsRequirement extends Requirement {
 
 			final int killed = getStatsPlugin().getNormalStat(
 					StatsHandler.statTypes.MOBS_KILLED.toString(),
-					player.getUniqueId(), null, mobType);
+					player.getUniqueId(), this.getWorld(), mobType);
 
 			if (mobType == null) {
 				mobType = "mobs";
@@ -107,7 +112,7 @@ public class MobKillsRequirement extends Requirement {
 
 			final int killed = getStatsPlugin().getNormalStat(
 					StatsHandler.statTypes.MOBS_KILLED.toString(),
-					player.getUniqueId(), null, mobType);
+					player.getUniqueId(), this.getWorld(), mobType);
 
 			if (killed >= Integer.parseInt(total))
 				return true;

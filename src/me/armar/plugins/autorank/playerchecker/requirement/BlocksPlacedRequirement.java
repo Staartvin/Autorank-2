@@ -51,8 +51,15 @@ public class BlocksPlacedRequirement extends Requirement {
 			names.add(message);
 		}
 
-		return Lang.PLACED_BLOCKS_REQUIREMENT.getConfigValue(AutorankTools
-				.seperateList(names, "or"));
+		String lang = Lang.PLACED_BLOCKS_REQUIREMENT
+				.getConfigValue(AutorankTools.seperateList(names, "or"));
+
+		// Check if this requirement is world-specific
+		if (this.isWorldSpecific()) {
+			lang = lang.concat(" (in world '" + this.getWorld() + "')");
+		}
+
+		return lang;
 	}
 
 	@Override
@@ -71,7 +78,8 @@ public class BlocksPlacedRequirement extends Requirement {
 			} else {
 				progressBar = getStatsPlugin().getNormalStat(
 						StatsHandler.statTypes.BLOCKS_PLACED.toString(),
-						player.getUniqueId(), null, wrapper.getBlockId() + "",
+						player.getUniqueId(), this.getWorld(),
+						wrapper.getBlockId() + "",
 						wrapper.getDamageValue() + "");
 			}
 
@@ -105,7 +113,7 @@ public class BlocksPlacedRequirement extends Requirement {
 			if (blockID > 0) {
 				progress = getStatsPlugin().getNormalStat(
 						StatsHandler.statTypes.BLOCKS_PLACED.toString(),
-						player.getUniqueId(), null, blockID + "",
+						player.getUniqueId(), this.getWorld(), blockID + "",
 						damageValue + "");
 			} else {
 				progress = getStatsPlugin().getNormalStat(
