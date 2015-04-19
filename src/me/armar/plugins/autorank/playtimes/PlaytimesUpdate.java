@@ -37,7 +37,7 @@ public class PlaytimesUpdate implements Runnable {
 
 		// Check for leaderboard exempt permission -> updates value of leaderboard exemption
 		plugin.getPlayerChecker().doLeaderboardExemptCheck(player);
-		
+
 		if (player.hasPermission("autorank.rsefrxsgtse")
 				|| !player.hasPermission("autorank.timeexclude")) {
 

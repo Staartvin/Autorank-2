@@ -85,7 +85,8 @@ public class CommandsManager implements TabExecutor {
 				.put(Arrays.asList("track"), new TrackCommand(plugin));
 		registeredCommands.put(Arrays.asList("gset", "globalset"),
 				new GlobalSetCommand(plugin));
-		registeredCommands.put(Arrays.asList("hooks", "hook"), new HooksCommand(plugin));
+		registeredCommands.put(Arrays.asList("hooks", "hook"),
+				new HooksCommand(plugin));
 	}
 
 	public HashMap<List<String>, AutorankCommand> getRegisteredCommands() {

@@ -63,7 +63,7 @@ public class BlocksBrokenRequirement extends Requirement {
 			final BlocksWrapper wrapper = wrappers.get(i);
 
 			int progressBar = 0;
-			
+
 			if (wrapper.getBlockId() < 0) {
 				progressBar = getStatsPlugin().getNormalStat(
 						StatsHandler.statTypes.TOTAL_BLOCKS_BROKEN.toString(),
@@ -72,7 +72,7 @@ public class BlocksBrokenRequirement extends Requirement {
 				progressBar = getStatsPlugin().getNormalStat(
 						StatsHandler.statTypes.BLOCKS_BROKEN.toString(),
 						player.getUniqueId(), null, wrapper.getBlockId() + "",
-						wrapper.getDamageValue() + "");	
+						wrapper.getDamageValue() + "");
 			}
 
 			if (i == 0) {

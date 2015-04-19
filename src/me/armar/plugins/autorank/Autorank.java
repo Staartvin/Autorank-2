@@ -54,8 +54,8 @@ import me.armar.plugins.autorank.playerchecker.result.RankChangeResult;
 import me.armar.plugins.autorank.playerchecker.result.Result;
 import me.armar.plugins.autorank.playerchecker.result.SpawnFireworkResult;
 import me.armar.plugins.autorank.playerchecker.result.TeleportResult;
+import me.armar.plugins.autorank.playerdatahandler.PlayerDataHandler;
 import me.armar.plugins.autorank.playtimes.Playtimes;
-import me.armar.plugins.autorank.requirementhandler.PlayerDataHandler;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.armar.plugins.autorank.updater.UpdateHandler;
 import me.armar.plugins.autorank.updater.Updater;
@@ -461,14 +461,16 @@ public class Autorank extends JavaPlugin {
 					.warning(
 							"DEV versions are not guaranteed to be stable and generally shouldn't be used on big production servers with lots of players.");
 		}
-		
+
 		// Start automatic backup
 		this.getBackupManager().startBackupSystem();
 
 	}
 
 	public boolean isDevVersion() {
-		return this.getDescription().getVersion().toLowerCase().contains("dev") || this.getDescription().getVersion().toLowerCase().contains("project");
+		return this.getDescription().getVersion().toLowerCase().contains("dev")
+				|| this.getDescription().getVersion().toLowerCase()
+						.contains("project");
 	}
 
 	public void registerRequirement(final String name,
@@ -537,8 +539,7 @@ public class Autorank extends JavaPlugin {
 		this.playtimes = playtimes;
 	}
 
-	public void setRequirementHandler(
-			final PlayerDataHandler requirementHandler) {
+	public void setRequirementHandler(final PlayerDataHandler requirementHandler) {
 		this.requirementHandler = requirementHandler;
 	}
 

@@ -317,7 +317,7 @@ public class ConfigHandler {
 
 		return list;
 	}
-	
+
 	public boolean showWarnings() {
 		return plugin.getSettingsConfig().getBoolean("show warnings", true);
 	}

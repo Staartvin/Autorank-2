@@ -184,7 +184,7 @@ public class CheckCommand extends AutorankCommand {
 							continue;
 						}
 					}
-					
+
 					// If requirement is optional, we do not check.
 					if (req.isOptional()) {
 						continue;
@@ -196,17 +196,16 @@ public class CheckCommand extends AutorankCommand {
 				}
 			} else {
 
-				
 				if (!plugin.getConfigHandler().usePartialCompletion()) {
 
 					// Doesn't auto complete and doesn't meet requirement, then continue searching
 					if (!req.meetsRequirement(player)) {
-						
+
 						// If requirement is optional, we do not check.
 						if (req.isOptional()) {
 							continue;
 						}
-						
+
 						meetsAllRequirements = false;
 						continue;
 					} else {
@@ -223,19 +222,18 @@ public class CheckCommand extends AutorankCommand {
 					metRequirements.add(reqID);
 					continue;
 				} else {
-					
+
 					// If requirement is optional, we do not check.
 					if (req.isOptional()) {
 						continue;
 					}
-					
+
 					meetsAllRequirements = false;
 					continue;
 				}
 			}
 		}
-		
-		
+
 		final String reqMessage = nextRankChange.getRankTo() == null ? Lang.MEETS_ALL_REQUIREMENTS_WITHOUT_RANK_UP
 				.getConfigValue() : Lang.MEETS_ALL_REQUIREMENTS
 				.getConfigValue(nextRankChange.getRankTo());

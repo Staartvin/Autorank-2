@@ -23,7 +23,7 @@ public class WarningNoticeTask extends BukkitRunnable {
 		if (!plugin.getConfigHandler().showWarnings()) {
 			return;
 		}
-		
+
 		for (final Player p : plugin.getServer().getOnlinePlayers()) {
 			// If player has notice on warning permission
 			if (p.hasPermission("autorank.warning.notice")) {

@@ -92,7 +92,7 @@ public class DependencyManager {
 		if (!plugin.getConfigHandler().useAFKIntegration()) {
 			return false;
 		}
-		
+
 		if (handlers.get(dependency.ESSENTIALS).isAvailable()) {
 			plugin.debugMessage("Using Essentials for AFK");
 			return ((EssentialsHandler) handlers.get(dependency.ESSENTIALS))

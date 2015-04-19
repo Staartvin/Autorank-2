@@ -91,15 +91,16 @@ public class Leaderboard {
 		final HashMap<UUID, Integer> times = new HashMap<UUID, Integer>();
 
 		//String firstWorld = plugin.getServer().getWorlds().get(0).getName();
-		
+
 		// Fill unsorted lists
 		for (int i = 0; i < uuids.size(); i++) {
 
 			// If player is exempted
-			if (plugin.getRequirementHandler().hasLeaderboardExemption(uuids.get(i))) {
+			if (plugin.getRequirementHandler().hasLeaderboardExemption(
+					uuids.get(i))) {
 				continue;
 			}
-			
+
 			// We should use getTimeOfPlayer(), but that requires a lot of rewrites, so I'll leave it at the moment.
 			times.put(uuids.get(i),
 					plugin.getPlaytimes().getLocalTime(uuids.get(i)));

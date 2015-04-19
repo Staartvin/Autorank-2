@@ -17,8 +17,9 @@ import com.wolvencraft.yasp.util.cache.OfflineSessionCache;
 /**
  * Handles all connections with Statistics
  * <p>
- * Date created: 21:02:34 15 mrt. 2014
- * TODO Statistics cannot currently look up custom data. Thus Autorank cannot support it yet.
+ * Date created: 21:02:34 15 mrt. 2014 TODO Statistics cannot currently look up
+ * custom data. Thus Autorank cannot support it yet.
+ * 
  * @author Staartvin
  * 
  */
@@ -259,8 +260,9 @@ public class StatisticsAPIHandler implements DependencyHandler {
 			onlineSession = StatisticsAPI.getSession(plugin.getServer()
 					.getPlayer(uuid));
 		}
-		
-		for (NamedInteger n: OfflineSessionCache.fetch(uuid).getPlayerTotals().getNamedValues()) {
+
+		for (NamedInteger n : OfflineSessionCache.fetch(uuid).getPlayerTotals()
+				.getNamedValues()) {
 			System.out.print("n: " + n.getName() + " value: " + n.getValue());
 		}
 		//System.out.print(onlineSession.getDataStore(DataStoreType.Blocks).getNormalData().get(0));

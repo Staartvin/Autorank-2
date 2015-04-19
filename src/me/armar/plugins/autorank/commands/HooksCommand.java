@@ -26,24 +26,27 @@ public class HooksCommand extends AutorankCommand {
 			final String label, final String[] args) {
 
 		sender.sendMessage(ChatColor.GOLD + "Autorank Hooks:");
-		
-		for (dependency dep: dependency.values()) {
+
+		for (dependency dep : dependency.values()) {
 			// There is no dependency handler for Autorank
-			if (dep == dependency.AUTORANK) continue;
-			
-			DependencyHandler handler = plugin.getDependencyManager().getDependency(dep);
-			
-			StringBuilder message = new StringBuilder(ChatColor.GRAY + dep.toString() + ": " + ChatColor.RESET);
-			
+			if (dep == dependency.AUTORANK)
+				continue;
+
+			DependencyHandler handler = plugin.getDependencyManager()
+					.getDependency(dep);
+
+			StringBuilder message = new StringBuilder(ChatColor.GRAY
+					+ dep.toString() + ": " + ChatColor.RESET);
+
 			if (handler.isAvailable()) {
 				message.append(ChatColor.GREEN + "AVAILABLE");
 			} else {
 				message.append(ChatColor.RED + "NOT AVAILABLE");
 			}
-			
+
 			sender.sendMessage(message.toString());
 		}
-		
+
 		return true;
 	}
 

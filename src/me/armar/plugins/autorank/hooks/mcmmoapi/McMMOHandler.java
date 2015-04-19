@@ -80,16 +80,16 @@ public class McMMOHandler implements DependencyHandler {
 		} catch (Exception e) {
 			Class<? extends Exception> error = e.getClass();
 			String errorMessage = error.toString().toLowerCase();
-			
+
 			if (errorMessage.contains("invalidskill")) {
 				plugin.getLogger().warning(
 						"Skill '" + skillName + "' is not a valid skill!");
 				return -1;
 			} else if (errorMessage.contains("mcmmoplayernotfound")) {
 				plugin.getLogger()
-				.severe("Could not get user '"
-						+ player.getName()
-						+ "' of McMMO. Report McMMOPlayerNotFoundException to mcmmo devs.");
+						.severe("Could not get user '"
+								+ player.getName()
+								+ "' of McMMO. Report McMMOPlayerNotFoundException to mcmmo devs.");
 			} else {
 				e.fillInStackTrace();
 			}

@@ -182,7 +182,8 @@ public class AutorankTools {
 	 * seconds</b>
 	 * 
 	 * @param count the value to convert
-	 * @param the type of time of the value given (DAYS, HOURS, MINUTES, SECONDS)
+	 * @param the type of time of the value given (DAYS, HOURS, MINUTES,
+	 *            SECONDS)
 	 * @return string in given format
 	 */
 	public static String timeToString(int count, final Time time) {
@@ -357,31 +358,36 @@ public class AutorankTools {
 
 		return returnString;
 	}
-	
-	public static boolean containsAtLeast(Player player, ItemStack item, int amount, String displayName) {
+
+	public static boolean containsAtLeast(Player player, ItemStack item,
+			int amount, String displayName) {
 		// Check if player has at least the x of an item WITH proper displayname
-		
+
 		int count = 0;
-		
+
 		// Otherwise we'll not find any colour codes
 		displayName = displayName.replace("&", "§");
-		
+
 		// Check every slot
 		for (ItemStack itemFound : player.getInventory().getContents()) {
-			
-			if (itemFound == null) continue;
-			
+
+			if (itemFound == null)
+				continue;
+
 			// Not the same item
-			if (!itemFound.getType().equals(item.getType())) continue;
-			
+			if (!itemFound.getType().equals(item.getType()))
+				continue;
+
 			// Check display name
-			if (!itemFound.hasItemMeta() || !itemFound.getItemMeta().hasDisplayName()) continue;
-			
+			if (!itemFound.hasItemMeta()
+					|| !itemFound.getItemMeta().hasDisplayName())
+				continue;
+
 			if (itemFound.getItemMeta().getDisplayName().equals(displayName)) {
 				count += itemFound.getAmount();
-			}			
+			}
 		}
-		
+
 		return count >= amount;
 	}
 }
