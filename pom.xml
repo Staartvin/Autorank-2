@@ -67,11 +67,11 @@
 			<url>http://repo.mcstats.org/content/repositories/public/</url>
 		</repository>
 
-		<repository>
+		<!-- <repository>
 			<id>stats-repo</id>
 			<url>http://centrility.nl:8081/nexus/content/repositories/releases/
 			</url>
-		</repository>
+		</repository> -->
 		
 		<repository>
 			<id>stats-repo-snapshot</id>
