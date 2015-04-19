@@ -76,13 +76,13 @@ public class StatsHandler implements StatsPlugin {
 			value = statsApi.getBlocksStat(uuid,
 					Integer.parseInt((String) arguments[1]),
 					Integer.parseInt((String) arguments[2]), worldName,
-					"Block place");
+					"Blocks placed");
 		} else if (correctName.equals("blocks_broken")) {
 			// Handle blocks broken
 			value = statsApi.getBlocksStat(uuid,
 					Integer.parseInt((String) arguments[1]),
 					Integer.parseInt((String) arguments[2]), worldName,
-					"Block break");
+					"Blocks broken");
 		} else if (correctName.equals("total_blocks_placed")) {
 			// Handle total blocks placed
 			value = statsApi.getTotalBlocksPlaced(uuid, worldName);
@@ -98,16 +98,13 @@ public class StatsHandler implements StatsPlugin {
 					worldName);
 		} else if (correctName.equals("fish_caught")) {
 			// Handle time played
-			// Fish catched is the proper spelling of the stat
-			value = statsApi.getNormalStat(uuid, "Fish catched", worldName);
+			value = statsApi.getNormalStat(uuid, "Fish caught", worldName);
 		} else if (correctName.equals("items_crafted")) {
 			// Handle time played
-			// Fish catched is the proper spelling of the stat
 			value = statsApi.getNormalStat(uuid, "Items crafted", worldName);
 		} else if (correctName.equals("times_sheared")) {
 			// Handle time played
-			// Fish catched is the proper spelling of the stat
-			value = statsApi.getNormalStat(uuid, "Shear", worldName);
+			value = statsApi.getNormalStat(uuid, "Shears", worldName);
 		}
 
 		return value;
@@ -123,12 +120,6 @@ public class StatsHandler implements StatsPlugin {
 
 		if (!statsApi.isAvailable()) {
 			plugin.getLogger().info("Stats (by Lolmewn) is not enabled!");
-			return false;
-		}
-
-		if (!statsApi.areBetaFunctionsEnabled()) {
-			plugin.getLogger().info(
-					"Stats (by Lolmewn) does not have beta functions enabled!");
 			return false;
 		}
 

@@ -1,22 +1,25 @@
 package me.armar.plugins.autorank.hooks.statsapi;
 
+import java.util.Collection;
+import java.util.Map;
 import java.util.UUID;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.DependencyHandler;
-import nl.lolmewn.stats.Main;
-import nl.lolmewn.stats.api.Stat;
 import nl.lolmewn.stats.api.StatsAPI;
-import nl.lolmewn.stats.player.StatData;
-import nl.lolmewn.stats.player.StatsPlayer;
+import nl.lolmewn.stats.api.stat.Stat;
+import nl.lolmewn.stats.api.stat.StatEntry;
+import nl.lolmewn.stats.api.user.StatsHolder;
+import nl.lolmewn.stats.bukkit.BukkitMain;
 
+import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.Plugin;
 
 /**
  * Handles all connections with Stats
  * <p>
- * Date created: 21:02:34 15 mrt. 2014 TODO Add support for Stats 3.0
+ * Date created: 21:02:34 15 mrt. 2014 
  * 
  * @author Staartvin
  * 
@@ -24,17 +27,11 @@ import org.bukkit.plugin.Plugin;
 public class StatsAPIHandler implements DependencyHandler {
 
 	private StatsAPI api;
+	private BukkitMain stats;
 	private final Autorank plugin;
 
 	public StatsAPIHandler(final Autorank instance) {
 		plugin = instance;
-	}
-
-	public boolean areBetaFunctionsEnabled() {
-		if (api != null) {
-			return api.isUsingBetaFunctions();
-		}
-		return false;
 	}
 
 	/* (non-Javadoc)
@@ -47,7 +44,7 @@ public class StatsAPIHandler implements DependencyHandler {
 
 		try {
 			// WorldGuard may not be loaded
-			if (plugin == null || !(plugin instanceof Main)) {
+			if (plugin == null || !(plugin instanceof BukkitMain)) {
 				return null; // Maybe you want throw an exception instead
 			}
 		} catch (final NoClassDefFoundError exception) {
@@ -71,14 +68,53 @@ public class StatsAPIHandler implements DependencyHandler {
 	 * @param statType Either "Block break" or "Block place"
 	 * @return amount player placed/broke of a block
 	 */
+	@SuppressWarnings("deprecation")
 	public int getBlocksStat(final UUID uuid, final int id,
-			final int damageValue, final String worldName, final String statType) {
+			final int damageValue, final String worldName, final String statName) {
 		if (!isAvailable())
 			return 0;
 
-		final StatData blockStat = getStatType(statType, uuid, worldName);
-		int value = 0;
+		final Collection<StatEntry> stat = getStatType(statName, uuid);
 		boolean checkDamageValue = false;
+		
+		if (damageValue > 0) {
+			checkDamageValue = true;
+		}
+		
+		int value = 0;
+
+		for (StatEntry s : stat) {
+			Map<String, Object> metadata = s.getMetadata();
+
+			// Check world
+			if (worldName != null && metadata.containsKey("world")) {
+				// Not in the world we look for
+				if (!metadata.get("world").equals(worldName))
+					continue;
+			}
+			
+			// Check damage value
+			if (checkDamageValue) {
+				if (metadata.containsKey("data")) {
+					if (!metadata.get("data").equals(damageValue))
+						continue;
+				}
+			}
+			
+			// Check correct id
+			if (metadata.containsKey("name")) {
+				Material material = Material.matchMaterial(metadata.get("name").toString());
+				
+				if (material.getId() != id) continue;
+			}
+			
+			value += s.getValue();
+		}
+
+		return value;
+		
+		/*int value = 0;
+		
 
 		if (damageValue > 0) {
 			checkDamageValue = true;
@@ -101,7 +137,7 @@ public class StatsAPIHandler implements DependencyHandler {
 			}
 		}
 
-		return value;
+		return value;*/
 	}
 
 	public EntityType getEntityType(final String entityName) {
@@ -117,23 +153,31 @@ public class StatsAPIHandler implements DependencyHandler {
 		if (!isAvailable())
 			return 0;
 
-		final StatData stat = getStatType(statName, uuid, worldName);
+		final Collection<StatEntry> stat = getStatType(statName, uuid);
 
 		int value = 0;
+
+		for (StatEntry s : stat) {
+			Map<String, Object> metadata = s.getMetadata();
+
+			if (worldName != null && metadata.containsKey("world")) {
+				// Not in the world we look for
+				if (!metadata.get("world").equals(worldName))
+					continue;
+			}
+
+			value += s.getValue();
+		}
+
+		return value;
+
+		/*
 
 		for (final Object[] vars : stat.getAllVariables()) {
 			value += stat.getValue(vars);
 		}
 
-		return value;
-	}
-
-	public Stat getStat(final String name) {
-		return api.getStat(name);
-	}
-
-	public StatsPlayer getStats(final UUID uuid) {
-		return api.getPlayer(uuid);
+		return value;*/
 	}
 
 	/**
@@ -145,41 +189,26 @@ public class StatsAPIHandler implements DependencyHandler {
 	 * @param worldName World to check for.
 	 * @return Requested stat of the player
 	 */
-	public StatData getStatType(final String statName, final UUID uuid,
-			final String worldName) {
-		final StatsPlayer sPlayer = getStats(uuid);
+	public Collection<StatEntry> getStatType(final String statName,
+			final UUID uuid) {
 
-		final Stat stat = getStat(statName);
+		StatsHolder holder = stats.getUserManager().getUser(uuid);
+
+		Stat stat = stats.getStatManager().getStat(statName);
 
 		if (stat == null)
 			throw new IllegalArgumentException("Unknown stat '" + statName
 					+ "'!");
 
-		StatData data = null;
-
-		if (worldName != null) {
-			data = sPlayer.getStatData(stat, worldName, true);
-		} else {
-			data = sPlayer.getGlobalStatData(stat);
-		}
-
-		return data;
+		return holder.getStats(stat);
 	}
 
 	public int getTotalBlocksBroken(final UUID uuid, final String worldName) {
 		if (!isAvailable())
 			return 0;
-
-		final StatData data = getStatType("Block break", uuid, worldName);
-
-		if (data == null)
-			return 0;
-
-		double value = 0;
-		for (final Object[] vars : data.getAllVariables()) {
-			value += data.getValue(vars);
-		}
-		return (int) value;
+		
+		
+		return this.getNormalStat(uuid, "Blocks broken", worldName);
 	}
 
 	public int getTotalBlocksMoved(final UUID uuid, final int type,
@@ -189,15 +218,32 @@ public class StatsAPIHandler implements DependencyHandler {
 
 		final String statName = "Move";
 
-		final StatData stat = getStatType(statName, uuid, worldName);
+		final Collection<StatEntry> stat = getStatType(statName, uuid);
 
 		int value = 0;
 
-		for (final Object[] vars : stat.getAllVariables()) {
-			if ((Integer) vars[0] == type) {
-				value += stat.getValue(vars);
+		for (StatEntry s : stat) {
+
+			Map<String, Object> metadata = s.getMetadata();
+
+			if (worldName != null && metadata.containsKey("world")) {
+				// Not in the world we look for
+				if (!metadata.get("world").equals(worldName))
+					continue;
 			}
+
+			if (metadata.containsKey("type")
+					&& (Integer) metadata.get("type") != type)
+				continue;
+
+			value += s.getValue();
+
 		}
+//		for (final Object[] vars : stat.getAllVariables()) {
+//			if ((Integer) vars[0] == type) {
+//				value += stat.getValue(vars);
+//			}
+//		}
 
 		return value;
 	}
@@ -206,16 +252,7 @@ public class StatsAPIHandler implements DependencyHandler {
 		if (!isAvailable())
 			return 0;
 
-		final StatData data = getStatType("Block place", uuid, worldName);
-
-		if (data == null)
-			return 0;
-
-		double value = 0;
-		for (final Object[] vars : data.getAllVariables()) {
-			value += data.getValue(vars);
-		}
-		return (int) value;
+		return this.getNormalStat(uuid, "Blocks placed", worldName);
 	}
 
 	public int getTotalMobsKilled(final UUID uuid, final String mobName,
@@ -223,7 +260,10 @@ public class StatsAPIHandler implements DependencyHandler {
 		if (!isAvailable())
 			return 0;
 
-		final String statName = "Kill";
+		// TODO NOT DONE BY STATS 3.0 AUTHOR
+		
+		
+		/*final String statName = "Kill";
 
 		final StatData data = getStatType(statName, uuid, worldName);
 
@@ -248,23 +288,15 @@ public class StatsAPIHandler implements DependencyHandler {
 			}
 		}
 
-		return value;
+		return value;*/
+		return 0;
 	}
 
 	public int getTotalPlayTime(final UUID uuid, final String worldName) {
 		if (!isAvailable())
 			return 0;
 
-		final StatData data = getStatType("Playtime", uuid, worldName);
-
-		if (data == null)
-			return 0;
-
-		double value = 0;
-		for (final Object[] vars : data.getAllVariables()) {
-			value += data.getValue(vars);
-		}
-		return (int) value;
+		return this.getNormalStat(uuid, "Playtime", worldName);
 	}
 
 	/* (non-Javadoc)
@@ -296,9 +328,11 @@ public class StatsAPIHandler implements DependencyHandler {
 			}
 			return false;
 		} else {
-			final Main stats = (Main) get();
 
-			api = stats.getAPI();
+			api = plugin.getServer().getServicesManager()
+					.getRegistration(StatsAPI.class).getProvider();
+
+			stats = (BukkitMain) get();
 
 			if (api != null) {
 				if (verbose) {
