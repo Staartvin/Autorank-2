@@ -74,7 +74,7 @@
 		</repository>
 		
 		<repository>
-			<id>stats-repo</id>
+			<id>stats-repo-snapshot</id>
 			<url>http://centrility.nl:8081/nexus/content/repositories/snapshots/
 			</url>
 		</repository>
