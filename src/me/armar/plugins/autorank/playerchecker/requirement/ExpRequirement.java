@@ -14,8 +14,16 @@ public class ExpRequirement extends Requirement {
 
 	@Override
 	public String getDescription() {
-		return Lang.EXP_REQUIREMENT.getConfigValue(AutorankTools.seperateList(
+
+		String lang = Lang.EXP_REQUIREMENT.getConfigValue(AutorankTools.seperateList(
 				minExps, "or"));
+		
+		// Check if this requirement is world-specific
+		if (this.isWorldSpecific()) {
+			lang = lang.concat(" (in world '" + this.getWorld() + "')");
+		}
+
+		return lang;
 	}
 
 	@Override
@@ -30,6 +38,14 @@ public class ExpRequirement extends Requirement {
 
 	@Override
 	public boolean meetsRequirement(final Player player) {
+
+		// Check if this requirement is world-specific
+		if (this.isWorldSpecific()) {
+			// Is player in the same world as specified
+			if (!this.getWorld().equals(player.getWorld().getName()))
+				return false;
+		}
+
 		final int expLevel = player.getLevel();
 
 		for (final int expMin : minExps) {

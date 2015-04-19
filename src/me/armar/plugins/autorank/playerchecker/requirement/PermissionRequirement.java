@@ -14,8 +14,16 @@ public class PermissionRequirement extends Requirement {
 
 	@Override
 	public String getDescription() {
-		return Lang.PERMISSION_REQUIREMENT.getConfigValue(AutorankTools
+
+		String lang = Lang.PERMISSION_REQUIREMENT.getConfigValue(AutorankTools
 				.seperateList(permissions, "or"));
+
+		// Check if this requirement is world-specific
+		if (this.isWorldSpecific()) {
+			lang = lang.concat(" (in world '" + this.getWorld() + "')");
+		}
+
+		return lang;
 	}
 
 	@Override
@@ -26,6 +34,13 @@ public class PermissionRequirement extends Requirement {
 
 	@Override
 	public boolean meetsRequirement(final Player player) {
+
+		// Check if this requirement is world-specific
+		if (this.isWorldSpecific()) {
+			// Is player in the same world as specified
+			if (!this.getWorld().equals(player.getWorld().getName()))
+				return false;
+		}
 
 		for (final String perm : permissions) {
 			if (player.hasPermission(perm))

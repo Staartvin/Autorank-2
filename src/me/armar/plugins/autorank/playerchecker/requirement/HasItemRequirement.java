@@ -52,8 +52,15 @@ public class HasItemRequirement extends Requirement {
 			}*/
 		}
 
-		return Lang.ITEM_REQUIREMENT.getConfigValue(AutorankTools.seperateList(
-				names, "or"));
+		String lang = Lang.ITEM_REQUIREMENT.getConfigValue(AutorankTools
+				.seperateList(names, "or"));
+
+		// Check if this requirement is world-specific
+		if (this.isWorldSpecific()) {
+			lang = lang.concat(" (in world '" + this.getWorld() + "')");
+		}
+
+		return lang;
 	}
 
 	@Override
@@ -86,6 +93,13 @@ public class HasItemRequirement extends Requirement {
 
 	@Override
 	public boolean meetsRequirement(final Player player) {
+
+		// Check if this requirement is world-specific
+		if (this.isWorldSpecific()) {
+			// Is player in the same world as specified
+			if (!this.getWorld().equals(player.getWorld().getName()))
+				return false;
+		}
 
 		for (final ItemWrapper wrapper : neededItems) {
 			final ItemStack item = wrapper.getItem();

@@ -17,7 +17,14 @@ public class InBiomeRequirement extends Requirement {
 	public String getDescription() {
 		final String arg = AutorankTools.seperateList(biomes, "or");
 
-		return Lang.IN_BIOME_REQUIREMENT.getConfigValue(arg);
+		String lang = Lang.IN_BIOME_REQUIREMENT.getConfigValue(arg);
+
+		// Check if this requirement is world-specific
+		if (this.isWorldSpecific()) {
+			lang = lang.concat(" (in world '" + this.getWorld() + "')");
+		}
+
+		return lang;
 	}
 
 	@Override
@@ -33,6 +40,14 @@ public class InBiomeRequirement extends Requirement {
 
 	@Override
 	public boolean meetsRequirement(final Player player) {
+
+		// Check if this requirement is world-specific
+		if (this.isWorldSpecific()) {
+			// Is player in the same world as specified
+			if (!this.getWorld().equals(player.getWorld().getName()))
+				return false;
+		}
+
 		final Location pLocation = player.getLocation();
 
 		for (final String biome : biomes) {

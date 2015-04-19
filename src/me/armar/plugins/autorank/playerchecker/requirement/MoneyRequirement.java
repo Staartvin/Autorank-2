@@ -15,10 +15,18 @@ public class MoneyRequirement extends Requirement {
 
 	@Override
 	public String getDescription() {
-		return Lang.MONEY_REQUIREMENT.getConfigValue(AutorankTools
+
+		String lang = Lang.MONEY_REQUIREMENT.getConfigValue(AutorankTools
 				.seperateList(minMoney, "or")
 				+ " "
 				+ VaultHandler.economy.currencyNamePlural());
+
+		// Check if this requirement is world-specific
+		if (this.isWorldSpecific()) {
+			lang = lang.concat(" (in world '" + this.getWorld() + "')");
+		}
+
+		return lang;
 	}
 
 	@Override
@@ -36,6 +44,13 @@ public class MoneyRequirement extends Requirement {
 
 	@Override
 	public boolean meetsRequirement(final Player player) {
+
+		// Check if this requirement is world-specific
+		if (this.isWorldSpecific()) {
+			// Is player in the same world as specified
+			if (!this.getWorld().equals(player.getWorld().getName()))
+				return false;
+		}
 
 		//UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
 		if (VaultHandler.economy == null)

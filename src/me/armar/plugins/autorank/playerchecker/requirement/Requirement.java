@@ -32,6 +32,7 @@ public abstract class Requirement {
 	private Autorank autorank;
 	private boolean optional = false, autoComplete = false;
 	private int reqId;
+	private String world = null;
 	private List<Result> results = new ArrayList<Result>();
 
 	public final Autorank getAutorank() {
@@ -195,5 +196,29 @@ public abstract class Requirement {
 	 */
 	public boolean useAutoCompletion() {
 		return autoComplete;
+	}
+
+	/**
+	 * If requirement is world specific, what world does it apply to?
+	 * @return the world that this requirement is specific to.
+	 */
+	public String getWorld() {
+		return world;
+	}
+
+	/**
+	 * Sets the world that this requirement is specific to.
+	 * @param world name of the world
+	 */
+	public void setWorld(String world) {
+		this.world = world;
+	}
+	
+	/**
+	 * Is this requirement world-specific?
+	 * @return true if it is, false otherwise.
+	 */
+	public boolean isWorldSpecific() {
+		return world != null;
 	}
 }
