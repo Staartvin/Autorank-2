@@ -97,4 +97,10 @@ permissions:
         default: op
     autorank.hooks:
         description: Allows viewing the available hooks for Autorank
-        default: op            
+        default: op
+    autorank.gcheck:
+        description: Allows checking global time.
+        default: op
+    autorank.gadd:
+        description: Allows adding global time.
+        default: op    
