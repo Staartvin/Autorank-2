@@ -67,9 +67,6 @@ public class BackupManager {
 		plugin.getServer().getScheduler()
 				.runTaskTimerAsynchronously(plugin, new Runnable() {
 					public void run() {
-
-						System.out.println("Difference: " + (System.currentTimeMillis() - backupDataManager.getLatestBackup("data")));
-						System.out.println("Difference: " + (System.currentTimeMillis() - backupDataManager.getLatestBackup("playerdata")));
 						
 						// Older than a day
 						if ((System.currentTimeMillis() - backupDataManager.getLatestBackup("data")) > 86400000 ) {
