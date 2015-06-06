@@ -19,9 +19,13 @@ import com.google.common.io.Files;
 public class BackupManager {
 
 	private final Autorank plugin;
+	private final BackupDataManager backupDataManager;
 
 	public BackupManager(final Autorank plugin) {
 		this.plugin = plugin;
+		backupDataManager = new BackupDataManager(plugin);
+		
+		backupDataManager.createNewFile();
 	}
 
 	/**
@@ -64,20 +68,44 @@ public class BackupManager {
 				.runTaskTimerAsynchronously(plugin, new Runnable() {
 					public void run() {
 
-						plugin.getLogger()
-								.info("Making a backup of data.yml and playerdata.yml..");
-
-						// Before running, backup stuff.
-						plugin.getBackupManager().backupFile(
-								"/playerdata/playerdata.yml",
-								plugin.getDataFolder().getAbsolutePath()
-										+ File.separator + "backups"
-										+ File.separator + "playerdata.yml");
-						plugin.getBackupManager().backupFile(
-								"Data.yml",
-								plugin.getDataFolder().getAbsolutePath()
-										+ File.separator + "backups"
-										+ File.separator + "data.yml");
+						System.out.println("Difference: " + (System.currentTimeMillis() - backupDataManager.getLatestBackup("data")));
+						System.out.println("Difference: " + (System.currentTimeMillis() - backupDataManager.getLatestBackup("playerdata")));
+						
+						// Older than a day
+						if ((System.currentTimeMillis() - backupDataManager.getLatestBackup("data")) > 86400000 ) {
+							plugin.getLogger()
+							.info("Making a backup of data.yml.");
+							
+							plugin.getBackupManager().backupFile(
+									"Data.yml",
+									plugin.getDataFolder().getAbsolutePath()
+											+ File.separator + "backups"
+											+ File.separator + "data.yml");
+							
+							// Update latest backup time
+							backupDataManager.getConfig().set("data", System.currentTimeMillis());
+						}
+						
+						// Older than a day
+						if ((System.currentTimeMillis() - backupDataManager.getLatestBackup("playerdata")) > 86400000 ) {
+							plugin.getLogger()
+							.info("Making a backup of playerdata.yml.");
+							
+							
+							// Before running, backup stuff.
+							plugin.getBackupManager().backupFile(
+									"/playerdata/playerdata.yml",
+									plugin.getDataFolder().getAbsolutePath()
+											+ File.separator + "backups"
+											+ File.separator + "playerdata.yml");
+							
+							// Update latest backup time
+							backupDataManager.getConfig().set("playerdata", System.currentTimeMillis());
+						}
+						
+						
+						// Save config
+						backupDataManager.saveConfig();	
 					}
 				}, 0, 1728000);
 	}
