@@ -21,7 +21,7 @@ public class GlobalCheckCommand extends AutorankCommand {
 	public GlobalCheckCommand(final Autorank instance) {
 		this.setUsage("/ar gcheck [player]");
 		this.setDesc("Check [player]'s global playtime.");
-		this.setPermission("autorank.check");
+		this.setPermission("autorank.gcheck");
 
 		plugin = instance;
 	}
