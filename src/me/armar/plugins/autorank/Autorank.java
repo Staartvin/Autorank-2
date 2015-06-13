@@ -245,6 +245,9 @@ public class Autorank extends JavaPlugin {
 
 		setDependencyManager(null);
 
+		// Close database connection
+		this.getMySQLWrapper().disconnectDatabase();
+		
 		setMySQLWrapper(null);
 
 		setUpdateHandler(null);
