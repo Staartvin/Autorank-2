@@ -19,7 +19,7 @@ import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
 public class Playtimes {
 
-	public static int INTERVAL_MINUTES = 5;
+	public static int INTERVAL_MINUTES;
 
 	private final SimpleYamlConfiguration data;
 	private final Autorank plugin;
@@ -218,6 +218,12 @@ public class Playtimes {
 			return -1;
 		return plugin.getMySQLWrapper().getDatabaseTime(uuid);
 	}
+	
+	private int getFreshGlobalTime(final UUID uuid) {
+		if (uuid == null)
+			return -1;
+		return plugin.getMySQLWrapper().getFreshDatabaseTime(uuid);
+	}
 
 	/**
 	 * Returns playtime on this particular server
@@ -345,7 +351,7 @@ public class Playtimes {
 			}
 		}
 
-		final int time = getGlobalTime(uuid);
+		final int time = getFreshGlobalTime(uuid);
 
 		if (time >= 0) {
 			try {

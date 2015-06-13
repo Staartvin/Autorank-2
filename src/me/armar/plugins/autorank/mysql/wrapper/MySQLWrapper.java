@@ -12,6 +12,7 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.config.ConfigHandler;
 import me.armar.plugins.autorank.config.ConfigHandler.MySQLOptions;
 import me.armar.plugins.autorank.data.SQLDataStorage;
+import me.armar.plugins.autorank.playtimes.Playtimes;
 
 /**
  * This class keeps all incoming and outgoing under control.
@@ -127,6 +128,52 @@ public class MySQLWrapper {
 		return value;
 	}
 
+	/**
+	 * Get the database time of a certain UUID. 
+	 * <p>This will always return the result that is currently in the database and is never a cached value.
+	 * <p>A new request will always be made to get the value, therefor this should be run async.
+	 * @param uuid UUID of the player to get the time for.
+	 * @return fresh value of database time for UUID.
+	 */
+	public int getFreshDatabaseTime(final UUID uuid) {
+		// Mysql is not enabled
+		if (!isMySQLEnabled())
+			return -1;
+
+		// Check if connection is still alive
+		if (mysql.isClosed()) {
+			mysql.connect();
+		}
+		// Retrieve database time
+		// Setup executor service with pool = 1
+		final ExecutorService executor = Executors.newFixedThreadPool(1);
+
+		// Initialise new callable class
+		final Callable<Integer> callable = new GrabDatabaseTimeTask(mysql,
+				uuid, table);
+
+		// Sumbit callable
+		final Future<Integer> futureValue = executor.submit(callable);
+
+		// Grab value (will block thread, but there is no other way)
+		// That's why you need to run this async.
+		int value = -1;
+
+		try {
+			value = futureValue.get();
+		} catch (final InterruptedException e) {
+			e.printStackTrace();
+		} catch (final ExecutionException e) {
+			e.printStackTrace();
+		}
+
+		// Store last received time and last received value
+		lastChecked.put(uuid, System.currentTimeMillis());
+		lastReceivedTime.put(uuid, value);
+
+		return value;
+	}
+
 	public boolean isMySQLEnabled() {
 		return mysql != null;
 	}
@@ -151,7 +198,7 @@ public class MySQLWrapper {
 		}
 
 		// Get the difference in minutes
-		if ((currentTime - lastCheckedTime) / 60000 >= 5) {
+		if ((currentTime - lastCheckedTime) / 60000 >= Playtimes.INTERVAL_MINUTES) {
 			return true;
 		} else {
 			return false;
@@ -244,5 +291,12 @@ public class MySQLWrapper {
 						"Successfully established connection to " + hostname);
 			}
 		}
+	}
+	
+	/**
+	 * Disconnect from database manually.
+	 */
+	public void disconnectDatabase() {
+		mysql.closeConnection();
 	}
 }
