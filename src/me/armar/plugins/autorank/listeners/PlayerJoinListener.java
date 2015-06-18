@@ -31,6 +31,8 @@ public class PlayerJoinListener implements Listener {
 		// Add cached player
 		//UUIDManager.addCachedPlayer(player);
 
+		plugin.debugMessage("PlayerChecker: " + plugin.getPlayerChecker());
+		
 		// Do leaderboard exemption check
 		plugin.getPlayerChecker().doLeaderboardExemptCheck(player);
 
