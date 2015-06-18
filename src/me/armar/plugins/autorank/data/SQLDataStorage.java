@@ -156,10 +156,12 @@ public class SQLDataStorage {
 			return true;
 		}
 	}
-	
+
 	public void closeConnection() {
 		try {
-			conn.close();
+			if (conn != null) {
+				conn.close();
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
