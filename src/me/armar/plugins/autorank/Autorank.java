@@ -321,6 +321,7 @@ public class Autorank extends JavaPlugin {
 
 		this.debugMessage("Before DependencyManager");
 
+		
 		// Load dependency manager
 		setDependencyManager(new DependencyManager(this));
 
@@ -331,11 +332,13 @@ public class Autorank extends JavaPlugin {
 			Class<? extends Exception> error = e.getClass();
 			String errorMessage = error.toString().toLowerCase();
 
-			if (errorMessage.contains("classnotfound")
+			getLogger().severe("Could not hook into a dependency: " + errorMessage);
+			
+			/*if (errorMessage.contains("classnotfound")
 					|| errorMessage.contains("noclassdeffound")) {
 				getLogger().severe(
 						"Could not hook into a dependency: " + errorMessage);
-			}
+			}*/
 		}
 
 		this.debugMessage("After DependencyManager");
