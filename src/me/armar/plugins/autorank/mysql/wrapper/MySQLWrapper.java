@@ -129,9 +129,14 @@ public class MySQLWrapper {
 	}
 
 	/**
-	 * Get the database time of a certain UUID. 
-	 * <p>This will always return the result that is currently in the database and is never a cached value.
-	 * <p>A new request will always be made to get the value, therefor this should be run async.
+	 * Get the database time of a certain UUID.
+	 * <p>
+	 * This will always return the result that is currently in the database and
+	 * is never a cached value.
+	 * <p>
+	 * A new request will always be made to get the value, therefor this should
+	 * be run async.
+	 * 
 	 * @param uuid UUID of the player to get the time for.
 	 * @return fresh value of database time for UUID.
 	 */
@@ -292,11 +297,13 @@ public class MySQLWrapper {
 			}
 		}
 	}
-	
+
 	/**
 	 * Disconnect from database manually.
 	 */
 	public void disconnectDatabase() {
-		mysql.closeConnection();
+		if (mysql != null) {
+			mysql.closeConnection();
+		}
 	}
 }
