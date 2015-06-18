@@ -117,9 +117,10 @@ public class DependencyManager {
 	/**
 	 * Loads all dependencies used for Autorank. <br>
 	 * Autorank will check for dependencies and shows the output on the console.
+	 * @throws Exception This can be a multitude of exceptions
 	 * 
 	 */
-	public void loadDependencies() {
+	public void loadDependencies() throws Exception {
 
 		// Make seperate loading bar
 		if (plugin.getConfigHandler().useAdvancedDependencyLogs()) {

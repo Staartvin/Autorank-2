@@ -41,5 +41,5 @@ public interface DependencyHandler {
 	 * @param verbose Whether to show output or not
 	 * @return true if correctly setup, false otherwise.
 	 */
-	public boolean setup(boolean verbose);
+	public boolean setup(boolean verbose) throws Exception;
 }
