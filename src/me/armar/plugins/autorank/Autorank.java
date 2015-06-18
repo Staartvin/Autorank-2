@@ -321,19 +321,18 @@ public class Autorank extends JavaPlugin {
 
 		this.debugMessage("Before DependencyManager");
 
-		
 		// Load dependency manager
 		setDependencyManager(new DependencyManager(this));
 
 		try {
 			// Load dependencies
 			dependencyManager.loadDependencies();
-		} catch (Exception e) {
-			Class<? extends Exception> error = e.getClass();
-			String errorMessage = error.toString().toLowerCase();
+		} catch (Throwable t) {
 
-			getLogger().severe("Could not hook into a dependency: " + errorMessage);
-			
+			getLogger().severe(
+					"Could not hook into a dependency: \nCause: "
+							+ t.getCause());
+
 			/*if (errorMessage.contains("classnotfound")
 					|| errorMessage.contains("noclassdeffound")) {
 				getLogger().severe(

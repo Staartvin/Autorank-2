@@ -31,11 +31,17 @@ public class McMMOHandler implements DependencyHandler {
 		final Plugin plugin = this.plugin.getServer().getPluginManager()
 				.getPlugin("mcMMO");
 
-		// WorldGuard may not be loaded
-		if (plugin == null || !(plugin instanceof mcMMO)) {
-			return null; // Maybe you want throw an exception instead
-		}
-
+		//try {
+			if (plugin == null || !(plugin instanceof mcMMO)) {
+				return null; // Maybe you want throw an exception instead
+			}
+		/*} catch (Throwable t) {
+			Class<? extends Throwable> error = t.getClass();
+			String errorMessage = error.toString().toLowerCase();
+			
+			plugin.getLogger().info("Couldn't connect to mcMMO: " + errorMessage);
+		}*/
+		
 		return plugin;
 	}
 
@@ -127,7 +133,9 @@ public class McMMOHandler implements DependencyHandler {
 			}
 			return false;
 		} else {
+			
 			api = (mcMMO) get();
+			
 
 			if (api != null) {
 				if (verbose) {
