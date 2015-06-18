@@ -31,11 +31,6 @@ public class PlayerJoinListener implements Listener {
 		// Add cached player
 		//UUIDManager.addCachedPlayer(player);
 
-		plugin.debugMessage("PlayerChecker: " + plugin.getPlayerChecker());
-		
-		// Do leaderboard exemption check
-		plugin.getPlayerChecker().doLeaderboardExemptCheck(player);
-
 		// Store uuid of player
 		if (plugin.getUUIDStorage().isOutdated(player.getName())) {
 			plugin.getUUIDStorage().storeUUID(player.getName(),
@@ -43,8 +38,15 @@ public class PlayerJoinListener implements Listener {
 		}
 
 		// Cannot check player at this moment. -> try at next automatic task
-		if (plugin.getPlayerChecker() == null)
+		if (plugin.getPlayerChecker() == null) {
+			plugin.getLogger().severe("Autorank lost its player checker, this is bad! Please report this to the developers!");
 			return;
+		}
+			
+		//plugin.debugMessage("PlayerChecker: " + plugin.getPlayerChecker());
+
+		// Do leaderboard exemption check
+		plugin.getPlayerChecker().doLeaderboardExemptCheck(player);
 
 		// Perform check for player on login
 		plugin.getPlayerChecker().checkPlayer(player);
