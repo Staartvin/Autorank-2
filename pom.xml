@@ -17,7 +17,7 @@
 				<filtering>true</filtering>
 				<directory>${basedir}</directory>
 				<includes>
-					<include>**/*.yml</include>
+					<include>*.yml</include>
 				</includes>
 			</resource>
 

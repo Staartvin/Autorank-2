@@ -319,8 +319,6 @@ public class Autorank extends JavaPlugin {
 		// Create MySQL Wrapper
 		setMySQLWrapper(new MySQLWrapper(this));
 
-		this.debugMessage("Before DependencyManager");
-
 		// Load dependency manager
 		setDependencyManager(new DependencyManager(this));
 
@@ -335,8 +333,6 @@ public class Autorank extends JavaPlugin {
 					"Could not hook into a dependency: \nCause: "
 							+ t.getCause());
 		}
-
-		this.debugMessage("After DependencyManager");
 
 		// Create playtime class
 		setPlaytimes(new Playtimes(this));
