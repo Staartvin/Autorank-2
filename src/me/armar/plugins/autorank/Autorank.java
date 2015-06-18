@@ -247,7 +247,7 @@ public class Autorank extends JavaPlugin {
 
 		// Close database connection
 		this.getMySQLWrapper().disconnectDatabase();
-		
+
 		setMySQLWrapper(null);
 
 		setUpdateHandler(null);
@@ -320,13 +320,24 @@ public class Autorank extends JavaPlugin {
 		setMySQLWrapper(new MySQLWrapper(this));
 
 		this.debugMessage("Before DependencyManager");
-		
+
 		// Load dependency manager
 		setDependencyManager(new DependencyManager(this));
 
-		// Load dependencies
-		dependencyManager.loadDependencies();
-		
+		try {
+			// Load dependencies
+			dependencyManager.loadDependencies();
+		} catch (Exception e) {
+			Class<? extends Exception> error = e.getClass();
+			String errorMessage = error.toString().toLowerCase();
+
+			if (errorMessage.contains("classnotfound")
+					|| errorMessage.contains("noclassdeffound")) {
+				getLogger().severe(
+						"Could not hook into a dependency: " + errorMessage);
+			}
+		}
+
 		this.debugMessage("After DependencyManager");
 
 		// Create playtime class
