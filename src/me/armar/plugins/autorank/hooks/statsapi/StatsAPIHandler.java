@@ -270,7 +270,7 @@ public class StatsAPIHandler implements DependencyHandler {
 			type = EntityType.valueOf(
 					mobName.toUpperCase().replaceAll(" ", "_")).toString();
 		}
-		
+
 		final Collection<StatEntry> stat = getStatType(statName, uuid);
 
 		int value = 0;
@@ -286,7 +286,12 @@ public class StatsAPIHandler implements DependencyHandler {
 			}
 
 			if (type != null && metadata.containsKey("entityType")
-					&& (String) metadata.get("entityType") != type)
+					&& !metadata.get("entityType").equals(type))
+				continue;
+
+			// If no type was given (so any mob can be killed, exclude 'player' kills, as most admins don't see players as a real mob).
+			if (type == null && metadata.containsKey("entityType")
+					&& metadata.get("entityType").equals("PLAYER"))
 				continue;
 
 			value += s.getValue();
