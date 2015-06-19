@@ -32,7 +32,7 @@ public class MobKillsRequirement extends Requirement {
 					mobsKilledCombinedString, ";", 1);
 
 			if (i == 0) {
-				if (mobType == null) {
+				if (mobType == null || mobType.trim().equals("")) {
 					desc = Lang.TOTAL_MOBS_KILLED_REQUIREMENT
 							.getConfigValue(total + " mobs");
 				} else {
@@ -127,12 +127,12 @@ public class MobKillsRequirement extends Requirement {
 
 		for (final String[] options : optionsList) {
 			final int total = Integer.parseInt(options[0]);
-			String mobType = null;
+			String mobType = "";
 
 			if (options.length > 1) {
 				mobType = options[1].trim().replace(" ", "_");
 			}
-
+			
 			mobsKilledCombined.add(total + ";" + mobType);
 		}
 
