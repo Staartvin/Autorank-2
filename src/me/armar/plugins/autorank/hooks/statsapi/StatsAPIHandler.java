@@ -19,7 +19,7 @@ import org.bukkit.plugin.Plugin;
 /**
  * Handles all connections with Stats
  * <p>
- * Date created: 21:02:34 15 mrt. 2014 
+ * Date created: 21:02:34 15 mrt. 2014
  * 
  * @author Staartvin
  * 
@@ -76,11 +76,11 @@ public class StatsAPIHandler implements DependencyHandler {
 
 		final Collection<StatEntry> stat = getStatType(statName, uuid);
 		boolean checkDamageValue = false;
-		
+
 		if (damageValue > 0) {
 			checkDamageValue = true;
 		}
-		
+
 		int value = 0;
 
 		for (StatEntry s : stat) {
@@ -92,7 +92,7 @@ public class StatsAPIHandler implements DependencyHandler {
 				if (!metadata.get("world").equals(worldName))
 					continue;
 			}
-			
+
 			// Check damage value
 			if (checkDamageValue) {
 				if (metadata.containsKey("data")) {
@@ -100,19 +100,21 @@ public class StatsAPIHandler implements DependencyHandler {
 						continue;
 				}
 			}
-			
+
 			// Check correct id
 			if (metadata.containsKey("name")) {
-				Material material = Material.matchMaterial(metadata.get("name").toString());
-				
-				if (material.getId() != id) continue;
+				Material material = Material.matchMaterial(metadata.get("name")
+						.toString());
+
+				if (material.getId() != id)
+					continue;
 			}
-			
+
 			value += s.getValue();
 		}
 
 		return value;
-		
+
 		/*int value = 0;
 		
 
@@ -206,8 +208,7 @@ public class StatsAPIHandler implements DependencyHandler {
 	public int getTotalBlocksBroken(final UUID uuid, final String worldName) {
 		if (!isAvailable())
 			return 0;
-		
-		
+
 		return this.getNormalStat(uuid, "Blocks broken", worldName);
 	}
 
@@ -260,36 +261,39 @@ public class StatsAPIHandler implements DependencyHandler {
 		if (!isAvailable())
 			return 0;
 
-		// TODO NOT DONE BY STATS 3.0 AUTHOR
-		
-		
-		/*final String statName = "Kill";
+		final String statName = "Kill";
 
-		final StatData data = getStatType(statName, uuid, worldName);
+		// Mob type
+		String type = null;
 
-		final EntityType mob = getEntityType(mobName);
-		boolean checkEntityType = false;
+		if (mobName != null && !mobName.equals("")) {
+			type = EntityType.valueOf(
+					mobName.toUpperCase().replaceAll(" ", "_")).toString();
+		}
+		
+		final Collection<StatEntry> stat = getStatType(statName, uuid);
+
 		int value = 0;
 
-		if (mob != null) {
-			checkEntityType = true;
-		}
+		for (StatEntry s : stat) {
 
-		for (final Object[] vars : data.getAllVariables()) {
+			Map<String, Object> metadata = s.getMetadata();
 
-			// var 0 is mob type
-			if (checkEntityType) {
-				if (getEntityType(vars[0].toString()) != null
-						&& getEntityType(vars[0].toString()).equals(mob)) {
-					value += data.getValue(vars);
-				}
-			} else {
-				value += data.getValue(vars);
+			if (worldName != null && metadata.containsKey("world")) {
+				// Not in the world we look for
+				if (!metadata.get("world").equals(worldName))
+					continue;
 			}
+
+			if (type != null && metadata.containsKey("entityType")
+					&& (String) metadata.get("entityType") != type)
+				continue;
+
+			value += s.getValue();
+
 		}
 
-		return value;*/
-		return 0;
+		return value;
 	}
 
 	public int getTotalPlayTime(final UUID uuid, final String worldName) {
