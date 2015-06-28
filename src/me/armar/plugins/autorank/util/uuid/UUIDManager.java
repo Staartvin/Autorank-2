@@ -250,7 +250,7 @@ public class UUIDManager {
 			}
 		}
 
-		throw new NullPointerException("Could not UUID from player "
+		throw new NullPointerException("Could not get UUID from player "
 				+ playerName + "!");
 	}
 
