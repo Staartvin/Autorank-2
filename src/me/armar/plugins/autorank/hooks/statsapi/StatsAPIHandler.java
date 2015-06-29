@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.DependencyHandler;
+import me.armar.plugins.autorank.hooks.statsapi.customstats.MobKilledStat;
 import nl.lolmewn.stats.api.StatsAPI;
 import nl.lolmewn.stats.api.stat.Stat;
 import nl.lolmewn.stats.api.stat.StatEntry;
@@ -267,6 +268,21 @@ public class StatsAPIHandler implements DependencyHandler {
 		String type = null;
 
 		if (mobName != null && !mobName.equals("")) {
+			
+			if (mobName.equalsIgnoreCase("wither_skeleton")) {
+				return this.getSpecialMobsKilled(uuid, "WITHER SKELETON", worldName);
+			} else if (mobName.equalsIgnoreCase("charged_creeper")) {
+				return this.getSpecialMobsKilled(uuid, "POWERED CREEPER", worldName);
+			} else if (mobName.equalsIgnoreCase("spider_jockey")) {
+				return this.getSpecialMobsKilled(uuid, "SPIDER JOCKEY", worldName);
+			} else if (mobName.equalsIgnoreCase("chicken_jockey")) {
+				return this.getSpecialMobsKilled(uuid, "CHICKEN JOCKEY", worldName);
+			} else if (mobName.equalsIgnoreCase("killer_rabbit")) {
+				return this.getSpecialMobsKilled(uuid, "KILLER RABBIT", worldName);
+			} else if (mobName.equalsIgnoreCase("elder_guardian")) {
+				return this.getSpecialMobsKilled(uuid, "ELDER GUARDIAN", worldName);
+			}
+			
 			type = EntityType.valueOf(
 					mobName.toUpperCase().replaceAll(" ", "_")).toString();
 		}
@@ -298,6 +314,44 @@ public class StatsAPIHandler implements DependencyHandler {
 
 		}
 
+		return value;
+	}
+	
+	public int getSpecialMobsKilled(UUID uuid, String mobName, String worldName) {
+		if (!isAvailable())
+			return 0;
+		
+		final String statName = MobKilledStat.statName;
+		
+		final Collection<StatEntry> stat = getStatType(statName, uuid);
+		
+		int value = 0;
+		
+		String extraType = mobName.split(" ")[0].trim();
+		String entityType = mobName.split(" ")[1].trim();
+
+		for (StatEntry s : stat) {
+
+			Map<String, Object> metadata = s.getMetadata();
+
+			if (worldName != null && metadata.containsKey("world")) {
+				// Not in the world we look for
+				if (!metadata.get("world").equals(worldName))
+					continue;
+			}
+
+			if (metadata.containsKey("entityType")
+					&& !metadata.get("entityType").equals(entityType))
+				continue;
+
+			if (metadata.containsKey("extraType")
+					&& !metadata.get("extraType").equals(extraType))
+				continue;
+
+			value += s.getValue();
+
+		}
+		
 		return value;
 	}
 
@@ -357,5 +411,15 @@ public class StatsAPIHandler implements DependencyHandler {
 				return false;
 			}
 		}
+	}
+	
+	public void addStat(Stat stat) {
+		if (!isAvailable()) return;
+		
+		api.getStatManager().addStat(stat);
+	}
+	
+	public StatsAPI getAPI() {
+		return api;
 	}
 }
