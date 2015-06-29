@@ -36,23 +36,58 @@ public class MobKillsRequirement extends Requirement {
 					desc = Lang.TOTAL_MOBS_KILLED_REQUIREMENT
 							.getConfigValue(total + " mobs");
 				} else {
-					final EntityType entity = EntityType.valueOf(mobType
-							.toUpperCase());
+					String entityName;
+
+					if (mobType.equalsIgnoreCase("wither_skeleton")) {
+						entityName = "WITHER SKELETON";
+					} else if (mobType.equalsIgnoreCase("charged_creeper")) {
+						entityName = "CHARGED CREEPER";
+					} else if (mobType.equalsIgnoreCase("spider_jockey")) {
+						entityName = "SPIDER JOCKEY";
+					} else if (mobType.equalsIgnoreCase("chicken_jockey")) {
+						entityName = "CHICKEN JOCKEY";
+					} else if (mobType.equalsIgnoreCase("killer_rabbit")) {
+						entityName = "KILLER RABBIT";
+					} else if (mobType.equalsIgnoreCase("elder_guardian")) {
+						entityName = "ELDER GUARDIAN";
+					} else {
+						entityName = EntityType.valueOf(mobType.toUpperCase())
+								.toString();
+					}
+					
+					entityName = entityName.replace("_", " ");
+					
 					desc = Lang.TOTAL_MOBS_KILLED_REQUIREMENT
-							.getConfigValue(total
-									+ " "
-									+ entity.toString().toLowerCase()
-											.replace("_", " ") + "(s)");
+							.getConfigValue(total + " "
+									+ entityName.toLowerCase() + "(s)");
 				}
 			} else {
 				if (mobType == null) {
 					desc = desc.concat(" or " + total + " mobs");
 				} else {
-					final EntityType entity = EntityType.valueOf(mobType
-							.toUpperCase());
+					String entityName;
+
+					if (mobType.equalsIgnoreCase("wither_skeleton")) {
+						entityName = "WITHER SKELETON";
+					} else if (mobType.equalsIgnoreCase("charged_creeper")) {
+						entityName = "CHARGED CREEPER";
+					} else if (mobType.equalsIgnoreCase("spider_jockey")) {
+						entityName = "SPIDER JOCKEY";
+					} else if (mobType.equalsIgnoreCase("chicken_jockey")) {
+						entityName = "CHICKEN JOCKEY";
+					} else if (mobType.equalsIgnoreCase("killer_rabbit")) {
+						entityName = "KILLER RABBIT";
+					} else if (mobType.equalsIgnoreCase("elder_guardian")) {
+						entityName = "ELDER GUARDIAN";
+					} else {
+						entityName = EntityType.valueOf(mobType.toUpperCase())
+								.toString();
+					}
+					
+					entityName = entityName.replace("_", " ");
+
 					desc = desc.concat(" or " + total + " "
-							+ entity.toString().toLowerCase().replace("_", " ")
-							+ "(s)");
+							+ entityName.toLowerCase() + "(s)");
 				}
 			}
 		}
@@ -87,10 +122,10 @@ public class MobKillsRequirement extends Requirement {
 
 			if (i == 0) {
 				progress = progress
-						.concat(killed + "/" + total + " " + mobType);
+						.concat(killed + "/" + total + " " + mobType.replace("_", " ") + "(s)");
 			} else {
 				progress = progress.concat(" or " + killed + "/" + total + " "
-						+ mobType);
+						+ mobType.replace("_", " ") + "(s)");
 			}
 
 		}
@@ -132,7 +167,7 @@ public class MobKillsRequirement extends Requirement {
 			if (options.length > 1) {
 				mobType = options[1].trim().replace(" ", "_");
 			}
-			
+
 			mobsKilledCombined.add(total + ";" + mobType);
 		}
 
