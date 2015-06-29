@@ -39,10 +39,11 @@ public class PlayerJoinListener implements Listener {
 
 		// Cannot check player at this moment. -> try at next automatic task
 		if (plugin.getPlayerChecker() == null) {
-			plugin.getLogger().severe("Autorank lost its player checker, this is bad! Please report this to the developers!");
+			plugin.getLogger()
+					.severe("Autorank lost its player checker, this is bad! Please report this to the developers!");
 			return;
 		}
-			
+
 		//plugin.debugMessage("PlayerChecker: " + plugin.getPlayerChecker());
 
 		// Do leaderboard exemption check
