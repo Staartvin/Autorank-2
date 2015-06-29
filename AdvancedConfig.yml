@@ -49,12 +49,12 @@ ranks:
 #       world: world_nether (player has to be in this world to get ranked)
 #       gamemode: 1 (player has to have a certain gamemode, 0 = Survival mode, 1 = Creative mode, 2 = Adventure mode)
 #       has item: id(;amount;data;name;false/true) (checks the players inventory for the item, the name would be the display name of the item. When the false/true (boolean) parameter is true, the player should have the item with the given display name, if it is false, the player only needs the specific amount and material type.)
-#       blocks broken: id(;amount;data;name) (a player has to have broken x amount blocks of item id and data) (Requires Stats) (when no data or amount is given, it will check total blocks)
+#       blocks broken: id(;amount;data;name) (a player has to have broken x amount blocks of item id and data) (Requires Stats) (when no data or id is given, it will check total blocks)
 #       Example: break 10 magenta wool would be: 'blocks broken: 35;10;2' 35 = itemid, 10 = amount, 2 = damagevalue
 #       blocks placed: id(;amount;data) (a player has to have placed x amount blocks of item id and data) (Requires Stats) (when no data or amount is given, it will check total blocks)
 #       votes: 10 (player has to have voted at least 10 times) (Requires Stats and Votifier)
 #       damage taken: 10 (player has to have taken 10 damage) (damage is not counted in hearts) (Requires Stats)
-#       mobs killed: 5;spider (player has to have killed 5 spiders) (if no entity is specified, then any kill counts) (Requires Stats) (for a list of entities: http://jd.bukkit.org/rb/apidocs/org/bukkit/entity/EntityType.html)
+#       mobs killed: 5;spider (player has to have killed 5 spiders) (if no entity is specified, then any kill counts) (Requires Stats) (for a list of entities: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/EntityType.html) Can also use WITHER_SKELETON, 
 #       location: x;y;z;world;radius (player has to be in a location or within its radius)
 #       faction power: 10 (Amount of power a faction has to have) (Requires Factions)
 #       players killed: 10 (Player has to kill at least 10 players) (Requires Stats)
@@ -69,7 +69,7 @@ ranks:
 #       items crafted: 7 (Player has to have crafted at least 7 items) (requires Stats)
 #       times sheared: 15 (Player has to have sheared at least 15 sheep) (requires Stats)
 #       essentials geoip location: Netherlands (Player has to be in the area 'Netherlands') (requires Essentials GeoIP)
-#       in biome: river (Player has to be in biome 'river') (a list of all biomes: https://hub.spigotmc.org/javadocs/spigot/)
+#       in biome: river (Player has to be in biome 'river') (a list of all biomes: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/block/Biome.html)
 #
 #   results:
 #       rank change: new-rank
