@@ -29,21 +29,34 @@ public class BlocksBrokenRequirement extends Requirement {
 			final int blockID = wrapper.getBlockId();
 			final int damageValue = wrapper.getDamageValue();
 
+			String displayName = wrapper.getDisplayName();
+			
 			String message = wrapper.getBlocksBroken() + " ";
-
+			
 			if (blockID > 0 && damageValue >= 0) {
-				final ItemStack item = new ItemStack(blockID, 1,
-						(short) damageValue);
+				
+				if (displayName.equals("")) {
+					final ItemStack item = new ItemStack(blockID, 1,
+							(short) damageValue);
 
-				message = message.concat(item.getType().name().replace("_", "")
-						.toLowerCase()
-						+ " ");
+					message = message.concat(item.getType().name().replace("_", "")
+							.toLowerCase()
+							+ " ");
+				} else {
+					message = message.concat(displayName + " ");
+				}
+				
 			} else if (blockID > 0) {
-				final ItemStack item = new ItemStack(blockID, 1);
+				if (displayName.equals("")) {
+					final ItemStack item = new ItemStack(blockID, 1);
 
-				message = message.concat(item.getType().name().replace("_", "")
-						.toLowerCase()
-						+ " ");
+					message = message.concat(item.getType().name().replace("_", "")
+							.toLowerCase()
+							+ " ");
+				} else {
+					message = message.concat(displayName + " ");
+				}
+				
 			}
 
 			message = message.concat("blocks");
@@ -134,6 +147,7 @@ public class BlocksBrokenRequirement extends Requirement {
 			int blocksBroken = 0;
 			int blockId = -1;
 			int damageValue = -1;
+			String displayName = "";
 
 			if (options.length > 0) {
 				blocksBroken = Integer.parseInt(options[0].trim());
@@ -145,8 +159,11 @@ public class BlocksBrokenRequirement extends Requirement {
 			if (options.length > 2) {
 				damageValue = Integer.parseInt(options[2].trim());
 			}
+			if (options.length > 3) {
+				displayName = options[3].trim();
+			}
 
-			wrappers.add(new BlocksWrapper(blockId, blocksBroken, damageValue));
+			wrappers.add(new BlocksWrapper(blockId, blocksBroken, damageValue, displayName));
 		}
 
 		return !wrappers.isEmpty();
@@ -156,12 +173,14 @@ public class BlocksBrokenRequirement extends Requirement {
 class BlocksWrapper {
 
 	private int blockId, blocksBroken, damageValue;
+	private String displayName;
 
 	public BlocksWrapper(final int blockId, final int blocksBroken,
-			final int damageValue) {
+			final int damageValue, String displayName) {
 		this.setBlockId(blockId);
 		this.setBlocksBroken(blocksBroken);
 		this.setDamageValue(damageValue);
+		this.setDisplayName(displayName);
 	}
 
 	public int getBlockId() {
@@ -186,6 +205,14 @@ class BlocksWrapper {
 
 	public void setDamageValue(final int damageValue) {
 		this.damageValue = damageValue;
+	}
+
+	public String getDisplayName() {
+		return displayName;
+	}
+
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
 	}
 
 }
