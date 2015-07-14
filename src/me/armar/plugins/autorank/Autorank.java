@@ -28,6 +28,7 @@ import me.armar.plugins.autorank.playerchecker.requirement.EssentialsGeoIPRequir
 import me.armar.plugins.autorank.playerchecker.requirement.ExpRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.FactionPowerRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.FishCaughtRequirement;
+import me.armar.plugins.autorank.playerchecker.requirement.FoodEatenRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.GamemodeRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.GlobalTimeRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.HasItemRequirement;
@@ -391,6 +392,7 @@ public class Autorank extends JavaPlugin {
 		req.registerRequirement("essentials geoip location",
 				EssentialsGeoIPRequirement.class);
 		req.registerRequirement("in biome", InBiomeRequirement.class);
+		req.registerRequirement("food eaten", FoodEatenRequirement.class);
 
 		// REGISTER PLURALS IN AUTORANKTOOLS AS WELL!
 

@@ -9,7 +9,7 @@ import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 public class StatsHandler implements StatsPlugin {
 
 	public static enum statTypes {
-		BLOCKS_BROKEN, BLOCKS_MOVED, BLOCKS_PLACED, DAMAGE_TAKEN, FISH_CAUGHT, ITEMS_CRAFTED, MOBS_KILLED, PLAYERS_KILLED, TIME_PLAYED, TIMES_SHEARED, TOTAL_BLOCKS_BROKEN, TOTAL_BLOCKS_PLACED, VOTES
+		BLOCKS_BROKEN, BLOCKS_MOVED, BLOCKS_PLACED, DAMAGE_TAKEN, FISH_CAUGHT, ITEMS_CRAFTED, MOBS_KILLED, PLAYERS_KILLED, TIME_PLAYED, TIMES_SHEARED, TOTAL_BLOCKS_BROKEN, TOTAL_BLOCKS_PLACED, VOTES, FOOD_EATEN
 	}
 
 	private final Autorank plugin;
@@ -105,6 +105,9 @@ public class StatsHandler implements StatsPlugin {
 		} else if (correctName.equals("times_sheared")) {
 			// Handle time played
 			value = statsApi.getNormalStat(uuid, "Shears", worldName);
+		}  else if (correctName.equals("food_eaten")) {
+			// Handle food eaten
+			value = statsApi.getFoodEaten(uuid, worldName, (String) arguments[1]);
 		}
 
 		return value;

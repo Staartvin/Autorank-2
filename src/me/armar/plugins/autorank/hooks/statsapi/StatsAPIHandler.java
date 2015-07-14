@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.DependencyHandler;
+import me.armar.plugins.autorank.hooks.statsapi.customstats.FoodEatenStat;
 import me.armar.plugins.autorank.hooks.statsapi.customstats.MobKilledStat;
 import nl.lolmewn.stats.api.StatsAPI;
 import nl.lolmewn.stats.api.stat.Stat;
@@ -371,6 +372,39 @@ public class StatsAPIHandler implements DependencyHandler {
 			return 0;
 
 		return this.getNormalStat(uuid, "Playtime", worldName);
+	}
+	
+	public int getFoodEaten(final UUID uuid,
+			final String worldName, String foodType) {
+		if (!isAvailable())
+			return 0;
+
+		String statName = FoodEatenStat.statName;
+		
+		final Collection<StatEntry> stat = getStatType(statName, uuid);
+		
+		int value = 0;
+
+		for (StatEntry s : stat) {
+			Map<String, Object> metadata = s.getMetadata();
+
+			if (worldName != null && metadata.containsKey("world")) {
+				// Not in the world we look for
+				if (!metadata.get("world").equals(worldName))
+					continue;
+			}
+			
+			if (foodType != null && metadata.containsKey("foodType")) {
+				// Not in the world we look for
+				if (!metadata.get("foodType").equals(foodType))
+					continue;
+			}
+			
+
+			value += s.getValue();
+		}
+
+		return value;
 	}
 
 	/* (non-Javadoc)

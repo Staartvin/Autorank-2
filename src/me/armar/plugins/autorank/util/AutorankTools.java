@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 import me.armar.plugins.autorank.language.Lang;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -401,6 +402,8 @@ public class AutorankTools {
 		// Returns null if not a valid food item
 		// Got Materials from https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
 		
+		if (item == null) return null;
+		
 		switch (item.getType()) {
 		case APPLE:
 			return "APPLE";
@@ -475,5 +478,81 @@ public class AutorankTools {
 		default:
 			return null;
 		}
+	}
+	
+	@SuppressWarnings("deprecation")
+	public static ItemStack getFoodItemFromName(String name) {
+		// Cannot use switch, is only supported in Java 1.7+
+		
+		if (name == null) return null;
+		
+		name = name.toUpperCase();
+		name = name.replace(" ", "_");
+		
+		if (name.equals("APPLE")) {
+			return new ItemStack(Material.APPLE, 1);
+		} else if (name.equals("BAKED_POTATO")) {
+			return new ItemStack(Material.BAKED_POTATO, 1);
+		} else if (name.equals("BREAD")) {
+			return new ItemStack(Material.BREAD, 1);
+		} else if (name.equals("CAKE_BLOCK")) {
+			return new ItemStack(Material.CAKE_BLOCK, 1);
+		} else if (name.equals("CARROT_ITEM")) {
+			return new ItemStack(Material.CARROT_ITEM, 1);
+		} else if (name.equals("COOKED_CHICKEN")) {
+			return new ItemStack(Material.COOKED_CHICKEN, 1);
+		} else if (name.equals("COOKED_FISH")) {
+			return new ItemStack(Material.COOKED_FISH, 1);
+		} else if (name.equals("COOKED_SALMON")) {
+			return new ItemStack(Material.COOKED_FISH.getId(), 1, (short) 1);
+		} else if (name.equals("COOKED_MUTTON")) {
+			return new ItemStack(Material.COOKED_MUTTON, 1);
+		} else if (name.equals("GRILLED_PORK")) {
+			return new ItemStack(Material.GRILLED_PORK, 1);
+		} else if (name.equals("COOKED_RABBIT")) {
+			return new ItemStack(Material.COOKED_RABBIT, 1);
+		} else if (name.equals("COOKIE")) {
+			return new ItemStack(Material.COOKIE, 1);
+		} else if (name.equals("GOLDEN_APPLE")) {
+			return new ItemStack(Material.GOLDEN_APPLE, 1);
+		} else if (name.equals("ENCHANTED_GOLDEN_APPLE")) {
+			return new ItemStack(Material.GOLDEN_APPLE.getId(), 1, (short) 1);
+		} else if (name.equals("GOLDEN_CARROT")) {
+			return new ItemStack(Material.GOLDEN_CARROT, 1);
+		} else if (name.equals("MELON")) {
+			return new ItemStack(Material.MELON, 1);
+		} else if (name.equals("MUSHROOM_SOUP")) {
+			return new ItemStack(Material.MUSHROOM_SOUP, 1);
+		} else if (name.equals("RABBIT_STEW")) {
+			return new ItemStack(Material.RABBIT_STEW, 1);
+		} else if (name.equals("RAW_BEEF")) {
+			return new ItemStack(Material.RAW_BEEF, 1);
+		} else if (name.equals("RAW_CHICKEN")) {
+			return new ItemStack(Material.RAW_CHICKEN, 1);
+		} else if (name.equals("RAW_FISH")) {
+			return new ItemStack(Material.RAW_FISH, 1);
+		} else if (name.equals("RAW_SALMON")) {
+			return new ItemStack(Material.RAW_FISH.getId(), 1, (short) 1);
+		} else if (name.equals("CLOWNFISH")) {
+			return new ItemStack(Material.RAW_FISH.getId(), 1, (short) 2);
+		} else if (name.equals("PUFFERFISH")) {
+			return new ItemStack(Material.RAW_FISH.getId(), 1, (short) 3);
+		} else if (name.equals("POISONOUS_POTATO")) {
+			return new ItemStack(Material.POISONOUS_POTATO, 1);
+		} else if (name.equals("POTATO")) {
+			return new ItemStack(Material.POTATO, 1);
+		} else if (name.equals("PUMPKIN_PIE")) {
+			return new ItemStack(Material.PUMPKIN_PIE, 1);
+		} else if (name.equals("MUTTON")) {
+			return new ItemStack(Material.MUTTON, 1);
+		} else if (name.equals("COOKED_BEEF")) {
+			return new ItemStack(Material.COOKED_BEEF, 1);
+		} else if (name.equals("RABBIT")) {
+			return new ItemStack(Material.RABBIT, 1);
+		} else if (name.equals("ROTTEN_FLESH")) {
+			return new ItemStack(Material.ROTTEN_FLESH, 1);
+		} else if (name.equals("SPIDER_EYE")) {
+			return new ItemStack(Material.SPIDER_EYE, 1);
+		} else return null;
 	}
 }
