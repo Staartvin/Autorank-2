@@ -149,7 +149,7 @@
 		  <dependency>
 			<groupId>nl.lolmewn.stats</groupId>
 			<artifactId>Stats</artifactId>
-			<version>3.0.0-SNAPSHOT</version>
+			<version>3.0.2-SNAPSHOT</version>
 			<scope>provided</scope>
 			<type>jar</type>
 		</dependency>
