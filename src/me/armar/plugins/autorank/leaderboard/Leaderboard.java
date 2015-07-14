@@ -100,10 +100,17 @@ public class Leaderboard {
 					uuids.get(i))) {
 				continue;
 			}
+			
+			String playerName = plugin.getUUIDStorage().getPlayerName(uuids.get(i));
+			
+			if (playerName == null) {
+				plugin.getLogger().warning("Could not get player name of uuid '" + uuids.get(i) + "'!");
+				continue;
+			}
 
 			// We should use getTimeOfPlayer(), but that requires a lot of rewrites, so I'll leave it at the moment.
 			times.put(uuids.get(i),
-					plugin.getPlaytimes().getLocalTime(uuids.get(i)));
+					(plugin.getPlaytimes().getTimeOfPlayer(playerName)/60));
 		}
 
 		// Sort all values
