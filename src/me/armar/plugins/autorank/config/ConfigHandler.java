@@ -329,4 +329,11 @@ public class ConfigHandler {
 	public boolean showWarnings() {
 		return plugin.getSettingsConfig().getBoolean("show warnings", true);
 	}
+	
+	
+	public boolean onlyUsePrimaryGroupVault() {
+		return plugin.getSettingsConfig().getBoolean("use primary group for vault", true);
+	}
+	
+	
 }

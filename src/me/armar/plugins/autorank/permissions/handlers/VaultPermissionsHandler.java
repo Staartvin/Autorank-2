@@ -5,6 +5,7 @@ import me.armar.plugins.autorank.permissions.PermissionsHandler;
 import net.milkbowl.vault.Vault;
 import net.milkbowl.vault.permission.Permission;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -79,12 +80,18 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 		if (permission == null)
 			return new String[10];
 
-		if (permission.getName().toLowerCase().contains("permissionsex")) {
-			// Workaround for PEX, PEX shows old groups for some reason.
-			return new String[] { permission.getPrimaryGroup(player) };
+		String[] groups = null;
+		
+		Autorank plugin = (Autorank) Bukkit.getPluginManager().getPlugin("Autorank");
+		
+		// Let players choose.
+		if (plugin.getConfigHandler().onlyUsePrimaryGroupVault()) {
+			groups = new String[] { permission.getPrimaryGroup(player) };
+		} else {
+			groups = permission.getPlayerGroups(player);
 		}
-
-		return permission.getPlayerGroups(player);
+		
+		return groups;
 	}
 
 	@SuppressWarnings("deprecation")

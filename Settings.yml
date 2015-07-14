@@ -90,3 +90,7 @@ allow infinite ranking: false
 show warnings: true
 # Whether Autorank has to show critical warnings.
 # Leave this set to true. You can only change it to false when Autorank is giving you false warnings.
+
+use primary group for vault: true
+# Most permission plugins will only work properly with Autorank if you let it only get the primary group.
+# Some need to get all the groups however. You probably only need to change this when a dev tells you to.
