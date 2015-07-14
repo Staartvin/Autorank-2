@@ -183,7 +183,7 @@ public class AutorankTools {
 	 * seconds</b>
 	 * 
 	 * @param count the value to convert
-	 * @param the type of time of the value given (DAYS, HOURS, MINUTES,
+	 * @param time the type of time of the value given (DAYS, HOURS, MINUTES,
 	 *            SECONDS)
 	 * @return string in given format
 	 */
@@ -274,7 +274,7 @@ public class AutorankTools {
 	 * Example: a list with {1,2,3,4,5,6,7,8,9,0} and end divider 'or'. <br>
 	 * Would show: 1, 2, 3, 4, 5, 6, 7, 8, 9 or 0.
 	 * 
-	 * @param array Array to get the elements from.
+	 * @param c Array to get the elements from.
 	 * @param endDivider Last word used for dividing the second last and last
 	 *            word.
 	 * @return string with all elements.

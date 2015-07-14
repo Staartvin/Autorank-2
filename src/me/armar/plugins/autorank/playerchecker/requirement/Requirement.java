@@ -159,7 +159,7 @@ public abstract class Requirement {
 	 * The requirement id, auto completion and optional values are assigned
 	 * automatically.
 	 * 
-	 * @param options Each element in the list contains an array that has all
+	 * @param optionsList Each element in the list contains an array that has all
 	 *            variables in it.
 	 * @return true if everything was setup correctly; false otherwise
 	 */

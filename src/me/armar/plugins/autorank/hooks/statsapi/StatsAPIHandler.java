@@ -63,12 +63,12 @@ public class StatsAPIHandler implements DependencyHandler {
 	/**
 	 * Gets the total blocks of a certain id and damage value placed/broken
 	 * 
-	 * @param playerName Player to check for
+	 * @param uuid UUID to check for
 	 * @param id Item ID to check for
 	 * @param damageValue Damage value to check for. (negative number to not
 	 *            skip check)
 	 * @param worldName World to check in. Null for global.
-	 * @param statType Either "Block break" or "Block place"
+	 * @param statName Either "Block break" or "Block place"
 	 * @return amount player placed/broke of a block
 	 */
 	@SuppressWarnings("deprecation")
@@ -190,8 +190,7 @@ public class StatsAPIHandler implements DependencyHandler {
 	 * yet.
 	 * 
 	 * @param statName Name of the stat to get
-	 * @param playerName Player to get the stats of.
-	 * @param worldName World to check for.
+	 * @param uuid UUID to get the stats of.
 	 * @return Requested stat of the player
 	 */
 	public Collection<StatEntry> getStatType(final String statName,

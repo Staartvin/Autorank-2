@@ -55,6 +55,7 @@ public class StatisticsAPIHandler implements DependencyHandler {
 		return plugin;
 	}
 
+	/*
 	/**
 	 * Gets the total blocks of a certain id and damage value placed/broken
 	 * 
@@ -66,7 +67,8 @@ public class StatisticsAPIHandler implements DependencyHandler {
 	 * @param statType Either "Block break" or "Block place"
 	 * @return amount player placed/broke of a block
 	 */
-	/*public int getBlocksStat(final String playerName, final int id,
+	/*
+	public int getBlocksStat(final String playerName, final int id,
 			final int damageValue, final String worldName, final String statType) {
 		if (!isAvailable())
 			return 0;
@@ -249,6 +251,7 @@ public class StatisticsAPIHandler implements DependencyHandler {
 	}
 	
 	*/
+	
 	@SuppressWarnings("unused")
 	public int getNormalStat(final UUID uuid, final String statType,
 			final String worldName) {
