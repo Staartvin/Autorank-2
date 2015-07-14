@@ -1,5 +1,6 @@
 package me.armar.plugins.autorank.hooks.statsapi;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
@@ -157,7 +158,7 @@ public class StatsAPIHandler implements DependencyHandler {
 			return 0;
 
 		final Collection<StatEntry> stat = getStatType(statName, uuid);
-
+		
 		int value = 0;
 
 		for (StatEntry s : stat) {
@@ -195,8 +196,18 @@ public class StatsAPIHandler implements DependencyHandler {
 	public Collection<StatEntry> getStatType(final String statName,
 			final UUID uuid) {
 
+		if (uuid == null) {
+			return new ArrayList<StatEntry>();
+		}
+		
 		StatsHolder holder = stats.getUserManager().getUser(uuid);
 
+		if (holder == null) {
+			plugin.debugMessage("UUID '" + uuid.toString() + "' was not found in Stats database!");
+			
+			return new ArrayList<StatEntry>();
+		}
+		
 		Stat stat = stats.getStatManager().getStat(statName);
 
 		if (stat == null)
