@@ -11,13 +11,10 @@ import me.armar.plugins.autorank.hooks.ontimeapi.OnTimeHandler;
 import me.armar.plugins.autorank.hooks.royalcommandsapi.RoyalCommandsHandler;
 import me.armar.plugins.autorank.hooks.statisticsapi.StatisticsAPIHandler;
 import me.armar.plugins.autorank.hooks.statsapi.StatsAPIHandler;
-import me.armar.plugins.autorank.hooks.statsapi.customstats.FoodEatenStat;
-import me.armar.plugins.autorank.hooks.statsapi.customstats.MobKilledStat;
+import me.armar.plugins.autorank.hooks.statsapi.customstats.CustomStatsManager;
 import me.armar.plugins.autorank.hooks.ultimatecoreapi.UltimateCoreHandler;
 import me.armar.plugins.autorank.hooks.vaultapi.VaultHandler;
 import me.armar.plugins.autorank.hooks.worldguardapi.WorldGuardHandler;
-import me.armar.plugins.autorank.listeners.PlayerEatsFoodListener;
-import me.armar.plugins.autorank.listeners.PlayerKillsMobListener;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.armar.plugins.autorank.statsmanager.StatsPluginManager;
 
@@ -56,6 +53,8 @@ public class DependencyManager {
 	private final Autorank plugin;
 
 	private final StatsPluginManager statsPluginManager;
+
+	private CustomStatsManager customStatsManager;
 
 	public DependencyManager(final Autorank instance) {
 		plugin = instance;
@@ -158,24 +157,14 @@ public class DependencyManager {
 		plugin.getLogger().info("Loaded libraries and dependencies");
 
 		if (this.getDependency(dependency.STATS).isAvailable()) {
-			StatsAPIHandler handler = (StatsAPIHandler) this
-					.getDependency(dependency.STATS);
+
+			if (customStatsManager == null) {
+				customStatsManager = new CustomStatsManager(plugin);
+			}
 
 			// Register stats to Stats plugin.
+			customStatsManager.registerCustomStats();
 
-			handler.addStat(new MobKilledStat());
-			plugin.debugMessage("Registered '" + MobKilledStat.statName
-					+ "' to Stats.");
-
-			handler.addStat(new FoodEatenStat());
-			plugin.debugMessage("Registered '" + FoodEatenStat.statName
-					+ "' to Stats.");
-
-			// Register listeners
-			plugin.getServer().getPluginManager()
-					.registerEvents(new PlayerEatsFoodListener(plugin), plugin);
-			plugin.getServer().getPluginManager()
-					.registerEvents(new PlayerKillsMobListener(plugin), plugin);
 		}
 	}
 

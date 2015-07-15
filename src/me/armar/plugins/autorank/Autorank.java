@@ -319,7 +319,7 @@ public class Autorank extends JavaPlugin {
 
 		// Create MySQL Wrapper
 		setMySQLWrapper(new MySQLWrapper(this));
-
+		
 		// Load dependency manager
 		setDependencyManager(new DependencyManager(this));
 
