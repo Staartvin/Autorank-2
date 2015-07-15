@@ -329,7 +329,7 @@ public class Autorank extends JavaPlugin {
 		} catch (Throwable t) {
 
 			// When an error occured!
-			
+
 			getLogger().severe(
 					"Could not hook into a dependency: \nCause: "
 							+ t.getCause());

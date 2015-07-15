@@ -218,7 +218,7 @@ public class Playtimes {
 			return -1;
 		return plugin.getMySQLWrapper().getDatabaseTime(uuid);
 	}
-	
+
 	private int getFreshGlobalTime(final UUID uuid) {
 		if (uuid == null)
 			return -1;

@@ -81,7 +81,7 @@ public class RankChangeBuilder {
 							+ requirement + "' of group '" + group
 							+ "' is unknown!");
 				}
-				
+
 				Requirement newRequirement = createRequirement(
 						AutorankTools.getCorrectName(requirement),
 						configHandler.getOptions(requirement, group), optional,
@@ -90,8 +90,10 @@ public class RankChangeBuilder {
 						reqId);
 
 				// Make requirement world-specific if a world was specified in the config.
-				if (autorank.getConfigHandler().isRequirementWorldSpecific(requirement, group)) {
-					newRequirement.setWorld(autorank.getConfigHandler().getWorldOfRequirement(requirement, group));
+				if (autorank.getConfigHandler().isRequirementWorldSpecific(
+						requirement, group)) {
+					newRequirement.setWorld(autorank.getConfigHandler()
+							.getWorldOfRequirement(requirement, group));
 				}
 
 				req.add(newRequirement);

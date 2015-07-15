@@ -10,23 +10,23 @@ import nl.lolmewn.stats.api.storage.DataType;
 /**
  * Stat that tracks what kind of food is eaten by a player
  * <p>
- * Date created:  15:59:38
- * 27 jun. 2015
+ * Date created: 15:59:38 27 jun. 2015
+ * 
  * @author Staartvin
- *
+ * 
  */
 public class FoodEatenStat implements Stat {
 
 	private HashMap<String, DataType> data = new HashMap<String, DataType>();
-	
+
 	public static String statName = "AR food eaten";
-	
+
 	public FoodEatenStat() {
 		// init
 		data.put("foodType", DataType.STRING);
 		data.put("world", DataType.STRING);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see nl.lolmewn.stats.api.stat.Stat#format(nl.lolmewn.stats.api.stat.StatEntry)
 	 */
@@ -78,7 +78,7 @@ public class FoodEatenStat implements Stat {
 	@Override
 	public void setEnabled(boolean arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

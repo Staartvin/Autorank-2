@@ -159,7 +159,8 @@ public abstract class Requirement {
 	 * The requirement id, auto completion and optional values are assigned
 	 * automatically.
 	 * 
-	 * @param optionsList Each element in the list contains an array that has all
+	 * @param optionsList Each element in the list contains an array that has
+	 *            all
 	 *            variables in it.
 	 * @return true if everything was setup correctly; false otherwise
 	 */
@@ -200,6 +201,7 @@ public abstract class Requirement {
 
 	/**
 	 * If requirement is world specific, what world does it apply to?
+	 * 
 	 * @return the world that this requirement is specific to.
 	 */
 	public String getWorld() {
@@ -208,14 +210,16 @@ public abstract class Requirement {
 
 	/**
 	 * Sets the world that this requirement is specific to.
+	 * 
 	 * @param world name of the world
 	 */
 	public void setWorld(String world) {
 		this.world = world;
 	}
-	
+
 	/**
 	 * Is this requirement world-specific?
+	 * 
 	 * @return true if it is, false otherwise.
 	 */
 	public boolean isWorldSpecific() {

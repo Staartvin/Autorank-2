@@ -105,9 +105,10 @@ public class StatsHandler implements StatsPlugin {
 		} else if (correctName.equals("times_sheared")) {
 			// Handle time played
 			value = statsApi.getNormalStat(uuid, "Shears", worldName);
-		}  else if (correctName.equals("food_eaten")) {
+		} else if (correctName.equals("food_eaten")) {
 			// Handle food eaten
-			value = statsApi.getFoodEaten(uuid, worldName, (String) arguments[1]);
+			value = statsApi.getFoodEaten(uuid, worldName,
+					(String) arguments[1]);
 		}
 
 		return value;

@@ -243,8 +243,9 @@ public class UUIDStorage {
 			for (final String fPlayerName : config.getKeys(false)) {
 				final String fuuid = config.getString(fPlayerName + ".uuid");
 
-				if (fuuid == null) return null;
-				
+				if (fuuid == null)
+					return null;
+
 				if (fuuid.equals(uuid.toString())) {
 					return fPlayerName;
 				}

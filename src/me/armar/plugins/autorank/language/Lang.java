@@ -270,7 +270,7 @@ public enum Lang {
 	/**
 	 * Eat at least '{0}'.
 	 */
-	FOOD_EATEN_REQUIREMENT("food-eaten-requirement", "Eat at least {0}"),;
+	FOOD_EATEN_REQUIREMENT("food-eaten-requirement", "Eat at least {0}"), ;
 
 	private static FileConfiguration LANG;
 

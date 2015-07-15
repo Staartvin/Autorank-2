@@ -30,33 +30,33 @@ public class BlocksBrokenRequirement extends Requirement {
 			final int damageValue = wrapper.getDamageValue();
 
 			String displayName = wrapper.getDisplayName();
-			
+
 			String message = wrapper.getBlocksBroken() + " ";
-			
+
 			if (blockID > 0 && damageValue >= 0) {
-				
+
 				if (displayName.equals("")) {
 					final ItemStack item = new ItemStack(blockID, 1,
 							(short) damageValue);
 
-					message = message.concat(item.getType().name().replace("_", "")
-							.toLowerCase()
+					message = message.concat(item.getType().name()
+							.replace("_", "").toLowerCase()
 							+ " ");
 				} else {
 					message = message.concat(displayName + " ");
 				}
-				
+
 			} else if (blockID > 0) {
 				if (displayName.equals("")) {
 					final ItemStack item = new ItemStack(blockID, 1);
 
-					message = message.concat(item.getType().name().replace("_", "")
-							.toLowerCase()
+					message = message.concat(item.getType().name()
+							.replace("_", "").toLowerCase()
 							+ " ");
 				} else {
 					message = message.concat(displayName + " ");
 				}
-				
+
 			}
 
 			message = message.concat("blocks");
@@ -163,7 +163,8 @@ public class BlocksBrokenRequirement extends Requirement {
 				displayName = options[3].trim();
 			}
 
-			wrappers.add(new BlocksWrapper(blockId, blocksBroken, damageValue, displayName));
+			wrappers.add(new BlocksWrapper(blockId, blocksBroken, damageValue,
+					displayName));
 		}
 
 		return !wrappers.isEmpty();

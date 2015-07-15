@@ -8,26 +8,27 @@ import nl.lolmewn.stats.api.stat.StatEntry;
 import nl.lolmewn.stats.api.storage.DataType;
 
 /**
- * Stat that tracks special mobs killed, such as 'charged creeper' or 'elder guardian'
+ * Stat that tracks special mobs killed, such as 'charged creeper' or 'elder
+ * guardian'
  * <p>
- * Date created:  15:59:38
- * 27 jun. 2015
+ * Date created: 15:59:38 27 jun. 2015
+ * 
  * @author Staartvin
- *
+ * 
  */
 public class MobKilledStat implements Stat {
 
 	private HashMap<String, DataType> data = new HashMap<String, DataType>();
-	
+
 	public static String statName = "AR special mobs killed";
-	
+
 	public MobKilledStat() {
 		// init
 		data.put("entityType", DataType.STRING);
 		data.put("extraType", DataType.STRING);
 		data.put("world", DataType.STRING);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see nl.lolmewn.stats.api.stat.Stat#format(nl.lolmewn.stats.api.stat.StatEntry)
 	 */
@@ -79,7 +80,7 @@ public class MobKilledStat implements Stat {
 	@Override
 	public void setEnabled(boolean arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }
