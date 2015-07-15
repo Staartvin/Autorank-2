@@ -155,11 +155,13 @@ public class ConfigHandler {
 				.get("ranks." + group + ".requirements." + requirement
 						+ ".results." + result).toString();
 	}
-	
+
 	public String getWorldOfRequirement(String requirement, String group) {
-		return plugin.getAdvancedConfig().getString("ranks." + group + ".requirements." + requirement + ".options.world", null);
+		return plugin.getAdvancedConfig().getString(
+				"ranks." + group + ".requirements." + requirement
+						+ ".options.world", null);
 	}
-	
+
 	public boolean isRequirementWorldSpecific(String requirement, String group) {
 		return this.getWorldOfRequirement(requirement, group) != null;
 	}
@@ -329,11 +331,10 @@ public class ConfigHandler {
 	public boolean showWarnings() {
 		return plugin.getSettingsConfig().getBoolean("show warnings", true);
 	}
-	
-	
+
 	public boolean onlyUsePrimaryGroupVault() {
-		return plugin.getSettingsConfig().getBoolean("use primary group for vault", true);
+		return plugin.getSettingsConfig().getBoolean(
+				"use primary group for vault", true);
 	}
-	
-	
+
 }

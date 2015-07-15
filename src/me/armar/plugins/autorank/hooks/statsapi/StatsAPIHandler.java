@@ -159,7 +159,7 @@ public class StatsAPIHandler implements DependencyHandler {
 			return 0;
 
 		final Collection<StatEntry> stat = getStatType(statName, uuid);
-		
+
 		int value = 0;
 
 		for (StatEntry s : stat) {
@@ -199,15 +199,16 @@ public class StatsAPIHandler implements DependencyHandler {
 		if (uuid == null) {
 			return new ArrayList<StatEntry>();
 		}
-		
+
 		StatsHolder holder = stats.getUserManager().getUser(uuid);
 
 		if (holder == null) {
-			plugin.debugMessage("UUID '" + uuid.toString() + "' was not found in Stats database!");
-			
+			plugin.debugMessage("UUID '" + uuid.toString()
+					+ "' was not found in Stats database!");
+
 			return new ArrayList<StatEntry>();
 		}
-		
+
 		Stat stat = stats.getStatManager().getStat(statName);
 
 		if (stat == null)
@@ -279,21 +280,27 @@ public class StatsAPIHandler implements DependencyHandler {
 		String type = null;
 
 		if (mobName != null && !mobName.equals("")) {
-			
+
 			if (mobName.equalsIgnoreCase("wither_skeleton")) {
-				return this.getSpecialMobsKilled(uuid, "WITHER SKELETON", worldName);
+				return this.getSpecialMobsKilled(uuid, "WITHER SKELETON",
+						worldName);
 			} else if (mobName.equalsIgnoreCase("charged_creeper")) {
-				return this.getSpecialMobsKilled(uuid, "POWERED CREEPER", worldName);
+				return this.getSpecialMobsKilled(uuid, "POWERED CREEPER",
+						worldName);
 			} else if (mobName.equalsIgnoreCase("spider_jockey")) {
-				return this.getSpecialMobsKilled(uuid, "SPIDER JOCKEY", worldName);
+				return this.getSpecialMobsKilled(uuid, "SPIDER JOCKEY",
+						worldName);
 			} else if (mobName.equalsIgnoreCase("chicken_jockey")) {
-				return this.getSpecialMobsKilled(uuid, "CHICKEN JOCKEY", worldName);
+				return this.getSpecialMobsKilled(uuid, "CHICKEN JOCKEY",
+						worldName);
 			} else if (mobName.equalsIgnoreCase("killer_rabbit")) {
-				return this.getSpecialMobsKilled(uuid, "KILLER RABBIT", worldName);
+				return this.getSpecialMobsKilled(uuid, "KILLER RABBIT",
+						worldName);
 			} else if (mobName.equalsIgnoreCase("elder_guardian")) {
-				return this.getSpecialMobsKilled(uuid, "ELDER GUARDIAN", worldName);
+				return this.getSpecialMobsKilled(uuid, "ELDER GUARDIAN",
+						worldName);
 			}
-			
+
 			type = EntityType.valueOf(
 					mobName.toUpperCase().replaceAll(" ", "_")).toString();
 		}
@@ -327,17 +334,17 @@ public class StatsAPIHandler implements DependencyHandler {
 
 		return value;
 	}
-	
+
 	public int getSpecialMobsKilled(UUID uuid, String mobName, String worldName) {
 		if (!isAvailable())
 			return 0;
-		
+
 		final String statName = MobKilledStat.statName;
-		
+
 		final Collection<StatEntry> stat = getStatType(statName, uuid);
-		
+
 		int value = 0;
-		
+
 		String extraType = mobName.split(" ")[0].trim();
 		String entityType = mobName.split(" ")[1].trim();
 
@@ -362,7 +369,7 @@ public class StatsAPIHandler implements DependencyHandler {
 			value += s.getValue();
 
 		}
-		
+
 		return value;
 	}
 
@@ -372,16 +379,16 @@ public class StatsAPIHandler implements DependencyHandler {
 
 		return this.getNormalStat(uuid, "Playtime", worldName);
 	}
-	
-	public int getFoodEaten(final UUID uuid,
-			final String worldName, String foodType) {
+
+	public int getFoodEaten(final UUID uuid, final String worldName,
+			String foodType) {
 		if (!isAvailable())
 			return 0;
 
 		String statName = FoodEatenStat.statName;
-		
+
 		final Collection<StatEntry> stat = getStatType(statName, uuid);
-		
+
 		int value = 0;
 
 		for (StatEntry s : stat) {
@@ -392,13 +399,12 @@ public class StatsAPIHandler implements DependencyHandler {
 				if (!metadata.get("world").equals(worldName))
 					continue;
 			}
-			
+
 			if (foodType != null && metadata.containsKey("foodType")) {
 				// Not in the world we look for
 				if (!metadata.get("foodType").equals(foodType))
 					continue;
 			}
-			
 
 			value += s.getValue();
 		}
@@ -456,13 +462,14 @@ public class StatsAPIHandler implements DependencyHandler {
 			}
 		}
 	}
-	
+
 	public void addStat(Stat stat) {
-		if (!isAvailable()) return;
-		
+		if (!isAvailable())
+			return;
+
 		api.getStatManager().addStat(stat);
 	}
-	
+
 	public StatsAPI getAPI() {
 		return api;
 	}

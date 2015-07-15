@@ -11,8 +11,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 /**
- * Class used to get data from backups Autorank is regularly doing.
- * <br>
+ * Class used to get data from backups Autorank is regularly doing. <br>
+ * 
  * @author Staartvin
  */
 public class BackupDataManager {
@@ -20,7 +20,7 @@ public class BackupDataManager {
 	private FileConfiguration backupConfig;
 	private File backupConfigFile;
 	private final Autorank plugin;
-	
+
 	public BackupDataManager(final Autorank autorank) {
 		plugin = autorank;
 	}
@@ -43,13 +43,15 @@ public class BackupDataManager {
 
 	public void loadConfig() {
 
-		backupConfig.options().header("Backup-data file"
-				+ "\nDon't edit this file if you don't know what you are doing. "
-				+ "\nThis file is used by Autorank to check when the latest backups were made.");
+		backupConfig
+				.options()
+				.header("Backup-data file"
+						+ "\nDon't edit this file if you don't know what you are doing. "
+						+ "\nThis file is used by Autorank to check when the latest backups were made.");
 
 		backupConfig.addDefault("data", 0);
 		backupConfig.addDefault("playerdata", 0);
-		
+
 		backupConfig.options().copyDefaults(true);
 		saveConfig();
 	}
@@ -57,15 +59,15 @@ public class BackupDataManager {
 	@SuppressWarnings("deprecation")
 	public void reloadConfig() {
 		if (backupConfigFile == null) {
-			backupConfigFile = new File(plugin.getDataFolder().getAbsolutePath()
-					+ File.separator + "backups",
+			backupConfigFile = new File(plugin.getDataFolder()
+					.getAbsolutePath() + File.separator + "backups",
 					"backup-data.yml");
 		}
-		backupConfig = YamlConfiguration
-				.loadConfiguration(backupConfigFile);
+		backupConfig = YamlConfiguration.loadConfiguration(backupConfigFile);
 
 		// Look for defaults in the jar
-		final InputStream defConfigStream = plugin.getResource("backup-data.yml");
+		final InputStream defConfigStream = plugin
+				.getResource("backup-data.yml");
 		if (defConfigStream != null) {
 			final YamlConfiguration defConfig = YamlConfiguration
 					.loadConfiguration(defConfigStream);
@@ -84,7 +86,7 @@ public class BackupDataManager {
 					"Could not save config to " + backupConfigFile, ex);
 		}
 	}
-	
+
 	public long getLatestBackup(String file) {
 		return backupConfig.getLong(file, -1);
 	}

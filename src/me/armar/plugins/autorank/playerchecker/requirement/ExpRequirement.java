@@ -15,9 +15,9 @@ public class ExpRequirement extends Requirement {
 	@Override
 	public String getDescription() {
 
-		String lang = Lang.EXP_REQUIREMENT.getConfigValue(AutorankTools.seperateList(
-				minExps, "or"));
-		
+		String lang = Lang.EXP_REQUIREMENT.getConfigValue(AutorankTools
+				.seperateList(minExps, "or"));
+
 		// Check if this requirement is world-specific
 		if (this.isWorldSpecific()) {
 			lang = lang.concat(" (in world '" + this.getWorld() + "')");

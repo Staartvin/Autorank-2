@@ -401,9 +401,10 @@ public class AutorankTools {
 	public static String getFoodName(ItemStack item) {
 		// Returns null if not a valid food item
 		// Got Materials from https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
-		
-		if (item == null) return null;
-		
+
+		if (item == null)
+			return null;
+
 		switch (item.getType()) {
 		case APPLE:
 			return "APPLE";
@@ -479,16 +480,17 @@ public class AutorankTools {
 			return null;
 		}
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	public static ItemStack getFoodItemFromName(String name) {
 		// Cannot use switch, is only supported in Java 1.7+
-		
-		if (name == null) return null;
-		
+
+		if (name == null)
+			return null;
+
 		name = name.toUpperCase();
 		name = name.replace(" ", "_");
-		
+
 		if (name.equals("APPLE")) {
 			return new ItemStack(Material.APPLE, 1);
 		} else if (name.equals("BAKED_POTATO")) {
@@ -553,6 +555,7 @@ public class AutorankTools {
 			return new ItemStack(Material.ROTTEN_FLESH, 1);
 		} else if (name.equals("SPIDER_EYE")) {
 			return new ItemStack(Material.SPIDER_EYE, 1);
-		} else return null;
+		} else
+			return null;
 	}
 }

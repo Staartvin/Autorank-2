@@ -121,6 +121,7 @@ public class DependencyManager {
 	/**
 	 * Loads all dependencies used for Autorank. <br>
 	 * Autorank will check for dependencies and shows the output on the console.
+	 * 
 	 * @throws Exception This can be a multitude of exceptions
 	 * 
 	 */
@@ -155,21 +156,26 @@ public class DependencyManager {
 		}
 
 		plugin.getLogger().info("Loaded libraries and dependencies");
-		
+
 		if (this.getDependency(dependency.STATS).isAvailable()) {
-			StatsAPIHandler handler = (StatsAPIHandler) this.getDependency(dependency.STATS);
-			
+			StatsAPIHandler handler = (StatsAPIHandler) this
+					.getDependency(dependency.STATS);
+
 			// Register stats to Stats plugin.
-			
+
 			handler.addStat(new MobKilledStat());
-			plugin.debugMessage("Registered '" + MobKilledStat.statName + "' to Stats.");
-			
+			plugin.debugMessage("Registered '" + MobKilledStat.statName
+					+ "' to Stats.");
+
 			handler.addStat(new FoodEatenStat());
-			plugin.debugMessage("Registered '" + FoodEatenStat.statName + "' to Stats.");
-			
+			plugin.debugMessage("Registered '" + FoodEatenStat.statName
+					+ "' to Stats.");
+
 			// Register listeners
-			plugin.getServer().getPluginManager().registerEvents(new PlayerEatsFoodListener(plugin), plugin);
-			plugin.getServer().getPluginManager().registerEvents(new PlayerKillsMobListener(plugin), plugin);
+			plugin.getServer().getPluginManager()
+					.registerEvents(new PlayerEatsFoodListener(plugin), plugin);
+			plugin.getServer().getPluginManager()
+					.registerEvents(new PlayerKillsMobListener(plugin), plugin);
 		}
 	}
 

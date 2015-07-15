@@ -35,8 +35,6 @@ public class BlocksMovedRequirement extends Requirement {
 			}
 		}
 
-		
-		
 		// Check if this requirement is world-specific
 		if (this.isWorldSpecific()) {
 			desc = desc.concat(" (in world '" + this.getWorld() + "')");

@@ -54,9 +54,9 @@ public class MobKillsRequirement extends Requirement {
 						entityName = EntityType.valueOf(mobType.toUpperCase())
 								.toString();
 					}
-					
+
 					entityName = entityName.replace("_", " ");
-					
+
 					desc = Lang.TOTAL_MOBS_KILLED_REQUIREMENT
 							.getConfigValue(total + " "
 									+ entityName.toLowerCase() + "(s)");
@@ -83,7 +83,7 @@ public class MobKillsRequirement extends Requirement {
 						entityName = EntityType.valueOf(mobType.toUpperCase())
 								.toString();
 					}
-					
+
 					entityName = entityName.replace("_", " ");
 
 					desc = desc.concat(" or " + total + " "
@@ -121,8 +121,8 @@ public class MobKillsRequirement extends Requirement {
 			}
 
 			if (i == 0) {
-				progress = progress
-						.concat(killed + "/" + total + " " + mobType.replace("_", " ") + "(s)");
+				progress = progress.concat(killed + "/" + total + " "
+						+ mobType.replace("_", " ") + "(s)");
 			} else {
 				progress = progress.concat(" or " + killed + "/" + total + " "
 						+ mobType.replace("_", " ") + "(s)");
