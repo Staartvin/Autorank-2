@@ -78,7 +78,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class Autorank extends JavaPlugin {
 
-	// Test push for test branch - test2
+	// Test push for test branch - test3
 	
 	private AddOnManager addonManager;
 	private SimpleYamlConfiguration advancedConfig;
