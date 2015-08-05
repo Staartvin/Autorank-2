@@ -96,7 +96,7 @@ public class Leaderboard {
 		for (int i = 0; i < uuids.size(); i++) {
 
 			// If player is exempted
-			if (plugin.getRequirementHandler().hasLeaderboardExemption(
+			if (plugin.getPlayerDataHandler().hasLeaderboardExemption(
 					uuids.get(i))) {
 				continue;
 			}

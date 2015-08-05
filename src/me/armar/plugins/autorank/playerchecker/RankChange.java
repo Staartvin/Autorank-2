@@ -39,12 +39,12 @@ public class RankChange {
 			// Apply all 'main' results
 
 			// Player already got this rank
-			if (plugin.getRequirementHandler().hasCompletedRank(uuid, rankFrom)) {
+			if (plugin.getPlayerDataHandler().hasCompletedRank(uuid, rankFrom)) {
 				return false;
 			}
 
 			// Add progress of completed requirements
-			plugin.getRequirementHandler().addCompletedRanks(uuid, rankFrom);
+			plugin.getPlayerDataHandler().addCompletedRanks(uuid, rankFrom);
 
 			for (final Result r : res) {
 				if (r != null) {
@@ -66,7 +66,7 @@ public class RankChange {
 		final UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
 
 		// Player already got this rank
-		if (plugin.getRequirementHandler().hasCompletedRank(uuid, rankFrom)) {
+		if (plugin.getPlayerDataHandler().hasCompletedRank(uuid, rankFrom)) {
 			return false;
 		}
 
@@ -91,7 +91,7 @@ public class RankChange {
 
 			// If this requirement doesn't auto complete and hasn't already been completed, return false;
 			if (!r.useAutoCompletion()
-					&& !plugin.getRequirementHandler().hasCompletedRequirement(
+					&& !plugin.getPlayerDataHandler().hasCompletedRequirement(
 							reqID, uuid)) {
 				return false;
 			}
@@ -99,7 +99,7 @@ public class RankChange {
 			if (!r.meetsRequirement(player)) {
 
 				// Player does not meet requirement, but has completed it already
-				if (plugin.getRequirementHandler().hasCompletedRequirement(
+				if (plugin.getPlayerDataHandler().hasCompletedRequirement(
 						reqID, uuid)) {
 					continue;
 				}
@@ -111,9 +111,9 @@ public class RankChange {
 				final List<Result> results = r.getResults();
 
 				// Player has not completed this requirement -> perform results
-				if (!plugin.getRequirementHandler().hasCompletedRequirement(
+				if (!plugin.getPlayerDataHandler().hasCompletedRequirement(
 						reqID, uuid)) {
-					plugin.getRequirementHandler().addPlayerProgress(uuid,
+					plugin.getPlayerDataHandler().addPlayerProgress(uuid,
 							reqID);
 				} else {
 					// Player already completed this -> do nothing

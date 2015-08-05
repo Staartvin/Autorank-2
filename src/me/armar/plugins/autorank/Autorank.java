@@ -18,8 +18,6 @@ import me.armar.plugins.autorank.metrics.Metrics.Graph;
 import me.armar.plugins.autorank.mysql.wrapper.MySQLWrapper;
 import me.armar.plugins.autorank.permissions.PermissionsPluginManager;
 import me.armar.plugins.autorank.playerchecker.PlayerChecker;
-import me.armar.plugins.autorank.playerchecker.builders.RequirementBuilder;
-import me.armar.plugins.autorank.playerchecker.builders.ResultBuilder;
 import me.armar.plugins.autorank.playerchecker.requirement.BlocksBrokenRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.BlocksMovedRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.BlocksPlacedRequirement;
@@ -57,7 +55,8 @@ import me.armar.plugins.autorank.playerchecker.result.SpawnFireworkResult;
 import me.armar.plugins.autorank.playerchecker.result.TeleportResult;
 import me.armar.plugins.autorank.playerdatahandler.PlayerDataHandler;
 import me.armar.plugins.autorank.playtimes.Playtimes;
-import me.armar.plugins.autorank.rankbuilder.ChangeGroupBuilder;
+import me.armar.plugins.autorank.rankbuilder.builders.RequirementBuilder;
+import me.armar.plugins.autorank.rankbuilder.builders.ResultBuilder;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.armar.plugins.autorank.updater.UpdateHandler;
 import me.armar.plugins.autorank.updater.Updater;
@@ -93,7 +92,7 @@ public class Autorank extends JavaPlugin {
 	private PermissionsPluginManager permPlugHandler;
 	private PlayerChecker playerChecker;
 	private Playtimes playtimes;
-	private PlayerDataHandler requirementHandler;
+	private PlayerDataHandler playerDataHandler;
 	private SimpleYamlConfiguration settingsConfig;
 	private SimpleYamlConfiguration simpleConfig;
 	private UUIDStorage uuidStorage;
@@ -191,8 +190,8 @@ public class Autorank extends JavaPlugin {
 		return playtimes;
 	}
 
-	public PlayerDataHandler getRequirementHandler() {
-		return requirementHandler;
+	public PlayerDataHandler getPlayerDataHandler() {
+		return playerDataHandler;
 	}
 
 	public SimpleYamlConfiguration getSettingsConfig() {
@@ -306,7 +305,7 @@ public class Autorank extends JavaPlugin {
 		setRequirementHandler(new PlayerDataHandler(this));
 
 		// Create files
-		requirementHandler.createNewFile();
+		playerDataHandler.createNewFile();
 
 		// Create update handler
 		setUpdateHandler(new UpdateHandler(this));
@@ -357,10 +356,8 @@ public class Autorank extends JavaPlugin {
 		// Create commands manager
 		setCommandsManager(new CommandsManager(this));
 
-		final RequirementBuilder req = this.getPlayerChecker().getBuilder()
-				.getRequirementBuilder();
-		final ResultBuilder res = this.getPlayerChecker().getBuilder()
-				.getResultBuilder();
+		final RequirementBuilder req = this.getPlayerChecker().getChangeGroupManager().getBuilder().getRequirementBuilder();
+		final ResultBuilder res = this.getPlayerChecker().getChangeGroupManager().getBuilder().getResultBuilder();
 
 		// Register 'main' requirements
 		req.registerRequirement("exp", ExpRequirement.class);
@@ -406,7 +403,7 @@ public class Autorank extends JavaPlugin {
 		res.registerResult("firework", SpawnFireworkResult.class);
 
 		// Load requirements and results per group from config
-		playerChecker.initialiseFromConfigs();
+		playerChecker.getChangeGroupManager().initialiseFromConfigs();
 
 		// Load again after 5 seconds so custom commands can be listed
 		getServer().getScheduler().runTaskLaterAsynchronously(this,
@@ -414,7 +411,7 @@ public class Autorank extends JavaPlugin {
 					@Override
 					public void run() {
 
-						getPlayerChecker().initialiseFromConfigs();
+						getPlayerChecker().getChangeGroupManager().initialiseFromConfigs();
 					}
 				}, 100);
 
@@ -479,9 +476,6 @@ public class Autorank extends JavaPlugin {
 
 		// Start automatic backup
 		this.getBackupManager().startBackupSystem();
-		
-		// Test thingy
-		new ChangeGroupBuilder(this).initialiseChangeGroups(false, this.getAdvancedConfig());
 
 	}
 
@@ -493,13 +487,13 @@ public class Autorank extends JavaPlugin {
 
 	public void registerRequirement(final String name,
 			final Class<? extends Requirement> requirement) {
-		playerChecker.getBuilder().getRequirementBuilder()
+		this.getPlayerChecker().getChangeGroupManager().getBuilder().getRequirementBuilder()
 				.registerRequirement(name, requirement);
 	}
 
 	public void registerResult(final String name,
 			final Class<? extends Result> result) {
-		playerChecker.getBuilder().getResultBuilder()
+		this.getPlayerChecker().getChangeGroupManager().getBuilder().getResultBuilder()
 				.registerResult(name, result);
 	}
 
@@ -558,7 +552,7 @@ public class Autorank extends JavaPlugin {
 	}
 
 	public void setRequirementHandler(final PlayerDataHandler requirementHandler) {
-		this.requirementHandler = requirementHandler;
+		this.playerDataHandler = requirementHandler;
 	}
 
 	public void setSettingsConfig(final SimpleYamlConfiguration settingsConfig) {

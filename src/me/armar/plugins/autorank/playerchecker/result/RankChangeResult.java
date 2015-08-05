@@ -50,10 +50,13 @@ public class RankChangeResult extends Result {
 		final UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
 
 		// When rank is changed: reset progress and update last known group
-		getAutorank().getRequirementHandler().setPlayerProgress(uuid,
+		getAutorank().getPlayerDataHandler().setPlayerProgress(uuid,
 				new ArrayList<Integer>());
 
-		getAutorank().getRequirementHandler().setLastKnownGroup(uuid, to);
+		getAutorank().getPlayerDataHandler().setLastKnownGroup(uuid, to);
+		
+		// Reset chosen path as the player is moved to another group
+		getAutorank().getPlayerDataHandler().setChosenPath(uuid, null);
 
 		return this.getAutorank().getPermPlugHandler().getPermissionPlugin()
 				.replaceGroup(player, world, oldrank, to);

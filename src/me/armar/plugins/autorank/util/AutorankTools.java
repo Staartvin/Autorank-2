@@ -7,6 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import me.armar.plugins.autorank.language.Lang;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -556,5 +557,24 @@ public class AutorankTools {
 			return new ItemStack(Material.SPIDER_EYE, 1);
 		} else
 			return null;
+	}
+	
+	public static String createStringFromList(Collection<?> c) {
+		StringBuilder builder = new StringBuilder("");
+		
+		Object[] array = c.toArray();
+		
+		for (int i=0;i<c.size();i++) {
+			
+			if (i==0) {
+				builder.append(ChatColor.GRAY + array[i].toString() + ChatColor.RESET);
+			} else if (i == (c.size() - 1)) {
+				builder.append(" and " + ChatColor.GRAY + array[i].toString() + ChatColor.RESET);
+			} else {
+				builder.append(", " + ChatColor.GRAY + array[i].toString() + ChatColor.RESET);
+			}
+		}
+		
+		return builder.toString();
 	}
 }

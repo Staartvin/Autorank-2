@@ -2,13 +2,10 @@ package me.armar.plugins.autorank.api;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.addons.AddOnManager;
-import me.armar.plugins.autorank.playerchecker.RankChange;
 import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 import me.armar.plugins.autorank.playerchecker.result.Result;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
@@ -54,17 +51,7 @@ public class API {
 	 * @return a list of requirements; An empty list when none are found.
 	 */
 	public List<Requirement> getAllRequirements(final Player player) {
-		final Map<RankChange, List<Requirement>> failed = plugin
-				.getPlayerChecker().getAllRequirements(player);
-
-		final Set<RankChange> keySet = failed.keySet();
-		List<Requirement> reqs = new ArrayList<Requirement>();
-
-		for (final RankChange rank : keySet) {
-			reqs = failed.get(rank);
-		}
-
-		return reqs;
+		return plugin.getPlayerChecker().getAllRequirements(player);
 	}
 
 	/**
@@ -146,12 +133,13 @@ public class API {
 	 * player will be ranked up to that group and not the 'global results'
 	 * group.
 	 * 
+	 * @deprecated No longer used, will always return null: it has no function anymore.
 	 * @param player Player to get the next rank up for.
 	 * @return The name of the group the player will be ranked to; null when no
 	 *         rank up.
 	 */
 	public String getNextRankupGroup(final Player player) {
-		return plugin.getPlayerChecker().getNextRankupGroup(player);
+		return null;
 	}
 
 	/**
