@@ -1,15 +1,11 @@
 package me.armar.plugins.autorank.commands;
 
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
-import me.armar.plugins.autorank.playerchecker.RankChange;
 import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
@@ -78,54 +74,55 @@ public class TrackCommand extends AutorankCommand {
 
 		final UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
 
-		final Map<RankChange, List<Requirement>> failed = plugin
-				.getPlayerChecker().getAllRequirements(player);
-		final Set<RankChange> keySet = failed.keySet();
+		final List<Requirement> requirements = plugin.getPlayerChecker()
+				.getAllRequirements(player);
 
-		if (keySet.size() == 0) {
+		if (requirements.size() == 0) {
 			player.sendMessage(ChatColor.RED
 					+ "You don't have any requirements!");
 			return true;
 		}
 
-		List<Requirement> requirements;
-
 		player.sendMessage(ChatColor.GRAY + " ------------ ");
 
-		for (final Iterator<RankChange> it = keySet.iterator(); it.hasNext();) {
-			final RankChange rank = it.next();
-			requirements = failed.get(rank);
-
-			// Rank player as he has fulfilled all requirements
-			if (requirements.size() == 0) {
-				player.sendMessage(ChatColor.GREEN
-						+ "You don't have any requirements left.");
-				return true;
-			} else {
-				// Get the specified requirement
-				if (completionID > requirements.size()) {
-					completionID = requirements.size();
-				}
-
-				// Human logic = first number is 1 not 0.
-				final Requirement req = requirements.get((completionID - 1));
-
-				if (plugin.getRequirementHandler().hasCompletedRequirement(
-						(completionID - 1), uuid)) {
-					player.sendMessage(ChatColor.RED
-							+ Lang.ALREADY_COMPLETED_REQUIREMENT
-									.getConfigValue());
-					return true;
-				}
-
-				player.sendMessage(ChatColor.RED
-						+ Lang.REQUIREMENT_PROGRESS.getConfigValue(completionID
-								+ ""));
-				player.sendMessage(ChatColor.AQUA + req.getDescription());
-				player.sendMessage(ChatColor.GREEN + "Current: "
-						+ ChatColor.GOLD + req.getProgress(player));
+		// Rank player as he has fulfilled all requirements
+		if (requirements.size() == 0) {
+			player.sendMessage(ChatColor.GREEN
+					+ "You don't have any requirements left.");
+			return true;
+		} else {
+			// Get the specified requirement
+			if (completionID > requirements.size()) {
+				completionID = requirements.size();
 			}
+
+			if (completionID < 1) {
+				// Fail-safe
+				completionID = 1;
+			}
+
+			// Human logic = first number is 1 not 0.
+			final Requirement req = requirements.get((completionID - 1));
+
+			if (plugin.getPlayerDataHandler().hasCompletedRequirement(
+					(completionID - 1), uuid)) {
+				player.sendMessage(ChatColor.RED
+						+ Lang.ALREADY_COMPLETED_REQUIREMENT.getConfigValue());
+				return true;
+			}
+
+			player.sendMessage(ChatColor.RED
+					+ Lang.REQUIREMENT_PROGRESS.getConfigValue(completionID
+							+ ""));
+			player.sendMessage(ChatColor.AQUA + req.getDescription());
+			player.sendMessage(ChatColor.GREEN + "Current: " + ChatColor.GOLD
+					+ req.getProgress(player));
 		}
+
+		/*for (Requirement requirement: requirements) {
+
+			
+		}*/
 
 		return true;
 	}
