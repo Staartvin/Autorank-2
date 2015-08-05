@@ -4,20 +4,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.config.ConfigHandler;
 import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
-import me.armar.plugins.autorank.playerchecker.RankChange;
-import me.armar.plugins.autorank.playerchecker.builders.RequirementBuilder;
-import me.armar.plugins.autorank.playerchecker.builders.ResultBuilder;
 import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 import me.armar.plugins.autorank.playerchecker.requirement.TimeRequirement;
 import me.armar.plugins.autorank.playerchecker.result.MessageResult;
 import me.armar.plugins.autorank.playerchecker.result.RankChangeResult;
 import me.armar.plugins.autorank.playerchecker.result.Result;
+import me.armar.plugins.autorank.rankbuilder.builders.RequirementBuilder;
+import me.armar.plugins.autorank.rankbuilder.builders.ResultBuilder;
 import me.armar.plugins.autorank.util.AutorankTools;
 
 /**
@@ -34,11 +32,6 @@ import me.armar.plugins.autorank.util.AutorankTools;
  */
 public class ChangeGroupBuilder {
 
-	// The String is a name of the group, used to get the change groups from that group.
-	// The List contains all change groups that this parent group has.
-	// One ChangeGroup class represents one path to take in the group
-	private HashMap<String, List<ChangeGroup>> changeGroups = new HashMap<String, List<ChangeGroup>>();
-
 	private Autorank plugin;
 
 	private RequirementBuilder requirementBuilder;
@@ -50,18 +43,19 @@ public class ChangeGroupBuilder {
 		setRequirementBuilder(new RequirementBuilder());
 	}
 
-	public void initialiseChangeGroups(boolean simpleConfigUsed,
-			SimpleYamlConfiguration config) {
+	public HashMap<String, List<ChangeGroup>> initialiseChangeGroups(boolean simpleConfigUsed,
+			SimpleYamlConfiguration config,
+			HashMap<String, List<ChangeGroup>> changeGroups) {
 		if (simpleConfigUsed) {
-			initSimpleConfig(config);
+			return initSimpleConfig(config, changeGroups);
 		} else {
-			initAdvancedConfig(config);
+			return initAdvancedConfig(config, changeGroups);
 		}
-
-		printChangeGroups(true);
 	}
 
-	public void initSimpleConfig(SimpleYamlConfiguration config) {
+	private HashMap<String, List<ChangeGroup>> initSimpleConfig(
+			SimpleYamlConfiguration config,
+			HashMap<String, List<ChangeGroup>> changeGroups) {
 
 		final Set<String> ranks = config.getKeys(false);
 
@@ -93,7 +87,7 @@ public class ChangeGroupBuilder {
 				System.out
 						.print("[AutoRank] Simple Config is not configured correctly!");
 				plugin.getServer().getPluginManager().disablePlugin(plugin);
-				return;
+				return null;
 			}
 
 			@SuppressWarnings("serial")
@@ -149,16 +143,20 @@ public class ChangeGroupBuilder {
 
 			changeGroup.setParentGroup(rankName);
 			changeGroup.setInternalGroup(rank);
+			changeGroup.setDisplayName(plugin.getConfigHandler().getDisplayName(rank));
 
 			currentChanges.add(changeGroup);
 
 			// Save the current changegroup to the parent group
 			changeGroups.put(rankName, currentChanges);
-
 		}
+
+		return changeGroups;
 	}
 
-	public void initAdvancedConfig(SimpleYamlConfiguration config) {
+	private HashMap<String, List<ChangeGroup>> initAdvancedConfig(
+			SimpleYamlConfiguration config,
+			HashMap<String, List<ChangeGroup>> changeGroups) {
 
 		final ConfigHandler configHandler = plugin.getConfigHandler();
 
@@ -211,7 +209,7 @@ public class ChangeGroupBuilder {
 					} catch (final Exception e) {
 						// TODO Auto-generated catch block
 						plugin.getLogger().severe(e.getCause().getMessage());
-						return;
+						return null;
 					}
 				}
 
@@ -253,7 +251,7 @@ public class ChangeGroupBuilder {
 				if (rankChange.length <= 0) {
 					plugin.getWarningManager().registerWarning(
 							"Rank change of " + group + " is invalid!", 10);
-					return;
+					return null;
 				}
 			}
 
@@ -277,42 +275,15 @@ public class ChangeGroupBuilder {
 
 			changeGroup.setParentGroup(groupName);
 			changeGroup.setInternalGroup(group);
+			changeGroup.setDisplayName(plugin.getConfigHandler().getDisplayName(group));
 
 			currentChanges.add(changeGroup);
 
 			// Save the current changegroup to the parent group
 			changeGroups.put(groupName, currentChanges);
-
 		}
-	}
 
-	public void printChangeGroups(boolean deepInfo) {
-
-		plugin.debugMessage(" ------------------- ChangeGroup debug info ------------------- ");
-
-		for (Entry<String, List<ChangeGroup>> entry : changeGroups.entrySet()) {
-			String groupName = entry.getKey();
-			List<ChangeGroup> groups = entry.getValue();
-
-			plugin.debugMessage("Group: " + groupName);
-
-			for (ChangeGroup group : groups) {
-				plugin.debugMessage("- " + group.getInternalGroup());
-				
-				// Provide more info
-				if (deepInfo) {
-					plugin.debugMessage("    - " + group.getRequirements().size() + " requirements");
-					plugin.debugMessage("    - " + group.getResults().size() + " results");
-				}						
-			}
-
-			plugin.debugMessage("----------------------------");
-
-		}
-	}
-
-	public List<ChangeGroup> getChangeGroups(String groupName) {
-		return changeGroups.get(groupName);
+		return changeGroups;
 	}
 
 	private Result createResult(final String type, final String object) {
