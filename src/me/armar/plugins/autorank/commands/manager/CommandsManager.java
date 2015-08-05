@@ -1,5 +1,6 @@
 package me.armar.plugins.autorank.commands.manager;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -10,6 +11,7 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.AddCommand;
 import me.armar.plugins.autorank.commands.ArchiveCommand;
 import me.armar.plugins.autorank.commands.CheckCommand;
+import me.armar.plugins.autorank.commands.ChooseCommand;
 import me.armar.plugins.autorank.commands.CompleteCommand;
 import me.armar.plugins.autorank.commands.ConvertUUIDCommand;
 import me.armar.plugins.autorank.commands.DebugCommand;
@@ -27,6 +29,7 @@ import me.armar.plugins.autorank.commands.SetCommand;
 import me.armar.plugins.autorank.commands.SyncCommand;
 import me.armar.plugins.autorank.commands.SyncStatsCommand;
 import me.armar.plugins.autorank.commands.TrackCommand;
+import me.armar.plugins.autorank.commands.ViewCommand;
 import me.armar.plugins.autorank.language.Lang;
 
 import org.bukkit.ChatColor;
@@ -90,6 +93,10 @@ public class CommandsManager implements TabExecutor {
 				new HooksCommand(plugin));
 		registeredCommands.put(Arrays.asList("gadd", "globaladd"),
 				new GlobalAddCommand(plugin));
+		registeredCommands.put(Arrays.asList("view", "preview"),
+				new ViewCommand(plugin));
+		registeredCommands.put(Arrays.asList("choose"),
+				new ChooseCommand(plugin));
 	}
 
 	public HashMap<List<String>, AutorankCommand> getRegisteredCommands() {
@@ -151,10 +158,21 @@ public class CommandsManager implements TabExecutor {
 
 		if (args.length == 1) {
 			// Show a list of commands if needed
-			return Lists.newArrayList("help", "check", "leaderboard", "set",
+			
+			List<String> commands = new ArrayList<String>();
+			
+			for (Entry<List<String>, AutorankCommand> entry: registeredCommands.entrySet()) {
+				List<String> list = entry.getKey();
+				
+				commands.add(list.get(0));
+			}
+			
+			/*Lists.newArrayList("help", "check", "leaderboard", "set",
 					"add", "remove", "debug", "reload", "import", "archive",
 					"gcheck", "complete", "sync", "syncstats", "forcecheck",
-					"convert", "track", "gset", "hooks", "gadd");
+					"convert", "track", "gset", "hooks", "gadd", "view");*/
+			
+			return commands;
 		}
 
 		if (args.length > 1) {
