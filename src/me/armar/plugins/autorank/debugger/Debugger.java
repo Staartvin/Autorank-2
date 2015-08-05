@@ -103,7 +103,7 @@ public class Debugger {
 			out.newLine();
 
 			for (final String change : plugin.getPlayerChecker()
-					.toStringArray()) {
+					.toStringList()) {
 				out.write(change);
 				out.newLine();
 			}
