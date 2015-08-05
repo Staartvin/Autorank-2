@@ -1,17 +1,16 @@
 package me.armar.plugins.autorank.playerchecker;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
-import me.armar.plugins.autorank.playerchecker.builders.RankChangeBuilder;
+import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
+import me.armar.plugins.autorank.rankbuilder.ChangeGroup;
+import me.armar.plugins.autorank.rankbuilder.ChangeGroupManager;
 import me.armar.plugins.autorank.util.AutorankTools;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 /*
@@ -27,16 +26,17 @@ import org.bukkit.entity.Player;
  */
 public class PlayerChecker {
 
-	private RankChangeBuilder builder;
 	private final Autorank plugin;
-	private final Map<String, List<RankChange>> rankChanges = new HashMap<String, List<RankChange>>();
+	private ChangeGroupManager changeGroupManager;
+
+	//private final Map<String, List<RankChange>> rankChanges = new HashMap<String, List<RankChange>>();
 
 	public PlayerChecker(final Autorank plugin) {
-		setBuilder(new RankChangeBuilder(plugin));
 		this.plugin = plugin;
+		this.changeGroupManager = new ChangeGroupManager(plugin);
 	}
 
-	public void addRankChange(final String name, final RankChange change) {
+	/*public void addRankChange(final String name, final RankChange change) {
 		if (rankChanges.get(name) == null) {
 			final List<RankChange> list = new ArrayList<RankChange>();
 			list.add(change);
@@ -44,180 +44,263 @@ public class PlayerChecker {
 		} else {
 			rankChanges.get(name).add(change);
 		}
-	}
+	}*/
 
 	public boolean checkPlayer(final Player player) {
 
-		boolean result = false;
-
 		// Do not rank a player when he is excluded
 		if (AutorankTools.isExcluded(player))
-			return result;
+			return false;
 
 		final String[] groups = plugin.getPermPlugHandler()
 				.getPermissionPlugin().getPlayerGroups(player);
 
-		for (final String group : groups) {
-			final List<RankChange> changes = rankChanges.get(group);
-			if (changes != null) {
-				for (final RankChange change : changes) {
-					if (change.applyChange(player)) {
-						result = true;
-					}
-				}
+		// only first group - will cause problems
+		String groupName = groups[0];
+		
+		List<ChangeGroup> changes = changeGroupManager
+				.getChangeGroups(groupName);
+		
+		if (changes == null || changes.size() == 0) {
+			return false;
+		}
+		
+		for (ChangeGroup changeGroup : changes) {
+			if (!changeGroup.applyChange(player)) {
+				return false;
 			}
 		}
 
-		return result;
+		return true;
 	}
 
-	public Map<RankChange, List<Requirement>> getAllRequirements(
+	public List<Requirement> getAllRequirements(
 			final Player player) {
-		final Map<RankChange, List<Requirement>> result = new HashMap<RankChange, List<Requirement>>();
-
+		
 		final String[] groups = plugin.getPermPlugHandler()
 				.getPermissionPlugin().getPlayerGroups(player);
 
+		// Only use first group - will cause problems
 		for (final String group : groups) {
-			final List<RankChange> changes = rankChanges.get(group);
+
+			ChangeGroup chosenChangeGroup = changeGroupManager
+					.matchChangeGroup(group, plugin.getPlayerDataHandler()
+							.getChosenPath(player.getUniqueId()));
+
+			if (chosenChangeGroup == null) {
+
+				// Get all requirements of all changegroups together
+				List<Requirement> reqs = new ArrayList<Requirement>();
+
+				for (ChangeGroup changeGroup : changeGroupManager
+						.getChangeGroups(group)) {
+					for (Requirement req : changeGroup.getRequirements()) {
+						reqs.add(req);
+					}
+				}
+
+				return reqs;
+
+			}
+
+			return chosenChangeGroup.getRequirements();
+
+			/*final List<RankChange> changes = rankChanges.get(group);
 			if (changes != null) {
 				for (final RankChange change : changes) {
 					result.put(change, change.getReq());
 				}
-			}
+			}*/
 		}
 
-		return result;
+		return new ArrayList<Requirement>();
 	}
 
-	public RankChangeBuilder getBuilder() {
-		return builder;
-	}
-
-	public Map<RankChange, List<Requirement>> getFailedRequirements(
+	public List<Requirement> getFailedRequirements(
 			final Player player) {
-		final Map<RankChange, List<Requirement>> result = new HashMap<RankChange, List<Requirement>>();
 
 		final String[] groups = plugin.getPermPlugHandler()
 				.getPermissionPlugin().getPlayerGroups(player);
 
 		for (final String group : groups) {
-			final List<RankChange> changes = rankChanges.get(group);
+
+			ChangeGroup chosenChangeGroup = changeGroupManager
+					.matchChangeGroup(group, plugin.getPlayerDataHandler()
+							.getChosenPath(player.getUniqueId()));
+
+			if (chosenChangeGroup == null) {
+
+				// Get all requirments of all changegroups together
+				List<Requirement> reqs = new ArrayList<Requirement>();
+
+				for (ChangeGroup changeGroup : changeGroupManager
+						.getChangeGroups(group)) {
+					for (Requirement req : changeGroup.getFailedRequirements(player)) {
+						reqs.add(req);
+					}
+				}
+
+				return reqs;
+			}
+
+			return chosenChangeGroup.getFailedRequirements(player);
+
+			/*final List<RankChange> changes = rankChanges.get(group);
 			if (changes != null) {
 				for (final RankChange change : changes) {
-					result.put(change, change.getFailedRequirements(player));
+					result.put(change, change.getReq());
 				}
-			}
+			}*/
 		}
 
-		return result;
+		return new ArrayList<Requirement>();
 	}
 
-	/**
-	 * Get the next {@link RankChange} class for the player
-	 * 
-	 * @param player Player to check for.
-	 * @return the {@link RankChange} class that is associated with this
-	 *         player's rankup; null if no rank up
-	 */
-	public RankChange getNextRank(final Player player) {
-		final Map<RankChange, List<Requirement>> requirements = getAllRequirements(player);
-
-		final Set<RankChange> rankchanges = requirements.keySet();
-
-		if (rankchanges.size() == 0) {
-			return null;
-		}
-
-		RankChange newRank = null;
-
-		for (final RankChange rank : rankchanges) {
-			newRank = rank;
-		}
-
-		return newRank;
-	}
-
-	/**
-	 * Get the next rank up permission group
-	 * 
-	 * @param player Player to check for
-	 * @return name of the permission group the player will be ranked to; null
-	 *         if no rank up
-	 */
-	public String getNextRankupGroup(final Player player) {
-		final RankChange change = getNextRank(player);
-
-		if (change == null)
-			return null;
-
-		return change.getRankTo();
-	}
-
-	/**
-	 * Get all requirements for a player to rank up.
-	 * All requirements are included, even if they are completed.
-	 * 
-	 * @param player Player to get the requirements for
-	 * @return a list of requirements; null if the player has no rank up.
-	 */
-	public List<Requirement> getRequirementsForNextRank(final Player player) {
-		final RankChange rank = getNextRank(player);
-
-		if (rank == null) {
-			return null;
-		}
-
-		return getAllRequirements(player).get(rank);
-	}
-
-	public void initialiseFromConfigs() {
-		final SimpleYamlConfiguration simpleConfig = plugin.getSimpleConfig();
-
-		List<RankChange> ranks;
-		if (plugin.getConfigHandler().useAdvancedConfig()) {
-			ranks = builder
-					.createFromAdvancedConfig(plugin.getAdvancedConfig());
-		} else {
-			ranks = builder.createFromSimpleConfig(simpleConfig);
-		}
-
-		// Clear all rank changes, so nothing is left behind.
-		rankChanges.clear();
-
-		for (final RankChange rank : ranks) {
-			addRankChange(rank.getRankFrom(), rank);
-		}
-
-	}
-
-	private void setBuilder(final RankChangeBuilder builder) {
-		this.builder = builder;
-	}
-
-	public String[] toStringArray() {
-		final List<String> list = new ArrayList<String>();
-
-		for (final String name : rankChanges.keySet()) {
-
-			final List<RankChange> changes = rankChanges.get(name);
-			for (final RankChange change : changes) {
-
-				if (change == null) {
-					list.add("- NULL");
-				} else {
-					list.add("- " + change.toString());
-				}
-			}
-		}
-
-		return list.toArray(new String[] {});
+	public List<String> toStringList() {
+		return changeGroupManager.debugChangeGroups(true);
 	}
 
 	public void doLeaderboardExemptCheck(Player player) {
-		plugin.getRequirementHandler().hasLeaderboardExemption(
+		plugin.getPlayerDataHandler().hasLeaderboardExemption(
 				player.getUniqueId(),
 				player.hasPermission("autorank.leaderboard.exempt"));
+	}
+	
+	public ChangeGroupManager getChangeGroupManager() {
+		return changeGroupManager;
+	}
+	
+	public List<String> getRequirementsInStringList(
+			final List<Requirement> reqs, final List<Integer> metRequirements) {
+		// Converts requirements into a list of readable requirements
+
+		final List<String> messages = new ArrayList<String>();
+
+		messages.add(ChatColor.GRAY + " ------------ ");
+		
+		for (int i = 0; i < reqs.size(); i++) {
+			final Requirement req = reqs.get(i);
+			final int reqID = req.getReqId();
+
+			if (req != null) {
+				final StringBuilder message = new StringBuilder("     "
+						+ ChatColor.GOLD + (i + 1) + ". ");
+				if (metRequirements.contains(reqID)) {
+					message.append(ChatColor.RED + req.getDescription()
+							+ ChatColor.BLUE + " ("
+							+ Lang.DONE_MARKER.getConfigValue() + ")");
+				} else {
+					message.append(ChatColor.RED + req.getDescription());
+				}
+
+				if (req.isOptional()) {
+					message.append(ChatColor.AQUA + " ("
+							+ Lang.OPTIONAL_MARKER.getConfigValue() + ")");
+				}
+
+				messages.add(message.toString());
+
+			}
+		}
+
+		return messages;
+
+	}
+	
+	public List<Integer> getMetRequirements(List<Requirement> reqs, Player player) {
+		final List<Integer> metRequirements = new ArrayList<Integer>();
+		
+		boolean onlyOptional = true;
+		
+		// Check if we only have optional requirements
+		for (final Requirement req : reqs) {
+			if (!req.isOptional())
+				onlyOptional = false;
+		}
+		
+		if (onlyOptional) {
+			List<Integer> optionalRequirements = new ArrayList<Integer>();
+			
+			for (Requirement req : reqs) {
+				optionalRequirements.add(req.getReqId());
+			}
+			
+			return optionalRequirements;
+		}
+
+		for (final Requirement req : reqs) {
+			final int reqID = req.getReqId();
+
+			// Use auto completion
+			if (req.useAutoCompletion()) {
+				// Do auto complete
+				if (req.meetsRequirement(player)) {
+					// Player meets the requirement -> give him results
+
+					// Doesn't need to check whether this requirement was already done
+					if (!plugin.getConfigHandler().usePartialCompletion())
+						continue;
+
+					metRequirements.add(reqID);
+					continue;
+				} else {
+
+					// Only check if player has done this when partial completion is used
+					if (plugin.getConfigHandler().usePartialCompletion()) {
+						// Player does not meet requirements, but has done this already
+						if (plugin.getPlayerDataHandler()
+								.hasCompletedRequirement(reqID, player.getUniqueId())) {
+							metRequirements.add(reqID);
+							continue;
+						}
+					}
+
+					// If requirement is optional, we do not check.
+					if (req.isOptional()) {
+						continue;
+					}
+
+					// Player does not meet requirements -> do nothing
+					continue;
+				}
+			} else {
+
+				if (!plugin.getConfigHandler().usePartialCompletion()) {
+
+					// Doesn't auto complete and doesn't meet requirement, then continue searching
+					if (!req.meetsRequirement(player)) {
+
+						// If requirement is optional, we do not check.
+						if (req.isOptional()) {
+							continue;
+						}
+
+						continue;
+					} else {
+						// Player does meet requirement, continue searching
+						continue;
+					}
+
+				}
+
+				// Do not auto complete
+				if (plugin.getPlayerDataHandler().hasCompletedRequirement(
+						reqID, player.getUniqueId())) {
+					// Player has completed requirement already
+					metRequirements.add(reqID);
+					continue;
+				} else {
+
+					// If requirement is optional, we do not check.
+					if (req.isOptional()) {
+						continue;
+					}
+
+					continue;
+				}
+			}
+		}
+		return metRequirements;
 	}
 
 }

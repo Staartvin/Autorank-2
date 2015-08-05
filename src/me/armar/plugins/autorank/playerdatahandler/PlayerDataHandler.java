@@ -184,8 +184,7 @@ public class PlayerDataHandler {
 	public void loadConfig() {
 
 		config.options().header(
-				"This file saves all progress of players."
-						+ "\nIt stores their progress of /ar complete");
+				"This file contains all the data Autorank needs of players");
 
 		config.options().copyDefaults(true);
 		saveConfig();
@@ -266,5 +265,13 @@ public class PlayerDataHandler {
 
 	public void hasLeaderboardExemption(UUID uuid, boolean value) {
 		config.set(uuid.toString() + ".exempt leaderboard", value);
+	}
+	
+	public void setChosenPath(UUID uuid, String path) {
+		config.set(uuid.toString() + ".chosen path", path);
+	}
+	
+	public String getChosenPath(UUID uuid) {
+		return config.getString(uuid.toString() + ".chosen path", "unknown");
 	}
 }
