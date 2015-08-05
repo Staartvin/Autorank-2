@@ -1,4 +1,4 @@
-package me.armar.plugins.autorank.playerchecker.builders;
+package me.armar.plugins.autorank.rankbuilder.builders;
 
 import java.util.HashMap;
 import java.util.Map;
