@@ -67,7 +67,7 @@ public enum Lang {
 	/**
 	 * Have at least level {0} in exp.
 	 */
-	EXP_REQUIREMENT("exp-requirement", "Have at least level {0} in exp."),
+	EXP_REQUIREMENT("exp-requirement", "Have at least level {0} in exp"),
 	/**
 	 * Have at least {0} power in your faction.
 	 */
@@ -81,7 +81,7 @@ public enum Lang {
 	/**
 	 * Be in gamemode {0}.
 	 */
-	GAMEMODE_REQUIREMENT("gamemode-requirement", "Be in gamemode {0}."),
+	GAMEMODE_REQUIREMENT("gamemode-requirement", "Be in gamemode {0}"),
 	/**
 	 * Play for at least {0} on any of the servers.
 	 */
@@ -106,7 +106,7 @@ public enum Lang {
 	/**
 	 * Obtain {0}.
 	 */
-	ITEM_REQUIREMENT("item-requirement", "Obtain {0}."),
+	ITEM_REQUIREMENT("item-requirement", "Obtain {0}"),
 	/**
 	 * Craft at least {0} item(s).
 	 */
