@@ -57,6 +57,7 @@ import me.armar.plugins.autorank.playerchecker.result.SpawnFireworkResult;
 import me.armar.plugins.autorank.playerchecker.result.TeleportResult;
 import me.armar.plugins.autorank.playerdatahandler.PlayerDataHandler;
 import me.armar.plugins.autorank.playtimes.Playtimes;
+import me.armar.plugins.autorank.rankbuilder.ChangeGroupBuilder;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.armar.plugins.autorank.updater.UpdateHandler;
 import me.armar.plugins.autorank.updater.Updater;
@@ -478,6 +479,9 @@ public class Autorank extends JavaPlugin {
 
 		// Start automatic backup
 		this.getBackupManager().startBackupSystem();
+		
+		// Test thingy
+		new ChangeGroupBuilder(this).initialiseChangeGroups(false, this.getAdvancedConfig());
 
 	}
 
