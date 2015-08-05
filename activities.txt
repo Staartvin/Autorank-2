@@ -1,3 +1,4 @@
 Currently working on in this branch:
 
-- Nothing
+- Allowing multiple rankups from the same group
+	- A player will have to choose which group he takes, but he always change any time.
