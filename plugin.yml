@@ -103,4 +103,10 @@ permissions:
         default: op
     autorank.gadd:
         description: Allows adding global time.
-        default: op    
+        default: op
+    autorank.view:
+        description: Allows previewing ranking paths before choosing
+        default: true
+    autorank.choose:
+        description: Allows choosing ranking paths
+        default: true         
