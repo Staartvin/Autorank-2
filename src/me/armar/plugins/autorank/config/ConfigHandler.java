@@ -336,5 +336,13 @@ public class ConfigHandler {
 		return plugin.getSettingsConfig().getBoolean(
 				"use primary group for vault", true);
 	}
+	
+	// A display name for a changegroup is when the changegroup is a copy of another group.
+	public String getDisplayName(final String group) {
+		String displayName = plugin.getAdvancedConfig().getString(
+				"ranks." + group + ".options.display name", group);
+
+		return displayName;
+	}
 
 }
