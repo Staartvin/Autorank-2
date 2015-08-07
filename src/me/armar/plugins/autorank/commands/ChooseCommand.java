@@ -1,6 +1,7 @@
 package me.armar.plugins.autorank.commands;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
@@ -40,8 +41,7 @@ public class ChooseCommand extends AutorankCommand {
 		}
 		
 		if (!(sender instanceof Player)) {
-			sender.sendMessage(ChatColor.RED
-					+ "You are a robot! You can't choose ranking paths, silly..");
+			sender.sendMessage(Lang.YOU_ARE_A_ROBOT.getConfigValue("you can't choose ranking paths, silly.."));
 			return true;
 		}
 		
@@ -50,6 +50,18 @@ public class ChooseCommand extends AutorankCommand {
 		String pathName = args[1];
 		
 		String groupName = plugin.getAPI().getPrimaryGroup(player);
+		
+		List<ChangeGroup> changeGroups = plugin.getPlayerChecker().getChangeGroupManager().getChangeGroups(groupName);
+		
+		if (changeGroups == null || changeGroups.size() == 1) {
+			sender.sendMessage(ChatColor.RED + "You don't have to choose a path for this rank, there is only one.");
+			return true;
+		}
+		
+		if (pathName.equalsIgnoreCase(plugin.getPlayerDataHandler().getChosenPath(player.getUniqueId()))) {
+			sender.sendMessage(ChatColor.RED + "You're already on this path!");
+			return true;
+		}
 		
 		ChangeGroup changeGroup = plugin.getPlayerChecker().getChangeGroupManager().matchChangeGroupFromDisplayName(groupName, pathName.toLowerCase());
 		

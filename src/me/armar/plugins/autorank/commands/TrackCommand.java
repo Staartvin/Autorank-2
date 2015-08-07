@@ -32,14 +32,13 @@ public class TrackCommand extends AutorankCommand {
 
 		// Implemented /ar track #
 		if (args.length != 2) {
-			sender.sendMessage(ChatColor.RED + "Incorrect command usage!");
-			sender.sendMessage(ChatColor.YELLOW + "Usage: /ar track #");
+			sender.sendMessage(Lang.INVALID_FORMAT.getConfigValue("/ar track #"));
 			return true;
 		}
 
 		if (!(sender instanceof Player)) {
-			sender.sendMessage(ChatColor.RED
-					+ "You are a robot! You don't make progress, silly..");
+			sender.sendMessage(Lang.YOU_ARE_A_ROBOT
+					.getConfigValue("you don't make progress, silly.."));
 			return true;
 		}
 

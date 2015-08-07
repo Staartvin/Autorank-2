@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
+import me.armar.plugins.autorank.language.Lang;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -36,7 +37,7 @@ public class SyncCommand extends AutorankCommand {
 		}
 
 		if (!plugin.getConfigHandler().useMySQL()) {
-			sender.sendMessage(ChatColor.RED + "MySQL is not being used!");
+			sender.sendMessage(Lang.MYSQL_IS_NOT_ENABLED.getConfigValue());
 			return true;
 		}
 

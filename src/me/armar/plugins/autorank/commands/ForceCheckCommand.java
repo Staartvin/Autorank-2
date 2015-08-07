@@ -31,9 +31,7 @@ public class ForceCheckCommand extends AutorankCommand {
 			return true;
 
 		if (args.length != 2) {
-			sender.sendMessage(ChatColor.RED + "Incorrect command usage!");
-			sender.sendMessage(ChatColor.YELLOW
-					+ "Usage: /ar forcecheck <player>");
+			sender.sendMessage(Lang.INVALID_FORMAT.getConfigValue("/ar forcecheck <player>"));
 			return true;
 		}
 

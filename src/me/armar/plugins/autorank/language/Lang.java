@@ -17,12 +17,12 @@ import org.bukkit.configuration.file.FileConfiguration;
  */
 public enum Lang {
 	/**
-	 * You have already completed this requirement!
+	 * &cYou have already completed this requirement!
 	 */
 	ALREADY_COMPLETED_REQUIREMENT("already-completed-requirement",
-			"You have already completed this requirement!"),
+			"&cYou have already completed this requirement!"),
 	/**
-	 * Autorank has been reloaded.
+	 * &3Autorank has been reloaded.
 	 */
 	AUTORANK_RELOADED("autorank-reloaded", "&3Autorank has been reloaded."),
 	/**
@@ -35,7 +35,7 @@ public enum Lang {
 	 */
 	BROKEN_BLOCKS_REQUIREMENT("broken-blocks-requirement", "Break at least {0}"),
 	/**
-	 * Cannot check for console!
+	 * &cCannot check for console!
 	 */
 	CANNOT_CHECK_CONSOLE("cannot-check-console", "&cCannot check for console!"),
 	/**
@@ -56,7 +56,7 @@ public enum Lang {
 	 */
 	DAY_SINGULAR("day-singular", "day"),
 	/**
-	 * You do not meet requirements for #{0}:
+	 * You do not meet requirements for #&6{0}&c:
 	 */
 	DO_NOT_MEET_REQUIREMENTS_FOR("do-not-meet-requirements-for",
 			"You do not meet requirements for #&6{0}&c:"),
@@ -96,13 +96,13 @@ public enum Lang {
 	 */
 	HOUR_SINGULAR("hour-singular", "hour"),
 	/**
-	 * Invalid format, use {0}.
+	 * &cInvalid format, use {0}.
 	 */
 	INVALID_FORMAT("invalid-format", "&cInvalid format, use {0}."),
 	/**
-	 * {0} is not a valid number!
+	 * &c{0} is not a valid number!
 	 */
-	INVALID_NUMBER("invalid-number", "{0} is not a valid number!"),
+	INVALID_NUMBER("invalid-number", "&c{0} is not a valid number!"),
 	/**
 	 * Obtain {0}.
 	 */
@@ -150,10 +150,10 @@ public enum Lang {
 	 */
 	MONEY_REQUIREMENT("money-requirement", "Have at least {0}"),
 	/**
-	 * MySQL is not enabled and therefore global time does not exist!
+	 * &cMySQL is not enabled!
 	 */
 	MYSQL_IS_NOT_ENABLED("mysql-is-not-enabled",
-			"MySQL is not enabled and therefore global time does not exist!"),
+			"&cMySQL is not enabled!"),
 	/**
 	 * no groups
 	 */
@@ -163,7 +163,7 @@ public enum Lang {
 	 */
 	NO_NEXT_RANK("no-next-rankup", "Does not have a next rankup."),
 	/**
-	 * You need ({0}) for that!
+	 * &cYou need ({0}) for that!
 	 */
 	NO_PERMISSION("no-permission", "&cYou need ({0}) for that!"),
 	/**
@@ -179,11 +179,11 @@ public enum Lang {
 	 */
 	PLACED_BLOCKS_REQUIREMENT("placed-blocks-requirement", "Place at least {0}"),
 	/**
-	 * {0} is excluded from ranking!
+	 * &c{0} is excluded from ranking!
 	 */
-	PLAYER_IS_EXCLUDED("player-is-excluded", "{0} is excluded from ranking!"),
+	PLAYER_IS_EXCLUDED("player-is-excluded", "&c{0} is excluded from ranking!"),
 	/**
-	 * {0} has never been logged before.
+	 * &6{0}&c has never been logged before.
 	 */
 	PLAYER_IS_INVALID("player-is-invalid",
 			"&6{0}&4 has never been logged before."),
@@ -193,7 +193,7 @@ public enum Lang {
 	PLAYER_KILLS_REQUIREMENT("player-kills-requirement",
 			"Kill at least {0} player(s)"),
 	/**
-	 * {0} is not online!
+	 * &6{0}&c is not online!
 	 */
 	PLAYER_NOT_ONLINE("player-not-online", "&6{0}&4 is not online!"),
 	/**
@@ -237,7 +237,7 @@ public enum Lang {
 	TOTAL_TIME_REQUIREMENT("total-time-requirement",
 			"Be with this server for at least {0}"),
 	/**
-	 * Player {0} is unknown and couldn't be identified.
+	 * &cPlayer {0} is unknown and couldn't be identified.
 	 */
 	UNKNOWN_PLAYER("unknown-player",
 			"&cPlayer {0} is unknown and couldn't be identified."),
@@ -270,7 +270,11 @@ public enum Lang {
 	/**
 	 * Eat at least '{0}'.
 	 */
-	FOOD_EATEN_REQUIREMENT("food-eaten-requirement", "Eat at least {0}"), ;
+	FOOD_EATEN_REQUIREMENT("food-eaten-requirement", "Eat at least {0}"),
+	/**
+	 * &cYou are a robot, '{0}'
+	 */
+	YOU_ARE_A_ROBOT("you-are-a-robot", "&cYou are a robot, {0}"),;
 
 	private static FileConfiguration LANG;
 

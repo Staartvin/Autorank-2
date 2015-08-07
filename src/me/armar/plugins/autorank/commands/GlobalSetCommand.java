@@ -91,8 +91,7 @@ public class GlobalSetCommand extends AutorankCommand {
 			try {
 				plugin.getPlaytimes().setGlobalTime(uuid, value);
 			} catch (final SQLException e) {
-				sender.sendMessage(ChatColor.RED
-						+ "Could not update time! Is MySQL turned on?");
+				sender.sendMessage(Lang.MYSQL_IS_NOT_ENABLED.getConfigValue());
 				return true;
 			}
 

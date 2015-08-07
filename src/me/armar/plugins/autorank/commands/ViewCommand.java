@@ -41,8 +41,7 @@ public class ViewCommand extends AutorankCommand {
 		}
 		
 		if (!(sender instanceof Player)) {
-			sender.sendMessage(ChatColor.RED
-					+ "You are a robot! You can't view ranking paths of players, silly..");
+			sender.sendMessage(Lang.YOU_ARE_A_ROBOT.getConfigValue("you can't view ranking paths of players, silly.."));
 			return true;
 		}
 		

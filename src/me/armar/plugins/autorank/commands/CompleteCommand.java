@@ -33,14 +33,12 @@ public class CompleteCommand extends AutorankCommand {
 
 		// Implemented /ar complete #
 		if (args.length != 2) {
-			sender.sendMessage(ChatColor.RED + "Incorrect command usage!");
-			sender.sendMessage(ChatColor.YELLOW + "Usage: /ar complete #");
+			sender.sendMessage(Lang.INVALID_FORMAT.getConfigValue("/ar complete #"));
 			return true;
 		}
 
 		if (!(sender instanceof Player)) {
-			sender.sendMessage(ChatColor.RED
-					+ "You are a robot! You can't rank up, silly..");
+			sender.sendMessage(Lang.YOU_ARE_A_ROBOT.getConfigValue("you can't rank up, silly.."));
 			return true;
 		}
 
