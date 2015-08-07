@@ -35,6 +35,14 @@ public class StatsRequirementValidation {
 			return true;
 		} else if (correctName.equalsIgnoreCase("blocks moved")) {
 			return true;
+		} else if (correctName.equalsIgnoreCase("fish caught")) {
+			return true;
+		} else if (correctName.equalsIgnoreCase("items crafted")) {
+			return true;
+		} else if (correctName.equalsIgnoreCase("times sheared")) {
+			return true;
+		} else if (correctName.equalsIgnoreCase("food eaten")) {
+			return true;
 		} else
 			return false;
 	}
@@ -64,7 +72,7 @@ public class StatsRequirementValidation {
 							|| !plugin.getHookedStatsPlugin().isEnabled()) {
 						plugin.getWarningManager()
 								.registerWarning(
-										"You need to install Stats because you have Stats-required requirements listed in your config (also turn on beta functions).",
+										"You need to install Stats because you have Stats-required requirements listed in your config.",
 										5);
 						return false;
 					}
