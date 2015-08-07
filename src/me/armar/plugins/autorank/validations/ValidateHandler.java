@@ -38,6 +38,8 @@ public class ValidateHandler {
 
 		// Check for Stats required requirements
 		if (!statsValidate.validateRequirements(config)) {
+			autorank.getLogger().severe(
+					"You need Stats for some requirements that you use!");
 			return false;
 		}
 
