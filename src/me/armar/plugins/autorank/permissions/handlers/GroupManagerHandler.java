@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.permissions.PermissionsHandler;
@@ -72,6 +73,34 @@ public class GroupManagerHandler implements PermissionsHandler {
 		final List<String> groups = Arrays.asList(handler
 				.getPrimaryGroup(player.getName()));
 		final String[] array = (String[]) groups.toArray();
+
+		UUID uuid = player.getUniqueId();
+		
+		// Checking if player changed group
+		// Check if the latest known group is the current group. Otherwise, reset progress
+		String currentGroup = array[0];
+		String latestKnownGroup = plugin.getPlayerDataHandler()
+				.getLastKnownGroup(uuid);
+
+		if (latestKnownGroup == null) {
+			plugin.getPlayerDataHandler().setLastKnownGroup(uuid, currentGroup);
+
+			latestKnownGroup = currentGroup;
+		}
+		if (!latestKnownGroup.equalsIgnoreCase(currentGroup)) {
+			// Reset progress and update latest known group
+			plugin.getPlayerDataHandler().setPlayerProgress(uuid,
+					new ArrayList<Integer>());
+			plugin.getPlayerDataHandler().setLastKnownGroup(uuid, currentGroup);
+			plugin.getPlayerDataHandler().setChosenPath(uuid, null);
+
+			plugin.debugMessage("Reset player data for " + player.getName());
+		}
+		
+		for (String group : groups) {
+			System.out.println("Group from player '" + player.getName() + "': "
+					+ group);
+		}
 
 		return array;
 	}
