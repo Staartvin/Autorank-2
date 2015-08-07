@@ -52,19 +52,16 @@ public class PlayerChecker {
 		if (AutorankTools.isExcluded(player))
 			return false;
 
-		final String[] groups = plugin.getPermPlugHandler()
-				.getPermissionPlugin().getPlayerGroups(player);
-
 		// only first group - will cause problems
-		String groupName = groups[0];
-		
+		String groupName = plugin.getPermPlugHandler().getPrimaryGroup(player);
+
 		List<ChangeGroup> changes = changeGroupManager
 				.getChangeGroups(groupName);
-		
+
 		if (changes == null || changes.size() == 0) {
 			return false;
 		}
-		
+
 		for (ChangeGroup changeGroup : changes) {
 			if (!changeGroup.applyChange(player)) {
 				return false;
@@ -74,86 +71,76 @@ public class PlayerChecker {
 		return true;
 	}
 
-	public List<Requirement> getAllRequirements(
-			final Player player) {
-		
-		final String[] groups = plugin.getPermPlugHandler()
-				.getPermissionPlugin().getPlayerGroups(player);
+	public List<Requirement> getAllRequirements(final Player player) {
 
-		// Only use first group - will cause problems
-		for (final String group : groups) {
+		// only first group - will cause problems
+		String groupName = plugin.getPermPlugHandler().getPrimaryGroup(player);
 
-			ChangeGroup chosenChangeGroup = changeGroupManager
-					.matchChangeGroup(group, plugin.getPlayerDataHandler()
-							.getChosenPath(player.getUniqueId()));
+		ChangeGroup chosenChangeGroup = changeGroupManager.matchChangeGroup(
+				groupName,
+				plugin.getPlayerDataHandler().getChosenPath(
+						player.getUniqueId()));
 
-			if (chosenChangeGroup == null) {
+		if (chosenChangeGroup == null) {
 
-				// Get all requirements of all changegroups together
-				List<Requirement> reqs = new ArrayList<Requirement>();
+			// Get all requirements of all changegroups together
+			List<Requirement> reqs = new ArrayList<Requirement>();
 
-				for (ChangeGroup changeGroup : changeGroupManager
-						.getChangeGroups(group)) {
-					for (Requirement req : changeGroup.getRequirements()) {
-						reqs.add(req);
-					}
+			for (ChangeGroup changeGroup : changeGroupManager
+					.getChangeGroups(groupName)) {
+				for (Requirement req : changeGroup.getRequirements()) {
+					reqs.add(req);
 				}
-
-				return reqs;
-
 			}
 
-			return chosenChangeGroup.getRequirements();
+			return reqs;
 
-			/*final List<RankChange> changes = rankChanges.get(group);
-			if (changes != null) {
-				for (final RankChange change : changes) {
-					result.put(change, change.getReq());
-				}
-			}*/
 		}
 
-		return new ArrayList<Requirement>();
+		return chosenChangeGroup.getRequirements();
+
+		/*final List<RankChange> changes = rankChanges.get(group);
+		if (changes != null) {
+			for (final RankChange change : changes) {
+				result.put(change, change.getReq());
+			}
+		}*/
 	}
 
-	public List<Requirement> getFailedRequirements(
-			final Player player) {
+	public List<Requirement> getFailedRequirements(final Player player) {
 
-		final String[] groups = plugin.getPermPlugHandler()
-				.getPermissionPlugin().getPlayerGroups(player);
+		// only first group - will cause problems
+		String groupName = plugin.getPermPlugHandler().getPrimaryGroup(player);
 
-		for (final String group : groups) {
+		ChangeGroup chosenChangeGroup = changeGroupManager.matchChangeGroup(
+				groupName,
+				plugin.getPlayerDataHandler().getChosenPath(
+						player.getUniqueId()));
 
-			ChangeGroup chosenChangeGroup = changeGroupManager
-					.matchChangeGroup(group, plugin.getPlayerDataHandler()
-							.getChosenPath(player.getUniqueId()));
+		if (chosenChangeGroup == null) {
 
-			if (chosenChangeGroup == null) {
+			// Get all requirments of all changegroups together
+			List<Requirement> reqs = new ArrayList<Requirement>();
 
-				// Get all requirments of all changegroups together
-				List<Requirement> reqs = new ArrayList<Requirement>();
-
-				for (ChangeGroup changeGroup : changeGroupManager
-						.getChangeGroups(group)) {
-					for (Requirement req : changeGroup.getFailedRequirements(player)) {
-						reqs.add(req);
-					}
+			for (ChangeGroup changeGroup : changeGroupManager
+					.getChangeGroups(groupName)) {
+				for (Requirement req : changeGroup
+						.getFailedRequirements(player)) {
+					reqs.add(req);
 				}
-
-				return reqs;
 			}
 
-			return chosenChangeGroup.getFailedRequirements(player);
-
-			/*final List<RankChange> changes = rankChanges.get(group);
-			if (changes != null) {
-				for (final RankChange change : changes) {
-					result.put(change, change.getReq());
-				}
-			}*/
+			return reqs;
 		}
 
-		return new ArrayList<Requirement>();
+		return chosenChangeGroup.getFailedRequirements(player);
+
+		/*final List<RankChange> changes = rankChanges.get(group);
+		if (changes != null) {
+			for (final RankChange change : changes) {
+				result.put(change, change.getReq());
+			}
+		}*/
 	}
 
 	public List<String> toStringList() {
@@ -165,11 +152,11 @@ public class PlayerChecker {
 				player.getUniqueId(),
 				player.hasPermission("autorank.leaderboard.exempt"));
 	}
-	
+
 	public ChangeGroupManager getChangeGroupManager() {
 		return changeGroupManager;
 	}
-	
+
 	public List<String> getRequirementsInStringList(
 			final List<Requirement> reqs, final List<Integer> metRequirements) {
 		// Converts requirements into a list of readable requirements
@@ -177,7 +164,7 @@ public class PlayerChecker {
 		final List<String> messages = new ArrayList<String>();
 
 		messages.add(ChatColor.GRAY + " ------------ ");
-		
+
 		for (int i = 0; i < reqs.size(); i++) {
 			final Requirement req = reqs.get(i);
 			final int reqID = req.getReqId();
@@ -206,25 +193,26 @@ public class PlayerChecker {
 		return messages;
 
 	}
-	
-	public List<Integer> getMetRequirements(List<Requirement> reqs, Player player) {
+
+	public List<Integer> getMetRequirements(List<Requirement> reqs,
+			Player player) {
 		final List<Integer> metRequirements = new ArrayList<Integer>();
-		
+
 		boolean onlyOptional = true;
-		
+
 		// Check if we only have optional requirements
 		for (final Requirement req : reqs) {
 			if (!req.isOptional())
 				onlyOptional = false;
 		}
-		
+
 		if (onlyOptional) {
 			List<Integer> optionalRequirements = new ArrayList<Integer>();
-			
+
 			for (Requirement req : reqs) {
 				optionalRequirements.add(req.getReqId());
 			}
-			
+
 			return optionalRequirements;
 		}
 
@@ -249,7 +237,8 @@ public class PlayerChecker {
 					if (plugin.getConfigHandler().usePartialCompletion()) {
 						// Player does not meet requirements, but has done this already
 						if (plugin.getPlayerDataHandler()
-								.hasCompletedRequirement(reqID, player.getUniqueId())) {
+								.hasCompletedRequirement(reqID,
+										player.getUniqueId())) {
 							metRequirements.add(reqID);
 							continue;
 						}

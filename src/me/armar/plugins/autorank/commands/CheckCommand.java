@@ -45,11 +45,8 @@ public class CheckCommand extends AutorankCommand {
 		if (event.isCancelled())
 			return;
 
-		final String[] groups = plugin.getPermPlugHandler()
-				.getPermissionPlugin().getPlayerGroups(player);
-		
 		// Only do for the first group - will cause problems
-		String groupName = groups[0];
+		String groupName = plugin.getPermPlugHandler().getPrimaryGroup(player);
 
 		String chosenPath = plugin.getPlayerDataHandler().getChosenPath(uuid);
 		ChangeGroup chosenChangeGroup = plugin.getPlayerChecker()
@@ -103,9 +100,9 @@ public class CheckCommand extends AutorankCommand {
 
 		final StringBuilder groupsString = new StringBuilder("");
 
-		if (groups.length == 0) {
+		if (groupName == null) {
 			groupsString.append(Lang.NO_GROUPS.getConfigValue());
-		} else {
+		} else {/*
 			boolean first = true;
 			for (final String group : groups) {
 				if (!first) {
@@ -113,7 +110,8 @@ public class CheckCommand extends AutorankCommand {
 				}
 				groupsString.append(group);
 				first = false;
-			}
+			}*/
+			groupsString.append(groupName);
 		}
 
 		layout = layout.replace("&groups", groupsString.toString());
