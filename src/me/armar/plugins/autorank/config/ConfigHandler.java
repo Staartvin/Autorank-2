@@ -84,8 +84,12 @@ public class ConfigHandler {
 	}
 
 	public Set<String> getRanks() {
-		return plugin.getAdvancedConfig().getConfigurationSection("ranks")
-				.getKeys(false);
+		if (this.useAdvancedConfig()) {
+			return plugin.getAdvancedConfig().getConfigurationSection("ranks")
+					.getKeys(false);
+		} else {
+			return plugin.getSimpleConfig().getKeys(false);
+		}
 	}
 
 	/**
