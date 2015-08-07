@@ -36,7 +36,7 @@ public class ViewCommand extends AutorankCommand {
 		}
 
 		if (args.length < 2) {
-			sender.sendMessage(Lang.INVALID_FORMAT.getConfigValue("/ar view <path name>"));
+			sender.sendMessage(Lang.INVALID_FORMAT.getConfigValue("/ar view <path name> or /ar view list"));
 			return true;
 		}
 		
