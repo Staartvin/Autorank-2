@@ -135,86 +135,6 @@ public class Autorank extends JavaPlugin {
 		System.out.print("[Autorank debug] " + message);
 	}
 
-	public AddOnManager getAddonManager() {
-		return addonManager;
-	}
-
-	public SimpleYamlConfiguration getAdvancedConfig() {
-		return advancedConfig;
-	}
-
-	public API getAPI() {
-		return new API(this);
-	}
-
-	public CommandsManager getCommandsManager() {
-		return commandsManager;
-	}
-
-	public ConfigHandler getConfigHandler() {
-		return configHandler;
-	}
-
-	public Debugger getDebugger() {
-		return debugger;
-	}
-
-	public DependencyManager getDependencyManager() {
-		return dependencyManager;
-	}
-
-	public StatsPlugin getHookedStatsPlugin() {
-		return getDependencyManager().getStatsPlugin();
-	}
-
-	public LanguageHandler getLanguageHandler() {
-		return languageHandler;
-	}
-
-	public Leaderboard getLeaderboard() {
-		return leaderboard;
-	}
-
-	public MySQLWrapper getMySQLWrapper() {
-		return mysqlWrapper;
-	}
-
-	public PermissionsPluginManager getPermPlugHandler() {
-		return permPlugHandler;
-	}
-
-	public PlayerChecker getPlayerChecker() {
-		return playerChecker;
-	}
-
-	public Playtimes getPlaytimes() {
-		return playtimes;
-	}
-
-	public PlayerDataHandler getPlayerDataHandler() {
-		return playerDataHandler;
-	}
-
-	public SimpleYamlConfiguration getSettingsConfig() {
-		return settingsConfig;
-	}
-
-	public SimpleYamlConfiguration getSimpleConfig() {
-		return simpleConfig;
-	}
-
-	public UpdateHandler getUpdateHandler() {
-		return updateHandler;
-	}
-
-	public ValidateHandler getValidateHandler() {
-		return validateHandler;
-	}
-
-	public WarningManager getWarningManager() {
-		return warningManager;
-	}
-
 	@Override
 	public void onDisable() {
 
@@ -276,8 +196,6 @@ public class Autorank extends JavaPlugin {
 	@SuppressWarnings("deprecation")
 	@Override
 	public void onEnable() {
-
-		// TODO: Add our own Stats logger which keeps track of (a lot of) things
 
 		// Register configs
 		setSimpleConfig(new SimpleYamlConfiguration(this, "SimpleConfig.yml",
@@ -393,8 +311,6 @@ public class Autorank extends JavaPlugin {
 		req.registerRequirement("in biome", InBiomeRequirement.class);
 		req.registerRequirement("food eaten", FoodEatenRequirement.class);
 
-		// REGISTER PLURALS IN AUTORANKTOOLS AS WELL!
-
 		// Register 'main' results
 		res.registerResult("command", CommandResult.class);
 		res.registerResult("effect", EffectResult.class);
@@ -478,6 +394,87 @@ public class Autorank extends JavaPlugin {
 		// Start automatic backup
 		this.getBackupManager().startBackupSystem();
 
+	}
+	
+
+	public AddOnManager getAddonManager() {
+		return addonManager;
+	}
+
+	public SimpleYamlConfiguration getAdvancedConfig() {
+		return advancedConfig;
+	}
+
+	public API getAPI() {
+		return new API(this);
+	}
+
+	public CommandsManager getCommandsManager() {
+		return commandsManager;
+	}
+
+	public ConfigHandler getConfigHandler() {
+		return configHandler;
+	}
+
+	public Debugger getDebugger() {
+		return debugger;
+	}
+
+	public DependencyManager getDependencyManager() {
+		return dependencyManager;
+	}
+
+	public StatsPlugin getHookedStatsPlugin() {
+		return getDependencyManager().getStatsPlugin();
+	}
+
+	public LanguageHandler getLanguageHandler() {
+		return languageHandler;
+	}
+
+	public Leaderboard getLeaderboard() {
+		return leaderboard;
+	}
+
+	public MySQLWrapper getMySQLWrapper() {
+		return mysqlWrapper;
+	}
+
+	public PermissionsPluginManager getPermPlugHandler() {
+		return permPlugHandler;
+	}
+
+	public PlayerChecker getPlayerChecker() {
+		return playerChecker;
+	}
+
+	public Playtimes getPlaytimes() {
+		return playtimes;
+	}
+
+	public PlayerDataHandler getPlayerDataHandler() {
+		return playerDataHandler;
+	}
+
+	public SimpleYamlConfiguration getSettingsConfig() {
+		return settingsConfig;
+	}
+
+	public SimpleYamlConfiguration getSimpleConfig() {
+		return simpleConfig;
+	}
+
+	public UpdateHandler getUpdateHandler() {
+		return updateHandler;
+	}
+
+	public ValidateHandler getValidateHandler() {
+		return validateHandler;
+	}
+
+	public WarningManager getWarningManager() {
+		return warningManager;
 	}
 
 	public boolean isDevVersion() {
