@@ -123,7 +123,7 @@ public class PermissionGroupValidation {
 	}
 
 	/**
-	 * This will check if the groups defined in the advanced config are correct.
+	 * This will check if the groups defined in the AdvancedConfig are correct.
 	 * 
 	 * @param config Advanced Config
 	 * @return true if correct; false otherwise
@@ -183,7 +183,7 @@ public class PermissionGroupValidation {
 	}
 
 	/**
-	 * Validates whether the groups in the Simple Config are correct.
+	 * Validates whether the groups in the SimpleConfig are correct.
 	 * 
 	 * @param config SimpleConfig
 	 * @return true if they are valid; false otherwise.
@@ -206,6 +206,11 @@ public class PermissionGroupValidation {
 				// found matching group
 				if (rank.equals(group))
 					break;
+				
+				// Rank is a copy of another rank, so don't worry about the name.
+				if (rank.contains("-copy-")) {
+					break;
+				}
 
 				// found almost matching group
 				if (rank.equalsIgnoreCase(group)) {
