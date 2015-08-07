@@ -13,6 +13,7 @@ import java.util.Map.Entry;
 import java.util.UUID;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
@@ -61,7 +62,7 @@ public class Leaderboard {
 	}
 
 	private long lastUpdatedTime;
-	private String layout = "&6&r | &b&p - &7&d day(s), &h hour(s) and &m minute(s).";
+	private String layout = "&6&r | &b&p - &7&d %day%, &h %hour% and &m %minute%.";
 	private int leaderboardLength = 10;
 	private String[] messages;
 	private final Autorank plugin;
@@ -209,17 +210,46 @@ public class Leaderboard {
 			Integer time = entry.getValue().intValue();
 
 			String message = layout.replaceAll("&p", name);
+			
+			// divided by 1440
+			int days = (time / 1440);
+			
+			// (time - days) / 60
+			int hours = (time - (days * 1440)) / 60;
+			
+			// (time - days - hours)
+			int minutes = time - (days * 1440) - (hours * 60);
+			
 
 			message = message.replaceAll("&r", Integer.toString(i + 1));
 			message = message.replaceAll("&tm", Integer.toString(time));
 			message = message.replaceAll("&th", Integer.toString(time / 60));
-			message = message.replaceAll("&d", Integer.toString(time / 1440));
+			message = message.replaceAll("&d", Integer.toString(days));
 			time = time - ((time / 1440) * 1440);
-			message = message.replaceAll("&h", Integer.toString(time / 60));
+			message = message.replaceAll("&h", Integer.toString(hours));
 			time = time - ((time / 60) * 60);
-			message = message.replaceAll("&m", Integer.toString(time));
+			message = message.replaceAll("&m", Integer.toString(minutes));
 			message = ChatColor.translateAlternateColorCodes('&', message);
 
+			// Correctly show plural or singular format.
+			if (days > 1 || days == 0) {
+				message = message.replace("%day%", Lang.DAY_PLURAL.getConfigValue());
+			} else {
+				message = message.replace("%day%", Lang.DAY_SINGULAR.getConfigValue());
+			}
+			
+			if (hours > 1 || hours == 0) {
+				message = message.replace("%hour%", Lang.HOUR_PLURAL.getConfigValue());
+			} else {
+				message = message.replace("%hour%", Lang.HOUR_SINGULAR.getConfigValue());
+			}
+			
+			if (minutes > 1 || minutes == 0) {
+				message = message.replace("%minute%", Lang.MINUTE_PLURAL.getConfigValue());
+			} else {
+				message = message.replace("%minute%", Lang.MINUTE_SINGULAR.getConfigValue());
+			}
+			
 			stringList.add(message);
 
 		}
