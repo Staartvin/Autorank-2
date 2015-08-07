@@ -84,7 +84,7 @@ public class PermissionGroupValidation {
 			if (group1 == null)
 				continue;
 
-			if (group1.equals(rankTo.trim())) {
+			if (group1.equalsIgnoreCase(rankTo.trim())) {
 				isMissingRankTo = false;
 			}
 		}
