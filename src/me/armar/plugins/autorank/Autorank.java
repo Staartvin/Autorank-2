@@ -78,7 +78,6 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class Autorank extends JavaPlugin {
 
-	// test push
 	private AddOnManager addonManager;
 	private SimpleYamlConfiguration advancedConfig;
 	private CommandsManager commandsManager;
@@ -581,13 +580,23 @@ public class Autorank extends JavaPlugin {
 
 			// Setup graph for MySQL
 			final Graph mysqlUsedGraph = metrics
-					.createGraph("Percentage using MySQL");
+					.createGraph("Using MySQL");
 
 			mysqlUsedGraph.addPlotter(new Metrics.Plotter("MySQL") {
 
 				@Override
 				public int getValue() {
 					return getConfigHandler().useMySQL() ? 1 : 0;
+				}
+
+			});
+			
+			mysqlUsedGraph.addPlotter(new Metrics.Plotter("No MySQL") {
+
+				@Override
+				public int getValue() {
+					if (!getConfigHandler().useMySQL()) return 1;
+					else return 0;
 				}
 
 			});
