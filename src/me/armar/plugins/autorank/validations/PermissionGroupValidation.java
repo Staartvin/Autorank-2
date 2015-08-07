@@ -148,6 +148,11 @@ public class PermissionGroupValidation {
 				if (rank.equals(group)) {
 					break;
 				}
+				
+				// Rank is a copy of another rank, so don't worry about the name.
+				if (rank.contains("-copy-")) {
+					break;
+				}
 
 				if (rank.equalsIgnoreCase(group)) {
 					// Do not log but register warning
