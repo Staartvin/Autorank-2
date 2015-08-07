@@ -62,13 +62,22 @@ public class PlayerChecker {
 			return false;
 		}
 
-		for (ChangeGroup changeGroup : changes) {
-			if (!changeGroup.applyChange(player)) {
-				return false;
-			}
+		String chosenPath = plugin.getPlayerDataHandler().getChosenPath(
+				player.getUniqueId());
+
+		if (!plugin.getPlayerDataHandler().checkValidChosenPath(player)) {
+			chosenPath = "unknown";
 		}
 
-		return true;
+		ChangeGroup changeGroup = this.getChangeGroupManager()
+				.matchChangeGroup(groupName, chosenPath);
+
+		if (changeGroup == null)
+			return false;
+
+		// TODO account for chosen path
+
+		return changeGroup.applyChange(player);
 	}
 
 	public List<Requirement> getAllRequirements(final Player player) {
