@@ -54,19 +54,8 @@ public class CheckCommand extends AutorankCommand {
 				.matchChangeGroup(groupName, chosenPath);
 		
 		List<ChangeGroup> changeGroups = plugin.getPlayerChecker().getChangeGroupManager().getChangeGroups(groupName);
-
-		boolean validChosenPath = false;
 		
-		// Check whether the chosen path equals one of the change groups
-		for (ChangeGroup group: changeGroups) {
-			if (group.getInternalGroup().equals(chosenPath)) {
-				validChosenPath = true;
-			}
-		}
-		
-		if (!validChosenPath) {
-			// Somehow there wrong chosen path was still left over. Remove it.
-			plugin.getPlayerDataHandler().setChosenPath(uuid, null);
+		if (!plugin.getPlayerDataHandler().checkValidChosenPath(player)) {
 			chosenPath = "unknown";
 		}
 		

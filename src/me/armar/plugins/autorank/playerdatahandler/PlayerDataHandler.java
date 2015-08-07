@@ -12,6 +12,7 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.api.events.RequirementCompleteEvent;
 import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 import me.armar.plugins.autorank.playerchecker.result.Result;
+import me.armar.plugins.autorank.rankbuilder.ChangeGroup;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
 import org.bukkit.Bukkit;
@@ -43,7 +44,7 @@ public class PlayerDataHandler {
 		this.plugin = instance;
 
 		// Start requirement saver task
-		//Run save task every 2 minutes
+		// Run save task every 2 minutes
 		plugin.getServer().getScheduler()
 				.runTaskTimerAsynchronously(plugin, new Runnable() {
 					@Override
@@ -269,5 +270,30 @@ public class PlayerDataHandler {
 	
 	public String getChosenPath(UUID uuid) {
 		return config.getString(uuid.toString() + ".chosen path", "unknown");
+	}
+	
+	public boolean checkValidChosenPath(Player player) {
+		
+		String groupName = plugin.getPermPlugHandler().getPrimaryGroup(player);
+		String chosenPath = this.getChosenPath(player.getUniqueId());
+		
+		List<ChangeGroup> changeGroups = plugin.getPlayerChecker().getChangeGroupManager().getChangeGroups(groupName);
+
+		boolean validChosenPath = false;
+		
+		// Check whether the chosen path equals one of the change groups
+		for (ChangeGroup group: changeGroups) {
+			if (group.getInternalGroup().equals(chosenPath)) {
+				validChosenPath = true;
+			}
+		}
+		
+		if (!validChosenPath) {
+			// Somehow there wrong chosen path was still left over. Remove it.
+			plugin.getPlayerDataHandler().setChosenPath(player.getUniqueId(), null);
+		}
+		
+		return validChosenPath;
+		
 	}
 }
