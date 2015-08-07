@@ -47,6 +47,8 @@ public class McMMOHandler implements DependencyHandler {
 		try {
 			powerLevel = ExperienceAPI.getPowerLevel(player);
 		} catch (Exception e) {
+			
+			/*
 			Class<? extends Exception> error = e.getClass();
 			String errorMessage = error.toString().toLowerCase();
 
@@ -55,7 +57,11 @@ public class McMMOHandler implements DependencyHandler {
 						.severe("Could not get user '"
 								+ player.getName()
 								+ "' of McMMO. Report McMMOPlayerNotFoundException to mcmmo devs.");
-			}
+			}*/
+			
+			// Instead of erroring, use cache value
+			powerLevel = ExperienceAPI.getPowerLevelOffline(player.getUniqueId());
+			
 		}
 
 		return powerLevel;
@@ -80,18 +86,22 @@ public class McMMOHandler implements DependencyHandler {
 			Class<? extends Exception> error = e.getClass();
 			String errorMessage = error.toString().toLowerCase();
 
+			// Error only when invalid skill
 			if (errorMessage.contains("invalidskill")) {
 				plugin.getLogger().warning(
 						"Skill '" + skillName + "' is not a valid skill!");
 				return -1;
-			} else if (errorMessage.contains("mcmmoplayernotfound")) {
+			} /*else if (errorMessage.contains("mcmmoplayernotfound")) {
 				plugin.getLogger()
 						.severe("Could not get user '"
 								+ player.getName()
 								+ "' of McMMO. Report McMMOPlayerNotFoundException to mcmmo devs.");
 			} else {
 				e.fillInStackTrace();
-			}
+			}*/
+			
+			// instead of erroring, get cache value.
+			skillLevel = ExperienceAPI.getLevelOffline(player.getUniqueId(), skillName);
 		}
 
 		return skillLevel;
