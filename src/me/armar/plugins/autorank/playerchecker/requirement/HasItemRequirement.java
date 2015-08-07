@@ -37,7 +37,7 @@ public class HasItemRequirement extends Requirement {
 				arg.append(wrapper.getDisplayName());
 			} else {
 
-				arg.append(item.getType().toString());
+				arg.append(item.getType().toString().replace("_", " ").toLowerCase());
 
 				if (wrapper.showShortValue()) {
 					arg.append(" (Dam. value: " + item.getDurability() + ")");
