@@ -45,25 +45,6 @@ public class CheckCommand extends AutorankCommand {
 		if (event.isCancelled())
 			return;
 
-		// Check if the latest known group is the current group. Otherwise, reset progress
-		final String currentGroup = plugin.getPermPlugHandler()
-				.getPermissionPlugin()
-				.getWorldGroups(player, player.getWorld().getName())[0];
-		String latestKnownGroup = plugin.getPlayerDataHandler()
-				.getLastKnownGroup(uuid);
-
-		if (latestKnownGroup == null) {
-			plugin.getPlayerDataHandler().setLastKnownGroup(uuid, currentGroup);
-
-			latestKnownGroup = currentGroup;
-		}
-		if (!latestKnownGroup.equalsIgnoreCase(currentGroup)) {
-			// Reset progress and update latest known group
-			plugin.getPlayerDataHandler().setPlayerProgress(uuid,
-					new ArrayList<Integer>());
-			plugin.getPlayerDataHandler().setLastKnownGroup(uuid, currentGroup);
-		}
-
 		final String[] groups = plugin.getPermPlugHandler()
 				.getPermissionPlugin().getPlayerGroups(player);
 		

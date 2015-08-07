@@ -1,5 +1,8 @@
 package me.armar.plugins.autorank.permissions.handlers;
 
+import java.util.ArrayList;
+import java.util.UUID;
+
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.permissions.PermissionsHandler;
 import net.milkbowl.vault.Vault;
@@ -85,11 +88,40 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 		Autorank plugin = (Autorank) Bukkit.getPluginManager().getPlugin(
 				"Autorank");
 
+		UUID uuid = player.getUniqueId();
+		
+
+		for (String group : permission.getPlayerGroups(player)) {
+			System.out.println("Group from player '" + player.getName() + "': "
+					+ group);
+		}
+
 		// Let players choose.
 		if (plugin.getConfigHandler().onlyUsePrimaryGroupVault()) {
 			groups = new String[] { permission.getPrimaryGroup(player) };
 		} else {
 			groups = permission.getPlayerGroups(player);
+		}
+		
+		// Checking if player changed group
+		// Check if the latest known group is the current group. Otherwise, reset progress
+		String currentGroup = groups[0];
+		String latestKnownGroup = plugin.getPlayerDataHandler()
+				.getLastKnownGroup(uuid);
+
+		if (latestKnownGroup == null) {
+			plugin.getPlayerDataHandler().setLastKnownGroup(uuid, currentGroup);
+
+			latestKnownGroup = currentGroup;
+		}
+		if (!latestKnownGroup.equalsIgnoreCase(currentGroup)) {
+			// Reset progress and update latest known group
+			plugin.getPlayerDataHandler().setPlayerProgress(uuid,
+					new ArrayList<Integer>());
+			plugin.getPlayerDataHandler().setLastKnownGroup(uuid, currentGroup);
+			plugin.getPlayerDataHandler().setChosenPath(uuid, null);
+			
+			plugin.debugMessage("Reset player data for " + player.getName());
 		}
 
 		return groups;

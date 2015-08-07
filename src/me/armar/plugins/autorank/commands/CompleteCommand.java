@@ -1,6 +1,5 @@
 package me.armar.plugins.autorank.commands;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -70,25 +69,6 @@ public class CompleteCommand extends AutorankCommand {
 		}
 
 		final UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
-
-		// Check if the latest known group is the current group. Otherwise, reset progress
-		final String currentGroup = plugin.getPermPlugHandler()
-				.getPermissionPlugin().getPlayerGroups(player)[0];
-		String latestKnownGroup = plugin.getPlayerDataHandler()
-				.getLastKnownGroup(uuid);
-
-		if (latestKnownGroup == null) {
-			plugin.getPlayerDataHandler().setLastKnownGroup(uuid, currentGroup);
-
-			latestKnownGroup = currentGroup;
-		}
-
-		if (!latestKnownGroup.equalsIgnoreCase(currentGroup)) {
-			// Reset progress and update latest known group
-			plugin.getPlayerDataHandler().setPlayerProgress(uuid,
-					new ArrayList<Integer>());
-			plugin.getPlayerDataHandler().setLastKnownGroup(uuid, currentGroup);
-		}
 
 		List<Requirement> requirements = plugin.getPlayerChecker()
 				.getAllRequirements(player);
