@@ -101,7 +101,7 @@ public class ChangeGroupManager {
 	 * 
 	 * @param parentGroup Group that the ChangeGroup belongs to
 	 * @param chosenPath The internal name of the ChangeGroup
-	 * @return
+	 * @return a ChangeGroup class that corresponds to the internal name given.
 	 */
 	public ChangeGroup matchChangeGroup(String parentGroup, String chosenPath) {
 		List<ChangeGroup> changeGroup = this.getChangeGroups(parentGroup);
