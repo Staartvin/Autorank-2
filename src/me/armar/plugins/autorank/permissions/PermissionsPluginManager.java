@@ -1,10 +1,13 @@
 package me.armar.plugins.autorank.permissions;
 
+import java.util.Set;
+
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.permissions.handlers.GroupManagerHandler;
 import me.armar.plugins.autorank.permissions.handlers.PermissionsBukkitHandler;
 import me.armar.plugins.autorank.permissions.handlers.VaultPermissionsHandler;
 
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 /*
@@ -72,5 +75,40 @@ public class PermissionsPluginManager {
 			// use Vault
 			permissionPlugin = new VaultPermissionsHandler(plugin);
 		}
+	}
+
+	/**
+	 * Gets the primary permissions group a player is in.
+	 * 
+	 * @param player Player to get the group for.
+	 * @return the primary permissions group.
+	 */
+	public String getPrimaryGroup(Player player) {
+		// All groups of the player
+		String[] groups = this.getPermissionPlugin().getPlayerGroups(player);
+
+		if (groups.length == 1) {
+			return groups[0];
+		}
+
+		// In no groups
+		if (groups.length == 0)
+			return null;
+
+		// All ranks defined in the config
+		Set<String> ranks = plugin.getConfigHandler().getRanks();
+
+		for (String group : groups) {
+			// Check for every group if it is defined in the config -> if so, it probably is the primary group
+
+			for (String rank : ranks) {
+				if (group.equalsIgnoreCase(rank)) {
+					return group;
+				}
+			}
+		}
+
+		// Nothing found
+		return null;
 	}
 }
