@@ -150,10 +150,6 @@ public class PlayerDataHandler {
 
 	public String getLastKnownGroup(final UUID uuid) {
 		//UUID uuid = UUIDManager.getUUIDFromPlayer(playerName);
-
-		plugin.debugMessage("Config - Last known group: " + config);
-		plugin.debugMessage("Config - Last known group (uuid): "
-				+ uuid.toString());
 		return config.getString(uuid.toString() + ".last group");
 	}
 

@@ -89,12 +89,6 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 				"Autorank");
 
 		UUID uuid = player.getUniqueId();
-		
-
-		for (String group : permission.getPlayerGroups(player)) {
-			System.out.println("Group from player '" + player.getName() + "': "
-					+ group);
-		}
 
 		// Let players choose.
 		if (plugin.getConfigHandler().onlyUsePrimaryGroupVault()) {

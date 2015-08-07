@@ -96,11 +96,6 @@ public class GroupManagerHandler implements PermissionsHandler {
 
 			plugin.debugMessage("Reset player data for " + player.getName());
 		}
-		
-		for (String group : groups) {
-			System.out.println("Group from player '" + player.getName() + "': "
-					+ group);
-		}
 
 		return array;
 	}
