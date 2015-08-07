@@ -175,7 +175,10 @@ public class Autorank extends JavaPlugin {
 
 		setConfigHandler(null);
 
-		setRequirementHandler(null);
+		// Save playerdata.yml
+		this.getPlayerDataHandler().saveConfig();
+		
+		setPlayerDataHandler(null);
 
 		setSimpleConfig(null);
 
@@ -220,7 +223,7 @@ public class Autorank extends JavaPlugin {
 		setWarningManager(new WarningManager());
 
 		// Create requirement handler
-		setRequirementHandler(new PlayerDataHandler(this));
+		setPlayerDataHandler(new PlayerDataHandler(this));
 
 		// Create files
 		playerDataHandler.createNewFile();
@@ -548,7 +551,7 @@ public class Autorank extends JavaPlugin {
 		this.playtimes = playtimes;
 	}
 
-	public void setRequirementHandler(final PlayerDataHandler requirementHandler) {
+	public void setPlayerDataHandler(final PlayerDataHandler requirementHandler) {
 		this.playerDataHandler = requirementHandler;
 	}
 
