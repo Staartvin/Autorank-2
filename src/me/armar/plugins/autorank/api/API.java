@@ -61,17 +61,7 @@ public class API {
 	 * @return list of requirements that still have to be completed.
 	 */
 	public List<Requirement> getFailedRequirements(final Player player) {
-		final List<Requirement> failedRequirements = new ArrayList<Requirement>();
-
-		final List<Requirement> allRequirements = getAllRequirements(player);
-
-		for (final Requirement req : allRequirements) {
-			if (!req.meetsRequirement(player)) {
-				failedRequirements.add(req);
-			}
-		}
-
-		return failedRequirements;
+		return plugin.getPlayerChecker().getFailedRequirements(player);
 	}
 
 	/**
@@ -166,17 +156,10 @@ public class API {
 	 * Gets the primary permissions group of a player.
 	 * 
 	 * @param player Player to get the primary group of
-	 * @return Name of the group that appears first.
+	 * @return Name of the group that seems primary for Autorank.
 	 */
 	public String getPrimaryGroup(final Player player) {
-		final List<String> groups = getPermissionGroups(player);
-
-		if (groups.size() < 1) {
-			throw new IllegalArgumentException("Groups of player '"
-					+ player.getName() + "' are empty.");
-		}
-
-		return groups.get(0);
+		return plugin.getPermPlugHandler().getPrimaryGroup(player);
 	}
 
 	/**
