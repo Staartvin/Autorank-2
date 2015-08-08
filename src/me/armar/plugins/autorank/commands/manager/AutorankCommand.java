@@ -1,7 +1,10 @@
 package me.armar.plugins.autorank.commands.manager;
 
+import java.util.List;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 
 /**
  * This class represents an Autorank command
@@ -11,7 +14,7 @@ import org.bukkit.command.CommandSender;
  * @author Staartvin
  * 
  */
-public abstract class AutorankCommand {
+public abstract class AutorankCommand implements TabExecutor {
 
 	private String desc = "", usage = "", permission = "";
 
@@ -41,4 +44,7 @@ public abstract class AutorankCommand {
 	public void setUsage(final String usage) {
 		this.usage = usage;
 	}
+
+	public abstract List<String> onTabComplete(CommandSender sender,
+			Command cmd, String commandLabel, String[] args);
 }

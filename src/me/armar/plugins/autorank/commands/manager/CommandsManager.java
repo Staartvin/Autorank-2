@@ -95,8 +95,8 @@ public class CommandsManager implements TabExecutor {
 				new GlobalAddCommand(plugin));
 		registeredCommands.put(Arrays.asList("view", "preview"),
 				new ViewCommand(plugin));
-		registeredCommands.put(Arrays.asList("choose"),
-				new ChooseCommand(plugin));
+		registeredCommands.put(Arrays.asList("choose"), new ChooseCommand(
+				plugin));
 	}
 
 	public HashMap<List<String>, AutorankCommand> getRegisteredCommands() {
@@ -156,40 +156,68 @@ public class CommandsManager implements TabExecutor {
 	public List<String> onTabComplete(final CommandSender sender,
 			final Command cmd, final String commandLabel, final String[] args) {
 
-		if (args.length == 1) {
+		if (args.length <= 1) {
 			// Show a list of commands if needed
-			
+
 			List<String> commands = new ArrayList<String>();
-			
-			for (Entry<List<String>, AutorankCommand> entry: registeredCommands.entrySet()) {
+
+			for (Entry<List<String>, AutorankCommand> entry : registeredCommands
+					.entrySet()) {
 				List<String> list = entry.getKey();
-				
+
 				commands.add(list.get(0));
 			}
-			
+
 			/*Lists.newArrayList("help", "check", "leaderboard", "set",
 					"add", "remove", "debug", "reload", "import", "archive",
 					"gcheck", "complete", "sync", "syncstats", "forcecheck",
 					"convert", "track", "gset", "hooks", "gadd", "view");*/
-			
+
 			return commands;
 		}
 
-		if (args.length > 1) {
-			final String subCommand = args[0];
+		String subCommand = args[0].trim();
 
-			if (subCommand.equalsIgnoreCase("add")
-					|| subCommand.equalsIgnoreCase("remove")
-					|| subCommand.equalsIgnoreCase("set")) {
-				// Give example numbers if needed.
-				if (args.length == 3) {
-					return Lists.newArrayList("5", "10", "15", "20", "25",
-							"30", "35", "40", "45", "50", "55", "60");
+		if (subCommand.equalsIgnoreCase("set")
+				|| subCommand.equalsIgnoreCase("add")
+				|| subCommand.equalsIgnoreCase("remove")
+				|| subCommand.equalsIgnoreCase("rem")
+				|| subCommand.equalsIgnoreCase("gadd")
+				|| subCommand.equalsIgnoreCase("gset")) {
+			
+			if (args.length > 2) {
+				
+				String arg = args[2];
+				
+				int count = 0;
+				
+				try {
+					count = Integer.parseInt(arg);
+				} catch (NumberFormatException e) {
+					count = 0;
 				}
+				
+				return Lists.newArrayList("" + (count + 5));
+						
 			}
+			
+			return null;
+			
 		}
 
-		// TODO Auto-generated method stub
+			// Return on tab complete of sub command
+			for (Entry<List<String>, AutorankCommand> entry : registeredCommands
+					.entrySet()) {
+
+				for (String alias : entry.getKey()) {
+					if (subCommand.trim().equalsIgnoreCase(alias)) {
+						return entry.getValue().onTabComplete(sender, cmd,
+								commandLabel, args);
+					}
+				}
+
+			}
+
 		return null;
 	}
 }
