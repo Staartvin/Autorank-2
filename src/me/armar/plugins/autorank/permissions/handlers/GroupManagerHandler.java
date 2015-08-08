@@ -168,4 +168,13 @@ public class GroupManagerHandler implements PermissionsHandler {
 
 		return groupManager != null;
 	}
+
+	/* (non-Javadoc)
+	 * @see me.armar.plugins.autorank.permissions.PermissionsHandler#getName()
+	 */
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return "GroupManager";
+	}
 }

@@ -30,5 +30,7 @@ public interface PermissionsHandler {
 
 	public boolean replaceGroup(Player player, String world, String groupFrom,
 			String groupTo);
+	
+	public String getName();
 
 }
