@@ -34,7 +34,7 @@ use time of: Autorank
 # 3. OnTime
 # If no valid time plugin was found, it defaults to Autorank
 
-leaderboard layout: '&6&r | &b&p - &7&d day(s), &h hour(s) and &m minute(s).'
+leaderboard layout: '&6&r | &b&p - &7&d %day%, &h %hour% and &m %minute%.'
 leaderboard length: 5
 # changes the appearance of the /ar leaderboard command
 # &r : Ranking in the leaderboard
