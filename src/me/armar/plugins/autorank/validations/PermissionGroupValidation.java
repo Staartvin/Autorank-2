@@ -33,8 +33,17 @@ public class PermissionGroupValidation {
 		if (rankChange == null)
 			return true;
 
-		if (rankChange.trim().equals(""))
+		if (rankChange.trim().equals("")) {
+			autorank.getWarningManager()
+			.registerWarning(
+					"Rank change of rank '"
+							+ group
+							+ "' is invalid. It doesn't exist!",
+					10);
+			
 			return false;
+		}
+			
 
 		if (!rankChange.contains(";")) {
 			boolean isMissing = true;
@@ -43,6 +52,15 @@ public class PermissionGroupValidation {
 				if (group1.equals(rankChange.trim())) {
 					isMissing = false;
 				}
+			}
+			
+			if (isMissing) {
+				autorank.getWarningManager()
+				.registerWarning(
+						"Rank change of rank '"
+								+ group
+								+ "' is invalid. Rank '" + rankChange.trim() + "' doesn't exist in the permissions file!",
+						10);
 			}
 
 			return !isMissing;
@@ -118,8 +136,12 @@ public class PermissionGroupValidation {
 							10);
 			return false;
 		}
-
-		return (rankFrom.equals(group) && !isMissingRankTo && !isMissingRankFrom);
+		
+		if (!rankFrom.equals(group) && !group.contains("-copy")) {			
+			return false;
+		}
+		
+		return true;
 	}
 
 	/**
