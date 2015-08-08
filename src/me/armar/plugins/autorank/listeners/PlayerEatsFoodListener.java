@@ -41,7 +41,7 @@ public class PlayerEatsFoodListener implements Listener {
 			return;
 
 		Player p = event.getPlayer();
-
+		
 		String foodName = AutorankTools.getFoodName(event.getItem());
 
 		if (foodName == null)
