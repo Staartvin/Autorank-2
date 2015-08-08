@@ -558,23 +558,41 @@ public class AutorankTools {
 		} else
 			return null;
 	}
-	
+
 	public static String createStringFromList(Collection<?> c) {
 		StringBuilder builder = new StringBuilder("");
-		
+
 		Object[] array = c.toArray();
-		
-		for (int i=0;i<c.size();i++) {
-			
-			if (i==0) {
-				builder.append(ChatColor.GRAY + array[i].toString() + ChatColor.RESET);
+
+		for (int i = 0; i < c.size(); i++) {
+
+			if (i == 0) {
+				builder.append(ChatColor.GRAY + array[i].toString()
+						+ ChatColor.RESET);
 			} else if (i == (c.size() - 1)) {
-				builder.append(" and " + ChatColor.GRAY + array[i].toString() + ChatColor.RESET);
+				builder.append(" and " + ChatColor.GRAY + array[i].toString()
+						+ ChatColor.RESET);
 			} else {
-				builder.append(", " + ChatColor.GRAY + array[i].toString() + ChatColor.RESET);
+				builder.append(", " + ChatColor.GRAY + array[i].toString()
+						+ ChatColor.RESET);
 			}
 		}
-		
+
 		return builder.toString();
+	}
+
+	public static String getStringFromArgs(String[] args, int startArg) {
+		StringBuilder string = new StringBuilder("");
+
+		for (int i = startArg; i < args.length; i++) {
+
+			if (i == startArg) {
+				string.append(args[i]);
+			} else {
+				string.append(" " + args[i]);
+			}
+		}
+
+		return string.toString();
 	}
 }

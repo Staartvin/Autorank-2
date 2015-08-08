@@ -7,6 +7,7 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.rankbuilder.ChangeGroup;
+import me.armar.plugins.autorank.util.AutorankTools;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -47,7 +48,7 @@ public class ChooseCommand extends AutorankCommand {
 		
 		Player player = (Player) sender;
 		
-		String pathName = args[1];
+		String pathName = AutorankTools.getStringFromArgs(args, 1);
 		
 		String groupName = plugin.getAPI().getPrimaryGroup(player);
 		

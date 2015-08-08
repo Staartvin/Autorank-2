@@ -47,7 +47,7 @@ public class ViewCommand extends AutorankCommand {
 		
 		Player player = (Player) sender;
 		
-		String pathName = args[1];
+		String pathName = AutorankTools.getStringFromArgs(args, 1);
 		
 		String groupName = plugin.getAPI().getPrimaryGroup(player);
 		
