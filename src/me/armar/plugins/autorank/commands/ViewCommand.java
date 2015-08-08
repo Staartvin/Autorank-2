@@ -1,5 +1,6 @@
 package me.armar.plugins.autorank.commands;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import me.armar.plugins.autorank.Autorank;
@@ -30,27 +31,28 @@ public class ViewCommand extends AutorankCommand {
 			final String label, final String[] args) {
 
 		// This command will give a preview of a certain path of ranking.
-		if (!plugin.getCommandsManager()
-				.hasPermission("autorank.view", sender)) {
+		if (!plugin.getCommandsManager().hasPermission("autorank.view", sender)) {
 			return true;
 		}
 
 		if (args.length < 2) {
-			sender.sendMessage(Lang.INVALID_FORMAT.getConfigValue("/ar view <path name> or /ar view list"));
+			sender.sendMessage(Lang.INVALID_FORMAT
+					.getConfigValue("/ar view <path name> or /ar view list"));
 			return true;
 		}
-		
+
 		if (!(sender instanceof Player)) {
-			sender.sendMessage(Lang.YOU_ARE_A_ROBOT.getConfigValue("you can't view ranking paths of players, silly.."));
+			sender.sendMessage(Lang.YOU_ARE_A_ROBOT
+					.getConfigValue("you can't view ranking paths of players, silly.."));
 			return true;
 		}
-		
+
 		Player player = (Player) sender;
-		
+
 		String pathName = AutorankTools.getStringFromArgs(args, 1);
-		
+
 		String groupName = plugin.getAPI().getPrimaryGroup(player);
-		
+
 		if (pathName.equals("list")) {
 			sender.sendMessage(ChatColor.GREEN + "You can choose these paths: ");
 
@@ -60,24 +62,59 @@ public class ViewCommand extends AutorankCommand {
 			sender.sendMessage(ChatColor.WHITE + pathsString);
 			return true;
 		}
-		
-		ChangeGroup changeGroup = plugin.getPlayerChecker().getChangeGroupManager().matchChangeGroupFromDisplayName(groupName, pathName.toLowerCase());
-		
+
+		ChangeGroup changeGroup = plugin
+				.getPlayerChecker()
+				.getChangeGroupManager()
+				.matchChangeGroupFromDisplayName(groupName,
+						pathName.toLowerCase());
+
 		if (changeGroup == null) {
-			sender.sendMessage(ChatColor.RED + "There was no ranking path found.");
+			sender.sendMessage(ChatColor.RED
+					+ "There was no ranking path found.");
 			return true;
 		}
-		
-		List<String> messages = plugin.getPlayerChecker().getRequirementsInStringList(changeGroup.getRequirements(), plugin.getPlayerChecker().getMetRequirements(changeGroup.getRequirements(), player));
-		
+
+		List<String> messages = plugin.getPlayerChecker()
+				.getRequirementsInStringList(
+						changeGroup.getRequirements(),
+						plugin.getPlayerChecker().getMetRequirements(
+								changeGroup.getRequirements(), player));
+
 		for (final String message : messages) {
 			AutorankTools.sendColoredMessage(sender, message);
 		}
-		
-		sender.sendMessage(ChatColor.GREEN + "Preview of path '" + ChatColor.GRAY + pathName + ChatColor.GREEN + "'");
+
+		sender.sendMessage(ChatColor.GREEN + "Preview of path '"
+				+ ChatColor.GRAY + pathName + ChatColor.GREEN + "'");
 
 		return true;
 	}
-	
+
+	/* (non-Javadoc)
+	 * @see me.armar.plugins.autorank.commands.manager.AutorankCommand#onTabComplete(org.bukkit.command.CommandSender, org.bukkit.command.Command, java.lang.String, java.lang.String[])
+	 */
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command cmd,
+			String commandLabel, String[] args) {
+		// TODO Auto-generated method stub
+		Player player = (Player) sender;
+
+		List<String> possibilities = new ArrayList<String>();
+
+		String groupName = plugin.getPermPlugHandler().getPrimaryGroup(player);
+
+		List<ChangeGroup> changeGroups = plugin.getPlayerChecker()
+				.getChangeGroupManager().getChangeGroups(groupName);
+
+		// List shows a list of changegroups to view
+		possibilities.add("list");
+
+		for (ChangeGroup changeGroup : changeGroups) {
+			possibilities.add(changeGroup.getDisplayName());
+		}
+
+		return possibilities;
+	}
 
 }

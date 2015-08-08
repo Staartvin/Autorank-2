@@ -131,4 +131,14 @@ public class CompleteCommand extends AutorankCommand {
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see me.armar.plugins.autorank.commands.manager.AutorankCommand#onTabComplete(org.bukkit.command.CommandSender, org.bukkit.command.Command, java.lang.String, java.lang.String[])
+	 */
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command cmd,
+			String commandLabel, String[] args) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

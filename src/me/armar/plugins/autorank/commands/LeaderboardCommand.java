@@ -1,5 +1,7 @@
 package me.armar.plugins.autorank.commands;
 
+import java.util.List;
+
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
@@ -62,6 +64,16 @@ public class LeaderboardCommand extends AutorankCommand {
 		}
 
 		return true;
+	}
+
+	/* (non-Javadoc)
+	 * @see me.armar.plugins.autorank.commands.manager.AutorankCommand#onTabComplete(org.bukkit.command.CommandSender, org.bukkit.command.Command, java.lang.String, java.lang.String[])
+	 */
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command cmd,
+			String commandLabel, String[] args) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

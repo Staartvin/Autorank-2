@@ -1,5 +1,6 @@
 package me.armar.plugins.autorank.commands;
 
+import java.util.List;
 import java.util.UUID;
 
 import me.armar.plugins.autorank.Autorank;
@@ -104,6 +105,16 @@ public class GlobalCheckCommand extends AutorankCommand {
 					Lang.CANNOT_CHECK_CONSOLE.getConfigValue());
 		}
 		return true;
+	}
+
+	/* (non-Javadoc)
+	 * @see me.armar.plugins.autorank.commands.manager.AutorankCommand#onTabComplete(org.bukkit.command.CommandSender, org.bukkit.command.Command, java.lang.String, java.lang.String[])
+	 */
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command cmd,
+			String commandLabel, String[] args) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
