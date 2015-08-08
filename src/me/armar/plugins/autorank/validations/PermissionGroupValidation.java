@@ -102,18 +102,37 @@ public class PermissionGroupValidation {
 			if (group1 == null)
 				continue;
 
+			if (group1.equalsIgnoreCase(group) && autorank.getPermPlugHandler().getPermissionPlugin().getName().contains("bPermissions")) {
+				// bPerms does not care about case-sensitivity.
+				isMissingRankTo = false;
+				break;
+			}
+			
 			if (group1.equalsIgnoreCase(rankTo.trim())) {
 				isMissingRankTo = false;
+				break;
 			}
 		}
-
+		
 		// Check whether the rankFrom exists
 		for (final String group1 : groups) {
 			if (group1 == null)
 				continue;
+			
+			if (group.contains("-copy-")) {
+				isMissingRankFrom = false;
+				break;
+			}
 
+			if (group1.equalsIgnoreCase(group) && autorank.getPermPlugHandler().getPermissionPlugin().getName().contains("bPermissions")) {
+				// bPerms does not care about case-sensitivity.
+				isMissingRankFrom = false;
+				break;
+			}
+			
 			if (group1.equals(rankFrom.trim())) {
 				isMissingRankFrom = false;
+				break;
 			}
 		}
 
@@ -175,7 +194,12 @@ public class PermissionGroupValidation {
 				if (rank.contains("-copy-")) {
 					break;
 				}
-
+				
+				if (rank.equalsIgnoreCase(group) && autorank.getPermPlugHandler().getPermissionPlugin().getName().contains("bPermissions")) {
+					// bPerms does not care about case-sensitivity.
+					break;
+				}
+				
 				if (rank.equalsIgnoreCase(group)) {
 					// Do not log but register warning
 					autorank.getWarningManager().registerWarning(
