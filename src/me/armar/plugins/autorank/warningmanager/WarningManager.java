@@ -1,7 +1,9 @@
 package me.armar.plugins.autorank.warningmanager;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map.Entry;
+
+import me.armar.plugins.autorank.Autorank;
 
 /**
  * This class handles all warning message that are displayed when something is
@@ -43,40 +45,27 @@ import java.util.List;
  */
 public class WarningManager {
 
-	private String highestPriorityWarn = "none";
-	private final List<String> warnings = new ArrayList<String>();
+	private Autorank plugin;
+
+	public WarningManager(Autorank plugin) {
+		this.plugin = plugin;
+	}
+
+	private final HashMap<String, Integer> warnings = new HashMap<String, Integer>();
 
 	private String findHighestPriorityWarning() {
 		String highestWarning = null;
 		int highestPriority = 0;
 
-		for (final String warning : warnings) {
-			if (findPriority(warning) > highestPriority) {
-				highestPriority = findPriority(warning);
+		for (final Entry<String, Integer> entry : warnings.entrySet()) {
 
-				highestWarning = findMessage(warning);
+			if (entry.getValue() > highestPriority) {
+				highestPriority = entry.getValue();
+				highestWarning = entry.getKey();
 			}
 		}
 
 		return highestWarning;
-	}
-
-	private String findMessage(final String warning) {
-		if (!warning.contains(">"))
-			return warning;
-
-		final String[] splitter = warning.split(">");
-
-		return splitter[0];
-	}
-
-	private int findPriority(final String warning) {
-		if (!warning.contains(">"))
-			return 1;
-
-		final String[] splitter = warning.split(">");
-
-		return Integer.parseInt(splitter[1]);
 	}
 
 	/**
@@ -87,18 +76,14 @@ public class WarningManager {
 	 */
 	public String getHighestWarning() {
 
-		// No warnings registered
-		if (highestPriorityWarn == null) {
+		String highestWarning = findHighestPriorityWarning();
+
+		if (highestWarning == null) {
 			return null;
 		}
 
-		// Never checked yet
-		if (highestPriorityWarn.equals("none")) {
-			highestPriorityWarn = findHighestPriorityWarning();
-		}
-
 		// Return the highest one
-		return highestPriorityWarn;
+		return highestWarning;
 	}
 
 	/**
@@ -116,8 +101,14 @@ public class WarningManager {
 			priority = 1;
 		}
 
-		final String fullString = message + ">" + priority;
+		warnings.put(message, priority);
+	}
 
-		warnings.add(fullString);
+	public void startWarningTask() {
+		// Create a new task that runs every 30 seconds (will show a warning every 30 seconds)
+		plugin.getServer()
+				.getScheduler()
+				.runTaskTimerAsynchronously(plugin,
+						new WarningNoticeTask(plugin), 0, 30L * 20L);
 	}
 }
