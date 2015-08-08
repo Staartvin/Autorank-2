@@ -63,7 +63,6 @@ import me.armar.plugins.autorank.updater.Updater;
 import me.armar.plugins.autorank.util.uuid.storage.UUIDStorage;
 import me.armar.plugins.autorank.validations.ValidateHandler;
 import me.armar.plugins.autorank.warningmanager.WarningManager;
-import me.armar.plugins.autorank.warningmanager.WarningNoticeTask;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -195,7 +194,6 @@ public class Autorank extends JavaPlugin {
 						getDescription().getVersion()));
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void onEnable() {
 
@@ -220,7 +218,7 @@ public class Autorank extends JavaPlugin {
 		getUUIDStorage().createNewFiles();
 
 		// Create warning manager
-		setWarningManager(new WarningManager());
+		setWarningManager(new WarningManager(this));
 
 		// Create requirement handler
 		setPlayerDataHandler(new PlayerDataHandler(this));
@@ -322,7 +320,7 @@ public class Autorank extends JavaPlugin {
 		res.registerResult("firework", SpawnFireworkResult.class);
 
 		// Load requirements and results per group from config
-		playerChecker.getChangeGroupManager().initialiseFromConfigs();
+		//playerChecker.getChangeGroupManager().initialiseFromConfigs();
 
 		// Load again after 5 seconds so custom commands can be listed
 		getServer().getScheduler().runTaskLaterAsynchronously(this,
@@ -331,24 +329,25 @@ public class Autorank extends JavaPlugin {
 					public void run() {
 
 						getPlayerChecker().getChangeGroupManager().initialiseFromConfigs();
+						
+						// Validate configs after that
+						if (configHandler.useAdvancedConfig()) {
+							getValidateHandler().validateConfigGroups(
+									getAdvancedConfig());
+						} else {
+							getValidateHandler()
+									.validateConfigGroups(getSimpleConfig());
+						}
+						
+						// Start warning task if a warning has been found
+						if (getWarningManager().getHighestWarning() != null) {
+							getWarningManager().startWarningTask();
+						}
 					}
 				}, 100);
 
 		// Register command
 		getCommand("autorank").setExecutor(getCommandsManager());
-
-		// Validate config files -- after 20 seconds
-		getServer().getScheduler().runTaskLater(this, new Runnable() {
-			public void run() {
-				if (configHandler.useAdvancedConfig()) {
-					getValidateHandler().validateConfigGroups(
-							getAdvancedConfig());
-				} else {
-					getValidateHandler()
-							.validateConfigGroups(getSimpleConfig());
-				}
-			}
-		}, 20 * 20);
 
 		// Setup language file
 		languageHandler.createNewFile();
@@ -370,10 +369,6 @@ public class Autorank extends JavaPlugin {
 		getLogger().info(
 				String.format("Autorank %s has been enabled!", getDescription()
 						.getVersion()));
-
-		// Create a new task that runs every 30 seconds (will show a warning every 30 seconds)
-		getServer().getScheduler().runTaskTimer(this,
-				new WarningNoticeTask(this), 5L * 20L, 30L * 20L);
 
 		// Start collecting data
 		if (!startMetrics()) {
