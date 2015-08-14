@@ -253,11 +253,6 @@ public class StatsAPIHandler implements DependencyHandler {
 			value += s.getValue();
 
 		}
-//		for (final Object[] vars : stat.getAllVariables()) {
-//			if ((Integer) vars[0] == type) {
-//				value += stat.getValue(vars);
-//			}
-//		}
 
 		return value;
 	}
