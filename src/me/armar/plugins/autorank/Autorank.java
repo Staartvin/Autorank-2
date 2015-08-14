@@ -361,7 +361,6 @@ public class Autorank extends JavaPlugin {
 						+ getConfigHandler().useTimeOf().toString()
 								.toLowerCase());
 
-		// Set addon manager
 		// Note that custom requirements and results are not yet loaded into memory.
 		// TODO Add support for custom requirements and results.
 		setAddonManager(new AddOnManager(this));
@@ -389,8 +388,7 @@ public class Autorank extends JavaPlugin {
 		}
 
 		// Start automatic backup
-		this.getBackupManager().startBackupSystem();
-
+		this.getBackupManager().startBackupSystem();	
 	}
 	
 
