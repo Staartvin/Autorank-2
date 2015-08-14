@@ -86,11 +86,11 @@ public class API {
 
 	/**
 	 * Gets the local play time of this player on this server according to
-	 * Autorank. <br>
+	 * Autorank. (in minutes)<br>
 	 * This method will grab the time from the data.yml used by Autorank and <br>
 	 * this is not dependend on other plugins.
 	 * 
-	 * @deprecated use getLocalPlayTime(UUID uuid) instead.
+	 * @deprecated Use getLocalPlayTime(UUID uuid) instead.
 	 * @param player Player to get the time for.
 	 * @return play time of this player or 0 if not found.
 	 */
@@ -101,6 +101,9 @@ public class API {
 		return plugin.getPlaytimes().getLocalTime(uuid);
 	}
 
+	/**
+	 * @see #getLocalTime(Player)
+	 **/
 	public int getLocalPlayTime(final UUID uuid) {
 		return plugin.getPlaytimes().getLocalTime(uuid);
 	}
