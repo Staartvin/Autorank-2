@@ -93,7 +93,7 @@ public class NameFetcher implements Callable<Map<UUID, String>> {
 				// Try converting the stream to a string and removing all the spaces. 
 				fromStream = fromStream(connection.getInputStream())
 						.replaceAll(" ", "");
-
+				
 				// Parse again
 				response = (JSONObject) jsonParser.parse(fromStream);
 
@@ -106,10 +106,10 @@ public class NameFetcher implements Callable<Map<UUID, String>> {
 					continue;
 				}
 
-				final String cause = (String) response.get("cause");
+				String error = (String) response.get("error");
 				final String errorMessage = (String) response
 						.get("errorMessage");
-				if (cause != null && cause.length() > 0) {
+				if (error != null && error.length() > 0) {
 					throw new IllegalStateException(errorMessage);
 				}
 			} finally {
