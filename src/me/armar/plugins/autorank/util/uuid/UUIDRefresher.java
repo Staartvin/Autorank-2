@@ -52,7 +52,6 @@ public class UUIDRefresher implements Runnable {
 			
 			// Show progress every 1000
 			if (i % 1000 == 0) {
-				//System.out.println("I: " + i);
 				plugin.debugMessage("Setup progress: " + i + "/" + uuids.size());
 			}
 			
