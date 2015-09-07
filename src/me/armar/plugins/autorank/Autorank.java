@@ -60,6 +60,7 @@ import me.armar.plugins.autorank.rankbuilder.builders.ResultBuilder;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.armar.plugins.autorank.updater.UpdateHandler;
 import me.armar.plugins.autorank.updater.Updater;
+import me.armar.plugins.autorank.util.uuid.UUIDRefresher;
 import me.armar.plugins.autorank.util.uuid.storage.UUIDStorage;
 import me.armar.plugins.autorank.validations.ValidateHandler;
 import me.armar.plugins.autorank.warningmanager.WarningManager;
@@ -256,6 +257,9 @@ public class Autorank extends JavaPlugin {
 
 		// Create playtime class
 		setPlaytimes(new Playtimes(this));
+		
+		// Refresh player data
+		this.getServer().getScheduler().runTaskAsynchronously(this, new UUIDRefresher(this));
 
 		// Convert data folder
 		//playtimes.convertToUUIDStorage();
