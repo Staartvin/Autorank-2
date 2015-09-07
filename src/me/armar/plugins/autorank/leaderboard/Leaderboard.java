@@ -102,7 +102,10 @@ public class Leaderboard {
 				continue;
 			}
 
-			String playerName = plugin.getUUIDStorage().getPlayerName(
+			// Get the cached value of this uuid
+			String playerName = plugin.getUUIDStorage().getPlayerName(uuids.get(i)); 
+					
+					plugin.getUUIDStorage().getPlayerName(
 					uuids.get(i));
 
 			if (playerName == null) {
@@ -112,9 +115,9 @@ public class Leaderboard {
 				continue;
 			}
 
-			// We should use getTimeOfPlayer(), but that requires a lot of rewrites, so I'll leave it at the moment.
+			// Use cache on .getTimeOfPlayer() so that we don't refresh all uuids in existence.
 			times.put(uuids.get(i),
-					(plugin.getPlaytimes().getTimeOfPlayer(playerName) / 60));
+					(plugin.getPlaytimes().getTimeOfPlayer(playerName, true) / 60));
 		}
 
 		// Sort all values

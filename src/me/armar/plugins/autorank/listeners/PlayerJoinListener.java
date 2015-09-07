@@ -31,7 +31,7 @@ public class PlayerJoinListener implements Listener {
 		// Add cached player
 		//UUIDManager.addCachedPlayer(player);
 
-		// Store uuid of player
+		// Refresh uuid of the player if it is outdated
 		if (plugin.getUUIDStorage().isOutdated(player.getName())) {
 			plugin.getUUIDStorage().storeUUID(player.getName(),
 					player.getUniqueId());

@@ -258,14 +258,21 @@ public class Playtimes {
 	 * Time is seconds.
 	 * 
 	 * @param playerName Player to get the time for
+	 * @param cache whether to only use cache or use real time values.
 	 * @return play time of given player or 0 if not found.
 	 */
-	public int getTimeOfPlayer(final String playerName) {
+	public int getTimeOfPlayer(final String playerName, boolean cache) {
 
 		int playTime = 0;
 
 		UUID uuid = null;
-		uuid = UUIDManager.getUUIDFromPlayer(playerName);
+
+		// If using cache, just get the latest stored uuid
+		if (cache) {
+			uuid = plugin.getUUIDStorage().getStoredUUID(playerName);
+		} else {
+			uuid = UUIDManager.getUUIDFromPlayer(playerName);
+		}
 
 		// Determine what plugin to use for getting the time.
 		if (timePlugin.equals(dependency.STATS)) {
@@ -290,8 +297,6 @@ public class Playtimes {
 			// Time is in minutes, so convert to seconds
 			playTime = playTime * 60;
 		} else {
-
-			uuid = UUIDManager.getUUIDFromPlayer(playerName);
 
 			if (uuid == null)
 				return playTime;

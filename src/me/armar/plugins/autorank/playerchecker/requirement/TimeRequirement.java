@@ -38,7 +38,7 @@ public class TimeRequirement extends Requirement {
 		String progress = "";
 
 		final int playtime = (getAutorank().getPlaytimes().getTimeOfPlayer(
-				player.getName()) / 60);
+				player.getName(), true) / 60);
 
 		/*for (int i=0;i<times.size();i++) {
 			int time = times.get(i);
@@ -60,7 +60,7 @@ public class TimeRequirement extends Requirement {
 		// Use getTimeOf so that when switched to another time, it'll still work.
 		// getTimeOfPlayer() is in seconds, so convert.
 		final double playtime = this.getAutorank().getPlaytimes()
-				.getTimeOfPlayer(player.getName()) / 60;
+				.getTimeOfPlayer(player.getName(), true) / 60;
 
 		for (final int time : times) {
 			if (time != -1 && time <= playtime) {

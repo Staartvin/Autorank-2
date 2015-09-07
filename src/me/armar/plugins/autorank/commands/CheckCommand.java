@@ -85,7 +85,7 @@ public class CheckCommand extends AutorankCommand {
 		layout = layout.replace("&p", player.getName());
 		layout = layout.replace("&time",
 				AutorankTools.timeToString(plugin.getPlaytimes()
-						.getTimeOfPlayer(player.getName()), Time.SECONDS));
+						.getTimeOfPlayer(player.getName(), true), Time.SECONDS));
 
 		final StringBuilder groupsString = new StringBuilder("");
 
@@ -288,7 +288,7 @@ public class CheckCommand extends AutorankCommand {
 			final Player player = plugin.getServer().getPlayer(args[1]);
 			if (player == null) {
 
-				final int time = plugin.getPlaytimes().getTimeOfPlayer(args[1]);
+				final int time = plugin.getPlaytimes().getTimeOfPlayer(args[1], true);
 
 				if (time <= 0) {
 					sender.sendMessage(Lang.PLAYER_IS_INVALID
