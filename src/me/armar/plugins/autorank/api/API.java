@@ -175,7 +175,7 @@ public class API {
 	 * @return play time of a player. 0 when has never played before.
 	 */
 	public int getTimeOfPlayer(final Player player) {
-		return plugin.getPlaytimes().getTimeOfPlayer(player.getName());
+		return plugin.getPlaytimes().getTimeOfPlayer(player.getName(), true);
 	}
 
 	/**
