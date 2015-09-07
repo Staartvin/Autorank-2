@@ -34,7 +34,7 @@ public class UUIDStorage {
 	private final String desFolder;
 
 	// Expiration date in hours
-	private final int expirationDate = 12;
+	private final int expirationDate = 24;
 
 	private final List<String> fileSuffixes = Arrays.asList("a", "b", "c", "d",
 			"e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q",
