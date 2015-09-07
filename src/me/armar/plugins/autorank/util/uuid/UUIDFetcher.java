@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 
+import org.bukkit.Bukkit;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -109,6 +110,7 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
 				array = (JSONArray) jsonParser.parse(new InputStreamReader(
 						connection.getInputStream()));
 			} catch (final Exception e) {
+				
 				System.out.print("[Autorank] Could not fetch UUID of player '"
 						+ names.get(i) + "'!");
 				continue;
@@ -124,7 +126,10 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
 				uuidMap.put(name, uuid);
 			}
 			if (rateLimiting && i != requests - 1) {
-				Thread.sleep(100L);
+				// Sleep for 10 minutes
+				Bukkit.getServer().getLogger()
+						.info("[Autorank] Waiting for 10 minutes");
+				Thread.sleep(60000L);
 			}
 		}
 		return uuidMap;
