@@ -29,7 +29,7 @@
 	<classpathentry kind="lib" path="lib/UltimateCore.jar"/>
 	<classpathentry kind="lib" path="lib/Statistics.jar">
 		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/Autorank2/lib/Statistics.jar!/"/>
+			<attribute name="javadoc_location" value="jar:platform:/resource/Autorank2/lib/Statistics.jar/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/spigot.jar">
@@ -49,5 +49,10 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/UltimateCore_old.jar"/>
 	<classpathentry kind="lib" path="lib/afkTerminator.jar"/>
+	<classpathentry kind="lib" path="lib/spigot-api.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="https://hub.spigotmc.org/javadocs/spigot/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
