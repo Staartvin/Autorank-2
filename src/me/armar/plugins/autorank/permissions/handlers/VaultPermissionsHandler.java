@@ -157,8 +157,18 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 		System.out.print("World: " + world);
 		System.out.print("Player: " + player);*/
 
+		
+		
 		final boolean worked1 = addGroup(player, world, newGroup);
-		final boolean worked2 = removeGroup(player, world, oldGroup);
+		
+		boolean worked2 = false;
+		
+		if (permission.getName().toLowerCase().contains("permissionsex")) {
+			worked2 = true;
+		} else {
+			worked2 = removeGroup(player, world, oldGroup);
+		}
+		
 
 		//System.out.print("Worked1: " + worked1);
 		//System.out.print("Worked2: " + worked2);
