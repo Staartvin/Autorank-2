@@ -14,14 +14,16 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 /**
- * @author Staartvin
- *         VaultPermissionsHandler tackles all work that has to be done with
- *         Vault. (Most of the permissions plugins
- *         are supported with Vault)
+ * @author Staartvin & DeathStampler (see replaceGroup())
+ * <p>
+ * VaultPermissionsHandler tackles all work that has to be done with
+ * Vault. (Most of the permissions plugins
+ * are supported with Vault)
  */
 public class VaultPermissionsHandler implements PermissionsHandler {
 
 	private static Permission permission = null;
+	private Autorank plugin;
 
 	public VaultPermissionsHandler(final Autorank plugin) {
 		if (!setupPermissions(plugin)) {
@@ -40,6 +42,8 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 						}
 					}, 60L);
 		}
+
+		this.plugin = plugin;
 	}
 
 	/**
@@ -92,7 +96,7 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 		} else {
 			groups = permission.getPlayerGroups(player);
 		}
-		
+
 		// Checking if player changed group
 		// Check if the latest known group is the current group. Otherwise, reset progress
 		String currentGroup = groups[0];
@@ -110,7 +114,7 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 					new ArrayList<Integer>());
 			plugin.getPlayerDataHandler().setLastKnownGroup(uuid, currentGroup);
 			plugin.getPlayerDataHandler().setChosenPath(uuid, null);
-			
+
 			plugin.debugMessage("Reset player data for " + player.getName());
 		}
 
@@ -152,28 +156,64 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 				&& permission.getName().toLowerCase().contains("bpermissions")) {
 			world = player.getWorld().getName();
 		}
-		/*System.out.print("Group To: " + newGroup);
-		System.out.print("Group From: " + oldGroup);
-		System.out.print("World: " + world);
-		System.out.print("Player: " + player);*/
 
-		
-		
-		final boolean worked1 = addGroup(player, world, newGroup);
-		
-		boolean worked2 = false;
-		
-		if (permission.getName().toLowerCase().contains("permissionsex")) {
-			worked2 = true;
-		} else {
-			worked2 = removeGroup(player, world, oldGroup);
+		// Let get the player groups before we change them.
+		String[] groupsBeforeAdd = getPlayerGroups(player);
+
+		// Output array for debug
+		for (String group : groupsBeforeAdd) {
+			plugin.debugMessage("Group of " + player.getName()
+					+ " before adding: " + group);
 		}
-		
 
-		//System.out.print("Worked1: " + worked1);
-		//System.out.print("Worked2: " + worked2);
+		String[] groupsAfterAdd = null;
 
-		//System.out.print("In group: " + permission.playerInGroup(world, player.getName(), newGroup));
+		final boolean worked1 = addGroup(player, world, newGroup);
+
+		boolean worked2 = false;
+
+		if (worked1) {
+			// There should be a difference between the two.
+			groupsAfterAdd = getPlayerGroups(player);
+
+			// Output array for debug
+			for (String group : groupsAfterAdd) {
+				plugin.debugMessage("Group of " + player.getName()
+						+ " after adding: " + group);
+			}
+
+			// When using PEX, if a player is in a default group this is not really listed as the player being in the group. 
+			// It's just used as an alias. When we would change the rank, the player would lose all other default groups.
+			// We check if the player is in a default group and then re-add the other groups after we added the new group the player was ranked up to.
+			// Thanks to @DeathStampler for this code and info.
+			if (permission.getName().toLowerCase().contains("permissionsex")) {
+				// Normally the player should have one more group at this point.
+				if (groupsAfterAdd.length > (groupsBeforeAdd.length + 1)) {
+					// We have one more groups than before.  Great.  Let's remove oldGroup.
+					worked2 = removeGroup(player, world, oldGroup);
+
+					// Otherwise, let's see if we have just one group.  This is an indication that the
+					// PermissionsEX player had more than one default group set.  Those are now gone 
+					// and we are left with just the newGroup.
+				} else if (groupsAfterAdd.length == 1) {
+					// We have just one group.  Let's add any that are missing.
+					for (String group : groupsBeforeAdd) {
+						// Let's not re-add the oldGroup
+						if (!group.equalsIgnoreCase(oldGroup)) {
+							// Should we check it if succeeds?
+							addGroup(player, world, group);
+						}
+					}
+					worked2 = true;
+				} else {
+					//  Not sure what situation would lead us here, so we'll just assume everything is good.
+					worked2 = true;
+				}
+			} else {
+				worked2 = removeGroup(player, world, oldGroup);
+			}
+		}
+
 		return worked1 && worked2;
 	}
 
