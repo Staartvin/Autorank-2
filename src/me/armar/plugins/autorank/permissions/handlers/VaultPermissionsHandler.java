@@ -188,7 +188,7 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 			// Thanks to @DeathStampler for this code and info.
 			if (permission.getName().toLowerCase().contains("permissionsex")) {
 				// Normally the player should have one more group at this point.
-				if (groupsAfterAdd.length > (groupsBeforeAdd.length + 1)) {
+				if (groupsAfterAdd.length >= (groupsBeforeAdd.length + 1)) {
 					// We have one more groups than before.  Great.  Let's remove oldGroup.
 					worked2 = removeGroup(player, world, oldGroup);
 
