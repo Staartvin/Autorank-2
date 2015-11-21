@@ -5,10 +5,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Level;
 
-import me.armar.plugins.autorank.Autorank;
-
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+
+import me.armar.plugins.autorank.Autorank;
 
 /**
  * Class used to get data from backups Autorank is regularly doing. <br>

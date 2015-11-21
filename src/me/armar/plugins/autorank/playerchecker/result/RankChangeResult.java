@@ -3,11 +3,11 @@ package me.armar.plugins.autorank.playerchecker.result;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import me.armar.plugins.autorank.api.events.PlayerPromoteEvent;
-import me.armar.plugins.autorank.util.uuid.UUIDManager;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+
+import me.armar.plugins.autorank.api.events.PlayerPromoteEvent;
+import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
 public class RankChangeResult extends Result {
 

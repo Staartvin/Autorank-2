@@ -7,6 +7,13 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
+import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
+
+import com.google.common.collect.Lists;
+
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.AddCommand;
 import me.armar.plugins.autorank.commands.ArchiveCommand;
@@ -31,13 +38,6 @@ import me.armar.plugins.autorank.commands.SyncStatsCommand;
 import me.armar.plugins.autorank.commands.TrackCommand;
 import me.armar.plugins.autorank.commands.ViewCommand;
 import me.armar.plugins.autorank.language.Lang;
-
-import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabExecutor;
-
-import com.google.common.collect.Lists;
 
 public class CommandsManager implements TabExecutor {
 

@@ -3,15 +3,15 @@ package me.armar.plugins.autorank.playerchecker;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
+
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 import me.armar.plugins.autorank.rankbuilder.ChangeGroup;
 import me.armar.plugins.autorank.rankbuilder.ChangeGroupManager;
 import me.armar.plugins.autorank.util.AutorankTools;
-
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
 
 /*
  * PlayerChecker is where the magic happens :P It has a RankChangeBuilder that reads 

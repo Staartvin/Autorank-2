@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="D:/Users/Vincent/Java Projects/workspace/Autorank2/Javadocs|D:/Users/Vincent/Java Projects/workspace/Autorank2/lib" kind="src" output="target/classes" path="src">
-		<attributes>
-			<attribute name="optional" value="true"/>
-			<attribute name="maven.pomderived" value="true"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="lib" path="lib/Essentials.jar"/>
 	<classpathentry kind="lib" path="lib/EssentialsGroupManager.jar"/>
 	<classpathentry kind="lib" path="lib/Factions.jar"/>
@@ -52,6 +46,12 @@
 	<classpathentry kind="lib" path="lib/spigot-api.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="https://hub.spigotmc.org/javadocs/spigot/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry excluding="C:/Users/s150149/Documents/Programming/git/Autorank-2/Javadocs|C:/Users/s150149/Documents/Programming/git/Autorank-2/lib" kind="src" output="target/classes" path="src">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="output" path="target/classes"/>

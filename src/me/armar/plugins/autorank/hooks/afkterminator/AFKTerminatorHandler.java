@@ -1,12 +1,10 @@
 package me.armar.plugins.autorank.hooks.afkterminator;
 
-import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.hooks.DependencyHandler;
-import me.edge209.afkTerminator.AfkTerminator;
-import me.edge209.afkTerminator.AfkTerminatorAPI;
-
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+
+import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.hooks.DependencyHandler;
 
 /**
  * Handles all connections with AFKTerminator

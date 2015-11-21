@@ -8,10 +8,10 @@ import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 
-import me.armar.plugins.autorank.Autorank;
-
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+
+import me.armar.plugins.autorank.Autorank;
 
 /**
  * This class represents a multitude of files where are looked up uuids are

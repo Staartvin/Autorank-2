@@ -2,15 +2,15 @@ package me.armar.plugins.autorank.permissions.handlers;
 
 import java.util.List;
 
-import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.permissions.PermissionsHandler;
-
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
 import com.platymuus.bukkit.permissions.Group;
 import com.platymuus.bukkit.permissions.PermissionsPlugin;
+
+import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.permissions.PermissionsHandler;
 
 /**
  * @author Staartvin

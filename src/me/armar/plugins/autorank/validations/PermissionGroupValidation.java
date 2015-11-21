@@ -2,10 +2,10 @@ package me.armar.plugins.autorank.validations;
 
 import java.util.Set;
 
+import org.bukkit.configuration.ConfigurationSection;
+
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
-
-import org.bukkit.configuration.ConfigurationSection;
 
 public class PermissionGroupValidation {
 

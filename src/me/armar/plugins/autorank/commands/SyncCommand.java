@@ -4,13 +4,13 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 
-import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.commands.manager.AutorankCommand;
-import me.armar.plugins.autorank.language.Lang;
-
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+
+import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.commands.manager.AutorankCommand;
+import me.armar.plugins.autorank.language.Lang;
 
 public class SyncCommand extends AutorankCommand {
 

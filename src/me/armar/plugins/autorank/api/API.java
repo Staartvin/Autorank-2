@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.entity.Player;
+
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.addons.AddOnManager;
 import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 import me.armar.plugins.autorank.playerchecker.result.Result;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
-
-import org.bukkit.entity.Player;
 
 /**
  * <b>Autorank's API class:</b>

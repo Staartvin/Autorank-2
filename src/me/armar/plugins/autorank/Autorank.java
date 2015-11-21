@@ -2,6 +2,9 @@ package me.armar.plugins.autorank;
 
 import java.io.IOException;
 
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitTask;
+
 import me.armar.plugins.autorank.addons.AddOnManager;
 import me.armar.plugins.autorank.api.API;
 import me.armar.plugins.autorank.backup.BackupManager;
@@ -64,9 +67,6 @@ import me.armar.plugins.autorank.util.uuid.UUIDRefresher;
 import me.armar.plugins.autorank.util.uuid.storage.UUIDStorage;
 import me.armar.plugins.autorank.validations.ValidateHandler;
 import me.armar.plugins.autorank.warningmanager.WarningManager;
-
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitTask;
 
 /**
  * 

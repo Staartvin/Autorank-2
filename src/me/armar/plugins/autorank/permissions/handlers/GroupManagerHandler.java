@@ -6,9 +6,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.permissions.PermissionsHandler;
-
 import org.anjocaido.groupmanager.GroupManager;
 import org.anjocaido.groupmanager.data.Group;
 import org.anjocaido.groupmanager.dataholder.OverloadedWorldHolder;
@@ -17,6 +14,9 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
+
+import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.permissions.PermissionsHandler;
 
 /**
  * @author Staartvin

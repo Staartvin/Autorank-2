@@ -3,11 +3,11 @@ package me.armar.plugins.autorank.playerchecker.requirement;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.armar.plugins.autorank.language.Lang;
-import me.armar.plugins.autorank.util.AutorankTools;
-
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+
+import me.armar.plugins.autorank.language.Lang;
+import me.armar.plugins.autorank.util.AutorankTools;
 
 public class InBiomeRequirement extends Requirement {
 

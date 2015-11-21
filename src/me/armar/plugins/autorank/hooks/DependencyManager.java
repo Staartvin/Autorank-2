@@ -2,6 +2,8 @@ package me.armar.plugins.autorank.hooks;
 
 import java.util.HashMap;
 
+import org.bukkit.entity.Player;
+
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.afkterminator.AFKTerminatorHandler;
 import me.armar.plugins.autorank.hooks.essentialsapi.EssentialsHandler;
@@ -17,8 +19,6 @@ import me.armar.plugins.autorank.hooks.vaultapi.VaultHandler;
 import me.armar.plugins.autorank.hooks.worldguardapi.WorldGuardHandler;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.armar.plugins.autorank.statsmanager.StatsPluginManager;
-
-import org.bukkit.entity.Player;
 
 /**
  * This class is used for loading all the dependencies Autorank has. <br>

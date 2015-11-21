@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import me.armar.plugins.autorank.language.Lang;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
+import me.armar.plugins.autorank.language.Lang;
 
 /*
  * AutorankTools is a bunch of static methods, I put sendColoredMessage 

@@ -2,14 +2,14 @@ package me.armar.plugins.autorank.commands;
 
 import java.util.List;
 
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.hooks.DependencyHandler;
 import me.armar.plugins.autorank.hooks.DependencyManager.dependency;
 import net.md_5.bungee.api.ChatColor;
-
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 
 public class HooksCommand extends AutorankCommand {
 
