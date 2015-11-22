@@ -131,6 +131,7 @@ public class API {
 	 * @return The name of the group the player will be ranked to; null when no
 	 *         rank up.
 	 */
+	@Deprecated
 	public String getNextRankupGroup(final Player player) {
 		return null;
 	}

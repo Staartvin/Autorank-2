@@ -30,6 +30,7 @@ public abstract class AutorankCommand implements TabExecutor {
 		return usage;
 	}
 
+	@Override
 	public abstract boolean onCommand(final CommandSender sender,
 			final Command cmd, final String label, final String[] args);
 
@@ -45,6 +46,7 @@ public abstract class AutorankCommand implements TabExecutor {
 		this.usage = usage;
 	}
 
+	@Override
 	public abstract List<String> onTabComplete(CommandSender sender,
 			Command cmd, String commandLabel, String[] args);
 }

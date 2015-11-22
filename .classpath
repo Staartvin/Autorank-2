@@ -1,58 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="lib" path="lib/Essentials.jar"/>
-	<classpathentry kind="lib" path="lib/EssentialsGroupManager.jar"/>
-	<classpathentry kind="lib" path="lib/Factions.jar"/>
-	<classpathentry kind="lib" path="lib/MassiveCore.jar"/>
-	<classpathentry kind="lib" path="lib/PermissionsBukkit.jar"/>
+	<classpathentry kind="lib" path="lib/Essentials.jar" />
+	<classpathentry kind="lib" path="lib/EssentialsGroupManager.jar" />
+	<classpathentry kind="lib" path="lib/Factions.jar" />
+	<classpathentry kind="lib" path="lib/PermissionsBukkit.jar" />
 	<classpathentry kind="lib" path="lib/Vault.jar">
 		<attributes>
-			<attribute name="javadoc_location" value="http://milkbowl.github.io/VaultAPI/"/>
+			<attribute name="javadoc_location" value="http://milkbowl.github.io/VaultAPI/" />
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/WorldEdit.jar"/>
-	<classpathentry kind="lib" path="lib/mcMMO.jar"/>
-	<classpathentry kind="lib" path="lib/WorldGuard.jar"/>
-	<classpathentry kind="lib" path="lib/RoyalCommands.jar"/>
-	<classpathentry kind="lib" path="lib/OnTime.jar"/>
-	<classpathentry kind="lib" path="lib/Stats.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="http://ci.lolmewn.nl/job/Stats/javadoc/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/UltimateCore.jar"/>
+	<classpathentry kind="lib" path="lib/mcMMO.jar" />
+	<classpathentry kind="lib" path="lib/RoyalCommands.jar" />
+	<classpathentry kind="lib" path="lib/OnTime.jar" />
+	<classpathentry kind="lib" path="lib/UltimateCore.jar" />
 	<classpathentry kind="lib" path="lib/Statistics.jar">
 		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/Autorank2/lib/Statistics.jar/"/>
+			<attribute name="javadoc_location"
+				value="jar:platform:/resource/Autorank2/lib/Statistics.jar/" />
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/spigot.jar">
 		<attributes>
-			<attribute name="javadoc_location" value="https://hub.spigotmc.org/javadocs/spigot/"/>
+			<attribute name="javadoc_location" value="https://hub.spigotmc.org/javadocs/spigot/" />
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6">
+	<classpathentry kind="con"
+		path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6">
 		<attributes>
-			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.pomderived" value="true" />
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
+	<classpathentry kind="con"
+		path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
 		<attributes>
-			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.pomderived" value="true" />
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/UltimateCore_old.jar"/>
-	<classpathentry kind="lib" path="lib/afkTerminator.jar"/>
-	<classpathentry kind="lib" path="lib/spigot-api.jar">
+	<classpathentry kind="lib" path="lib/worldguard-6.1.jar" />
+	<classpathentry kind="lib" path="lib/worldedit-bukkit-6.1.jar" />
+	<classpathentry kind="lib" path="lib/Stats3.jar" />
+	<classpathentry kind="lib" path="lib/afkTerminator.jar" />
+	<classpathentry kind="lib" path="lib/MassiveCore.jar" />
+	<classpathentry kind="lib" path="lib/UltimateCore_Old.jar" />
+	<classpathentry
+		excluding="C:/Users/s150149/Documents/Programming/git/Autorank-2/Javadocs|C:/Users/s150149/Documents/Programming/git/Autorank-2/lib"
+		kind="src" output="target/classes" path="src">
 		<attributes>
-			<attribute name="javadoc_location" value="https://hub.spigotmc.org/javadocs/spigot/"/>
+			<attribute name="optional" value="true" />
+			<attribute name="maven.pomderived" value="true" />
 		</attributes>
 	</classpathentry>
-	<classpathentry excluding="C:/Users/s150149/Documents/Programming/git/Autorank-2/Javadocs|C:/Users/s150149/Documents/Programming/git/Autorank-2/lib" kind="src" output="target/classes" path="src">
-		<attributes>
-			<attribute name="optional" value="true"/>
-			<attribute name="maven.pomderived" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="output" path="target/classes"/>
+	<classpathentry kind="output" path="target/classes" />
 </classpath>

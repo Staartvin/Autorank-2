@@ -67,12 +67,9 @@
 			<url>http://repo.mcstats.org/content/repositories/public/</url>
 		</repository>
 
-		<!-- <repository>
-			<id>stats-repo</id>
-			<url>http://centrility.nl:8081/nexus/content/repositories/releases/
-			</url>
-		</repository> -->
-		
+		<!-- <repository> <id>stats-repo</id> <url>http://centrility.nl:8081/nexus/content/repositories/releases/ 
+			</url> </repository> -->
+
 		<repository>
 			<id>stats-repo-snapshot</id>
 			<url>http://centrility.nl:8081/nexus/content/repositories/snapshots/
@@ -138,15 +135,10 @@
 			<type>jar</type>
 		</dependency>
 
-		<!-- OLD STATS <dependency>
-			<groupId>nl.lolmewn.stats</groupId>
-			<artifactId>Stats</artifactId>
-			<version>2.0.1</version>
-			<scope>provided</scope>
-			<type>jar</type>
-		</dependency>-->
-		
-		  <dependency>
+		<!-- OLD STATS <dependency> <groupId>nl.lolmewn.stats</groupId> <artifactId>Stats</artifactId> 
+			<version>2.0.1</version> <scope>provided</scope> <type>jar</type> </dependency> -->
+
+		<dependency>
 			<groupId>nl.lolmewn.stats</groupId>
 			<artifactId>Stats</artifactId>
 			<version>3.0.2-SNAPSHOT</version>

@@ -66,6 +66,7 @@ public class BackupManager {
 		// Makes a backup every day
 		plugin.getServer().getScheduler()
 				.runTaskTimerAsynchronously(plugin, new Runnable() {
+					@Override
 					public void run() {
 
 						// Older than a day
