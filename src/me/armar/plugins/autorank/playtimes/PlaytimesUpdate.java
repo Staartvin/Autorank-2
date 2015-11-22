@@ -64,7 +64,6 @@ public class PlaytimesUpdate implements Runnable {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	private void updateMinutesPlayed() {
 		plugin.debugMessage("Checking players for automatic ranking");
 

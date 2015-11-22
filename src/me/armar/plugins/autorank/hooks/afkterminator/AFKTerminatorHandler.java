@@ -5,6 +5,8 @@ import org.bukkit.plugin.Plugin;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.DependencyHandler;
+import me.edge209.afkTerminator.AfkTerminator;
+import me.edge209.afkTerminator.AfkTerminatorAPI;
 
 /**
  * Handles all connections with AFKTerminator

@@ -3,6 +3,8 @@ package me.armar.plugins.autorank.hooks.ultimatecoreapi;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
+import Bammerbom.UltimateCore.API.UC;
+import Bammerbom.UltimateCore.API.UCplayer;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.DependencyHandler;
 
