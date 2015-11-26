@@ -12,13 +12,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 
-import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
+
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 
 /**
  * Leaderboard stores how when the last update was and if someone wants to<br>
@@ -103,10 +103,10 @@ public class Leaderboard {
 			}
 
 			// Get the cached value of this uuid
-			String playerName = plugin.getUUIDStorage().getPlayerName(uuids.get(i)); 
-					
-					plugin.getUUIDStorage().getPlayerName(
+			final String playerName = plugin.getUUIDStorage().getPlayerName(
 					uuids.get(i));
+
+			plugin.getUUIDStorage().getPlayerName(uuids.get(i));
 
 			if (playerName == null) {
 				plugin.getLogger().warning(
@@ -116,7 +116,8 @@ public class Leaderboard {
 			}
 
 			// Use cache on .getTimeOfPlayer() so that we don't refresh all uuids in existence.
-			times.put(uuids.get(i),
+			times.put(
+					uuids.get(i),
 					(plugin.getPlaytimes().getTimeOfPlayer(playerName, true) / 60));
 		}
 
@@ -213,16 +214,15 @@ public class Leaderboard {
 			Integer time = entry.getValue().intValue();
 
 			String message = layout.replaceAll("&p", name);
-			
+
 			// divided by 1440
-			int days = (time / 1440);
-			
+			final int days = (time / 1440);
+
 			// (time - days) / 60
-			int hours = (time - (days * 1440)) / 60;
-			
+			final int hours = (time - (days * 1440)) / 60;
+
 			// (time - days - hours)
-			int minutes = time - (days * 1440) - (hours * 60);
-			
+			final int minutes = time - (days * 1440) - (hours * 60);
 
 			message = message.replaceAll("&r", Integer.toString(i + 1));
 			message = message.replaceAll("&tm", Integer.toString(time));
@@ -236,23 +236,29 @@ public class Leaderboard {
 
 			// Correctly show plural or singular format.
 			if (days > 1 || days == 0) {
-				message = message.replace("%day%", Lang.DAY_PLURAL.getConfigValue());
+				message = message.replace("%day%",
+						Lang.DAY_PLURAL.getConfigValue());
 			} else {
-				message = message.replace("%day%", Lang.DAY_SINGULAR.getConfigValue());
+				message = message.replace("%day%",
+						Lang.DAY_SINGULAR.getConfigValue());
 			}
-			
+
 			if (hours > 1 || hours == 0) {
-				message = message.replace("%hour%", Lang.HOUR_PLURAL.getConfigValue());
+				message = message.replace("%hour%",
+						Lang.HOUR_PLURAL.getConfigValue());
 			} else {
-				message = message.replace("%hour%", Lang.HOUR_SINGULAR.getConfigValue());
+				message = message.replace("%hour%",
+						Lang.HOUR_SINGULAR.getConfigValue());
 			}
-			
+
 			if (minutes > 1 || minutes == 0) {
-				message = message.replace("%minute%", Lang.MINUTE_PLURAL.getConfigValue());
+				message = message.replace("%minute%",
+						Lang.MINUTE_PLURAL.getConfigValue());
 			} else {
-				message = message.replace("%minute%", Lang.MINUTE_SINGULAR.getConfigValue());
+				message = message.replace("%minute%",
+						Lang.MINUTE_SINGULAR.getConfigValue());
 			}
-			
+
 			stringList.add(message);
 
 		}

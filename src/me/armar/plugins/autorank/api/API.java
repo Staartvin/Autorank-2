@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.bukkit.entity.Player;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.addons.AddOnManager;
 import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 import me.armar.plugins.autorank.playerchecker.result.Result;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
+
+import org.bukkit.entity.Player;
 
 /**
  * <b>Autorank's API class:</b>
@@ -126,7 +126,8 @@ public class API {
 	 * player will be ranked up to that group and not the 'global results'
 	 * group.
 	 * 
-	 * @deprecated No longer used, will always return null: it has no function anymore.
+	 * @deprecated No longer used, will always return null: it has no function
+	 *             anymore.
 	 * @param player Player to get the next rank up for.
 	 * @return The name of the group the player will be ranked to; null when no
 	 *         rank up.

@@ -16,14 +16,15 @@ import me.armar.plugins.autorank.listeners.PlayerKillsMobListener;
  */
 public class CustomStatsManager {
 
-	private Autorank plugin;
-	private StatsAPIHandler handler;
+	private final Autorank plugin;
+	private final StatsAPIHandler handler;
 
-	public CustomStatsManager(Autorank instance) {
+	public CustomStatsManager(final Autorank instance) {
 		this.plugin = instance;
-		this.handler = (StatsAPIHandler) instance.getDependencyManager().getDependency(dependency.STATS);
+		this.handler = (StatsAPIHandler) instance.getDependencyManager()
+				.getDependency(dependency.STATS);
 	}
-	
+
 	public void registerCustomStats() {
 		handler.addStat(new MobKilledStat());
 		plugin.debugMessage("Registered '" + MobKilledStat.statName

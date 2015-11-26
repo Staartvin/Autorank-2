@@ -3,11 +3,11 @@ package me.armar.plugins.autorank.playerchecker.requirement;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
+
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 public class HasItemRequirement extends Requirement {
 
@@ -37,7 +37,8 @@ public class HasItemRequirement extends Requirement {
 				arg.append(wrapper.getDisplayName());
 			} else {
 
-				arg.append(item.getType().toString().replace("_", " ").toLowerCase());
+				arg.append(item.getType().toString().replace("_", " ")
+						.toLowerCase());
 
 				if (wrapper.showShortValue()) {
 					arg.append(" (Dam. value: " + item.getDurability() + ")");
@@ -174,7 +175,7 @@ class ItemWrapper {
 	private boolean useDisplayName = false;
 
 	public ItemWrapper(final ItemStack item, final String displayName,
-			final boolean showShortValue, boolean useDisplayName) {
+			final boolean showShortValue, final boolean useDisplayName) {
 		this.setItem(item);
 		this.setDisplayName(displayName);
 		this.setShowShortValue(showShortValue);
@@ -209,7 +210,7 @@ class ItemWrapper {
 		return useDisplayName;
 	}
 
-	public void setUseDisplayName(boolean useDisplayName) {
+	public void setUseDisplayName(final boolean useDisplayName) {
 		this.useDisplayName = useDisplayName;
 	}
 }

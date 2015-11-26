@@ -1,13 +1,13 @@
 package me.armar.plugins.autorank.hooks.mcmmoapi;
 
+import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.hooks.DependencyHandler;
+
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import com.gmail.nossr50.mcMMO;
 import com.gmail.nossr50.api.ExperienceAPI;
-
-import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.hooks.DependencyHandler;
 
 /**
  * Handles all connections with McMMO.
@@ -46,8 +46,8 @@ public class McMMOHandler implements DependencyHandler {
 
 		try {
 			powerLevel = ExperienceAPI.getPowerLevel(player);
-		} catch (Exception e) {
-			
+		} catch (final Exception e) {
+
 			/*
 			Class<? extends Exception> error = e.getClass();
 			String errorMessage = error.toString().toLowerCase();
@@ -58,10 +58,11 @@ public class McMMOHandler implements DependencyHandler {
 								+ player.getName()
 								+ "' of McMMO. Report McMMOPlayerNotFoundException to mcmmo devs.");
 			}*/
-			
+
 			// Instead of erroring, use cache value
-			powerLevel = ExperienceAPI.getPowerLevelOffline(player.getUniqueId());
-			
+			powerLevel = ExperienceAPI.getPowerLevelOffline(player
+					.getUniqueId());
+
 		}
 
 		return powerLevel;
@@ -82,9 +83,9 @@ public class McMMOHandler implements DependencyHandler {
 
 		try {
 			skillLevel = ExperienceAPI.getLevel(player, skillName);
-		} catch (Exception e) {
-			Class<? extends Exception> error = e.getClass();
-			String errorMessage = error.toString().toLowerCase();
+		} catch (final Exception e) {
+			final Class<? extends Exception> error = e.getClass();
+			final String errorMessage = error.toString().toLowerCase();
 
 			// Error only when invalid skill
 			if (errorMessage.contains("invalidskill")) {
@@ -96,12 +97,13 @@ public class McMMOHandler implements DependencyHandler {
 						.severe("Could not get user '"
 								+ player.getName()
 								+ "' of McMMO. Report McMMOPlayerNotFoundException to mcmmo devs.");
-			} else {
+				} else {
 				e.fillInStackTrace();
-			}*/
-			
+				}*/
+
 			// instead of erroring, get cache value.
-			skillLevel = ExperienceAPI.getLevelOffline(player.getUniqueId(), skillName);
+			skillLevel = ExperienceAPI.getLevelOffline(player.getUniqueId(),
+					skillName);
 		}
 
 		return skillLevel;

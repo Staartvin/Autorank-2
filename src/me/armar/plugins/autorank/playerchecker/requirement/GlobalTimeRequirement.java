@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.bukkit.entity.Player;
-
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
+
+import org.bukkit.entity.Player;
 
 /**
  * This requirement checks for global playtime

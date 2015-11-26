@@ -1,13 +1,13 @@
 package me.armar.plugins.autorank.hooks.factionsapi;
 
+import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.hooks.DependencyHandler;
+
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.entity.MPlayer;
-
-import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.hooks.DependencyHandler;
 
 /**
  * Handles all connections with Factions

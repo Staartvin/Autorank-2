@@ -3,12 +3,12 @@ package me.armar.plugins.autorank.playerchecker.requirement;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.statsmanager.handlers.StatsHandler;
 import me.armar.plugins.autorank.util.AutorankTools;
+
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 public class BlocksBrokenRequirement extends Requirement {
 
@@ -29,7 +29,7 @@ public class BlocksBrokenRequirement extends Requirement {
 			final int blockID = wrapper.getBlockId();
 			final int damageValue = wrapper.getDamageValue();
 
-			String displayName = wrapper.getDisplayName();
+			final String displayName = wrapper.getDisplayName();
 
 			String message = wrapper.getBlocksBroken() + " ";
 
@@ -177,7 +177,7 @@ class BlocksWrapper {
 	private String displayName;
 
 	public BlocksWrapper(final int blockId, final int blocksBroken,
-			final int damageValue, String displayName) {
+			final int damageValue, final String displayName) {
 		this.setBlockId(blockId);
 		this.setBlocksBroken(blocksBroken);
 		this.setDamageValue(damageValue);
@@ -212,7 +212,7 @@ class BlocksWrapper {
 		return displayName;
 	}
 
-	public void setDisplayName(String displayName) {
+	public void setDisplayName(final String displayName) {
 		this.displayName = displayName;
 	}
 

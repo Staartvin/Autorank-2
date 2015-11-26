@@ -7,13 +7,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabExecutor;
-
-import com.google.common.collect.Lists;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.AddCommand;
 import me.armar.plugins.autorank.commands.ArchiveCommand;
@@ -38,6 +31,13 @@ import me.armar.plugins.autorank.commands.SyncStatsCommand;
 import me.armar.plugins.autorank.commands.TrackCommand;
 import me.armar.plugins.autorank.commands.ViewCommand;
 import me.armar.plugins.autorank.language.Lang;
+
+import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
+
+import com.google.common.collect.Lists;
 
 public class CommandsManager implements TabExecutor {
 
@@ -159,11 +159,11 @@ public class CommandsManager implements TabExecutor {
 		if (args.length <= 1) {
 			// Show a list of commands if needed
 
-			List<String> commands = new ArrayList<String>();
+			final List<String> commands = new ArrayList<String>();
 
-			for (Entry<List<String>, AutorankCommand> entry : registeredCommands
+			for (final Entry<List<String>, AutorankCommand> entry : registeredCommands
 					.entrySet()) {
-				List<String> list = entry.getKey();
+				final List<String> list = entry.getKey();
 
 				commands.add(list.get(0));
 			}
@@ -176,7 +176,7 @@ public class CommandsManager implements TabExecutor {
 			return commands;
 		}
 
-		String subCommand = args[0].trim();
+		final String subCommand = args[0].trim();
 
 		if (subCommand.equalsIgnoreCase("set")
 				|| subCommand.equalsIgnoreCase("add")
@@ -184,39 +184,39 @@ public class CommandsManager implements TabExecutor {
 				|| subCommand.equalsIgnoreCase("rem")
 				|| subCommand.equalsIgnoreCase("gadd")
 				|| subCommand.equalsIgnoreCase("gset")) {
-			
+
 			if (args.length > 2) {
-				
-				String arg = args[2];
-				
+
+				final String arg = args[2];
+
 				int count = 0;
-				
+
 				try {
 					count = Integer.parseInt(arg);
-				} catch (NumberFormatException e) {
+				} catch (final NumberFormatException e) {
 					count = 0;
 				}
-				
+
 				return Lists.newArrayList("" + (count + 5));
-						
+
 			}
-			
+
 			return null;
-			
+
 		}
 
-			// Return on tab complete of sub command
-			for (Entry<List<String>, AutorankCommand> entry : registeredCommands
-					.entrySet()) {
+		// Return on tab complete of sub command
+		for (final Entry<List<String>, AutorankCommand> entry : registeredCommands
+				.entrySet()) {
 
-				for (String alias : entry.getKey()) {
-					if (subCommand.trim().equalsIgnoreCase(alias)) {
-						return entry.getValue().onTabComplete(sender, cmd,
-								commandLabel, args);
-					}
+			for (final String alias : entry.getKey()) {
+				if (subCommand.trim().equalsIgnoreCase(alias)) {
+					return entry.getValue().onTabComplete(sender, cmd,
+							commandLabel, args);
 				}
-
 			}
+
+		}
 
 		return null;
 	}

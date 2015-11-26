@@ -1,8 +1,5 @@
 package me.armar.plugins.autorank.statsmanager;
 
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.java.JavaPlugin;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.DependencyManager.dependency;
 import me.armar.plugins.autorank.hooks.statisticsapi.StatisticsAPIHandler;
@@ -10,6 +7,9 @@ import me.armar.plugins.autorank.hooks.statsapi.StatsAPIHandler;
 import me.armar.plugins.autorank.statsmanager.handlers.DummyHandler;
 import me.armar.plugins.autorank.statsmanager.handlers.StatisticsHandler;
 import me.armar.plugins.autorank.statsmanager.handlers.StatsHandler;
+
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * This class decides which Stats plugin will be used for getting stat data.

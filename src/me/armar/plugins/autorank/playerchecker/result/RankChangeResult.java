@@ -3,11 +3,11 @@ package me.armar.plugins.autorank.playerchecker.result;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-
 import me.armar.plugins.autorank.api.events.PlayerPromoteEvent;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
+
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 public class RankChangeResult extends Result {
 
@@ -54,7 +54,7 @@ public class RankChangeResult extends Result {
 				new ArrayList<Integer>());
 
 		getAutorank().getPlayerDataHandler().setLastKnownGroup(uuid, to);
-		
+
 		// Reset chosen path as the player is moved to another group
 		getAutorank().getPlayerDataHandler().setChosenPath(uuid, null);
 

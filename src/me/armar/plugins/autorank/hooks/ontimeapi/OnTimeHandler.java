@@ -1,12 +1,12 @@
 package me.armar.plugins.autorank.hooks.ontimeapi;
 
-import org.bukkit.plugin.Plugin;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.DependencyHandler;
 import me.edge209.OnTime.OnTime;
 import me.edge209.OnTime.OnTimeAPI;
 import me.edge209.OnTime.OnTimeAPI.data;
+
+import org.bukkit.plugin.Plugin;
 
 /**
  * Handles all connections with OnTime

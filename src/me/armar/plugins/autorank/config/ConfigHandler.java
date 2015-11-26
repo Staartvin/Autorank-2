@@ -6,10 +6,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.google.common.collect.Lists;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.DependencyManager.dependency;
+
+import com.google.common.collect.Lists;
 
 /**
  * This class handles has all methods to get data from the configs. This is now
@@ -160,13 +160,15 @@ public class ConfigHandler {
 						+ ".results." + result).toString();
 	}
 
-	public String getWorldOfRequirement(String requirement, String group) {
+	public String getWorldOfRequirement(final String requirement,
+			final String group) {
 		return plugin.getAdvancedConfig().getString(
 				"ranks." + group + ".requirements." + requirement
 						+ ".options.world", null);
 	}
 
-	public boolean isRequirementWorldSpecific(String requirement, String group) {
+	public boolean isRequirementWorldSpecific(final String requirement,
+			final String group) {
 		return this.getWorldOfRequirement(requirement, group) != null;
 	}
 
@@ -340,10 +342,10 @@ public class ConfigHandler {
 		return plugin.getSettingsConfig().getBoolean(
 				"use primary group for vault", true);
 	}
-	
+
 	// A display name for a changegroup is when the changegroup is a copy of another group.
 	public String getDisplayName(final String group) {
-		String displayName = plugin.getAdvancedConfig().getString(
+		final String displayName = plugin.getAdvancedConfig().getString(
 				"ranks." + group + ".options.display name", group);
 
 		return displayName;

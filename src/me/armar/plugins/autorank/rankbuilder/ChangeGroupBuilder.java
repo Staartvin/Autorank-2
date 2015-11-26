@@ -32,20 +32,21 @@ import me.armar.plugins.autorank.util.AutorankTools;
  */
 public class ChangeGroupBuilder {
 
-	private Autorank plugin;
+	private final Autorank plugin;
 
 	private RequirementBuilder requirementBuilder;
 	private ResultBuilder resultBuilder;
 
-	public ChangeGroupBuilder(Autorank plugin) {
+	public ChangeGroupBuilder(final Autorank plugin) {
 		this.plugin = plugin;
 		setResultBuilder(new ResultBuilder());
 		setRequirementBuilder(new RequirementBuilder());
 	}
 
-	public HashMap<String, List<ChangeGroup>> initialiseChangeGroups(boolean simpleConfigUsed,
-			SimpleYamlConfiguration config,
-			HashMap<String, List<ChangeGroup>> changeGroups) {
+	public HashMap<String, List<ChangeGroup>> initialiseChangeGroups(
+			final boolean simpleConfigUsed,
+			final SimpleYamlConfiguration config,
+			final HashMap<String, List<ChangeGroup>> changeGroups) {
 		if (simpleConfigUsed) {
 			return initSimpleConfig(config, changeGroups);
 		} else {
@@ -54,8 +55,8 @@ public class ChangeGroupBuilder {
 	}
 
 	private HashMap<String, List<ChangeGroup>> initSimpleConfig(
-			SimpleYamlConfiguration config,
-			HashMap<String, List<ChangeGroup>> changeGroups) {
+			final SimpleYamlConfiguration config,
+			final HashMap<String, List<ChangeGroup>> changeGroups) {
 
 		final Set<String> ranks = config.getKeys(false);
 
@@ -73,9 +74,9 @@ public class ChangeGroupBuilder {
 			if (rank.contains("-copy-")) {
 				// Rank belongs to another rank
 
-				int pointer = rank.indexOf("-copy-");
+				final int pointer = rank.indexOf("-copy-");
 
-				String subString = rank.substring(0, pointer);
+				final String subString = rank.substring(0, pointer);
 
 				rankName = subString;
 			} else {
@@ -133,7 +134,7 @@ public class ChangeGroupBuilder {
 			}
 
 			// ChangeGroup for this rank
-			ChangeGroup changeGroup = new ChangeGroup(plugin);
+			final ChangeGroup changeGroup = new ChangeGroup(plugin);
 
 			// Save the requirements
 			changeGroup.setRequirements(req);
@@ -143,7 +144,8 @@ public class ChangeGroupBuilder {
 
 			changeGroup.setParentGroup(rankName);
 			changeGroup.setInternalGroup(rank);
-			changeGroup.setDisplayName(plugin.getConfigHandler().getDisplayName(rank));
+			changeGroup.setDisplayName(plugin.getConfigHandler()
+					.getDisplayName(rank));
 
 			currentChanges.add(changeGroup);
 
@@ -155,8 +157,8 @@ public class ChangeGroupBuilder {
 	}
 
 	private HashMap<String, List<ChangeGroup>> initAdvancedConfig(
-			SimpleYamlConfiguration config,
-			HashMap<String, List<ChangeGroup>> changeGroups) {
+			final SimpleYamlConfiguration config,
+			final HashMap<String, List<ChangeGroup>> changeGroups) {
 
 		final ConfigHandler configHandler = plugin.getConfigHandler();
 
@@ -167,9 +169,9 @@ public class ChangeGroupBuilder {
 			if (group.contains("-copy-")) {
 				// Rank belongs to another rank
 
-				int pointer = group.indexOf("-copy-");
+				final int pointer = group.indexOf("-copy-");
 
-				String subString = group.substring(0, pointer);
+				final String subString = group.substring(0, pointer);
 
 				groupName = subString;
 			} else {
@@ -222,7 +224,7 @@ public class ChangeGroupBuilder {
 							+ "' is unknown!");
 				}
 
-				Requirement newRequirement = createRequirement(
+				final Requirement newRequirement = createRequirement(
 						AutorankTools.getCorrectName(requirement),
 						configHandler.getOptions(requirement, group), optional,
 						realResults,
@@ -265,7 +267,7 @@ public class ChangeGroupBuilder {
 			}
 
 			// ChangeGroup for this rank
-			ChangeGroup changeGroup = new ChangeGroup(plugin);
+			final ChangeGroup changeGroup = new ChangeGroup(plugin);
 
 			// Save the requirements
 			changeGroup.setRequirements(req);
@@ -275,7 +277,8 @@ public class ChangeGroupBuilder {
 
 			changeGroup.setParentGroup(groupName);
 			changeGroup.setInternalGroup(group);
-			changeGroup.setDisplayName(plugin.getConfigHandler().getDisplayName(group));
+			changeGroup.setDisplayName(plugin.getConfigHandler()
+					.getDisplayName(group));
 
 			currentChanges.add(changeGroup);
 
@@ -333,7 +336,8 @@ public class ChangeGroupBuilder {
 		return requirementBuilder;
 	}
 
-	public void setRequirementBuilder(RequirementBuilder requirementBuilder) {
+	public void setRequirementBuilder(
+			final RequirementBuilder requirementBuilder) {
 		this.requirementBuilder = requirementBuilder;
 	}
 
@@ -341,7 +345,7 @@ public class ChangeGroupBuilder {
 		return resultBuilder;
 	}
 
-	public void setResultBuilder(ResultBuilder resultBuilder) {
+	public void setResultBuilder(final ResultBuilder resultBuilder) {
 		this.resultBuilder = resultBuilder;
 	}
 

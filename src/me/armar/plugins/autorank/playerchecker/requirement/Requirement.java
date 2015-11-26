@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.bukkit.entity.Player;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.DependencyManager;
 import me.armar.plugins.autorank.playerchecker.result.Result;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
+
+import org.bukkit.entity.Player;
 
 /**
  * Whenever you want to create a new requirement, you'll have to extend this
@@ -213,7 +213,7 @@ public abstract class Requirement {
 	 * 
 	 * @param world name of the world
 	 */
-	public void setWorld(String world) {
+	public void setWorld(final String world) {
 		this.world = world;
 	}
 

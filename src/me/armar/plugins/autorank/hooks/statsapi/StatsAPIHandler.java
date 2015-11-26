@@ -5,10 +5,6 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
 
-import org.bukkit.Material;
-import org.bukkit.entity.EntityType;
-import org.bukkit.plugin.Plugin;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.DependencyHandler;
 import me.armar.plugins.autorank.hooks.statsapi.customstats.FoodEatenStat;
@@ -18,6 +14,10 @@ import nl.lolmewn.stats.api.stat.Stat;
 import nl.lolmewn.stats.api.stat.StatEntry;
 import nl.lolmewn.stats.api.user.StatsHolder;
 import nl.lolmewn.stats.bukkit.BukkitMain;
+
+import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
+import org.bukkit.plugin.Plugin;
 
 /**
  * Handles all connections with Stats
@@ -86,8 +86,8 @@ public class StatsAPIHandler implements DependencyHandler {
 
 		int value = 0;
 
-		for (StatEntry s : stat) {
-			Map<String, Object> metadata = s.getMetadata();
+		for (final StatEntry s : stat) {
+			final Map<String, Object> metadata = s.getMetadata();
 
 			// Check world
 			if (worldName != null && metadata.containsKey("world")) {
@@ -106,8 +106,8 @@ public class StatsAPIHandler implements DependencyHandler {
 
 			// Check correct id
 			if (metadata.containsKey("name")) {
-				Material material = Material.matchMaterial(metadata.get("name")
-						.toString());
+				final Material material = Material.matchMaterial(metadata.get(
+						"name").toString());
 
 				if (material.getId() != id)
 					continue;
@@ -162,8 +162,8 @@ public class StatsAPIHandler implements DependencyHandler {
 
 		int value = 0;
 
-		for (StatEntry s : stat) {
-			Map<String, Object> metadata = s.getMetadata();
+		for (final StatEntry s : stat) {
+			final Map<String, Object> metadata = s.getMetadata();
 
 			if (worldName != null && metadata.containsKey("world")) {
 				// Not in the world we look for
@@ -200,7 +200,7 @@ public class StatsAPIHandler implements DependencyHandler {
 			return new ArrayList<StatEntry>();
 		}
 
-		StatsHolder holder = stats.getUserManager().getUser(uuid);
+		final StatsHolder holder = stats.getUserManager().getUser(uuid);
 
 		if (holder == null) {
 			plugin.debugMessage("UUID '" + uuid.toString()
@@ -209,7 +209,7 @@ public class StatsAPIHandler implements DependencyHandler {
 			return new ArrayList<StatEntry>();
 		}
 
-		Stat stat = stats.getStatManager().getStat(statName);
+		final Stat stat = stats.getStatManager().getStat(statName);
 
 		if (stat == null)
 			throw new IllegalArgumentException("Unknown stat '" + statName
@@ -236,9 +236,9 @@ public class StatsAPIHandler implements DependencyHandler {
 
 		int value = 0;
 
-		for (StatEntry s : stat) {
+		for (final StatEntry s : stat) {
 
-			Map<String, Object> metadata = s.getMetadata();
+			final Map<String, Object> metadata = s.getMetadata();
 
 			if (worldName != null && metadata.containsKey("world")) {
 				// Not in the world we look for
@@ -304,9 +304,9 @@ public class StatsAPIHandler implements DependencyHandler {
 
 		int value = 0;
 
-		for (StatEntry s : stat) {
+		for (final StatEntry s : stat) {
 
-			Map<String, Object> metadata = s.getMetadata();
+			final Map<String, Object> metadata = s.getMetadata();
 
 			if (worldName != null && metadata.containsKey("world")) {
 				// Not in the world we look for
@@ -330,7 +330,8 @@ public class StatsAPIHandler implements DependencyHandler {
 		return value;
 	}
 
-	public int getSpecialMobsKilled(UUID uuid, String mobName, String worldName) {
+	public int getSpecialMobsKilled(final UUID uuid, final String mobName,
+			final String worldName) {
 		if (!isAvailable())
 			return 0;
 
@@ -340,12 +341,12 @@ public class StatsAPIHandler implements DependencyHandler {
 
 		int value = 0;
 
-		String extraType = mobName.split(" ")[0].trim();
-		String entityType = mobName.split(" ")[1].trim();
+		final String extraType = mobName.split(" ")[0].trim();
+		final String entityType = mobName.split(" ")[1].trim();
 
-		for (StatEntry s : stat) {
+		for (final StatEntry s : stat) {
 
-			Map<String, Object> metadata = s.getMetadata();
+			final Map<String, Object> metadata = s.getMetadata();
 
 			if (worldName != null && metadata.containsKey("world")) {
 				// Not in the world we look for
@@ -376,18 +377,18 @@ public class StatsAPIHandler implements DependencyHandler {
 	}
 
 	public int getFoodEaten(final UUID uuid, final String worldName,
-			String foodType) {
+			final String foodType) {
 		if (!isAvailable())
 			return 0;
 
-		String statName = FoodEatenStat.statName;
+		final String statName = FoodEatenStat.statName;
 
 		final Collection<StatEntry> stat = getStatType(statName, uuid);
 
 		int value = 0;
 
-		for (StatEntry s : stat) {
-			Map<String, Object> metadata = s.getMetadata();
+		for (final StatEntry s : stat) {
+			final Map<String, Object> metadata = s.getMetadata();
 
 			if (worldName != null && metadata.containsKey("world")) {
 				// Not in the world we look for
@@ -458,7 +459,7 @@ public class StatsAPIHandler implements DependencyHandler {
 		}
 	}
 
-	public void addStat(Stat stat) {
+	public void addStat(final Stat stat) {
 		if (!isAvailable())
 			return;
 

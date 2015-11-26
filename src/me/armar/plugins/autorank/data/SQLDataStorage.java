@@ -162,7 +162,7 @@ public class SQLDataStorage {
 			if (conn != null) {
 				conn.close();
 			}
-		} catch (SQLException e) {
+		} catch (final SQLException e) {
 			e.printStackTrace();
 		}
 	}

@@ -1,5 +1,8 @@
 package me.armar.plugins.autorank.hooks.worldguardapi;
 
+import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.hooks.DependencyHandler;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -8,9 +11,6 @@ import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
-
-import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.hooks.DependencyHandler;
 
 /**
  * Handle all connections with WorldGuard

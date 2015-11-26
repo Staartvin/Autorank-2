@@ -3,16 +3,16 @@ package me.armar.plugins.autorank.commands;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.rankbuilder.ChangeGroup;
 import me.armar.plugins.autorank.util.AutorankTools;
+
+import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class ViewCommand extends AutorankCommand {
 
@@ -47,23 +47,23 @@ public class ViewCommand extends AutorankCommand {
 			return true;
 		}
 
-		Player player = (Player) sender;
+		final Player player = (Player) sender;
 
-		String pathName = AutorankTools.getStringFromArgs(args, 1);
+		final String pathName = AutorankTools.getStringFromArgs(args, 1);
 
-		String groupName = plugin.getAPI().getPrimaryGroup(player);
+		final String groupName = plugin.getAPI().getPrimaryGroup(player);
 
 		if (pathName.equals("list")) {
 			sender.sendMessage(ChatColor.GREEN + "You can choose these paths: ");
 
-			String pathsString = AutorankTools.createStringFromList(plugin
-					.getPlayerChecker().getChangeGroupManager()
-					.getChangeGroups(groupName));
+			final String pathsString = AutorankTools
+					.createStringFromList(plugin.getPlayerChecker()
+							.getChangeGroupManager().getChangeGroups(groupName));
 			sender.sendMessage(ChatColor.WHITE + pathsString);
 			return true;
 		}
 
-		ChangeGroup changeGroup = plugin
+		final ChangeGroup changeGroup = plugin
 				.getPlayerChecker()
 				.getChangeGroupManager()
 				.matchChangeGroupFromDisplayName(groupName,
@@ -75,7 +75,7 @@ public class ViewCommand extends AutorankCommand {
 			return true;
 		}
 
-		List<String> messages = plugin.getPlayerChecker()
+		final List<String> messages = plugin.getPlayerChecker()
 				.getRequirementsInStringList(
 						changeGroup.getRequirements(),
 						plugin.getPlayerChecker().getMetRequirements(
@@ -95,22 +95,23 @@ public class ViewCommand extends AutorankCommand {
 	 * @see me.armar.plugins.autorank.commands.manager.AutorankCommand#onTabComplete(org.bukkit.command.CommandSender, org.bukkit.command.Command, java.lang.String, java.lang.String[])
 	 */
 	@Override
-	public List<String> onTabComplete(CommandSender sender, Command cmd,
-			String commandLabel, String[] args) {
+	public List<String> onTabComplete(final CommandSender sender,
+			final Command cmd, final String commandLabel, final String[] args) {
 		// TODO Auto-generated method stub
-		Player player = (Player) sender;
+		final Player player = (Player) sender;
 
-		List<String> possibilities = new ArrayList<String>();
+		final List<String> possibilities = new ArrayList<String>();
 
-		String groupName = plugin.getPermPlugHandler().getPrimaryGroup(player);
+		final String groupName = plugin.getPermPlugHandler().getPrimaryGroup(
+				player);
 
-		List<ChangeGroup> changeGroups = plugin.getPlayerChecker()
+		final List<ChangeGroup> changeGroups = plugin.getPlayerChecker()
 				.getChangeGroupManager().getChangeGroups(groupName);
 
 		// List shows a list of changegroups to view
 		possibilities.add("list");
 
-		for (ChangeGroup changeGroup : changeGroups) {
+		for (final ChangeGroup changeGroup : changeGroups) {
 			possibilities.add(changeGroup.getDisplayName());
 		}
 

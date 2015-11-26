@@ -45,9 +45,9 @@ import me.armar.plugins.autorank.Autorank;
  */
 public class WarningManager {
 
-	private Autorank plugin;
+	private final Autorank plugin;
 
-	public WarningManager(Autorank plugin) {
+	public WarningManager(final Autorank plugin) {
 		this.plugin = plugin;
 	}
 
@@ -76,7 +76,7 @@ public class WarningManager {
 	 */
 	public String getHighestWarning() {
 
-		String highestWarning = findHighestPriorityWarning();
+		final String highestWarning = findHighestPriorityWarning();
 
 		if (highestWarning == null) {
 			return null;

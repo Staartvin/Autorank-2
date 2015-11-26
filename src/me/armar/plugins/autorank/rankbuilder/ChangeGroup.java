@@ -4,41 +4,42 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.bukkit.entity.Player;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 import me.armar.plugins.autorank.playerchecker.result.Result;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
+import org.bukkit.entity.Player;
+
 /**
  * Represents a group of changes, including all requirements and results.
  * <p>
- * Date created:  14:23:30
- * 5 aug. 2015
+ * Date created: 14:23:30 5 aug. 2015
+ * 
  * @author Staartvin
- *
+ * 
  */
 public class ChangeGroup {
 
 	private List<Requirement> requirements;
 	private List<Result> results;
-	
+
 	// Parent group is the group that a player must be in for this ChangeGroup to have effect.
 	// Internal group is the internally used name (in the config) of this ChangeGroup. It's linked to the parentGroup but has to be unique in the config.
 	// It therefore always contains a '-copy-*' part.
 	// The display name is the name shown when this changegroup is a copy of another changegroup.
 	private String parentGroup, internalGroup, displayName;
-	
-	private Autorank plugin;
-	
-	public ChangeGroup(Autorank plugin, List<Requirement> reqs, List<Result> results) {
+
+	private final Autorank plugin;
+
+	public ChangeGroup(final Autorank plugin, final List<Requirement> reqs,
+			final List<Result> results) {
 		this.plugin = plugin;
 		this.setRequirements(reqs);
 		this.setResults(results);
 	}
-	
-	public ChangeGroup(Autorank plugin) {
+
+	public ChangeGroup(final Autorank plugin) {
 		this.plugin = plugin;
 	}
 
@@ -46,7 +47,7 @@ public class ChangeGroup {
 		return requirements;
 	}
 
-	public void setRequirements(List<Requirement> requirements) {
+	public void setRequirements(final List<Requirement> requirements) {
 		this.requirements = requirements;
 	}
 
@@ -54,7 +55,7 @@ public class ChangeGroup {
 		return results;
 	}
 
-	public void setResults(List<Result> results) {
+	public void setResults(final List<Result> results) {
 		this.results = results;
 	}
 
@@ -62,7 +63,7 @@ public class ChangeGroup {
 		return parentGroup;
 	}
 
-	public void setParentGroup(String parentGroup) {
+	public void setParentGroup(final String parentGroup) {
 		this.parentGroup = parentGroup;
 	}
 
@@ -70,10 +71,10 @@ public class ChangeGroup {
 		return internalGroup;
 	}
 
-	public void setInternalGroup(String internalGroup) {
+	public void setInternalGroup(final String internalGroup) {
 		this.internalGroup = internalGroup;
 	}
-	
+
 	public boolean applyChange(final Player player) {
 		boolean result = true;
 
@@ -84,7 +85,8 @@ public class ChangeGroup {
 			// Apply all 'main' results
 
 			// Player already got this rank
-			if (plugin.getPlayerDataHandler().hasCompletedRank(uuid, parentGroup)) {
+			if (plugin.getPlayerDataHandler().hasCompletedRank(uuid,
+					parentGroup)) {
 				return false;
 			}
 
@@ -104,7 +106,7 @@ public class ChangeGroup {
 
 		return result;
 	}
-	
+
 	public boolean checkRequirements(final Player player) {
 		boolean result = true;
 
@@ -158,8 +160,8 @@ public class ChangeGroup {
 				// Player has not completed this requirement -> perform results
 				if (!plugin.getPlayerDataHandler().hasCompletedRequirement(
 						reqID, uuid)) {
-					plugin.getPlayerDataHandler().addPlayerProgress(uuid,
-							reqID);
+					plugin.getPlayerDataHandler()
+							.addPlayerProgress(uuid, reqID);
 				} else {
 					// Player already completed this -> do nothing
 					continue;
@@ -192,7 +194,7 @@ public class ChangeGroup {
 
 		return failed;
 	}
-	
+
 	@Override
 	public String toString() {
 		return displayName;
@@ -202,7 +204,7 @@ public class ChangeGroup {
 		return displayName;
 	}
 
-	public void setDisplayName(String displayName) {
+	public void setDisplayName(final String displayName) {
 		this.displayName = displayName;
 	}
 }

@@ -1,5 +1,14 @@
 package me.armar.plugins.autorank.listeners;
 
+import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.hooks.DependencyManager.dependency;
+import me.armar.plugins.autorank.hooks.statsapi.StatsAPIHandler;
+import me.armar.plugins.autorank.hooks.statsapi.customstats.MobKilledStat;
+import nl.lolmewn.stats.api.stat.Stat;
+import nl.lolmewn.stats.api.user.StatsHolder;
+import nl.lolmewn.stats.stat.DefaultStatEntry;
+import nl.lolmewn.stats.stat.MetadataPair;
+
 import org.bukkit.entity.Chicken;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
@@ -14,15 +23,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
-
-import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.hooks.DependencyManager.dependency;
-import me.armar.plugins.autorank.hooks.statsapi.StatsAPIHandler;
-import me.armar.plugins.autorank.hooks.statsapi.customstats.MobKilledStat;
-import nl.lolmewn.stats.api.stat.Stat;
-import nl.lolmewn.stats.api.user.StatsHolder;
-import nl.lolmewn.stats.stat.DefaultStatEntry;
-import nl.lolmewn.stats.stat.MetadataPair;
 
 /**
  * This listener will listen to players killing mobs (for custom stat)
@@ -46,46 +46,46 @@ public class PlayerKillsMobListener implements Listener {
 				.isAvailable())
 			return;
 
-		Entity e = event.getEntity();
+		final Entity e = event.getEntity();
 		if (e.getLastDamageCause() instanceof EntityDamageByEntityEvent) {
-			EntityDamageByEntityEvent nEvent = (EntityDamageByEntityEvent) e
+			final EntityDamageByEntityEvent nEvent = (EntityDamageByEntityEvent) e
 					.getLastDamageCause();
 			if (nEvent.getDamager() instanceof Player) {
 
 				String extraType = null;
 
 				if (e instanceof Skeleton) {
-					Skeleton ske = (Skeleton) e;
+					final Skeleton ske = (Skeleton) e;
 
 					if (ske.getSkeletonType() == SkeletonType.WITHER) {
 						extraType = "WITHER";
 					}
 				} else if (e instanceof Creeper) {
-					Creeper cre = (Creeper) e;
+					final Creeper cre = (Creeper) e;
 
 					if (cre.isPowered()) {
 						extraType = "POWERED";
 					}
 				} else if (e instanceof Chicken) {
-					Chicken mob = (Chicken) e;
+					final Chicken mob = (Chicken) e;
 
 					if (mob.getPassenger() != null) {
 						extraType = "JOCKEY";
 					}
 				} else if (e instanceof Rabbit) {
-					Rabbit mob = (Rabbit) e;
+					final Rabbit mob = (Rabbit) e;
 
 					if (mob.getRabbitType() == Type.THE_KILLER_BUNNY) {
 						extraType = "KILLER";
 					}
 				} else if (e instanceof Spider) {
-					Spider mob = (Spider) e;
+					final Spider mob = (Spider) e;
 
 					if (mob.getPassenger() != null) {
 						extraType = "JOCKEY";
 					}
 				} else if (e instanceof Guardian) {
-					Guardian mob = (Guardian) e;
+					final Guardian mob = (Guardian) e;
 
 					if (mob.isElder()) {
 						extraType = "ELDER";
@@ -96,13 +96,13 @@ public class PlayerKillsMobListener implements Listener {
 					return;
 				}
 
-				StatsAPIHandler handler = (StatsAPIHandler) plugin
+				final StatsAPIHandler handler = (StatsAPIHandler) plugin
 						.getDependencyManager().getDependency(dependency.STATS);
 
-				Stat mobkilled = handler.getAPI().getStatManager()
+				final Stat mobkilled = handler.getAPI().getStatManager()
 						.getStat(MobKilledStat.statName);
 
-				StatsHolder holder = handler.getAPI().getPlayer(
+				final StatsHolder holder = handler.getAPI().getPlayer(
 						nEvent.getDamager().getUniqueId());
 
 				holder.addEntry(mobkilled, new DefaultStatEntry(1,

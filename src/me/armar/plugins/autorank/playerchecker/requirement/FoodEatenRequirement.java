@@ -3,12 +3,12 @@ package me.armar.plugins.autorank.playerchecker.requirement;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.statsmanager.handlers.StatsHandler;
 import me.armar.plugins.autorank.util.AutorankTools;
+
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 public class FoodEatenRequirement extends Requirement {
 
@@ -21,9 +21,9 @@ public class FoodEatenRequirement extends Requirement {
 		String desc = "";
 
 		for (int i = 0; i < foodEaten.size(); i++) {
-			FoodWrapper wrapper = foodEaten.get(i);
-			int amount = wrapper.getAmount();
-			String foodType = wrapper.getFoodName();
+			final FoodWrapper wrapper = foodEaten.get(i);
+			final int amount = wrapper.getAmount();
+			final String foodType = wrapper.getFoodName();
 
 			if (i == 0) {
 				if (foodType == null || foodType.trim().equals("")) {
@@ -58,7 +58,7 @@ public class FoodEatenRequirement extends Requirement {
 		String progress = "";
 
 		for (int i = 0; i < foodEaten.size(); i++) {
-			int amount = foodEaten.get(i).getAmount();
+			final int amount = foodEaten.get(i).getAmount();
 			String foodType = foodEaten.get(i).getFoodName();
 
 			final int totalFoodEaten = getStatsPlugin().getNormalStat(
@@ -90,8 +90,8 @@ public class FoodEatenRequirement extends Requirement {
 			return false;
 
 		for (int i = 0; i < foodEaten.size(); i++) {
-			int amount = foodEaten.get(i).getAmount();
-			String foodType = foodEaten.get(i).getFoodName();
+			final int amount = foodEaten.get(i).getAmount();
+			final String foodType = foodEaten.get(i).getFoodName();
 
 			final int totalFoodEaten = getStatsPlugin().getNormalStat(
 					StatsHandler.statTypes.FOOD_EATEN.toString(),
@@ -128,7 +128,7 @@ class FoodWrapper {
 	private ItemStack foodItem;
 	private int amount;
 
-	public FoodWrapper(String foodName, int amount) {
+	public FoodWrapper(final String foodName, final int amount) {
 		this.setAmount(amount);
 		this.setFoodItem(AutorankTools.getFoodItemFromName(foodName));
 	}
@@ -137,7 +137,7 @@ class FoodWrapper {
 		return foodItem;
 	}
 
-	public void setFoodItem(ItemStack foodItem) {
+	public void setFoodItem(final ItemStack foodItem) {
 		this.foodItem = foodItem;
 	}
 
@@ -145,7 +145,7 @@ class FoodWrapper {
 		return amount;
 	}
 
-	public void setAmount(int amount) {
+	public void setAmount(final int amount) {
 		this.amount = amount;
 	}
 

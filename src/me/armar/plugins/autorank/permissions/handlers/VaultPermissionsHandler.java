@@ -3,27 +3,26 @@ package me.armar.plugins.autorank.permissions.handlers;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.RegisteredServiceProvider;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.permissions.PermissionsHandler;
 import net.milkbowl.vault.Vault;
 import net.milkbowl.vault.permission.Permission;
 
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.RegisteredServiceProvider;
+
 /**
  * @author Staartvin & DeathStampler (see replaceGroup())
- * <p>
- * VaultPermissionsHandler tackles all work that has to be done with
- * Vault. (Most of the permissions plugins
- * are supported with Vault)
+ *         <p>
+ *         VaultPermissionsHandler tackles all work that has to be done with
+ *         Vault. (Most of the permissions plugins are supported with Vault)
  */
 public class VaultPermissionsHandler implements PermissionsHandler {
 
 	private static Permission permission = null;
-	private Autorank plugin;
+	private final Autorank plugin;
 
 	public VaultPermissionsHandler(final Autorank plugin) {
 		if (!setupPermissions(plugin)) {
@@ -85,10 +84,10 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 
 		String[] groups = null;
 
-		Autorank plugin = (Autorank) Bukkit.getPluginManager().getPlugin(
+		final Autorank plugin = (Autorank) Bukkit.getPluginManager().getPlugin(
 				"Autorank");
 
-		UUID uuid = player.getUniqueId();
+		final UUID uuid = player.getUniqueId();
 
 		// Let players choose.
 		if (plugin.getConfigHandler().onlyUsePrimaryGroupVault()) {
@@ -99,7 +98,7 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 
 		// Checking if player changed group
 		// Check if the latest known group is the current group. Otherwise, reset progress
-		String currentGroup = groups[0];
+		final String currentGroup = groups[0];
 		String latestKnownGroup = plugin.getPlayerDataHandler()
 				.getLastKnownGroup(uuid);
 
@@ -158,10 +157,10 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 		}
 
 		// Let get the player groups before we change them.
-		String[] groupsBeforeAdd = getPlayerGroups(player);
+		final String[] groupsBeforeAdd = getPlayerGroups(player);
 
 		// Output array for debug
-		for (String group : groupsBeforeAdd) {
+		for (final String group : groupsBeforeAdd) {
 			plugin.debugMessage("Group of " + player.getName()
 					+ " before adding: " + group);
 		}
@@ -177,7 +176,7 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 			groupsAfterAdd = getPlayerGroups(player);
 
 			// Output array for debug
-			for (String group : groupsAfterAdd) {
+			for (final String group : groupsAfterAdd) {
 				plugin.debugMessage("Group of " + player.getName()
 						+ " after adding: " + group);
 			}
@@ -197,7 +196,7 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 					// and we are left with just the newGroup.
 				} else if (groupsAfterAdd.length == 1) {
 					// We have just one group.  Let's add any that are missing.
-					for (String group : groupsBeforeAdd) {
+					for (final String group : groupsBeforeAdd) {
 						// Let's not re-add the oldGroup
 						if (!group.equalsIgnoreCase(oldGroup)) {
 							// Should we check it if succeeds?

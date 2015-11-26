@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import me.armar.plugins.autorank.language.Lang;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-
-import me.armar.plugins.autorank.language.Lang;
 
 /*
  * AutorankTools is a bunch of static methods, I put sendColoredMessage 
@@ -360,8 +360,8 @@ public class AutorankTools {
 		return returnString;
 	}
 
-	public static boolean containsAtLeast(Player player, ItemStack item,
-			int amount, String displayName) {
+	public static boolean containsAtLeast(final Player player,
+			final ItemStack item, final int amount, String displayName) {
 		// Check if player has at least the x of an item WITH proper displayname
 
 		int count = 0;
@@ -370,7 +370,7 @@ public class AutorankTools {
 		displayName = displayName.replace("&", "§");
 
 		// Check every slot
-		for (ItemStack itemFound : player.getInventory().getContents()) {
+		for (final ItemStack itemFound : player.getInventory().getContents()) {
 
 			if (itemFound == null)
 				continue;
@@ -398,7 +398,7 @@ public class AutorankTools {
 	 * @param item ItemStack to get the name of.
 	 * @return Name of food, or null if not a valid food item.
 	 */
-	public static String getFoodName(ItemStack item) {
+	public static String getFoodName(final ItemStack item) {
 		// Returns null if not a valid food item
 		// Got Materials from https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
 
@@ -559,10 +559,10 @@ public class AutorankTools {
 			return null;
 	}
 
-	public static String createStringFromList(Collection<?> c) {
-		StringBuilder builder = new StringBuilder("");
+	public static String createStringFromList(final Collection<?> c) {
+		final StringBuilder builder = new StringBuilder("");
 
-		Object[] array = c.toArray();
+		final Object[] array = c.toArray();
 
 		for (int i = 0; i < c.size(); i++) {
 
@@ -581,8 +581,9 @@ public class AutorankTools {
 		return builder.toString();
 	}
 
-	public static String getStringFromArgs(String[] args, int startArg) {
-		StringBuilder string = new StringBuilder("");
+	public static String getStringFromArgs(final String[] args,
+			final int startArg) {
+		final StringBuilder string = new StringBuilder("");
 
 		for (int i = startArg; i < args.length; i++) {
 

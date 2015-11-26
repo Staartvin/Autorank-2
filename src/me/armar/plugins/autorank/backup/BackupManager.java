@@ -3,9 +3,9 @@ package me.armar.plugins.autorank.backup;
 import java.io.File;
 import java.io.IOException;
 
-import com.google.common.io.Files;
-
 import me.armar.plugins.autorank.Autorank;
+
+import com.google.common.io.Files;
 
 /**
  * Class that allows me to backup files before overwriting them.
