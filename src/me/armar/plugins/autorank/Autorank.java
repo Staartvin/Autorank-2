@@ -632,5 +632,5 @@ public class Autorank extends JavaPlugin {
 	public void setBackupManager(final BackupManager backupManager) {
 		this.backupManager = backupManager;
 	}
-	// Why is it so hard to push a fucking commit?
+	// Why is it so hard to push a fucking commit??
 }
