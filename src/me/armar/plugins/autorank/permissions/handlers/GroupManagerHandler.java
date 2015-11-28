@@ -6,6 +6,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.permissions.PermissionsHandler;
+
 import org.anjocaido.groupmanager.GroupManager;
 import org.anjocaido.groupmanager.data.Group;
 import org.anjocaido.groupmanager.dataholder.OverloadedWorldHolder;
@@ -14,9 +17,6 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
-
-import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.permissions.PermissionsHandler;
 
 /**
  * @author Staartvin
@@ -74,11 +74,11 @@ public class GroupManagerHandler implements PermissionsHandler {
 				.getPrimaryGroup(player.getName()));
 		final String[] array = (String[]) groups.toArray();
 
-		UUID uuid = player.getUniqueId();
-		
+		final UUID uuid = player.getUniqueId();
+
 		// Checking if player changed group
 		// Check if the latest known group is the current group. Otherwise, reset progress
-		String currentGroup = array[0];
+		final String currentGroup = array[0];
 		String latestKnownGroup = plugin.getPlayerDataHandler()
 				.getLastKnownGroup(uuid);
 

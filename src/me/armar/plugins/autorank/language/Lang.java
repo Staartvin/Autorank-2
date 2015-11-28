@@ -152,8 +152,7 @@ public enum Lang {
 	/**
 	 * &cMySQL is not enabled!
 	 */
-	MYSQL_IS_NOT_ENABLED("mysql-is-not-enabled",
-			"&cMySQL is not enabled!"),
+	MYSQL_IS_NOT_ENABLED("mysql-is-not-enabled", "&cMySQL is not enabled!"),
 	/**
 	 * no groups
 	 */
@@ -274,7 +273,7 @@ public enum Lang {
 	/**
 	 * &cYou are a robot, '{0}'
 	 */
-	YOU_ARE_A_ROBOT("you-are-a-robot", "&cYou are a robot, {0}"),;
+	YOU_ARE_A_ROBOT("you-are-a-robot", "&cYou are a robot, {0}"), ;
 
 	private static FileConfiguration LANG;
 

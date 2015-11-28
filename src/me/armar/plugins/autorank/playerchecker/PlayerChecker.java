@@ -3,15 +3,15 @@ package me.armar.plugins.autorank.playerchecker;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 import me.armar.plugins.autorank.rankbuilder.ChangeGroup;
 import me.armar.plugins.autorank.rankbuilder.ChangeGroupManager;
 import me.armar.plugins.autorank.util.AutorankTools;
+
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 
 /*
  * PlayerChecker is where the magic happens :P It has a RankChangeBuilder that reads 
@@ -27,7 +27,7 @@ import me.armar.plugins.autorank.util.AutorankTools;
 public class PlayerChecker {
 
 	private final Autorank plugin;
-	private ChangeGroupManager changeGroupManager;
+	private final ChangeGroupManager changeGroupManager;
 
 	//private final Map<String, List<RankChange>> rankChanges = new HashMap<String, List<RankChange>>();
 
@@ -53,9 +53,10 @@ public class PlayerChecker {
 			return false;
 
 		// only first group - will cause problems
-		String groupName = plugin.getPermPlugHandler().getPrimaryGroup(player);
+		final String groupName = plugin.getPermPlugHandler().getPrimaryGroup(
+				player);
 
-		List<ChangeGroup> changes = changeGroupManager
+		final List<ChangeGroup> changes = changeGroupManager
 				.getChangeGroups(groupName);
 
 		if (changes == null || changes.size() == 0) {
@@ -69,7 +70,7 @@ public class PlayerChecker {
 			chosenPath = "unknown";
 		}
 
-		ChangeGroup changeGroup = this.getChangeGroupManager()
+		final ChangeGroup changeGroup = this.getChangeGroupManager()
 				.matchChangeGroup(groupName, chosenPath);
 
 		if (changeGroup == null)
@@ -83,21 +84,21 @@ public class PlayerChecker {
 	public List<Requirement> getAllRequirements(final Player player) {
 
 		// only first group - will cause problems
-		String groupName = plugin.getPermPlugHandler().getPrimaryGroup(player);
+		final String groupName = plugin.getPermPlugHandler().getPrimaryGroup(
+				player);
 
-		ChangeGroup chosenChangeGroup = changeGroupManager.matchChangeGroup(
-				groupName,
-				plugin.getPlayerDataHandler().getChosenPath(
-						player.getUniqueId()));
+		final ChangeGroup chosenChangeGroup = changeGroupManager
+				.matchChangeGroup(groupName, plugin.getPlayerDataHandler()
+						.getChosenPath(player.getUniqueId()));
 
 		if (chosenChangeGroup == null) {
 
 			// Get all requirements of all changegroups together
-			List<Requirement> reqs = new ArrayList<Requirement>();
+			final List<Requirement> reqs = new ArrayList<Requirement>();
 
-			for (ChangeGroup changeGroup : changeGroupManager
+			for (final ChangeGroup changeGroup : changeGroupManager
 					.getChangeGroups(groupName)) {
-				for (Requirement req : changeGroup.getRequirements()) {
+				for (final Requirement req : changeGroup.getRequirements()) {
 					reqs.add(req);
 				}
 			}
@@ -119,21 +120,21 @@ public class PlayerChecker {
 	public List<Requirement> getFailedRequirements(final Player player) {
 
 		// only first group - will cause problems
-		String groupName = plugin.getPermPlugHandler().getPrimaryGroup(player);
+		final String groupName = plugin.getPermPlugHandler().getPrimaryGroup(
+				player);
 
-		ChangeGroup chosenChangeGroup = changeGroupManager.matchChangeGroup(
-				groupName,
-				plugin.getPlayerDataHandler().getChosenPath(
-						player.getUniqueId()));
+		final ChangeGroup chosenChangeGroup = changeGroupManager
+				.matchChangeGroup(groupName, plugin.getPlayerDataHandler()
+						.getChosenPath(player.getUniqueId()));
 
 		if (chosenChangeGroup == null) {
 
 			// Get all requirments of all changegroups together
-			List<Requirement> reqs = new ArrayList<Requirement>();
+			final List<Requirement> reqs = new ArrayList<Requirement>();
 
-			for (ChangeGroup changeGroup : changeGroupManager
+			for (final ChangeGroup changeGroup : changeGroupManager
 					.getChangeGroups(groupName)) {
-				for (Requirement req : changeGroup
+				for (final Requirement req : changeGroup
 						.getFailedRequirements(player)) {
 					reqs.add(req);
 				}
@@ -156,7 +157,7 @@ public class PlayerChecker {
 		return changeGroupManager.debugChangeGroups(true);
 	}
 
-	public void doLeaderboardExemptCheck(Player player) {
+	public void doLeaderboardExemptCheck(final Player player) {
 		plugin.getPlayerDataHandler().hasLeaderboardExemption(
 				player.getUniqueId(),
 				player.hasPermission("autorank.leaderboard.exempt"));
@@ -203,8 +204,8 @@ public class PlayerChecker {
 
 	}
 
-	public List<Integer> getMetRequirements(List<Requirement> reqs,
-			Player player) {
+	public List<Integer> getMetRequirements(final List<Requirement> reqs,
+			final Player player) {
 		final List<Integer> metRequirements = new ArrayList<Integer>();
 
 		boolean onlyOptional = true;
@@ -216,9 +217,9 @@ public class PlayerChecker {
 		}
 
 		if (onlyOptional) {
-			List<Integer> optionalRequirements = new ArrayList<Integer>();
+			final List<Integer> optionalRequirements = new ArrayList<Integer>();
 
-			for (Requirement req : reqs) {
+			for (final Requirement req : reqs) {
 				optionalRequirements.add(req.getReqId());
 			}
 

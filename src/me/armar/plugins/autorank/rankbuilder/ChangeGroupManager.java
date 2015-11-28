@@ -17,15 +17,15 @@ import me.armar.plugins.autorank.Autorank;
  */
 public class ChangeGroupManager {
 
-	private Autorank plugin;
+	private final Autorank plugin;
 	private ChangeGroupBuilder builder;
 
 	// The String is a name of the group, used to get the change groups from that group.
 	// The List contains all change groups that this parent group has.
 	// One ChangeGroup class represents one path to take in the group
-	private HashMap<String, List<ChangeGroup>> changeGroups = new HashMap<String, List<ChangeGroup>>();
+	private final HashMap<String, List<ChangeGroup>> changeGroups = new HashMap<String, List<ChangeGroup>>();
 
-	public ChangeGroupManager(Autorank plugin) {
+	public ChangeGroupManager(final Autorank plugin) {
 		this.plugin = plugin;
 		setBuilder(new ChangeGroupBuilder(plugin));
 	}
@@ -34,7 +34,7 @@ public class ChangeGroupManager {
 		return builder;
 	}
 
-	public void setBuilder(ChangeGroupBuilder builder) {
+	public void setBuilder(final ChangeGroupBuilder builder) {
 		this.builder = builder;
 	}
 
@@ -51,26 +51,27 @@ public class ChangeGroupManager {
 					changeGroups);
 		}
 
-		for (String message : debugChangeGroups(true)) {
+		for (final String message : debugChangeGroups(true)) {
 			plugin.debugMessage(message);
 		}
 
 	}
 
 	// Returns a list of strings that can be printed out one for one to get the debug
-	public List<String> debugChangeGroups(boolean deepInfo) {
+	public List<String> debugChangeGroups(final boolean deepInfo) {
 
-		List<String> messages = new ArrayList<String>();
+		final List<String> messages = new ArrayList<String>();
 
 		messages.add(" ------------------- ChangeGroup debug info ------------------- ");
 
-		for (Entry<String, List<ChangeGroup>> entry : changeGroups.entrySet()) {
-			String groupName = entry.getKey();
-			List<ChangeGroup> groups = entry.getValue();
+		for (final Entry<String, List<ChangeGroup>> entry : changeGroups
+				.entrySet()) {
+			final String groupName = entry.getKey();
+			final List<ChangeGroup> groups = entry.getValue();
 
 			messages.add("Group: " + groupName);
 
-			for (ChangeGroup group : groups) {
+			for (final ChangeGroup group : groups) {
 				messages.add("- " + group.getInternalGroup());
 
 				// Provide more info
@@ -89,10 +90,11 @@ public class ChangeGroupManager {
 		return messages;
 	}
 
-	public List<ChangeGroup> getChangeGroups(String groupName) {
+	public List<ChangeGroup> getChangeGroups(final String groupName) {
 		// return empty list if nothing found
-		if (!changeGroups.containsKey(groupName)) return new ArrayList<ChangeGroup>();
-		
+		if (!changeGroups.containsKey(groupName))
+			return new ArrayList<ChangeGroup>();
+
 		return changeGroups.get(groupName);
 	}
 
@@ -103,8 +105,9 @@ public class ChangeGroupManager {
 	 * @param chosenPath The internal name of the ChangeGroup
 	 * @return a ChangeGroup class that corresponds to the internal name given.
 	 */
-	public ChangeGroup matchChangeGroup(String parentGroup, String chosenPath) {
-		List<ChangeGroup> changeGroup = this.getChangeGroups(parentGroup);
+	public ChangeGroup matchChangeGroup(final String parentGroup,
+			final String chosenPath) {
+		final List<ChangeGroup> changeGroup = this.getChangeGroups(parentGroup);
 
 		if (changeGroup == null)
 			return null;
@@ -114,8 +117,8 @@ public class ChangeGroupManager {
 			return changeGroup.get(0);
 		}
 
-		for (ChangeGroup change : changeGroup) {
-			String internalName = change.getInternalGroup();
+		for (final ChangeGroup change : changeGroup) {
+			final String internalName = change.getInternalGroup();
 
 			if (internalName.equals(chosenPath)) {
 				return change;
@@ -123,16 +126,18 @@ public class ChangeGroupManager {
 		}
 		return null;
 	}
-	
-	public ChangeGroup matchChangeGroupFromDisplayName(String parentGroup, String displayName) {
-		List<ChangeGroup> changeGroupList = this.getChangeGroups(parentGroup);
-		
-		for (ChangeGroup group: changeGroupList) {
+
+	public ChangeGroup matchChangeGroupFromDisplayName(
+			final String parentGroup, final String displayName) {
+		final List<ChangeGroup> changeGroupList = this
+				.getChangeGroups(parentGroup);
+
+		for (final ChangeGroup group : changeGroupList) {
 			if (group.getDisplayName().toLowerCase().equals(displayName)) {
 				return group;
 			}
 		}
-		
+
 		return null;
 	}
 

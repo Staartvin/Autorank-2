@@ -18,7 +18,7 @@ import nl.lolmewn.stats.api.storage.DataType;
  */
 public class MobKilledStat implements Stat {
 
-	private HashMap<String, DataType> data = new HashMap<String, DataType>();
+	private final HashMap<String, DataType> data = new HashMap<String, DataType>();
 
 	public static String statName = "AR special mobs killed";
 
@@ -33,7 +33,7 @@ public class MobKilledStat implements Stat {
 	 * @see nl.lolmewn.stats.api.stat.Stat#format(nl.lolmewn.stats.api.stat.StatEntry)
 	 */
 	@Override
-	public String format(StatEntry arg0) {
+	public String format(final StatEntry arg0) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -78,7 +78,7 @@ public class MobKilledStat implements Stat {
 	 * @see nl.lolmewn.stats.api.stat.Stat#setEnabled(boolean)
 	 */
 	@Override
-	public void setEnabled(boolean arg0) {
+	public void setEnabled(final boolean arg0) {
 		// TODO Auto-generated method stub
 
 	}

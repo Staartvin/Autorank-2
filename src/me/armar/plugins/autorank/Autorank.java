@@ -2,9 +2,6 @@ package me.armar.plugins.autorank;
 
 import java.io.IOException;
 
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitTask;
-
 import me.armar.plugins.autorank.addons.AddOnManager;
 import me.armar.plugins.autorank.api.API;
 import me.armar.plugins.autorank.backup.BackupManager;
@@ -63,10 +60,12 @@ import me.armar.plugins.autorank.rankbuilder.builders.ResultBuilder;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.armar.plugins.autorank.updater.UpdateHandler;
 import me.armar.plugins.autorank.updater.Updater;
-import me.armar.plugins.autorank.util.uuid.UUIDRefresher;
 import me.armar.plugins.autorank.util.uuid.storage.UUIDStorage;
 import me.armar.plugins.autorank.validations.ValidateHandler;
 import me.armar.plugins.autorank.warningmanager.WarningManager;
+
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitTask;
 
 /**
  * 
@@ -105,7 +104,7 @@ public class Autorank extends JavaPlugin {
 	private ValidateHandler validateHandler;
 
 	private WarningManager warningManager;
-	
+
 	private BukkitTask uuidRefresherTask;
 
 	/**
@@ -142,7 +141,7 @@ public class Autorank extends JavaPlugin {
 
 		// Cancel refresh
 		uuidRefresherTask.cancel();
-		
+
 		// Make sure all tasks are cancelled after shutdown. This seems obvious, but when a player /reloads, the server creates an instance of the plugin which causes duplicate tasks to run. 
 		getServer().getScheduler().cancelTasks(this);
 
@@ -183,7 +182,7 @@ public class Autorank extends JavaPlugin {
 
 		// Save playerdata.yml
 		this.getPlayerDataHandler().saveConfig();
-		
+
 		setPlayerDataHandler(null);
 
 		setSimpleConfig(null);
@@ -245,14 +244,14 @@ public class Autorank extends JavaPlugin {
 
 		// Create MySQL Wrapper
 		setMySQLWrapper(new MySQLWrapper(this));
-		
+
 		// Load dependency manager
 		setDependencyManager(new DependencyManager(this));
 
 		try {
 			// Load dependencies
 			dependencyManager.loadDependencies();
-		} catch (Throwable t) {
+		} catch (final Throwable t) {
 
 			// When an error occured!
 
@@ -263,9 +262,9 @@ public class Autorank extends JavaPlugin {
 
 		// Create playtime class
 		setPlaytimes(new Playtimes(this));
-		
+
 		// Refresh player data - store it so we can cancel it later
-		uuidRefresherTask = this.getServer().getScheduler().runTaskAsynchronously(this, new UUIDRefresher(this));
+		//uuidRefresherTask = this.getServer().getScheduler().runTaskAsynchronously(this, new UUIDRefresher(this));
 
 		// Convert data folder
 		//playtimes.convertToUUIDStorage();
@@ -285,8 +284,10 @@ public class Autorank extends JavaPlugin {
 		// Create commands manager
 		setCommandsManager(new CommandsManager(this));
 
-		final RequirementBuilder req = this.getPlayerChecker().getChangeGroupManager().getBuilder().getRequirementBuilder();
-		final ResultBuilder res = this.getPlayerChecker().getChangeGroupManager().getBuilder().getResultBuilder();
+		final RequirementBuilder req = this.getPlayerChecker()
+				.getChangeGroupManager().getBuilder().getRequirementBuilder();
+		final ResultBuilder res = this.getPlayerChecker()
+				.getChangeGroupManager().getBuilder().getResultBuilder();
 
 		// Register 'main' requirements
 		req.registerRequirement("exp", ExpRequirement.class);
@@ -338,17 +339,18 @@ public class Autorank extends JavaPlugin {
 					@Override
 					public void run() {
 
-						getPlayerChecker().getChangeGroupManager().initialiseFromConfigs();
-						
+						getPlayerChecker().getChangeGroupManager()
+								.initialiseFromConfigs();
+
 						// Validate configs after that
 						if (configHandler.useAdvancedConfig()) {
 							getValidateHandler().validateConfigGroups(
 									getAdvancedConfig());
 						} else {
-							getValidateHandler()
-									.validateConfigGroups(getSimpleConfig());
+							getValidateHandler().validateConfigGroups(
+									getSimpleConfig());
 						}
-						
+
 						// Start warning task if a warning has been found
 						if (getWarningManager().getHighestWarning() != null) {
 							getWarningManager().startWarningTask();
@@ -398,9 +400,8 @@ public class Autorank extends JavaPlugin {
 		}
 
 		// Start automatic backup
-		this.getBackupManager().startBackupSystem();	
+		this.getBackupManager().startBackupSystem();
 	}
-	
 
 	public AddOnManager getAddonManager() {
 		return addonManager;
@@ -490,14 +491,14 @@ public class Autorank extends JavaPlugin {
 
 	public void registerRequirement(final String name,
 			final Class<? extends Requirement> requirement) {
-		this.getPlayerChecker().getChangeGroupManager().getBuilder().getRequirementBuilder()
-				.registerRequirement(name, requirement);
+		this.getPlayerChecker().getChangeGroupManager().getBuilder()
+				.getRequirementBuilder().registerRequirement(name, requirement);
 	}
 
 	public void registerResult(final String name,
 			final Class<? extends Result> result) {
-		this.getPlayerChecker().getChangeGroupManager().getBuilder().getResultBuilder()
-				.registerResult(name, result);
+		this.getPlayerChecker().getChangeGroupManager().getBuilder()
+				.getResultBuilder().registerResult(name, result);
 	}
 
 	public void reload() {
@@ -585,8 +586,7 @@ public class Autorank extends JavaPlugin {
 			metrics = new me.armar.plugins.autorank.metrics.Metrics(this);
 
 			// Setup graph for MySQL
-			final Graph mysqlUsedGraph = metrics
-					.createGraph("Using MySQL");
+			final Graph mysqlUsedGraph = metrics.createGraph("Using MySQL");
 
 			mysqlUsedGraph.addPlotter(new Metrics.Plotter("MySQL") {
 
@@ -596,13 +596,15 @@ public class Autorank extends JavaPlugin {
 				}
 
 			});
-			
+
 			mysqlUsedGraph.addPlotter(new Metrics.Plotter("No MySQL") {
 
 				@Override
 				public int getValue() {
-					if (!getConfigHandler().useMySQL()) return 1;
-					else return 0;
+					if (!getConfigHandler().useMySQL())
+						return 1;
+					else
+						return 0;
 				}
 
 			});

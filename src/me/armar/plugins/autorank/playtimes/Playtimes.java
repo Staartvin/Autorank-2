@@ -261,7 +261,7 @@ public class Playtimes {
 	 * @param cache whether to only use cache or use real time values.
 	 * @return play time of given player or 0 if not found.
 	 */
-	public int getTimeOfPlayer(final String playerName, boolean cache) {
+	public int getTimeOfPlayer(final String playerName, final boolean cache) {
 
 		int playTime = 0;
 

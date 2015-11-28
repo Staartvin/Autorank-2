@@ -2,10 +2,10 @@ package me.armar.plugins.autorank.validations;
 
 import java.util.Set;
 
-import org.bukkit.configuration.ConfigurationSection;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
+
+import org.bukkit.configuration.ConfigurationSection;
 
 public class PermissionGroupValidation {
 
@@ -34,16 +34,12 @@ public class PermissionGroupValidation {
 			return true;
 
 		if (rankChange.trim().equals("")) {
-			autorank.getWarningManager()
-			.registerWarning(
-					"Rank change of rank '"
-							+ group
-							+ "' is invalid. It doesn't exist!",
-					10);
-			
+			autorank.getWarningManager().registerWarning(
+					"Rank change of rank '" + group
+							+ "' is invalid. It doesn't exist!", 10);
+
 			return false;
 		}
-			
 
 		if (!rankChange.contains(";")) {
 			boolean isMissing = true;
@@ -53,13 +49,12 @@ public class PermissionGroupValidation {
 					isMissing = false;
 				}
 			}
-			
+
 			if (isMissing) {
-				autorank.getWarningManager()
-				.registerWarning(
-						"Rank change of rank '"
-								+ group
-								+ "' is invalid. Rank '" + rankChange.trim() + "' doesn't exist in the permissions file!",
+				autorank.getWarningManager().registerWarning(
+						"Rank change of rank '" + group
+								+ "' is invalid. Rank '" + rankChange.trim()
+								+ "' doesn't exist in the permissions file!",
 						10);
 			}
 
@@ -102,34 +97,38 @@ public class PermissionGroupValidation {
 			if (group1 == null)
 				continue;
 
-			if (group1.equalsIgnoreCase(group) && autorank.getPermPlugHandler().getPermissionPlugin().getName().contains("bPermissions")) {
+			if (group1.equalsIgnoreCase(group)
+					&& autorank.getPermPlugHandler().getPermissionPlugin()
+							.getName().contains("bPermissions")) {
 				// bPerms does not care about case-sensitivity.
 				isMissingRankTo = false;
 				break;
 			}
-			
+
 			if (group1.equalsIgnoreCase(rankTo.trim())) {
 				isMissingRankTo = false;
 				break;
 			}
 		}
-		
+
 		// Check whether the rankFrom exists
 		for (final String group1 : groups) {
 			if (group1 == null)
 				continue;
-			
+
 			if (group.contains("-copy-")) {
 				isMissingRankFrom = false;
 				break;
 			}
 
-			if (group1.equalsIgnoreCase(group) && autorank.getPermPlugHandler().getPermissionPlugin().getName().contains("bPermissions")) {
+			if (group1.equalsIgnoreCase(group)
+					&& autorank.getPermPlugHandler().getPermissionPlugin()
+							.getName().contains("bPermissions")) {
 				// bPerms does not care about case-sensitivity.
 				isMissingRankFrom = false;
 				break;
 			}
-			
+
 			if (group1.equals(rankFrom.trim())) {
 				isMissingRankFrom = false;
 				break;
@@ -155,11 +154,11 @@ public class PermissionGroupValidation {
 							10);
 			return false;
 		}
-		
-		if (!rankFrom.equals(group) && !group.contains("-copy")) {			
+
+		if (!rankFrom.equals(group) && !group.contains("-copy")) {
 			return false;
 		}
-		
+
 		return true;
 	}
 
@@ -189,17 +188,19 @@ public class PermissionGroupValidation {
 				if (rank.equals(group)) {
 					break;
 				}
-				
+
 				// Rank is a copy of another rank, so don't worry about the name.
 				if (rank.contains("-copy-")) {
 					break;
 				}
-				
-				if (rank.equalsIgnoreCase(group) && autorank.getPermPlugHandler().getPermissionPlugin().getName().contains("bPermissions")) {
+
+				if (rank.equalsIgnoreCase(group)
+						&& autorank.getPermPlugHandler().getPermissionPlugin()
+								.getName().contains("bPermissions")) {
 					// bPerms does not care about case-sensitivity.
 					break;
 				}
-				
+
 				if (rank.equalsIgnoreCase(group)) {
 					// Do not log but register warning
 					autorank.getWarningManager().registerWarning(
@@ -252,7 +253,7 @@ public class PermissionGroupValidation {
 				// found matching group
 				if (rank.equals(group))
 					break;
-				
+
 				// Rank is a copy of another rank, so don't worry about the name.
 				if (rank.contains("-copy-")) {
 					break;

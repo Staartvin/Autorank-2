@@ -3,9 +3,9 @@ package me.armar.plugins.autorank.addons;
 import java.util.HashMap;
 import java.util.Set;
 
-import org.bukkit.plugin.java.JavaPlugin;
-
 import me.armar.plugins.autorank.Autorank;
+
+import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * This will class will take care of all the handling of addons for Autorank.

@@ -4,12 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.api.events.CheckCommandEvent;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
@@ -19,6 +13,12 @@ import me.armar.plugins.autorank.rankbuilder.ChangeGroup;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
+
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class CheckCommand extends AutorankCommand {
 
@@ -46,24 +46,28 @@ public class CheckCommand extends AutorankCommand {
 			return;
 
 		// Only do for the first group - will cause problems
-		String groupName = plugin.getPermPlugHandler().getPrimaryGroup(player);
+		final String groupName = plugin.getPermPlugHandler().getPrimaryGroup(
+				player);
 
 		String chosenPath = plugin.getPlayerDataHandler().getChosenPath(uuid);
-		ChangeGroup chosenChangeGroup = plugin.getPlayerChecker()
+		final ChangeGroup chosenChangeGroup = plugin.getPlayerChecker()
 				.getChangeGroupManager()
 				.matchChangeGroup(groupName, chosenPath);
-		
-		List<ChangeGroup> changeGroups = plugin.getPlayerChecker().getChangeGroupManager().getChangeGroups(groupName);
-		
+
+		final List<ChangeGroup> changeGroups = plugin.getPlayerChecker()
+				.getChangeGroupManager().getChangeGroups(groupName);
+
 		if (!plugin.getPlayerDataHandler().checkValidChosenPath(player)) {
 			chosenPath = "unknown";
 		}
-		
-		if (chosenPath.equals("unknown") && chosenChangeGroup == null && !(changeGroups == null || changeGroups.size() == 0)) {
-			
+
+		if (chosenPath.equals("unknown") && chosenChangeGroup == null
+				&& !(changeGroups == null || changeGroups.size() == 0)) {
+
 			// Not yet chosen a changegroup
-			
-			sender.sendMessage(ChatColor.BLACK + "-------------------------------------");
+
+			sender.sendMessage(ChatColor.BLACK
+					+ "-------------------------------------");
 			sender.sendMessage(ChatColor.BLUE
 					+ "There are multiple ranking paths, please choose one with "
 					+ ChatColor.RED + "'/ar choose'" + ChatColor.BLUE + ".");
@@ -72,8 +76,11 @@ public class CheckCommand extends AutorankCommand {
 			sender.sendMessage(ChatColor.BLUE
 					+ "To check what each path looks like, use "
 					+ ChatColor.RED + "'/ar view'" + ChatColor.DARK_BLUE + ".");
-			sender.sendMessage(ChatColor.YELLOW + "You can see a list of paths with '" + ChatColor.RED + "/ar view list" + ChatColor.YELLOW + "'.");			
-			sender.sendMessage(ChatColor.BLACK + "-------------------------------------");
+			sender.sendMessage(ChatColor.YELLOW
+					+ "You can see a list of paths with '" + ChatColor.RED
+					+ "/ar view list" + ChatColor.YELLOW + "'.");
+			sender.sendMessage(ChatColor.BLACK
+					+ "-------------------------------------");
 			return;
 
 		}
@@ -83,23 +90,23 @@ public class CheckCommand extends AutorankCommand {
 		String layout = plugin.getConfigHandler().getCheckCommandLayout();
 
 		layout = layout.replace("&p", player.getName());
-		layout = layout.replace("&time",
-				AutorankTools.timeToString(plugin.getPlaytimes()
-						.getTimeOfPlayer(player.getName(), true), Time.SECONDS));
+		layout = layout.replace("&time", AutorankTools.timeToString(plugin
+				.getPlaytimes().getTimeOfPlayer(player.getName(), true),
+				Time.SECONDS));
 
 		final StringBuilder groupsString = new StringBuilder("");
 
 		if (groupName == null) {
 			groupsString.append(Lang.NO_GROUPS.getConfigValue());
 		} else {/*
-			boolean first = true;
-			for (final String group : groups) {
+				boolean first = true;
+				for (final String group : groups) {
 				if (!first) {
 					groupsString.append(", ");
 				}
 				groupsString.append(group);
 				first = false;
-			}*/
+				}*/
 			groupsString.append(groupName);
 		}
 
@@ -262,8 +269,8 @@ public class CheckCommand extends AutorankCommand {
 			//	Lang.REQUIREMENTS_TO_RANK.getConfigValue(null));
 
 			if (showReqs) {
-				final List<String> messages = plugin.getPlayerChecker().getRequirementsInStringList(reqs,
-						metRequirements);
+				final List<String> messages = plugin.getPlayerChecker()
+						.getRequirementsInStringList(reqs, metRequirements);
 
 				for (final String message : messages) {
 					AutorankTools.sendColoredMessage(sender, message);
@@ -288,7 +295,8 @@ public class CheckCommand extends AutorankCommand {
 			final Player player = plugin.getServer().getPlayer(args[1]);
 			if (player == null) {
 
-				final int time = plugin.getPlaytimes().getTimeOfPlayer(args[1], true);
+				final int time = plugin.getPlaytimes().getTimeOfPlayer(args[1],
+						true);
 
 				if (time <= 0) {
 					sender.sendMessage(Lang.PLAYER_IS_INVALID
@@ -335,8 +343,8 @@ public class CheckCommand extends AutorankCommand {
 	 * @see me.armar.plugins.autorank.commands.manager.AutorankCommand#onTabComplete(org.bukkit.command.CommandSender, org.bukkit.command.Command, java.lang.String, java.lang.String[])
 	 */
 	@Override
-	public List<String> onTabComplete(CommandSender sender, Command cmd,
-			String commandLabel, String[] args) {
+	public List<String> onTabComplete(final CommandSender sender,
+			final Command cmd, final String commandLabel, final String[] args) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -2,12 +2,12 @@ package me.armar.plugins.autorank.commands;
 
 import java.util.List;
 
+import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.commands.manager.AutorankCommand;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-
-import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 
 public class DebugCommand extends AutorankCommand {
 
@@ -50,8 +50,8 @@ public class DebugCommand extends AutorankCommand {
 	 * @see me.armar.plugins.autorank.commands.manager.AutorankCommand#onTabComplete(org.bukkit.command.CommandSender, org.bukkit.command.Command, java.lang.String, java.lang.String[])
 	 */
 	@Override
-	public List<String> onTabComplete(CommandSender sender, Command cmd,
-			String commandLabel, String[] args) {
+	public List<String> onTabComplete(final CommandSender sender,
+			final Command cmd, final String commandLabel, final String[] args) {
 		// TODO Auto-generated method stub
 		return null;
 	}

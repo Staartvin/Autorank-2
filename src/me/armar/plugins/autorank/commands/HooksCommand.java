@@ -2,14 +2,14 @@ package me.armar.plugins.autorank.commands;
 
 import java.util.List;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.hooks.DependencyHandler;
 import me.armar.plugins.autorank.hooks.DependencyManager.dependency;
 import net.md_5.bungee.api.ChatColor;
+
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 
 public class HooksCommand extends AutorankCommand {
 
@@ -29,15 +29,15 @@ public class HooksCommand extends AutorankCommand {
 
 		sender.sendMessage(ChatColor.GOLD + "Autorank Hooks:");
 
-		for (dependency dep : dependency.values()) {
+		for (final dependency dep : dependency.values()) {
 			// There is no dependency handler for Autorank
 			if (dep == dependency.AUTORANK)
 				continue;
 
-			DependencyHandler handler = plugin.getDependencyManager()
+			final DependencyHandler handler = plugin.getDependencyManager()
 					.getDependency(dep);
 
-			StringBuilder message = new StringBuilder(ChatColor.GRAY
+			final StringBuilder message = new StringBuilder(ChatColor.GRAY
 					+ dep.toString() + ": " + ChatColor.RESET);
 
 			if (handler.isAvailable()) {
@@ -56,8 +56,8 @@ public class HooksCommand extends AutorankCommand {
 	 * @see me.armar.plugins.autorank.commands.manager.AutorankCommand#onTabComplete(org.bukkit.command.CommandSender, org.bukkit.command.Command, java.lang.String, java.lang.String[])
 	 */
 	@Override
-	public List<String> onTabComplete(CommandSender sender, Command cmd,
-			String commandLabel, String[] args) {
+	public List<String> onTabComplete(final CommandSender sender,
+			final Command cmd, final String commandLabel, final String[] args) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -2,6 +2,9 @@ package me.armar.plugins.autorank.hooks.statisticsapi;
 
 import java.util.UUID;
 
+import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.hooks.DependencyHandler;
+
 import org.bukkit.plugin.Plugin;
 
 import com.avaje.ebeaninternal.server.autofetch.Statistics;
@@ -10,9 +13,6 @@ import com.wolvencraft.yasp.session.OfflineSession;
 import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.util.NamedInteger;
 import com.wolvencraft.yasp.util.cache.OfflineSessionCache;
-
-import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.hooks.DependencyHandler;
 
 /**
  * Handles all connections with Statistics
@@ -264,8 +264,8 @@ public class StatisticsAPIHandler implements DependencyHandler {
 					.getPlayer(uuid));
 		}
 
-		for (NamedInteger n : OfflineSessionCache.fetch(uuid).getPlayerTotals()
-				.getNamedValues()) {
+		for (final NamedInteger n : OfflineSessionCache.fetch(uuid)
+				.getPlayerTotals().getNamedValues()) {
 			System.out.print("n: " + n.getName() + " value: " + n.getValue());
 		}
 		//System.out.print(onlineSession.getDataStore(DataStoreType.Blocks).getNormalData().get(0));

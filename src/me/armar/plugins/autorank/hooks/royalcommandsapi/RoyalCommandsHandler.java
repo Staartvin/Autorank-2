@@ -1,11 +1,11 @@
 package me.armar.plugins.autorank.hooks.royalcommandsapi;
 
+import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.hooks.DependencyHandler;
+
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.royaldev.royalcommands.RoyalCommands;
-
-import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.hooks.DependencyHandler;
 
 /**
  * Handles all connections with RoyalCommands

@@ -8,9 +8,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
-
 import me.armar.plugins.autorank.Autorank;
+
+import org.bukkit.Bukkit;
 
 /**
  * This class allows developers to easily get UUIDs from names <br>

@@ -110,7 +110,7 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
 				array = (JSONArray) jsonParser.parse(new InputStreamReader(
 						connection.getInputStream()));
 			} catch (final Exception e) {
-				
+
 				System.out.print("[Autorank] Could not fetch UUID of player '"
 						+ names.get(i) + "'!");
 				continue;

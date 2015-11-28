@@ -8,17 +8,17 @@ import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 
-import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.api.events.RequirementCompleteEvent;
 import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 import me.armar.plugins.autorank.playerchecker.result.Result;
 import me.armar.plugins.autorank.rankbuilder.ChangeGroup;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
+
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 
 /**
  * PlayerDataHandler will keep track of the latest known group and progress a
@@ -255,45 +255,48 @@ public class PlayerDataHandler {
 		config.set(uuid.toString() + ".progress", progress);
 	}
 
-	public boolean hasLeaderboardExemption(UUID uuid) {
+	public boolean hasLeaderboardExemption(final UUID uuid) {
 		return config
 				.getBoolean(uuid.toString() + ".exempt leaderboard", false);
 	}
 
-	public void hasLeaderboardExemption(UUID uuid, boolean value) {
+	public void hasLeaderboardExemption(final UUID uuid, final boolean value) {
 		config.set(uuid.toString() + ".exempt leaderboard", value);
 	}
-	
-	public void setChosenPath(UUID uuid, String path) {
+
+	public void setChosenPath(final UUID uuid, final String path) {
 		config.set(uuid.toString() + ".chosen path", path);
 	}
-	
-	public String getChosenPath(UUID uuid) {
+
+	public String getChosenPath(final UUID uuid) {
 		return config.getString(uuid.toString() + ".chosen path", "unknown");
 	}
-	
-	public boolean checkValidChosenPath(Player player) {
-		
-		String groupName = plugin.getPermPlugHandler().getPrimaryGroup(player);
-		String chosenPath = this.getChosenPath(player.getUniqueId());
-		
-		List<ChangeGroup> changeGroups = plugin.getPlayerChecker().getChangeGroupManager().getChangeGroups(groupName);
+
+	public boolean checkValidChosenPath(final Player player) {
+
+		final String groupName = plugin.getPermPlugHandler().getPrimaryGroup(
+				player);
+		final String chosenPath = this.getChosenPath(player.getUniqueId());
+
+		final List<ChangeGroup> changeGroups = plugin.getPlayerChecker()
+				.getChangeGroupManager().getChangeGroups(groupName);
 
 		boolean validChosenPath = false;
-		
+
 		// Check whether the chosen path equals one of the change groups
-		for (ChangeGroup group: changeGroups) {
+		for (final ChangeGroup group : changeGroups) {
 			if (group.getInternalGroup().equals(chosenPath)) {
 				validChosenPath = true;
 			}
 		}
-		
+
 		if (!validChosenPath) {
 			// Somehow there wrong chosen path was still left over. Remove it.
-			plugin.getPlayerDataHandler().setChosenPath(player.getUniqueId(), null);
+			plugin.getPlayerDataHandler().setChosenPath(player.getUniqueId(),
+					null);
 		}
-		
+
 		return validChosenPath;
-		
+
 	}
 }
