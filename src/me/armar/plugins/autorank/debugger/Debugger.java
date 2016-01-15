@@ -153,6 +153,12 @@ public class Debugger {
 		} catch (final IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			try {
+				out.close();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			return dateFormatSave;
 		}
 
