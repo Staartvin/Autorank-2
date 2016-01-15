@@ -34,7 +34,6 @@ public class Debugger {
 		plugin = instance;
 	}
 
-	@SuppressWarnings("resource")
 	public String createDebugFile() {
 
 		final String dateFormatSave = dateFormat.format(new Date());
