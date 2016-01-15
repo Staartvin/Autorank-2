@@ -60,13 +60,12 @@ public class Leaderboard {
 		return sortedMap;
 	}
 
-	private long lastUpdatedTime;
 	private String layout = "&6&r | &b&p - &7&d %day%, &h %hour% and &m %minute%.";
 	private int leaderboardLength = 10;
-	private String[] messages;
+	//private String[] messages;
 	private final Autorank plugin;
 
-	private final double validTime = 10D; // In minutes
+	private final double validTime = 30; // Leaderboard is valid for 30 minutes.
 
 	public Leaderboard(final Autorank plugin) {
 		this.plugin = plugin;
@@ -135,16 +134,12 @@ public class Leaderboard {
 							updateLeaderboard();
 
 							// Send them afterwards, not at the same time.
-							for (final String msg : messages) {
-								AutorankTools.sendColoredMessage(sender, msg);
-							}
+							sendMessages(sender);
 						}
 					});
 		} else {
 			// send them instantly
-			for (final String msg : messages) {
-				AutorankTools.sendColoredMessage(sender, msg);
-			}
+			sendMessages(sender);
 		}
 	}
 
@@ -159,7 +154,7 @@ public class Leaderboard {
 							updateLeaderboard();
 
 							// Send them afterwards, not at the same time.
-							for (final String msg : messages) {
+							for (final String msg : plugin.getInternalProps().getCachedLeaderboard()) {
 								plugin.getServer().broadcastMessage(
 										ChatColor.translateAlternateColorCodes(
 												'&', msg));
@@ -168,7 +163,7 @@ public class Leaderboard {
 					});
 		} else {
 			// send them instantly
-			for (final String msg : messages) {
+			for (final String msg : plugin.getInternalProps().getCachedLeaderboard()) {
 				plugin.getServer().broadcastMessage(
 						ChatColor.translateAlternateColorCodes('&', msg));
 			}
@@ -176,17 +171,20 @@ public class Leaderboard {
 	}
 
 	private boolean shouldUpdateLeaderboard() {
-		if (System.currentTimeMillis() - lastUpdatedTime > (60000 * validTime)
-				|| messages == null)
+		if (System.currentTimeMillis() - plugin.getInternalProps().getLeaderboardLastUpdateTime() > (60000 * validTime))
 			return true;
 		else
 			return false;
 	}
+	
+	public void sendMessages(CommandSender sender) {
+		for (final String msg : plugin.getInternalProps().getCachedLeaderboard()) {
+			AutorankTools.sendColoredMessage(sender, msg);
+		}
+	}
 
 	public void updateLeaderboard() {
 		plugin.debugMessage("Updating leaderboard...");
-
-		lastUpdatedTime = System.currentTimeMillis();
 
 		final Map<UUID, Integer> sortedPlaytimes = getSortedPlaytimes();
 		final Iterator<Entry<UUID, Integer>> itr = sortedPlaytimes.entrySet()
@@ -263,10 +261,14 @@ public class Leaderboard {
 		}
 
 		stringList.add("&a------------------------------------");
+		
+		// Cache this leaderboard
+		plugin.getInternalProps().setCachedLeaderboard(stringList);
+		
+		// Update latest update-time
+		plugin.getInternalProps().setLeaderboardLastUpdateTime(System.currentTimeMillis());
 
-		messages = stringList.toArray(new String[stringList.size()]);
-
-		//System.out.print("Took: " + (System.currentTimeMillis() - lastUpdatedTime)  + " ms."); 
+		//messages = stringList.toArray(new String[stringList.size()]);
 	}
 
 }
