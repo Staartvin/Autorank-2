@@ -70,11 +70,8 @@
 		<!-- <repository> <id>stats-repo</id> <url>http://centrility.nl:8081/nexus/content/repositories/releases/ 
 			</url> </repository> -->
 
-		<repository>
-			<id>stats-repo-snapshot</id>
-			<url>http://centrility.nl:8081/nexus/content/repositories/snapshots/
-			</url>
-		</repository>
+		<!-- <repository> <id>stats-repo-snapshot</id> <url>http://centrility.nl:8081/nexus/content/repositories/snapshots/ 
+			</url> </repository> -->
 
 		<repository>
 			<id>sk89q-repo</id>
@@ -138,13 +135,18 @@
 		<!-- OLD STATS <dependency> <groupId>nl.lolmewn.stats</groupId> <artifactId>Stats</artifactId> 
 			<version>2.0.1</version> <scope>provided</scope> <type>jar</type> </dependency> -->
 
+		<!-- <dependency> <groupId>nl.lolmewn.stats</groupId> <artifactId>Stats</artifactId> 
+			<version>3.0.2-SNAPSHOT</version> <scope>provided</scope> <type>jar</type> 
+			</dependency> -->
+
 		<dependency>
 			<groupId>nl.lolmewn.stats</groupId>
 			<artifactId>Stats</artifactId>
-			<version>3.0.2-SNAPSHOT</version>
+			<version>3.0.2</version>
 			<scope>provided</scope>
 			<type>jar</type>
 		</dependency>
+
 
 		<dependency>
 			<groupId>net.milkbowl.vault</groupId>
