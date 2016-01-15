@@ -21,8 +21,8 @@ import org.bukkit.command.CommandSender;
 
 /**
  * Leaderboard stores how when the last update was and if someone wants to<br>
- * display it and it it outdated (set to 10 minutes)
- * it will generate a new leaderboard.<br>
+ * display it and it it outdated (set to 10 minutes) it will generate a new
+ * leaderboard.<br>
  * <p>
  * Date created: 21:03:23 15 mrt. 2014
  * 
@@ -31,17 +31,14 @@ import org.bukkit.command.CommandSender;
  */
 public class Leaderboard {
 
-	private static Map<UUID, Integer> sortByComparator(
-			final Map<UUID, Integer> unsortMap, final boolean order) {
+	private static Map<UUID, Integer> sortByComparator(final Map<UUID, Integer> unsortMap, final boolean order) {
 
-		final List<Entry<UUID, Integer>> list = new LinkedList<Entry<UUID, Integer>>(
-				unsortMap.entrySet());
+		final List<Entry<UUID, Integer>> list = new LinkedList<Entry<UUID, Integer>>(unsortMap.entrySet());
 
 		// Sorting the list based on values
 		Collections.sort(list, new Comparator<Entry<UUID, Integer>>() {
 			@Override
-			public int compare(final Entry<UUID, Integer> o1,
-					final Entry<UUID, Integer> o2) {
+			public int compare(final Entry<UUID, Integer> o1, final Entry<UUID, Integer> o2) {
 				if (order) {
 					return o1.getValue().compareTo(o2.getValue());
 				} else {
@@ -62,7 +59,7 @@ public class Leaderboard {
 
 	private String layout = "&6&r | &b&p - &7&d %day%, &h %hour% and &m %minute%.";
 	private int leaderboardLength = 10;
-	//private String[] messages;
+	// private String[] messages;
 	private final Autorank plugin;
 
 	private final double validTime = 30; // Leaderboard is valid for 30 minutes.
@@ -80,32 +77,27 @@ public class Leaderboard {
 
 		final HashMap<UUID, Integer> times = new HashMap<UUID, Integer>();
 
-		//String firstWorld = plugin.getServer().getWorlds().get(0).getName();
+		// String firstWorld = plugin.getServer().getWorlds().get(0).getName();
 
 		// Fill unsorted lists
 		for (int i = 0; i < uuids.size(); i++) {
 
 			// If player is exempted
-			if (plugin.getPlayerDataHandler().hasLeaderboardExemption(
-					uuids.get(i))) {
+			if (plugin.getPlayerDataHandler().hasLeaderboardExemption(uuids.get(i))) {
 				continue;
 			}
 
 			// Get the cached value of this uuid
-			final String playerName = plugin.getUUIDStorage().getPlayerName(
-					uuids.get(i));
+			final String playerName = plugin.getUUIDStorage().getPlayerName(uuids.get(i));
 
 			if (playerName == null) {
-				plugin.getLogger().warning(
-						"Could not get player name of uuid '" + uuids.get(i)
-								+ "'!");
+				plugin.debugMessage("Could not get cached player name of uuid '" + uuids.get(i) + "'!");
 				continue;
 			}
 
-			// Use cache on .getTimeOfPlayer() so that we don't refresh all uuids in existence.
-			times.put(
-					uuids.get(i),
-					(plugin.getPlaytimes().getTimeOfPlayer(playerName, true) / 60));
+			// Use cache on .getTimeOfPlayer() so that we don't refresh all
+			// uuids in existence.
+			times.put(uuids.get(i), (plugin.getPlaytimes().getTimeOfPlayer(playerName, true) / 60));
 		}
 
 		// Sort all values
@@ -118,16 +110,15 @@ public class Leaderboard {
 		if (shouldUpdateLeaderboard()) {
 			// Update leaderboard because it is not valid anymore.
 			// Run async because it uses UUID lookup
-			plugin.getServer().getScheduler()
-					.runTaskAsynchronously(plugin, new Runnable() {
-						@Override
-						public void run() {
-							updateLeaderboard();
+			plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+				@Override
+				public void run() {
+					updateLeaderboard();
 
-							// Send them afterwards, not at the same time.
-							sendMessages(sender);
-						}
-					});
+					// Send them afterwards, not at the same time.
+					sendMessages(sender);
+				}
+			});
 		} else {
 			// send them instantly
 			sendMessages(sender);
@@ -138,25 +129,21 @@ public class Leaderboard {
 		if (shouldUpdateLeaderboard()) {
 			// Update leaderboard because it is not valid anymore.
 			// Run async because it uses UUID lookup
-			plugin.getServer().getScheduler()
-					.runTaskAsynchronously(plugin, new Runnable() {
-						@Override
-						public void run() {
-							updateLeaderboard();
+			plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+				@Override
+				public void run() {
+					updateLeaderboard();
 
-							// Send them afterwards, not at the same time.
-							for (final String msg : plugin.getInternalProps().getCachedLeaderboard()) {
-								plugin.getServer().broadcastMessage(
-										ChatColor.translateAlternateColorCodes(
-												'&', msg));
-							}
-						}
-					});
+					// Send them afterwards, not at the same time.
+					for (final String msg : plugin.getInternalProps().getCachedLeaderboard()) {
+						plugin.getServer().broadcastMessage(ChatColor.translateAlternateColorCodes('&', msg));
+					}
+				}
+			});
 		} else {
 			// send them instantly
 			for (final String msg : plugin.getInternalProps().getCachedLeaderboard()) {
-				plugin.getServer().broadcastMessage(
-						ChatColor.translateAlternateColorCodes('&', msg));
+				plugin.getServer().broadcastMessage(ChatColor.translateAlternateColorCodes('&', msg));
 			}
 		}
 	}
@@ -167,7 +154,7 @@ public class Leaderboard {
 		else
 			return false;
 	}
-	
+
 	public void sendMessages(CommandSender sender) {
 		for (final String msg : plugin.getInternalProps().getCachedLeaderboard()) {
 			AutorankTools.sendColoredMessage(sender, msg);
@@ -178,8 +165,7 @@ public class Leaderboard {
 		plugin.debugMessage("Updating leaderboard...");
 
 		final Map<UUID, Integer> sortedPlaytimes = getSortedPlaytimes();
-		final Iterator<Entry<UUID, Integer>> itr = sortedPlaytimes.entrySet()
-				.iterator();
+		final Iterator<Entry<UUID, Integer>> itr = sortedPlaytimes.entrySet().iterator();
 
 		plugin.debugMessage("Size leaderboard: " + sortedPlaytimes.size());
 
@@ -191,10 +177,11 @@ public class Leaderboard {
 
 			final UUID uuid = entry.getKey();
 
-			// Grab playername from here so it doesn't load all player names ever.
-			// Get the cached value of this uuid to improve performance 
+			// Grab playername from here so it doesn't load all player names
+			// ever.
+			// Get the cached value of this uuid to improve performance
 			final String name = plugin.getUUIDStorage().getPlayerName(uuid);
-			//UUIDManager.getPlayerFromUUID(uuid);
+			// UUIDManager.getPlayerFromUUID(uuid);
 
 			if (name == null)
 				continue;
@@ -224,27 +211,21 @@ public class Leaderboard {
 
 			// Correctly show plural or singular format.
 			if (days > 1 || days == 0) {
-				message = message.replace("%day%",
-						Lang.DAY_PLURAL.getConfigValue());
+				message = message.replace("%day%", Lang.DAY_PLURAL.getConfigValue());
 			} else {
-				message = message.replace("%day%",
-						Lang.DAY_SINGULAR.getConfigValue());
+				message = message.replace("%day%", Lang.DAY_SINGULAR.getConfigValue());
 			}
 
 			if (hours > 1 || hours == 0) {
-				message = message.replace("%hour%",
-						Lang.HOUR_PLURAL.getConfigValue());
+				message = message.replace("%hour%", Lang.HOUR_PLURAL.getConfigValue());
 			} else {
-				message = message.replace("%hour%",
-						Lang.HOUR_SINGULAR.getConfigValue());
+				message = message.replace("%hour%", Lang.HOUR_SINGULAR.getConfigValue());
 			}
 
 			if (minutes > 1 || minutes == 0) {
-				message = message.replace("%minute%",
-						Lang.MINUTE_PLURAL.getConfigValue());
+				message = message.replace("%minute%", Lang.MINUTE_PLURAL.getConfigValue());
 			} else {
-				message = message.replace("%minute%",
-						Lang.MINUTE_SINGULAR.getConfigValue());
+				message = message.replace("%minute%", Lang.MINUTE_SINGULAR.getConfigValue());
 			}
 
 			stringList.add(message);
@@ -252,14 +233,14 @@ public class Leaderboard {
 		}
 
 		stringList.add("&a------------------------------------");
-		
+
 		// Cache this leaderboard
 		plugin.getInternalProps().setCachedLeaderboard(stringList);
-		
+
 		// Update latest update-time
 		plugin.getInternalProps().setLeaderboardLastUpdateTime(System.currentTimeMillis());
 
-		//messages = stringList.toArray(new String[stringList.size()]);
+		// messages = stringList.toArray(new String[stringList.size()]);
 	}
 
 }
