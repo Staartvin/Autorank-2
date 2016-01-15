@@ -106,8 +106,6 @@ public class Leaderboard {
 			final String playerName = plugin.getUUIDStorage().getPlayerName(
 					uuids.get(i));
 
-			plugin.getUUIDStorage().getPlayerName(uuids.get(i));
-
 			if (playerName == null) {
 				plugin.getLogger().warning(
 						"Could not get player name of uuid '" + uuids.get(i)
@@ -206,7 +204,9 @@ public class Leaderboard {
 			final UUID uuid = entry.getKey();
 
 			// Grab playername from here so it doesn't load all player names ever.
-			final String name = UUIDManager.getPlayerFromUUID(uuid);
+			// Get the cached value of this uuid to improve performance 
+			final String name = plugin.getUUIDStorage().getPlayerName(uuid);
+			//UUIDManager.getPlayerFromUUID(uuid);
 
 			if (name == null)
 				continue;

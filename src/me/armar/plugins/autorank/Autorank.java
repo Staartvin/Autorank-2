@@ -104,9 +104,7 @@ public class Autorank extends JavaPlugin {
 	private ValidateHandler validateHandler;
 
 	private WarningManager warningManager;
-
-	private BukkitTask uuidRefresherTask;
-
+	
 	/**
 	 * This method can only be performed from the main class as it tries to do
 	 * {@link #getFile()}
@@ -138,9 +136,6 @@ public class Autorank extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-
-		// Cancel refresh
-		uuidRefresherTask.cancel();
 
 		// Make sure all tasks are cancelled after shutdown. This seems obvious, but when a player /reloads, the server creates an instance of the plugin which causes duplicate tasks to run. 
 		getServer().getScheduler().cancelTasks(this);
