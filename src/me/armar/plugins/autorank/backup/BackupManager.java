@@ -3,6 +3,8 @@ package me.armar.plugins.autorank.backup;
 import java.io.File;
 import java.io.IOException;
 
+import org.bukkit.ChatColor;
+
 import me.armar.plugins.autorank.Autorank;
 
 import com.google.common.io.Files;
@@ -57,7 +59,8 @@ public class BackupManager {
 			Files.copy(sourceFile, copyFile);
 			plugin.debugMessage("Made backup of '" + sourceFileName + "'!");
 		} catch (final IOException e) {
-			e.printStackTrace();
+			plugin.getServer().getConsoleSender().sendMessage("[Autorank] " + ChatColor.RED + "Could not find " + sourceFileName + ", so didn't backup.");
+			//e.printStackTrace();
 		}
 
 	}
