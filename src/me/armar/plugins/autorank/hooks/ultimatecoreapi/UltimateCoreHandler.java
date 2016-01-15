@@ -6,8 +6,6 @@ import me.armar.plugins.autorank.hooks.DependencyHandler;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-import Bammerbom.UltimateCore.API.UC;
-import Bammerbom.UltimateCore.API.UCplayer;
 
 /**
  * Handles all connections with Ultimate Core
@@ -119,7 +117,9 @@ public class UltimateCoreHandler implements DependencyHandler {
 			return false;
 		}
 
-		if (getVersion().equals(1)) {
+		// Remove support of UltimateCore 2.0 -- too old
+		
+/*		if (getVersion().equals(1)) {
 			final UCplayer user = UC.getPlayer(player);
 
 			if (user == null) {
@@ -127,7 +127,7 @@ public class UltimateCoreHandler implements DependencyHandler {
 			}
 
 			return user.isAFK();
-		}
+		}*/
 		if (getVersion().equals(2)) {
 			final bammerbom.ultimatecore.bukkit.api.UPlayer user = bammerbom.ultimatecore.bukkit.api.UC
 					.getPlayer(player);

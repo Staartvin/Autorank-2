@@ -205,12 +205,6 @@
 
 		<dependency>
 			<groupId>bammerbom</groupId>
-			<artifactId>UltimateCore</artifactId>
-			<version>2.0.0</version>
-		</dependency>
-
-		<dependency>
-			<groupId>bammerbom</groupId>
 			<artifactId>UltimateCoreNew</artifactId>
 			<version>2.1.16</version>
 		</dependency>
