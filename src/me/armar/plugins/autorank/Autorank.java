@@ -2,6 +2,8 @@ package me.armar.plugins.autorank;
 
 import java.io.IOException;
 
+import org.bukkit.plugin.java.JavaPlugin;
+
 import me.armar.plugins.autorank.addons.AddOnManager;
 import me.armar.plugins.autorank.api.API;
 import me.armar.plugins.autorank.backup.BackupManager;
@@ -10,6 +12,7 @@ import me.armar.plugins.autorank.config.ConfigHandler;
 import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
 import me.armar.plugins.autorank.debugger.Debugger;
 import me.armar.plugins.autorank.hooks.DependencyManager;
+import me.armar.plugins.autorank.internalproperties.InternalProperties;
 import me.armar.plugins.autorank.language.LanguageHandler;
 import me.armar.plugins.autorank.leaderboard.Leaderboard;
 import me.armar.plugins.autorank.listeners.PlayerJoinListener;
@@ -64,8 +67,6 @@ import me.armar.plugins.autorank.util.uuid.storage.UUIDStorage;
 import me.armar.plugins.autorank.validations.ValidateHandler;
 import me.armar.plugins.autorank.warningmanager.WarningManager;
 
-import org.bukkit.plugin.java.JavaPlugin;
-
 /**
  * 
  * Main class of Autorank
@@ -94,6 +95,7 @@ public class Autorank extends JavaPlugin {
 	private PlayerDataHandler playerDataHandler;
 	private SimpleYamlConfiguration settingsConfig;
 	private SimpleYamlConfiguration simpleConfig;
+	private InternalProperties internalProps;
 	private UUIDStorage uuidStorage;
 
 	private BackupManager backupManager;
@@ -188,6 +190,8 @@ public class Autorank extends JavaPlugin {
 		setUUIDStorage(null);
 
 		setBackupManager(null);
+		
+		setInternalProps(null);
 
 		getLogger().info(
 				String.format("Autorank %s has been disabled!",
@@ -204,9 +208,14 @@ public class Autorank extends JavaPlugin {
 				"AdvancedConfig.yml", null, "Advanced config"));
 		setSettingsConfig(new SimpleYamlConfiguration(this, "Settings.yml",
 				null, "Settings config"));
+		
+		setInternalProps(new InternalProperties(this));
 
 		// Create config handler
 		setConfigHandler(new ConfigHandler(this));
+		
+		// Create internal properties file
+		this.getInternalProps().loadFile();
 
 		// Create backup manager
 		setBackupManager(new BackupManager(this));
@@ -626,5 +635,12 @@ public class Autorank extends JavaPlugin {
 	public void setBackupManager(final BackupManager backupManager) {
 		this.backupManager = backupManager;
 	}
-	// Why is it so hard to push a fucking commit??
+
+	public InternalProperties getInternalProps() {
+		return internalProps;
+	}
+
+	public void setInternalProps(InternalProperties internalProps) {
+		this.internalProps = internalProps;
+	}
 }
