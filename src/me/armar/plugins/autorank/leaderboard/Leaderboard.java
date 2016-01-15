@@ -72,15 +72,6 @@ public class Leaderboard {
 
 		leaderboardLength = plugin.getConfigHandler().getLeaderboardLength();
 		layout = plugin.getConfigHandler().getLeaderboardLayout();
-
-		// Run async because it uses UUID lookup
-		plugin.getServer().getScheduler()
-				.runTaskAsynchronously(plugin, new Runnable() {
-					@Override
-					public void run() {
-						updateLeaderboard();
-					}
-				});
 	}
 
 	private Map<UUID, Integer> getSortedPlaytimes() {
