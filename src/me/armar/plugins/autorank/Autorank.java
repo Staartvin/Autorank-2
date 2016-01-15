@@ -404,6 +404,9 @@ public class Autorank extends JavaPlugin {
 
 		// Start automatic backup
 		this.getBackupManager().startBackupSystem();
+		
+		// Send leaderboard to consolesender to update it.
+		this.getLeaderboard().sendLeaderboard(this.getServer().getConsoleSender());
 	}
 
 	public AddOnManager getAddonManager() {
