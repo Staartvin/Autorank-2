@@ -5,18 +5,20 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
-
-import me.armar.plugins.autorank.Autorank;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import me.armar.plugins.autorank.Autorank;
+import net.md_5.bungee.api.ChatColor;
+
 /**
  * This class represents a multitude of files where are looked up uuids are
- * stored.
- * </br>Every player has its own uuid, which is stored with the time it was last
+ * stored. </br>
+ * Every player has its own uuid, which is stored with the time it was last
  * stored.
  * <p>
  * Date created: 15:35:30 13 okt. 2014
@@ -36,23 +38,21 @@ public class UUIDStorage {
 	// Expiration date in hours
 	private final int expirationDate = 24;
 
-	private final List<String> fileSuffixes = Arrays.asList("a", "b", "c", "d",
-			"e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q",
-			"r", "s", "t", "u", "v", "w", "x", "y", "z", "other");
+	private final List<String> fileSuffixes = Arrays.asList("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l",
+			"m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "other");
 
 	public UUIDStorage(final Autorank instance) {
 		this.plugin = instance;
 
 		desFolder = plugin.getDataFolder() + "/uuids";
 
-		//Run save task every 2 minutes
-		plugin.getServer().getScheduler()
-				.runTaskTimerAsynchronously(plugin, new Runnable() {
-					@Override
-					public void run() {
-						saveAllFiles();
-					}
-				}, 1200, 2400);
+		// Run save task every 2 minutes
+		plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new Runnable() {
+			@Override
+			public void run() {
+				saveAllFiles();
+			}
+		}, 1200, 2400);
 	}
 
 	public void createNewFiles() {
@@ -65,7 +65,7 @@ public class UUIDStorage {
 		}
 
 		// Convert old format to new UUID storage format
-		//convertNamesToUUIDs();
+		// convertNamesToUUIDs();
 
 		plugin.getLogger().info("Loaded stored uuids.");
 	}
@@ -90,9 +90,8 @@ public class UUIDStorage {
 
 		final FileConfiguration config = configs.get(key);
 
-		config.options()
-				.header("This file stores all uuids of players that Autorank has looked up before."
-						+ "\nEach file stores accounts with the starting letter of the player's name.");
+		config.options().header("This file stores all uuids of players that Autorank has looked up before."
+				+ "\nEach file stores accounts with the starting letter of the player's name.");
 
 		config.options().copyDefaults(true);
 		saveConfig(key);
@@ -123,8 +122,7 @@ public class UUIDStorage {
 		try {
 			getConfig(key).save(configFile);
 		} catch (final IOException ex) {
-			plugin.getLogger().log(Level.SEVERE,
-					"Could not save config to " + configFile, ex);
+			plugin.getLogger().log(Level.SEVERE, "Could not save config to " + configFile, ex);
 		}
 	}
 
@@ -146,7 +144,11 @@ public class UUIDStorage {
 		return "other";
 	}
 
-	public FileConfiguration findCorrectConfig(final String playerName) {
+	public FileConfiguration findCorrectConfig(String playerName) {
+
+		// Everything is now stored in lowercase.
+		playerName = playerName.toLowerCase();
+
 		final String key = findMatchingKey(playerName);
 
 		final FileConfiguration config = configs.get(key);
@@ -154,15 +156,21 @@ public class UUIDStorage {
 		return config;
 	}
 
-	public boolean isOutdated(final String playerName) {
+	public boolean isOutdated(String playerName) {
+
+		// Everything is now stored in lowercase.
+		playerName = playerName.toLowerCase();
+
 		final int time = getLastUpdateTime(playerName);
 		return (time > expirationDate || time < 0);
 	}
 
-	public UUID getStoredUUID(final String playerName) {
+	public UUID getStoredUUID(String playerName) {
 
-		final String uuidString = findCorrectConfig(playerName).getString(
-				playerName + ".uuid", null);
+		// Everything is now stored in lowercase.
+		playerName = playerName.toLowerCase();
+
+		final String uuidString = findCorrectConfig(playerName).getString(playerName + ".uuid", null);
 
 		if (uuidString == null) {
 			return null;
@@ -171,9 +179,12 @@ public class UUIDStorage {
 		return UUID.fromString(uuidString);
 	}
 
-	public int getLastUpdateTime(final String playerName) {
-		final long lastUpdateTime = findCorrectConfig(playerName).getLong(
-				playerName + ".updateTime", -1);
+	public int getLastUpdateTime(String playerName) {
+
+		// Everything is now stored in lowercase.
+		playerName = playerName.toLowerCase();
+
+		final long lastUpdateTime = findCorrectConfig(playerName).getLong(playerName + ".updateTime", -1);
 
 		if (lastUpdateTime < 0) {
 			return -1;
@@ -186,8 +197,11 @@ public class UUIDStorage {
 		return timeDifference;
 	}
 
-	public void storeUUID(final String playerName, final UUID uuid) {
+	public void storeUUID(String playerName, final UUID uuid) {
 		FileConfiguration config;
+
+		// Everything is now stored in lowercase.
+		playerName = playerName.toLowerCase();
 
 		// Remove old name and uuid because apparently name was changed.
 		if (isAlreadyStored(uuid)) {
@@ -200,17 +214,16 @@ public class UUIDStorage {
 			// Name didn't change, it was just out of date.
 			if (oldUser.equals(playerName)) {
 				// Don't do anything besides updating updateTime.
-				config.set(playerName + ".updateTime",
-						System.currentTimeMillis());
+				config.set(playerName + ".updateTime", System.currentTimeMillis());
 
-				//plugin.debugMessage("Refreshed user '" + playerName
-				//		+ "' with uuid " + uuid + "!");
+				// plugin.debugMessage("Refreshed user '" + playerName
+				// + "' with uuid " + uuid + "!");
 				return;
 			}
 
 			config.set(oldUser, null);
 
-			//plugin.debugMessage("Deleting old user '" + oldUser + "'!");
+			// plugin.debugMessage("Deleting old user '" + oldUser + "'!");
 		}
 
 		config = findCorrectConfig(playerName);
@@ -218,8 +231,8 @@ public class UUIDStorage {
 		config.set(playerName + ".uuid", uuid.toString());
 		config.set(playerName + ".updateTime", System.currentTimeMillis());
 
-		//plugin.debugMessage("Stored user '" + playerName + "' with uuid "
-		//		+ uuid + "!");
+		// plugin.debugMessage("Stored user '" + playerName + "' with uuid "
+		// + uuid + "!");
 	}
 
 	public String getPlayerName(final UUID uuid, final String key) {
@@ -261,6 +274,42 @@ public class UUIDStorage {
 
 	public boolean isAlreadyStored(final UUID uuid) {
 		return getPlayerName(uuid) != null;
+	}
+	
+	public void transferUUIDs() {
+		// Since Autorank 3.7.1, all names of players are stored lowercase. For version that update from pre-3.7.1, all names should be converted to lowercase as well.
+		// This method checks every uuid and converts it to lowercase. It returns how many uuids it changed.
+		
+		if (plugin.getInternalProps().hasTransferredUUIDs()) return; // UUIDs were already successfully converted.
+		
+		plugin.getServer().getConsoleSender().sendMessage("[Autorank] " + ChatColor.RED + "Since this is the first time running Autorank 3.7.1, I need to convert your UUID files to a new format.");
+		plugin.getServer().getConsoleSender().sendMessage("[Autorank] " + ChatColor.RED + "Converting UUID files to new format (3.7.1), this may take a while.");
+		
+		// Get every name in every file and change it to lowercase.
+		for (String suffix: fileSuffixes) {
+			FileConfiguration config = getConfig(suffix);
+			
+			// All names that are in this config
+			Set<String> names = config.getKeys(false);
+			
+			for (String name: names) {
+				// Get old values
+				String uuidString = config.getString(name+ ".uuid");
+				long updateTime = config.getLong(name + ".updateTime", 0);
+				
+				// Delete old name
+				config.set(name, null);
+				
+				// Add new (lowercase) name
+				config.set(name.toLowerCase() + ".uuid", uuidString);
+				config.set(name.toLowerCase() + ".updateTime", updateTime);
+			}
+		}
+		
+		plugin.getServer().getConsoleSender().sendMessage("[Autorank] " + ChatColor.GREEN + "All UUID files were properly converted. Please restart your server!");
+		
+		// Changed all names, now update boolean in internal properties.
+		plugin.getInternalProps().hasTransferredUUIDs(true);
 	}
 
 }

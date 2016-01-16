@@ -29,6 +29,7 @@ public class InternalProperties {
 		
 		propFile.addDefault("cached leaderboard", new ArrayList<String>()); // A cached version of the leaderboard.
 		propFile.addDefault("leaderboard last updated", 0); // When was the leaderboard updated for last time? In UNIX time.
+		propFile.addDefault("has converted uuids", false); // Did it already convert uuids?
 		
 		propFile.options().copyDefaults(true);
 		
@@ -53,6 +54,19 @@ public class InternalProperties {
 	
 	public long getLeaderboardLastUpdateTime() {
 		return propFile.getLong("leaderboard last updated", 0);
+	}
+	
+	public boolean hasTransferredUUIDs() {
+		// Since Autorank 3.7.1, a new format of storing player names was introduced. If all values were properly converted, this method will return true.
+		// If it hasn't been run before or did not successfully convert all names, it will return false.
+		
+		return propFile.getBoolean("has converted uuids", false);
+	}
+	
+	public void hasTransferredUUIDs(boolean value) {
+		propFile.set("has converted uuids", true);
+		
+		propFile.save();
 	}
 	
 	
