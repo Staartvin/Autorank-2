@@ -15,6 +15,7 @@ import me.armar.plugins.autorank.playerchecker.result.Result;
 import me.armar.plugins.autorank.rankbuilder.ChangeGroup;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
+import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -150,6 +151,8 @@ public class PlayerDataHandler {
 	}
 
 	public String getLastKnownGroup(final UUID uuid) {
+		Validate.notNull(uuid, "UUID of a player is null!");
+		
 		//UUID uuid = UUIDManager.getUUIDFromPlayer(playerName);
 		return config.getString(uuid.toString() + ".last group");
 	}
@@ -157,7 +160,8 @@ public class PlayerDataHandler {
 	@SuppressWarnings("unchecked")
 	public List<Integer> getProgress(final UUID uuid) {
 		//UUID uuid = UUIDManager.getUUIDFromPlayer(playerName);
-
+		Validate.notNull(uuid, "UUID of a player is null!");
+		
 		return (List<Integer>) config.getList(uuid.toString() + ".progress",
 				new ArrayList<Integer>());
 	}
@@ -256,6 +260,7 @@ public class PlayerDataHandler {
 	}
 
 	public boolean hasLeaderboardExemption(final UUID uuid) {
+		Validate.notNull(uuid, "UUID of a player is null!");
 		return config
 				.getBoolean(uuid.toString() + ".exempt leaderboard", false);
 	}
