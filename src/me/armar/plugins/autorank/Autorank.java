@@ -407,6 +407,9 @@ public class Autorank extends JavaPlugin {
 		
 		// Send leaderboard to consolesender to update it.
 		this.getLeaderboard().sendLeaderboard(this.getServer().getConsoleSender());
+		
+		// Convert all UUIDS to lowercase.
+		this.getUUIDStorage().transferUUIDs();
 	}
 
 	public AddOnManager getAddonManager() {
