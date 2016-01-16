@@ -60,7 +60,7 @@ public class CommandsManager implements TabExecutor {
 		registeredCommands.put(Arrays.asList("add"), new AddCommand(plugin));
 		registeredCommands.put(Arrays.asList("help"), new HelpCommand(plugin));
 		registeredCommands.put(Arrays.asList("set"), new SetCommand(plugin));
-		registeredCommands.put(Arrays.asList("leaderboard", "leaderboards"),
+		registeredCommands.put(Arrays.asList("leaderboard", "leaderboards", "top"),
 				new LeaderboardCommand(plugin));
 		registeredCommands.put(Arrays.asList("remove", "rem"),
 				new RemoveCommand(plugin));
