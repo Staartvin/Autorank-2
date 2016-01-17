@@ -83,4 +83,8 @@ public class SimpleYamlConfiguration extends YamlConfiguration {
 			e.printStackTrace();
 		}
 	}
+	
+	public File getInternalFile() {
+		return file;
+	}
 }
