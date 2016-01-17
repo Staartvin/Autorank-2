@@ -21,6 +21,8 @@ import me.armar.plugins.autorank.metrics.Metrics.Graph;
 import me.armar.plugins.autorank.mysql.wrapper.MySQLWrapper;
 import me.armar.plugins.autorank.permissions.PermissionsPluginManager;
 import me.armar.plugins.autorank.playerchecker.PlayerChecker;
+import me.armar.plugins.autorank.playerchecker.requirement.ASkyBlockLevelRequirement;
+import me.armar.plugins.autorank.playerchecker.requirement.AcidIslandLevelRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.BlocksBrokenRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.BlocksMovedRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.BlocksPlacedRequirement;
@@ -324,6 +326,8 @@ public class Autorank extends JavaPlugin {
 				EssentialsGeoIPRequirement.class);
 		req.registerRequirement("in biome", InBiomeRequirement.class);
 		req.registerRequirement("food eaten", FoodEatenRequirement.class);
+		req.registerRequirement("acidisland level", AcidIslandLevelRequirement.class);
+		req.registerRequirement("askyblock level", ASkyBlockLevelRequirement.class);
 
 		// Register 'main' results
 		res.registerResult("command", CommandResult.class);

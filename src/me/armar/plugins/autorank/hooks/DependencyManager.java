@@ -5,7 +5,9 @@ import java.util.HashMap;
 import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.hooks.afkterminator.AFKTerminatorHandler;
+import me.armar.plugins.autorank.hooks.acidislandapi.AcidIslandHandler;
+import me.armar.plugins.autorank.hooks.afkterminatorapi.AFKTerminatorHandler;
+import me.armar.plugins.autorank.hooks.askyblockapi.ASkyBlockHandler;
 import me.armar.plugins.autorank.hooks.essentialsapi.EssentialsHandler;
 import me.armar.plugins.autorank.hooks.factionsapi.FactionsHandler;
 import me.armar.plugins.autorank.hooks.mcmmoapi.McMMOHandler;
@@ -45,7 +47,11 @@ public class DependencyManager {
 	 */
 	public enum dependency {
 
-		AUTORANK, ESSENTIALS, FACTIONS, MCMMO, ONTIME, ROYALCOMMANDS, STATS, VAULT, WORLDGUARD, ULTIMATECORE, STATISTICS, AFKTERMINATOR
+		AUTORANK, ESSENTIALS,
+		FACTIONS, MCMMO, ONTIME, 
+		ROYALCOMMANDS, STATS, VAULT,
+		WORLDGUARD, ULTIMATECORE, STATISTICS, 
+		AFKTERMINATOR, ACIDISLAND, ASKYBLOCK
 	};
 
 	private final HashMap<dependency, DependencyHandler> handlers = new HashMap<dependency, DependencyHandler>();
@@ -72,6 +78,10 @@ public class DependencyManager {
 		handlers.put(dependency.ULTIMATECORE, new UltimateCoreHandler(instance));
 		handlers.put(dependency.STATISTICS, new StatisticsAPIHandler(instance));
 		handlers.put(dependency.AFKTERMINATOR, new AFKTerminatorHandler(
+				instance));
+		handlers.put(dependency.ACIDISLAND, new AcidIslandHandler(
+				instance));
+		handlers.put(dependency.ASKYBLOCK, new ASkyBlockHandler(
 				instance));
 
 		statsPluginManager = new StatsPluginManager(instance);
