@@ -109,4 +109,10 @@ permissions:
         default: true
     autorank.choose:
         description: Allows choosing ranking paths
-        default: true         
+        default: true
+    autorank.times:
+        description: Allows checking your own time statistics.
+        default: true
+    autorank.times.others:
+        description: Allows checking time statistics of other players.
+        default: op            
