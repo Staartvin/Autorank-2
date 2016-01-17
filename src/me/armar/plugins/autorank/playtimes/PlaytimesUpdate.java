@@ -1,6 +1,5 @@
 package me.armar.plugins.autorank.playtimes;
 
-import java.util.Calendar;
 import java.util.UUID;
 
 import org.bukkit.entity.Player;
@@ -71,28 +70,8 @@ public class PlaytimesUpdate implements Runnable {
 	private void updateMinutesPlayed() {
 		plugin.debugMessage("Checking players for automatic ranking");
 		
-		// Check if daily, weekly or monthly files should be reset.
-		
-		Calendar cal = Calendar.getInstance();
-		
-		for (dataType type : Playtimes.dataType.values()) {
-			if (plugin.getPlaytimes().shouldResetDatafile(type)) {
-				// We should reset it now, it has expired.
-				plugin.getPlaytimes().resetDatafile(type);
-				
-				int value = 0;
-				if (type == dataType.DAILY_TIME) {
-					value = cal.get(Calendar.DAY_OF_WEEK);
-				} else if (type == dataType.WEEKLY_TIME) {
-					value = cal.get(Calendar.WEEK_OF_YEAR);
-				} else if (type == dataType.MONTHLY_TIME) {
-					value = cal.get(Calendar.MONTH);
-				}
- 				
-				// Update tracked data type
-				plugin.getInternalProps().setTrackedDataType(type, value);
-			}
-		}
+		// Check whether the files are still up to date.
+		plugin.getPlaytimes().doCalendarCheck();
 
 		for (final Player player : plugin.getServer().getOnlinePlayers()) {
 

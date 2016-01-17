@@ -444,12 +444,12 @@ public class Playtimes {
 
 		return data.getInt(uuid.toString(), 0);
 	}
-	
+
 	public boolean shouldResetDatafile(dataType type) {
 		// Should we reset a specific data file?
 		// Compare date to last date in internal properties
 		Calendar cal = Calendar.getInstance();
-		
+
 		if (type == dataType.DAILY_TIME) {
 			if (cal.get(Calendar.DAY_OF_WEEK) != plugin.getInternalProps().getTrackedDataType(type)) {
 				return true;
@@ -463,21 +463,22 @@ public class Playtimes {
 				return true;
 			}
 		}
-		
-		return false;		
+
+		return false;
 	}
-	
+
 	public void resetDatafile(dataType type) {
 		SimpleYamlConfiguration data = this.getDataFile(type);
-		
+
 		plugin.debugMessage("Resetting data file '" + type + "'!");
-		
+
 		// Delete file
 		boolean deleted = data.getInternalFile().delete();
-		
+
 		// Don't create a new file if it wasn't deleted in the first place.
-		if (!deleted) return;
-		
+		if (!deleted)
+			return;
+
 		// Create a new file so it's empty
 		if (type == dataType.DAILY_TIME) {
 			dataFiles.put(dataType.DAILY_TIME,
@@ -492,13 +493,39 @@ public class Playtimes {
 			dataFiles.put(dataType.TOTAL_TIME, new SimpleYamlConfiguration(plugin, "Data.yml", null, "Total data"));
 		}
 	}
-	
-	public void modifyTime(final UUID uuid, final int timeDifference, dataType type){
+
+	public void modifyTime(final UUID uuid, final int timeDifference, dataType type) {
 
 		final int time = this.getTime(type, uuid);
 
 		if (time >= 0) {
 			setTime(type, time + timeDifference, uuid);
+		}
+	}
+
+	public void doCalendarCheck() {
+		// Check if all data files are still up to date.
+		// Check if daily, weekly or monthly files should be reset.
+
+		Calendar cal = Calendar.getInstance();
+
+		for (dataType type : Playtimes.dataType.values()) {
+			if (plugin.getPlaytimes().shouldResetDatafile(type)) {
+				// We should reset it now, it has expired.
+				plugin.getPlaytimes().resetDatafile(type);
+
+				int value = 0;
+				if (type == dataType.DAILY_TIME) {
+					value = cal.get(Calendar.DAY_OF_WEEK);
+				} else if (type == dataType.WEEKLY_TIME) {
+					value = cal.get(Calendar.WEEK_OF_YEAR);
+				} else if (type == dataType.MONTHLY_TIME) {
+					value = cal.get(Calendar.MONTH);
+				}
+
+				// Update tracked data type
+				plugin.getInternalProps().setTrackedDataType(type, value);
+			}
 		}
 	}
 }

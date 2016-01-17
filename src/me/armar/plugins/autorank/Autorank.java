@@ -107,7 +107,7 @@ public class Autorank extends JavaPlugin {
 	private ValidateHandler validateHandler;
 
 	private WarningManager warningManager;
-	
+
 	/**
 	 * This method can only be performed from the main class as it tries to do
 	 * {@link #getFile()}
@@ -116,16 +116,14 @@ public class Autorank extends JavaPlugin {
 	 */
 	public boolean checkForUpdate() {
 
-		// We are not allowed to check for new versions. 
+		// We are not allowed to check for new versions.
 		if (!updateHandler.doCheckForNewVersion())
 			return false;
 
-		final Updater updater = new Updater(this, 34447, this.getFile(),
-				Updater.UpdateType.NO_DOWNLOAD, false);
+		final Updater updater = new Updater(this, 34447, this.getFile(), Updater.UpdateType.NO_DOWNLOAD, false);
 		updateHandler.setUpdater(updater);
 
-		return (updater.getResult()
-				.equals(Updater.UpdateResult.UPDATE_AVAILABLE));
+		return (updater.getResult().equals(Updater.UpdateResult.UPDATE_AVAILABLE));
 
 	}
 
@@ -140,7 +138,9 @@ public class Autorank extends JavaPlugin {
 	@Override
 	public void onDisable() {
 
-		// Make sure all tasks are cancelled after shutdown. This seems obvious, but when a player /reloads, the server creates an instance of the plugin which causes duplicate tasks to run. 
+		// Make sure all tasks are cancelled after shutdown. This seems obvious,
+		// but when a player /reloads, the server creates an instance of the
+		// plugin which causes duplicate tasks to run.
 		getServer().getScheduler().cancelTasks(this);
 
 		playtimes.save();
@@ -192,30 +192,25 @@ public class Autorank extends JavaPlugin {
 		setUUIDStorage(null);
 
 		setBackupManager(null);
-		
+
 		setInternalProps(null);
 
-		getLogger().info(
-				String.format("Autorank %s has been disabled!",
-						getDescription().getVersion()));
+		getLogger().info(String.format("Autorank %s has been disabled!", getDescription().getVersion()));
 	}
 
 	@Override
 	public void onEnable() {
 
 		// Register configs
-		setSimpleConfig(new SimpleYamlConfiguration(this, "SimpleConfig.yml",
-				null, "Simple config"));
-		setAdvancedConfig(new SimpleYamlConfiguration(this,
-				"AdvancedConfig.yml", null, "Advanced config"));
-		setSettingsConfig(new SimpleYamlConfiguration(this, "Settings.yml",
-				null, "Settings config"));
-		
+		setSimpleConfig(new SimpleYamlConfiguration(this, "SimpleConfig.yml", null, "Simple config"));
+		setAdvancedConfig(new SimpleYamlConfiguration(this, "AdvancedConfig.yml", null, "Advanced config"));
+		setSettingsConfig(new SimpleYamlConfiguration(this, "Settings.yml", null, "Settings config"));
+
 		setInternalProps(new InternalProperties(this));
 
 		// Create config handler
 		setConfigHandler(new ConfigHandler(this));
-		
+
 		// Create internal properties file
 		this.getInternalProps().loadFile();
 
@@ -241,8 +236,7 @@ public class Autorank extends JavaPlugin {
 		setUpdateHandler(new UpdateHandler(this));
 
 		// Register listeners
-		getServer().getPluginManager().registerEvents(
-				new PlayerJoinListener(this), this);
+		getServer().getPluginManager().registerEvents(new PlayerJoinListener(this), this);
 
 		// Create language classes
 		setLanguageHandler(new LanguageHandler(this));
@@ -260,19 +254,19 @@ public class Autorank extends JavaPlugin {
 
 			// When an error occured!
 
-			getLogger().severe(
-					"Could not hook into a dependency: \nCause: "
-							+ t.getCause());
+			getLogger().severe("Could not hook into a dependency: \nCause: " + t.getCause());
 		}
 
 		// Create playtime class
 		setPlaytimes(new Playtimes(this));
 
 		// Refresh player data - store it so we can cancel it later
-		//uuidRefresherTask = this.getServer().getScheduler().runTaskAsynchronously(this, new UUIDRefresher(this));
+		// uuidRefresherTask =
+		// this.getServer().getScheduler().runTaskAsynchronously(this, new
+		// UUIDRefresher(this));
 
 		// Convert data folder
-		//playtimes.convertToUUIDStorage();
+		// playtimes.convertToUUIDStorage();
 
 		// Create permission plugin handler class
 		setPermPlugHandler(new PermissionsPluginManager(this));
@@ -289,10 +283,9 @@ public class Autorank extends JavaPlugin {
 		// Create commands manager
 		setCommandsManager(new CommandsManager(this));
 
-		final RequirementBuilder req = this.getPlayerChecker()
-				.getChangeGroupManager().getBuilder().getRequirementBuilder();
-		final ResultBuilder res = this.getPlayerChecker()
-				.getChangeGroupManager().getBuilder().getResultBuilder();
+		final RequirementBuilder req = this.getPlayerChecker().getChangeGroupManager().getBuilder()
+				.getRequirementBuilder();
+		final ResultBuilder res = this.getPlayerChecker().getChangeGroupManager().getBuilder().getResultBuilder();
 
 		// Register 'main' requirements
 		req.registerRequirement("exp", ExpRequirement.class);
@@ -311,19 +304,15 @@ public class Autorank extends JavaPlugin {
 		req.registerRequirement("global time", GlobalTimeRequirement.class);
 		req.registerRequirement("total time", TotalTimeRequirement.class);
 		req.registerRequirement("world", WorldRequirement.class);
-		req.registerRequirement("worldguard region",
-				WorldGuardRegionRequirement.class);
-		req.registerRequirement("mcmmo skill level",
-				McMMOSkillLevelRequirement.class);
-		req.registerRequirement("mcmmo power level",
-				McMMOPowerLevelRequirement.class);
+		req.registerRequirement("worldguard region", WorldGuardRegionRequirement.class);
+		req.registerRequirement("mcmmo skill level", McMMOSkillLevelRequirement.class);
+		req.registerRequirement("mcmmo power level", McMMOPowerLevelRequirement.class);
 		req.registerRequirement("permission", PermissionRequirement.class);
 		req.registerRequirement("fish caught", FishCaughtRequirement.class);
 		req.registerRequirement("items crafted", ItemsCraftedRequirement.class);
 		req.registerRequirement("time", TimeRequirement.class);
 		req.registerRequirement("times sheared", TimesShearedRequirement.class);
-		req.registerRequirement("essentials geoip location",
-				EssentialsGeoIPRequirement.class);
+		req.registerRequirement("essentials geoip location", EssentialsGeoIPRequirement.class);
 		req.registerRequirement("in biome", InBiomeRequirement.class);
 		req.registerRequirement("food eaten", FoodEatenRequirement.class);
 		req.registerRequirement("acidisland level", AcidIslandLevelRequirement.class);
@@ -338,32 +327,28 @@ public class Autorank extends JavaPlugin {
 		res.registerResult("firework", SpawnFireworkResult.class);
 
 		// Load requirements and results per group from config
-		//playerChecker.getChangeGroupManager().initialiseFromConfigs();
+		// playerChecker.getChangeGroupManager().initialiseFromConfigs();
 
 		// Load again after 5 seconds so custom commands can be listed
-		getServer().getScheduler().runTaskLaterAsynchronously(this,
-				new Runnable() {
-					@Override
-					public void run() {
+		getServer().getScheduler().runTaskLaterAsynchronously(this, new Runnable() {
+			@Override
+			public void run() {
 
-						getPlayerChecker().getChangeGroupManager()
-								.initialiseFromConfigs();
+				getPlayerChecker().getChangeGroupManager().initialiseFromConfigs();
 
-						// Validate configs after that
-						if (configHandler.useAdvancedConfig()) {
-							getValidateHandler().validateConfigGroups(
-									getAdvancedConfig());
-						} else {
-							getValidateHandler().validateConfigGroups(
-									getSimpleConfig());
-						}
+				// Validate configs after that
+				if (configHandler.useAdvancedConfig()) {
+					getValidateHandler().validateConfigGroups(getAdvancedConfig());
+				} else {
+					getValidateHandler().validateConfigGroups(getSimpleConfig());
+				}
 
-						// Start warning task if a warning has been found
-						if (getWarningManager().getHighestWarning() != null) {
-							getWarningManager().startWarningTask();
-						}
-					}
-				}, 100);
+				// Start warning task if a warning has been found
+				if (getWarningManager().getHighestWarning() != null) {
+					getWarningManager().startWarningTask();
+				}
+			}
+		}, 100);
 
 		// Register command
 		getCommand("autorank").setExecutor(getCommandsManager());
@@ -375,45 +360,40 @@ public class Autorank extends JavaPlugin {
 		setDebugger(new Debugger(this));
 
 		// Debug message telling what plugin is used for timing.
-		getLogger().info(
-				"Using timings of: "
-						+ getConfigHandler().useTimeOf().toString()
-								.toLowerCase());
+		getLogger().info("Using timings of: " + getConfigHandler().useTimeOf().toString().toLowerCase());
 
-		// Note that custom requirements and results are not yet loaded into memory.
+		// Note that custom requirements and results are not yet loaded into
+		// memory.
 		// TODO Add support for custom requirements and results.
 		setAddonManager(new AddOnManager(this));
 
-		getLogger().info(
-				String.format("Autorank %s has been enabled!", getDescription()
-						.getVersion()));
+		getLogger().info(String.format("Autorank %s has been enabled!", getDescription().getVersion()));
 
 		// Start collecting data
 		if (!startMetrics()) {
-			getLogger().info(
-					"Failed to start Metrics, you can ignore this message.");
+			getLogger().info("Failed to start Metrics, you can ignore this message.");
 		}
 
 		debugMessage("Autorank debug is turned on!");
 
 		// Extra warning for dev users
 		if (isDevVersion()) {
-			this.getLogger()
-					.warning(
-							"You're running a DEV version, be sure to backup your Autorank folder!");
-			this.getLogger()
-					.warning(
-							"DEV versions are not guaranteed to be stable and generally shouldn't be used on big production servers with lots of players.");
+			this.getLogger().warning("You're running a DEV version, be sure to backup your Autorank folder!");
+			this.getLogger().warning(
+					"DEV versions are not guaranteed to be stable and generally shouldn't be used on big production servers with lots of players.");
 		}
 
 		// Start automatic backup
 		this.getBackupManager().startBackupSystem();
-		
+
 		// Send leaderboard to consolesender to update it.
 		this.getLeaderboard().sendLeaderboard(this.getServer().getConsoleSender());
-		
+
 		// Convert all UUIDS to lowercase.
 		this.getUUIDStorage().transferUUIDs();
+
+		// Check whether the data files are still up to date.
+		this.getPlaytimes().doCalendarCheck();
 	}
 
 	public AddOnManager getAddonManager() {
@@ -498,20 +478,16 @@ public class Autorank extends JavaPlugin {
 
 	public boolean isDevVersion() {
 		return this.getDescription().getVersion().toLowerCase().contains("dev")
-				|| this.getDescription().getVersion().toLowerCase()
-						.contains("project");
+				|| this.getDescription().getVersion().toLowerCase().contains("project");
 	}
 
-	public void registerRequirement(final String name,
-			final Class<? extends Requirement> requirement) {
-		this.getPlayerChecker().getChangeGroupManager().getBuilder()
-				.getRequirementBuilder().registerRequirement(name, requirement);
+	public void registerRequirement(final String name, final Class<? extends Requirement> requirement) {
+		this.getPlayerChecker().getChangeGroupManager().getBuilder().getRequirementBuilder().registerRequirement(name,
+				requirement);
 	}
 
-	public void registerResult(final String name,
-			final Class<? extends Result> result) {
-		this.getPlayerChecker().getChangeGroupManager().getBuilder()
-				.getResultBuilder().registerResult(name, result);
+	public void registerResult(final String name, final Class<? extends Result> result) {
+		this.getPlayerChecker().getChangeGroupManager().getBuilder().getResultBuilder().registerResult(name, result);
 	}
 
 	public void reload() {
@@ -555,8 +531,7 @@ public class Autorank extends JavaPlugin {
 		this.mysqlWrapper = mysqlWrapper;
 	}
 
-	public void setPermPlugHandler(
-			final PermissionsPluginManager permPlugHandler) {
+	public void setPermPlugHandler(final PermissionsPluginManager permPlugHandler) {
 		this.permPlugHandler = permPlugHandler;
 	}
 
