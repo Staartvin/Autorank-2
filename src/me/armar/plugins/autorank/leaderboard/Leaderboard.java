@@ -88,7 +88,7 @@ public class Leaderboard {
 			}
 
 			// Get the cached value of this uuid
-			final String playerName = plugin.getUUIDStorage().getPlayerName(uuids.get(i));
+			final String playerName = plugin.getUUIDStorage().getCachedPlayerName(uuids.get(i));
 
 			if (playerName == null) {
 				plugin.debugMessage("Could not get cached player name of uuid '" + uuids.get(i) + "'!");
@@ -180,9 +180,16 @@ public class Leaderboard {
 			// Grab playername from here so it doesn't load all player names
 			// ever.
 			// Get the cached value of this uuid to improve performance
-			final String name = plugin.getUUIDStorage().getPlayerName(uuid);
+			String name = plugin.getUUIDStorage().getRealName(uuid);
+
 			// UUIDManager.getPlayerFromUUID(uuid);
 
+			// There was no real name found, use cached player name
+			if (name == null) {
+				name = plugin.getUUIDStorage().getCachedPlayerName(uuid);
+			}
+
+			// No cached name found, don't use this name.
 			if (name == null)
 				continue;
 

@@ -53,7 +53,7 @@ public class GlobalCheckCommand extends AutorankCommand {
 			} else {
 				if (player.hasPermission("autorank.exclude")) {
 					sender.sendMessage(ChatColor.RED
-							+ Lang.PLAYER_IS_EXCLUDED.getConfigValue(args[1]));
+							+ Lang.PLAYER_IS_EXCLUDED.getConfigValue(player.getName()));
 					return true;
 				}
 
@@ -70,7 +70,7 @@ public class GlobalCheckCommand extends AutorankCommand {
 
 				AutorankTools.sendColoredMessage(
 						sender,
-						args[1]
+						player.getName()
 								+ " has played for "
 								+ AutorankTools.timeToString(minutes,
 										Time.MINUTES) + " across all servers.");

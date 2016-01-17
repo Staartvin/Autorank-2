@@ -34,7 +34,7 @@ public class PlayerJoinListener implements Listener {
 		// Refresh uuid of the player if it is outdated
 		if (plugin.getUUIDStorage().isOutdated(player.getName())) {
 			plugin.getUUIDStorage().storeUUID(player.getName(),
-					player.getUniqueId());
+					player.getUniqueId(), player.getName());
 		}
 
 		// Cannot check player at this moment. -> try at next automatic task

@@ -197,7 +197,7 @@ public class UUIDStorage {
 		return timeDifference;
 	}
 
-	public void storeUUID(String playerName, final UUID uuid) {
+	public void storeUUID(String playerName, final UUID uuid, String realName) {
 		FileConfiguration config;
 
 		// Everything is now stored in lowercase.
@@ -206,11 +206,16 @@ public class UUIDStorage {
 		// Remove old name and uuid because apparently name was changed.
 		if (isAlreadyStored(uuid)) {
 			// Change name to new name
-			final String oldUser = getPlayerName(uuid);
+			final String oldUser = getCachedPlayerName(uuid);
 
 			// Change config pointer to correct config
 			config = findCorrectConfig(oldUser);
 
+			// If this player does not have a real name yet, go add it.
+			if (this.getRealName(uuid) == null) {
+				config.set(playerName + ".realName", realName);
+			}
+			
 			// Name didn't change, it was just out of date.
 			if (oldUser.equals(playerName)) {
 				// Don't do anything besides updating updateTime.
@@ -231,11 +236,17 @@ public class UUIDStorage {
 		config.set(playerName + ".uuid", uuid.toString());
 		config.set(playerName + ".updateTime", System.currentTimeMillis());
 
+		if (realName != null) {
+			config.set(playerName + ".realName", realName);
+			// The real name is the name of the player with proper capitalisation.
+			// The real name is useful for leaderboards.
+		}
+
 		// plugin.debugMessage("Stored user '" + playerName + "' with uuid "
 		// + uuid + "!");
 	}
 
-	public String getPlayerName(final UUID uuid, final String key) {
+	public String getCachedPlayerName(final UUID uuid, final String key) {
 		final FileConfiguration config = configs.get(key);
 
 		for (final String fPlayerName : config.getKeys(false)) {
@@ -249,7 +260,7 @@ public class UUIDStorage {
 		return null;
 	}
 
-	public String getPlayerName(final UUID uuid) {
+	public String getCachedPlayerName(final UUID uuid) {
 		for (final String suffix : fileSuffixes) {
 			final FileConfiguration config = getConfig(suffix);
 
@@ -269,47 +280,73 @@ public class UUIDStorage {
 	}
 
 	public boolean isAlreadyStored(final UUID uuid, final String key) {
-		return getPlayerName(uuid, key) != null;
+		return getCachedPlayerName(uuid, key) != null;
 	}
 
 	public boolean isAlreadyStored(final UUID uuid) {
-		return getPlayerName(uuid) != null;
+		return getCachedPlayerName(uuid) != null;
 	}
-	
+
 	public void transferUUIDs() {
-		// Since Autorank 3.7.1, all names of players are stored lowercase. For version that update from pre-3.7.1, all names should be converted to lowercase as well.
-		// This method checks every uuid and converts it to lowercase. It returns how many uuids it changed.
-		
-		if (plugin.getInternalProps().hasTransferredUUIDs()) return; // UUIDs were already successfully converted.
-		
-		plugin.getServer().getConsoleSender().sendMessage("[Autorank] " + ChatColor.RED + "Since this is the first time running Autorank 3.7.1, I need to convert your UUID files to a new format.");
-		plugin.getServer().getConsoleSender().sendMessage("[Autorank] " + ChatColor.RED + "Converting UUID files to new format (3.7.1), this may take a while.");
-		
+		// Since Autorank 3.7.1, all names of players are stored lowercase. For
+		// version that update from pre-3.7.1, all names should be converted to
+		// lowercase as well.
+		// This method checks every uuid and converts it to lowercase. It
+		// returns how many uuids it changed.
+
+		if (plugin.getInternalProps().hasTransferredUUIDs())
+			return; // UUIDs were already successfully converted.
+
+		plugin.getServer().getConsoleSender().sendMessage("[Autorank] " + ChatColor.RED
+				+ "Since this is the first time running Autorank 3.7.1, I need to convert your UUID files to a new format.");
+		plugin.getServer().getConsoleSender().sendMessage(
+				"[Autorank] " + ChatColor.RED + "Converting UUID files to new format (3.7.1), this may take a while.");
+
 		// Get every name in every file and change it to lowercase.
-		for (String suffix: fileSuffixes) {
+		for (String suffix : fileSuffixes) {
 			FileConfiguration config = getConfig(suffix);
-			
+
 			// All names that are in this config
 			Set<String> names = config.getKeys(false);
-			
-			for (String name: names) {
+
+			for (String name : names) {
 				// Get old values
-				String uuidString = config.getString(name+ ".uuid");
+				String uuidString = config.getString(name + ".uuid");
 				long updateTime = config.getLong(name + ".updateTime", 0);
-				
+
 				// Delete old name
 				config.set(name, null);
-				
+
 				// Add new (lowercase) name
 				config.set(name.toLowerCase() + ".uuid", uuidString);
 				config.set(name.toLowerCase() + ".updateTime", updateTime);
 			}
 		}
-		
-		plugin.getServer().getConsoleSender().sendMessage("[Autorank] " + ChatColor.GREEN + "All UUID files were properly converted. Please restart your server!");
-		
+
+		plugin.getServer().getConsoleSender().sendMessage("[Autorank] " + ChatColor.GREEN
+				+ "All UUID files were properly converted. Please restart your server!");
+
 		// Changed all names, now update boolean in internal properties.
 		plugin.getInternalProps().hasTransferredUUIDs(true);
+	}
+	
+	public String getRealName(UUID uuid) {
+		// Returns the real name of the player, or the cached lower case name if no real name exists.
+		String cachedName = this.getCachedPlayerName(uuid);
+		
+		if (cachedName == null) return null;
+		
+		FileConfiguration config = this.findCorrectConfig(cachedName);
+		
+		if (config == null) return null;
+		
+		Object realNameObject = config.get(cachedName + ".realName", null);
+		
+		return (realNameObject != null ? realNameObject.toString() : null);
+	}
+	
+	public boolean hasRealName(UUID uuid) {
+		return getRealName(uuid) != null;
 	}
 
 }

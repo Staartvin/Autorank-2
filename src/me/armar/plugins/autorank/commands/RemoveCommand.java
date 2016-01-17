@@ -46,6 +46,10 @@ public class RemoveCommand extends AutorankCommand {
 			sender.sendMessage(Lang.UNKNOWN_PLAYER.getConfigValue(args[1]));
 			return true;
 		}
+		
+		if (plugin.getUUIDStorage().hasRealName(uuid)) {
+			args[1] = plugin.getUUIDStorage().getRealName(uuid);
+		}
 
 		int value = -1;
 

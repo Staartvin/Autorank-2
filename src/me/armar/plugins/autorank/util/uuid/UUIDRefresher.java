@@ -59,7 +59,7 @@ public class UUIDRefresher implements Runnable {
 
 			final UUID uuid = uuids.get(i);
 
-			final String playerName = plugin.getUUIDStorage().getPlayerName(
+			final String playerName = plugin.getUUIDStorage().getCachedPlayerName(
 					uuid);
 
 			//System.out.println("Count: " + i + "/" + uuids.size());
@@ -125,7 +125,7 @@ public class UUIDRefresher implements Runnable {
 			final String name = entry.getValue();
 			final UUID uuid = entry.getKey();
 
-			plugin.getUUIDStorage().storeUUID(name, uuid);
+			plugin.getUUIDStorage().storeUUID(name, uuid, name);
 		}
 
 	}

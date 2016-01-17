@@ -69,6 +69,11 @@ public class AddCommand extends AutorankCommand {
 		}
 
 		if (value >= 0) {
+			
+			if (plugin.getUUIDStorage().hasRealName(uuid)) {
+				args[1] = plugin.getUUIDStorage().getRealName(uuid);
+			}
+			
 			plugin.getPlaytimes().setLocalTime(uuid, value);
 			AutorankTools.sendColoredMessage(sender,
 					Lang.PLAYTIME_CHANGED.getConfigValue(args[1], value + ""));

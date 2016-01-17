@@ -303,6 +303,12 @@ public class CheckCommand extends AutorankCommand {
 							.getConfigValue(args[1]));
 					return true;
 				}
+				
+				UUID uuid = plugin.getUUIDStorage().getStoredUUID(args[1]);
+				
+				if (plugin.getUUIDStorage().hasRealName(uuid)) {
+					args[1] = plugin.getUUIDStorage().getRealName(uuid);
+				}
 
 				AutorankTools.sendColoredMessage(
 						sender,
@@ -313,7 +319,7 @@ public class CheckCommand extends AutorankCommand {
 			} else {
 				if (AutorankTools.isExcluded(player)) {
 					sender.sendMessage(ChatColor.RED
-							+ Lang.PLAYER_IS_EXCLUDED.getConfigValue(args[1]));
+							+ Lang.PLAYER_IS_EXCLUDED.getConfigValue(player.getName()));
 					return true;
 				}
 				check(sender, player);

@@ -88,6 +88,10 @@ public class GlobalSetCommand extends AutorankCommand {
 				sender.sendMessage(Lang.UNKNOWN_PLAYER.getConfigValue(args[1]));
 				return true;
 			}
+			
+			if (plugin.getUUIDStorage().hasRealName(uuid)) {
+				args[1] = plugin.getUUIDStorage().getRealName(uuid);
+			}
 
 			try {
 				plugin.getPlaytimes().setGlobalTime(uuid, value);

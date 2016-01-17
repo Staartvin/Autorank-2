@@ -38,11 +38,11 @@ public class UUIDManager {
 	// Whether to use cache or not
 	private static final boolean useCache = true;
 
-	public static void addCachedPlayer(final String playerName, final UUID uuid) {
+	public static void addCachedPlayer(final String playerName, final UUID uuid, String realName) {
 		if (!useCache)
 			return;
 
-		plugin.getUUIDStorage().storeUUID(playerName, uuid);
+		plugin.getUUIDStorage().storeUUID(playerName, uuid, realName);
 
 		//System.out.print("Cached " + uuid + " of " + playerName);
 		/*
@@ -127,9 +127,15 @@ public class UUIDManager {
 			// Check if we have cached values
 			for (final UUID uuid : uuids) {
 
-				final String playerName = plugin.getUUIDStorage()
-						.getPlayerName(uuid);
+				String playerName = plugin.getUUIDStorage()
+						.getRealName(uuid);
+				
+				if (playerName == null) {
+					// Real name was not found, use cached name.
+					playerName = plugin.getUUIDStorage().getCachedPlayerName(uuid);
+				}
 
+				// No cached value
 				if (playerName != null) {
 					// If cached value is still valid, use it.
 					if (!plugin.getUUIDStorage().isOutdated(playerName)) {
@@ -210,7 +216,7 @@ public class UUIDManager {
 
 			if (plugin.getUUIDStorage().isOutdated(playerName)) {
 				// Update cached values
-				addCachedPlayer(playerName, uuid);
+				addCachedPlayer(playerName, uuid, playerName);
 			} else {
 				// Do not update if it is not needed.
 				continue;
@@ -357,7 +363,7 @@ public class UUIDManager {
 
 			if (plugin.getUUIDStorage().isOutdated(playerName)) {
 				// Update cached values
-				addCachedPlayer(playerName, uuid);
+				addCachedPlayer(playerName, uuid, playerName);
 			} else {
 				// Do not update if it is not needed.
 				continue;
