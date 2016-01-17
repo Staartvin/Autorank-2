@@ -312,10 +312,8 @@ public class CheckCommand extends AutorankCommand {
 
 				AutorankTools.sendColoredMessage(
 						sender,
-						args[1]
-								+ " has played for "
-								+ AutorankTools
-										.timeToString(time, Time.SECONDS));
+						Lang.HAS_PLAYED_FOR.getConfigValue(args[1], AutorankTools
+								.timeToString(time, Time.SECONDS)));
 			} else {
 				if (AutorankTools.isExcluded(player)) {
 					sender.sendMessage(ChatColor.RED

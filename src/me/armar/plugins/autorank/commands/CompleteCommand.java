@@ -43,8 +43,7 @@ public class CompleteCommand extends AutorankCommand {
 		}
 
 		if (!plugin.getConfigHandler().usePartialCompletion()) {
-			sender.sendMessage(ChatColor.RED
-					+ "You cannot use this command as this server has not enabled partial completion!");
+			sender.sendMessage(Lang.PARTIAL_COMPLETION_NOT_ENABLED.getConfigValue());
 			return true;
 		}
 

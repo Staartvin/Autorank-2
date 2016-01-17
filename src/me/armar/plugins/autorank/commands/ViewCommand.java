@@ -55,7 +55,7 @@ public class ViewCommand extends AutorankCommand {
 			List<ChangeGroup> groups = plugin.getPlayerChecker().getChangeGroupManager().getChangeGroups(groupName);
 
 			if (groups.isEmpty()) {
-				sender.sendMessage(ChatColor.RED + "There are currently no paths to choose from.");
+				sender.sendMessage(Lang.ONLY_DEFAULT_PATH.getConfigValue());
 				return true;
 			}
 			
@@ -71,7 +71,7 @@ public class ViewCommand extends AutorankCommand {
 				.matchChangeGroupFromDisplayName(groupName, pathName.toLowerCase());
 
 		if (changeGroup == null) {
-			sender.sendMessage(ChatColor.RED + "There was no ranking path with that name found.");
+			sender.sendMessage(Lang.NO_PATH_FOUND_WITH_THAT_NAME.getConfigValue());
 			return true;
 		}
 

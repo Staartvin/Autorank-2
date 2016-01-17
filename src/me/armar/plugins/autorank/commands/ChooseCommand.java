@@ -3,7 +3,6 @@ package me.armar.plugins.autorank.commands;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -58,14 +57,13 @@ public class ChooseCommand extends AutorankCommand {
 				.getChangeGroupManager().getChangeGroups(groupName);
 
 		if (changeGroups == null || changeGroups.size() == 1) {
-			sender.sendMessage(ChatColor.RED
-					+ "You don't have to choose a path for this rank, there is only one.");
+			sender.sendMessage(Lang.ONLY_DEFAULT_PATH.getConfigValue());
 			return true;
 		}
 
 		if (pathName.equalsIgnoreCase(plugin.getPlayerDataHandler()
 				.getChosenPath(player.getUniqueId()))) {
-			sender.sendMessage(ChatColor.RED + "You're already on this path!");
+			sender.sendMessage(Lang.ALREADY_ON_THIS_PATH.getConfigValue());
 			return true;
 		}
 
@@ -76,8 +74,7 @@ public class ChooseCommand extends AutorankCommand {
 						pathName.toLowerCase());
 
 		if (changeGroup == null) {
-			sender.sendMessage(ChatColor.RED
-					+ "There was no ranking path found with that name.");
+			sender.sendMessage(Lang.NO_PATH_FOUND_WITH_THAT_NAME.getConfigValue());
 			return true;
 		}
 
@@ -88,11 +85,8 @@ public class ChooseCommand extends AutorankCommand {
 		plugin.getPlayerDataHandler().setPlayerProgress(player.getUniqueId(),
 				new ArrayList<Integer>());
 
-		sender.sendMessage(ChatColor.GREEN + "You have chosen '"
-				+ ChatColor.GRAY + changeGroup.getDisplayName()
-				+ ChatColor.GREEN + "'.");
-		sender.sendMessage(ChatColor.YELLOW
-				+ "Your progress for the rank is reset.");
+		sender.sendMessage(Lang.CHOSEN_PATH.getConfigValue(changeGroup.getDisplayName()));
+		sender.sendMessage(Lang.PROGRESS_RESET.getConfigValue());
 
 		return true;
 	}

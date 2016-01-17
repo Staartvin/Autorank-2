@@ -273,7 +273,43 @@ public enum Lang {
 	/**
 	 * &cYou are a robot, '{0}'
 	 */
-	YOU_ARE_A_ROBOT("you-are-a-robot", "&cYou are a robot, {0}"), ;
+	YOU_ARE_A_ROBOT("you-are-a-robot", "&cYou are a robot, {0}"),
+	/**
+	 * Have at least an (acid) island level of {0}.
+	 */
+	ACID_ISLAND_LEVEL_REQUIREMENT("acid-island-level-requirement", "Have at least an (acid) island level of {0}."),
+	/**
+	 * Have at least an (skyblock) island level of {0}.
+	 */
+	ASKYBLOCK_LEVEL_REQUIREMENT("askyblock-level-requirement", "Have at least an (skyblock) island level of {0}."),
+	/**
+	 * &6{0}&7 has played for {1}.
+	 */
+	HAS_PLAYED_FOR("has-played-for", "&6{0}&7 has played for {1}."),
+	/**
+	 * &4You don't have to choose a path for this rank, there is only one.
+	 */
+	ONLY_DEFAULT_PATH("only-default-path", "&4You don't have to choose a path for this rank, there is only one."),
+	/**
+	 * &4You're already on this path!
+	 */
+	ALREADY_ON_THIS_PATH("already-on-this-path", "&4You're already on this path!"),
+	/**
+	 * &4There was no ranking path found with that name.
+	 */
+	NO_PATH_FOUND_WITH_THAT_NAME("no-path-found-with-that-name", "&4There was no ranking path found with that name."),
+	/**
+	 * &2You have chosen &7'{0}'&2.
+	 */
+	CHOSEN_PATH("chosen-path", "&2You have chosen &7'{0}'&2."),
+	/**
+	 * &eYour progress for the rank is reset.
+	 */
+	PROGRESS_RESET("progress-reset", "&eYour progress for the rank is reset."),
+	/**
+	 * &eYour progress for the rank is reset.
+	 */
+	PARTIAL_COMPLETION_NOT_ENABLED("partial-completion-not-enabled", "&4You cannot use this command as this server has not enabled partial completion!"),;
 
 	private static FileConfiguration LANG;
 

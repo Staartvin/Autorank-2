@@ -36,7 +36,8 @@ public class ArchiveCommand extends AutorankCommand {
 		int rate = -1;
 
 		if (args.length != 2) {
-			sender.sendMessage(ChatColor.RED + "You need to specify a time!");
+			
+			sender.sendMessage(Lang.INVALID_FORMAT.getConfigValue("/ar archive <minimum>"));
 			return true;
 		}
 
