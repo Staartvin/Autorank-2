@@ -35,6 +35,7 @@ import me.armar.plugins.autorank.commands.RemoveCommand;
 import me.armar.plugins.autorank.commands.SetCommand;
 import me.armar.plugins.autorank.commands.SyncCommand;
 import me.armar.plugins.autorank.commands.SyncStatsCommand;
+import me.armar.plugins.autorank.commands.TimesCommand;
 import me.armar.plugins.autorank.commands.TrackCommand;
 import me.armar.plugins.autorank.commands.ViewCommand;
 import me.armar.plugins.autorank.language.Lang;
@@ -96,6 +97,8 @@ public class CommandsManager implements TabExecutor {
 		registeredCommands.put(Arrays.asList("view", "preview"),
 				new ViewCommand(plugin));
 		registeredCommands.put(Arrays.asList("choose"), new ChooseCommand(
+				plugin));
+		registeredCommands.put(Arrays.asList("times", "time"), new TimesCommand(
 				plugin));
 	}
 
