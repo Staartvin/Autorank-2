@@ -3,7 +3,10 @@ package me.armar.plugins.autorank.rankbuilder.builders;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.bukkit.Bukkit;
+
 import me.armar.plugins.autorank.playerchecker.result.Result;
+import net.md_5.bungee.api.ChatColor;
 
 public class ResultBuilder {
 
@@ -19,6 +22,9 @@ public class ResultBuilder {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		} else {
+			Bukkit.getServer().getConsoleSender().sendMessage("[Autorank] " + ChatColor.RED + "Result '" + type + "' is not a valid result type!");
+			return null;
 		}
 		return res;
 	}

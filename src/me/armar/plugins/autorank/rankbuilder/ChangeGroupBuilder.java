@@ -231,6 +231,8 @@ public class ChangeGroupBuilder {
 						configHandler.useAutoCompletion(group, requirement),
 						reqId);
 
+				if (newRequirement == null) continue;
+				
 				// Make requirement world-specific if a world was specified in the config.
 				if (plugin.getConfigHandler().isRequirementWorldSpecific(
 						requirement, group)) {
@@ -243,7 +245,11 @@ public class ChangeGroupBuilder {
 			}
 
 			for (final String resu : configHandler.getResults(group)) {
-				res.add(createResult(resu, configHandler.getResult(resu, group)));
+				Result result = createResult(resu, configHandler.getResult(resu, group));
+				
+				if (result == null) continue;
+				
+				res.add(result);
 			}
 
 			if (configHandler.getRankChange(group) != null) {
@@ -291,7 +297,7 @@ public class ChangeGroupBuilder {
 
 	private Result createResult(final String type, final String object) {
 		final Result res = resultBuilder.create(type);
-
+		
 		if (res != null) {
 			res.setAutorank(plugin);
 			res.setOptions(object.split(";"));

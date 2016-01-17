@@ -3,8 +3,11 @@ package me.armar.plugins.autorank.rankbuilder.builders;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.bukkit.Bukkit;
+
 import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 import me.armar.plugins.autorank.util.AutorankTools;
+import net.md_5.bungee.api.ChatColor;
 
 public class RequirementBuilder {
 
@@ -19,6 +22,9 @@ public class RequirementBuilder {
 			} catch (final Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			} else {
+				Bukkit.getServer().getConsoleSender().sendMessage("[Autorank] " + ChatColor.RED + "Requirement '" + type + "' is not a valid requirement type!");
+				return null;
 			}
 		return res;
 	}
