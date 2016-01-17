@@ -94,3 +94,8 @@ show warnings: true
 use primary group for vault: true
 # Most permission plugins will only work properly with Autorank if you let it only get the primary group.
 # Some need to get all the groups however. You probably only need to change this when a dev tells you to.
+
+broadcast resetting of data files: true
+# Autorank keeps track of amount of time played per day, week and month.
+# When a new day, week or month starts, Autorank will reset the times of all players (except the total time, this is always preserved).
+# If this value is set to true, Autorank will broadcast to all players when their data gets reset.
