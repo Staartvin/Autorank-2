@@ -229,7 +229,7 @@ public class AutorankTools {
 				b.append(Lang.DAY_SINGULAR.getConfigValue());
 
 			if (hours != 0 || minutes != 0)
-				b.append(" ");
+				b.append(", ");
 		}
 
 		if (hours != 0) {
@@ -241,7 +241,7 @@ public class AutorankTools {
 				b.append(Lang.HOUR_SINGULAR.getConfigValue());
 
 			if (minutes != 0)
-				b.append(" ");
+				b.append(", ");
 		}
 
 		if (minutes != 0 || (hours == 0 && days == 0)) {
@@ -253,7 +253,7 @@ public class AutorankTools {
 				b.append(Lang.MINUTE_SINGULAR.getConfigValue());
 
 			if (seconds != 0)
-				b.append(" ");
+				b.append(", ");
 		}
 
 		if (seconds != 0) {
@@ -263,6 +263,12 @@ public class AutorankTools {
 				b.append(Lang.SECOND_PLURAL.getConfigValue());
 			else
 				b.append(Lang.SECOND_SINGULAR.getConfigValue());
+		}
+		
+		int index = b.lastIndexOf(",");
+		
+		if (index != -1) {
+			b.replace(index, index + 1, " and");
 		}
 
 		return b.toString();
