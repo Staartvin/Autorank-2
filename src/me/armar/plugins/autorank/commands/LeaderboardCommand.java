@@ -2,12 +2,12 @@ package me.armar.plugins.autorank.commands;
 
 import java.util.List;
 
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
-
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 
 public class LeaderboardCommand extends AutorankCommand {
 

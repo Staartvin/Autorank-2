@@ -3,15 +3,15 @@ package me.armar.plugins.autorank.permissions.handlers;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.permissions.PermissionsHandler;
-import net.milkbowl.vault.Vault;
-import net.milkbowl.vault.permission.Permission;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
+
+import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.permissions.PermissionsHandler;
+import net.milkbowl.vault.Vault;
+import net.milkbowl.vault.permission.Permission;
 
 /**
  * @author Staartvin & DeathStampler (see replaceGroup())

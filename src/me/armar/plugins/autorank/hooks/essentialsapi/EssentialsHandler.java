@@ -1,13 +1,13 @@
 package me.armar.plugins.autorank.hooks.essentialsapi;
 
-import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.hooks.DependencyHandler;
-
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
+
+import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.hooks.DependencyHandler;
 
 /**
  * Handles all connections with Essentials

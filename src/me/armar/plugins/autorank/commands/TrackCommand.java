@@ -3,16 +3,15 @@ package me.armar.plugins.autorank.commands;
 import java.util.List;
 import java.util.UUID;
 
-import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.commands.manager.AutorankCommand;
-import me.armar.plugins.autorank.language.Lang;
-import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
-import me.armar.plugins.autorank.util.uuid.UUIDManager;
-
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.commands.manager.AutorankCommand;
+import me.armar.plugins.autorank.language.Lang;
+import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 
 public class TrackCommand extends AutorankCommand {
 
@@ -72,7 +71,7 @@ public class TrackCommand extends AutorankCommand {
 			return true;
 		}
 
-		final UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
+		final UUID uuid = plugin.getUUIDStorage().getStoredUUID(player.getName());
 
 		final List<Requirement> requirements = plugin.getPlayerChecker()
 				.getAllRequirements(player);

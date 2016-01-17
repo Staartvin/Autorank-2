@@ -4,12 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.entity.Player;
+
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
-import me.armar.plugins.autorank.util.uuid.UUIDManager;
-
-import org.bukkit.entity.Player;
 
 /**
  * This requirement checks for global playtime
@@ -42,7 +41,7 @@ public class GlobalTimeRequirement extends Requirement {
 		String progress = "";
 
 		final int playtime = getAutorank().getPlaytimes().getGlobalTime(
-				UUIDManager.getUUIDFromPlayer(player.getName()));
+				player.getUniqueId());
 
 		progress = AutorankTools
 				.makeProgressString(times, "min", playtime + "");
@@ -51,7 +50,7 @@ public class GlobalTimeRequirement extends Requirement {
 
 	@Override
 	public boolean meetsRequirement(final Player player) {
-		final UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
+		final UUID uuid = player.getUniqueId();
 
 		final double playtime = this.getAutorank().getPlaytimes()
 				.getGlobalTime(uuid);

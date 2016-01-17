@@ -12,12 +12,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
-
-import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
 
 /**
  * Leaderboard stores how when the last update was and if someone wants to<br>

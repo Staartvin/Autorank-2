@@ -1,11 +1,11 @@
 package me.armar.plugins.autorank.api.events;
 
-import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
-
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+
+import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 
 /**
  * This event is called when a player meets the requirement for a group and

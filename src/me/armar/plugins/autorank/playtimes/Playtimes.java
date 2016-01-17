@@ -123,8 +123,7 @@ public class Playtimes {
 							if (record.contains("-"))
 								continue;
 
-							final UUID uuid = UUIDManager
-									.getUUIDFromPlayer(record);
+							final UUID uuid = plugin.getUUIDStorage().getStoredUUID(record);
 
 							// Could not convert this name to uuid
 							if (uuid == null) {

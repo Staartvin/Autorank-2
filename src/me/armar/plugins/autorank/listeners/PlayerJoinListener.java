@@ -1,13 +1,13 @@
 package me.armar.plugins.autorank.listeners;
 
-import me.armar.plugins.autorank.Autorank;
-
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+
+import me.armar.plugins.autorank.Autorank;
 
 /**
  * This listener will listen to players joining and send them a message when an

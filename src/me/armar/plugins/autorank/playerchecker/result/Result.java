@@ -1,8 +1,8 @@
 package me.armar.plugins.autorank.playerchecker.result;
 
-import me.armar.plugins.autorank.Autorank;
-
 import org.bukkit.entity.Player;
+
+import me.armar.plugins.autorank.Autorank;
 
 public abstract class Result {
 

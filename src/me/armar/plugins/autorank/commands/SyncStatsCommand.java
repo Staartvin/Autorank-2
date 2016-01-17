@@ -3,13 +3,13 @@ package me.armar.plugins.autorank.commands;
 import java.util.List;
 import java.util.UUID;
 
-import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.commands.manager.AutorankCommand;
-
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+
+import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 
 public class SyncStatsCommand extends AutorankCommand {
 

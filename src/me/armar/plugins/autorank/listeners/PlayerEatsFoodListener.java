@@ -1,5 +1,10 @@
 package me.armar.plugins.autorank.listeners;
 
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
+
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.DependencyManager.dependency;
 import me.armar.plugins.autorank.hooks.statsapi.StatsAPIHandler;
@@ -9,11 +14,6 @@ import nl.lolmewn.stats.api.stat.Stat;
 import nl.lolmewn.stats.api.user.StatsHolder;
 import nl.lolmewn.stats.stat.DefaultStatEntry;
 import nl.lolmewn.stats.stat.MetadataPair;
-
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerItemConsumeEvent;
 
 /**
  * This listener will listen to players eating food (for custom stat)

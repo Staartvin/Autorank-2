@@ -5,9 +5,9 @@ import java.io.IOException;
 
 import org.bukkit.ChatColor;
 
-import me.armar.plugins.autorank.Autorank;
-
 import com.google.common.io.Files;
+
+import me.armar.plugins.autorank.Autorank;
 
 /**
  * Class that allows me to backup files before overwriting them.

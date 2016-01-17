@@ -4,16 +4,15 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
-import me.armar.plugins.autorank.util.uuid.UUIDManager;
-
-import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 
 public class GlobalSetCommand extends AutorankCommand {
 
@@ -80,7 +79,7 @@ public class GlobalSetCommand extends AutorankCommand {
 				}
 			}
 
-			final UUID uuid = UUIDManager.getUUIDFromPlayer(args[1]);
+			final UUID uuid = plugin.getUUIDStorage().getStoredUUID(args[1]);
 
 			//System.out.print("Name of UUID: " + UUIDManager.getPlayerFromUUID(UUID.fromString("fc914960-7aa1-3ae2-a3ee-70f5ac1e81e5")));
 

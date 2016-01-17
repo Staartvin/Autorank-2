@@ -3,13 +3,13 @@ package me.armar.plugins.autorank.commands;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.commands.manager.AutorankCommand;
-import me.armar.plugins.autorank.language.Lang;
-
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+
+import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.commands.manager.AutorankCommand;
+import me.armar.plugins.autorank.language.Lang;
 
 public class HelpCommand extends AutorankCommand {
 

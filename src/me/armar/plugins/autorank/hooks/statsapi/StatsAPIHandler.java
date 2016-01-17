@@ -5,6 +5,10 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
 
+import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
+import org.bukkit.plugin.Plugin;
+
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.DependencyHandler;
 import me.armar.plugins.autorank.hooks.statsapi.customstats.FoodEatenStat;
@@ -14,10 +18,6 @@ import nl.lolmewn.stats.api.stat.Stat;
 import nl.lolmewn.stats.api.stat.StatEntry;
 import nl.lolmewn.stats.api.user.StatsHolder;
 import nl.lolmewn.stats.bukkit.BukkitMain;
-
-import org.bukkit.Material;
-import org.bukkit.entity.EntityType;
-import org.bukkit.plugin.Plugin;
 
 /**
  * Handles all connections with Stats

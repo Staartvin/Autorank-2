@@ -4,13 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.entity.Player;
+
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.addons.AddOnManager;
 import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 import me.armar.plugins.autorank.playerchecker.result.Result;
-import me.armar.plugins.autorank.util.uuid.UUIDManager;
-
-import org.bukkit.entity.Player;
 
 /**
  * <b>Autorank's API class:</b>
@@ -75,7 +74,8 @@ public class API {
 	 */
 	@Deprecated
 	public int getGlobalPlayTime(final Player player) {
-		final UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
+		final UUID uuid = plugin.getUUIDStorage().getStoredUUID(player.getName());
+		//UUIDManager.getUUIDFromPlayer(player.getName());
 
 		return getGlobalPlayTime(uuid);
 	}
@@ -96,7 +96,8 @@ public class API {
 	 */
 	@Deprecated
 	public int getLocalTime(final Player player) {
-		final UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
+		final UUID uuid = plugin.getUUIDStorage().getStoredUUID(player.getName());
+		//UUIDManager.getUUIDFromPlayer(player.getName());
 
 		return plugin.getPlaytimes().getLocalTime(uuid);
 	}

@@ -3,11 +3,10 @@ package me.armar.plugins.autorank.playerchecker.result;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import me.armar.plugins.autorank.api.events.PlayerPromoteEvent;
-import me.armar.plugins.autorank.util.uuid.UUIDManager;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+
+import me.armar.plugins.autorank.api.events.PlayerPromoteEvent;
 
 public class RankChangeResult extends Result {
 
@@ -47,7 +46,8 @@ public class RankChangeResult extends Result {
 		if (event.isCancelled())
 			return false;
 
-		final UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
+		//final UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
+		UUID uuid = player.getUniqueId();
 
 		// When rank is changed: reset progress and update last known group
 		getAutorank().getPlayerDataHandler().setPlayerProgress(uuid,

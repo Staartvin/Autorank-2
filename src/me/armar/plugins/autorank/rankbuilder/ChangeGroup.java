@@ -4,12 +4,11 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.bukkit.entity.Player;
+
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 import me.armar.plugins.autorank.playerchecker.result.Result;
-import me.armar.plugins.autorank.util.uuid.UUIDManager;
-
-import org.bukkit.entity.Player;
 
 /**
  * Represents a group of changes, including all requirements and results.
@@ -80,7 +79,8 @@ public class ChangeGroup {
 
 		if (checkRequirements(player)) {
 
-			final UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
+			//final UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
+			UUID uuid = plugin.getUUIDStorage().getStoredUUID(player.getName());
 
 			// Apply all 'main' results
 
@@ -110,7 +110,8 @@ public class ChangeGroup {
 	public boolean checkRequirements(final Player player) {
 		boolean result = true;
 
-		final UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
+		//final UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
+		UUID uuid = plugin.getUUIDStorage().getStoredUUID(player.getName());
 
 		// Player already got this rank
 		if (plugin.getPlayerDataHandler().hasCompletedRank(uuid, parentGroup)) {

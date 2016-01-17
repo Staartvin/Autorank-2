@@ -2,11 +2,10 @@ package me.armar.plugins.autorank.playtimes;
 
 import java.util.UUID;
 
+import org.bukkit.entity.Player;
+
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.DependencyManager;
-import me.armar.plugins.autorank.util.uuid.UUIDManager;
-
-import org.bukkit.entity.Player;
 
 /*
  * PlaytimesUpdate does an update on all online players 
@@ -48,7 +47,7 @@ public class PlaytimesUpdate implements Runnable {
 				return;
 			}
 
-			final UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
+			final UUID uuid = plugin.getUUIDStorage().getStoredUUID(player.getName());
 
 			// Modify local time
 			playtimes.modifyLocalTime(uuid, Playtimes.INTERVAL_MINUTES);

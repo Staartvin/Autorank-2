@@ -2,9 +2,6 @@ package me.armar.plugins.autorank.hooks.statisticsapi;
 
 import java.util.UUID;
 
-import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.hooks.DependencyHandler;
-
 import org.bukkit.plugin.Plugin;
 
 import com.avaje.ebeaninternal.server.autofetch.Statistics;
@@ -13,6 +10,9 @@ import com.wolvencraft.yasp.session.OfflineSession;
 import com.wolvencraft.yasp.session.OnlineSession;
 import com.wolvencraft.yasp.util.NamedInteger;
 import com.wolvencraft.yasp.util.cache.OfflineSessionCache;
+
+import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.hooks.DependencyHandler;
 
 /**
  * Handles all connections with Statistics

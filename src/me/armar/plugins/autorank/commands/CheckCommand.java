@@ -4,6 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.api.events.CheckCommandEvent;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
@@ -12,13 +18,6 @@ import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 import me.armar.plugins.autorank.rankbuilder.ChangeGroup;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
-import me.armar.plugins.autorank.util.uuid.UUIDManager;
-
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 public class CheckCommand extends AutorankCommand {
 
@@ -39,7 +38,8 @@ public class CheckCommand extends AutorankCommand {
 		// Call the event
 		Bukkit.getServer().getPluginManager().callEvent(event);
 
-		final UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
+		//final UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
+		UUID uuid = plugin.getUUIDStorage().getStoredUUID(player.getName());
 
 		// Check if event is cancelled.
 		if (event.isCancelled())

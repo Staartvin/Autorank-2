@@ -1,14 +1,5 @@
 package me.armar.plugins.autorank.listeners;
 
-import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.hooks.DependencyManager.dependency;
-import me.armar.plugins.autorank.hooks.statsapi.StatsAPIHandler;
-import me.armar.plugins.autorank.hooks.statsapi.customstats.MobKilledStat;
-import nl.lolmewn.stats.api.stat.Stat;
-import nl.lolmewn.stats.api.user.StatsHolder;
-import nl.lolmewn.stats.stat.DefaultStatEntry;
-import nl.lolmewn.stats.stat.MetadataPair;
-
 import org.bukkit.entity.Chicken;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
@@ -23,6 +14,15 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+
+import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.hooks.DependencyManager.dependency;
+import me.armar.plugins.autorank.hooks.statsapi.StatsAPIHandler;
+import me.armar.plugins.autorank.hooks.statsapi.customstats.MobKilledStat;
+import nl.lolmewn.stats.api.stat.Stat;
+import nl.lolmewn.stats.api.user.StatsHolder;
+import nl.lolmewn.stats.stat.DefaultStatEntry;
+import nl.lolmewn.stats.stat.MetadataPair;
 
 /**
  * This listener will listen to players killing mobs (for custom stat)

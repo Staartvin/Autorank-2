@@ -1,9 +1,9 @@
 package me.armar.plugins.autorank.warningmanager;
 
-import me.armar.plugins.autorank.Autorank;
-
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+
+import me.armar.plugins.autorank.Autorank;
 
 public class WarningNoticeTask implements Runnable {
 
