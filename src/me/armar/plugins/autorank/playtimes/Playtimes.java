@@ -10,6 +10,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 
+import org.bukkit.ChatColor;
+
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
 import me.armar.plugins.autorank.hooks.DependencyManager.dependency;
@@ -517,10 +519,29 @@ public class Playtimes {
 				int value = 0;
 				if (type == dataType.DAILY_TIME) {
 					value = cal.get(Calendar.DAY_OF_WEEK);
+					
+					if (plugin.getConfigHandler().shouldBroadcastDataReset()) {
+						// Should we broadcast the reset?
+						
+						plugin.getServer().broadcastMessage(ChatColor.GOLD + "[Autorank] " + ChatColor.DARK_PURPLE + "A new day has arrived! " + ChatColor.YELLOW + "All daily times have been reset.");
+					}
+					
 				} else if (type == dataType.WEEKLY_TIME) {
 					value = cal.get(Calendar.WEEK_OF_YEAR);
+					
+					if (plugin.getConfigHandler().shouldBroadcastDataReset()) {
+						// Should we broadcast the reset?
+						
+						plugin.getServer().broadcastMessage(ChatColor.GOLD + "[Autorank] " + ChatColor.DARK_PURPLE + "A new week has arrived! " + ChatColor.YELLOW + "All weekly times have been reset.");
+					}
 				} else if (type == dataType.MONTHLY_TIME) {
 					value = cal.get(Calendar.MONTH);
+					
+					if (plugin.getConfigHandler().shouldBroadcastDataReset()) {
+						// Should we broadcast the reset?
+						
+						plugin.getServer().broadcastMessage(ChatColor.GOLD + "[Autorank] " + ChatColor.DARK_PURPLE + "A new month has arrived! " + ChatColor.YELLOW + "All monthy times have been reset.");
+					}
 				}
 
 				// Update tracked data type

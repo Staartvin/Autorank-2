@@ -350,5 +350,9 @@ public class ConfigHandler {
 
 		return displayName;
 	}
+	
+	public boolean shouldBroadcastDataReset() {
+		return plugin.getSettingsConfig().getBoolean("broadcast resetting of data files", true);
+	}
 
 }
