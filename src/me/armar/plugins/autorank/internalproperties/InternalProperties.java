@@ -43,7 +43,7 @@ public class InternalProperties {
 	}
 	
 	public List<String> getCachedLeaderboard() {
-		return (ArrayList<String>) propFile.getStringList("cached leaderboard");
+		return propFile.getStringList("cached leaderboard");
 	}
 	
 	public void setLeaderboardLastUpdateTime(long time) {
