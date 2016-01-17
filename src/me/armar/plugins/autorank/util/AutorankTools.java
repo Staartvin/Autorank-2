@@ -265,6 +265,7 @@ public class AutorankTools {
 				b.append(Lang.SECOND_SINGULAR.getConfigValue());
 		}
 		
+		// Replace last comma with an and if needed.
 		int index = b.lastIndexOf(",");
 		
 		if (index != -1) {
