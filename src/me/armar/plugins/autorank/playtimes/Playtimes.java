@@ -2,6 +2,8 @@ package me.armar.plugins.autorank.playtimes;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -21,11 +23,19 @@ public class Playtimes {
 
 	public static int INTERVAL_MINUTES;
 
-	private final SimpleYamlConfiguration data;
 	private final Autorank plugin;
 	private final PlaytimesSave save;
 	// Used to store what plugin Autorank uses for checking the time
 	private final dependency timePlugin;
+
+	// Autorank keeps track of total time, time online on one day, time online
+	// in a week and time online in a month.
+	// There are all tracked in minutes.
+	public static enum dataType {
+		TOTAL_TIME, DAILY_TIME, WEEKLY_TIME, MONTHLY_TIME
+	};
+
+	private HashMap<dataType, SimpleYamlConfiguration> dataFiles = new HashMap<dataType, SimpleYamlConfiguration>();
 
 	private final PlaytimesUpdate update;
 
@@ -34,23 +44,27 @@ public class Playtimes {
 
 		INTERVAL_MINUTES = plugin.getConfigHandler().getIntervalTime();
 
-		plugin.getLogger().info(
-				"Interval check every " + INTERVAL_MINUTES + " minutes.");
+		plugin.getLogger().info("Interval check every " + INTERVAL_MINUTES + " minutes.");
 
-		this.data = new SimpleYamlConfiguration(plugin, "Data.yml", null,
-				"Data");
+		dataFiles.put(dataType.TOTAL_TIME, new SimpleYamlConfiguration(plugin, "Data.yml", null, "Total data"));
+		dataFiles.put(dataType.DAILY_TIME,
+				new SimpleYamlConfiguration(plugin, "/data/daily_time.yml", null, "Daily data"));
+		dataFiles.put(dataType.WEEKLY_TIME,
+				new SimpleYamlConfiguration(plugin, "/data/weekly_time.yml", null, "Weekly data"));
+		dataFiles.put(dataType.MONTHLY_TIME,
+				new SimpleYamlConfiguration(plugin, "/data/monthly_time.yml", null, "Monthly data"));
+		// this.data = new SimpleYamlConfiguration(plugin, "Data.yml", null,
+		// "Data");
+
 		this.save = new PlaytimesSave(this);
 		this.update = new PlaytimesUpdate(this, plugin);
 
 		// Run save task every 30 seconds
-		plugin.getServer().getScheduler()
-				.runTaskTimerAsynchronously(plugin, save, 20L, 1200L);
+		plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, save, 20L, 1200L);
 
 		// Run update timer every x minutes
-		plugin.getServer()
-				.getScheduler()
-				.runTaskTimerAsynchronously(plugin, update,
-						INTERVAL_MINUTES * 20 * 60, INTERVAL_MINUTES * 20 * 60);
+		plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, update, INTERVAL_MINUTES * 20 * 60,
+				INTERVAL_MINUTES * 20 * 60);
 
 		timePlugin = plugin.getConfigHandler().useTimeOf();
 	}
@@ -59,7 +73,8 @@ public class Playtimes {
 	 * Archive old records. Records below the minimum will be removed because
 	 * they are 'inactive'.
 	 * 
-	 * @param minimum Lowest threshold to check for
+	 * @param minimum
+	 *            Lowest threshold to check for
 	 * @return Amount of records removed
 	 */
 	public int archive(final int minimum) {
@@ -73,6 +88,7 @@ public class Playtimes {
 			if (time < minimum) {
 				counter++;
 
+				SimpleYamlConfiguration data = this.getDataFile(dataType.TOTAL_TIME);
 				// Remove record
 				data.set(uuid.toString(), null);
 			}
@@ -90,65 +106,62 @@ public class Playtimes {
 	public void convertToUUIDStorage() {
 
 		// Run async to prevent load-time problems.
-		plugin.getServer().getScheduler()
-				.runTaskAsynchronously(plugin, new Runnable() {
+		plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
 
-					@Override
-					public void run() {
+			@Override
+			public void run() {
 
-						// Before running, backup stuff.
-						plugin.getBackupManager().backupFile("Data.yml", null);
+				SimpleYamlConfiguration data = getDataFile(dataType.TOTAL_TIME);
 
-						// First archive all names below 1
-						archive(1);
+				// Before running, backup stuff.
+				plugin.getBackupManager().backupFile("Data.yml", null);
 
-						final Set<String> records = data.getKeys(false);
+				// First archive all names below 1
+				archive(1);
 
-						final int size = records.size();
+				final Set<String> records = data.getKeys(false);
 
-						// 9 items per second
-						final int speed = 9;
-						final int duration = (int) Math.floor(size / speed);
-						final String timeName = getDurationString(duration);
+				final int size = records.size();
 
-						plugin.getLogger().warning(
-								"Starting converting data.yml");
-						plugin.getLogger().warning(
-								"Conversion will take approx. " + timeName
-										+ "( guess for your data.yml)");
+				// 9 items per second
+				final int speed = 9;
+				final int duration = (int) Math.floor(size / speed);
+				final String timeName = getDurationString(duration);
 
-						for (final String record : records) {
-							// UUID contains dashes and playernames do not, so if it contains dashes
-							// it is probably a UUID and thus we should skip it.
-							if (record.contains("-"))
-								continue;
+				plugin.getLogger().warning("Starting converting data.yml");
+				plugin.getLogger().warning("Conversion will take approx. " + timeName + "( guess for your data.yml)");
 
-							final UUID uuid = plugin.getUUIDStorage().getStoredUUID(record);
+				for (final String record : records) {
+					// UUID contains dashes and playernames do not, so if it
+					// contains dashes
+					// it is probably a UUID and thus we should skip it.
+					if (record.contains("-"))
+						continue;
 
-							// Could not convert this name to uuid
-							if (uuid == null) {
-								plugin.getLogger().severe(
-										"Could not find UUID of " + record);
-								continue;
-							}
+					final UUID uuid = plugin.getUUIDStorage().getStoredUUID(record);
 
-							// Get the time that player has played.
-							final int minutesPlayed = data.getInt(record, 0);
-
-							// Remove the data from the file.
-							data.set(record, null);
-
-							// Add new data (in UUID form to the file)
-							data.set(uuid.toString(), minutesPlayed);
-						}
-
-						save();
-
-						plugin.getLogger().info(
-								"Converted data.yml to UUID format");
+					// Could not convert this name to uuid
+					if (uuid == null) {
+						plugin.getLogger().severe("Could not find UUID of " + record);
+						continue;
 					}
 
-				});
+					// Get the time that player has played.
+					final int minutesPlayed = data.getInt(record, 0);
+
+					// Remove the data from the file.
+					data.set(record, null);
+
+					// Add new data (in UUID form to the file)
+					data.set(uuid.toString(), minutesPlayed);
+				}
+
+				save();
+
+				plugin.getLogger().info("Converted data.yml to UUID format");
+			}
+
+		});
 	}
 
 	public Autorank getAutorank() {
@@ -205,11 +218,11 @@ public class Playtimes {
 	}
 
 	/**
-	 * Returns total playtime across all servers
-	 * (Multiple servers write to 1 database and get the total playtime from
-	 * there)
+	 * Returns total playtime across all servers (Multiple servers write to 1
+	 * database and get the total playtime from there)
 	 * 
-	 * @param uuid UUID to check for
+	 * @param uuid
+	 *            UUID to check for
 	 * @return Global playtime across all servers or -1 if no time was found
 	 */
 	public int getGlobalTime(final UUID uuid) {
@@ -225,15 +238,19 @@ public class Playtimes {
 	}
 
 	/**
-	 * Returns playtime on this particular server
-	 * It reads from the local data.yml
+	 * Returns playtime on this particular server It reads from the local
+	 * data.yml
 	 * 
-	 * @param uuid UUID to get the time for
+	 * @param uuid
+	 *            UUID to get the time for
 	 * @return play time of that account or -1 if not found.
 	 */
 	public int getLocalTime(final UUID uuid) {
 		if (uuid == null)
 			return -1;
+
+		SimpleYamlConfiguration data = this.getDataFile(dataType.TOTAL_TIME);
+
 		return data.getInt(uuid.toString(), 0);
 	}
 
@@ -256,8 +273,10 @@ public class Playtimes {
 	 * This depends on what plugin is used to get the time from. <br>
 	 * Time is seconds.
 	 * 
-	 * @param playerName Player to get the time for
-	 * @param cache whether to only use cache or use real time values.
+	 * @param playerName
+	 *            Player to get the time for
+	 * @param cache
+	 *            whether to only use cache or use real time values.
 	 * @return play time of given player or 0 if not found.
 	 */
 	public int getTimeOfPlayer(final String playerName, final boolean cache) {
@@ -279,20 +298,19 @@ public class Playtimes {
 
 			if (stats instanceof StatsHandler) {
 				// In seconds
-				playTime = ((StatsAPIHandler) plugin.getDependencyManager()
-						.getDependency(dependency.STATS)).getTotalPlayTime(
-						uuid, null);
+				playTime = ((StatsAPIHandler) plugin.getDependencyManager().getDependency(dependency.STATS))
+						.getTotalPlayTime(uuid, null);
 			} else {
 
 				if (uuid == null)
 					return playTime;
 
 				// Stats not found, using Autorank's system.
-				playTime = data.getInt(uuid.toString(), 0) * 60;
+				playTime = this.getLocalTime(uuid) * 60;
 			}
 		} else if (timePlugin.equals(dependency.ONTIME)) {
-			playTime = ((OnTimeHandler) plugin.getDependencyManager()
-					.getDependency(dependency.ONTIME)).getPlayTime(playerName);
+			playTime = ((OnTimeHandler) plugin.getDependencyManager().getDependency(dependency.ONTIME))
+					.getPlayTime(playerName);
 			// Time is in minutes, so convert to seconds
 			playTime = playTime * 60;
 		} else {
@@ -301,7 +319,7 @@ public class Playtimes {
 				return playTime;
 
 			// Use internal system of Autorank.
-			playTime = data.getInt(uuid.toString(), 0) * 60;
+			playTime = this.getLocalTime(uuid) * 60;
 		}
 
 		return playTime;
@@ -311,20 +329,26 @@ public class Playtimes {
 
 		final List<UUID> uuids = new ArrayList<UUID>();
 
+		SimpleYamlConfiguration data = this.getDataFile(dataType.TOTAL_TIME);
+
 		for (final String uuidString : data.getKeys(false)) {
 			UUID uuid = null;
 			try {
 				uuid = UUID.fromString(uuidString);
 			} catch (final IllegalArgumentException e) {
-				/*plugin.getLogger().severe(
-						"Player '" + uuidString + "' is not converted yet!");*/
+				/*
+				 * plugin.getLogger().severe( "Player '" + uuidString +
+				 * "' is not converted yet!");
+				 */
 				continue;
 			}
 
 			// Invalid uuid
 			if (uuid == null) {
-				/*plugin.getLogger().severe(
-						"Player '" + uuidString + "' is not converted yet!");*/
+				/*
+				 * plugin.getLogger().severe( "Player '" + uuidString +
+				 * "' is not converted yet!");
+				 */
 				continue;
 			}
 
@@ -335,6 +359,7 @@ public class Playtimes {
 	}
 
 	public void importData() {
+		SimpleYamlConfiguration data = this.getDataFile(dataType.TOTAL_TIME);
 		data.reload();
 	}
 
@@ -342,13 +367,11 @@ public class Playtimes {
 		return plugin.getMySQLWrapper().isMySQLEnabled();
 	}
 
-	public void modifyGlobalTime(final UUID uuid, final int timeDifference)
-			throws IllegalArgumentException {
+	public void modifyGlobalTime(final UUID uuid, final int timeDifference) throws IllegalArgumentException {
 		// Check for MySQL
 		if (!plugin.getMySQLWrapper().isMySQLEnabled()) {
 			try {
-				throw new SQLException(
-						"MySQL database is not enabled so you can't modify database!");
+				throw new SQLException("MySQL database is not enabled so you can't modify database!");
 			} catch (final SQLException e) {
 				e.printStackTrace();
 				return;
@@ -374,8 +397,7 @@ public class Playtimes {
 		}
 	}
 
-	public void modifyLocalTime(final UUID uuid, final int timeDifference)
-			throws IllegalArgumentException {
+	public void modifyLocalTime(final UUID uuid, final int timeDifference) throws IllegalArgumentException {
 
 		final int time = this.getLocalTime(uuid);
 
@@ -385,21 +407,98 @@ public class Playtimes {
 	}
 
 	public void save() {
-		data.save();
+		for (Entry<dataType, SimpleYamlConfiguration> entry : dataFiles.entrySet()) {
+			entry.getValue().save();
+		}
 	}
 
-	public void setGlobalTime(final UUID uuid, final int time)
-			throws SQLException {
+	public void setGlobalTime(final UUID uuid, final int time) throws SQLException {
 		// Check for MySQL
 		if (!plugin.getMySQLWrapper().isMySQLEnabled()) {
-			throw new SQLException(
-					"MySQL database is not enabled so you can't set items to it!");
+			throw new SQLException("MySQL database is not enabled so you can't set items to it!");
 		}
 
 		plugin.getMySQLWrapper().setGlobalTime(uuid, time);
 	}
 
 	public void setLocalTime(final UUID uuid, final int time) {
+		SimpleYamlConfiguration data = this.getDataFile(dataType.TOTAL_TIME);
 		data.set(uuid.toString(), time);
+	}
+
+	public SimpleYamlConfiguration getDataFile(dataType type) {
+		return dataFiles.get(type);
+	}
+
+	public void setTime(dataType type, int value, UUID uuid) {
+		// Set time of a player of a specific type
+
+		SimpleYamlConfiguration data = this.getDataFile(type);
+
+		data.set(uuid.toString(), value);
+	}
+
+	public int getTime(dataType type, UUID uuid) {
+		// Get time of a player with specific type
+		SimpleYamlConfiguration data = this.getDataFile(type);
+
+		return data.getInt(uuid.toString(), 0);
+	}
+	
+	public boolean shouldResetDatafile(dataType type) {
+		// Should we reset a specific data file?
+		// Compare date to last date in internal properties
+		Calendar cal = Calendar.getInstance();
+		
+		if (type == dataType.DAILY_TIME) {
+			if (cal.get(Calendar.DAY_OF_WEEK) != plugin.getInternalProps().getTrackedDataType(type)) {
+				return true;
+			}
+		} else if (type == dataType.WEEKLY_TIME) {
+			if (cal.get(Calendar.WEEK_OF_YEAR) != plugin.getInternalProps().getTrackedDataType(type)) {
+				return true;
+			}
+		} else if (type == dataType.MONTHLY_TIME) {
+			if (cal.get(Calendar.MONTH) != plugin.getInternalProps().getTrackedDataType(type)) {
+				return true;
+			}
+		}
+		
+		return false;		
+	}
+	
+	public void resetDatafile(dataType type) {
+		SimpleYamlConfiguration data = this.getDataFile(type);
+		
+		plugin.debugMessage("Resetting data file '" + type + "'!");
+		
+		// Delete file
+		boolean deleted = data.getInternalFile().delete();
+		
+		// Don't create a new file if it wasn't deleted in the first place.
+		if (!deleted) return;
+		
+		// Create a new file so it's empty
+		if (type == dataType.DAILY_TIME) {
+			dataFiles.put(dataType.DAILY_TIME,
+					new SimpleYamlConfiguration(plugin, "/data/daily_time.yml", null, "Daily data"));
+		} else if (type == dataType.WEEKLY_TIME) {
+			dataFiles.put(dataType.WEEKLY_TIME,
+					new SimpleYamlConfiguration(plugin, "/data/weekly_time.yml", null, "Weekly data"));
+		} else if (type == dataType.MONTHLY_TIME) {
+			dataFiles.put(dataType.MONTHLY_TIME,
+					new SimpleYamlConfiguration(plugin, "/data/monthly_time.yml", null, "Monthly data"));
+		} else if (type == dataType.TOTAL_TIME) {
+			dataFiles.put(dataType.TOTAL_TIME, new SimpleYamlConfiguration(plugin, "Data.yml", null, "Total data"));
+		}
+	}
+	
+	public void modifyTime(final UUID uuid, final int timeDifference, dataType type){
+
+		final int time = this.getTime(type, uuid);
+
+		if (time >= 0) {
+			setTime(type, time + timeDifference, uuid);
+		}
 	}
 }
