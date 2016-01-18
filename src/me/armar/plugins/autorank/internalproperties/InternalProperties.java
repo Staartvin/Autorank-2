@@ -1,5 +1,6 @@
 package me.armar.plugins.autorank.internalproperties;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import me.armar.plugins.autorank.Autorank;
@@ -41,6 +42,14 @@ public class InternalProperties {
 		propFile.addDefault("tracked month", 1); // This is used to keep track of what month we are checking the data for. If this is changed, the montly_data.yml gets reset.
 		propFile.addDefault("tracked week", 1); // This is used to keep track of what week we are checking the data for. If this is changed, the weekly_data.yml gets reset.
 		propFile.addDefault("tracked day", 1); // This is used to keep track of what day we are checking the data for. If this is changed, the daily_data.yml gets reset.
+		
+		List<String> newList = new ArrayList<String>();
+		newList.add("&cThis leaderboard wasn't set up yet.");
+		
+		propFile.addDefault("leaderboards.total_time.cached leaderboard", newList);
+		propFile.addDefault("leaderboards.daily_time.cached leaderboard", newList);
+		propFile.addDefault("leaderboards.weekly_time.cached leaderboard", newList);
+		propFile.addDefault("leaderboards.monthly_time.cached leaderboard", newList);
 
 		propFile.options().copyDefaults(true);
 
