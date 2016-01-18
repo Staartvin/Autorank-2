@@ -17,6 +17,7 @@ import org.bukkit.command.CommandSender;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.language.Lang;
+import me.armar.plugins.autorank.playtimes.Playtimes.dataType;
 import me.armar.plugins.autorank.util.AutorankTools;
 
 /**
@@ -71,9 +72,9 @@ public class Leaderboard {
 		layout = plugin.getConfigHandler().getLeaderboardLayout();
 	}
 
-	private Map<UUID, Integer> getSortedPlaytimes() {
+	private Map<UUID, Integer> getSortedPlaytimes(dataType type) {
 
-		final List<UUID> uuids = plugin.getPlaytimes().getUUIDKeys();
+		final List<UUID> uuids = plugin.getPlaytimes().getUUIDKeys(type);
 
 		final HashMap<UUID, Integer> times = new HashMap<UUID, Integer>();
 
@@ -97,7 +98,12 @@ public class Leaderboard {
 
 			// Use cache on .getTimeOfPlayer() so that we don't refresh all
 			// uuids in existence.
-			times.put(uuids.get(i), (plugin.getPlaytimes().getTimeOfPlayer(playerName, true) / 60));
+			if (type == dataType.TOTAL_TIME) {
+				times.put(uuids.get(i), (plugin.getPlaytimes().getTimeOfPlayer(playerName, true) / 60));
+			} else {
+				times.put(uuids.get(i), plugin.getPlaytimes().getTime(type, uuids.get(i)));
+			}
+			
 		}
 
 		// Sort all values
@@ -106,43 +112,43 @@ public class Leaderboard {
 		return sortedMap;
 	}
 
-	public void sendLeaderboard(final CommandSender sender) {
+	public void sendLeaderboard(final CommandSender sender, final dataType type) {
 		if (shouldUpdateLeaderboard()) {
 			// Update leaderboard because it is not valid anymore.
 			// Run async because it uses UUID lookup
 			plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
 				@Override
 				public void run() {
-					updateLeaderboard();
+					updateLeaderboard(type);
 
 					// Send them afterwards, not at the same time.
-					sendMessages(sender);
+					sendMessages(sender, type);
 				}
 			});
 		} else {
 			// send them instantly
-			sendMessages(sender);
+			sendMessages(sender, type);
 		}
 	}
 
-	public void broadcastLeaderboard() {
+	public void broadcastLeaderboard(final dataType type) {
 		if (shouldUpdateLeaderboard()) {
 			// Update leaderboard because it is not valid anymore.
 			// Run async because it uses UUID lookup
 			plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
 				@Override
 				public void run() {
-					updateLeaderboard();
+					updateLeaderboard(type);
 
 					// Send them afterwards, not at the same time.
-					for (final String msg : plugin.getInternalProps().getCachedLeaderboard()) {
+					for (final String msg : plugin.getInternalProps().getCachedLeaderboard(type)) {
 						plugin.getServer().broadcastMessage(ChatColor.translateAlternateColorCodes('&', msg));
 					}
 				}
 			});
 		} else {
 			// send them instantly
-			for (final String msg : plugin.getInternalProps().getCachedLeaderboard()) {
+			for (final String msg : plugin.getInternalProps().getCachedLeaderboard(type)) {
 				plugin.getServer().broadcastMessage(ChatColor.translateAlternateColorCodes('&', msg));
 			}
 		}
@@ -155,22 +161,32 @@ public class Leaderboard {
 			return false;
 	}
 
-	public void sendMessages(CommandSender sender) {
-		for (final String msg : plugin.getInternalProps().getCachedLeaderboard()) {
+	public void sendMessages(CommandSender sender, dataType type) {
+		for (final String msg : plugin.getInternalProps().getCachedLeaderboard(type)) {
 			AutorankTools.sendColoredMessage(sender, msg);
 		}
 	}
 
-	public void updateLeaderboard() {
-		plugin.debugMessage("Updating leaderboard...");
+	public void updateLeaderboard(dataType type) {
+		plugin.debugMessage("Updating leaderboard '" + type.toString() + "'!");
 
-		final Map<UUID, Integer> sortedPlaytimes = getSortedPlaytimes();
+		final Map<UUID, Integer> sortedPlaytimes = getSortedPlaytimes(type);
 		final Iterator<Entry<UUID, Integer>> itr = sortedPlaytimes.entrySet().iterator();
 
 		plugin.debugMessage("Size leaderboard: " + sortedPlaytimes.size());
 
 		final List<String> stringList = new ArrayList<String>();
-		stringList.add("&a-------- Autorank Leaderboard --------");
+		
+		if (type == dataType.TOTAL_TIME) {
+			stringList.add("&a-------- Leaderboard (All time) --------");
+		} else if (type == dataType.DAILY_TIME) {
+			stringList.add("&a-------- Leaderboard (Daily time) --------");
+		} else if (type == dataType.WEEKLY_TIME) {
+			stringList.add("&a-------- Leaderboard (Weekly time) --------");
+		} else if (type == dataType.MONTHLY_TIME) {
+			stringList.add("&a-------- Leaderboard (Monthly time) --------");
+		}
+		
 
 		for (int i = 0; i < leaderboardLength && itr.hasNext(); i++) {
 			final Entry<UUID, Integer> entry = itr.next();
@@ -242,12 +258,25 @@ public class Leaderboard {
 		stringList.add("&a------------------------------------");
 
 		// Cache this leaderboard
-		plugin.getInternalProps().setCachedLeaderboard(stringList);
+		plugin.getInternalProps().setCachedLeaderboard(type, stringList);
 
 		// Update latest update-time
 		plugin.getInternalProps().setLeaderboardLastUpdateTime(System.currentTimeMillis());
 
 		// messages = stringList.toArray(new String[stringList.size()]);
+	}
+	
+	public void updateAllLeaderboards() {
+		if (!shouldUpdateLeaderboard()) return;
+		
+		plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+			@Override
+			public void run() {
+				for (dataType type: dataType.values()) {
+					updateLeaderboard(type);
+				}
+			}
+		});
 	}
 
 }

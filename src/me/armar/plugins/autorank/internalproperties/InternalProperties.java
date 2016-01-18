@@ -1,6 +1,5 @@
 package me.armar.plugins.autorank.internalproperties;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import me.armar.plugins.autorank.Autorank;
@@ -31,12 +30,6 @@ public class InternalProperties {
 				.header("This is the internal properties file of Autorank. \nYou should not touch any values here, unless instructed by a developer."
 						+ "\nAutorank uses these to keep track of certain aspects of the plugin.");
 
-		propFile.addDefault("cached leaderboard", new ArrayList<String>()); // A
-																			// cached
-																			// version
-																			// of
-																			// the
-																			// leaderboard.
 		propFile.addDefault("leaderboard last updated", 0); // When was the
 															// leaderboard
 															// updated for last
@@ -54,14 +47,15 @@ public class InternalProperties {
 		propFile.save();
 	}
 
-	public void setCachedLeaderboard(List<String> cachedLeaderboard) {
-		propFile.set("cached leaderboard", cachedLeaderboard);
+	public void setCachedLeaderboard(dataType type, List<String> cachedLeaderboard) {
+		propFile.set("leaderboards." + type.toString().toLowerCase() + ".cached leaderboard", cachedLeaderboard);
 
 		propFile.save();
 	}
 
-	public List<String> getCachedLeaderboard() {
-		return propFile.getStringList("cached leaderboard");
+	public List<String> getCachedLeaderboard(dataType type) {
+		// Type is the leaderboard type you want to get (all time, daily, weekly or monthly)
+		return propFile.getStringList("leaderboards." + type.toString().toLowerCase() + ".cached leaderboard");
 	}
 
 	public void setLeaderboardLastUpdateTime(long time) {
