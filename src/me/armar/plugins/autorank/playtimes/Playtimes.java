@@ -83,7 +83,7 @@ public class Playtimes {
 		// Keep a counter of archived items
 		int counter = 0;
 
-		for (final UUID uuid : getUUIDKeys()) {
+		for (final UUID uuid : getUUIDKeys(dataType.TOTAL_TIME)) {
 			final int time = this.getLocalTime(uuid);
 
 			// Found a record to be archived
@@ -256,8 +256,8 @@ public class Playtimes {
 		return data.getInt(uuid.toString(), 0);
 	}
 
-	public List<String> getPlayerKeys() {
-		final List<UUID> uuids = getUUIDKeys();
+	public List<String> getPlayerKeys(dataType type) {
+		final List<UUID> uuids = getUUIDKeys(type);
 
 		final List<String> playerNames = new ArrayList<String>();
 
@@ -327,11 +327,11 @@ public class Playtimes {
 		return playTime;
 	}
 
-	public List<UUID> getUUIDKeys() {
+	public List<UUID> getUUIDKeys(dataType type) {
 
 		final List<UUID> uuids = new ArrayList<UUID>();
 
-		SimpleYamlConfiguration data = this.getDataFile(dataType.TOTAL_TIME);
+		SimpleYamlConfiguration data = this.getDataFile(type);
 
 		for (final String uuidString : data.getKeys(false)) {
 			UUID uuid = null;

@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 import java.util.UUID;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.playtimes.Playtimes.dataType;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
 
@@ -39,7 +40,7 @@ public class UUIDRefresher implements Runnable {
 		isRunning = true;
 
 		// Get a list of all uuid keys.
-		final List<UUID> uuids = plugin.getPlaytimes().getUUIDKeys();
+		final List<UUID> uuids = plugin.getPlaytimes().getUUIDKeys(dataType.TOTAL_TIME);
 
 		final List<UUID> notOutdated = new ArrayList<UUID>();
 

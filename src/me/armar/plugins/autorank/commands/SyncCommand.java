@@ -11,6 +11,7 @@ import org.bukkit.command.CommandSender;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
+import me.armar.plugins.autorank.playtimes.Playtimes.dataType;
 
 public class SyncCommand extends AutorankCommand {
 
@@ -53,7 +54,7 @@ public class SyncCommand extends AutorankCommand {
 					public void run() {
 						// Update all mysql records
 						for (final UUID uuid : plugin.getPlaytimes()
-								.getUUIDKeys()) {
+								.getUUIDKeys(dataType.TOTAL_TIME)) {
 							final int localTime = plugin.getPlaytimes()
 									.getLocalTime(uuid);
 
