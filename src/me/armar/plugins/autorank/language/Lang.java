@@ -307,9 +307,13 @@ public enum Lang {
 	 */
 	PROGRESS_RESET("progress-reset", "&eYour progress for the rank is reset."),
 	/**
-	 * &eYour progress for the rank is reset.
+	 * &4You cannot use this command as this server has not enabled partial completion!
 	 */
-	PARTIAL_COMPLETION_NOT_ENABLED("partial-completion-not-enabled", "&4You cannot use this command as this server has not enabled partial completion!"),;
+	PARTIAL_COMPLETION_NOT_ENABLED("partial-completion-not-enabled", "&4You cannot use this command as this server has not enabled partial completion!"),
+	/**
+	 * &4You have not specified a valid leaderboard type! &eOnly 'total', 'daily', 'weekly' and 'monthly' are allowed.
+	 */
+	INVALID_LEADERBOARD_TYPE("invalid-leaderboard-type", "&4You have not specified a valid leaderboard type! &eOnly 'total', 'daily', 'weekly' and 'monthly' are allowed."),;
 
 	private static FileConfiguration LANG;
 
