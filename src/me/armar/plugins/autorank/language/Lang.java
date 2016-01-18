@@ -349,19 +349,19 @@ public enum Lang {
 	/**
 	 * &3Today: &d
 	 */
-	AR_TIMES_TODAY("ar-times-today", "&3Today: &d"),
+	AR_TIMES_TODAY("ar-times-today", "&3Today: &d{0}"),
 	/**
 	 * &cThis week: &d
 	 */
-	AR_TIMES_THIS_WEEK("ar-times-this-week", "&cThis week: &d"),
+	AR_TIMES_THIS_WEEK("ar-times-this-week", "&cThis week: &d{0}"),
 	/**
 	 * &eThis month: &d
 	 */
-	AR_TIMES_THIS_MONTH("ar-times-this-month", "&eThis month: &d"),
+	AR_TIMES_THIS_MONTH("ar-times-this-month", "&eThis month: &d{0}"),
 	/**
 	 * &aTotal: &d
 	 */
-	AR_TIMES_TOTAL("ar-times-total", "&aTotal: &d"),
+	AR_TIMES_TOTAL("ar-times-total", "&aTotal: &d{0}"),
 	/**
 	 * &a-------- Leaderboard (All time) --------
 	 */
