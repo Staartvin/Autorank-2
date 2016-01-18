@@ -386,8 +386,8 @@ public class Autorank extends JavaPlugin {
 		// Start automatic backup
 		this.getBackupManager().startBackupSystem();
 
-		// Send leaderboard to consolesender to update it.
-		this.getLeaderboard().sendLeaderboard(this.getServer().getConsoleSender());
+		// Try to update all leaderboards if needed.
+		this.getLeaderboard().updateAllLeaderboards();
 
 		// Convert all UUIDS to lowercase.
 		this.getUUIDStorage().transferUUIDs();
