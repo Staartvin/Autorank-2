@@ -20,7 +20,7 @@ public class TimesCommand extends AutorankCommand {
 	private final Autorank plugin;
 
 	public TimesCommand(final Autorank instance) {
-		this.setUsage("/ar times <player.");
+		this.setUsage("/ar times <player>");
 		this.setDesc("Show the amount of time you played.");
 		this.setPermission("autorank.times");
 
