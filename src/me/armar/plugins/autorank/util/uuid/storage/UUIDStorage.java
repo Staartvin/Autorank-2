@@ -267,8 +267,9 @@ public class UUIDStorage {
 			for (final String fPlayerName : config.getKeys(false)) {
 				final String fuuid = config.getString(fPlayerName + ".uuid");
 
+				// Skip this player, as there is no uuid
 				if (fuuid == null)
-					return null;
+					continue;
 
 				if (fuuid.equals(uuid.toString())) {
 					return fPlayerName;
