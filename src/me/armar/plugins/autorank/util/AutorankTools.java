@@ -269,7 +269,7 @@ public class AutorankTools {
 		int index = b.lastIndexOf(",");
 		
 		if (index != -1) {
-			b.replace(index, index + 1, " and");
+			b.replace(index, index + 1, " " + Lang.AND.getConfigValue());
 		}
 
 		return b.toString();

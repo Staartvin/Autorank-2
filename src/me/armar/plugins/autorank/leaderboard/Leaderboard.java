@@ -178,15 +178,14 @@ public class Leaderboard {
 		final List<String> stringList = new ArrayList<String>();
 		
 		if (type == dataType.TOTAL_TIME) {
-			stringList.add("&a-------- Leaderboard (All time) --------");
+			stringList.add(Lang.LEADERBOARD_HEADER_ALL_TIME.getConfigValue());
 		} else if (type == dataType.DAILY_TIME) {
-			stringList.add("&a-------- Leaderboard (Daily time) --------");
+			stringList.add(Lang.LEADERBOARD_HEADER_DAILY.getConfigValue());
 		} else if (type == dataType.WEEKLY_TIME) {
-			stringList.add("&a-------- Leaderboard (Weekly time) --------");
+			stringList.add(Lang.LEADERBOARD_HEADER_WEEKLY.getConfigValue());
 		} else if (type == dataType.MONTHLY_TIME) {
-			stringList.add("&a-------- Leaderboard (Monthly time) --------");
-		}
-		
+			stringList.add(Lang.LEADERBOARD_HEADER_MONTHLY.getConfigValue());
+		}		
 
 		for (int i = 0; i < leaderboardLength && itr.hasNext(); i++) {
 			final Entry<UUID, Integer> entry = itr.next();

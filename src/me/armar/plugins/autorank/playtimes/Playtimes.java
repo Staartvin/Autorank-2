@@ -10,13 +10,12 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 
-import org.bukkit.ChatColor;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
 import me.armar.plugins.autorank.hooks.DependencyManager.dependency;
 import me.armar.plugins.autorank.hooks.ontimeapi.OnTimeHandler;
 import me.armar.plugins.autorank.hooks.statsapi.StatsAPIHandler;
+import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.armar.plugins.autorank.statsmanager.handlers.StatsHandler;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
@@ -523,7 +522,7 @@ public class Playtimes {
 					if (plugin.getConfigHandler().shouldBroadcastDataReset()) {
 						// Should we broadcast the reset?
 						
-						plugin.getServer().broadcastMessage(ChatColor.GOLD + "[Autorank] " + ChatColor.DARK_PURPLE + "A new day has arrived! " + ChatColor.YELLOW + "All daily times have been reset.");
+						plugin.getServer().broadcastMessage(Lang.RESET_DAILY_TIME.getConfigValue());
 					}
 					
 				} else if (type == dataType.WEEKLY_TIME) {
@@ -532,7 +531,7 @@ public class Playtimes {
 					if (plugin.getConfigHandler().shouldBroadcastDataReset()) {
 						// Should we broadcast the reset?
 						
-						plugin.getServer().broadcastMessage(ChatColor.GOLD + "[Autorank] " + ChatColor.DARK_PURPLE + "A new week has arrived! " + ChatColor.YELLOW + "All weekly times have been reset.");
+						plugin.getServer().broadcastMessage(Lang.RESET_WEEKLY_TIME.getConfigValue());
 					}
 				} else if (type == dataType.MONTHLY_TIME) {
 					value = cal.get(Calendar.MONTH);
@@ -540,7 +539,7 @@ public class Playtimes {
 					if (plugin.getConfigHandler().shouldBroadcastDataReset()) {
 						// Should we broadcast the reset?
 						
-						plugin.getServer().broadcastMessage(ChatColor.GOLD + "[Autorank] " + ChatColor.DARK_PURPLE + "A new month has arrived! " + ChatColor.YELLOW + "All monthy times have been reset.");
+						plugin.getServer().broadcastMessage(Lang.RESET_MONTHLY_TIME.getConfigValue());
 					}
 				}
 

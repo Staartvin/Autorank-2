@@ -3,7 +3,6 @@ package me.armar.plugins.autorank.commands;
 import java.util.List;
 import java.util.UUID;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -78,12 +77,12 @@ public class TimesCommand extends AutorankCommand {
 		int monthly = plugin.getPlaytimes().getTime(dataType.MONTHLY_TIME, uuid);
 		int total = plugin.getPlaytimes().getTime(dataType.TOTAL_TIME, uuid);
 		
-		sender.sendMessage(ChatColor.GREEN + "----------- [Times of " + ChatColor.GOLD + targetName + ChatColor.GREEN + "] -----------");
-		sender.sendMessage(ChatColor.GOLD + targetName + ChatColor.BLUE + " played:");
-		sender.sendMessage(ChatColor.DARK_AQUA + "Today: " + ChatColor.LIGHT_PURPLE + AutorankTools.timeToString(daily, Time.MINUTES));
-		sender.sendMessage(ChatColor.RED + "This week: " + ChatColor.LIGHT_PURPLE + AutorankTools.timeToString(weekly, Time.MINUTES));
-		sender.sendMessage(ChatColor.YELLOW + "This month: " + ChatColor.LIGHT_PURPLE + AutorankTools.timeToString(monthly, Time.MINUTES));
-		sender.sendMessage(ChatColor.GREEN + "Total: " + ChatColor.LIGHT_PURPLE + AutorankTools.timeToString(total, Time.MINUTES));
+		sender.sendMessage(Lang.AR_TIMES_HEADER.getConfigValue(targetName));
+		sender.sendMessage(Lang.AR_TIMES_PLAYER_PLAYED.getConfigValue(targetName));
+		sender.sendMessage(Lang.AR_TIMES_TODAY.getConfigValue(AutorankTools.timeToString(daily, Time.MINUTES)));
+		sender.sendMessage(Lang.AR_TIMES_THIS_WEEK.getConfigValue(AutorankTools.timeToString(weekly, Time.MINUTES)));
+		sender.sendMessage(Lang.AR_TIMES_THIS_MONTH.getConfigValue(AutorankTools.timeToString(monthly, Time.MINUTES)));
+		sender.sendMessage(Lang.AR_TIMES_TOTAL.getConfigValue(AutorankTools.timeToString(total, Time.MINUTES)));
 		
 		return true;
 	}

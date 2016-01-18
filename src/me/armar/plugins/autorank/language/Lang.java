@@ -313,7 +313,73 @@ public enum Lang {
 	/**
 	 * &4You have not specified a valid leaderboard type! &eOnly 'total', 'daily', 'weekly' and 'monthly' are allowed.
 	 */
-	INVALID_LEADERBOARD_TYPE("invalid-leaderboard-type", "&4You have not specified a valid leaderboard type! &eOnly 'total', 'daily', 'weekly' and 'monthly' are allowed."),;
+	INVALID_LEADERBOARD_TYPE("invalid-leaderboard-type", "&4You have not specified a valid leaderboard type! &eOnly 'total', 'daily', 'weekly' and 'monthly' are allowed."),
+	/**
+	 * none (no rankup found)
+	 */
+	NO_FURTHER_RANKUP_FOUND("no-further-rankup-found", "none (no rankup found)"),
+	/**
+	 * and
+	 */
+	AND("and", "and"),
+	/**
+	 * but has already completed this rankup before.
+	 */
+	ALREADY_COMPLETED_RANK("already-completed-rank", "but has already completed this rankup before."),
+	/**
+	 * &6[Autorank] &5A new day has arrived! &eAll daily times have been reset.
+	 */
+	RESET_DAILY_TIME("reset-daily-time", "&6[Autorank] &5A new day has arrived! &eAll daily times have been reset."),
+	/**
+	 * &6[Autorank] &5A new day has arrived! &eAll daily times have been reset.
+	 */
+	RESET_WEEKLY_TIME("reset-weekly-time", "&6[Autorank] &5A new week has arrived! &eAll weekly times have been reset."),
+	/**
+	 * &6[Autorank] &5A new day has arrived! &eAll daily times have been reset.
+	 */
+	RESET_MONTHLY_TIME("reset-monthly-time", "&6[Autorank] &5A new month has arrived! &eAll monthly times have been reset."),
+	/**
+	 * &a----------- [Times of &6{0}&a] -----------
+	 */
+	AR_TIMES_HEADER("ar-times-header", "&a----------- [Times of &6{0}&a] -----------"),
+	/**
+	 * &6{0}&9 played:
+	 */
+	AR_TIMES_PLAYER_PLAYED("ar-times-player-played", "&6{0}&9 played:"),
+	/**
+	 * &3Today: &d
+	 */
+	AR_TIMES_TODAY("ar-times-today", "&3Today: &d"),
+	/**
+	 * &cThis week: &d
+	 */
+	AR_TIMES_THIS_WEEK("ar-times-this-week", "&cThis week: &d"),
+	/**
+	 * &eThis month: &d
+	 */
+	AR_TIMES_THIS_MONTH("ar-times-this-month", "&eThis month: &d"),
+	/**
+	 * &aTotal: &d
+	 */
+	AR_TIMES_TOTAL("ar-times-total", "&aTotal: &d"),
+	/**
+	 * &a-------- Leaderboard (All time) --------
+	 */
+	LEADERBOARD_HEADER_ALL_TIME("leaderboard-header-all-time", "&a-------- Leaderboard (All time) --------"),
+	/**
+	 * &a-------- Leaderboard (Daily time) --------
+	 */
+	LEADERBOARD_HEADER_DAILY("leaderboard-header-daily", "&a-------- Leaderboard (Daily time) --------"),
+	/**
+	 * &a-------- Leaderboard (Weekly time) --------
+	 */
+	LEADERBOARD_HEADER_WEEKLY("leaderboard-header-weekly", "&a-------- Leaderboard (Weekly time) --------"),
+	/**
+	 * &a-------- Leaderboard (Monthly time) --------
+	 */
+	LEADERBOARD_HEADER_MONTHLY("leaderboard-header-monthly", "&a-------- Leaderboard (Monthly time) --------"),
+	
+	;
 
 	private static FileConfiguration LANG;
 

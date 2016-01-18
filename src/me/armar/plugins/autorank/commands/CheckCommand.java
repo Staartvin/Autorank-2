@@ -118,7 +118,7 @@ public class CheckCommand extends AutorankCommand {
 		boolean showReqs = false;
 
 		if (reqs.size() == 0) {
-			layout = layout.replace("&reqs", "none (no rankup found)");
+			layout = layout.replace("&reqs", Lang.NO_FURTHER_RANKUP_FOUND.getConfigValue());
 		} else {
 			layout = layout.replace("&reqs", "");
 			showReqs = true;
@@ -255,7 +255,7 @@ public class CheckCommand extends AutorankCommand {
 
 		if (plugin.getPlayerDataHandler().hasCompletedRank(uuid,
 				chosenChangeGroup.getParentGroup())) {
-			reqMessage2 = " but has already completed this rankup before.";
+			reqMessage2 = " " + Lang.ALREADY_COMPLETED_RANK.getConfigValue();
 		} else {
 			reqMessage2 = Lang.RANKED_UP_NOW.getConfigValue();
 		}
