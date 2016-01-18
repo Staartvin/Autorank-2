@@ -254,7 +254,7 @@ public class Leaderboard {
 
 		}
 
-		stringList.add("&a------------------------------------");
+		stringList.add(Lang.LEADERBOARD_FOOTER.getConfigValue());
 
 		// Cache this leaderboard
 		plugin.getInternalProps().setCachedLeaderboard(type, stringList);

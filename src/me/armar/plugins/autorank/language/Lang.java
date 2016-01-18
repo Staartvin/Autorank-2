@@ -378,6 +378,10 @@ public enum Lang {
 	 * &a-------- Leaderboard (Monthly time) --------
 	 */
 	LEADERBOARD_HEADER_MONTHLY("leaderboard-header-monthly", "&a-------- Leaderboard (Monthly time) --------"),
+	/**
+	 * &a------------------------------------
+	 */
+	LEADERBOARD_FOOTER("leaderboard-footer", "&a------------------------------------"),
 	
 	;
 
