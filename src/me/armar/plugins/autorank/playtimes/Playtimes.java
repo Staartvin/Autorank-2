@@ -450,6 +450,7 @@ public class Playtimes {
 		// Should we reset a specific data file?
 		// Compare date to last date in internal properties
 		Calendar cal = Calendar.getInstance();
+		cal.setFirstDayOfWeek(Calendar.MONDAY);
 
 		if (type == dataType.DAILY_TIME) {
 			if (cal.get(Calendar.DAY_OF_WEEK) != plugin.getInternalProps().getTrackedDataType(type)) {
@@ -509,6 +510,7 @@ public class Playtimes {
 		// Check if daily, weekly or monthly files should be reset.
 
 		Calendar cal = Calendar.getInstance();
+		cal.setFirstDayOfWeek(Calendar.MONDAY);
 
 		for (dataType type : Playtimes.dataType.values()) {
 			if (plugin.getPlaytimes().shouldResetDatafile(type)) {
