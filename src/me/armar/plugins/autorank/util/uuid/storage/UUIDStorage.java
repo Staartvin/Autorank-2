@@ -9,11 +9,11 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
 
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import me.armar.plugins.autorank.Autorank;
-import net.md_5.bungee.api.ChatColor;
 
 /**
  * This class represents a multitude of files where are looked up uuids are
