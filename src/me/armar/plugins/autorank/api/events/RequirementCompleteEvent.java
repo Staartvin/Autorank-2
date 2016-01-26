@@ -5,7 +5,7 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
+import me.armar.plugins.autorank.rankbuilder.holders.RequirementsHolder;
 
 /**
  * This event is called when a player meets the requirement for a group and
@@ -25,18 +25,18 @@ public class RequirementCompleteEvent extends Event implements Cancellable {
 	private boolean isCancelled;
 	private final Player player;
 
-	private final Requirement requirement;
+	private final RequirementsHolder reqHolder;
 
 	/**
 	 * Create a new RequirementCompleteEvent.
 	 * This event represents a requirement that is completed by a player.
 	 * 
 	 * @param player Player that completed the requirement
-	 * @param req Requirement that was completed
+	 * @param reqHolder {@linkplain RequirementsHolder} that was completed
 	 */
-	public RequirementCompleteEvent(final Player player, final Requirement req) {
+	public RequirementCompleteEvent(final Player player, final RequirementsHolder reqHolder) {
 		this.player = player;
-		this.requirement = req;
+		this.reqHolder = reqHolder;
 	}
 
 	@Override
@@ -54,12 +54,12 @@ public class RequirementCompleteEvent extends Event implements Cancellable {
 	}
 
 	/**
-	 * Get the requirement that has been completed.
+	 * Get the {@linkplain RequirementsHolder} that has been completed.
 	 * 
-	 * @return Requirement that has been completed.
+	 * @return {@linkplain RequirementsHolder} that has been completed.
 	 */
-	public Requirement getRequirement() {
-		return requirement;
+	public RequirementsHolder getRequirement() {
+		return reqHolder;
 	}
 
 	/* (non-Javadoc)

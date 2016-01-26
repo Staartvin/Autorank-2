@@ -43,22 +43,22 @@ public class API {
 	}
 
 	/**
-	 * Gets all requirements for a player at the exact moment.
+	 * Gets all {@linkplain RequirementsHolder}s for a player at the exact moment.
 	 * This does not consider already finished requirement but just mirrors the
 	 * config file.
 	 * 
 	 * @param player Player to get the requirements from.
-	 * @return a list of requirements; An empty list when none are found.
+	 * @return a list of {@linkplain RequirementsHolder}s; An empty list when none are found.
 	 */
 	public List<RequirementsHolder> getAllRequirements(final Player player) {
 		return plugin.getPlayerChecker().getAllRequirementsHolders(player);
 	}
 
 	/**
-	 * Gets all requirements that are not yet completed.
+	 * Gets all {@linkplain RequirementsHolder}s that are not yet completed.
 	 * 
 	 * @param player Player to get the failed requirements for.
-	 * @return list of requirements that still have to be completed.
+	 * @return list of {@linkplain RequirementsHolder}s that still have to be completed.
 	 */
 	public List<RequirementsHolder> getFailedRequirementsHolders(final Player player) {
 		return plugin.getPlayerChecker().getFailedRequirementsHolders(player);

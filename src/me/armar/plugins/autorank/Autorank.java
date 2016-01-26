@@ -127,6 +127,11 @@ public class Autorank extends JavaPlugin {
 
 	}
 
+	/**
+	 * Sends a message via the debug channel of Autorank.
+	 * <br>It will only show up in console if the debug option in the Settings.yml is turned on.
+	 * @param message Message to send.
+	 */
 	public void debugMessage(final String message) {
 		// Don't put out debug message when it is not needed.
 		if (!this.getConfigHandler().useDebugOutput())
@@ -135,6 +140,9 @@ public class Autorank extends JavaPlugin {
 		System.out.print("[Autorank debug] " + message);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.bukkit.plugin.java.JavaPlugin#onDisable()
+	 */
 	@Override
 	public void onDisable() {
 
@@ -198,6 +206,9 @@ public class Autorank extends JavaPlugin {
 		getLogger().info(String.format("Autorank %s has been disabled!", getDescription().getVersion()));
 	}
 
+	/* (non-Javadoc)
+	 * @see org.bukkit.plugin.java.JavaPlugin#onEnable()
+	 */
 	@Override
 	public void onEnable() {
 
@@ -424,6 +435,10 @@ public class Autorank extends JavaPlugin {
 		return dependencyManager;
 	}
 
+	/**
+	 * Get the current {@linkplain StatsPlugin} that is hooked.
+	 * @return current {@linkplain StatsPlugin} that is hooked or {@linkplain DummyHandler} if no stats plugin is found.
+	 */
 	public StatsPlugin getHookedStatsPlugin() {
 		return getDependencyManager().getStatsPlugin();
 	}
@@ -476,20 +491,33 @@ public class Autorank extends JavaPlugin {
 		return warningManager;
 	}
 
+	/**
+	 * Checks whether the current version of Autorank is a DEV version.
+	 * @return true if is, false otherwise.
+	 */
 	public boolean isDevVersion() {
 		return this.getDescription().getVersion().toLowerCase().contains("dev")
 				|| this.getDescription().getVersion().toLowerCase().contains("project");
 	}
 
+	/**
+	 * @see {@linkplain me.armar.plugins.autorank.api.API#registerRequirement(String, Class) registerRequirement()}
+	 */
 	public void registerRequirement(final String name, final Class<? extends Requirement> requirement) {
 		this.getPlayerChecker().getChangeGroupManager().getBuilder().getRequirementBuilder().registerRequirement(name,
 				requirement);
 	}
 
+	/**
+	 * @see {@linkplain me.armar.plugins.autorank.api.API#registerResult(String, Class) registerResult()}
+	 */
 	public void registerResult(final String name, final Class<? extends Result> result) {
 		this.getPlayerChecker().getChangeGroupManager().getBuilder().getResultBuilder().registerResult(name, result);
 	}
 
+	/**
+	 * Reloads the Autorank plugin.
+	 */
 	public void reload() {
 		getServer().getPluginManager().disablePlugin(this);
 		getServer().getPluginManager().enablePlugin(this);
@@ -567,6 +595,10 @@ public class Autorank extends JavaPlugin {
 		this.warningManager = warningManager;
 	}
 
+	/**
+	 * Starts the metrics of Autorank.
+	 * @return true if succesfully started, false otherwise.
+	 */
 	private boolean startMetrics() {
 		// Try to start metrics
 		try {

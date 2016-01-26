@@ -8,11 +8,13 @@ import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.api.events.RequirementCompleteEvent;
 import me.armar.plugins.autorank.playerchecker.result.Result;
 import me.armar.plugins.autorank.rankbuilder.ChangeGroup;
 import me.armar.plugins.autorank.rankbuilder.holders.RequirementsHolder;
@@ -209,14 +211,14 @@ public class PlayerDataHandler {
 		// Fire event so it can be cancelled
 		// Create the event here/
 		// TODO Implement logic for events with RequirementHolder
-//		final RequirementCompleteEvent event = new RequirementCompleteEvent(
-//				player, req);
-//		// Call the event
-//		Bukkit.getServer().getPluginManager().callEvent(event);
-//
-//		// Check if event is cancelled.
-//		if (event.isCancelled())
-//			return;
+		final RequirementCompleteEvent event = new RequirementCompleteEvent(
+				player, holder);
+		// Call the event
+		Bukkit.getServer().getPluginManager().callEvent(event);
+
+		// Check if event is cancelled.
+		if (event.isCancelled())
+			return;
 
 		// Run results
 		final List<Result> results = holder.getResults();
