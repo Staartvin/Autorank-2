@@ -91,10 +91,6 @@ public class ChangeGroupManager {
 	}
 
 	public List<ChangeGroup> getChangeGroups(final String groupName) {
-		
-		System.out.println("Searching for: " + groupName);
-	
-		
 		// return empty list if nothing found
 		if (!changeGroups.containsKey(groupName))
 			return new ArrayList<ChangeGroup>();
