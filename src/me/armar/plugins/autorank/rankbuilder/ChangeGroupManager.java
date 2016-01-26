@@ -76,7 +76,7 @@ public class ChangeGroupManager {
 
 				// Provide more info
 				if (deepInfo) {
-					messages.add("    - " + group.getRequirements().size()
+					messages.add("    - " + group.getRequirementsHolders().size()
 							+ " requirements");
 					messages.add("    - " + group.getResults().size()
 							+ " results");

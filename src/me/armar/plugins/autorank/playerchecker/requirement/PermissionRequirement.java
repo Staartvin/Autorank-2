@@ -10,13 +10,12 @@ import me.armar.plugins.autorank.util.AutorankTools;
 
 public class PermissionRequirement extends Requirement {
 
-	List<String> permissions = new ArrayList<String>();
+	String permission = null;
 
 	@Override
 	public String getDescription() {
 
-		String lang = Lang.PERMISSION_REQUIREMENT.getConfigValue(AutorankTools
-				.seperateList(permissions, "or"));
+		String lang = Lang.PERMISSION_REQUIREMENT.getConfigValue(permission);
 
 		// Check if this requirement is world-specific
 		if (this.isWorldSpecific()) {
@@ -42,25 +41,18 @@ public class PermissionRequirement extends Requirement {
 				return false;
 		}
 
-		for (final String perm : permissions) {
-			if (player.hasPermission(perm))
-				return true;
-		}
-
-		return false;
+		return player.hasPermission(permission);
 	}
 
 	@Override
-	public boolean setOptions(final List<String[]> optionsList) {
+	public boolean setOptions(String[] options) {
 
-		for (final String[] options : optionsList) {
-			try {
-				permissions.add(options[0]);
-			} catch (final Exception e) {
-				return false;
-			}
+		try {
+			permission = options[0];
+		} catch (final Exception e) {
+			return false;
 		}
 
-		return !permissions.isEmpty();
+		return permission != null;
 	}
 }

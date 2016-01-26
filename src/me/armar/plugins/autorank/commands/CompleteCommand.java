@@ -12,6 +12,7 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
+import me.armar.plugins.autorank.rankbuilder.holders.RequirementsHolder;
 
 public class CompleteCommand extends AutorankCommand {
 
@@ -70,27 +71,29 @@ public class CompleteCommand extends AutorankCommand {
 
 		final UUID uuid = plugin.getUUIDStorage().getStoredUUID(player.getName());
 
-		final List<Requirement> requirements = plugin.getPlayerChecker()
-				.getAllRequirements(player);
+//		final List<Requirement> requirements = plugin.getPlayerChecker()
+//				.getAllRequirements(player);
+		
+		List<RequirementsHolder> holders = plugin.getPlayerChecker().getAllRequirementsHolders(player);
 
-		if (requirements.size() == 0) {
+		if (holders.size() == 0) {
 			player.sendMessage(ChatColor.RED + "You don't have a next rank up!");
 			return true;
 		}
 
 		// Rank player as he has fulfilled all requirements
-		if (requirements.size() == 0) {
+		if (holders.size() == 0) {
 			player.sendMessage(ChatColor.GREEN
 					+ "You don't have any requirements left.");
 			return true;
 		} else {
 			// Get the specified requirement
-			if (completionID > requirements.size()) {
-				completionID = requirements.size();
+			if (completionID > holders.size()) {
+				completionID = holders.size();
 			}
 
 			// Human logic = first number is 1 not 0.
-			final Requirement req = requirements.get((completionID - 1));
+			final RequirementsHolder holder = holders.get((completionID - 1));
 
 			if (plugin.getPlayerDataHandler().hasCompletedRequirement(
 					(completionID - 1), uuid)) {
@@ -99,15 +102,15 @@ public class CompleteCommand extends AutorankCommand {
 				return true;
 			}
 
-			if (req.meetsRequirement(player)) {
+			if (holder.meetsRequirement(player, uuid)) {
 				// Player meets requirement
 				player.sendMessage(ChatColor.GREEN
 						+ Lang.SUCCESSFULLY_COMPLETED_REQUIREMENT
 								.getConfigValue(completionID + ""));
-				player.sendMessage(ChatColor.AQUA + req.getDescription());
+				player.sendMessage(ChatColor.AQUA + holder.getDescription());
 
 				// Run results
-				plugin.getPlayerDataHandler().runResults(req, player);
+				plugin.getPlayerDataHandler().runResults(holder, player);
 
 				// Log that a player has passed this requirement
 				plugin.getPlayerDataHandler().addPlayerProgress(uuid,
@@ -118,16 +121,12 @@ public class CompleteCommand extends AutorankCommand {
 				player.sendMessage(ChatColor.RED
 						+ Lang.DO_NOT_MEET_REQUIREMENTS_FOR
 								.getConfigValue(completionID + ""));
-				player.sendMessage(ChatColor.AQUA + req.getDescription());
+				player.sendMessage(ChatColor.AQUA + holder.getDescription());
 				player.sendMessage(ChatColor.GREEN + "Current: "
-						+ ChatColor.GOLD + req.getProgress(player));
+						+ ChatColor.GOLD + holder.getProgress(player));
 			}
 		}
-
-		/*for (Entry<String, List<Requirement>> entry: failed.entrySet()) {
-			
-		}*/
-
+		
 		return true;
 	}
 

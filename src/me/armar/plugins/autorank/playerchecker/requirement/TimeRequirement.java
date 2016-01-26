@@ -19,23 +19,15 @@ import me.armar.plugins.autorank.util.AutorankTools.Time;
  */
 public class TimeRequirement extends Requirement {
 
-	List<Integer> times = new ArrayList<Integer>();
+	int timeNeeded = -1;
 
 	@Override
 	public String getDescription() {
-		final List<String> sTimes = new ArrayList<String>();
-
-		for (final int time : times) {
-			sTimes.add(AutorankTools.timeToString(time, Time.MINUTES));
-		}
-
-		return Lang.TIME_REQUIREMENT.getConfigValue(AutorankTools.seperateList(
-				sTimes, "or"));
+		return Lang.TIME_REQUIREMENT.getConfigValue(AutorankTools.timeToString(timeNeeded, Time.MINUTES));
 	}
 
 	@Override
 	public String getProgress(final Player player) {
-		String progress = "";
 
 		final int playtime = (getAutorank().getPlaytimes().getTimeOfPlayer(
 				player.getName(), true) / 60);
@@ -49,10 +41,10 @@ public class TimeRequirement extends Requirement {
 				progress += "or " + playtime + " min/" + time + " min";
 			}
 		}*/
-		progress = AutorankTools
-				.makeProgressString(times, "min", "" + playtime);
+//		progress = AutorankTools
+//				.makeProgressString(times, "min", "" + playtime);
 
-		return progress;
+		return playtime + " min/" + timeNeeded + " min";
 	}
 
 	@Override
@@ -61,26 +53,17 @@ public class TimeRequirement extends Requirement {
 		// getTimeOfPlayer() is in seconds, so convert.
 		final double playtime = this.getAutorank().getPlaytimes()
 				.getTimeOfPlayer(player.getName(), true) / 60;
-
-		for (final int time : times) {
-			if (time != -1 && time <= playtime) {
-				return true;
-			}
-		}
-		return false;
+		
+		return timeNeeded != -1 && playtime >= timeNeeded;
 	}
 
 	@Override
-	public boolean setOptions(final List<String[]> optionsList) {
-
-		for (final String[] options : optionsList) {
-			if (options.length > 0) {
-				times.add(AutorankTools.stringToTime(options[0], Time.MINUTES));
-			} else {
-				return false;
-			}
+	public boolean setOptions(String[] options) {
+		
+		if (options.length > 0) {
+			timeNeeded = AutorankTools.stringToTime(options[0], Time.MINUTES);
 		}
-
-		return !times.isEmpty();
+		
+		return timeNeeded != -1;
 	}
 }

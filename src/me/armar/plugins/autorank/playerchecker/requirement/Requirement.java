@@ -159,12 +159,10 @@ public abstract class Requirement {
 	 * The requirement id, auto completion and optional values are assigned
 	 * automatically.
 	 * 
-	 * @param optionsList Each element in the list contains an array that has
-	 *            all
-	 *            variables in it.
+	 * @param options Each element is an element supplied by the config.
 	 * @return true if everything was setup correctly; false otherwise
 	 */
-	public abstract boolean setOptions(List<String[]> optionsList);
+	public abstract boolean setOptions(String[] options);
 
 	/**
 	 * Set the requirement id of this requirement

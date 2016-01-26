@@ -11,6 +11,7 @@ import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 import me.armar.plugins.autorank.rankbuilder.ChangeGroup;
 import me.armar.plugins.autorank.rankbuilder.ChangeGroupManager;
+import me.armar.plugins.autorank.rankbuilder.holders.RequirementsHolder;
 import me.armar.plugins.autorank.util.AutorankTools;
 
 /*
@@ -29,22 +30,20 @@ public class PlayerChecker {
 	private final Autorank plugin;
 	private final ChangeGroupManager changeGroupManager;
 
-	//private final Map<String, List<RankChange>> rankChanges = new HashMap<String, List<RankChange>>();
+	// private final Map<String, List<RankChange>> rankChanges = new
+	// HashMap<String, List<RankChange>>();
 
 	public PlayerChecker(final Autorank plugin) {
 		this.plugin = plugin;
 		this.changeGroupManager = new ChangeGroupManager(plugin);
 	}
 
-	/*public void addRankChange(final String name, final RankChange change) {
-		if (rankChanges.get(name) == null) {
-			final List<RankChange> list = new ArrayList<RankChange>();
-			list.add(change);
-			rankChanges.put(name, list);
-		} else {
-			rankChanges.get(name).add(change);
-		}
-	}*/
+	/*
+	 * public void addRankChange(final String name, final RankChange change) {
+	 * if (rankChanges.get(name) == null) { final List<RankChange> list = new
+	 * ArrayList<RankChange>(); list.add(change); rankChanges.put(name, list); }
+	 * else { rankChanges.get(name).add(change); } }
+	 */
 
 	public boolean checkPlayer(final Player player) {
 
@@ -53,25 +52,21 @@ public class PlayerChecker {
 			return false;
 
 		// only first group - will cause problems
-		final String groupName = plugin.getPermPlugHandler().getPrimaryGroup(
-				player);
+		final String groupName = plugin.getPermPlugHandler().getPrimaryGroup(player);
 
-		final List<ChangeGroup> changes = changeGroupManager
-				.getChangeGroups(groupName);
+		final List<ChangeGroup> changes = changeGroupManager.getChangeGroups(groupName);
 
 		if (changes == null || changes.size() == 0) {
 			return false;
 		}
 
-		String chosenPath = plugin.getPlayerDataHandler().getChosenPath(
-				player.getUniqueId());
+		String chosenPath = plugin.getPlayerDataHandler().getChosenPath(player.getUniqueId());
 
 		if (!plugin.getPlayerDataHandler().checkValidChosenPath(player)) {
 			chosenPath = "unknown";
 		}
 
-		final ChangeGroup changeGroup = this.getChangeGroupManager()
-				.matchChangeGroup(groupName, chosenPath);
+		final ChangeGroup changeGroup = this.getChangeGroupManager().matchChangeGroup(groupName, chosenPath);
 
 		if (changeGroup == null)
 			return false;
@@ -81,24 +76,21 @@ public class PlayerChecker {
 		return changeGroup.applyChange(player);
 	}
 
-	public List<Requirement> getAllRequirements(final Player player) {
+	public List<RequirementsHolder> getAllRequirementsHolders(final Player player) {
 
 		// only first group - will cause problems
-		final String groupName = plugin.getPermPlugHandler().getPrimaryGroup(
-				player);
+		final String groupName = plugin.getPermPlugHandler().getPrimaryGroup(player);
 
-		final ChangeGroup chosenChangeGroup = changeGroupManager
-				.matchChangeGroup(groupName, plugin.getPlayerDataHandler()
-						.getChosenPath(player.getUniqueId()));
+		final ChangeGroup chosenChangeGroup = changeGroupManager.matchChangeGroup(groupName,
+				plugin.getPlayerDataHandler().getChosenPath(player.getUniqueId()));
 
 		if (chosenChangeGroup == null) {
 
 			// Get all requirements of all changegroups together
-			final List<Requirement> reqs = new ArrayList<Requirement>();
+			final List<RequirementsHolder> reqs = new ArrayList<RequirementsHolder>();
 
-			for (final ChangeGroup changeGroup : changeGroupManager
-					.getChangeGroups(groupName)) {
-				for (final Requirement req : changeGroup.getRequirements()) {
+			for (final ChangeGroup changeGroup : changeGroupManager.getChangeGroups(groupName)) {
+				for (final RequirementsHolder req : changeGroup.getRequirementsHolders()) {
 					reqs.add(req);
 				}
 			}
@@ -107,50 +99,44 @@ public class PlayerChecker {
 
 		}
 
-		return chosenChangeGroup.getRequirements();
+		return chosenChangeGroup.getRequirementsHolders();
 
-		/*final List<RankChange> changes = rankChanges.get(group);
-		if (changes != null) {
-			for (final RankChange change : changes) {
-				result.put(change, change.getReq());
-			}
-		}*/
+		/*
+		 * final List<RankChange> changes = rankChanges.get(group); if (changes
+		 * != null) { for (final RankChange change : changes) {
+		 * result.put(change, change.getReq()); } }
+		 */
 	}
 
-	public List<Requirement> getFailedRequirements(final Player player) {
+	public List<RequirementsHolder> getFailedRequirementsHolders(final Player player) {
 
 		// only first group - will cause problems
-		final String groupName = plugin.getPermPlugHandler().getPrimaryGroup(
-				player);
+		final String groupName = plugin.getPermPlugHandler().getPrimaryGroup(player);
 
-		final ChangeGroup chosenChangeGroup = changeGroupManager
-				.matchChangeGroup(groupName, plugin.getPlayerDataHandler()
-						.getChosenPath(player.getUniqueId()));
+		final ChangeGroup chosenChangeGroup = changeGroupManager.matchChangeGroup(groupName,
+				plugin.getPlayerDataHandler().getChosenPath(player.getUniqueId()));
 
 		if (chosenChangeGroup == null) {
 
 			// Get all requirments of all changegroups together
-			final List<Requirement> reqs = new ArrayList<Requirement>();
+			final List<RequirementsHolder> holders = new ArrayList<RequirementsHolder>();
 
-			for (final ChangeGroup changeGroup : changeGroupManager
-					.getChangeGroups(groupName)) {
-				for (final Requirement req : changeGroup
-						.getFailedRequirements(player)) {
-					reqs.add(req);
+			for (final ChangeGroup changeGroup : changeGroupManager.getChangeGroups(groupName)) {
+				for (final RequirementsHolder holder : changeGroup.getFailedRequirementsHolders(player)) {
+					holders.add(holder);
 				}
 			}
 
-			return reqs;
+			return holders;
 		}
 
-		return chosenChangeGroup.getFailedRequirements(player);
+		return chosenChangeGroup.getFailedRequirementsHolders(player);
 
-		/*final List<RankChange> changes = rankChanges.get(group);
-		if (changes != null) {
-			for (final RankChange change : changes) {
-				result.put(change, change.getReq());
-			}
-		}*/
+		/*
+		 * final List<RankChange> changes = rankChanges.get(group); if (changes
+		 * != null) { for (final RankChange change : changes) {
+		 * result.put(change, change.getReq()); } }
+		 */
 	}
 
 	public List<String> toStringList() {
@@ -158,8 +144,7 @@ public class PlayerChecker {
 	}
 
 	public void doLeaderboardExemptCheck(final Player player) {
-		plugin.getPlayerDataHandler().hasLeaderboardExemption(
-				player.getUniqueId(),
+		plugin.getPlayerDataHandler().hasLeaderboardExemption(player.getUniqueId(),
 				player.hasPermission("autorank.leaderboard.exempt"));
 	}
 
@@ -167,32 +152,29 @@ public class PlayerChecker {
 		return changeGroupManager;
 	}
 
-	public List<String> getRequirementsInStringList(
-			final List<Requirement> reqs, final List<Integer> metRequirements) {
+	public List<String> getRequirementsInStringList(final List<RequirementsHolder> holders,
+			final List<Integer> metRequirements) {
 		// Converts requirements into a list of readable requirements
 
 		final List<String> messages = new ArrayList<String>();
 
 		messages.add(ChatColor.GRAY + " ------------ ");
 
-		for (int i = 0; i < reqs.size(); i++) {
-			final Requirement req = reqs.get(i);
-			final int reqID = req.getReqId();
+		for (int i = 0; i < holders.size(); i++) {
+			final RequirementsHolder holder = holders.get(i);
+			final int reqID = holder.getReqID();
 
-			if (req != null) {
-				final StringBuilder message = new StringBuilder("     "
-						+ ChatColor.GOLD + (i + 1) + ". ");
+			if (holder != null) {
+				final StringBuilder message = new StringBuilder("     " + ChatColor.GOLD + (i + 1) + ". ");
 				if (metRequirements.contains(reqID)) {
-					message.append(ChatColor.RED + req.getDescription()
-							+ ChatColor.BLUE + " ("
+					message.append(ChatColor.RED + holder.getDescription() + ChatColor.BLUE + " ("
 							+ Lang.DONE_MARKER.getConfigValue() + ")");
 				} else {
-					message.append(ChatColor.RED + req.getDescription());
+					message.append(ChatColor.RED + holder.getDescription());
 				}
 
-				if (req.isOptional()) {
-					message.append(ChatColor.AQUA + " ("
-							+ Lang.OPTIONAL_MARKER.getConfigValue() + ")");
+				if (holder.isOptional()) {
+					message.append(ChatColor.AQUA + " (" + Lang.OPTIONAL_MARKER.getConfigValue() + ")");
 				}
 
 				messages.add(message.toString());
@@ -204,38 +186,38 @@ public class PlayerChecker {
 
 	}
 
-	public List<Integer> getMetRequirements(final List<Requirement> reqs,
-			final Player player) {
+	public List<Integer> getMetRequirementsHolders(final List<RequirementsHolder> holders, final Player player) {
 		final List<Integer> metRequirements = new ArrayList<Integer>();
 
 		boolean onlyOptional = true;
 
 		// Check if we only have optional requirements
-		for (final Requirement req : reqs) {
-			if (!req.isOptional())
+		for (final RequirementsHolder holder : holders) {
+			if (!holder.isOptional())
 				onlyOptional = false;
 		}
 
 		if (onlyOptional) {
 			final List<Integer> optionalRequirements = new ArrayList<Integer>();
 
-			for (final Requirement req : reqs) {
-				optionalRequirements.add(req.getReqId());
+			for (final RequirementsHolder holder : holders) {
+				optionalRequirements.add(holder.getReqID());
 			}
 
 			return optionalRequirements;
 		}
 
-		for (final Requirement req : reqs) {
-			final int reqID = req.getReqId();
+		for (final RequirementsHolder holder : holders) {
+			final int reqID = holder.getReqID();
 
 			// Use auto completion
-			if (req.useAutoCompletion()) {
+			if (holder.useAutoCompletion()) {
 				// Do auto complete
-				if (req.meetsRequirement(player)) {
+				if (holder.meetsRequirement(player, player.getUniqueId())) {
 					// Player meets the requirement -> give him results
 
-					// Doesn't need to check whether this requirement was already done
+					// Doesn't need to check whether this requirement was
+					// already done
 					if (!plugin.getConfigHandler().usePartialCompletion())
 						continue;
 
@@ -243,19 +225,19 @@ public class PlayerChecker {
 					continue;
 				} else {
 
-					// Only check if player has done this when partial completion is used
+					// Only check if player has done this when partial
+					// completion is used
 					if (plugin.getConfigHandler().usePartialCompletion()) {
-						// Player does not meet requirements, but has done this already
-						if (plugin.getPlayerDataHandler()
-								.hasCompletedRequirement(reqID,
-										player.getUniqueId())) {
+						// Player does not meet requirements, but has done this
+						// already
+						if (plugin.getPlayerDataHandler().hasCompletedRequirement(reqID, player.getUniqueId())) {
 							metRequirements.add(reqID);
 							continue;
 						}
 					}
 
 					// If requirement is optional, we do not check.
-					if (req.isOptional()) {
+					if (holder.isOptional()) {
 						continue;
 					}
 
@@ -266,11 +248,12 @@ public class PlayerChecker {
 
 				if (!plugin.getConfigHandler().usePartialCompletion()) {
 
-					// Doesn't auto complete and doesn't meet requirement, then continue searching
-					if (!req.meetsRequirement(player)) {
+					// Doesn't auto complete and doesn't meet requirement, then
+					// continue searching
+					if (!holder.meetsRequirement(player, player.getUniqueId())) {
 
 						// If requirement is optional, we do not check.
-						if (req.isOptional()) {
+						if (holder.isOptional()) {
 							continue;
 						}
 
@@ -283,15 +266,14 @@ public class PlayerChecker {
 				}
 
 				// Do not auto complete
-				if (plugin.getPlayerDataHandler().hasCompletedRequirement(
-						reqID, player.getUniqueId())) {
+				if (plugin.getPlayerDataHandler().hasCompletedRequirement(reqID, player.getUniqueId())) {
 					// Player has completed requirement already
 					metRequirements.add(reqID);
 					continue;
 				} else {
 
 					// If requirement is optional, we do not check.
-					if (req.isOptional()) {
+					if (holder.isOptional()) {
 						continue;
 					}
 
@@ -301,5 +283,4 @@ public class PlayerChecker {
 		}
 		return metRequirements;
 	}
-
 }

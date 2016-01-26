@@ -18,6 +18,7 @@ import me.armar.plugins.autorank.api.events.RequirementCompleteEvent;
 import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 import me.armar.plugins.autorank.playerchecker.result.Result;
 import me.armar.plugins.autorank.rankbuilder.ChangeGroup;
+import me.armar.plugins.autorank.rankbuilder.holders.RequirementsHolder;
 
 /**
  * PlayerDataHandler will keep track of the latest known group and progress a
@@ -206,21 +207,22 @@ public class PlayerDataHandler {
 		}
 	}
 
-	public void runResults(final Requirement req, final Player player) {
+	public void runResults(RequirementsHolder holder, final Player player) {
 
 		// Fire event so it can be cancelled
-		// Create the event here
-		final RequirementCompleteEvent event = new RequirementCompleteEvent(
-				player, req);
-		// Call the event
-		Bukkit.getServer().getPluginManager().callEvent(event);
-
-		// Check if event is cancelled.
-		if (event.isCancelled())
-			return;
+		// Create the event here/
+		// TODO Implement logic for events with RequirementHolder
+//		final RequirementCompleteEvent event = new RequirementCompleteEvent(
+//				player, req);
+//		// Call the event
+//		Bukkit.getServer().getPluginManager().callEvent(event);
+//
+//		// Check if event is cancelled.
+//		if (event.isCancelled())
+//			return;
 
 		// Run results
-		final List<Result> results = req.getResults();
+		final List<Result> results = holder.getResults();
 
 		// Apply result
 		for (final Result realResult : results) {

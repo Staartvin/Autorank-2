@@ -11,15 +11,12 @@ import me.armar.plugins.autorank.util.AutorankTools;
 
 public class MoneyRequirement extends Requirement {
 
-	private final List<Double> minMoney = new ArrayList<Double>();
+	double minMoney = -1;
 
 	@Override
 	public String getDescription() {
 
-		String lang = Lang.MONEY_REQUIREMENT.getConfigValue(AutorankTools
-				.seperateList(minMoney, "or")
-				+ " "
-				+ VaultHandler.economy.currencyNamePlural());
+		String lang = Lang.MONEY_REQUIREMENT.getConfigValue(minMoney + " " + VaultHandler.economy.currencyNamePlural());
 
 		// Check if this requirement is world-specific
 		if (this.isWorldSpecific()) {
@@ -31,15 +28,10 @@ public class MoneyRequirement extends Requirement {
 
 	@Override
 	public String getProgress(final Player player) {
-		//UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
-		String progress = "";
 
-		final double money = VaultHandler.economy
-				.getBalance(player.getPlayer());
+		final double money = VaultHandler.economy.getBalance(player.getPlayer());
 
-		progress = AutorankTools.makeProgressString(minMoney,
-				VaultHandler.economy.currencyNamePlural(), money + "");
-		return progress;
+		return money + "/" + minMoney + " " + VaultHandler.economy.currencyNamePlural();
 	}
 
 	@Override
@@ -52,29 +44,22 @@ public class MoneyRequirement extends Requirement {
 				return false;
 		}
 
-		//UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
+		// UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
 		if (VaultHandler.economy == null)
 			return false;
 
-		for (final double minMoneys : minMoney) {
-			if (VaultHandler.economy.has(player.getPlayer(), minMoneys))
-				return true;
-		}
-
-		return false;
+		return VaultHandler.economy.has(player.getPlayer(), minMoney);
 	}
 
 	@Override
-	public boolean setOptions(final List<String[]> optionsList) {
+	public boolean setOptions(String[] options) {
 
-		for (final String[] options : optionsList) {
-			try {
-				minMoney.add(Double.parseDouble(options[0]));
-			} catch (final Exception e) {
-				return false;
-			}
+		try {
+			minMoney = Double.parseDouble(options[0]);
+		} catch (final Exception e) {
+			return false;
 		}
 
-		return !minMoney.isEmpty();
+		return minMoney != -1;
 	}
 }

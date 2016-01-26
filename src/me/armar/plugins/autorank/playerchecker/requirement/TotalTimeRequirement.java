@@ -21,19 +21,11 @@ import me.armar.plugins.autorank.util.AutorankTools.Time;
  */
 public class TotalTimeRequirement extends Requirement {
 
-	List<Integer> times = new ArrayList<Integer>();
+	int totalTime = -1;
 
 	@Override
 	public String getDescription() {
-
-		final List<String> sTimes = new ArrayList<String>();
-
-		for (final int time : times) {
-			sTimes.add(AutorankTools.timeToString(time, Time.MINUTES));
-		}
-
-		return Lang.TOTAL_TIME_REQUIREMENT.getConfigValue(AutorankTools
-				.seperateList(sTimes, "or"));
+		return Lang.TOTAL_TIME_REQUIREMENT.getConfigValue(AutorankTools.timeToString(totalTime, Time.MINUTES));
 	}
 
 	@Override
@@ -47,12 +39,7 @@ public class TotalTimeRequirement extends Requirement {
 		// Difference in minutes
 		final long difference = (currentTime - joinTime) / 60000;
 
-		String progress = "";
-		//progress = progress.concat(difference + " min" + "/" + time + " min");
-
-		progress = AutorankTools.makeProgressString(times, "min", ""
-				+ difference);
-		return progress;
+		return difference + " min/" + totalTime + " min";
 	}
 
 	@Override
@@ -65,24 +52,17 @@ public class TotalTimeRequirement extends Requirement {
 		// Difference in minutes
 		final long difference = (currentTime - joinTime) / 60000;
 
-		for (final int time : times) {
-			if (time != -1 && difference >= time) {
-				return true;
-			}
-		}
-		return false;
+		return difference >= totalTime;
 	}
 
 	@Override
-	public boolean setOptions(final List<String[]> optionsList) {
-		for (final String[] options : optionsList) {
-			if (options.length > 0) {
-				times.add(AutorankTools.stringToTime(options[0], Time.MINUTES));
-			} else {
-				return false;
-			}
+	public boolean setOptions(String[] options) {
+		if (options.length > 0) {
+			totalTime = AutorankTools.stringToTime(options[0], Time.MINUTES);
+		} else {
+			return false;
 		}
 
-		return !times.isEmpty();
+		return totalTime != -1;
 	}
 }

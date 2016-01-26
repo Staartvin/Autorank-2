@@ -76,8 +76,8 @@ public class ViewCommand extends AutorankCommand {
 		}
 
 		final List<String> messages = plugin.getPlayerChecker().getRequirementsInStringList(
-				changeGroup.getRequirements(),
-				plugin.getPlayerChecker().getMetRequirements(changeGroup.getRequirements(), player));
+				changeGroup.getRequirementsHolders(),
+				plugin.getPlayerChecker().getMetRequirementsHolders(changeGroup.getRequirementsHolders(), player));
 
 		for (final String message : messages) {
 			AutorankTools.sendColoredMessage(sender, message);

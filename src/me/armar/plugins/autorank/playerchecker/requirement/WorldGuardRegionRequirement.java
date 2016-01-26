@@ -20,13 +20,13 @@ import me.armar.plugins.autorank.util.AutorankTools;
  */
 public class WorldGuardRegionRequirement extends Requirement {
 
-	List<String> regionNames = new ArrayList<String>();
+	String regionName = null;
 
 	@Override
 	public String getDescription() {
 
 		String lang = Lang.WORLD_GUARD_REGION_REQUIREMENT
-				.getConfigValue(AutorankTools.seperateList(regionNames, "or"));
+				.getConfigValue(regionName);
 
 		// Check if this requirement is world-specific
 		if (this.isWorldSpecific()) {
@@ -55,23 +55,15 @@ public class WorldGuardRegionRequirement extends Requirement {
 		final WorldGuardHandler wgH = (WorldGuardHandler) this.getAutorank()
 				.getDependencyManager().getDependency(dependency.WORLDGUARD);
 
-		for (final String region : regionNames) {
-			if (wgH.isInRegion(player, region))
-				return true;
-		}
-
-		return false;
+		return wgH.isInRegion(player, regionName);
 	}
 
 	@Override
-	public boolean setOptions(final List<String[]> optionsList) {
-
-		for (final String[] options : optionsList) {
-			if (options.length > 0) {
-				regionNames.add(options[0].trim());
-			}
+	public boolean setOptions(String[] options) {
+		if (options.length > 0) {
+			regionName = options[0].trim();
 		}
 
-		return !regionNames.isEmpty();
+		return regionName != null;
 	}
 }

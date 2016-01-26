@@ -16,6 +16,7 @@ import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 import me.armar.plugins.autorank.rankbuilder.ChangeGroup;
+import me.armar.plugins.autorank.rankbuilder.holders.RequirementsHolder;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
 
@@ -112,12 +113,13 @@ public class CheckCommand extends AutorankCommand {
 
 		layout = layout.replace("&groups", groupsString.toString());
 
-		final List<Requirement> reqs = plugin.getPlayerChecker()
-				.getAllRequirements(player);
+		List<RequirementsHolder> holders = chosenChangeGroup.getRequirementsHolders();
+//		final List<Requirement> reqs = plugin.getPlayerChecker()
+//				.getAllRequirements(player);
 
 		boolean showReqs = false;
 
-		if (reqs.size() == 0) {
+		if (holders.size() == 0) {
 			layout = layout.replace("&reqs", Lang.NO_FURTHER_RANKUP_FOUND.getConfigValue());
 		} else {
 			layout = layout.replace("&reqs", "");
@@ -126,29 +128,6 @@ public class CheckCommand extends AutorankCommand {
 
 		AutorankTools.sendColoredMessage(sender, layout);
 
-		// has played for
-		/*stringBuilder.append(player.getName()
-				+ Lang.HAS_PLAYED_FOR.getConfigValue(null)
-				+ AutorankTools.minutesToString(plugin.getPlaytimes()
-						.getLocalTime(uuid)) + ", ");*/
-
-		// is in
-		//stringBuilder.append(Lang.IS_IN.getConfigValue(null));
-		/*if (groups.length == 0)
-			stringBuilder.append(Lang.NO_GROUPS.getConfigValue(null)); // No groups.
-		else if (groups.length == 1)
-			stringBuilder.append(Lang.ONE_GROUP.getConfigValue(null)); // One group
-		else
-			stringBuilder.append(Lang.MULTIPLE_GROUPS.getConfigValue(null)); // Multiple groups
-		*/
-
-		/*String nextRankup = plugin.getPlayerChecker()
-				.getNextRankupGroup(player);
-
-		if (nextRankup == null || plugin.getRequirementHandler().getCompletedRanks(uuid).contains(nextRankChange.getRankFrom())) {
-			AutorankTools.sendColoredMessage(sender,
-					Lang.NO_NEXT_RANK.getConfigValue());
-		}*/
 
 		// Don't get requirements when the player has no new requirements
 		if (!showReqs)
@@ -159,18 +138,19 @@ public class CheckCommand extends AutorankCommand {
 		final List<Integer> metRequirements = new ArrayList<Integer>();
 
 		// Check if we only have optional requirements
-		for (final Requirement req : reqs) {
-			if (!req.isOptional())
+		for (RequirementsHolder holder : holders) {
+			if (!holder.isOptional())
 				onlyOptional = false;
 		}
 
-		for (final Requirement req : reqs) {
-			final int reqID = req.getReqId();
+		for (RequirementsHolder holder : holders) {
+			final int reqID = holder.getReqID();
 
 			// Use auto completion
-			if (req.useAutoCompletion()) {
+			if (holder.useAutoCompletion()) {
 				// Do auto complete
-				if (req.meetsRequirement(player)) {
+				
+				if (holder.meetsRequirement(player, uuid)) {
 					// Player meets the requirement -> give him results
 
 					// Doesn't need to check whether this requirement was already done
@@ -183,7 +163,7 @@ public class CheckCommand extends AutorankCommand {
 								reqID);
 
 						// Run results
-						plugin.getPlayerDataHandler().runResults(req, player);
+						plugin.getPlayerDataHandler().runResults(holder, player);
 					}
 					metRequirements.add(reqID);
 					continue;
@@ -200,7 +180,7 @@ public class CheckCommand extends AutorankCommand {
 					}
 
 					// If requirement is optional, we do not check.
-					if (req.isOptional()) {
+					if (holder.isOptional()) {
 						continue;
 					}
 
@@ -213,10 +193,10 @@ public class CheckCommand extends AutorankCommand {
 				if (!plugin.getConfigHandler().usePartialCompletion()) {
 
 					// Doesn't auto complete and doesn't meet requirement, then continue searching
-					if (!req.meetsRequirement(player)) {
+					if (!holder.meetsRequirement(player, uuid)) {
 
 						// If requirement is optional, we do not check.
-						if (req.isOptional()) {
+						if (holder.isOptional()) {
 							continue;
 						}
 
@@ -238,7 +218,7 @@ public class CheckCommand extends AutorankCommand {
 				} else {
 
 					// If requirement is optional, we do not check.
-					if (req.isOptional()) {
+					if (holder.isOptional()) {
 						continue;
 					}
 
@@ -270,7 +250,7 @@ public class CheckCommand extends AutorankCommand {
 
 			if (showReqs) {
 				final List<String> messages = plugin.getPlayerChecker()
-						.getRequirementsInStringList(reqs, metRequirements);
+						.getRequirementsInStringList(holders, metRequirements);
 
 				for (final String message : messages) {
 					AutorankTools.sendColoredMessage(sender, message);

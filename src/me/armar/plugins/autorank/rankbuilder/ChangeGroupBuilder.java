@@ -1,6 +1,7 @@
 package me.armar.plugins.autorank.rankbuilder;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -16,6 +17,7 @@ import me.armar.plugins.autorank.playerchecker.result.RankChangeResult;
 import me.armar.plugins.autorank.playerchecker.result.Result;
 import me.armar.plugins.autorank.rankbuilder.builders.RequirementBuilder;
 import me.armar.plugins.autorank.rankbuilder.builders.ResultBuilder;
+import me.armar.plugins.autorank.rankbuilder.holders.RequirementsHolder;
 import me.armar.plugins.autorank.util.AutorankTools;
 
 /**
@@ -43,10 +45,8 @@ public class ChangeGroupBuilder {
 		setRequirementBuilder(new RequirementBuilder());
 	}
 
-	public HashMap<String, List<ChangeGroup>> initialiseChangeGroups(
-			final boolean simpleConfigUsed,
-			final SimpleYamlConfiguration config,
-			final HashMap<String, List<ChangeGroup>> changeGroups) {
+	public HashMap<String, List<ChangeGroup>> initialiseChangeGroups(final boolean simpleConfigUsed,
+			final SimpleYamlConfiguration config, final HashMap<String, List<ChangeGroup>> changeGroups) {
 		if (simpleConfigUsed) {
 			return initSimpleConfig(config, changeGroups);
 		} else {
@@ -54,8 +54,7 @@ public class ChangeGroupBuilder {
 		}
 	}
 
-	private HashMap<String, List<ChangeGroup>> initSimpleConfig(
-			final SimpleYamlConfiguration config,
+	private HashMap<String, List<ChangeGroup>> initSimpleConfig(final SimpleYamlConfiguration config,
 			final HashMap<String, List<ChangeGroup>> changeGroups) {
 
 		final Set<String> ranks = config.getKeys(false);
@@ -85,8 +84,7 @@ public class ChangeGroupBuilder {
 
 			// Shut down to prevent any issues from happening.
 			if (options.length <= 0) {
-				System.out
-						.print("[AutoRank] Simple Config is not configured correctly!");
+				System.out.print("[AutoRank] Simple Config is not configured correctly!");
 				plugin.getServer().getPluginManager().disablePlugin(plugin);
 				return null;
 			}
@@ -119,8 +117,7 @@ public class ChangeGroupBuilder {
 
 			// Change the message
 			final Result message = new MessageResult();
-			message.setOptions(new String[] { "&2You got ranked to "
-					+ options[0] });
+			message.setOptions(new String[] { "&2You got ranked to " + options[0] });
 			message.setAutorank(plugin);
 			res.add(message);
 
@@ -136,16 +133,19 @@ public class ChangeGroupBuilder {
 			// ChangeGroup for this rank
 			final ChangeGroup changeGroup = new ChangeGroup(plugin);
 
-			// Save the requirements
-			changeGroup.setRequirements(req);
+			// Create RequirementsHolder
+			RequirementsHolder holder = new RequirementsHolder(plugin);
+			holder.setRequirements(req);
+
+			// Save the RequirementsHolder
+			changeGroup.addRequirementHolder(holder);
 
 			// Save the results
 			changeGroup.setResults(res);
 
 			changeGroup.setParentGroup(rankName);
 			changeGroup.setInternalGroup(rank);
-			changeGroup.setDisplayName(plugin.getConfigHandler()
-					.getDisplayName(rank));
+			changeGroup.setDisplayName(plugin.getConfigHandler().getDisplayName(rank));
 
 			currentChanges.add(changeGroup);
 
@@ -156,8 +156,7 @@ public class ChangeGroupBuilder {
 		return changeGroups;
 	}
 
-	private HashMap<String, List<ChangeGroup>> initAdvancedConfig(
-			final SimpleYamlConfiguration config,
+	private HashMap<String, List<ChangeGroup>> initAdvancedConfig(final SimpleYamlConfiguration config,
 			final HashMap<String, List<ChangeGroup>> changeGroups) {
 
 		final ConfigHandler configHandler = plugin.getConfigHandler();
@@ -178,36 +177,34 @@ public class ChangeGroupBuilder {
 				groupName = group;
 			}
 
-			final List<Requirement> req = new ArrayList<Requirement>();
+			// final List<Requirement> req = new ArrayList<Requirement>();
 			final List<Result> res = new ArrayList<Result>();
+			List<RequirementsHolder> holders = new ArrayList<RequirementsHolder>();
 
-			for (final String requirement : configHandler
-					.getRequirements(group)) {
+			for (final String requirement : configHandler.getRequirements(group)) {
+
 				// Implement optional option logic
-				final boolean optional = configHandler.isOptional(requirement,
-						group);
+				final boolean optional = configHandler.isOptional(requirement, group);
 				// Result for requirement
-				final List<String> results = configHandler
-						.getResultsOfRequirement(requirement, group);
+				final List<String> results = configHandler.getResultsOfRequirement(requirement, group);
 
-				// Create a new result List that will get all result when a requirement is met.
+				// Create a new result List that will get all result when a
+				// requirement is met.
 				final List<Result> realResults = new ArrayList<Result>();
 
 				for (final String resultString : results) {
-					realResults.add(createResult(resultString, configHandler
-							.getResultOfRequirement(requirement, group,
-									resultString)));
+					realResults.add(createResult(resultString,
+							configHandler.getResultOfRequirement(requirement, group, resultString)));
 				}
 				final int reqId = configHandler.getReqId(requirement, group);
 
-				//System.out.print("REQ ID of " + requirement + " for group " + group + ": " + reqId);
+				// System.out.print("REQ ID of " + requirement + " for group " +
+				// group + ": " + reqId);
 
 				if (reqId < 0) {
 					try {
-						throw new Exception(
-								"REQ ID COULDN'T BE FOUND! REPORT TO AUTHOR!"
-										+ " GROUP: " + group
-										+ ", REQUIREMENT: " + requirement);
+						throw new Exception("REQ ID COULDN'T BE FOUND! REPORT TO AUTHOR!" + " GROUP: " + group
+								+ ", REQUIREMENT: " + requirement);
 					} catch (final Exception e) {
 						// TODO Auto-generated catch block
 						plugin.getLogger().severe(e.getCause().getMessage());
@@ -215,50 +212,52 @@ public class ChangeGroupBuilder {
 					}
 				}
 
-				final String correctName = AutorankTools
-						.getCorrectName(requirement);
+				final String correctName = AutorankTools.getCorrectName(requirement);
 
 				if (correctName == null) {
-					throw new IllegalArgumentException("Requirement '"
-							+ requirement + "' of group '" + group
-							+ "' is unknown!");
+					throw new IllegalArgumentException(
+							"Requirement '" + requirement + "' of group '" + group + "' is unknown!");
 				}
 
-				final Requirement newRequirement = createRequirement(
-						AutorankTools.getCorrectName(requirement),
-						configHandler.getOptions(requirement, group), optional,
-						realResults,
-						configHandler.useAutoCompletion(group, requirement),
-						reqId);
+				RequirementsHolder holder = new RequirementsHolder(plugin);
 
-				if (newRequirement == null) continue;
-				
-				// Make requirement world-specific if a world was specified in the config.
-				if (plugin.getConfigHandler().isRequirementWorldSpecific(
-						requirement, group)) {
-					newRequirement.setWorld(plugin.getConfigHandler()
-							.getWorldOfRequirement(requirement, group));
+				// Option strings seperated
+				List<String[]> optionsList = configHandler.getOptions(requirement, group);
+
+				for (String[] options : optionsList) {
+					final Requirement newRequirement = createRequirement(AutorankTools.getCorrectName(requirement),
+							options, optional, realResults, configHandler.useAutoCompletion(group, requirement), reqId);
+
+					if (newRequirement == null)
+						continue;
+
+					// Make requirement world-specific if a world was specified
+					// in
+					// the config.
+					if (plugin.getConfigHandler().isRequirementWorldSpecific(requirement, group)) {
+						newRequirement.setWorld(plugin.getConfigHandler().getWorldOfRequirement(requirement, group));
+					}
+
+					holder.addRequirement(newRequirement);
 				}
 
-				req.add(newRequirement);
-
+				holders.add(holder);
 			}
 
 			for (final String resu : configHandler.getResults(group)) {
 				Result result = createResult(resu, configHandler.getResult(resu, group));
-				
-				if (result == null) continue;
-				
+
+				if (result == null)
+					continue;
+
 				res.add(result);
 			}
 
 			if (configHandler.getRankChange(group) != null) {
-				final String[] rankChange = configHandler.getRankChange(group)
-						.split(";");
+				final String[] rankChange = configHandler.getRankChange(group).split(";");
 
 				if (rankChange.length <= 0) {
-					plugin.getWarningManager().registerWarning(
-							"Rank change of " + group + " is invalid!", 10);
+					plugin.getWarningManager().registerWarning("Rank change of " + group + " is invalid!", 10);
 					return null;
 				}
 			}
@@ -275,16 +274,15 @@ public class ChangeGroupBuilder {
 			// ChangeGroup for this rank
 			final ChangeGroup changeGroup = new ChangeGroup(plugin);
 
-			// Save the requirements
-			changeGroup.setRequirements(req);
+			// Save the RequirementsHolders
+			changeGroup.setRequirementHolders(holders);
 
 			// Save the results
 			changeGroup.setResults(res);
 
 			changeGroup.setParentGroup(groupName);
 			changeGroup.setInternalGroup(group);
-			changeGroup.setDisplayName(plugin.getConfigHandler()
-					.getDisplayName(group));
+			changeGroup.setDisplayName(plugin.getConfigHandler().getDisplayName(group));
 
 			currentChanges.add(changeGroup);
 
@@ -297,7 +295,7 @@ public class ChangeGroupBuilder {
 
 	private Result createResult(final String type, final String object) {
 		final Result res = resultBuilder.create(type);
-		
+
 		if (res != null) {
 			res.setAutorank(plugin);
 			res.setOptions(object.split(";"));
@@ -306,10 +304,8 @@ public class ChangeGroupBuilder {
 		return res;
 	}
 
-	private Requirement createRequirement(final String type,
-			final List<String[]> args, final boolean optional,
-			final List<Result> results, final boolean autoComplete,
-			final int reqId) {
+	private Requirement createRequirement(final String type, final String[] args, final boolean optional,
+			final List<Result> results, final boolean autoComplete, final int reqId) {
 		final Requirement res = requirementBuilder.create(type);
 
 		if (res != null) {
@@ -318,12 +314,15 @@ public class ChangeGroupBuilder {
 			final String errorMessage = "Could not setup requirement '" + type
 					+ "'! It's invalid: check the wiki for documentation.";
 
+			// TODO Convert setOptions to only a String[] instead of a list
+
+			List<String[]> stringList = new ArrayList<String[]>(Collections.singletonList(args));
+
 			// Check if setOptions is valid
 			try {
-				if (!res.setOptions(args)) {
+				if (!res.setOptions(stringList)) {
 					plugin.getLogger().severe(errorMessage);
-					plugin.getWarningManager()
-							.registerWarning(errorMessage, 10);
+					plugin.getWarningManager().registerWarning(errorMessage, 10);
 				}
 			} catch (final Exception e) {
 				plugin.getLogger().severe(errorMessage);
@@ -342,8 +341,7 @@ public class ChangeGroupBuilder {
 		return requirementBuilder;
 	}
 
-	public void setRequirementBuilder(
-			final RequirementBuilder requirementBuilder) {
+	public void setRequirementBuilder(final RequirementBuilder requirementBuilder) {
 		this.requirementBuilder = requirementBuilder;
 	}
 

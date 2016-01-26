@@ -11,13 +11,12 @@ import me.armar.plugins.autorank.util.AutorankTools;
 
 public class PlayerKillsRequirement extends Requirement {
 
-	private final List<Integer> totalPlayersKilled = new ArrayList<Integer>();
+	int totalPlayersKilled = -1;
 
 	@Override
 	public String getDescription() {
 		String lang = Lang.PLAYER_KILLS_REQUIREMENT
-				.getConfigValue(AutorankTools.seperateList(totalPlayersKilled,
-						"or"));
+				.getConfigValue(totalPlayersKilled + "");
 
 		// Check if this requirement is world-specific
 		if (this.isWorldSpecific()) {
@@ -29,14 +28,11 @@ public class PlayerKillsRequirement extends Requirement {
 
 	@Override
 	public String getProgress(final Player player) {
-		String progress = "";
 		final int killed = getStatsPlugin().getNormalStat(
 				StatsHandler.statTypes.PLAYERS_KILLED.toString(),
 				player.getUniqueId(), this.getWorld());
 
-		progress = AutorankTools.makeProgressString(totalPlayersKilled,
-				"player(s)", killed + "");
-		return progress;
+		return killed + "/" + totalPlayersKilled + " player(s)";
 	}
 
 	@Override
@@ -45,25 +41,18 @@ public class PlayerKillsRequirement extends Requirement {
 				StatsHandler.statTypes.PLAYERS_KILLED.toString(),
 				player.getUniqueId(), this.getWorld());
 
-		for (final int killedPlayers : totalPlayersKilled) {
-			if (killed >= killedPlayers)
-				return true;
-		}
-
-		return false;
+		return killed >= totalPlayersKilled;
 	}
 
 	@Override
-	public boolean setOptions(final List<String[]> optionsList) {
+	public boolean setOptions(String[] options) {
 
-		for (final String[] options : optionsList) {
-			try {
-				totalPlayersKilled.add(Integer.parseInt(options[0]));
-			} catch (final Exception e) {
-				return false;
-			}
+		try {
+			totalPlayersKilled = Integer.parseInt(options[0]);
+		} catch (final Exception e) {
+			return false;
 		}
 
-		return !totalPlayersKilled.isEmpty();
+		return totalPlayersKilled != -1;
 	}
 }

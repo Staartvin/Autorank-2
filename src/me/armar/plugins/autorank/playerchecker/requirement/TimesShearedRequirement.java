@@ -11,12 +11,11 @@ import me.armar.plugins.autorank.util.AutorankTools;
 
 public class TimesShearedRequirement extends Requirement {
 
-	List<Integer> timesShorn = new ArrayList<Integer>();
+	int timesShorn = -1;
 
 	@Override
 	public String getDescription() {
-		String lang = Lang.TIMES_SHEARED_REQUIREMENT
-				.getConfigValue(AutorankTools.seperateList(timesShorn, "or"));
+		String lang = Lang.TIMES_SHEARED_REQUIREMENT.getConfigValue(timesShorn + "");
 
 		// Check if this requirement is world-specific
 		if (this.isWorldSpecific()) {
@@ -28,42 +27,28 @@ public class TimesShearedRequirement extends Requirement {
 
 	@Override
 	public String getProgress(final Player player) {
-		String progress = "";
-
-		final int progressBar = this.getStatsPlugin().getNormalStat(
-				StatsHandler.statTypes.TIMES_SHEARED.toString(),
+		final int progressBar = this.getStatsPlugin().getNormalStat(StatsHandler.statTypes.TIMES_SHEARED.toString(),
 				player.getUniqueId(), this.getWorld());
 
-		//progress = progress.concat(progressBar + "/" + timesSheared);
-		progress = AutorankTools.makeProgressString(timesShorn, "", ""
-				+ progressBar);
-		return progress;
+		// progress = progress.concat(progressBar + "/" + timesSheared);
+		return progressBar + "/" + timesShorn;
 	}
 
 	@Override
 	public boolean meetsRequirement(final Player player) {
-		for (final int times : timesShorn) {
-			if (this.getStatsPlugin().getNormalStat(
-					StatsHandler.statTypes.TIMES_SHEARED.toString(),
-					player.getUniqueId(), this.getWorld()) > times) {
-				return true;
-			}
-		}
-
-		return false;
+		return this.getStatsPlugin().getNormalStat(StatsHandler.statTypes.TIMES_SHEARED.toString(),
+				player.getUniqueId(), this.getWorld()) >= timesShorn;
 	}
 
 	@Override
-	public boolean setOptions(final List<String[]> optionsList) {
+	public boolean setOptions(String[] options) {
 
-		for (final String[] options : optionsList) {
-			try {
-				timesShorn.add(Integer.parseInt(options[0]));
-			} catch (final Exception e) {
-				return false;
-			}
+		try {
+			timesShorn = Integer.parseInt(options[0]);
+		} catch (final Exception e) {
+			return false;
 		}
 
-		return !timesShorn.isEmpty();
+		return timesShorn != -1;
 	}
 }

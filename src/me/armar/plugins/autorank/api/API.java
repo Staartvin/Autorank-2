@@ -10,6 +10,7 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.addons.AddOnManager;
 import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 import me.armar.plugins.autorank.playerchecker.result.Result;
+import me.armar.plugins.autorank.rankbuilder.holders.RequirementsHolder;
 
 /**
  * <b>Autorank's API class:</b>
@@ -49,8 +50,8 @@ public class API {
 	 * @param player Player to get the requirements from.
 	 * @return a list of requirements; An empty list when none are found.
 	 */
-	public List<Requirement> getAllRequirements(final Player player) {
-		return plugin.getPlayerChecker().getAllRequirements(player);
+	public List<RequirementsHolder> getAllRequirements(final Player player) {
+		return plugin.getPlayerChecker().getAllRequirementsHolders(player);
 	}
 
 	/**
@@ -59,8 +60,8 @@ public class API {
 	 * @param player Player to get the failed requirements for.
 	 * @return list of requirements that still have to be completed.
 	 */
-	public List<Requirement> getFailedRequirements(final Player player) {
-		return plugin.getPlayerChecker().getFailedRequirements(player);
+	public List<RequirementsHolder> getFailedRequirementsHolders(final Player player) {
+		return plugin.getPlayerChecker().getFailedRequirementsHolders(player);
 	}
 
 	/**
