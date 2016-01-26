@@ -70,7 +70,7 @@ public class RequirementsHolder {
 
 			// Player has completed it already
 			if (plugin.getPlayerDataHandler().hasCompletedRequirement(reqID, uuid)) {
-				return false;
+				return true;
 			}
 
 			if (!r.meetsRequirement(player)) {
