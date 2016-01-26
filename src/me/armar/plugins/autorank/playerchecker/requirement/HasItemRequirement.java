@@ -90,7 +90,7 @@ public class HasItemRequirement extends Requirement {
 
 		int id = -1;
 		int amount = -1;
-		short data = -1;
+		short data = 0;
 
 		String displayName = null;
 		boolean showShortValue = false;
