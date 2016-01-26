@@ -1,14 +1,10 @@
 package me.armar.plugins.autorank.playerchecker.requirement;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.hooks.DependencyManager.dependency;
 import me.armar.plugins.autorank.hooks.worldguardapi.WorldGuardHandler;
 import me.armar.plugins.autorank.language.Lang;
-import me.armar.plugins.autorank.util.AutorankTools;
 
 /**
  * This requirement checks for WorldGuard region

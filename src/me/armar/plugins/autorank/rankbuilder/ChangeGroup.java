@@ -3,12 +3,10 @@ package me.armar.plugins.autorank.rankbuilder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 import me.armar.plugins.autorank.playerchecker.result.Result;
 import me.armar.plugins.autorank.rankbuilder.holders.RequirementsHolder;
 
@@ -23,8 +21,8 @@ import me.armar.plugins.autorank.rankbuilder.holders.RequirementsHolder;
 public class ChangeGroup {
 
 	// A requirementsholder represents one or more requirements tied together
-	private List<RequirementsHolder> requirementsHolders;
-	private List<Result> results;
+	private List<RequirementsHolder> requirementsHolders = new ArrayList<RequirementsHolder>();
+	private List<Result> results = new ArrayList<Result>();
 
 	// Parent group is the group that a player must be in for this ChangeGroup
 	// to have effect.
@@ -139,8 +137,10 @@ public class ChangeGroup {
 			}
 			
 			// Holder does not meet requirements, so not all requirements are met!
-			if (!holder.meetsRequirement(player, uuid))
+			if (!holder.meetsRequirement(player, uuid)) {
 				return false;
+			}
+		
 		}
 
 		// When never returning false, return true at last!

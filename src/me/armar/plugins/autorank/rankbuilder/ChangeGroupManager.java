@@ -91,6 +91,10 @@ public class ChangeGroupManager {
 	}
 
 	public List<ChangeGroup> getChangeGroups(final String groupName) {
+		
+		System.out.println("Searching for: " + groupName);
+	
+		
 		// return empty list if nothing found
 		if (!changeGroups.containsKey(groupName))
 			return new ArrayList<ChangeGroup>();
@@ -109,6 +113,7 @@ public class ChangeGroupManager {
 			final String chosenPath) {
 		final List<ChangeGroup> changeGroup = this.getChangeGroups(parentGroup);
 
+		
 		if (changeGroup == null)
 			return null;
 
@@ -139,6 +144,16 @@ public class ChangeGroupManager {
 		}
 
 		return null;
+	}
+	
+	public boolean isDefinedGroup(String groupName) {
+		// Whether this group is a parent group that has a rank up path.
+		
+		for (String group: changeGroups.keySet()) {
+			if (group.equalsIgnoreCase(groupName)) return true;
+		}
+		
+		return false;
 	}
 
 }

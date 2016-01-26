@@ -1,7 +1,6 @@
 package me.armar.plugins.autorank.rankbuilder;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -89,24 +88,18 @@ public class ChangeGroupBuilder {
 				return null;
 			}
 
-			@SuppressWarnings("serial")
-			final List<String[]> optionsArray = new ArrayList<String[]>() {
-
-				{
-					add(new String[] { options[1] });
-				}
-			};
-
 			// Time requirement
-			final List<Requirement> req = new ArrayList<Requirement>();
+		
+			RequirementsHolder holder = new RequirementsHolder(plugin);
+			
 			final Requirement timeReq = new TimeRequirement();
-			timeReq.setOptions(optionsArray);
+			timeReq.setOptions(new String[] {options[1]});
 			timeReq.setOptional(false);
 			timeReq.setResults(new ArrayList<Result>());
 			timeReq.setAutoComplete(true);
 			timeReq.setReqId(0);
 			timeReq.setAutorank(plugin);
-			req.add(timeReq);
+			holder.addRequirement(timeReq);
 
 			// Change the rank
 			final List<Result> res = new ArrayList<Result>();
@@ -132,10 +125,6 @@ public class ChangeGroupBuilder {
 
 			// ChangeGroup for this rank
 			final ChangeGroup changeGroup = new ChangeGroup(plugin);
-
-			// Create RequirementsHolder
-			RequirementsHolder holder = new RequirementsHolder(plugin);
-			holder.setRequirements(req);
 
 			// Save the RequirementsHolder
 			changeGroup.addRequirementHolder(holder);
@@ -197,9 +186,6 @@ public class ChangeGroupBuilder {
 							configHandler.getResultOfRequirement(requirement, group, resultString)));
 				}
 				final int reqId = configHandler.getReqId(requirement, group);
-
-				// System.out.print("REQ ID of " + requirement + " for group " +
-				// group + ": " + reqId);
 
 				if (reqId < 0) {
 					try {
@@ -304,7 +290,7 @@ public class ChangeGroupBuilder {
 		return res;
 	}
 
-	private Requirement createRequirement(final String type, final String[] args, final boolean optional,
+	private Requirement createRequirement(final String type, final String[] options, final boolean optional,
 			final List<Result> results, final boolean autoComplete, final int reqId) {
 		final Requirement res = requirementBuilder.create(type);
 
@@ -313,14 +299,9 @@ public class ChangeGroupBuilder {
 
 			final String errorMessage = "Could not setup requirement '" + type
 					+ "'! It's invalid: check the wiki for documentation.";
-
-			// TODO Convert setOptions to only a String[] instead of a list
-
-			List<String[]> stringList = new ArrayList<String[]>(Collections.singletonList(args));
-
-			// Check if setOptions is valid
+			
 			try {
-				if (!res.setOptions(stringList)) {
+				if (!res.setOptions(options)) {
 					plugin.getLogger().severe(errorMessage);
 					plugin.getWarningManager().registerWarning(errorMessage, 10);
 				}

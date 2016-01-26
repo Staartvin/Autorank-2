@@ -1,7 +1,5 @@
 package me.armar.plugins.autorank.playerchecker.requirement;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.entity.Player;
@@ -20,32 +18,20 @@ import me.armar.plugins.autorank.util.AutorankTools.Time;
  */
 public class GlobalTimeRequirement extends Requirement {
 
-	private final List<Integer> times = new ArrayList<Integer>();
+	int globalTime = -1;
 
 	@Override
 	public String getDescription() {
-
-		final List<String> sTimes = new ArrayList<String>();
-
-		for (final int time : times) {
-			sTimes.add(AutorankTools.timeToString(time, Time.MINUTES));
-		}
-
-		return Lang.GLOBAL_TIME_REQUIREMENT.getConfigValue(AutorankTools
-				.seperateList(sTimes, "or"));
+		return Lang.GLOBAL_TIME_REQUIREMENT.getConfigValue(AutorankTools.timeToString(globalTime, Time.MINUTES));
 	}
 
 	@Override
 	public String getProgress(final Player player) {
 
-		String progress = "";
-
 		final int playtime = getAutorank().getPlaytimes().getGlobalTime(
 				player.getUniqueId());
 
-		progress = AutorankTools
-				.makeProgressString(times, "min", playtime + "");
-		return progress;
+		return playtime + "/" + globalTime;
 	}
 
 	@Override
@@ -55,23 +41,14 @@ public class GlobalTimeRequirement extends Requirement {
 		final double playtime = this.getAutorank().getPlaytimes()
 				.getGlobalTime(uuid);
 
-		for (final int time : times) {
-			if (time > 0 && playtime >= time) {
-				return true;
-			}
-		}
-
-		return false;
+		return globalTime != -1 && playtime >= globalTime;
 	}
 
 	@Override
-	public boolean setOptions(final List<String[]> optionsList) {
+	public boolean setOptions(String[] options) {
 
-		for (final String[] options : optionsList) {
-			if (options.length > 0) {
-				times.add(AutorankTools.stringToTime(options[0], Time.MINUTES));
-			}
-		}
-		return !times.isEmpty();
+		globalTime = AutorankTools.stringToTime(options[0], Time.MINUTES);
+		
+		return globalTime != -1;
 	}
 }

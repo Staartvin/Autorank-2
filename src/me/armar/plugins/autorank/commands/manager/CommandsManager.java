@@ -32,6 +32,7 @@ import me.armar.plugins.autorank.commands.ImportCommand;
 import me.armar.plugins.autorank.commands.LeaderboardCommand;
 import me.armar.plugins.autorank.commands.ReloadCommand;
 import me.armar.plugins.autorank.commands.RemoveCommand;
+import me.armar.plugins.autorank.commands.ResetCommand;
 import me.armar.plugins.autorank.commands.SetCommand;
 import me.armar.plugins.autorank.commands.SyncCommand;
 import me.armar.plugins.autorank.commands.SyncStatsCommand;
@@ -99,6 +100,8 @@ public class CommandsManager implements TabExecutor {
 		registeredCommands.put(Arrays.asList("choose"), new ChooseCommand(
 				plugin));
 		registeredCommands.put(Arrays.asList("times", "time"), new TimesCommand(
+				plugin));
+		registeredCommands.put(Arrays.asList("reset"), new ResetCommand(
 				plugin));
 	}
 
@@ -170,11 +173,6 @@ public class CommandsManager implements TabExecutor {
 
 				commands.add(list.get(0));
 			}
-
-			/*Lists.newArrayList("help", "check", "leaderboard", "set",
-					"add", "remove", "debug", "reload", "import", "archive",
-					"gcheck", "complete", "sync", "syncstats", "forcecheck",
-					"convert", "track", "gset", "hooks", "gadd", "view");*/
 
 			return commands;
 		}

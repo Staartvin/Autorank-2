@@ -1,8 +1,5 @@
 package me.armar.plugins.autorank.playerchecker.requirement;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.language.Lang;
@@ -10,30 +7,13 @@ import me.armar.plugins.autorank.statsmanager.handlers.StatsHandler;
 
 public class BlocksMovedRequirement extends Requirement {
 
-	private final List<BlocksMovedWrapper> wrappers = new ArrayList<BlocksMovedWrapper>();
+	BlocksMovedWrapper wrapper = null;
 
 	@Override
 	public String getDescription() {
 
-		final List<String> names = new ArrayList<String>();
-
-		for (final BlocksMovedWrapper wrapper : wrappers) {
-			names.add(wrapper.getBlocksMoved() + " blocks "
-					+ wrapper.getMovementType());
-		}
-
-		String desc = "";
-
-		for (int i = 0; i < names.size(); i++) {
-
-			if (i == 0) {
-				desc = Lang.BLOCKS_MOVED_REQUIREMENT.getConfigValue()
-						.replace("{0}", "").replace("{1}", "").trim()
-						+ " " + names.get(i);
-			} else {
-				desc = desc.concat(" or " + names.get(i));
-			}
-		}
+		String desc = Lang.BLOCKS_MOVED_REQUIREMENT.getConfigValue(wrapper.getBlocksMoved() + "",
+				wrapper.getMovementType());
 
 		// Check if this requirement is world-specific
 		if (this.isWorldSpecific()) {
@@ -45,72 +25,40 @@ public class BlocksMovedRequirement extends Requirement {
 
 	@Override
 	public String getProgress(final Player player) {
-		String progress = "";
 
-		for (int i = 0; i < wrappers.size(); i++) {
-			final BlocksMovedWrapper wrapper = wrappers.get(i);
+		final int progressBar = getStatsPlugin().getNormalStat(StatsHandler.statTypes.BLOCKS_MOVED.toString(),
+				player.getUniqueId(), this.getWorld(), wrapper.getRawMovementType());
 
-			final int progressBar = getStatsPlugin().getNormalStat(
-					StatsHandler.statTypes.BLOCKS_MOVED.toString(),
-					player.getUniqueId(), this.getWorld(),
-					wrapper.getRawMovementType());
-
-			if (i == 0) {
-				progress = progress.concat(progressBar + "/"
-						+ wrapper.getBlocksMoved() + " ("
-						+ wrapper.getMovementType() + ")");
-			} else {
-				progress = progress.concat(" or " + progressBar + "/"
-						+ wrapper.getBlocksMoved() + " ("
-						+ wrapper.getMovementType() + ")");
-			}
-
-		}
-
-		return progress;
+		return progressBar + "/" + wrapper.getBlocksMoved() + " (" + wrapper.getMovementType() + ")";
 	}
 
 	@Override
 	public boolean meetsRequirement(final Player player) {
 
-		final boolean enabled = getStatsPlugin().isEnabled();
+		if(getStatsPlugin().isEnabled()) return false;
 
-		if (!enabled)
-			return false;
+		final int count = this.getStatsPlugin().getNormalStat(StatsHandler.statTypes.BLOCKS_MOVED.toString(),
+				player.getUniqueId(), this.getWorld(), wrapper.getRawMovementType());
 
-		for (final BlocksMovedWrapper wrapper : wrappers) {
-
-			final int count = this.getStatsPlugin().getNormalStat(
-					StatsHandler.statTypes.BLOCKS_MOVED.toString(),
-					player.getUniqueId(), this.getWorld(),
-					wrapper.getRawMovementType());
-
-			if (count >= wrapper.getBlocksMoved()) {
-				return true;
-			}
-		}
-
-		return false;
+		return count >= wrapper.getBlocksMoved();
 	}
 
 	@Override
-	public boolean setOptions(final List<String[]> optionsList) {
+	public boolean setOptions(String[] options) {
 
-		for (final String[] options : optionsList) {
-			int blocksMoved = 0;
-			int movementType = 0;
+		int blocksMoved = 0;
+		int movementType = 0;
 
-			if (options.length > 0) {
-				blocksMoved = Integer.parseInt(options[0].trim());
-			}
-			if (options.length > 1) {
-				movementType = Integer.parseInt(options[1].trim());
-			}
-
-			wrappers.add(new BlocksMovedWrapper(blocksMoved, movementType));
+		if (options.length > 0) {
+			blocksMoved = Integer.parseInt(options[0].trim());
+		}
+		if (options.length > 1) {
+			movementType = Integer.parseInt(options[1].trim());
 		}
 
-		return !wrappers.isEmpty();
+		wrapper = new BlocksMovedWrapper(blocksMoved, movementType);
+
+		return wrapper != null;
 	}
 }
 

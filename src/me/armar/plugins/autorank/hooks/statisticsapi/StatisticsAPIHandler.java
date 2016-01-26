@@ -268,19 +268,8 @@ public class StatisticsAPIHandler implements DependencyHandler {
 				.getPlayerTotals().getNamedValues()) {
 			System.out.print("n: " + n.getName() + " value: " + n.getValue());
 		}
-		//System.out.print(onlineSession.getDataStore(DataStoreType.Blocks).getNormalData().get(0));
 
-		/*System.out.print(session.getPlayerTotals().getValue(PlayerVariable.BLOCKS_PLACED));
-		
-		System.out.print(((BlockData) session.getDataStore(DataStoreType.Blocks)).getNormalData().isEmpty());
-		*/
 		// TODO: Finish shit
-
-		/*for (Object store: session.getPlayerTotals().getBlocksBroken().getValue()) {
-			System.out.print("Store: " + store);
-		}*/
-
-		//System.out.print(o);
 
 		return 0;
 	}

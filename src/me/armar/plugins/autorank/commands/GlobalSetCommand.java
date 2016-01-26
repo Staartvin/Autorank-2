@@ -81,8 +81,6 @@ public class GlobalSetCommand extends AutorankCommand {
 
 			final UUID uuid = plugin.getUUIDStorage().getStoredUUID(args[1]);
 
-			//System.out.print("Name of UUID: " + UUIDManager.getPlayerFromUUID(UUID.fromString("fc914960-7aa1-3ae2-a3ee-70f5ac1e81e5")));
-
 			if (uuid == null) {
 				sender.sendMessage(Lang.UNKNOWN_PLAYER.getConfigValue(args[1]));
 				return true;

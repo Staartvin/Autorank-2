@@ -1,8 +1,5 @@
 package me.armar.plugins.autorank.playerchecker.requirement;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.language.Lang;
@@ -59,7 +56,6 @@ public class TimeRequirement extends Requirement {
 
 	@Override
 	public boolean setOptions(String[] options) {
-		
 		if (options.length > 0) {
 			timeNeeded = AutorankTools.stringToTime(options[0], Time.MINUTES);
 		}

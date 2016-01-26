@@ -1,34 +1,26 @@
 package me.armar.plugins.autorank.playerchecker.requirement;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.hooks.DependencyManager.dependency;
 import me.armar.plugins.autorank.hooks.mcmmoapi.McMMOHandler;
 import me.armar.plugins.autorank.language.Lang;
-import me.armar.plugins.autorank.util.AutorankTools;
 
 public class McMMOPowerLevelRequirement extends Requirement {
 
-	private final List<Integer> powerLevels = new ArrayList<Integer>();
+	int powerLevel = -1;
 	private McMMOHandler handler = null;
 
 	@Override
 	public String getDescription() {
-		return Lang.MCMMO_POWER_LEVEL_REQUIREMENT.getConfigValue(AutorankTools
-				.seperateList(powerLevels, "or"));
+		return Lang.MCMMO_POWER_LEVEL_REQUIREMENT.getConfigValue(powerLevel + "");
 	}
 
 	@Override
 	public String getProgress(final Player player) {
-		String progress = "";
 		final int level = handler.getPowerLevel(player);
 
-		progress = AutorankTools
-				.makeProgressString(powerLevels, "", level + "");
-		return progress;
+		return level + "/" + powerLevel;
 	}
 
 	@Override
@@ -39,29 +31,19 @@ public class McMMOPowerLevelRequirement extends Requirement {
 
 		final int level = handler.getPowerLevel(player);
 
-		for (final int realLevel : powerLevels) {
-			if (level > 0 && level >= realLevel)
-				return true;
-		}
-
-		return false;
+		return level >= powerLevel;
 	}
 
 	@Override
-	public boolean setOptions(final List<String[]> optionsList) {
+	public boolean setOptions(String[] options) {
 
-		handler = (McMMOHandler) this.getDependencyManager().getDependency(
-				dependency.MCMMO);
+		handler = (McMMOHandler) this.getDependencyManager().getDependency(dependency.MCMMO);
 
-		for (final String[] options : optionsList) {
-
-			if (options.length > 0) {
-				powerLevels.add(Integer.parseInt(options[0]));
-
-			}
+		if (options.length > 0) {
+			powerLevel = Integer.parseInt(options[0]);
 
 		}
 
-		return !powerLevels.isEmpty();
+		return powerLevel != -1;
 	}
 }

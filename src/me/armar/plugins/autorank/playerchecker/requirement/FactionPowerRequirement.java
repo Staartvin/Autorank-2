@@ -1,25 +1,22 @@
 package me.armar.plugins.autorank.playerchecker.requirement;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.hooks.DependencyManager.dependency;
 import me.armar.plugins.autorank.hooks.factionsapi.FactionsHandler;
 import me.armar.plugins.autorank.language.Lang;
-import me.armar.plugins.autorank.util.AutorankTools;
 
 public class FactionPowerRequirement extends Requirement {
 
-	private final List<Double> factionPowers = new ArrayList<Double>();
+	double factionPower = -1;
 
 	@Override
 	public String getDescription() {
 
 		String lang = Lang.FACTIONS_POWER_REQUIREMENT
-				.getConfigValue(AutorankTools.seperateList(factionPowers, "or"));
+				.getConfigValue(factionPower + "");
 
 		// Check if this requirement is world-specific
 		if (this.isWorldSpecific()) {
@@ -31,15 +28,12 @@ public class FactionPowerRequirement extends Requirement {
 
 	@Override
 	public String getProgress(final Player player) {
-		String progress = "";
 		final DecimalFormat df = new DecimalFormat("#.##");
 		final String doubleRounded = df.format(((FactionsHandler) getAutorank()
 				.getDependencyManager().getDependency(dependency.FACTIONS))
 				.getFactionPower(player));
 
-		progress = AutorankTools.makeProgressString(factionPowers, "",
-				doubleRounded);
-		return progress;
+		return doubleRounded + "/" + factionPower;
 	}
 
 	@Override
@@ -57,22 +51,13 @@ public class FactionPowerRequirement extends Requirement {
 
 		final double factionPower = fHandler.getFactionPower(player);
 
-		for (final double facPower : factionPowers) {
-			if (factionPower >= facPower) {
-				return true;
-			}
-		}
-
-		return false;
+		return factionPower >= this.factionPower;
 	}
 
 	@Override
-	public boolean setOptions(final List<String[]> optionsList) {
+	public boolean setOptions(String[] options) {
+		factionPower = Double.parseDouble(options[0]);
 
-		for (final String[] options : optionsList) {
-			factionPowers.add(Double.parseDouble(options[0]));
-		}
-
-		return !factionPowers.isEmpty();
+		return factionPower != -1;
 	}
 }

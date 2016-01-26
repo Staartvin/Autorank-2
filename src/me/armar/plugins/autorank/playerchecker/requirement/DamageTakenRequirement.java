@@ -1,23 +1,19 @@
 package me.armar.plugins.autorank.playerchecker.requirement;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.statsmanager.handlers.StatsHandler;
-import me.armar.plugins.autorank.util.AutorankTools;
 
 public class DamageTakenRequirement extends Requirement {
 
-	private final List<Integer> damageTaken = new ArrayList<Integer>();
+	int damageTaken = -1;
 
 	@Override
 	public String getDescription() {
 
 		String lang = Lang.DAMAGE_TAKEN_REQUIREMENT
-				.getConfigValue(AutorankTools.seperateList(damageTaken, "or"));
+				.getConfigValue(damageTaken + "");
 
 		// Check if this requirement is world-specific
 		if (this.isWorldSpecific()) {
@@ -29,15 +25,11 @@ public class DamageTakenRequirement extends Requirement {
 
 	@Override
 	public String getProgress(final Player player) {
-		String progress = "";
-
 		final int damTaken = getStatsPlugin().getNormalStat(
 				StatsHandler.statTypes.DAMAGE_TAKEN.toString(),
 				player.getUniqueId(), this.getWorld());
 
-		progress = AutorankTools.makeProgressString(damageTaken, "", damTaken
-				+ "");
-		return progress;
+		return damTaken + "/" + damageTaken;
 	}
 
 	@Override
@@ -47,21 +39,14 @@ public class DamageTakenRequirement extends Requirement {
 				StatsHandler.statTypes.DAMAGE_TAKEN.toString(),
 				player.getUniqueId(), this.getWorld());
 
-		for (final int damageTake : damageTaken) {
-			if (damTaken >= damageTake)
-				return true;
-		}
-
-		return false;
+		return damTaken >= damageTaken;
 	}
 
 	@Override
-	public boolean setOptions(final List<String[]> optionsList) {
+	public boolean setOptions(String[] options) {
 
-		for (final String[] options : optionsList) {
-			damageTaken.add(Integer.parseInt(options[0]));
-		}
+		damageTaken = Integer.parseInt(options[0]);
 
-		return !damageTaken.isEmpty();
+		return damageTaken != -1;
 	}
 }

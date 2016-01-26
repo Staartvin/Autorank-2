@@ -1,8 +1,5 @@
 package me.armar.plugins.autorank.playerchecker.requirement;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.language.Lang;
@@ -10,13 +7,12 @@ import me.armar.plugins.autorank.util.AutorankTools;
 
 public class ExpRequirement extends Requirement {
 
-	private final List<Integer> minExps = new ArrayList<Integer>();
+	int minExp = -1;
 
 	@Override
 	public String getDescription() {
 
-		String lang = Lang.EXP_REQUIREMENT.getConfigValue(AutorankTools
-				.seperateList(minExps, "or"));
+		String lang = Lang.EXP_REQUIREMENT.getConfigValue(minExp + "");
 
 		// Check if this requirement is world-specific
 		if (this.isWorldSpecific()) {
@@ -28,12 +24,9 @@ public class ExpRequirement extends Requirement {
 
 	@Override
 	public String getProgress(final Player player) {
-		String progress = "";
-
 		final int expLevel = player.getLevel();
 
-		progress = AutorankTools.makeProgressString(minExps, "", expLevel);
-		return progress;
+		return expLevel + "/" + minExp;
 	}
 
 	@Override
@@ -48,21 +41,14 @@ public class ExpRequirement extends Requirement {
 
 		final int expLevel = player.getLevel();
 
-		for (final int expMin : minExps) {
-			if (expLevel >= expMin)
-				return true;
-		}
-
-		return false;
+		return expLevel >= minExp;
 	}
 
 	@Override
-	public boolean setOptions(final List<String[]> optionsList) {
+	public boolean setOptions(String[] options) {
 
-		for (final String[] options : optionsList) {
-			minExps.add(AutorankTools.stringtoInt(options[0]));
-		}
+		minExp = AutorankTools.stringtoInt(options[0]);
 
-		return !minExps.isEmpty();
+		return minExp != -1;
 	}
 }

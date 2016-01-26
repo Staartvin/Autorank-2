@@ -49,7 +49,6 @@ public class AutorankTools {
 			// Contains word
 
 			if (type.length() == oldName.length()) {
-				//System.out.print(type + " & " + oldName + " are equal.");
 
 				return type;
 			}
@@ -59,7 +58,6 @@ public class AutorankTools {
 
 		}
 
-		//System.out.print("Returned: null");
 		return null;
 	}
 

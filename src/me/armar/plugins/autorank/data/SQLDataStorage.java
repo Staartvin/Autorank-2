@@ -39,10 +39,7 @@ public class SQLDataStorage {
 	public boolean connect() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
-
-			//System.out.println("jdbc:mysql://" + hostname + "/" + database
-			//	+ "?" + "user=" + username + "&password=" + password);
-
+			
 			final String url = "jdbc:mysql://" + hostname + "/" + database;
 
 			conn = DriverManager.getConnection(url, username, password);

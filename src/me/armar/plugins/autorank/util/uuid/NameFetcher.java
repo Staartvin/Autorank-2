@@ -68,21 +68,6 @@ public class NameFetcher implements Callable<Map<UUID, String>> {
 			String name = null;
 
 			String fromStream = null;
-			// Ping code 204 == No content (Request was sent, but UUID was invalid)
-			//final int pingCode = connection.getResponseCode();
-
-			/*if (pingCode == 204) {
-				Bukkit.getLogger().warning("Tried to get UUID: " + uuid.toString() + " but this invalid.");
-				continue;
-			}*/
-
-			/*if (pingCode == 204) {
-				System.out.print("Got 204 code - no content.");
-				continue;
-			}*/
-
-			//System.out.print("Ping: " + pingCode);
-
 			try {
 				response = (JSONObject) jsonParser.parse(new InputStreamReader(
 						connection.getInputStream()));

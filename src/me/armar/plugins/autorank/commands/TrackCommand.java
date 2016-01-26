@@ -11,7 +11,6 @@ import org.bukkit.entity.Player;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
-import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 import me.armar.plugins.autorank.rankbuilder.holders.RequirementsHolder;
 
 public class TrackCommand extends AutorankCommand {

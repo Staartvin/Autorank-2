@@ -1,71 +1,53 @@
 package me.armar.plugins.autorank.playerchecker.requirement;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.statsmanager.handlers.StatsHandler;
-import me.armar.plugins.autorank.util.AutorankTools;
 
 public class BlocksBrokenRequirement extends Requirement {
 
-	private final List<BlocksWrapper> wrappers = new ArrayList<BlocksWrapper>();
+	BlocksWrapper wrapper = null;
 
-	//private int blockID = -1;
-	//private int blocksBroken = 0;
-	//private int damageValue = -1;
+	// private int blockID = -1;
+	// private int blocksBroken = 0;
+	// private int damageValue = -1;
 
 	@SuppressWarnings("deprecation")
 	@Override
 	public String getDescription() {
-		final List<String> names = new ArrayList<String>();
+		final int blockID = wrapper.getBlockId();
+		final int damageValue = wrapper.getDamageValue();
 
-		for (int i = 0; i < wrappers.size(); i++) {
-			final BlocksWrapper wrapper = wrappers.get(i);
+		final String displayName = wrapper.getDisplayName();
 
-			final int blockID = wrapper.getBlockId();
-			final int damageValue = wrapper.getDamageValue();
+		String message = wrapper.getBlocksBroken() + " ";
 
-			final String displayName = wrapper.getDisplayName();
+		if (blockID > 0 && damageValue >= 0) {
 
-			String message = wrapper.getBlocksBroken() + " ";
+			if (displayName.equals("")) {
+				final ItemStack item = new ItemStack(blockID, 1, (short) damageValue);
 
-			if (blockID > 0 && damageValue >= 0) {
-
-				if (displayName.equals("")) {
-					final ItemStack item = new ItemStack(blockID, 1,
-							(short) damageValue);
-
-					message = message.concat(item.getType().name()
-							.replace("_", "").toLowerCase()
-							+ " ");
-				} else {
-					message = message.concat(displayName + " ");
-				}
-
-			} else if (blockID > 0) {
-				if (displayName.equals("")) {
-					final ItemStack item = new ItemStack(blockID, 1);
-
-					message = message.concat(item.getType().name()
-							.replace("_", "").toLowerCase()
-							+ " ");
-				} else {
-					message = message.concat(displayName + " ");
-				}
-
+				message = message.concat(item.getType().name().replace("_", "").toLowerCase() + " ");
+			} else {
+				message = message.concat(displayName + " ");
 			}
 
-			message = message.concat("blocks");
+		} else if (blockID > 0) {
+			if (displayName.equals("")) {
+				final ItemStack item = new ItemStack(blockID, 1);
 
-			names.add(message);
+				message = message.concat(item.getType().name().replace("_", "").toLowerCase() + " ");
+			} else {
+				message = message.concat(displayName + " ");
+			}
+
 		}
 
-		String lang = Lang.BROKEN_BLOCKS_REQUIREMENT
-				.getConfigValue(AutorankTools.seperateList(names, "or"));
+		message = message.concat("blocks");
+
+		String lang = Lang.BROKEN_BLOCKS_REQUIREMENT.getConfigValue(message);
 
 		// Check if this requirement is world-specific
 		if (this.isWorldSpecific()) {
@@ -77,97 +59,67 @@ public class BlocksBrokenRequirement extends Requirement {
 
 	@Override
 	public String getProgress(final Player player) {
-		String progress = "";
 
-		for (int i = 0; i < wrappers.size(); i++) {
-			final BlocksWrapper wrapper = wrappers.get(i);
+		int progressBar = 0;
 
-			int progressBar = 0;
-
-			if (wrapper.getBlockId() < 0) {
-				progressBar = getStatsPlugin().getNormalStat(
-						StatsHandler.statTypes.TOTAL_BLOCKS_BROKEN.toString(),
-						player.getUniqueId());
-			} else {
-				progressBar = getStatsPlugin().getNormalStat(
-						StatsHandler.statTypes.BLOCKS_BROKEN.toString(),
-						player.getUniqueId(), this.getWorld(),
-						wrapper.getBlockId() + "",
-						wrapper.getDamageValue() + "");
-			}
-
-			if (i == 0) {
-				progress = progress.concat(progressBar + "/"
-						+ wrapper.getBlocksBroken());
-			} else {
-				progress = progress.concat(" or " + progressBar + "/"
-						+ wrapper.getBlocksBroken());
-			}
+		if (wrapper.getBlockId() < 0) {
+			progressBar = getStatsPlugin().getNormalStat(StatsHandler.statTypes.TOTAL_BLOCKS_BROKEN.toString(),
+					player.getUniqueId());
+		} else {
+			progressBar = getStatsPlugin().getNormalStat(StatsHandler.statTypes.BLOCKS_BROKEN.toString(),
+					player.getUniqueId(), this.getWorld(), wrapper.getBlockId() + "", wrapper.getDamageValue() + "");
 		}
 
-		return progress;
+		return progressBar + "/" + wrapper.getBlocksBroken();
 	}
 
 	@Override
 	public boolean meetsRequirement(final Player player) {
-		final boolean enabled = getStatsPlugin().isEnabled();
 
-		if (!enabled)
+		if (!getStatsPlugin().isEnabled())
 			return false;
 
-		for (final BlocksWrapper wrapper : wrappers) {
+		final int blockID = wrapper.getBlockId();
+		final int damageValue = wrapper.getDamageValue();
+		final int blocksBroken = wrapper.getBlocksBroken();
 
-			final int blockID = wrapper.getBlockId();
-			final int damageValue = wrapper.getDamageValue();
-			final int blocksBroken = wrapper.getBlocksBroken();
+		int progress = 0;
 
-			int progress = 0;
-
-			if (blockID > 0) {
-				progress = getStatsPlugin().getNormalStat(
-						StatsHandler.statTypes.BLOCKS_BROKEN.toString(),
-						player.getUniqueId(), this.getWorld(), blockID + "",
-						damageValue + "");
-			} else {
-				progress = getStatsPlugin().getNormalStat(
-						StatsHandler.statTypes.TOTAL_BLOCKS_BROKEN.toString(),
-						player.getUniqueId());
-			}
-
-			if (progress >= blocksBroken)
-				return true;
+		if (blockID > 0) {
+			progress = getStatsPlugin().getNormalStat(StatsHandler.statTypes.BLOCKS_BROKEN.toString(),
+					player.getUniqueId(), this.getWorld(), blockID + "", damageValue + "");
+		} else {
+			progress = getStatsPlugin().getNormalStat(StatsHandler.statTypes.TOTAL_BLOCKS_BROKEN.toString(),
+					player.getUniqueId());
 		}
 
-		return false;
+		return progress >= blocksBroken;
 	}
 
 	@Override
-	public boolean setOptions(final List<String[]> optionsList) {
-		for (final String[] options : optionsList) {
-			int blocksBroken = 0;
-			int blockId = -1;
-			int damageValue = -1;
-			String displayName = "";
+	public boolean setOptions(String[] options) {
+		int blocksBroken = 0;
+		int blockId = -1;
+		int damageValue = -1;
+		String displayName = "";
 
-			if (options.length > 0) {
-				blocksBroken = Integer.parseInt(options[0].trim());
-			}
-			if (options.length > 1) {
-				blockId = Integer.parseInt(options[0].trim());
-				blocksBroken = Integer.parseInt(options[1].trim());
-			}
-			if (options.length > 2) {
-				damageValue = Integer.parseInt(options[2].trim());
-			}
-			if (options.length > 3) {
-				displayName = options[3].trim();
-			}
-
-			wrappers.add(new BlocksWrapper(blockId, blocksBroken, damageValue,
-					displayName));
+		if (options.length > 0) {
+			blocksBroken = Integer.parseInt(options[0].trim());
+		}
+		if (options.length > 1) {
+			blockId = Integer.parseInt(options[0].trim());
+			blocksBroken = Integer.parseInt(options[1].trim());
+		}
+		if (options.length > 2) {
+			damageValue = Integer.parseInt(options[2].trim());
+		}
+		if (options.length > 3) {
+			displayName = options[3].trim();
 		}
 
-		return !wrappers.isEmpty();
+		wrapper = new BlocksWrapper(blockId, blocksBroken, damageValue, displayName);
+
+		return wrapper != null;
 	}
 }
 
@@ -176,8 +128,7 @@ class BlocksWrapper {
 	private int blockId, blocksBroken, damageValue;
 	private String displayName;
 
-	public BlocksWrapper(final int blockId, final int blocksBroken,
-			final int damageValue, final String displayName) {
+	public BlocksWrapper(final int blockId, final int blocksBroken, final int damageValue, final String displayName) {
 		this.setBlockId(blockId);
 		this.setBlocksBroken(blocksBroken);
 		this.setDamageValue(damageValue);

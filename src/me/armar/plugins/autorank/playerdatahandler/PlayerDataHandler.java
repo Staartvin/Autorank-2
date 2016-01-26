@@ -8,14 +8,11 @@ import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.api.events.RequirementCompleteEvent;
-import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 import me.armar.plugins.autorank.playerchecker.result.Result;
 import me.armar.plugins.autorank.rankbuilder.ChangeGroup;
 import me.armar.plugins.autorank.rankbuilder.holders.RequirementsHolder;

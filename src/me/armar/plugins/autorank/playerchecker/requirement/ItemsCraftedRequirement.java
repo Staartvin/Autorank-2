@@ -1,23 +1,19 @@
 package me.armar.plugins.autorank.playerchecker.requirement;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.statsmanager.handlers.StatsHandler;
-import me.armar.plugins.autorank.util.AutorankTools;
 
 public class ItemsCraftedRequirement extends Requirement {
 
-	private final List<Integer> itemsCrafted = new ArrayList<Integer>();
+	int itemsCrafted = -1;
 
 	@Override
 	public String getDescription() {
 
 		String lang = Lang.ITEMS_CRAFTED_REQUIREMENT
-				.getConfigValue(AutorankTools.seperateList(itemsCrafted, "or"));
+				.getConfigValue(itemsCrafted + "");
 
 		// Check if this requirement is world-specific
 		if (this.isWorldSpecific()) {
@@ -29,15 +25,11 @@ public class ItemsCraftedRequirement extends Requirement {
 
 	@Override
 	public String getProgress(final Player player) {
-		String progress = "";
-
 		final int progressBar = this.getStatsPlugin().getNormalStat(
 				StatsHandler.statTypes.ITEMS_CRAFTED.toString(),
 				player.getUniqueId(), this.getWorld());
 
-		progress = AutorankTools.makeProgressString(itemsCrafted, "",
-				progressBar + "");
-		return progress;
+		return progressBar + "/" + itemsCrafted;
 	}
 
 	@Override
@@ -47,21 +39,14 @@ public class ItemsCraftedRequirement extends Requirement {
 				StatsHandler.statTypes.ITEMS_CRAFTED.toString(),
 				player.getUniqueId(), this.getWorld());
 
-		for (final int items : itemsCrafted) {
-			if (realItemsCrafted >= items)
-				return true;
-		}
-
-		return false;
+		return realItemsCrafted >= itemsCrafted;
 	}
 
 	@Override
-	public boolean setOptions(final List<String[]> optionsList) {
+	public boolean setOptions(String[] options) {
 
-		for (final String[] options : optionsList) {
-			itemsCrafted.add(Integer.parseInt(options[0]));
-		}
+		itemsCrafted = Integer.parseInt(options[0]);
 
-		return !itemsCrafted.isEmpty();
+		return itemsCrafted != -1;
 	}
 }

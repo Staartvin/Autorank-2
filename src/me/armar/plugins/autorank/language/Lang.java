@@ -382,7 +382,6 @@ public enum Lang {
 	 * &a------------------------------------
 	 */
 	LEADERBOARD_FOOTER("leaderboard-footer", "&a------------------------------------"),
-	
 	;
 
 	private static FileConfiguration LANG;

@@ -1,7 +1,5 @@
 package me.armar.plugins.autorank.playerchecker.requirement;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.entity.Player;
@@ -9,16 +7,15 @@ import org.bukkit.entity.Player;
 import me.armar.plugins.autorank.hooks.DependencyManager.dependency;
 import me.armar.plugins.autorank.hooks.askyblockapi.ASkyBlockHandler;
 import me.armar.plugins.autorank.language.Lang;
-import me.armar.plugins.autorank.util.AutorankTools;
 
 public class ASkyBlockLevelRequirement extends Requirement {
 
-	private final List<Integer> islandLevels = new ArrayList<Integer>();
+	private int islandLevel = -1;
 
 	@Override
 	public String getDescription() {
 
-		String lang = Lang.ASKYBLOCK_LEVEL_REQUIREMENT.getConfigValue(AutorankTools.seperateList(islandLevels, "or"));
+		String lang = Lang.ASKYBLOCK_LEVEL_REQUIREMENT.getConfigValue(islandLevel + "");
 
 		// Check if this requirement is world-specific
 		if (this.isWorldSpecific()) {
@@ -30,8 +27,6 @@ public class ASkyBlockLevelRequirement extends Requirement {
 
 	@Override
 	public String getProgress(final Player player) {
-		String progress = "";
-
 		ASkyBlockHandler handler = (ASkyBlockHandler) this.getAutorank().getDependencyManager()
 				.getDependency(dependency.ASKYBLOCK);
 
@@ -39,8 +34,7 @@ public class ASkyBlockLevelRequirement extends Requirement {
 
 		final int islandLevel = handler.getIslandLevel(uuid);
 
-		progress = AutorankTools.makeProgressString(islandLevels, "", islandLevel + "");
-		return progress;
+		return islandLevel + "/" + this.islandLevel;
 	}
 
 	@Override
@@ -53,21 +47,14 @@ public class ASkyBlockLevelRequirement extends Requirement {
 
 		final int islandLevel = handler.getIslandLevel(uuid);
 
-		for (final int level : islandLevels) {
-			if (islandLevel >= level)
-				return true;
-		}
-
-		return false;
+		return islandLevel >= this.islandLevel;
 	}
 
 	@Override
-	public boolean setOptions(final List<String[]> optionsList) {
+	public boolean setOptions(String[] options) {
 
-		for (final String[] options : optionsList) {
-			islandLevels.add(Integer.parseInt(options[0]));
-		}
+		islandLevel = Integer.parseInt(options[0]);
 
-		return !islandLevels.isEmpty();
+		return islandLevel != -1;
 	}
 }

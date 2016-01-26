@@ -8,7 +8,6 @@ import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.language.Lang;
-import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 import me.armar.plugins.autorank.rankbuilder.ChangeGroup;
 import me.armar.plugins.autorank.rankbuilder.ChangeGroupManager;
 import me.armar.plugins.autorank.rankbuilder.holders.RequirementsHolder;
@@ -67,7 +66,7 @@ public class PlayerChecker {
 		}
 
 		final ChangeGroup changeGroup = this.getChangeGroupManager().matchChangeGroup(groupName, chosenPath);
-
+		
 		if (changeGroup == null)
 			return false;
 

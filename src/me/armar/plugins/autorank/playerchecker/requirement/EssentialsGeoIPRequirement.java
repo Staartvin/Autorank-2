@@ -1,24 +1,20 @@
 package me.armar.plugins.autorank.playerchecker.requirement;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.hooks.DependencyManager.dependency;
 import me.armar.plugins.autorank.hooks.essentialsapi.EssentialsHandler;
 import me.armar.plugins.autorank.language.Lang;
-import me.armar.plugins.autorank.util.AutorankTools;
 
 public class EssentialsGeoIPRequirement extends Requirement {
 
-	private final List<String> locations = new ArrayList<String>();
+	String location = null;
 	private EssentialsHandler essHandler = null;
 
 	@Override
 	public String getDescription() {
 		return Lang.ESSENTIALS_GEOIP_LOCATION_REQUIREMENT
-				.getConfigValue(AutorankTools.seperateList(locations, "or"));
+				.getConfigValue(location);
 	}
 
 	@Override
@@ -26,7 +22,7 @@ public class EssentialsGeoIPRequirement extends Requirement {
 
 		final String realLocation = essHandler.getGeoIPLocation(player);
 
-		return AutorankTools.makeProgressString(locations, "", realLocation);
+		return realLocation + "/" + location;
 	}
 
 	@Override
@@ -36,29 +32,22 @@ public class EssentialsGeoIPRequirement extends Requirement {
 		if (realLocation == null)
 			return false;
 
-		for (final String loc : locations) {
-			if (loc != null && loc.equalsIgnoreCase(realLocation))
-				return true;
-		}
-
-		return false;
+		return location != null && location.equalsIgnoreCase(realLocation);
 	}
 
 	@Override
-	public boolean setOptions(final List<String[]> optionsList) {
+	public boolean setOptions(String[] options) {
 
 		essHandler = (EssentialsHandler) this.getDependencyManager()
 				.getDependency(dependency.ESSENTIALS);
 
-		for (final String[] options : optionsList) {
-			if (options.length != 1) {
-				return false;
-			}
-
-			locations.add(options[0]);
+		if (options.length != 1) {
+			return false;
 		}
 
-		return !locations.isEmpty();
+		location = options[0];
+
+		return location != null;
 
 	}
 }

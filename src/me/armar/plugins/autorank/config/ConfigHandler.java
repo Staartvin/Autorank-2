@@ -244,11 +244,9 @@ public class ConfigHandler {
 			if (plugin.getAdvancedConfig().get(
 					"ranks." + group + ".requirements." + requirement
 							+ ".options.auto complete") == null) {
-				//System.out.print("Return false for " + group + " requirement " + requirement);
 				return false;
 			} else {
 				// Defined (Optional + defined = defined)
-				//System.out.print("Return defined for " + group + " requirement " + requirement);
 				return plugin.getAdvancedConfig().getBoolean(
 						"ranks." + group + ".requirements." + requirement
 								+ ".options.auto complete");
@@ -263,11 +261,9 @@ public class ConfigHandler {
 				if (!usePartialCompletion()) {
 					return false;
 				}
-				//System.out.print("Return true for " + group + " requirement " + requirement);
 				return true;
 			} else {
 				// Defined (Not optional + defined = defined)
-				//System.out.print("Return defined for " + group + " requirement " + requirement);
 				return plugin.getAdvancedConfig().getBoolean(
 						"ranks." + group + ".requirements." + requirement
 								+ ".options.auto complete");

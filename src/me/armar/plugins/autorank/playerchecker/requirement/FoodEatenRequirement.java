@@ -1,8 +1,5 @@
 package me.armar.plugins.autorank.playerchecker.requirement;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -13,35 +10,21 @@ import me.armar.plugins.autorank.util.AutorankTools;
 public class FoodEatenRequirement extends Requirement {
 
 	// [0] amount, [1] foodType
-	List<FoodWrapper> foodEaten = new ArrayList<FoodWrapper>();
+	FoodWrapper foodEaten = null;
 
 	@Override
 	public String getDescription() {
 
 		String desc = "";
 
-		for (int i = 0; i < foodEaten.size(); i++) {
-			final FoodWrapper wrapper = foodEaten.get(i);
-			final int amount = wrapper.getAmount();
-			final String foodType = wrapper.getFoodName();
+		final int amount = foodEaten.getAmount();
+		final String foodType = foodEaten.getFoodName();
 
-			if (i == 0) {
-				if (foodType == null || foodType.trim().equals("")) {
-					desc = Lang.FOOD_EATEN_REQUIREMENT.getConfigValue(amount
-							+ " food");
-				} else {
-					desc = Lang.FOOD_EATEN_REQUIREMENT.getConfigValue(amount
-							+ " " + foodType.toLowerCase().replace("_", " ")
-							+ "(s)");
-				}
-			} else {
-				if (foodType == null) {
-					desc = desc.concat(" or " + amount + " food");
-				} else {
-					desc = desc.concat(" or " + amount + " "
-							+ foodType.toLowerCase().replace("_", " ") + "(s)");
-				}
-			}
+		if (foodType == null || foodType.trim().equals("")) {
+			desc = Lang.FOOD_EATEN_REQUIREMENT.getConfigValue(amount + " food");
+		} else {
+			desc = Lang.FOOD_EATEN_REQUIREMENT
+					.getConfigValue(amount + " " + foodType.toLowerCase().replace("_", " ") + "(s)");
 		}
 
 		// Check if this requirement is world-specific
@@ -57,29 +40,20 @@ public class FoodEatenRequirement extends Requirement {
 
 		String progress = "";
 
-		for (int i = 0; i < foodEaten.size(); i++) {
-			final int amount = foodEaten.get(i).getAmount();
-			String foodType = foodEaten.get(i).getFoodName();
+		final int amount = foodEaten.getAmount();
+		String foodType = foodEaten.getFoodName();
 
-			final int totalFoodEaten = getStatsPlugin().getNormalStat(
-					StatsHandler.statTypes.FOOD_EATEN.toString(),
-					player.getUniqueId(), this.getWorld(), foodType);
+		final int totalFoodEaten = getStatsPlugin().getNormalStat(StatsHandler.statTypes.FOOD_EATEN.toString(),
+				player.getUniqueId(), this.getWorld(), foodType);
 
-			if (foodType == null) {
-				foodType = "food";
-			} else {
-				foodType = foodType.toLowerCase();
-			}
-
-			if (i == 0) {
-				progress = progress.concat(totalFoodEaten + "/" + amount + " "
-						+ foodType.replace("_", " ") + "(s)");
-			} else {
-				progress = progress.concat(" or " + totalFoodEaten + "/"
-						+ amount + " " + foodType.replace("_", " ") + "(s)");
-			}
-
+		if (foodType == null) {
+			foodType = "food";
+		} else {
+			foodType = foodType.toLowerCase();
 		}
+
+		progress = progress.concat(totalFoodEaten + "/" + amount + " " + foodType.replace("_", " ") + "(s)");
+
 		return progress;
 	}
 
@@ -89,37 +63,28 @@ public class FoodEatenRequirement extends Requirement {
 		if (!this.getStatsPlugin().isEnabled())
 			return false;
 
-		for (int i = 0; i < foodEaten.size(); i++) {
-			final int amount = foodEaten.get(i).getAmount();
-			final String foodType = foodEaten.get(i).getFoodName();
+		final int amount = foodEaten.getAmount();
+		final String foodType = foodEaten.getFoodName();
 
-			final int totalFoodEaten = getStatsPlugin().getNormalStat(
-					StatsHandler.statTypes.FOOD_EATEN.toString(),
-					player.getUniqueId(), this.getWorld(), foodType);
+		final int totalFoodEaten = getStatsPlugin().getNormalStat(StatsHandler.statTypes.FOOD_EATEN.toString(),
+				player.getUniqueId(), this.getWorld(), foodType);
 
-			if (totalFoodEaten >= amount)
-				return true;
-
-		}
-
-		return false;
+		return totalFoodEaten >= amount;
 	}
 
 	@Override
-	public boolean setOptions(final List<String[]> optionsList) {
+	public boolean setOptions(String[] options) {
 
-		for (final String[] options : optionsList) {
-			final int total = Integer.parseInt(options[0]);
-			String foodType = "";
+		final int total = Integer.parseInt(options[0]);
+		String foodType = "";
 
-			if (options.length > 1) {
-				foodType = options[1].trim();
-			}
-
-			foodEaten.add(new FoodWrapper(foodType, total));
+		if (options.length > 1) {
+			foodType = options[1].trim();
 		}
 
-		return !foodEaten.isEmpty();
+		foodEaten = new FoodWrapper(foodType, total);
+
+		return foodEaten != null;
 	}
 }
 

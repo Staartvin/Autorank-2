@@ -44,35 +44,11 @@ public class UUIDManager {
 
 		plugin.getUUIDStorage().storeUUID(playerName, uuid, realName);
 
-		//System.out.print("Cached " + uuid + " of " + playerName);
-		/*
-		cachedUUIDs.put(playerName, uuid);
-		lastCached.put(playerName, System.currentTimeMillis());*/
 	}
 
 	private static UUID getCachedUUID(final String playerName) {
 
 		return plugin.getUUIDStorage().getStoredUUID(playerName);
-
-		/*
-		
-		// Already found
-		if (cachedUUIDs.containsKey(playerName))
-			return cachedUUIDs.get(playerName);
-
-		// Search for lowercase matches
-		for (final String loggedName : cachedUUIDs.keySet()) {
-			if (loggedName.equalsIgnoreCase(playerName)) {
-				playerName = loggedName;
-				break;
-			}
-		}
-
-		if (!cachedUUIDs.containsKey(playerName))
-			return null;
-
-		// Grab UUID
-		return cachedUUIDs.get(playerName);(*/
 	}
 
 	/**

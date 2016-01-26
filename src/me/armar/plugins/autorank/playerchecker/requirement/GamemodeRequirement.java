@@ -1,8 +1,5 @@
 package me.armar.plugins.autorank.playerchecker.requirement;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.language.Lang;
@@ -10,13 +7,12 @@ import me.armar.plugins.autorank.util.AutorankTools;
 
 public class GamemodeRequirement extends Requirement {
 
-	private final List<Integer> gamemodes = new ArrayList<Integer>();
+	int gameMode = -1;
 
 	@Override
 	public String getDescription() {
 
-		String lang = Lang.GAMEMODE_REQUIREMENT.getConfigValue(AutorankTools
-				.seperateList(gamemodes, "or"));
+		String lang = Lang.GAMEMODE_REQUIREMENT.getConfigValue(gameMode + "");
 
 		// Check if this requirement is world-specific
 		if (this.isWorldSpecific()) {
@@ -28,13 +24,11 @@ public class GamemodeRequirement extends Requirement {
 
 	@Override
 	public String getProgress(final Player player) {
-		String progress = "";
 
 		@SuppressWarnings("deprecation")
 		final int gamemode = player.getGameMode().getValue();
 
-		progress = AutorankTools.makeProgressString(gamemodes, "", gamemode);
-		return progress;
+		return gamemode + "/" + gameMode;
 	}
 
 	@Override
@@ -50,22 +44,15 @@ public class GamemodeRequirement extends Requirement {
 		@SuppressWarnings("deprecation")
 		final int gamemode = player.getGameMode().getValue();
 
-		for (final int mode : gamemodes) {
-			if (gamemode == mode)
-				return true;
-		}
-
-		return false;
+		return gamemode == gameMode;
 	}
 
 	@Override
-	public boolean setOptions(final List<String[]> optionsList) {
+	public boolean setOptions(String[] options) {
 
-		for (final String[] options : optionsList) {
-			if (options.length > 0)
-				gamemodes.add(AutorankTools.stringtoInt(options[0]));
-		}
+		if (options.length > 0)
+			gameMode = AutorankTools.stringtoInt(options[0]);
 
-		return !gamemodes.isEmpty();
+		return gameMode != -1;
 	}
 }

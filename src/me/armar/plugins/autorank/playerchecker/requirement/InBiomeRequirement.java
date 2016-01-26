@@ -1,23 +1,17 @@
 package me.armar.plugins.autorank.playerchecker.requirement;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.language.Lang;
-import me.armar.plugins.autorank.util.AutorankTools;
 
 public class InBiomeRequirement extends Requirement {
 
-	List<String> biomes = new ArrayList<String>();
+	String biome = null;
 
 	@Override
 	public String getDescription() {
-		final String arg = AutorankTools.seperateList(biomes, "or");
-
-		String lang = Lang.IN_BIOME_REQUIREMENT.getConfigValue(arg);
+		String lang = Lang.IN_BIOME_REQUIREMENT.getConfigValue(biome);
 
 		// Check if this requirement is world-specific
 		if (this.isWorldSpecific()) {
@@ -29,13 +23,9 @@ public class InBiomeRequirement extends Requirement {
 
 	@Override
 	public String getProgress(final Player player) {
-		final String currentBiome = player.getLocation().getBlock().getBiome()
-				.toString();
+		final String currentBiome = player.getLocation().getBlock().getBiome().toString();
 
-		final String progress = AutorankTools.makeProgressString(biomes, "",
-				currentBiome);
-
-		return progress;
+		return currentBiome + "/" + biome;
 	}
 
 	@Override
@@ -50,29 +40,19 @@ public class InBiomeRequirement extends Requirement {
 
 		final Location pLocation = player.getLocation();
 
-		for (final String biome : biomes) {
-			if (pLocation.getBlock().getBiome().toString().equals(biome)) {
-				return true;
-			}
-		}
-
-		return false;
+		return pLocation.getBlock().getBiome().toString().equals(biome);
 	}
 
 	@Override
-	public boolean setOptions(final List<String[]> optionsList) {
+	public boolean setOptions(String[] options) {
 
-		for (final String[] options : optionsList) {
-
-			// biomes
-			if (options.length != 1) {
-				return false;
-			}
-
-			biomes.add(options[0].toUpperCase().replace(" ", "_"));
-
+		// biomes
+		if (options.length != 1) {
+			return false;
 		}
 
-		return !biomes.isEmpty();
+		biome = options[0].toUpperCase().replace(" ", "_");
+
+		return biome != null;
 	}
 }
