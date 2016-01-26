@@ -34,6 +34,10 @@ public class Debugger {
 		plugin = instance;
 	}
 
+	/**
+	 * Creates a debug file which is based on the current status of Autorank.
+	 * <br>The file will be created in the folder 'debugger' and will have the name 'debug-yyyyMMddHHmmss'.
+	 */
 	public String createDebugFile() {
 
 		final String dateFormatSave = dateFormat.format(new Date());

@@ -11,7 +11,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import me.armar.plugins.autorank.Autorank;
 
 /**
- * Class used to get data from backups Autorank is regularly doing. <br>
+ * This class is used to create a backup-data.yml that will store what files were backed up and when.
  * 
  * @author Staartvin
  */
@@ -25,6 +25,10 @@ public class BackupDataManager {
 		plugin = autorank;
 	}
 
+	/**
+	 * Create a new backup data file if it did not exist already.
+	 * <br>If it already exists, it will be loaded into memory.
+	 */
 	public void createNewFile() {
 		reloadConfig();
 		saveConfig();
@@ -41,6 +45,9 @@ public class BackupDataManager {
 		return backupConfig;
 	}
 
+	/**
+	 * Loads the backup data file of Autorank (backup-data.yml).
+	 */
 	public void loadConfig() {
 
 		backupConfig
@@ -56,6 +63,9 @@ public class BackupDataManager {
 		saveConfig();
 	}
 
+	/**
+	 * Reloads backup data config.
+	 */
 	@SuppressWarnings("deprecation")
 	public void reloadConfig() {
 		if (backupConfigFile == null) {
@@ -75,6 +85,9 @@ public class BackupDataManager {
 		}
 	}
 
+	/**
+	 * Saves backup data config.
+	 */
 	public void saveConfig() {
 		if (backupConfig == null || backupConfigFile == null) {
 			return;

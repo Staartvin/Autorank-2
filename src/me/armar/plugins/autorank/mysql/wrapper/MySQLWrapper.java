@@ -15,7 +15,7 @@ import me.armar.plugins.autorank.data.SQLDataStorage;
 import me.armar.plugins.autorank.playtimes.Playtimes;
 
 /**
- * This class keeps all incoming and outgoing under control.
+ * This class keeps all incoming and outgoing connections under control.
  * It sends MySQL queries and can locate the database.
  * Previously, {@link me.armar.plugins.autorank.playtimes.Playtimes} kept all
  * MySQL, but it wasn't neatly organised.

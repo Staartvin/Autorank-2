@@ -409,7 +409,7 @@ public enum Lang {
 	}
 
 	/**
-	 * Get the value in the config with certain arguments
+	 * Get the value in the config with certain arguments.
 	 * 
 	 * @param args arguments that need to be given. (Can be null)
 	 * @return value in config or otherwise default value

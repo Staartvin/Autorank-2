@@ -6,6 +6,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * This class is used to create a connection between the MySQL database and Autorank.
+ * @author Staartvin
+ *
+ */
 public class SQLDataStorage {
 
 	private Connection conn = null;
@@ -114,27 +119,6 @@ public class SQLDataStorage {
 				System.out.println("VendorError: " + ex.getErrorCode());
 
 			}
-			// Removed this because the ResultSet would always be null on return.
-			/*finally {
-
-				if (rs != null) {
-					try {
-						rs.close();
-					} catch (SQLException sqlEx) {
-					}
-
-					rs = null;
-				}
-
-				if (stmt != null) {
-					try {
-						stmt.close();
-					} catch (SQLException sqlEx) {
-					}
-
-					stmt = null;
-				}
-			} */
 		}
 		return rs;
 	}
@@ -142,7 +126,7 @@ public class SQLDataStorage {
 	/**
 	 * Returns state of MySQL connection
 	 * 
-	 * @return true if closed, false if open
+	 * @return true if closed, false if open.
 	 */
 	public boolean isClosed() {
 		try {
@@ -154,6 +138,9 @@ public class SQLDataStorage {
 		}
 	}
 
+	/**
+	 * Tries to close the MySQL connection. If already closed, nothing will happen.
+	 */
 	public void closeConnection() {
 		try {
 			if (conn != null) {

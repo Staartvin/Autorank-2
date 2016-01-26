@@ -9,8 +9,9 @@ import me.armar.plugins.autorank.data.SQLDataStorage;
 
 /**
  * This will get the database time.
- * 
- * We have to wait for the thread to finish before we can get the results
+ * <br>
+ * <br>We have to wait for the thread to finish before we can get the results.
+ * <br>
  * Every database lookup will have to have its own thread.
  * 
  * @author Staartvin

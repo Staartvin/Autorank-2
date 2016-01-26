@@ -10,7 +10,7 @@ import com.google.common.io.Files;
 import me.armar.plugins.autorank.Autorank;
 
 /**
- * Class that allows me to backup files before overwriting them.
+ * Class that allows to backup files before overwriting them.
  * Stores functions to backup.
  * <p>
  * Date created: 15:25:43 12 dec. 2014
@@ -31,7 +31,7 @@ public class BackupManager {
 	}
 
 	/**
-	 * Backup a file to a folder
+	 * Backup a file to a folder.
 	 * 
 	 * @param sourceFileName Path of file to backup
 	 * @param storePath Path to backup the file to, can be null.
@@ -65,6 +65,10 @@ public class BackupManager {
 
 	}
 
+	/**
+	 * Starts internal backup system of Autorank.
+	 * <br>This will make a backup of each file every day.
+	 */
 	public void startBackupSystem() {
 		// Makes a backup every day
 		plugin.getServer().getScheduler()

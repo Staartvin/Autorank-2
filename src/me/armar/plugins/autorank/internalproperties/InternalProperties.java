@@ -9,8 +9,9 @@ import me.armar.plugins.autorank.playtimes.Playtimes.dataType;
 
 /**
  * This class manages the internalprop.yml that stores all internal properties
- * of Autorank. Think of the cached leaderboard, the last time something was
+ * <br>of Autorank. Think of the cached leaderboard, the last time something was
  * updated, etc.
+ * <br>This file should not be altered by the server owner, since Autorank manages this.
  * 
  * @author Staartvin
  *

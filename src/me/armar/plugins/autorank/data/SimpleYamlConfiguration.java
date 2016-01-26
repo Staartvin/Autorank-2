@@ -10,10 +10,23 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
+/**
+ * This represents any YAML file that Autorank uses.
+ * <br>It is used for the data.yml, playerdata.yml and daily/monthly/weekly data files.
+ * @author Staartvin
+ *
+ */
 public class SimpleYamlConfiguration extends YamlConfiguration {
 
 	File file;
 
+	/**
+	 * Creates a new YAML file. 
+	 * @param plugin Plugin to create it for.
+	 * @param fileName Path of the file.
+	 * @param configDefaults Defaults with which we should copy the new file, can be null for an empty file.
+	 * @param name Name of the file that is used to show in the console.
+	 */
 	public SimpleYamlConfiguration(final JavaPlugin plugin, final String fileName,
 			final LinkedHashMap<String, Object> configDefaults, final String name) {
 		/*

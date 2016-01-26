@@ -87,6 +87,11 @@ public class DependencyManager {
 		statsPluginManager = new StatsPluginManager(instance);
 	}
 
+	/**
+	 * Gets a specific dependency.
+	 * @param dep Dependency to get.
+	 * @return the {@linkplain DependencyHandler} that is associated with the given {@linkplain dependency}, can be null.
+	 */
 	public DependencyHandler getDependency(final dependency dep) {
 
 		if (!handlers.containsKey(dep)) {
@@ -101,6 +106,12 @@ public class DependencyManager {
 		return statsPluginManager.getStatsPlugin();
 	}
 
+	/**
+	 * Gets whether the given player is AFK.
+	 * <br>Obeys the AFK setting in the Settings.yml.
+	 * @param player Player to check.
+	 * @return true if the player is supspected of being AFK, false otherwise.
+	 */
 	public boolean isAFK(final Player player) {
 		if (!plugin.getConfigHandler().useAFKIntegration()) {
 			return false;

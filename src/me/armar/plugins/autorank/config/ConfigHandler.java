@@ -12,8 +12,8 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.DependencyManager.dependency;
 
 /**
- * This class handles has all methods to get data from the configs. This is now
- * handled by every class seperately, but should be organised soon.
+ * This class has all methods to get data from the configs.
+ * <br>The configurations of the Settings.yml, AdvancedConfig.yml and SimpleConfig.yml can be reached from here.
  * 
  * @author Staartvin
  * 
@@ -30,11 +30,19 @@ public class ConfigHandler {
 		plugin = instance;
 	}
 
+	/**
+	 * Should we only show the commands on /ar help that a player has access to?
+	 * @return true if we should, false otherwise.
+	 */
 	public boolean doBaseHelpPageOnPermission() {
 		return plugin.getSettingsConfig().getBoolean(
 				"show help command based on permission", false);
 	}
 
+	/**
+	 * Should we check for a new version online?
+	 * @return true if we should, false otherwise.
+	 */
 	public boolean doCheckForNewerVersion() {
 		return plugin.getSettingsConfig().getBoolean(
 				"auto-updater.check-for-new-versions", true);
@@ -48,6 +56,10 @@ public class ConfigHandler {
 						"&p has played for &time and is in group(s) &groups. Requirements to be ranked up: &reqs");
 	}
 
+	/**
+	 * How often should we check players?
+	 * @return how many minutes we should wait before checking players again.
+	 */
 	public int getIntervalTime() {
 		return plugin.getSettingsConfig().getInt("interval check", 5);
 	}
@@ -113,6 +125,12 @@ public class ConfigHandler {
 		return -1;
 	}
 
+	/**
+	 * Gets the value string that is associated with the given requirement name in a given group.
+	 * @param requirement Name of the requirement.
+	 * @param group Name of the group.
+	 * @return the value string, can be null.
+	 */
 	public String getRequirement(final String requirement, final String group) {
 
 		// Correct config
@@ -210,6 +228,9 @@ public class ConfigHandler {
 		return optional;
 	}
 
+	/**
+	 * Should we use the AdvancedConfig?
+	 */
 	public boolean useAdvancedConfig() {
 		return plugin.getSettingsConfig().getBoolean("use advanced config");
 	}
@@ -235,6 +256,12 @@ public class ConfigHandler {
 		return plugin.getSettingsConfig().getBoolean("afk integration", false);
 	}
 
+	/**
+	 * Should we use auto completion for a certain requirement in a group.
+	 * @param group Group to check for.
+	 * @param requirement Requirement to check for.
+	 * @return true if we should, false otherwise.
+	 */
 	public boolean useAutoCompletion(final String group,
 			final String requirement) {
 		final boolean optional = isOptional(requirement, group);
@@ -271,14 +298,23 @@ public class ConfigHandler {
 		}
 	}
 
+	/**
+	 * Should we output debug messages?
+	 */
 	public boolean useDebugOutput() {
 		return plugin.getSettingsConfig().getBoolean("use debug", false);
 	}
 
+	/**
+	 * Should we use the MySQL database?
+	 */
 	public boolean useMySQL() {
 		return plugin.getSettingsConfig().getBoolean("sql.enabled");
 	}
 
+	/**
+	 * Are we using partial completion?
+	 */
 	public boolean usePartialCompletion() {
 		return plugin.getSettingsConfig().getBoolean("use partial completion",
 				false);
@@ -347,6 +383,9 @@ public class ConfigHandler {
 		return displayName;
 	}
 	
+	/**
+	 * Should we broadcast in the server when any time gets reset?
+	 */
 	public boolean shouldBroadcastDataReset() {
 		return plugin.getSettingsConfig().getBoolean("broadcast resetting of data files", true);
 	}

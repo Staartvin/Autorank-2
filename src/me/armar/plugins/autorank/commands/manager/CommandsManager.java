@@ -41,6 +41,12 @@ import me.armar.plugins.autorank.commands.TrackCommand;
 import me.armar.plugins.autorank.commands.ViewCommand;
 import me.armar.plugins.autorank.language.Lang;
 
+/**
+ * This class will manage all incoming command requests.
+ * Commands are not performed here, they are only send to the correct place.
+ * A specific {@linkplain AutorankCommand} class handles the task of performing the command.
+ * 
+ */
 public class CommandsManager implements TabExecutor {
 
 	private final Autorank plugin;
@@ -49,11 +55,7 @@ public class CommandsManager implements TabExecutor {
 	private final LinkedHashMap<List<String>, AutorankCommand> registeredCommands = new LinkedHashMap<List<String>, AutorankCommand>();
 
 	/**
-	 * This class will manage all incoming command request.
-	 * Commands are not performed here, they are only send to the correct place.
-	 * A specific command class handles the task of performing the command.
-	 * 
-	 * @param plugin Autorank main class
+	 * All command aliases are set up in here.
 	 */
 	public CommandsManager(final Autorank plugin) {
 		this.plugin = plugin;
@@ -109,6 +111,13 @@ public class CommandsManager implements TabExecutor {
 		return registeredCommands;
 	}
 
+	/**
+	 * Gets whether the sender has the given permission.
+	 * <br>Will also send a 'you don't have this permission' message if the sender does not have the given permission.
+	 * @param permission Permission to check.
+	 * @param sender Sender to check.
+	 * @return true if this sender has the given permission, false otherwise.
+	 */
 	public boolean hasPermission(final String permission,
 			final CommandSender sender) {
 		if (!sender.hasPermission(permission)) {
@@ -120,6 +129,9 @@ public class CommandsManager implements TabExecutor {
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.bukkit.command.CommandExecutor#onCommand(org.bukkit.command.CommandSender, org.bukkit.command.Command, java.lang.String, java.lang.String[])
+	 */
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command cmd,
 			final String label, final String[] args) {
