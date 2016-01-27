@@ -73,6 +73,7 @@ ranks:
 #       food eaten: 10;PORK (Player has to eat at least 10 Pork chops) (Food type can be omitted to include any type of food) (Stats required)
 #       acidisland level: 10 (Player needs to have at least an island level of 10) (AcidIsland required)
 #       askyblock level: 10 (Player needs to have at least an island level of 10) (ASkyBlock required)
+#       javascript: Player.getHealth() > 15;You need at least 15 hearts of health. (This first part must be true for this evaluations to be true, the second part is the description that is shown.)
 #
 #   results:
 #       rank change: new-rank
