@@ -37,6 +37,7 @@ import me.armar.plugins.autorank.playerchecker.requirement.GlobalTimeRequirement
 import me.armar.plugins.autorank.playerchecker.requirement.HasItemRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.InBiomeRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.ItemsCraftedRequirement;
+import me.armar.plugins.autorank.playerchecker.requirement.JavaScriptRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.LocationRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.McMMOPowerLevelRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.McMMOSkillLevelRequirement;
@@ -63,6 +64,7 @@ import me.armar.plugins.autorank.playtimes.Playtimes;
 import me.armar.plugins.autorank.rankbuilder.builders.RequirementBuilder;
 import me.armar.plugins.autorank.rankbuilder.builders.ResultBuilder;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
+import me.armar.plugins.autorank.statsmanager.handlers.DummyHandler;
 import me.armar.plugins.autorank.updater.UpdateHandler;
 import me.armar.plugins.autorank.updater.Updater;
 import me.armar.plugins.autorank.util.uuid.storage.UUIDStorage;
@@ -328,6 +330,7 @@ public class Autorank extends JavaPlugin {
 		req.registerRequirement("food eaten", FoodEatenRequirement.class);
 		req.registerRequirement("acidisland level", AcidIslandLevelRequirement.class);
 		req.registerRequirement("askyblock level", ASkyBlockLevelRequirement.class);
+		req.registerRequirement("javascript", JavaScriptRequirement.class);
 
 		// Register 'main' results
 		res.registerResult("command", CommandResult.class);
