@@ -357,9 +357,17 @@ public class ConfigHandler {
 		final String[] split = org.split(",");
 
 		for (final String sp : split) {
-			final String newString = sp.replace("(", "").replace(")", "")
-					.trim();
-			final String[] splitArray = newString.split(";");
+			StringBuilder builder = new StringBuilder(sp);
+			
+			if (builder.charAt(0) == '(') {
+				builder.deleteCharAt(0);
+			}
+			
+			if (builder.charAt(builder.length() - 1) == ')') {
+				builder.deleteCharAt(builder.length() - 1);
+			}
+
+			final String[] splitArray = builder.toString().trim().split(";");
 			list.add(splitArray);
 		}
 
