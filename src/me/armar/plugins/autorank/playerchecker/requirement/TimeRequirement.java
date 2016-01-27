@@ -28,19 +28,7 @@ public class TimeRequirement extends Requirement {
 
 		final int playtime = (getAutorank().getPlaytimes().getTimeOfPlayer(
 				player.getName(), true) / 60);
-
-		/*for (int i=0;i<times.size();i++) {
-			int time = times.get(i);
-			
-			if (i==0) {
-				progress += playtime + " min/" + time + " min";
-			} else {
-				progress += "or " + playtime + " min/" + time + " min";
-			}
-		}*/
-//		progress = AutorankTools
-//				.makeProgressString(times, "min", "" + playtime);
-
+		
 		return playtime + " min/" + timeNeeded + " min";
 	}
 
