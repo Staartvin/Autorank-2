@@ -547,6 +547,8 @@ public class Playtimes {
 
 				// Update tracked data type
 				plugin.getInternalProps().setTrackedDataType(type, value);
+				// We reset leaderboard time so it refreshes again.
+				plugin.getInternalProps().setLeaderboardLastUpdateTime(0);
 			}
 		}
 	}
