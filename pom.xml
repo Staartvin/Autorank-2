@@ -61,17 +61,10 @@
 	</properties>
 
 	<repositories>
-
 		<repository>
-			<id>Plugin Metrics</id>
-			<url>http://repo.mcstats.org/content/repositories/public/</url>
+			<id>staartvin-repo</id>
+			<url>http://62.131.38.74:8081/artifactory/ext-release-local/</url>
 		</repository>
-
-		<!-- <repository> <id>stats-repo</id> <url>http://centrility.nl:8081/nexus/content/repositories/releases/ 
-			</url> </repository> -->
-
-		<!-- <repository> <id>stats-repo-snapshot</id> <url>http://centrility.nl:8081/nexus/content/repositories/snapshots/ 
-			</url> </repository> -->
 
 		<repository>
 			<id>sk89q-repo</id>
@@ -83,9 +76,10 @@
 			<url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
 		</repository>
 
+		
 		<repository>
-			<id>staartvin-repo</id>
-			<url>http://62.131.38.74:8081/artifactory/ext-release-local/</url>
+			<id>Plugin Metrics</id>
+			<url>http://repo.mcstats.org/content/repositories/public/</url>
 		</repository>
 
 	</repositories>
