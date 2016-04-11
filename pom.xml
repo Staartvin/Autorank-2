@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>Autorank</groupId>
 	<artifactId>Autorank</artifactId>
-	<version>3.7.2-Dev-${BUILD_NUMBER}</version>
+	<version>3.7.3<!-- -Dev-${BUILD_NUMBER}--></version>
 	<name>Autorank</name>
 	<description>Maven project for Bukkit plugin Autorank</description>
 	<url>http://dev.bukkit.org/server-mods/autorank/</url>
