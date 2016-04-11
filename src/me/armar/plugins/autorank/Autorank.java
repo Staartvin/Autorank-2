@@ -82,6 +82,7 @@ import me.armar.plugins.autorank.warningmanager.WarningManager;
  */
 public class Autorank extends JavaPlugin {
 
+	// Updated for Minecraft 1.9.2
 	private AddOnManager addonManager;
 	private SimpleYamlConfiguration advancedConfig;
 	private CommandsManager commandsManager;
