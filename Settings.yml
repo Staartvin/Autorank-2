@@ -105,3 +105,4 @@ allow deranking: false
 # When this is set to true, a player that does not have the requirements that have a derankable flag, will be deranked to their previous rank.
 # You will also have to specify which requirements are 'derankable'.
 # When you set this to true, make sure to also set 'allow infinite ranking' to true.
+# For more info, see this wiki article: https://github.com/Armarr/Autorank-2/wiki/What-are-these-derankable-requirements-you-are-talking-about%3F
