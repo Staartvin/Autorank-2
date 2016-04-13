@@ -89,7 +89,7 @@ public class HasItemRequirement extends Requirement {
 	public boolean setOptions(String[] options) {
 
 		int id = -1;
-		int amount = -1;
+		int amount = 1;
 		short data = 0;
 
 		String displayName = null;
@@ -119,7 +119,7 @@ public class HasItemRequirement extends Requirement {
 
 		neededItem = new ItemWrapper(item, displayName, showShortValue, useDisplayName);
 
-		return neededItem != null && id != -1 && amount != -1;
+		return neededItem != null && id != -1 && amount > 0;
 	}
 }
 
