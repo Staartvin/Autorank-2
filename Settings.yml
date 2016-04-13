@@ -99,3 +99,9 @@ broadcast resetting of data files: true
 # Autorank keeps track of amount of time played per day, week and month.
 # When a new day, week or month starts, Autorank will reset the times of all players (except the total time, this is always preserved).
 # If this value is set to true, Autorank will broadcast to all players when their data gets reset.
+
+allow deranking: false
+# Sometimes you want a player to derank when certain requirements are not met. 
+# When this is set to true, a player that does not have the requirements that have a derankable flag, will be deranked to their previous rank.
+# You will also have to specify which requirements are 'derankable'.
+# When you set this to true, make sure to also set 'allow infinite ranking' to true.

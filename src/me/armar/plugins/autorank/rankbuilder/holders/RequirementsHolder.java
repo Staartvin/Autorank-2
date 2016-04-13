@@ -36,6 +36,8 @@ public class RequirementsHolder {
 	}
 
 	private List<Requirement> requirements = new ArrayList<Requirement>();
+	
+	private boolean isDerankable = false;
 
 	public void addRequirement(Requirement req) {
 		requirements.add(req);
@@ -238,5 +240,17 @@ public class RequirementsHolder {
 		}
 
 		return -1;
+	}
+
+	/**
+	 * Check whether a player could be deranked if he does not meet this requirement.
+	 * @return true if he can be demoted, false otherwise.
+	 */
+	public boolean isDerankable() {
+		return isDerankable;
+	}
+
+	public void setDerankable(boolean isDerankable) {
+		this.isDerankable = isDerankable;
 	}
 }

@@ -29,17 +29,14 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 
 			// Only shutdown Autorank when Vault is needed and not found.
 			// Delay shutdown so Autorank can start successfully.
-			plugin.getServer().getScheduler()
-					.runTaskLater(plugin, new Runnable() {
-						@Override
-						public void run() {
+			plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
+				@Override
+				public void run() {
 
-							plugin.getLogger().severe(
-									"Disabling Autorank: Vault was not found");
-							plugin.getServer().getPluginManager()
-									.disablePlugin(plugin);
-						}
-					}, 60L);
+					plugin.getLogger().severe("Disabling Autorank: Vault was not found");
+					plugin.getServer().getPluginManager().disablePlugin(plugin);
+				}
+			}, 60L);
 		}
 
 		this.plugin = plugin;
@@ -48,18 +45,20 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 	/**
 	 * Add a player to group
 	 * 
-	 * @param player Player to add
-	 * @param world On a specific world
-	 * @param group Group to add the player to
+	 * @param player
+	 *            Player to add
+	 * @param world
+	 *            On a specific world
+	 * @param group
+	 *            Group to add the player to
 	 * @return true if done, false if failed
 	 */
-	@SuppressWarnings("deprecation")
-	public boolean addGroup(final Player player, final String world,
-			final String group) {
+	public boolean addGroup(final Player player, final String world, final String group) {
 		if (permission == null)
 			return false;
-
-		return permission.playerAddGroup(world, player.getName(), group);
+		
+		return permission.playerAddGroup(world, player, group);
+		// return permission.playerAddGroup(world, player.getName(), group);
 	}
 
 	/**
@@ -84,8 +83,7 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 
 		String[] groups = null;
 
-		final Autorank plugin = (Autorank) Bukkit.getPluginManager().getPlugin(
-				"Autorank");
+		final Autorank plugin = (Autorank) Bukkit.getPluginManager().getPlugin("Autorank");
 
 		final UUID uuid = player.getUniqueId();
 
@@ -97,10 +95,10 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 		}
 
 		// Checking if player changed group
-		// Check if the latest known group is the current group. Otherwise, reset progress
+		// Check if the latest known group is the current group. Otherwise,
+		// reset progress
 		final String currentGroup = groups[0];
-		String latestKnownGroup = plugin.getPlayerDataHandler()
-				.getLastKnownGroup(uuid);
+		String latestKnownGroup = plugin.getPlayerDataHandler().getLastKnownGroup(uuid);
 
 		if (latestKnownGroup == null) {
 			plugin.getPlayerDataHandler().setLastKnownGroup(uuid, currentGroup);
@@ -109,8 +107,7 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 		}
 		if (!latestKnownGroup.equalsIgnoreCase(currentGroup)) {
 			// Reset progress and update latest known group
-			plugin.getPlayerDataHandler().setPlayerProgress(uuid,
-					new ArrayList<Integer>());
+			plugin.getPlayerDataHandler().setPlayerProgress(uuid, new ArrayList<Integer>());
 			plugin.getPlayerDataHandler().setLastKnownGroup(uuid, currentGroup);
 			plugin.getPlayerDataHandler().setChosenPath(uuid, null);
 
@@ -133,26 +130,26 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 	/**
 	 * Remove a player from a group
 	 * 
-	 * @param player Player to remove
-	 * @param world On a specific world
-	 * @param group Group to remove the player from
+	 * @param player
+	 *            Player to remove
+	 * @param world
+	 *            On a specific world
+	 * @param group
+	 *            Group to remove the player from
 	 * @return true if done, false if failed
 	 */
-	@SuppressWarnings("deprecation")
-	public boolean removeGroup(final Player player, final String world,
-			final String group) {
+	public boolean removeGroup(final Player player, final String world, final String group) {
 		if (permission == null)
 			return false;
 
-		return permission.playerRemoveGroup(world, player.getName(), group);
+		return permission.playerRemoveGroup(world, player, group);
+		// return permission.playerRemoveGroup(world, player.getName(), group);
 	}
 
 	@Override
-	public boolean replaceGroup(final Player player, String world,
-			final String oldGroup, final String newGroup) {
+	public boolean replaceGroup(final Player player, String world, final String oldGroup, final String newGroup) {
 		// Temporary fix for bPermissions
-		if (world == null
-				&& permission.getName().toLowerCase().contains("bpermissions")) {
+		if (world == null && permission.getName().toLowerCase().contains("bpermissions")) {
 			world = player.getWorld().getName();
 		}
 
@@ -161,8 +158,7 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 
 		// Output array for debug
 		for (final String group : groupsBeforeAdd) {
-			plugin.debugMessage("Group of " + player.getName()
-					+ " before adding: " + group);
+			plugin.debugMessage("Group of " + player.getName() + " before adding: " + group);
 		}
 
 		String[] groupsAfterAdd = null;
@@ -177,25 +173,31 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 
 			// Output array for debug
 			for (final String group : groupsAfterAdd) {
-				plugin.debugMessage("Group of " + player.getName()
-						+ " after adding: " + group);
+				plugin.debugMessage("Group of " + player.getName() + " after adding: " + group);
 			}
 
-			// When using PEX, if a player is in a default group this is not really listed as the player being in the group. 
-			// It's just used as an alias. When we would change the rank, the player would lose all other default groups.
-			// We check if the player is in a default group and then re-add the other groups after we added the new group the player was ranked up to.
+			// When using PEX, if a player is in a default group this is not
+			// really listed as the player being in the group.
+			// It's just used as an alias. When we would change the rank, the
+			// player would lose all other default groups.
+			// We check if the player is in a default group and then re-add the
+			// other groups after we added the new group the player was ranked
+			// up to.
 			// Thanks to @DeathStampler for this code and info.
 			if (permission.getName().toLowerCase().contains("permissionsex")) {
 				// Normally the player should have one more group at this point.
 				if (groupsAfterAdd.length >= (groupsBeforeAdd.length + 1)) {
-					// We have one more groups than before.  Great.  Let's remove oldGroup.
+					// We have one more groups than before. Great. Let's remove
+					// oldGroup.
 					worked2 = removeGroup(player, world, oldGroup);
 
-					// Otherwise, let's see if we have just one group.  This is an indication that the
-					// PermissionsEX player had more than one default group set.  Those are now gone 
+					// Otherwise, let's see if we have just one group. This is
+					// an indication that the
+					// PermissionsEX player had more than one default group set.
+					// Those are now gone
 					// and we are left with just the newGroup.
 				} else if (groupsAfterAdd.length == 1) {
-					// We have just one group.  Let's add any that are missing.
+					// We have just one group. Let's add any that are missing.
 					for (final String group : groupsBeforeAdd) {
 						// Let's not re-add the oldGroup
 						if (!group.equalsIgnoreCase(oldGroup)) {
@@ -205,7 +207,8 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 					}
 					worked2 = true;
 				} else {
-					//  Not sure what situation would lead us here, so we'll just assume everything is good.
+					// Not sure what situation would lead us here, so we'll just
+					// assume everything is good.
 					worked2 = true;
 				}
 			} else {
@@ -218,16 +221,13 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 
 	private boolean setupPermissions(final Autorank plugin) {
 
-		final Plugin vPlugin = plugin.getServer().getPluginManager()
-				.getPlugin("Vault");
+		final Plugin vPlugin = plugin.getServer().getPluginManager().getPlugin("Vault");
 
 		if (vPlugin == null || !(vPlugin instanceof Vault)) {
 			return false;
 		}
 
-		final RegisteredServiceProvider<Permission> permissionProvider = plugin
-				.getServer()
-				.getServicesManager()
+		final RegisteredServiceProvider<Permission> permissionProvider = plugin.getServer().getServicesManager()
 				.getRegistration(net.milkbowl.vault.permission.Permission.class);
 
 		if (permissionProvider != null) {
@@ -237,12 +237,50 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 		return permission != null;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see me.armar.plugins.autorank.permissions.PermissionsHandler#getName()
 	 */
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
 		return permission.getName();
+	}
+
+	@Override
+	public boolean demotePlayer(Player player, String world, String groupFrom, String groupTo) {
+		// Temporary fix for bPermissions
+		if (world == null && permission.getName().toLowerCase().contains("bpermissions")) {
+			world = player.getWorld().getName();
+		}
+
+		// Let get the player groups before we change them.
+		final String[] groupsBeforeAdd = getPlayerGroups(player);
+
+		// Output array for debug
+		for (final String group : groupsBeforeAdd) {
+			plugin.debugMessage("Group of " + player.getName() + " before removing: " + group);
+		}
+
+		String[] groupsAfterAdd = null;
+
+		final boolean worked1 = removeGroup(player, world, groupFrom);
+
+		boolean worked2 = false;
+
+		if (worked1) {
+			// There should be a difference between the two.
+			groupsAfterAdd = getPlayerGroups(player);
+
+			// Output array for debug
+			for (final String group : groupsAfterAdd) {
+				plugin.debugMessage("Group of " + player.getName() + " after removing: " + group);
+			}
+
+			worked2 = addGroup(player, world, groupTo);
+		}
+
+		return worked1 && worked2;
 	}
 }

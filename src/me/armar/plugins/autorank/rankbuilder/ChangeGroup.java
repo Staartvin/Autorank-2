@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.playerchecker.result.Result;
 import me.armar.plugins.autorank.rankbuilder.holders.RequirementsHolder;
+import net.md_5.bungee.api.ChatColor;
 
 /**
  * Represents a group of changes, including all requirements and results.
@@ -32,7 +33,9 @@ public class ChangeGroup {
 	// It therefore always contains a '-copy-*' part.
 	// The display name is the name shown when this changegroup is a copy of
 	// another changegroup.
-	private String parentGroup, internalGroup, displayName;
+	// Previous group is the group a player will be demoted to if he doesn't
+	// meet certain requirements.
+	private String parentGroup, internalGroup, displayName, previousGroup;
 
 	private final Autorank plugin;
 
@@ -82,6 +85,10 @@ public class ChangeGroup {
 	public boolean applyChange(final Player player) {
 		boolean result = true;
 
+		if (this.checkDerankableRequirements(player)) {
+			return false;
+		}
+		
 		if (checkRequirements(player)) {
 
 			// final UUID uuid =
@@ -113,7 +120,7 @@ public class ChangeGroup {
 	}
 
 	public boolean checkRequirements(final Player player) {
-		
+
 		// final UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
 		UUID uuid = plugin.getUUIDStorage().getStoredUUID(player.getName());
 
@@ -135,22 +142,75 @@ public class ChangeGroup {
 					continue;
 				}
 			}
-			
-			// Holder does not meet requirements, so not all requirements are met!
+
+			// Holder does not meet requirements, so not all requirements are
+			// met!
 			if (!holder.meetsRequirement(player, uuid)) {
 				return false;
 			}
-		
+
 		}
 
 		// When never returning false, return true at last!
 		return true;
 	}
 
+	/** Check whether a player should be deranked based on its requirements
+	 * @param player Player to check.
+	 * @return true if the player will be deranked, false otherwise.
+	 */
+	public boolean checkDerankableRequirements(Player player) {
+		// Player can never be deranked with this option set to false.
+		if (!plugin.getConfigHandler().allowDeranking()) return false;
+
+		// final UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
+		UUID uuid = plugin.getUUIDStorage().getStoredUUID(player.getName());	
+		
+		for (final RequirementsHolder holder : this.getRequirementsHolders()) {
+			if (holder == null)
+				continue;
+
+			// Holder does not meet requirements, so not all requirements are
+			// met!
+			if (!holder.meetsRequirement(player, uuid)) {
+				if (holder.isDerankable()) {
+					// Does not meet requirement and is derankable, so demote.
+
+					// We don't know the previous group, so we can't demote.
+					if (this.getPreviousGroup() == null) {
+						continue;
+					}
+
+					plugin.debugMessage("Demote player " + player.getName()
+							+ " to " + this.getPreviousGroup() + " since he doesn't meet a requirement (that requirement is also derankable).");
+
+					// When rank is changed: reset progress and update last
+					// known group
+					plugin.getPlayerDataHandler().setPlayerProgress(uuid, new ArrayList<Integer>());
+
+					plugin.getPlayerDataHandler().setLastKnownGroup(uuid, this.getPreviousGroup());
+
+					// Reset chosen path as the player is moved to another group
+					plugin.getPlayerDataHandler().setChosenPath(uuid, null);
+
+					plugin.getPermPlugHandler().getPermissionPlugin().demotePlayer(player, null, this.getParentGroup(),
+							this.getPreviousGroup());
+					
+					player.sendMessage(ChatColor.DARK_RED + "You have been demoted to " + this.getPreviousGroup() + " since you did not meet a specific requirement: " + holder.getDescription());
+					return true;
+				}
+			}
+
+		}
+
+		// When never returning true, return true at false!
+		return false;
+	}
+
 	public List<RequirementsHolder> getFailedRequirementsHolders(final Player player) {
 		final List<RequirementsHolder> holders = new ArrayList<RequirementsHolder>();
 
-		for (RequirementsHolder holder : this.getRequirementsHolders() ) {
+		for (RequirementsHolder holder : this.getRequirementsHolders()) {
 			if (holder != null)
 				if (holder.meetsRequirement(player, player.getUniqueId())) {
 					holders.add(holder);
@@ -159,22 +219,22 @@ public class ChangeGroup {
 
 		return holders;
 	}
-	
-//	// Grabs all requirements of all holders
-//	public List<Requirement> getAllRequirements() {
-//		List<Requirement> requirements = new ArrayList<Requirement>();
-//		
-//		for (RequirementsHolder holder: this.getRequirementsHolders()) {
-//			requirements.addAll(holder.getRequirements());
-//		}
-//		
-//		return requirements;
-//	}
-	
+
+	// // Grabs all requirements of all holders
+	// public List<Requirement> getAllRequirements() {
+	// List<Requirement> requirements = new ArrayList<Requirement>();
+	//
+	// for (RequirementsHolder holder: this.getRequirementsHolders()) {
+	// requirements.addAll(holder.getRequirements());
+	// }
+	//
+	// return requirements;
+	// }
+
 	public void setRequirementHolders(List<RequirementsHolder> holders) {
 		this.requirementsHolders = holders;
 	}
-	
+
 	public void addRequirementHolder(RequirementsHolder holder) {
 		requirementsHolders.add(holder);
 	}
@@ -190,5 +250,13 @@ public class ChangeGroup {
 
 	public void setDisplayName(final String displayName) {
 		this.displayName = displayName;
+	}
+
+	public String getPreviousGroup() {
+		return previousGroup;
+	}
+
+	public void setPreviousGroup(String previousGroup) {
+		this.previousGroup = previousGroup;
 	}
 }

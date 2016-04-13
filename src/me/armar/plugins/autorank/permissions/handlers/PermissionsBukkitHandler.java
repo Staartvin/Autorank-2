@@ -141,4 +141,10 @@ public class PermissionsBukkitHandler implements PermissionsHandler {
 		// TODO Auto-generated method stub
 		return "PermissionsBukkit";
 	}
+
+	@Override
+	public boolean demotePlayer(Player player, String world, String groupFrom, String groupTo) {
+		return (addGroup(player, world, groupTo) && removeGroup(player, world,
+				groupFrom));
+	}
 }

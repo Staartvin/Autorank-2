@@ -137,7 +137,6 @@ public class GroupManagerHandler implements PermissionsHandler {
 	public boolean replaceGroup(final Player player, final String world,
 			final String groupFrom, final String groupTo) {
 		return setGroup(player, groupTo, world);
-
 	}
 
 	public boolean setGroup(final Player player, final String group,
@@ -176,5 +175,10 @@ public class GroupManagerHandler implements PermissionsHandler {
 	public String getName() {
 		// TODO Auto-generated method stub
 		return "GroupManager";
+	}
+
+	@Override
+	public boolean demotePlayer(Player player, String world, String groupFrom, String groupTo) {
+		return setGroup(player, groupTo, world);
 	}
 }

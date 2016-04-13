@@ -397,5 +397,22 @@ public class ConfigHandler {
 	public boolean shouldBroadcastDataReset() {
 		return plugin.getSettingsConfig().getBoolean("broadcast resetting of data files", true);
 	}
+	
+	/**
+	 * Does this server allow deranking for certain groups?
+	 */
+	public boolean allowDeranking() {
+		return plugin.getSettingsConfig().getBoolean("allow deranking", false);
+	}
+	
+	/**
+	 * Check whether a specific requirement of a group will derank a player if it is not met.
+	 * @param groupName Name of the group
+	 * @param requirement Name of the requirement
+	 * @return true if it is derankable, false otherwise.
+	 */
+	public boolean isRequirementDerankable(String groupName, String requirement) {
+		return plugin.getAdvancedConfig().getBoolean("ranks." + groupName + ".requirements." + requirement + ".options.derankable", false);
+	}
 
 }

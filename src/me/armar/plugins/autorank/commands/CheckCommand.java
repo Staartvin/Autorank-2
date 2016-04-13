@@ -229,7 +229,6 @@ public class CheckCommand extends AutorankCommand {
 		if (meetsAllRequirements || onlyOptional) {
 
 			AutorankTools.sendColoredMessage(sender, reqMessage + reqMessage2);
-			plugin.getPlayerChecker().checkPlayer(player);
 		} else {
 			// AutorankTools.sendColoredMessage(sender,
 			// Lang.REQUIREMENTS_TO_RANK.getConfigValue(null));
@@ -242,8 +241,9 @@ public class CheckCommand extends AutorankCommand {
 					AutorankTools.sendColoredMessage(sender, message);
 				}
 			}
-
 		}
+		
+		plugin.getPlayerChecker().checkPlayer(player);
 	}
 
 	@Override

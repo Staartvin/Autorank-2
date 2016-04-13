@@ -89,11 +89,11 @@ public class ChangeGroupBuilder {
 			}
 
 			// Time requirement
-		
+
 			RequirementsHolder holder = new RequirementsHolder(plugin);
-			
+
 			final Requirement timeReq = new TimeRequirement();
-			timeReq.setOptions(new String[] {options[1]});
+			timeReq.setOptions(new String[] { options[1] });
 			timeReq.setOptional(false);
 			timeReq.setResults(new ArrayList<Result>());
 			timeReq.setAutoComplete(true);
@@ -224,6 +224,12 @@ public class ChangeGroupBuilder {
 						newRequirement.setWorld(plugin.getConfigHandler().getWorldOfRequirement(requirement, group));
 					}
 
+					// Set whether this requirement will derank a player if it
+					// is not met.
+					if (plugin.getConfigHandler().isRequirementDerankable(group, requirement)) {
+						holder.setDerankable(true);
+					}
+
 					holder.addRequirement(newRequirement);
 				}
 
@@ -238,6 +244,19 @@ public class ChangeGroupBuilder {
 
 				res.add(result);
 			}
+
+			// ChangeGroup for this rank
+			final ChangeGroup changeGroup = new ChangeGroup(plugin);
+
+			// Save the RequirementsHolders
+			changeGroup.setRequirementHolders(holders);
+
+			// Save the results
+			changeGroup.setResults(res);
+
+			changeGroup.setParentGroup(groupName);
+			changeGroup.setInternalGroup(group);
+			changeGroup.setDisplayName(plugin.getConfigHandler().getDisplayName(group));
 
 			if (configHandler.getRankChange(group) != null) {
 				final String[] rankChange = configHandler.getRankChange(group).split(";");
@@ -257,23 +276,33 @@ public class ChangeGroupBuilder {
 				currentChanges = new ArrayList<ChangeGroup>();
 			}
 
-			// ChangeGroup for this rank
-			final ChangeGroup changeGroup = new ChangeGroup(plugin);
-
-			// Save the RequirementsHolders
-			changeGroup.setRequirementHolders(holders);
-
-			// Save the results
-			changeGroup.setResults(res);
-
-			changeGroup.setParentGroup(groupName);
-			changeGroup.setInternalGroup(group);
-			changeGroup.setDisplayName(plugin.getConfigHandler().getDisplayName(group));
-
 			currentChanges.add(changeGroup);
 
 			// Save the current changegroup to the parent group
 			changeGroups.put(groupName, currentChanges);
+		}
+
+		// Find previous ranks for all change groups to establish hierarchy
+		for (String group : changeGroups.keySet()) {
+			if (configHandler.getRankChange(group) != null) {
+				final String[] rankChange = configHandler.getRankChange(group).split(";");
+
+				String rankChangeName = null;
+				
+				if (rankChange.length == 1) {
+					rankChangeName = rankChange[0].trim();
+				} else {
+					rankChangeName = rankChange[1].trim();
+				}
+				
+				if (changeGroups.get(rankChangeName) != null) {
+					for (ChangeGroup changeGroup : changeGroups.get(rankChangeName)) {
+						if (changeGroup == null) continue;
+						
+						changeGroup.setPreviousGroup(group);
+					}
+				}
+			}
 		}
 
 		return changeGroups;
@@ -299,7 +328,7 @@ public class ChangeGroupBuilder {
 
 			final String errorMessage = "Could not setup requirement '" + type
 					+ "'! It's invalid: check the wiki for documentation.";
-			
+
 			try {
 				if (!res.setOptions(options)) {
 					plugin.getLogger().severe(errorMessage);
