@@ -7,9 +7,9 @@ import java.util.UUID;
 import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.playerchecker.result.Result;
 import me.armar.plugins.autorank.rankbuilder.holders.RequirementsHolder;
-import net.md_5.bungee.api.ChatColor;
 
 /**
  * Represents a group of changes, including all requirements and results.
@@ -196,7 +196,17 @@ public class ChangeGroup {
 					plugin.getPermPlugHandler().getPermissionPlugin().demotePlayer(player, null, this.getParentGroup(),
 							this.getPreviousGroup());
 					
-					player.sendMessage(ChatColor.DARK_RED + "You have been demoted to " + this.getPreviousGroup() + " since you did not meet a specific requirement: " + holder.getDescription());
+					// Find the commands that have to be run
+					List<String> commands = plugin.getConfigHandler().getCommandsOnDerank(this.getParentGroup(), plugin.getConfigHandler().getRequirementNameOfId(this.getParentGroup(), holder.getReqID()));
+					
+					// Run the commands
+					for (String command: commands) {
+						String cmd = command.replace("&p", player.getName());
+						plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), cmd);
+					}
+					
+					// Send player message telling them they have deranked
+					player.sendMessage(Lang.DERANK_MESSAGE.getConfigValue(this.getPreviousGroup(), holder.getDescription()));
 					return true;
 				}
 			}

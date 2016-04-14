@@ -414,5 +414,31 @@ public class ConfigHandler {
 	public boolean isRequirementDerankable(String groupName, String requirement) {
 		return plugin.getAdvancedConfig().getBoolean("ranks." + groupName + ".requirements." + requirement + ".options.derankable", false);
 	}
+	
+	/**
+	 * Get the commands (as strings) that have to be performed when a player deranks due to a certain requirement in a group.
+	 * @param groupName Name of the group the player is in
+	 * @param requirement Name of the requirement that triggered the derank.
+	 * @return list of commands to run.
+	 */
+	public List<String> getCommandsOnDerank(String groupName, String requirement) {
+		return plugin.getAdvancedConfig().getStringList("ranks." + groupName + ".requirements." + requirement + ".options.commands on derank");
+	}
+	
+	/**
+	 * Get the name of a requirement (in the config) from a group with a specific requirement id.
+	 * @param groupName Name of the group the requirement belongs to.
+	 * @param reqID ID of the requirement
+	 * @return Name of the requirement (as specified in the config) or null if not found.
+	 */
+	public String getRequirementNameOfId(String groupName, int reqID) {
+		for (String req: this.getRequirements(groupName)) {
+			if (this.getReqId(req, groupName) == reqID) {
+				return req;
+			}
+		}
+		
+		return null;
+	}
 
 }

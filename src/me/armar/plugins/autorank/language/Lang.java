@@ -382,6 +382,10 @@ public enum Lang {
 	 * &a------------------------------------
 	 */
 	LEADERBOARD_FOOTER("leaderboard-footer", "&a------------------------------------"),
+	/**
+	 * &4You have been demoted to {0} since you did not meet a specific requirement: {1}
+	 */
+	DERANK_MESSAGE("derank-message", "&4You have been demoted to {0} since you did not meet a specific requirement: {1}"),
 	;
 
 	private static FileConfiguration LANG;
