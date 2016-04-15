@@ -46,6 +46,8 @@ public class ASkyBlockHandler implements DependencyHandler {
 		if (!isAvailable())
 			return 0;
 
+		plugin.debugMessage("ASkyBlock Island level of uuid '" + uuid + "' is " + ASkyBlockAPI.getInstance().getIslandLevel(uuid));
+		
 		return ASkyBlockAPI.getInstance().getIslandLevel(uuid);
 	}
 	
