@@ -70,8 +70,9 @@ public class RequirementsHolder {
 				return false;
 			}
 
-			// Player has completed it already
-			if (plugin.getPlayerDataHandler().hasCompletedRequirement(reqID, uuid)) {
+			// Player has completed it already but this requirement is NOT derankable
+			// If it is derankable, we don't want this method to return true when it is already completed.
+			if (plugin.getPlayerDataHandler().hasCompletedRequirement(reqID, uuid) && !this.isDerankable()) {
 				return true;
 			}
 
