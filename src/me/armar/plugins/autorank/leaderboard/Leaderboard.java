@@ -94,9 +94,15 @@ public class Leaderboard {
 			if (plugin.getPlayerDataHandler().hasLeaderboardExemption(uuids.get(i))) {
 				continue;
 			}
+			
+			System.out.println("uuids:" + uuids);
+			System.out.println("uuids.get():" + uuids.get(i));
+			
 
 			// Get the cached value of this uuid
 			final String playerName = plugin.getUUIDStorage().getCachedPlayerName(uuids.get(i));
+			
+			System.out.println("playerName:" + playerName);
 
 			if (playerName == null) {
 				plugin.debugMessage("Could not get cached player name of uuid '" + uuids.get(i) + "'!");
@@ -106,9 +112,7 @@ public class Leaderboard {
 			// Use cache on .getTimeOfPlayer() so that we don't refresh all
 			// uuids in existence.
 			if (type == dataType.TOTAL_TIME) {
-				System.out.println("uuids:" + uuids);
-				System.out.println("uuids.get():" + uuids.get(i));
-				System.out.println("playerName:" + playerName);
+				
 				times.put(uuids.get(i), (plugin.getPlaytimes().getTimeOfPlayer(playerName, true) / 60));
 			} else {
 				times.put(uuids.get(i), plugin.getPlaytimes().getTime(type, uuids.get(i)));

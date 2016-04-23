@@ -76,7 +76,7 @@
 			<url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
 		</repository>
 
-		
+
 		<repository>
 			<id>Plugin Metrics</id>
 			<url>http://repo.mcstats.org/content/repositories/public/</url>
@@ -240,6 +240,12 @@
 			<groupId>com.wasteofplastic</groupId>
 			<artifactId>askyblock</artifactId>
 			<version>2.9.8.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>PowerfulPerms</groupId>
+			<artifactId>PowerfulPerms</artifactId>
+			<version>3.0.3</version>
 		</dependency>
 
 	</dependencies>
