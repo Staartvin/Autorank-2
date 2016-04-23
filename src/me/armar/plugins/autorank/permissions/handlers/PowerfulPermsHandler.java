@@ -77,9 +77,9 @@ public class PowerfulPermsHandler implements PermissionsHandler {
 		PermissionManager permManager = powerfulPerms.getPermissionManager();
 		final List<com.github.cheesesoftware.PowerfulPermsAPI.Group> groups = permManager.getPermissionPlayer(player.getUniqueId()).getGroups();
 		final String[] newGroups = new String[groups.size()];
-
+		
 		for (int i = 0; i < groups.size(); i++) {
-			newGroups[i] = groups.get(0).getName();
+			newGroups[i] = groups.get(i).getName();
 		}
 
 		return newGroups;
@@ -100,7 +100,8 @@ public class PowerfulPermsHandler implements PermissionsHandler {
 	 */
 	public boolean removeGroup(final Player player, final String world,
 			final String group) {
-		// No known way to set via API, hence we do it the ugly route (via commands).
+		// No known way to set via API, hence we do it the ugly route (via commands).`
+		// Does not seem to work properly.
 		plugin.getServer().dispatchCommand(
 				plugin.getServer().getConsoleSender(),
 				"pp user " + player.getName() + " removegroup "
@@ -112,8 +113,8 @@ public class PowerfulPermsHandler implements PermissionsHandler {
 	@Override
 	public boolean replaceGroup(final Player player, final String world,
 			final String oldGroup, final String newGroup) {
-		return (addGroup(player, world, newGroup) && removeGroup(player, world,
-				oldGroup));
+		return (addGroup(player, world, newGroup) /*&& removeGroup(player, world,
+				oldGroup)*/);
 	}
 
 	private boolean setup() {
@@ -139,7 +140,7 @@ public class PowerfulPermsHandler implements PermissionsHandler {
 
 	@Override
 	public boolean demotePlayer(Player player, String world, String groupFrom, String groupTo) {
-		return (addGroup(player, world, groupTo) && removeGroup(player, world,
-				groupFrom));
+		return (addGroup(player, world, groupTo)/* && removeGroup(player, world,
+				groupFrom)*/);
 	}
 }

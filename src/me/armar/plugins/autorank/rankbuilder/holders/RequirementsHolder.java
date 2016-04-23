@@ -52,7 +52,7 @@ public class RequirementsHolder {
 	// If any of the requirements is true, you can return true since were using
 	// OR logic.
 	public boolean meetsRequirement(Player player, UUID uuid) {
-
+		
 		boolean result = false;
 
 		for (Requirement r : this.getRequirements()) {

@@ -50,9 +50,6 @@ public class UUIDRefresher implements Runnable {
 
 		for (int i = 0; i < uuids.size(); i++) {
 
-			//
-			//System.out.println(i%100);
-
 			// Show progress every 1000
 			if (i % 1000 == 0) {
 				plugin.debugMessage("Setup progress: " + i + "/" + uuids.size());
@@ -62,8 +59,6 @@ public class UUIDRefresher implements Runnable {
 
 			final String playerName = plugin.getUUIDStorage().getCachedPlayerName(
 					uuid);
-
-			//System.out.println("Count: " + i + "/" + uuids.size());
 
 			if (playerName == null) {
 				continue;
