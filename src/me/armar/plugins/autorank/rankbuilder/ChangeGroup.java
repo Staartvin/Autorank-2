@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.Autorank;
@@ -201,8 +202,23 @@ public class ChangeGroup {
 					
 					// Run the commands
 					for (String command: commands) {
-						String cmd = command.replace("&p", player.getName());
-						plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), cmd);
+						final String cmd = command.replace("&p", player.getName());
+						
+						if (!Bukkit.isPrimaryThread()) {
+							plugin.getServer().getScheduler().runTask(plugin, new Runnable() {
+
+								@Override
+								public void run() {
+									// Run command sync if we are currently not in main thread.
+									plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), cmd);
+								}
+								
+							});
+						} else {
+							plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), cmd);
+						}
+						
+						
 					}
 					
 					// Send player message telling them they have deranked
