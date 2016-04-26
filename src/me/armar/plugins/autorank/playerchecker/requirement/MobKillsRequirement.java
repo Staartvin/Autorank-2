@@ -57,11 +57,13 @@ public class MobKillsRequirement extends Requirement {
 		final int killed = getStatsPlugin().getNormalStat(StatsHandler.statTypes.MOBS_KILLED.toString(),
 				player.getUniqueId(), this.getWorld(), mobType);
 
+		String entityType = mobType;
+		
 		if (mobType == null) {
-			mobType = "mobs";
+			entityType = "mobs";
 		}
 
-		return killed + "/" + totalMobsKilled + " " + mobType.replace("_", " ") + "(s)";
+		return killed + "/" + totalMobsKilled + " " + entityType.replace("_", " ") + "(s)";
 	}
 
 	@Override
@@ -77,14 +79,14 @@ public class MobKillsRequirement extends Requirement {
 	}
 
 	@Override
-	public boolean setOptions(String[] options) {
+	public boolean setOptions(final String[] options) {
 
 		totalMobsKilled = Integer.parseInt(options[0]);
 
 		if (options.length > 1) {
 			mobType = options[1].trim().replace(" ", "_");
 		}
-		
+
 		return totalMobsKilled != -1;
 	}
 }
