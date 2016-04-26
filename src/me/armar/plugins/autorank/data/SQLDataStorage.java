@@ -7,7 +7,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
- * This class is used to create a connection between the MySQL database and Autorank.
+ * This class is used to create a connection between the MySQL database and
+ * Autorank.
+ * 
  * @author Staartvin
  *
  */
@@ -28,8 +30,7 @@ public class SQLDataStorage {
 	 * @param password Password
 	 * @param database Database
 	 */
-	public SQLDataStorage(final String hostname, final String username,
-			final String password, final String database) {
+	public SQLDataStorage(final String hostname, final String username, final String password, final String database) {
 		this.hostname = hostname;
 		this.username = username;
 		this.password = password;
@@ -44,7 +45,7 @@ public class SQLDataStorage {
 	public boolean connect() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
-			
+
 			final String url = "jdbc:mysql://" + hostname + "/" + database;
 
 			conn = DriverManager.getConnection(url, username, password);
@@ -139,7 +140,8 @@ public class SQLDataStorage {
 	}
 
 	/**
-	 * Tries to close the MySQL connection. If already closed, nothing will happen.
+	 * Tries to close the MySQL connection. If already closed, nothing will
+	 * happen.
 	 */
 	public void closeConnection() {
 		try {

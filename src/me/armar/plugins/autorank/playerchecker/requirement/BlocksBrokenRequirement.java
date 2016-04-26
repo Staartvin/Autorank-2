@@ -97,7 +97,7 @@ public class BlocksBrokenRequirement extends Requirement {
 	}
 
 	@Override
-	public boolean setOptions(String[] options) {
+	public boolean setOptions(final String[] options) {
 		int blocksBroken = 0;
 		int blockId = -1;
 		int damageValue = -1;

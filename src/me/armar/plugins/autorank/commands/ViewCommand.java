@@ -51,17 +51,17 @@ public class ViewCommand extends AutorankCommand {
 		final String groupName = plugin.getAPI().getPrimaryGroup(player);
 
 		if (pathName.equals("list")) {
-			
-			List<ChangeGroup> groups = plugin.getPlayerChecker().getChangeGroupManager().getChangeGroups(groupName);
+
+			final List<ChangeGroup> groups = plugin.getPlayerChecker().getChangeGroupManager()
+					.getChangeGroups(groupName);
 
 			if (groups.isEmpty()) {
 				sender.sendMessage(Lang.ONLY_DEFAULT_PATH.getConfigValue());
 				return true;
 			}
-			
+
 			sender.sendMessage(ChatColor.GREEN + "You can choose these paths: ");
 
-			
 			final String pathsString = AutorankTools.createStringFromList(groups);
 			sender.sendMessage(ChatColor.WHITE + pathsString);
 			return true;

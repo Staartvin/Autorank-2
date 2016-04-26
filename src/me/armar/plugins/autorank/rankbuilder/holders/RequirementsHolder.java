@@ -29,17 +29,17 @@ import me.armar.plugins.autorank.playerchecker.result.Result;
  */
 public class RequirementsHolder {
 
-	private Autorank plugin;
+	private final Autorank plugin;
 
-	public RequirementsHolder(Autorank plugin) {
+	public RequirementsHolder(final Autorank plugin) {
 		this.plugin = plugin;
 	}
 
 	private List<Requirement> requirements = new ArrayList<Requirement>();
-	
+
 	private boolean isDerankable = false;
 
-	public void addRequirement(Requirement req) {
+	public void addRequirement(final Requirement req) {
 		requirements.add(req);
 	}
 
@@ -51,12 +51,12 @@ public class RequirementsHolder {
 	// Using OR logic.
 	// If any of the requirements is true, you can return true since were using
 	// OR logic.
-	public boolean meetsRequirement(Player player, UUID uuid) {
-		
+	public boolean meetsRequirement(final Player player, final UUID uuid) {
+
 		boolean result = false;
 
-		for (Requirement r : this.getRequirements()) {
-			
+		for (final Requirement r : this.getRequirements()) {
+
 			final int reqID = r.getReqId();
 
 			// When optional, always true
@@ -104,13 +104,13 @@ public class RequirementsHolder {
 		return result;
 	}
 
-	public void setRequirements(List<Requirement> requirements) {
+	public void setRequirements(final List<Requirement> requirements) {
 		this.requirements = requirements;
 	}
 
 	public boolean isOptional() {
 		// If any requirement is optional, they are all optional
-		for (Requirement r : this.getRequirements()) {
+		for (final Requirement r : this.getRequirements()) {
 			if (r.isOptional())
 				return true;
 		}
@@ -119,7 +119,7 @@ public class RequirementsHolder {
 	}
 
 	public boolean useAutoCompletion() {
-		for (Requirement r : this.getRequirements()) {
+		for (final Requirement r : this.getRequirements()) {
 			if (r.useAutoCompletion())
 				return true;
 		}
@@ -129,7 +129,7 @@ public class RequirementsHolder {
 
 	public int getReqID() {
 		// All req ids are the same.
-		for (Requirement r : this.getRequirements()) {
+		for (final Requirement r : this.getRequirements()) {
 			return r.getReqId();
 		}
 
@@ -137,7 +137,7 @@ public class RequirementsHolder {
 	}
 
 	public List<Result> getResults() {
-		for (Requirement r : this.getRequirements()) {
+		for (final Requirement r : this.getRequirements()) {
 			return r.getResults();
 		}
 
@@ -145,10 +145,10 @@ public class RequirementsHolder {
 	}
 
 	public String getDescription() {
-		StringBuilder builder = new StringBuilder("");
+		final StringBuilder builder = new StringBuilder("");
 
-		List<Requirement> reqs = this.getRequirements();
-		int size = reqs.size();
+		final List<Requirement> reqs = this.getRequirements();
+		final int size = reqs.size();
 
 		if (size == 0) {
 			return "";
@@ -156,10 +156,10 @@ public class RequirementsHolder {
 			return reqs.get(0).getDescription();
 		}
 
-		String original = reqs.get(0).getDescription();
+		final String original = reqs.get(0).getDescription();
 
 		for (int i = 0; i < size; i++) {
-			Requirement r = reqs.get(i);
+			final Requirement r = reqs.get(i);
 
 			String desc = r.getDescription();
 
@@ -168,7 +168,7 @@ public class RequirementsHolder {
 				builder.append(desc + " or ");
 			} else {
 
-				int difIndex = this.getDifferenceIndex(original, desc);
+				final int difIndex = this.getDifferenceIndex(original, desc);
 
 				desc = desc.substring(difIndex);
 
@@ -184,11 +184,11 @@ public class RequirementsHolder {
 		return builder.toString();
 	}
 
-	public String getProgress(Player player) {
-		StringBuilder builder = new StringBuilder("");
+	public String getProgress(final Player player) {
+		final StringBuilder builder = new StringBuilder("");
 
-		List<Requirement> reqs = this.getRequirements();
-		int size = reqs.size();
+		final List<Requirement> reqs = this.getRequirements();
+		final int size = reqs.size();
 
 		if (size == 0) {
 			return "";
@@ -196,10 +196,10 @@ public class RequirementsHolder {
 			return reqs.get(0).getProgress(player);
 		}
 
-		String original = reqs.get(0).getProgress(player);
+		final String original = reqs.get(0).getProgress(player);
 
 		for (int i = 0; i < size; i++) {
-			Requirement r = reqs.get(i);
+			final Requirement r = reqs.get(i);
 
 			String progress = r.getProgress(player);
 
@@ -208,7 +208,7 @@ public class RequirementsHolder {
 				builder.append(progress + " or ");
 			} else {
 
-				int difIndex = this.getDifferenceIndex(original, progress);
+				final int difIndex = this.getDifferenceIndex(original, progress);
 
 				progress = progress.substring(difIndex);
 
@@ -224,18 +224,18 @@ public class RequirementsHolder {
 		return builder.toString();
 	}
 
-	private int getDifferenceIndex(String s1, String s2) {
+	private int getDifferenceIndex(final String s1, final String s2) {
 		for (int i = 0; i < s1.length(); i++) {
 			try {
-				char c1 = s1.charAt(i);
-				char c2 = s2.charAt(i);
+				final char c1 = s1.charAt(i);
+				final char c2 = s2.charAt(i);
 
 				if (Character.isDigit(c1) || Character.isDigit(c2))
 					return i;
 
 				if (c2 != c1)
 					return i;
-			} catch (IndexOutOfBoundsException e) {
+			} catch (final IndexOutOfBoundsException e) {
 				return -1;
 			}
 		}
@@ -244,14 +244,16 @@ public class RequirementsHolder {
 	}
 
 	/**
-	 * Check whether a player could be deranked if he does not meet this requirement.
+	 * Check whether a player could be deranked if he does not meet this
+	 * requirement.
+	 * 
 	 * @return true if he can be demoted, false otherwise.
 	 */
 	public boolean isDerankable() {
 		return isDerankable;
 	}
 
-	public void setDerankable(boolean isDerankable) {
+	public void setDerankable(final boolean isDerankable) {
 		this.isDerankable = isDerankable;
 	}
 }

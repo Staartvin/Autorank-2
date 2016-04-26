@@ -31,8 +31,7 @@ public class FactionsHandler implements DependencyHandler {
 	 */
 	@Override
 	public Plugin get() {
-		final Plugin plugin = this.plugin.getServer().getPluginManager()
-				.getPlugin("Factions");
+		final Plugin plugin = this.plugin.getServer().getPluginManager().getPlugin("Factions");
 
 		// WorldGuard may not be loaded
 		if (plugin == null || !(plugin instanceof Factions)) {
@@ -89,14 +88,12 @@ public class FactionsHandler implements DependencyHandler {
 
 			if (api != null) {
 				if (verbose) {
-					plugin.getLogger().info(
-							"Factions has been found and can be used!");
+					plugin.getLogger().info("Factions has been found and can be used!");
 				}
 				return true;
 			} else {
 				if (verbose) {
-					plugin.getLogger().info(
-							"Factions has been found but cannot be used!");
+					plugin.getLogger().info("Factions has been found but cannot be used!");
 				}
 				return false;
 			}

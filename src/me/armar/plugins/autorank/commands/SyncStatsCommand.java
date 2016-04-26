@@ -25,11 +25,9 @@ public class SyncStatsCommand extends AutorankCommand {
 	}
 
 	@Override
-	public boolean onCommand(final CommandSender sender, final Command cmd,
-			final String label, final String[] args) {
+	public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
-		if (!plugin.getCommandsManager().hasPermission("autorank.syncstats",
-				sender))
+		if (!plugin.getCommandsManager().hasPermission("autorank.syncstats", sender))
 			return true;
 
 		if (!plugin.getHookedStatsPlugin().isEnabled()) {
@@ -45,27 +43,23 @@ public class SyncStatsCommand extends AutorankCommand {
 			final OfflinePlayer p = plugin.getServer().getOfflinePlayer(uuid);
 
 			// Time is stored in seconds
-			final int statsPlayTime = plugin.getHookedStatsPlugin()
-					.getNormalStat("time_played", p.getUniqueId());
+			final int statsPlayTime = plugin.getHookedStatsPlugin().getNormalStat("time_played", p.getUniqueId());
 
 			if (statsPlayTime <= 0) {
 				continue;
 			}
 
 			// Update time
-			plugin.getPlaytimes().setLocalTime(uuid,
-					Math.round(statsPlayTime / 60));
+			plugin.getPlaytimes().setLocalTime(uuid, Math.round(statsPlayTime / 60));
 
 			// Increment count
 			count++;
 		}
 
 		if (count == 0) {
-			sender.sendMessage(ChatColor.GREEN
-					+ "Could not sync stats. Run command again!");
+			sender.sendMessage(ChatColor.GREEN + "Could not sync stats. Run command again!");
 		} else {
-			sender.sendMessage(ChatColor.GREEN
-					+ "Time has succesfully been updated for all entries.");
+			sender.sendMessage(ChatColor.GREEN + "Time has succesfully been updated for all entries.");
 		}
 		return true;
 	}
@@ -74,8 +68,8 @@ public class SyncStatsCommand extends AutorankCommand {
 	 * @see me.armar.plugins.autorank.commands.manager.AutorankCommand#onTabComplete(org.bukkit.command.CommandSender, org.bukkit.command.Command, java.lang.String, java.lang.String[])
 	 */
 	@Override
-	public List<String> onTabComplete(final CommandSender sender,
-			final Command cmd, final String commandLabel, final String[] args) {
+	public List<String> onTabComplete(final CommandSender sender, final Command cmd, final String commandLabel,
+			final String[] args) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -90,7 +90,7 @@ public class ChangeGroupBuilder {
 
 			// Time requirement
 
-			RequirementsHolder holder = new RequirementsHolder(plugin);
+			final RequirementsHolder holder = new RequirementsHolder(plugin);
 
 			final Requirement timeReq = new TimeRequirement();
 			timeReq.setOptions(new String[] { options[1] });
@@ -168,7 +168,7 @@ public class ChangeGroupBuilder {
 
 			// final List<Requirement> req = new ArrayList<Requirement>();
 			final List<Result> res = new ArrayList<Result>();
-			List<RequirementsHolder> holders = new ArrayList<RequirementsHolder>();
+			final List<RequirementsHolder> holders = new ArrayList<RequirementsHolder>();
 
 			for (final String requirement : configHandler.getRequirements(group)) {
 
@@ -205,12 +205,12 @@ public class ChangeGroupBuilder {
 							"Requirement '" + requirement + "' of group '" + group + "' is unknown!");
 				}
 
-				RequirementsHolder holder = new RequirementsHolder(plugin);
+				final RequirementsHolder holder = new RequirementsHolder(plugin);
 
 				// Option strings seperated
-				List<String[]> optionsList = configHandler.getOptions(requirement, group);
+				final List<String[]> optionsList = configHandler.getOptions(requirement, group);
 
-				for (String[] options : optionsList) {
+				for (final String[] options : optionsList) {
 					final Requirement newRequirement = createRequirement(AutorankTools.getCorrectName(requirement),
 							options, optional, realResults, configHandler.useAutoCompletion(group, requirement), reqId);
 
@@ -237,7 +237,7 @@ public class ChangeGroupBuilder {
 			}
 
 			for (final String resu : configHandler.getResults(group)) {
-				Result result = createResult(resu, configHandler.getResult(resu, group));
+				final Result result = createResult(resu, configHandler.getResult(resu, group));
 
 				if (result == null)
 					continue;
@@ -283,22 +283,23 @@ public class ChangeGroupBuilder {
 		}
 
 		// Find previous ranks for all change groups to establish hierarchy
-		for (String group : changeGroups.keySet()) {
+		for (final String group : changeGroups.keySet()) {
 			if (configHandler.getRankChange(group) != null) {
 				final String[] rankChange = configHandler.getRankChange(group).split(";");
 
 				String rankChangeName = null;
-				
+
 				if (rankChange.length == 1) {
 					rankChangeName = rankChange[0].trim();
 				} else {
 					rankChangeName = rankChange[1].trim();
 				}
-				
+
 				if (changeGroups.get(rankChangeName) != null) {
-					for (ChangeGroup changeGroup : changeGroups.get(rankChangeName)) {
-						if (changeGroup == null) continue;
-						
+					for (final ChangeGroup changeGroup : changeGroups.get(rankChangeName)) {
+						if (changeGroup == null)
+							continue;
+
 						changeGroup.setPreviousGroup(group);
 					}
 				}

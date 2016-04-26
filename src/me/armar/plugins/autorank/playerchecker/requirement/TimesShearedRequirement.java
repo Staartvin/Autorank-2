@@ -37,7 +37,7 @@ public class TimesShearedRequirement extends Requirement {
 	}
 
 	@Override
-	public boolean setOptions(String[] options) {
+	public boolean setOptions(final String[] options) {
 
 		try {
 			timesShorn = Integer.parseInt(options[0]);

@@ -42,14 +42,12 @@ public class PlayerKillsMobListener implements Listener {
 	public void OnKill(final EntityDeathEvent event) {
 
 		// Stats is not available
-		if (!plugin.getDependencyManager().getDependency(dependency.STATS)
-				.isAvailable())
+		if (!plugin.getDependencyManager().getDependency(dependency.STATS).isAvailable())
 			return;
 
 		final Entity e = event.getEntity();
 		if (e.getLastDamageCause() instanceof EntityDamageByEntityEvent) {
-			final EntityDamageByEntityEvent nEvent = (EntityDamageByEntityEvent) e
-					.getLastDamageCause();
+			final EntityDamageByEntityEvent nEvent = (EntityDamageByEntityEvent) e.getLastDamageCause();
 			if (nEvent.getDamager() instanceof Player) {
 
 				String extraType = null;
@@ -96,20 +94,17 @@ public class PlayerKillsMobListener implements Listener {
 					return;
 				}
 
-				final StatsAPIHandler handler = (StatsAPIHandler) plugin
-						.getDependencyManager().getDependency(dependency.STATS);
+				final StatsAPIHandler handler = (StatsAPIHandler) plugin.getDependencyManager()
+						.getDependency(dependency.STATS);
 
-				final Stat mobkilled = handler.getAPI().getStatManager()
-						.getStat(MobKilledStat.statName);
+				final Stat mobkilled = handler.getAPI().getStatManager().getStat(MobKilledStat.statName);
 
-				final StatsHolder holder = handler.getAPI().getPlayer(
-						nEvent.getDamager().getUniqueId());
+				final StatsHolder holder = handler.getAPI().getPlayer(nEvent.getDamager().getUniqueId());
 
-				holder.addEntry(mobkilled, new DefaultStatEntry(1,
-						new MetadataPair("entityType", e.getType().toString()),
-						new MetadataPair("extraType", extraType),
-						new MetadataPair("world", e.getLocation().getWorld()
-								.getName().toString())));
+				holder.addEntry(mobkilled,
+						new DefaultStatEntry(1, new MetadataPair("entityType", e.getType().toString()),
+								new MetadataPair("extraType", extraType),
+								new MetadataPair("world", e.getLocation().getWorld().getName().toString())));
 
 			}
 		}

@@ -31,8 +31,7 @@ public class EssentialsHandler implements DependencyHandler {
 	 */
 	@Override
 	public Plugin get() {
-		final Plugin plugin = this.plugin.getServer().getPluginManager()
-				.getPlugin("Essentials");
+		final Plugin plugin = this.plugin.getServer().getPluginManager().getPlugin("Essentials");
 
 		// WorldGuard may not be loaded
 		if (plugin == null || !(plugin instanceof Essentials)) {
@@ -104,14 +103,12 @@ public class EssentialsHandler implements DependencyHandler {
 
 			if (api != null) {
 				if (verbose) {
-					plugin.getLogger().info(
-							"Essentials has been found and can be used!");
+					plugin.getLogger().info("Essentials has been found and can be used!");
 				}
 				return true;
 			} else {
 				if (verbose) {
-					plugin.getLogger().info(
-							"Essentials has been found but cannot be used!");
+					plugin.getLogger().info("Essentials has been found but cannot be used!");
 				}
 				return false;
 			}

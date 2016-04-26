@@ -197,7 +197,7 @@ public class UUIDStorage {
 		return timeDifference;
 	}
 
-	public void storeUUID(String playerName, final UUID uuid, String realName) {
+	public void storeUUID(String playerName, final UUID uuid, final String realName) {
 		FileConfiguration config;
 
 		// Everything is now stored in lowercase.
@@ -215,7 +215,7 @@ public class UUIDStorage {
 			if (this.getRealName(uuid) == null) {
 				config.set(playerName + ".realName", realName);
 			}
-			
+
 			// Name didn't change, it was just out of date.
 			if (oldUser.equals(playerName)) {
 				// Don't do anything besides updating updateTime.
@@ -304,16 +304,16 @@ public class UUIDStorage {
 				"[Autorank] " + ChatColor.RED + "Converting UUID files to new format (3.7.1), this may take a while.");
 
 		// Get every name in every file and change it to lowercase.
-		for (String suffix : fileSuffixes) {
-			FileConfiguration config = getConfig(suffix);
+		for (final String suffix : fileSuffixes) {
+			final FileConfiguration config = getConfig(suffix);
 
 			// All names that are in this config
-			Set<String> names = config.getKeys(false);
+			final Set<String> names = config.getKeys(false);
 
-			for (String name : names) {
+			for (final String name : names) {
 				// Get old values
-				String uuidString = config.getString(name + ".uuid");
-				long updateTime = config.getLong(name + ".updateTime", 0);
+				final String uuidString = config.getString(name + ".uuid");
+				final long updateTime = config.getLong(name + ".updateTime", 0);
 
 				// Delete old name
 				config.set(name, null);
@@ -330,23 +330,25 @@ public class UUIDStorage {
 		// Changed all names, now update boolean in internal properties.
 		plugin.getInternalProps().hasTransferredUUIDs(true);
 	}
-	
-	public String getRealName(UUID uuid) {
+
+	public String getRealName(final UUID uuid) {
 		// Returns the real name of the player, or the cached lower case name if no real name exists.
-		String cachedName = this.getCachedPlayerName(uuid);
-		
-		if (cachedName == null) return null;
-		
-		FileConfiguration config = this.findCorrectConfig(cachedName);
-		
-		if (config == null) return null;
-		
-		Object realNameObject = config.get(cachedName + ".realName", null);
-		
+		final String cachedName = this.getCachedPlayerName(uuid);
+
+		if (cachedName == null)
+			return null;
+
+		final FileConfiguration config = this.findCorrectConfig(cachedName);
+
+		if (config == null)
+			return null;
+
+		final Object realNameObject = config.get(cachedName + ".realName", null);
+
 		return (realNameObject != null ? realNameObject.toString() : null);
 	}
-	
-	public boolean hasRealName(UUID uuid) {
+
+	public boolean hasRealName(final UUID uuid) {
 		return getRealName(uuid) != null;
 	}
 

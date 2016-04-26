@@ -13,8 +13,7 @@ public class EssentialsGeoIPRequirement extends Requirement {
 
 	@Override
 	public String getDescription() {
-		return Lang.ESSENTIALS_GEOIP_LOCATION_REQUIREMENT
-				.getConfigValue(location);
+		return Lang.ESSENTIALS_GEOIP_LOCATION_REQUIREMENT.getConfigValue(location);
 	}
 
 	@Override
@@ -36,10 +35,9 @@ public class EssentialsGeoIPRequirement extends Requirement {
 	}
 
 	@Override
-	public boolean setOptions(String[] options) {
+	public boolean setOptions(final String[] options) {
 
-		essHandler = (EssentialsHandler) this.getDependencyManager()
-				.getDependency(dependency.ESSENTIALS);
+		essHandler = (EssentialsHandler) this.getDependencyManager().getDependency(dependency.ESSENTIALS);
 
 		if (options.length != 1) {
 			return false;

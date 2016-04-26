@@ -48,7 +48,7 @@ public class GamemodeRequirement extends Requirement {
 	}
 
 	@Override
-	public boolean setOptions(String[] options) {
+	public boolean setOptions(final String[] options) {
 
 		if (options.length > 0)
 			gameMode = AutorankTools.stringtoInt(options[0]);

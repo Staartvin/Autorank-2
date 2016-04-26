@@ -15,8 +15,7 @@ public class FactionPowerRequirement extends Requirement {
 	@Override
 	public String getDescription() {
 
-		String lang = Lang.FACTIONS_POWER_REQUIREMENT
-				.getConfigValue(factionPower + "");
+		String lang = Lang.FACTIONS_POWER_REQUIREMENT.getConfigValue(factionPower + "");
 
 		// Check if this requirement is world-specific
 		if (this.isWorldSpecific()) {
@@ -29,9 +28,9 @@ public class FactionPowerRequirement extends Requirement {
 	@Override
 	public String getProgress(final Player player) {
 		final DecimalFormat df = new DecimalFormat("#.##");
-		final String doubleRounded = df.format(((FactionsHandler) getAutorank()
-				.getDependencyManager().getDependency(dependency.FACTIONS))
-				.getFactionPower(player));
+		final String doubleRounded = df
+				.format(((FactionsHandler) getAutorank().getDependencyManager().getDependency(dependency.FACTIONS))
+						.getFactionPower(player));
 
 		return doubleRounded + "/" + factionPower;
 	}
@@ -46,8 +45,8 @@ public class FactionPowerRequirement extends Requirement {
 				return false;
 		}
 
-		final FactionsHandler fHandler = (FactionsHandler) this.getAutorank()
-				.getDependencyManager().getDependency(dependency.FACTIONS);
+		final FactionsHandler fHandler = (FactionsHandler) this.getAutorank().getDependencyManager()
+				.getDependency(dependency.FACTIONS);
 
 		final double factionPower = fHandler.getFactionPower(player);
 
@@ -55,7 +54,7 @@ public class FactionPowerRequirement extends Requirement {
 	}
 
 	@Override
-	public boolean setOptions(String[] options) {
+	public boolean setOptions(final String[] options) {
 		factionPower = Double.parseDouble(options[0]);
 
 		return factionPower != -1;

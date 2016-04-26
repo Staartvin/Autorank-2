@@ -40,7 +40,7 @@ public class CheckCommand extends AutorankCommand {
 		Bukkit.getServer().getPluginManager().callEvent(event);
 
 		// final UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
-		UUID uuid = plugin.getUUIDStorage().getStoredUUID(player.getName());
+		final UUID uuid = plugin.getUUIDStorage().getStoredUUID(player.getName());
 
 		// Check if event is cancelled.
 		if (event.isCancelled())
@@ -126,12 +126,12 @@ public class CheckCommand extends AutorankCommand {
 		final List<Integer> metRequirements = new ArrayList<Integer>();
 
 		// Check if we only have optional requirements
-		for (RequirementsHolder holder : holders) {
+		for (final RequirementsHolder holder : holders) {
 			if (!holder.isOptional())
 				onlyOptional = false;
 		}
 
-		for (RequirementsHolder holder : holders) {
+		for (final RequirementsHolder holder : holders) {
 			final int reqID = holder.getReqID();
 
 			// Use auto completion
@@ -242,7 +242,7 @@ public class CheckCommand extends AutorankCommand {
 				}
 			}
 		}
-		
+
 		plugin.getPlayerChecker().checkPlayer(player);
 	}
 
@@ -266,7 +266,7 @@ public class CheckCommand extends AutorankCommand {
 					return true;
 				}
 
-				UUID uuid = plugin.getUUIDStorage().getStoredUUID(args[1]);
+				final UUID uuid = plugin.getUUIDStorage().getStoredUUID(args[1]);
 
 				if (plugin.getUUIDStorage().hasRealName(uuid)) {
 					args[1] = plugin.getUUIDStorage().getRealName(uuid);

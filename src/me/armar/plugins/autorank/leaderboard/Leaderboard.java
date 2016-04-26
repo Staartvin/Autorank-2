@@ -21,10 +21,16 @@ import me.armar.plugins.autorank.playtimes.Playtimes.dataType;
 import me.armar.plugins.autorank.util.AutorankTools;
 
 /**
- * This class is used to handle all leaderboard things. 
- * <br>When a player calls /ar leaderboard, it will show the currently cached leaderboard.
- * <br><i>/ar leaderboard force</i> can be used to forcefully update the current leaderboard.
- *  <br><i>/ar leaderboard broadcast</i> can be used to broadcast the leaderboard over the entire server.
+ * This class is used to handle all leaderboard things.
+ * <br>
+ * When a player calls /ar leaderboard, it will show the currently cached
+ * leaderboard.
+ * <br>
+ * <i>/ar leaderboard force</i> can be used to forcefully update the current
+ * leaderboard.
+ * <br>
+ * <i>/ar leaderboard broadcast</i> can be used to broadcast the leaderboard
+ * over the entire server.
  * <p>
  * Date created: 21:03:23 15 mrt. 2014
  * 
@@ -74,12 +80,15 @@ public class Leaderboard {
 	}
 
 	/**
-	 * Gets a map, the key is the UUID of a player and the value is time that player has played.
-	 * <br>This map is sorted on player time.
+	 * Gets a map, the key is the UUID of a player and the value is time that
+	 * player has played.
+	 * <br>
+	 * This map is sorted on player time.
+	 * 
 	 * @param type dataType to get the sort for.
 	 * @return a sorted map.
 	 */
-	private Map<UUID, Integer> getSortedPlaytimes(dataType type) {
+	private Map<UUID, Integer> getSortedPlaytimes(final dataType type) {
 
 		final List<UUID> uuids = plugin.getPlaytimes().getUUIDKeys(type);
 
@@ -94,14 +103,13 @@ public class Leaderboard {
 			if (plugin.getPlayerDataHandler().hasLeaderboardExemption(uuids.get(i))) {
 				continue;
 			}
-			
+
 			System.out.println("uuids:" + uuids);
 			System.out.println("uuids.get():" + uuids.get(i));
-			
 
 			// Get the cached value of this uuid
 			final String playerName = plugin.getUUIDStorage().getCachedPlayerName(uuids.get(i));
-			
+
 			System.out.println("playerName:" + playerName);
 
 			if (playerName == null) {
@@ -112,12 +120,12 @@ public class Leaderboard {
 			// Use cache on .getTimeOfPlayer() so that we don't refresh all
 			// uuids in existence.
 			if (type == dataType.TOTAL_TIME) {
-				
+
 				times.put(uuids.get(i), (plugin.getPlaytimes().getTimeOfPlayer(playerName, true) / 60));
 			} else {
 				times.put(uuids.get(i), plugin.getPlaytimes().getTime(type, uuids.get(i)));
 			}
-			
+
 		}
 
 		// Sort all values
@@ -128,6 +136,7 @@ public class Leaderboard {
 
 	/**
 	 * Sends the leaderboard to a {@linkplain CommandSender}.
+	 * 
 	 * @param sender Sender to send it to.
 	 * @param type Type of leaderboard to send.
 	 */
@@ -180,7 +189,7 @@ public class Leaderboard {
 			return false;
 	}
 
-	public void sendMessages(CommandSender sender, dataType type) {
+	public void sendMessages(final CommandSender sender, final dataType type) {
 		for (final String msg : plugin.getInternalProps().getCachedLeaderboard(type)) {
 			AutorankTools.sendColoredMessage(sender, msg);
 		}
@@ -188,9 +197,10 @@ public class Leaderboard {
 
 	/**
 	 * Forcefully update a leaderboard.
+	 * 
 	 * @param type Type of leaderboard to update.
 	 */
-	public void updateLeaderboard(dataType type) {
+	public void updateLeaderboard(final dataType type) {
 		plugin.debugMessage("Updating leaderboard '" + type.toString() + "'!");
 
 		final Map<UUID, Integer> sortedPlaytimes = getSortedPlaytimes(type);
@@ -199,7 +209,7 @@ public class Leaderboard {
 		plugin.debugMessage("Size leaderboard: " + sortedPlaytimes.size());
 
 		final List<String> stringList = new ArrayList<String>();
-		
+
 		if (type == dataType.TOTAL_TIME) {
 			stringList.add(Lang.LEADERBOARD_HEADER_ALL_TIME.getConfigValue());
 		} else if (type == dataType.DAILY_TIME) {
@@ -208,7 +218,7 @@ public class Leaderboard {
 			stringList.add(Lang.LEADERBOARD_HEADER_WEEKLY.getConfigValue());
 		} else if (type == dataType.MONTHLY_TIME) {
 			stringList.add(Lang.LEADERBOARD_HEADER_MONTHLY.getConfigValue());
-		}		
+		}
 
 		for (int i = 0; i < leaderboardLength && itr.hasNext(); i++) {
 			final Entry<UUID, Integer> entry = itr.next();
@@ -287,14 +297,15 @@ public class Leaderboard {
 
 		// messages = stringList.toArray(new String[stringList.size()]);
 	}
-	
+
 	public void updateAllLeaderboards() {
-		if (!shouldUpdateLeaderboard()) return;
-		
+		if (!shouldUpdateLeaderboard())
+			return;
+
 		plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
 			@Override
 			public void run() {
-				for (dataType type: dataType.values()) {
+				for (final dataType type : dataType.values()) {
 					updateLeaderboard(type);
 				}
 			}

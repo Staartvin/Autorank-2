@@ -13,9 +13,9 @@ import me.armar.plugins.autorank.permissions.handlers.VaultPermissionsHandler;
 
 /*
  * PermissionsPluginManager sort the tasks of removing/adding a player to a group depending
- * on the permissions plugin. 
+ * on the permissions plugin.
  * For now it supports Vault and explicit GroupManager.
- *  
+ * 
  */
 
 /**
@@ -39,8 +39,7 @@ public class PermissionsPluginManager {
 	}
 
 	protected boolean findGroupManager(final Autorank plugin) {
-		final Plugin x = plugin.getServer().getPluginManager()
-				.getPlugin("GroupManager");
+		final Plugin x = plugin.getServer().getPluginManager().getPlugin("GroupManager");
 		if (x != null) {
 			return true;
 		}
@@ -48,17 +47,15 @@ public class PermissionsPluginManager {
 	}
 
 	protected boolean findPermissionsBukkit(final Autorank plugin) {
-		final Plugin x = plugin.getServer().getPluginManager()
-				.getPlugin("PermissionsBukkit");
+		final Plugin x = plugin.getServer().getPluginManager().getPlugin("PermissionsBukkit");
 		if (x != null) {
 			return true;
 		}
 		return false;
 	}
-	
+
 	protected boolean findPowerfulPerms(final Autorank plugin) {
-		final Plugin x = plugin.getServer().getPluginManager()
-				.getPlugin("PowerfulPerms");
+		final Plugin x = plugin.getServer().getPluginManager().getPlugin("PowerfulPerms");
 		if (x != null) {
 			return true;
 		}
@@ -93,8 +90,7 @@ public class PermissionsPluginManager {
 	 */
 	public String getPrimaryGroup(final Player player) {
 		// All groups of the player
-		final String[] groups = this.getPermissionPlugin().getPlayerGroups(
-				player);
+		final String[] groups = this.getPermissionPlugin().getPlayerGroups(player);
 		// All ranks defined in the config
 		final Set<String> ranks = plugin.getConfigHandler().getRanks();
 

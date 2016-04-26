@@ -9,6 +9,7 @@ import com.wasteofplastic.askyblock.ASkyBlockAPI;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.DependencyHandler;
+
 /**
  * Handles all connections with ASkyBlock
  * <p>
@@ -31,8 +32,7 @@ public class ASkyBlockHandler implements DependencyHandler {
 	 */
 	@Override
 	public Plugin get() {
-		final Plugin plugin = this.plugin.getServer().getPluginManager()
-				.getPlugin("ASkyBlock");
+		final Plugin plugin = this.plugin.getServer().getPluginManager().getPlugin("ASkyBlock");
 
 		// WorldGuard may not be loaded
 		if (plugin == null || !(plugin instanceof ASkyBlock)) {
@@ -42,16 +42,17 @@ public class ASkyBlockHandler implements DependencyHandler {
 		return plugin;
 	}
 
-	public int getIslandLevel(UUID uuid) {
+	public int getIslandLevel(final UUID uuid) {
 		if (!isAvailable())
 			return 0;
 
-		plugin.debugMessage("ASkyBlock Island level of uuid '" + uuid + "' is " + ASkyBlockAPI.getInstance().getIslandLevel(uuid));
-		
+		plugin.debugMessage(
+				"ASkyBlock Island level of uuid '" + uuid + "' is " + ASkyBlockAPI.getInstance().getIslandLevel(uuid));
+
 		return ASkyBlockAPI.getInstance().getIslandLevel(uuid);
 	}
-	
-	public boolean hasIsland(UUID uuid) {
+
+	public boolean hasIsland(final UUID uuid) {
 		if (!isAvailable())
 			return false;
 
@@ -91,14 +92,12 @@ public class ASkyBlockHandler implements DependencyHandler {
 
 			if (api != null) {
 				if (verbose) {
-					plugin.getLogger().info(
-							"ASkyBlock has been found and can be used!");
+					plugin.getLogger().info("ASkyBlock has been found and can be used!");
 				}
 				return true;
 			} else {
 				if (verbose) {
-					plugin.getLogger().info(
-							"ASkyBlock has been found but cannot be used!");
+					plugin.getLogger().info("ASkyBlock has been found but cannot be used!");
 				}
 				return false;
 			}

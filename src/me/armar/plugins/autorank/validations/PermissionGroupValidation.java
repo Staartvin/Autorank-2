@@ -25,18 +25,15 @@ public class PermissionGroupValidation {
 	 *         config); false otherwise
 	 */
 	public boolean isValidChange(final String group) {
-		final String rankChange = autorank.getConfigHandler().getRankChange(
-				group);
-		final String[] groups = autorank.getPermPlugHandler()
-				.getPermissionPlugin().getGroups();
+		final String rankChange = autorank.getConfigHandler().getRankChange(group);
+		final String[] groups = autorank.getPermPlugHandler().getPermissionPlugin().getGroups();
 
 		if (rankChange == null)
 			return true;
 
 		if (rankChange.trim().equals("")) {
-			autorank.getWarningManager().registerWarning(
-					"Rank change of rank '" + group
-							+ "' is invalid. It doesn't exist!", 10);
+			autorank.getWarningManager()
+					.registerWarning("Rank change of rank '" + group + "' is invalid. It doesn't exist!", 10);
 
 			return false;
 		}
@@ -51,11 +48,8 @@ public class PermissionGroupValidation {
 			}
 
 			if (isMissing) {
-				autorank.getWarningManager().registerWarning(
-						"Rank change of rank '" + group
-								+ "' is invalid. Rank '" + rankChange.trim()
-								+ "' doesn't exist in the permissions file!",
-						10);
+				autorank.getWarningManager().registerWarning("Rank change of rank '" + group + "' is invalid. Rank '"
+						+ rankChange.trim() + "' doesn't exist in the permissions file!", 10);
 			}
 
 			return !isMissing;
@@ -71,22 +65,14 @@ public class PermissionGroupValidation {
 		}
 
 		if (rankTo == null) {
-			autorank.getWarningManager()
-					.registerWarning(
-							"Rank change of rank '"
-									+ group
-									+ "' is invalid. There is no rank given to promote to!",
-							10);
+			autorank.getWarningManager().registerWarning(
+					"Rank change of rank '" + group + "' is invalid. There is no rank given to promote to!", 10);
 			return false;
 		}
 
 		if (rankFrom == null) {
-			autorank.getWarningManager()
-					.registerWarning(
-							"Rank change of rank '"
-									+ group
-									+ "' is invalid. There is no rank given to promote from!",
-							10);
+			autorank.getWarningManager().registerWarning(
+					"Rank change of rank '" + group + "' is invalid. There is no rank given to promote from!", 10);
 			return false;
 		}
 
@@ -98,8 +84,7 @@ public class PermissionGroupValidation {
 				continue;
 
 			if (group1.equalsIgnoreCase(group)
-					&& autorank.getPermPlugHandler().getPermissionPlugin()
-							.getName().contains("bPermissions")) {
+					&& autorank.getPermPlugHandler().getPermissionPlugin().getName().contains("bPermissions")) {
 				// bPerms does not care about case-sensitivity.
 				isMissingRankTo = false;
 				break;
@@ -122,8 +107,7 @@ public class PermissionGroupValidation {
 			}
 
 			if (group1.equalsIgnoreCase(group)
-					&& autorank.getPermPlugHandler().getPermissionPlugin()
-							.getName().contains("bPermissions")) {
+					&& autorank.getPermPlugHandler().getPermissionPlugin().getName().contains("bPermissions")) {
 				// bPerms does not care about case-sensitivity.
 				isMissingRankFrom = false;
 				break;
@@ -136,22 +120,14 @@ public class PermissionGroupValidation {
 		}
 
 		if (isMissingRankTo) {
-			autorank.getWarningManager()
-					.registerWarning(
-							"Rank change of rank '"
-									+ group
-									+ "' is invalid. The rank to 'promote to' doesn't exist in the perm file.",
-							10);
+			autorank.getWarningManager().registerWarning("Rank change of rank '" + group
+					+ "' is invalid. The rank to 'promote to' doesn't exist in the perm file.", 10);
 			return false;
 		}
 
 		if (isMissingRankFrom) {
-			autorank.getWarningManager()
-					.registerWarning(
-							"Rank change of rank '"
-									+ group
-									+ "' is invalid. The rank to 'promote from' doesn't exist in the perm file.",
-							10);
+			autorank.getWarningManager().registerWarning("Rank change of rank '" + group
+					+ "' is invalid. The rank to 'promote from' doesn't exist in the perm file.", 10);
 			return false;
 		}
 
@@ -174,12 +150,10 @@ public class PermissionGroupValidation {
 			return false;
 
 		boolean isMissing = false;
-		final String[] groups = autorank.getPermPlugHandler()
-				.getPermissionPlugin().getGroups();
+		final String[] groups = autorank.getPermPlugHandler().getPermissionPlugin().getGroups();
 		Set<String> ranks;
 
-		final ConfigurationSection section = config
-				.getConfigurationSection("ranks");
+		final ConfigurationSection section = config.getConfigurationSection("ranks");
 		ranks = section.getKeys(false);
 
 		for (final String rank : ranks) {
@@ -195,26 +169,23 @@ public class PermissionGroupValidation {
 				}
 
 				if (rank.equalsIgnoreCase(group)
-						&& autorank.getPermPlugHandler().getPermissionPlugin()
-								.getName().contains("bPermissions")) {
+						&& autorank.getPermPlugHandler().getPermissionPlugin().getName().contains("bPermissions")) {
 					// bPerms does not care about case-sensitivity.
 					break;
 				}
 
 				if (rank.equalsIgnoreCase(group)) {
 					// Do not log but register warning
-					autorank.getWarningManager().registerWarning(
-							"Permissions group '" + rank + "' should be '"
-									+ group + "'", 10);
+					autorank.getWarningManager()
+							.registerWarning("Permissions group '" + rank + "' should be '" + group + "'", 10);
 					isMissing = true;
 					break;
 				}
 
 				if ((i == (groups.length - 1))) {
 					// If this is the last group and is not equal to the rank defined in the config:
-					autorank.getWarningManager().registerWarning(
-							"Permissions group is not defined in permissions file: "
-									+ rank, 10);
+					autorank.getWarningManager()
+							.registerWarning("Permissions group is not defined in permissions file: " + rank, 10);
 					isMissing = true;
 				}
 			}
@@ -242,8 +213,7 @@ public class PermissionGroupValidation {
 		// is any group missing
 		boolean isMissing = false;
 
-		final String[] groups = autorank.getPermPlugHandler()
-				.getPermissionPlugin().getGroups();
+		final String[] groups = autorank.getPermPlugHandler().getPermissionPlugin().getGroups();
 		final Set<String> ranks = config.getKeys(false);
 
 		for (final String rank : ranks) {
@@ -262,17 +232,15 @@ public class PermissionGroupValidation {
 				// found almost matching group
 				if (rank.equalsIgnoreCase(group)) {
 					// Do not log but register warning
-					autorank.getWarningManager().registerWarning(
-							"Permissions group '" + rank + "' should be '"
-									+ group + "'", 10);
+					autorank.getWarningManager()
+							.registerWarning("Permissions group '" + rank + "' should be '" + group + "'", 10);
 					isMissing = true;
 					break;
 				}
 
 				// If this is the last group and is not equal to the rank defined in the config:
 				if ((i == (groups.length - 1)) && !rank.equals(group)) {
-					autorank.getWarningManager().registerWarning(
-							"Permissions group is not defined: '" + rank + "'",
+					autorank.getWarningManager().registerWarning("Permissions group is not defined: '" + rank + "'",
 							10);
 					isMissing = true;
 				}
@@ -286,12 +254,8 @@ public class PermissionGroupValidation {
 			final String[] temp = value.split(" ");
 
 			if (temp.length < 3) {
-				autorank.getWarningManager()
-						.registerWarning(
-								"Rank line of rank '"
-										+ rank
-										+ "' is invalid. Take a look at the examples in the config!",
-								10);
+				autorank.getWarningManager().registerWarning(
+						"Rank line of rank '" + rank + "' is invalid. Take a look at the examples in the config!", 10);
 				isMissing = true;
 			}
 
@@ -308,8 +272,7 @@ public class PermissionGroupValidation {
 
 			if (isMissingRankTo) {
 				autorank.getWarningManager().registerWarning(
-						"Rank line of rank '" + rank + "' is invalid. Group '"
-								+ rankTo + "' doesn't exist!", 10);
+						"Rank line of rank '" + rank + "' is invalid. Group '" + rankTo + "' doesn't exist!", 10);
 				return false;
 			}
 

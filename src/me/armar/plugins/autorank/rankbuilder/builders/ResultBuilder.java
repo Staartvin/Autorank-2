@@ -23,14 +23,14 @@ public class ResultBuilder {
 				e.printStackTrace();
 			}
 		} else {
-			Bukkit.getServer().getConsoleSender().sendMessage("[Autorank] " + ChatColor.RED + "Result '" + type + "' is not a valid result type!");
+			Bukkit.getServer().getConsoleSender()
+					.sendMessage("[Autorank] " + ChatColor.RED + "Result '" + type + "' is not a valid result type!");
 			return null;
 		}
 		return res;
 	}
 
-	public void registerResult(final String type,
-			final Class<? extends Result> result) {
+	public void registerResult(final String type, final Class<? extends Result> result) {
 		results.put(type, result);
 	}
 

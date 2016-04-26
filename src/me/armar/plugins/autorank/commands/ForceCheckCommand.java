@@ -25,16 +25,13 @@ public class ForceCheckCommand extends AutorankCommand {
 	}
 
 	@Override
-	public boolean onCommand(final CommandSender sender, final Command cmd,
-			final String label, final String[] args) {
+	public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
-		if (!plugin.getCommandsManager().hasPermission("autorank.forcecheck",
-				sender))
+		if (!plugin.getCommandsManager().hasPermission("autorank.forcecheck", sender))
 			return true;
 
 		if (args.length != 2) {
-			sender.sendMessage(Lang.INVALID_FORMAT
-					.getConfigValue("/ar forcecheck <player>"));
+			sender.sendMessage(Lang.INVALID_FORMAT.getConfigValue("/ar forcecheck <player>"));
 			return true;
 		}
 
@@ -47,8 +44,7 @@ public class ForceCheckCommand extends AutorankCommand {
 		}
 
 		if (AutorankTools.isExcluded(targetPlayer)) {
-			sender.sendMessage(Lang.PLAYER_IS_EXCLUDED
-					.getConfigValue(targetPlayer.getName()));
+			sender.sendMessage(Lang.PLAYER_IS_EXCLUDED.getConfigValue(targetPlayer.getName()));
 			return true;
 		}
 
@@ -56,8 +52,7 @@ public class ForceCheckCommand extends AutorankCommand {
 		plugin.getPlayerChecker().checkPlayer(targetPlayer);
 
 		// Let checker know that we checked.
-		sender.sendMessage(ChatColor.GREEN + targetPlayer.getName()
-				+ " checked!");
+		sender.sendMessage(ChatColor.GREEN + targetPlayer.getName() + " checked!");
 
 		return true;
 	}
@@ -66,8 +61,8 @@ public class ForceCheckCommand extends AutorankCommand {
 	 * @see me.armar.plugins.autorank.commands.manager.AutorankCommand#onTabComplete(org.bukkit.command.CommandSender, org.bukkit.command.Command, java.lang.String, java.lang.String[])
 	 */
 	@Override
-	public List<String> onTabComplete(final CommandSender sender,
-			final Command cmd, final String commandLabel, final String[] args) {
+	public List<String> onTabComplete(final CommandSender sender, final Command cmd, final String commandLabel,
+			final String[] args) {
 		// TODO Auto-generated method stub
 		return null;
 	}

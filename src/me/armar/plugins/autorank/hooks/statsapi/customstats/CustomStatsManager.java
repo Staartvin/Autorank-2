@@ -21,23 +21,18 @@ public class CustomStatsManager {
 
 	public CustomStatsManager(final Autorank instance) {
 		this.plugin = instance;
-		this.handler = (StatsAPIHandler) instance.getDependencyManager()
-				.getDependency(dependency.STATS);
+		this.handler = (StatsAPIHandler) instance.getDependencyManager().getDependency(dependency.STATS);
 	}
 
 	public void registerCustomStats() {
 		handler.addStat(new MobKilledStat());
-		plugin.debugMessage("Registered '" + MobKilledStat.statName
-				+ "' to Stats.");
+		plugin.debugMessage("Registered '" + MobKilledStat.statName + "' to Stats.");
 
 		handler.addStat(new FoodEatenStat());
-		plugin.debugMessage("Registered '" + FoodEatenStat.statName
-				+ "' to Stats.");
+		plugin.debugMessage("Registered '" + FoodEatenStat.statName + "' to Stats.");
 
 		// Register listeners
-		plugin.getServer().getPluginManager()
-				.registerEvents(new PlayerEatsFoodListener(plugin), plugin);
-		plugin.getServer().getPluginManager()
-				.registerEvents(new PlayerKillsMobListener(plugin), plugin);
+		plugin.getServer().getPluginManager().registerEvents(new PlayerEatsFoodListener(plugin), plugin);
+		plugin.getServer().getPluginManager().registerEvents(new PlayerKillsMobListener(plugin), plugin);
 	}
 }

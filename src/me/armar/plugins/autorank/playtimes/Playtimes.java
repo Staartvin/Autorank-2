@@ -36,7 +36,7 @@ public class Playtimes {
 		TOTAL_TIME, DAILY_TIME, WEEKLY_TIME, MONTHLY_TIME
 	};
 
-	private HashMap<dataType, SimpleYamlConfiguration> dataFiles = new HashMap<dataType, SimpleYamlConfiguration>();
+	private final HashMap<dataType, SimpleYamlConfiguration> dataFiles = new HashMap<dataType, SimpleYamlConfiguration>();
 
 	private final PlaytimesUpdate update;
 
@@ -89,7 +89,7 @@ public class Playtimes {
 			if (time < minimum) {
 				counter++;
 
-				SimpleYamlConfiguration data = this.getDataFile(dataType.TOTAL_TIME);
+				final SimpleYamlConfiguration data = this.getDataFile(dataType.TOTAL_TIME);
 				// Remove record
 				data.set(uuid.toString(), null);
 			}
@@ -112,7 +112,7 @@ public class Playtimes {
 			@Override
 			public void run() {
 
-				SimpleYamlConfiguration data = getDataFile(dataType.TOTAL_TIME);
+				final SimpleYamlConfiguration data = getDataFile(dataType.TOTAL_TIME);
 
 				// Before running, backup stuff.
 				plugin.getBackupManager().backupFile("Data.yml", null);
@@ -250,12 +250,12 @@ public class Playtimes {
 		if (uuid == null)
 			return -1;
 
-		SimpleYamlConfiguration data = this.getDataFile(dataType.TOTAL_TIME);
+		final SimpleYamlConfiguration data = this.getDataFile(dataType.TOTAL_TIME);
 
 		return data.getInt(uuid.toString(), 0);
 	}
 
-	public List<String> getPlayerKeys(dataType type) {
+	public List<String> getPlayerKeys(final dataType type) {
 		final List<UUID> uuids = getUUIDKeys(type);
 
 		final List<String> playerNames = new ArrayList<String>();
@@ -326,11 +326,11 @@ public class Playtimes {
 		return playTime;
 	}
 
-	public List<UUID> getUUIDKeys(dataType type) {
+	public List<UUID> getUUIDKeys(final dataType type) {
 
 		final List<UUID> uuids = new ArrayList<UUID>();
 
-		SimpleYamlConfiguration data = this.getDataFile(type);
+		final SimpleYamlConfiguration data = this.getDataFile(type);
 
 		for (final String uuidString : data.getKeys(false)) {
 			UUID uuid = null;
@@ -360,7 +360,7 @@ public class Playtimes {
 	}
 
 	public void importData() {
-		SimpleYamlConfiguration data = this.getDataFile(dataType.TOTAL_TIME);
+		final SimpleYamlConfiguration data = this.getDataFile(dataType.TOTAL_TIME);
 		data.reload();
 	}
 
@@ -408,7 +408,7 @@ public class Playtimes {
 	}
 
 	public void save() {
-		for (Entry<dataType, SimpleYamlConfiguration> entry : dataFiles.entrySet()) {
+		for (final Entry<dataType, SimpleYamlConfiguration> entry : dataFiles.entrySet()) {
 			entry.getValue().save();
 		}
 	}
@@ -423,33 +423,33 @@ public class Playtimes {
 	}
 
 	public void setLocalTime(final UUID uuid, final int time) {
-		SimpleYamlConfiguration data = this.getDataFile(dataType.TOTAL_TIME);
+		final SimpleYamlConfiguration data = this.getDataFile(dataType.TOTAL_TIME);
 		data.set(uuid.toString(), time);
 	}
 
-	public SimpleYamlConfiguration getDataFile(dataType type) {
+	public SimpleYamlConfiguration getDataFile(final dataType type) {
 		return dataFiles.get(type);
 	}
 
-	public void setTime(dataType type, int value, UUID uuid) {
+	public void setTime(final dataType type, final int value, final UUID uuid) {
 		// Set time of a player of a specific type
 
-		SimpleYamlConfiguration data = this.getDataFile(type);
+		final SimpleYamlConfiguration data = this.getDataFile(type);
 
 		data.set(uuid.toString(), value);
 	}
 
-	public int getTime(dataType type, UUID uuid) {
+	public int getTime(final dataType type, final UUID uuid) {
 		// Get time of a player with specific type
-		SimpleYamlConfiguration data = this.getDataFile(type);
+		final SimpleYamlConfiguration data = this.getDataFile(type);
 
 		return data.getInt(uuid.toString(), 0);
 	}
 
-	public boolean shouldResetDatafile(dataType type) {
+	public boolean shouldResetDatafile(final dataType type) {
 		// Should we reset a specific data file?
 		// Compare date to last date in internal properties
-		Calendar cal = Calendar.getInstance();
+		final Calendar cal = Calendar.getInstance();
 		cal.setFirstDayOfWeek(Calendar.MONDAY);
 
 		if (type == dataType.DAILY_TIME) {
@@ -469,13 +469,13 @@ public class Playtimes {
 		return false;
 	}
 
-	public void resetDatafile(dataType type) {
-		SimpleYamlConfiguration data = this.getDataFile(type);
+	public void resetDatafile(final dataType type) {
+		final SimpleYamlConfiguration data = this.getDataFile(type);
 
 		plugin.debugMessage("Resetting data file '" + type + "'!");
 
 		// Delete file
-		boolean deleted = data.getInternalFile().delete();
+		final boolean deleted = data.getInternalFile().delete();
 
 		// Don't create a new file if it wasn't deleted in the first place.
 		if (!deleted)
@@ -496,7 +496,7 @@ public class Playtimes {
 		}
 	}
 
-	public void modifyTime(final UUID uuid, final int timeDifference, dataType type) {
+	public void modifyTime(final UUID uuid, final int timeDifference, final dataType type) {
 
 		final int time = this.getTime(type, uuid);
 
@@ -509,10 +509,10 @@ public class Playtimes {
 		// Check if all data files are still up to date.
 		// Check if daily, weekly or monthly files should be reset.
 
-		Calendar cal = Calendar.getInstance();
+		final Calendar cal = Calendar.getInstance();
 		cal.setFirstDayOfWeek(Calendar.MONDAY);
 
-		for (dataType type : Playtimes.dataType.values()) {
+		for (final dataType type : Playtimes.dataType.values()) {
 			if (plugin.getPlaytimes().shouldResetDatafile(type)) {
 				// We should reset it now, it has expired.
 				plugin.getPlaytimes().resetDatafile(type);
@@ -520,27 +520,27 @@ public class Playtimes {
 				int value = 0;
 				if (type == dataType.DAILY_TIME) {
 					value = cal.get(Calendar.DAY_OF_WEEK);
-					
+
 					if (plugin.getConfigHandler().shouldBroadcastDataReset()) {
 						// Should we broadcast the reset?
-						
+
 						plugin.getServer().broadcastMessage(Lang.RESET_DAILY_TIME.getConfigValue());
 					}
-					
+
 				} else if (type == dataType.WEEKLY_TIME) {
 					value = cal.get(Calendar.WEEK_OF_YEAR);
-					
+
 					if (plugin.getConfigHandler().shouldBroadcastDataReset()) {
 						// Should we broadcast the reset?
-						
+
 						plugin.getServer().broadcastMessage(Lang.RESET_WEEKLY_TIME.getConfigValue());
 					}
 				} else if (type == dataType.MONTHLY_TIME) {
 					value = cal.get(Calendar.MONTH);
-					
+
 					if (plugin.getConfigHandler().shouldBroadcastDataReset()) {
 						// Should we broadcast the reset?
-						
+
 						plugin.getServer().broadcastMessage(Lang.RESET_MONTHLY_TIME.getConfigValue());
 					}
 				}

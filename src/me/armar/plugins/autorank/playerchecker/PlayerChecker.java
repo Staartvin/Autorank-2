@@ -14,11 +14,11 @@ import me.armar.plugins.autorank.rankbuilder.holders.RequirementsHolder;
 import me.armar.plugins.autorank.util.AutorankTools;
 
 /*
- * PlayerChecker is where the magic happens :P It has a RankChangeBuilder that reads 
- * the config and makes new RankChange objects. It sends the names of the needed results 
- * and requirements to AdditionalRequirementBuilder and ResultBuilder. Those are dynamic 
- * factories because they don't have any hardcoded classes to build. You register all 
- * the requirements or results when the plugin is started. Because of this other 
+ * PlayerChecker is where the magic happens :P It has a RankChangeBuilder that reads
+ * the config and makes new RankChange objects. It sends the names of the needed results
+ * and requirements to AdditionalRequirementBuilder and ResultBuilder. Those are dynamic
+ * factories because they don't have any hardcoded classes to build. You register all
+ * the requirements or results when the plugin is started. Because of this other
  * plugins / addons can register their own custom requirements and results very easily.
  * 
  * So: PlayerChecker has a list of RankChanges and a RankChange has a list of AdditionalRequirement and Results.
@@ -66,7 +66,7 @@ public class PlayerChecker {
 		}
 
 		final ChangeGroup changeGroup = this.getChangeGroupManager().matchChangeGroup(groupName, chosenPath);
-		
+
 		if (changeGroup == null)
 			return false;
 

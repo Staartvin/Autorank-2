@@ -3,7 +3,7 @@ package me.armar.plugins.autorank.permissions;
 import org.bukkit.entity.Player;
 
 /*
- * PermissionsHandler takes care of the communications with the permissions 
+ * PermissionsHandler takes care of the communications with the permissions
  * plugin.
  * 
  */
@@ -28,11 +28,12 @@ public interface PermissionsHandler {
 	 */
 	public String[] getWorldGroups(Player player, String world);
 
-	public boolean replaceGroup(Player player, String world, String groupFrom,
-			String groupTo);
-	
+	public boolean replaceGroup(Player player, String world, String groupFrom, String groupTo);
+
 	/**
-	 * Sometimes replaceGroup does not work. You can then try to do it the reverse way, by demoting someone.
+	 * Sometimes replaceGroup does not work. You can then try to do it the
+	 * reverse way, by demoting someone.
+	 * 
 	 * @param player Player to demote
 	 * @param world On which world should we demote him? (null if every world)
 	 * @param groupFrom What is the group he's currently in

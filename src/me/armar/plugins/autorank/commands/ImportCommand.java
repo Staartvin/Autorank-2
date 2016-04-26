@@ -23,16 +23,13 @@ public class ImportCommand extends AutorankCommand {
 	}
 
 	@Override
-	public boolean onCommand(final CommandSender sender, final Command cmd,
-			final String label, final String[] args) {
+	public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
-		if (!plugin.getCommandsManager().hasPermission("autorank.import",
-				sender)) {
+		if (!plugin.getCommandsManager().hasPermission("autorank.import", sender)) {
 			return true;
 		}
 
-		AutorankTools.sendColoredMessage(sender,
-				Lang.DATA_IMPORTED.getConfigValue());
+		AutorankTools.sendColoredMessage(sender, Lang.DATA_IMPORTED.getConfigValue());
 		plugin.getPlaytimes().importData();
 
 		return true;
@@ -42,8 +39,8 @@ public class ImportCommand extends AutorankCommand {
 	 * @see me.armar.plugins.autorank.commands.manager.AutorankCommand#onTabComplete(org.bukkit.command.CommandSender, org.bukkit.command.Command, java.lang.String, java.lang.String[])
 	 */
 	@Override
-	public List<String> onTabComplete(final CommandSender sender,
-			final Command cmd, final String commandLabel, final String[] args) {
+	public List<String> onTabComplete(final CommandSender sender, final Command cmd, final String commandLabel,
+			final String[] args) {
 		// TODO Auto-generated method stub
 		return null;
 	}

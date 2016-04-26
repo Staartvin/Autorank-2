@@ -23,49 +23,45 @@ public class LeaderboardCommand extends AutorankCommand {
 	}
 
 	@Override
-	public boolean onCommand(final CommandSender sender, final Command cmd,
-			final String label, final String[] args) {
+	public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
-		if (!plugin.getCommandsManager().hasPermission("autorank.leaderboard",
-				sender)) {
+		if (!plugin.getCommandsManager().hasPermission("autorank.leaderboard", sender)) {
 			return true;
 		}
 
 		// Whether to broadcast
 		boolean broadcast = false;
 		boolean force = false;
-		
-		for (String arg: args) {
+
+		for (final String arg : args) {
 			if (arg.equalsIgnoreCase("force")) {
-				
+
 				// Check for permission
 				if (!sender.hasPermission("autorank.leaderboard.force")) {
-					sender.sendMessage(Lang.NO_PERMISSION
-							.getConfigValue("autorank.leaderboard.force"));
+					sender.sendMessage(Lang.NO_PERMISSION.getConfigValue("autorank.leaderboard.force"));
 					return true;
 				}
-				
+
 				force = true;
 			} else if (arg.equalsIgnoreCase("broadcast")) {
-				
+
 				// Check for permission
 				if (!sender.hasPermission("autorank.leaderboard.broadcast")) {
-					sender.sendMessage(Lang.NO_PERMISSION
-							.getConfigValue("autorank.leaderboard.broadcast"));
+					sender.sendMessage(Lang.NO_PERMISSION.getConfigValue("autorank.leaderboard.broadcast"));
 					return true;
 				}
-				
+
 				broadcast = true;
 			}
 		}
-		
+
 		String leaderboardType = "total";
 		dataType type = null;
-		
-		if (args.length > 1 && !args[1].equalsIgnoreCase("force")  && !args[1].equalsIgnoreCase("broadcast")) {
+
+		if (args.length > 1 && !args[1].equalsIgnoreCase("force") && !args[1].equalsIgnoreCase("broadcast")) {
 			leaderboardType = args[1].toLowerCase();
 		}
-		
+
 		if (leaderboardType.equalsIgnoreCase("total")) {
 			type = dataType.TOTAL_TIME;
 		} else if (leaderboardType.equalsIgnoreCase("daily") || leaderboardType.contains("day")) {
@@ -75,12 +71,12 @@ public class LeaderboardCommand extends AutorankCommand {
 		} else if (leaderboardType.contains("month")) {
 			type = dataType.MONTHLY_TIME;
 		}
-		
+
 		if (type == null) {
 			sender.sendMessage(Lang.INVALID_LEADERBOARD_TYPE.getConfigValue());
 			return true;
 		}
-		
+
 		if (force) {
 			// Forcely update leaderboard first.
 			plugin.getLeaderboard().updateLeaderboard(type);
@@ -99,8 +95,8 @@ public class LeaderboardCommand extends AutorankCommand {
 	 * @see me.armar.plugins.autorank.commands.manager.AutorankCommand#onTabComplete(org.bukkit.command.CommandSender, org.bukkit.command.Command, java.lang.String, java.lang.String[])
 	 */
 	@Override
-	public List<String> onTabComplete(final CommandSender sender,
-			final Command cmd, final String commandLabel, final String[] args) {
+	public List<String> onTabComplete(final CommandSender sender, final Command cmd, final String commandLabel,
+			final String[] args) {
 		// TODO Auto-generated method stub
 		return null;
 	}

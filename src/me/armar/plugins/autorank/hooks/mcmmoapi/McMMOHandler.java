@@ -28,8 +28,7 @@ public class McMMOHandler implements DependencyHandler {
 
 	@Override
 	public Plugin get() {
-		final Plugin plugin = this.plugin.getServer().getPluginManager()
-				.getPlugin("mcMMO");
+		final Plugin plugin = this.plugin.getServer().getPluginManager().getPlugin("mcMMO");
 
 		if (plugin == null || !(plugin instanceof mcMMO)) {
 			return null; // Maybe you want throw an exception instead
@@ -51,7 +50,7 @@ public class McMMOHandler implements DependencyHandler {
 			/*
 			Class<? extends Exception> error = e.getClass();
 			String errorMessage = error.toString().toLowerCase();
-
+			
 			if (errorMessage.contains("mcmmoplayernotfound")) {
 				plugin.getLogger()
 						.severe("Could not get user '"
@@ -60,8 +59,7 @@ public class McMMOHandler implements DependencyHandler {
 			}*/
 
 			// Instead of erroring, use cache value
-			powerLevel = ExperienceAPI.getPowerLevelOffline(player
-					.getUniqueId());
+			powerLevel = ExperienceAPI.getPowerLevelOffline(player.getUniqueId());
 
 		}
 
@@ -89,8 +87,7 @@ public class McMMOHandler implements DependencyHandler {
 
 			// Error only when invalid skill
 			if (errorMessage.contains("invalidskill")) {
-				plugin.getLogger().warning(
-						"Skill '" + skillName + "' is not a valid skill!");
+				plugin.getLogger().warning("Skill '" + skillName + "' is not a valid skill!");
 				return -1;
 			} /*else if (errorMessage.contains("mcmmoplayernotfound")) {
 				plugin.getLogger()
@@ -102,8 +99,7 @@ public class McMMOHandler implements DependencyHandler {
 				}*/
 
 			// instead of erroring, get cache value.
-			skillLevel = ExperienceAPI.getLevelOffline(player.getUniqueId(),
-					skillName);
+			skillLevel = ExperienceAPI.getLevelOffline(player.getUniqueId(), skillName);
 		}
 
 		return skillLevel;
@@ -143,15 +139,13 @@ public class McMMOHandler implements DependencyHandler {
 
 			if (api != null) {
 				if (verbose) {
-					plugin.getLogger().info(
-							"mcMMO has been found and can be used!");
+					plugin.getLogger().info("mcMMO has been found and can be used!");
 				}
 
 				return true;
 			} else {
 				if (verbose) {
-					plugin.getLogger().info(
-							"mcMMO has been found but cannot be used!");
+					plugin.getLogger().info("mcMMO has been found but cannot be used!");
 				}
 				return false;
 			}

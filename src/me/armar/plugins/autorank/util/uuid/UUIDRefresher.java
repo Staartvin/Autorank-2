@@ -45,8 +45,7 @@ public class UUIDRefresher implements Runnable {
 		final List<UUID> notOutdated = new ArrayList<UUID>();
 
 		plugin.debugMessage("Starting up refreshing uuids...");
-		plugin.debugMessage("Setup will take "
-				+ AutorankTools.timeToString(uuids.size() / 110, Time.SECONDS));
+		plugin.debugMessage("Setup will take " + AutorankTools.timeToString(uuids.size() / 110, Time.SECONDS));
 
 		for (int i = 0; i < uuids.size(); i++) {
 
@@ -57,8 +56,7 @@ public class UUIDRefresher implements Runnable {
 
 			final UUID uuid = uuids.get(i);
 
-			final String playerName = plugin.getUUIDStorage().getCachedPlayerName(
-					uuid);
+			final String playerName = plugin.getUUIDStorage().getCachedPlayerName(uuid);
 
 			if (playerName == null) {
 				continue;
@@ -106,13 +104,12 @@ public class UUIDRefresher implements Runnable {
 
 			final double dif = count - countFloored;
 
-			// Add remaining stuff. 
+			// Add remaining stuff.
 			timeSpent += 600 + dif * 500;
 		}
 
-		plugin.debugMessage("Refreshing "
-				+ size
-				+ " uuids, assuming all uuids are outdated, this will take at max. about");
+		plugin.debugMessage(
+				"Refreshing " + size + " uuids, assuming all uuids are outdated, this will take at max. about");
 		plugin.debugMessage(AutorankTools.timeToString(timeSpent, Time.SECONDS));
 
 		final Map<UUID, String> names = UUIDManager.getPlayers(uuids);

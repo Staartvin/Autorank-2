@@ -28,8 +28,7 @@ public class GlobalTimeRequirement extends Requirement {
 	@Override
 	public String getProgress(final Player player) {
 
-		final int playtime = getAutorank().getPlaytimes().getGlobalTime(
-				player.getUniqueId());
+		final int playtime = getAutorank().getPlaytimes().getGlobalTime(player.getUniqueId());
 
 		return playtime + "/" + globalTime;
 	}
@@ -38,17 +37,16 @@ public class GlobalTimeRequirement extends Requirement {
 	public boolean meetsRequirement(final Player player) {
 		final UUID uuid = player.getUniqueId();
 
-		final double playtime = this.getAutorank().getPlaytimes()
-				.getGlobalTime(uuid);
+		final double playtime = this.getAutorank().getPlaytimes().getGlobalTime(uuid);
 
 		return globalTime != -1 && playtime >= globalTime;
 	}
 
 	@Override
-	public boolean setOptions(String[] options) {
+	public boolean setOptions(final String[] options) {
 
 		globalTime = AutorankTools.stringToTime(options[0], Time.MINUTES);
-		
+
 		return globalTime != -1;
 	}
 }

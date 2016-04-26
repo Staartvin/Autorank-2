@@ -44,11 +44,9 @@ public class ChangeGroupManager {
 		changeGroups.clear();
 
 		if (plugin.getConfigHandler().useAdvancedConfig()) {
-			builder.initialiseChangeGroups(false, plugin.getAdvancedConfig(),
-					changeGroups);
+			builder.initialiseChangeGroups(false, plugin.getAdvancedConfig(), changeGroups);
 		} else {
-			builder.initialiseChangeGroups(true, plugin.getSimpleConfig(),
-					changeGroups);
+			builder.initialiseChangeGroups(true, plugin.getSimpleConfig(), changeGroups);
 		}
 
 		for (final String message : debugChangeGroups(true)) {
@@ -64,8 +62,7 @@ public class ChangeGroupManager {
 
 		messages.add(" ------------------- ChangeGroup debug info ------------------- ");
 
-		for (final Entry<String, List<ChangeGroup>> entry : changeGroups
-				.entrySet()) {
+		for (final Entry<String, List<ChangeGroup>> entry : changeGroups.entrySet()) {
 			final String groupName = entry.getKey();
 			final List<ChangeGroup> groups = entry.getValue();
 
@@ -76,10 +73,8 @@ public class ChangeGroupManager {
 
 				// Provide more info
 				if (deepInfo) {
-					messages.add("    - " + group.getRequirementsHolders().size()
-							+ " requirements");
-					messages.add("    - " + group.getResults().size()
-							+ " results");
+					messages.add("    - " + group.getRequirementsHolders().size() + " requirements");
+					messages.add("    - " + group.getResults().size() + " results");
 				}
 			}
 
@@ -105,11 +100,9 @@ public class ChangeGroupManager {
 	 * @param chosenPath The internal name of the ChangeGroup
 	 * @return a ChangeGroup class that corresponds to the internal name given.
 	 */
-	public ChangeGroup matchChangeGroup(final String parentGroup,
-			final String chosenPath) {
+	public ChangeGroup matchChangeGroup(final String parentGroup, final String chosenPath) {
 		final List<ChangeGroup> changeGroup = this.getChangeGroups(parentGroup);
 
-		
 		if (changeGroup == null)
 			return null;
 
@@ -128,10 +121,8 @@ public class ChangeGroupManager {
 		return null;
 	}
 
-	public ChangeGroup matchChangeGroupFromDisplayName(
-			final String parentGroup, final String displayName) {
-		final List<ChangeGroup> changeGroupList = this
-				.getChangeGroups(parentGroup);
+	public ChangeGroup matchChangeGroupFromDisplayName(final String parentGroup, final String displayName) {
+		final List<ChangeGroup> changeGroupList = this.getChangeGroups(parentGroup);
 
 		for (final ChangeGroup group : changeGroupList) {
 			if (group.getDisplayName().toLowerCase().equals(displayName)) {
@@ -141,14 +132,15 @@ public class ChangeGroupManager {
 
 		return null;
 	}
-	
-	public boolean isDefinedGroup(String groupName) {
+
+	public boolean isDefinedGroup(final String groupName) {
 		// Whether this group is a parent group that has a rank up path.
-		
-		for (String group: changeGroups.keySet()) {
-			if (group.equalsIgnoreCase(groupName)) return true;
+
+		for (final String group : changeGroups.keySet()) {
+			if (group.equalsIgnoreCase(groupName))
+				return true;
 		}
-		
+
 		return false;
 	}
 

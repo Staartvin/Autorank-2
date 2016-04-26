@@ -25,18 +25,16 @@ public class ArchiveCommand extends AutorankCommand {
 	}
 
 	@Override
-	public boolean onCommand(final CommandSender sender, final Command cmd,
-			final String label, final String[] args) {
+	public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
-		if (!plugin.getCommandsManager().hasPermission("autorank.archive",
-				sender)) {
+		if (!plugin.getCommandsManager().hasPermission("autorank.archive", sender)) {
 			return true;
 		}
 
 		int rate = -1;
 
 		if (args.length != 2) {
-			
+
 			sender.sendMessage(Lang.INVALID_FORMAT.getConfigValue("/ar archive <minimum>"));
 			return true;
 		}
@@ -44,17 +42,13 @@ public class ArchiveCommand extends AutorankCommand {
 		rate = AutorankTools.stringToTime(args[1], Time.MINUTES);
 
 		if (rate <= 0) {
-			sender.sendMessage(ChatColor.RED
-					+ Lang.INVALID_FORMAT
-							.getConfigValue("/ar archive 10d/10h/10m"));
+			sender.sendMessage(ChatColor.RED + Lang.INVALID_FORMAT.getConfigValue("/ar archive 10d/10h/10m"));
 			return true;
 		}
 
-		sender.sendMessage(ChatColor.GREEN + "Removed " + ChatColor.YELLOW
-				+ plugin.getPlaytimes().archive(rate) + "" + ChatColor.GREEN
-				+ " records below " + ChatColor.YELLOW
-				+ AutorankTools.timeToString(rate, Time.MINUTES)
-				+ ChatColor.GREEN + ".");
+		sender.sendMessage(ChatColor.GREEN + "Removed " + ChatColor.YELLOW + plugin.getPlaytimes().archive(rate) + ""
+				+ ChatColor.GREEN + " records below " + ChatColor.YELLOW
+				+ AutorankTools.timeToString(rate, Time.MINUTES) + ChatColor.GREEN + ".");
 		return true;
 	}
 
@@ -62,8 +56,8 @@ public class ArchiveCommand extends AutorankCommand {
 	 * @see me.armar.plugins.autorank.commands.manager.AutorankCommand#onTabComplete(org.bukkit.command.CommandSender, org.bukkit.command.Command, java.lang.String, java.lang.String[])
 	 */
 	@Override
-	public List<String> onTabComplete(final CommandSender sender,
-			final Command cmd, final String commandLabel, final String[] args) {
+	public List<String> onTabComplete(final CommandSender sender, final Command cmd, final String commandLabel,
+			final String[] args) {
 		// TODO Auto-generated method stub
 		return null;
 	}

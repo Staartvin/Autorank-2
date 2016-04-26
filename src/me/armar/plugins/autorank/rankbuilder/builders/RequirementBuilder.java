@@ -22,15 +22,16 @@ public class RequirementBuilder {
 			} catch (final Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} else {
-				Bukkit.getServer().getConsoleSender().sendMessage("[Autorank] " + ChatColor.RED + "Requirement '" + type + "' is not a valid requirement type!");
-				return null;
 			}
+		else {
+			Bukkit.getServer().getConsoleSender().sendMessage(
+					"[Autorank] " + ChatColor.RED + "Requirement '" + type + "' is not a valid requirement type!");
+			return null;
+		}
 		return res;
 	}
 
-	public void registerRequirement(final String type,
-			final Class<? extends Requirement> requirement) {
+	public void registerRequirement(final String type, final Class<? extends Requirement> requirement) {
 		// Add type to the list
 		reqs.put(type, requirement);
 

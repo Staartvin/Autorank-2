@@ -48,7 +48,7 @@ public class McMMOSkillLevelRequirement extends Requirement {
 	}
 
 	@Override
-	public boolean setOptions(String[] options) {
+	public boolean setOptions(final String[] options) {
 
 		handler = (McMMOHandler) this.getDependencyManager().getDependency(dependency.MCMMO);
 

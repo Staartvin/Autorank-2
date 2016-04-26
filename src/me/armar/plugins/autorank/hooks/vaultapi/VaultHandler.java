@@ -34,8 +34,7 @@ public class VaultHandler implements DependencyHandler {
 	 */
 	@Override
 	public Plugin get() {
-		final Plugin plugin = this.plugin.getServer().getPluginManager()
-				.getPlugin("Vault");
+		final Plugin plugin = this.plugin.getServer().getPluginManager().getPlugin("Vault");
 
 		// WorldGuard may not be loaded
 		if (plugin == null || !(plugin instanceof Vault)) {
@@ -78,14 +77,12 @@ public class VaultHandler implements DependencyHandler {
 
 			if (api != null && setupEconomy() && setupPermissions()) {
 				if (verbose) {
-					plugin.getLogger().info(
-							"Vault has been found and can be used!");
+					plugin.getLogger().info("Vault has been found and can be used!");
 				}
 				return true;
 			} else {
 				if (verbose) {
-					plugin.getLogger().info(
-							"Vault has been found but cannot be used!");
+					plugin.getLogger().info("Vault has been found but cannot be used!");
 				}
 				return false;
 			}
@@ -93,8 +90,7 @@ public class VaultHandler implements DependencyHandler {
 	}
 
 	private boolean setupEconomy() {
-		final RegisteredServiceProvider<Economy> economyProvider = Bukkit
-				.getServer().getServicesManager()
+		final RegisteredServiceProvider<Economy> economyProvider = Bukkit.getServer().getServicesManager()
 				.getRegistration(net.milkbowl.vault.economy.Economy.class);
 		if (economyProvider != null) {
 			economy = economyProvider.getProvider();
@@ -104,9 +100,7 @@ public class VaultHandler implements DependencyHandler {
 	}
 
 	private boolean setupPermissions() {
-		final RegisteredServiceProvider<Permission> permissionProvider = Bukkit
-				.getServer()
-				.getServicesManager()
+		final RegisteredServiceProvider<Permission> permissionProvider = Bukkit.getServer().getServicesManager()
 				.getRegistration(net.milkbowl.vault.permission.Permission.class);
 		if (permissionProvider != null) {
 			permission = permissionProvider.getProvider();

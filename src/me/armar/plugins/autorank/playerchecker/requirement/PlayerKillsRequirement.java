@@ -11,8 +11,7 @@ public class PlayerKillsRequirement extends Requirement {
 
 	@Override
 	public String getDescription() {
-		String lang = Lang.PLAYER_KILLS_REQUIREMENT
-				.getConfigValue(totalPlayersKilled + "");
+		String lang = Lang.PLAYER_KILLS_REQUIREMENT.getConfigValue(totalPlayersKilled + "");
 
 		// Check if this requirement is world-specific
 		if (this.isWorldSpecific()) {
@@ -24,8 +23,7 @@ public class PlayerKillsRequirement extends Requirement {
 
 	@Override
 	public String getProgress(final Player player) {
-		final int killed = getStatsPlugin().getNormalStat(
-				StatsHandler.statTypes.PLAYERS_KILLED.toString(),
+		final int killed = getStatsPlugin().getNormalStat(StatsHandler.statTypes.PLAYERS_KILLED.toString(),
 				player.getUniqueId(), this.getWorld());
 
 		return killed + "/" + totalPlayersKilled + " player(s)";
@@ -33,15 +31,14 @@ public class PlayerKillsRequirement extends Requirement {
 
 	@Override
 	public boolean meetsRequirement(final Player player) {
-		final int killed = getStatsPlugin().getNormalStat(
-				StatsHandler.statTypes.PLAYERS_KILLED.toString(),
+		final int killed = getStatsPlugin().getNormalStat(StatsHandler.statTypes.PLAYERS_KILLED.toString(),
 				player.getUniqueId(), this.getWorld());
 
 		return killed >= totalPlayersKilled;
 	}
 
 	@Override
-	public boolean setOptions(String[] options) {
+	public boolean setOptions(final String[] options) {
 
 		try {
 			totalPlayersKilled = Integer.parseInt(options[0]);

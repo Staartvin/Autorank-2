@@ -21,8 +21,7 @@ public class WorldGuardRegionRequirement extends Requirement {
 	@Override
 	public String getDescription() {
 
-		String lang = Lang.WORLD_GUARD_REGION_REQUIREMENT
-				.getConfigValue(regionName);
+		String lang = Lang.WORLD_GUARD_REGION_REQUIREMENT.getConfigValue(regionName);
 
 		// Check if this requirement is world-specific
 		if (this.isWorldSpecific()) {
@@ -48,14 +47,14 @@ public class WorldGuardRegionRequirement extends Requirement {
 				return false;
 		}
 
-		final WorldGuardHandler wgH = (WorldGuardHandler) this.getAutorank()
-				.getDependencyManager().getDependency(dependency.WORLDGUARD);
+		final WorldGuardHandler wgH = (WorldGuardHandler) this.getAutorank().getDependencyManager()
+				.getDependency(dependency.WORLDGUARD);
 
 		return wgH.isInRegion(player, regionName);
 	}
 
 	@Override
-	public boolean setOptions(String[] options) {
+	public boolean setOptions(final String[] options) {
 		if (options.length > 0) {
 			regionName = options[0].trim();
 		}

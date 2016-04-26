@@ -89,7 +89,7 @@ public class LocationRequirement extends Requirement {
 	}
 
 	@Override
-	public boolean setOptions(String[] options) {
+	public boolean setOptions(final String[] options) {
 
 		// Location = x;y;z;world;radius
 		if (options.length != 5) {

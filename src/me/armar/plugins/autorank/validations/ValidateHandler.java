@@ -27,19 +27,16 @@ public class ValidateHandler {
 		}
 
 		if (!correctSetup) {
-			autorank.getLogger().severe(
-					"There are invalid groups defined in the config!");
+			autorank.getLogger().severe("There are invalid groups defined in the config!");
 			autorank.getLogger().severe("Check your config!");
 			return false;
 		} else {
-			autorank.getLogger()
-					.info("Config files have been correctly setup!");
+			autorank.getLogger().info("Config files have been correctly setup!");
 		}
 
 		// Check for Stats required requirements
 		if (!statsValidate.validateRequirements(config)) {
-			autorank.getLogger().severe(
-					"You need Stats for some requirements that you use!");
+			autorank.getLogger().severe("You need Stats for some requirements that you use!");
 			return false;
 		}
 

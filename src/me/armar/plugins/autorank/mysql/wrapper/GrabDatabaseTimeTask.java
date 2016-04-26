@@ -10,7 +10,8 @@ import me.armar.plugins.autorank.data.SQLDataStorage;
 /**
  * This will get the database time.
  * <br>
- * <br>We have to wait for the thread to finish before we can get the results.
+ * <br>
+ * We have to wait for the thread to finish before we can get the results.
  * <br>
  * Every database lookup will have to have its own thread.
  * 
@@ -23,8 +24,7 @@ public class GrabDatabaseTimeTask implements Callable<Integer> {
 	private final String table;
 	private final UUID uuid;
 
-	public GrabDatabaseTimeTask(final SQLDataStorage mysql, final UUID uuid,
-			final String table) {
+	public GrabDatabaseTimeTask(final SQLDataStorage mysql, final UUID uuid, final String table) {
 		this.mysql = mysql;
 		this.uuid = uuid;
 		this.table = table;
@@ -40,8 +40,7 @@ public class GrabDatabaseTimeTask implements Callable<Integer> {
 
 		int time = -1;
 
-		final String statement = "SELECT * FROM " + table + " WHERE uuid='"
-				+ uuid.toString() + "'";
+		final String statement = "SELECT * FROM " + table + " WHERE uuid='" + uuid.toString() + "'";
 		final ResultSet rs = mysql.executeQuery(statement);
 
 		if (rs == null)

@@ -106,9 +106,7 @@ public class WarningManager {
 
 	public void startWarningTask() {
 		// Create a new task that runs every 30 seconds (will show a warning every 30 seconds)
-		plugin.getServer()
-				.getScheduler()
-				.runTaskTimerAsynchronously(plugin,
-						new WarningNoticeTask(plugin), 0, 30L * 20L);
+		plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new WarningNoticeTask(plugin), 0,
+				30L * 20L);
 	}
 }

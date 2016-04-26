@@ -30,8 +30,7 @@ public class OnTimeHandler implements DependencyHandler {
 	 */
 	@Override
 	public Plugin get() {
-		final Plugin plugin = this.plugin.getServer().getPluginManager()
-				.getPlugin("OnTime");
+		final Plugin plugin = this.plugin.getServer().getPluginManager().getPlugin("OnTime");
 
 		// WorldGuard may not be loaded
 		if (plugin == null || !(plugin instanceof OnTime)) {
@@ -82,14 +81,12 @@ public class OnTimeHandler implements DependencyHandler {
 
 			if (api != null) {
 				if (verbose) {
-					plugin.getLogger().info(
-							"OnTime has been found and can be used!");
+					plugin.getLogger().info("OnTime has been found and can be used!");
 				}
 				return true;
 			} else {
 				if (verbose) {
-					plugin.getLogger().info(
-							"OnTime has been found but cannot be used!");
+					plugin.getLogger().info("OnTime has been found but cannot be used!");
 				}
 				return false;
 			}

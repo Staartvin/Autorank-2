@@ -132,7 +132,10 @@ public class Autorank extends JavaPlugin {
 
 	/**
 	 * Sends a message via the debug channel of Autorank.
-	 * <br>It will only show up in console if the debug option in the Settings.yml is turned on.
+	 * <br>
+	 * It will only show up in console if the debug option in the Settings.yml
+	 * is turned on.
+	 * 
 	 * @param message Message to send.
 	 */
 	public void debugMessage(final String message) {
@@ -441,7 +444,9 @@ public class Autorank extends JavaPlugin {
 
 	/**
 	 * Get the current {@linkplain StatsPlugin} that is hooked.
-	 * @return current {@linkplain StatsPlugin} that is hooked or {@linkplain DummyHandler} if no stats plugin is found.
+	 * 
+	 * @return current {@linkplain StatsPlugin} that is hooked or
+	 *         {@linkplain DummyHandler} if no stats plugin is found.
 	 */
 	public StatsPlugin getHookedStatsPlugin() {
 		return getDependencyManager().getStatsPlugin();
@@ -497,6 +502,7 @@ public class Autorank extends JavaPlugin {
 
 	/**
 	 * Checks whether the current version of Autorank is a DEV version.
+	 * 
 	 * @return true if is, false otherwise.
 	 */
 	public boolean isDevVersion() {
@@ -505,7 +511,8 @@ public class Autorank extends JavaPlugin {
 	}
 
 	/**
-	 * @see {@linkplain me.armar.plugins.autorank.api.API#registerRequirement(String, Class) registerRequirement()}
+	 * @see {@linkplain me.armar.plugins.autorank.api.API#registerRequirement(String, Class)
+	 *      registerRequirement()}
 	 */
 	public void registerRequirement(final String name, final Class<? extends Requirement> requirement) {
 		this.getPlayerChecker().getChangeGroupManager().getBuilder().getRequirementBuilder().registerRequirement(name,
@@ -513,7 +520,8 @@ public class Autorank extends JavaPlugin {
 	}
 
 	/**
-	 * @see {@linkplain me.armar.plugins.autorank.api.API#registerResult(String, Class) registerResult()}
+	 * @see {@linkplain me.armar.plugins.autorank.api.API#registerResult(String, Class)
+	 *      registerResult()}
 	 */
 	public void registerResult(final String name, final Class<? extends Result> result) {
 		this.getPlayerChecker().getChangeGroupManager().getBuilder().getResultBuilder().registerResult(name, result);
@@ -601,6 +609,7 @@ public class Autorank extends JavaPlugin {
 
 	/**
 	 * Starts the metrics of Autorank.
+	 * 
 	 * @return true if succesfully started, false otherwise.
 	 */
 	private boolean startMetrics() {
@@ -661,7 +670,7 @@ public class Autorank extends JavaPlugin {
 		return internalProps;
 	}
 
-	public void setInternalProps(InternalProperties internalProps) {
+	public void setInternalProps(final InternalProperties internalProps) {
 		this.internalProps = internalProps;
 	}
 }

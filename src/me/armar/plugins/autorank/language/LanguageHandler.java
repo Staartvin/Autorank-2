@@ -56,17 +56,14 @@ public class LanguageHandler {
 	@SuppressWarnings("deprecation")
 	public void reloadConfig() {
 		if (languageConfigFile == null) {
-			languageConfigFile = new File(plugin.getDataFolder() + "/lang",
-					"lang.yml");
+			languageConfigFile = new File(plugin.getDataFolder() + "/lang", "lang.yml");
 		}
-		languageConfig = YamlConfiguration
-				.loadConfiguration(languageConfigFile);
+		languageConfig = YamlConfiguration.loadConfiguration(languageConfigFile);
 
 		// Look for defaults in the jar
 		final InputStream defConfigStream = plugin.getResource("lang.yml");
 		if (defConfigStream != null) {
-			final YamlConfiguration defConfig = YamlConfiguration
-					.loadConfiguration(defConfigStream);
+			final YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
 			languageConfig.setDefaults(defConfig);
 		}
 	}
@@ -78,8 +75,7 @@ public class LanguageHandler {
 		try {
 			getConfig().save(languageConfigFile);
 		} catch (final IOException ex) {
-			plugin.getLogger().log(Level.SEVERE,
-					"Could not save config to " + languageConfigFile, ex);
+			plugin.getLogger().log(Level.SEVERE, "Could not save config to " + languageConfigFile, ex);
 		}
 	}
 }

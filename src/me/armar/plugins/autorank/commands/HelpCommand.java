@@ -24,8 +24,7 @@ public class HelpCommand extends AutorankCommand {
 	}
 
 	@Override
-	public boolean onCommand(final CommandSender sender, final Command cmd,
-			final String label, final String[] args) {
+	public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
 		if (args.length == 1) {
 			showHelpPages(sender, 1);
@@ -34,8 +33,7 @@ public class HelpCommand extends AutorankCommand {
 			try {
 				page = Integer.parseInt(args[1]);
 			} catch (final Exception e) {
-				sender.sendMessage(ChatColor.RED
-						+ Lang.INVALID_NUMBER.getConfigValue(args[1]));
+				sender.sendMessage(ChatColor.RED + Lang.INVALID_NUMBER.getConfigValue(args[1]));
 				return true;
 			}
 			showHelpPages(sender, page);
@@ -44,8 +42,8 @@ public class HelpCommand extends AutorankCommand {
 	}
 
 	private void showHelpPages(final CommandSender sender, int page) {
-		List<AutorankCommand> commands = new ArrayList<AutorankCommand>(plugin
-				.getCommandsManager().getRegisteredCommands().values());
+		List<AutorankCommand> commands = new ArrayList<AutorankCommand>(
+				plugin.getCommandsManager().getRegisteredCommands().values());
 
 		// Change commands list
 		if (plugin.getConfigHandler().doBaseHelpPageOnPermission()) {
@@ -98,8 +96,7 @@ public class HelpCommand extends AutorankCommand {
 
 			final AutorankCommand command = commands.get(i);
 
-			sender.sendMessage(ChatColor.AQUA + command.getUsage()
-					+ ChatColor.GRAY + " - " + command.getDescription());
+			sender.sendMessage(ChatColor.AQUA + command.getUsage() + ChatColor.GRAY + " - " + command.getDescription());
 		}
 
 		sender.sendMessage(ChatColor.BLUE + "Page " + page + " of " + maxPages);
@@ -109,8 +106,8 @@ public class HelpCommand extends AutorankCommand {
 	 * @see me.armar.plugins.autorank.commands.manager.AutorankCommand#onTabComplete(org.bukkit.command.CommandSender, org.bukkit.command.Command, java.lang.String, java.lang.String[])
 	 */
 	@Override
-	public List<String> onTabComplete(final CommandSender sender,
-			final Command cmd, final String commandLabel, final String[] args) {
+	public List<String> onTabComplete(final CommandSender sender, final Command cmd, final String commandLabel,
+			final String[] args) {
 		// TODO Auto-generated method stub
 		return null;
 	}

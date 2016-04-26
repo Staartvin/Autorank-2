@@ -25,14 +25,12 @@ public class TeleportResult extends Result {
 			return false;
 
 		if (options.length == 6) {
-			location = new Location(Bukkit.getServer().getWorld(options[3]),
-					Integer.parseInt(options[0]), Integer.parseInt(options[1]),
-					Integer.parseInt(options[2]), Float.parseFloat(options[4]),
+			location = new Location(Bukkit.getServer().getWorld(options[3]), Integer.parseInt(options[0]),
+					Integer.parseInt(options[1]), Integer.parseInt(options[2]), Float.parseFloat(options[4]),
 					Float.parseFloat(options[5]));
 		} else {
-			location = new Location(Bukkit.getServer().getWorld(options[3]),
-					Integer.parseInt(options[0]), Integer.parseInt(options[1]),
-					Integer.parseInt(options[2]));
+			location = new Location(Bukkit.getServer().getWorld(options[3]), Integer.parseInt(options[0]),
+					Integer.parseInt(options[1]), Integer.parseInt(options[2]));
 		}
 		return location != null;
 	}

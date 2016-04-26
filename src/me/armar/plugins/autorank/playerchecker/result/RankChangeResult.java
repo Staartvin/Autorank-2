@@ -23,22 +23,17 @@ public class RankChangeResult extends Result {
 			oldrank = from;
 		}
 		if (world != null) {
-			this.getAutorank()
-					.getLogger()
-					.info("Promote " + player.getName() + " on world " + world
-							+ " from " + oldrank + " to " + to);
+			this.getAutorank().getLogger()
+					.info("Promote " + player.getName() + " on world " + world + " from " + oldrank + " to " + to);
 		} else {
-			this.getAutorank()
-					.getLogger()
-					.info("Promote " + player.getName() + " globally from "
-							+ oldrank + " to " + to);
+			this.getAutorank().getLogger()
+					.info("Promote " + player.getName() + " globally from " + oldrank + " to " + to);
 		}
 
 		// Call PlayerPromoteEvent
 
 		// Create the event here
-		final PlayerPromoteEvent event = new PlayerPromoteEvent(player, world,
-				oldrank, to);
+		final PlayerPromoteEvent event = new PlayerPromoteEvent(player, world, oldrank, to);
 		// Call the event
 		Bukkit.getServer().getPluginManager().callEvent(event);
 
@@ -47,19 +42,17 @@ public class RankChangeResult extends Result {
 			return false;
 
 		//final UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
-		UUID uuid = player.getUniqueId();
+		final UUID uuid = player.getUniqueId();
 
 		// When rank is changed: reset progress and update last known group
-		getAutorank().getPlayerDataHandler().setPlayerProgress(uuid,
-				new ArrayList<Integer>());
+		getAutorank().getPlayerDataHandler().setPlayerProgress(uuid, new ArrayList<Integer>());
 
 		getAutorank().getPlayerDataHandler().setLastKnownGroup(uuid, to);
 
 		// Reset chosen path as the player is moved to another group
 		getAutorank().getPlayerDataHandler().setChosenPath(uuid, null);
 
-		return this.getAutorank().getPermPlugHandler().getPermissionPlugin()
-				.replaceGroup(player, world, oldrank, to);
+		return this.getAutorank().getPermPlugHandler().getPermissionPlugin().replaceGroup(player, world, oldrank, to);
 	}
 
 	@Override

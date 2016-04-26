@@ -86,7 +86,7 @@ public class HasItemRequirement extends Requirement {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public boolean setOptions(String[] options) {
+	public boolean setOptions(final String[] options) {
 
 		int id = -1;
 		int amount = 1;

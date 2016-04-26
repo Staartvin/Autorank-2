@@ -35,7 +35,8 @@ public class BlocksMovedRequirement extends Requirement {
 	@Override
 	public boolean meetsRequirement(final Player player) {
 
-		if(getStatsPlugin().isEnabled()) return false;
+		if (getStatsPlugin().isEnabled())
+			return false;
 
 		final int count = this.getStatsPlugin().getNormalStat(StatsHandler.statTypes.BLOCKS_MOVED.toString(),
 				player.getUniqueId(), this.getWorld(), wrapper.getRawMovementType());
@@ -44,7 +45,7 @@ public class BlocksMovedRequirement extends Requirement {
 	}
 
 	@Override
-	public boolean setOptions(String[] options) {
+	public boolean setOptions(final String[] options) {
 
 		int blocksMoved = 0;
 		int movementType = 0;

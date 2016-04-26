@@ -24,8 +24,7 @@ public class FishCaughtRequirement extends Requirement {
 
 	@Override
 	public String getProgress(final Player player) {
-		final int progressBar = this.getStatsPlugin().getNormalStat(
-				StatsHandler.statTypes.FISH_CAUGHT.toString(),
+		final int progressBar = this.getStatsPlugin().getNormalStat(StatsHandler.statTypes.FISH_CAUGHT.toString(),
 				player.getUniqueId(), this.getWorld());
 
 		return progressBar + "/" + fishCaught;
@@ -34,15 +33,14 @@ public class FishCaughtRequirement extends Requirement {
 	@Override
 	public boolean meetsRequirement(final Player player) {
 
-		final int fish = this.getStatsPlugin().getNormalStat(
-				StatsHandler.statTypes.FISH_CAUGHT.toString(),
+		final int fish = this.getStatsPlugin().getNormalStat(StatsHandler.statTypes.FISH_CAUGHT.toString(),
 				player.getUniqueId(), this.getWorld());
 
 		return fish >= fishCaught;
 	}
 
 	@Override
-	public boolean setOptions(String[] options) {
+	public boolean setOptions(final String[] options) {
 
 		fishCaught = Integer.parseInt(options[0]);
 

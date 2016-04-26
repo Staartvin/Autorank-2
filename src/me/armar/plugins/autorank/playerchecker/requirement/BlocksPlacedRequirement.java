@@ -95,7 +95,7 @@ public class BlocksPlacedRequirement extends Requirement {
 	}
 
 	@Override
-	public boolean setOptions(String[] options) {
+	public boolean setOptions(final String[] options) {
 
 		int blocksPlaced = 0;
 		int blockId = -1;

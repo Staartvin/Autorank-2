@@ -44,13 +44,12 @@ public class PlayerDataHandler {
 
 		// Start requirement saver task
 		// Run save task every 2 minutes
-		plugin.getServer().getScheduler()
-				.runTaskTimerAsynchronously(plugin, new Runnable() {
-					@Override
-					public void run() {
-						saveConfig();
-					}
-				}, 1200, 2400);
+		plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new Runnable() {
+			@Override
+			public void run() {
+				saveConfig();
+			}
+		}, 1200, 2400);
 	}
 
 	public void addCompletedRanks(final UUID uuid, final String rank) {
@@ -82,44 +81,38 @@ public class PlayerDataHandler {
 		plugin.getLogger().info("Starting to convert playerdata.yml");
 
 		// Run async to prevent problems.
-		plugin.getServer().getScheduler()
-				.runTaskAsynchronously(plugin, new Runnable() {
+		plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
 
-					@Override
-					public void run() {
-						// Backup beforehand
-						plugin.getBackupManager().backupFile(
-								"/playerdata/playerdata.yml", null);
+			@Override
+			public void run() {
+				// Backup beforehand
+				plugin.getBackupManager().backupFile("/playerdata/playerdata.yml", null);
 
-						for (final String name : getConfig().getKeys(false)) {
+				for (final String name : getConfig().getKeys(false)) {
 
-							// Probably UUID because names don't have dashes.
-							if (name.contains("-"))
-								continue;
+					// Probably UUID because names don't have dashes.
+					if (name.contains("-"))
+						continue;
 
-							final UUID uuid = plugin.getUUIDStorage().getStoredUUID(name);
+					final UUID uuid = plugin.getUUIDStorage().getStoredUUID(name);
 
-							if (uuid == null)
-								continue;
+					if (uuid == null)
+						continue;
 
-							final List<Integer> progress = config
-									.getIntegerList(name + ".progress");
-							final String lastKnownGroup = config.getString(name
-									+ ".last group");
+					final List<Integer> progress = config.getIntegerList(name + ".progress");
+					final String lastKnownGroup = config.getString(name + ".last group");
 
-							// Remove name
-							config.set(name, null);
+					// Remove name
+					config.set(name, null);
 
-							// Replace name with UUID
-							config.set(uuid.toString() + ".progress", progress);
-							config.set(uuid.toString() + ".last group",
-									lastKnownGroup);
-						}
+					// Replace name with UUID
+					config.set(uuid.toString() + ".progress", progress);
+					config.set(uuid.toString() + ".last group", lastKnownGroup);
+				}
 
-						plugin.getLogger().info(
-								"Converted playerdata.yml to UUID format");
-					}
-				});
+				plugin.getLogger().info("Converted playerdata.yml to UUID format");
+			}
+		});
 	}
 
 	public void createNewFile() {
@@ -134,8 +127,7 @@ public class PlayerDataHandler {
 	}
 
 	private List<String> getCompletedRanks(final UUID uuid) {
-		final List<String> completed = config.getStringList(uuid.toString()
-				+ ".completed ranks");
+		final List<String> completed = config.getStringList(uuid.toString() + ".completed ranks");
 
 		return completed;
 	}
@@ -149,7 +141,7 @@ public class PlayerDataHandler {
 
 	public String getLastKnownGroup(final UUID uuid) {
 		//Validate.notNull(uuid, "UUID of a player is null!");
-		
+
 		//UUID uuid = UUIDManager.getUUIDFromPlayer(playerName);
 		return config.getString(uuid.toString() + ".last group");
 	}
@@ -158,9 +150,8 @@ public class PlayerDataHandler {
 	public List<Integer> getProgress(final UUID uuid) {
 		//UUID uuid = UUIDManager.getUUIDFromPlayer(playerName);
 		//Validate.notNull(uuid, "UUID of a player is null!");
-		
-		return (List<Integer>) config.getList(uuid.toString() + ".progress",
-				new ArrayList<Integer>());
+
+		return (List<Integer>) config.getList(uuid.toString() + ".progress", new ArrayList<Integer>());
 	}
 
 	public boolean hasCompletedRank(final UUID uuid, final String rank) {
@@ -181,8 +172,7 @@ public class PlayerDataHandler {
 
 	public void loadConfig() {
 
-		config.options().header(
-				"This file contains all the data Autorank needs of players");
+		config.options().header("This file contains all the data Autorank needs of players");
 
 		config.options().copyDefaults(true);
 		saveConfig();
@@ -191,28 +181,24 @@ public class PlayerDataHandler {
 	@SuppressWarnings("deprecation")
 	public void reloadConfig() {
 		if (configFile == null) {
-			configFile = new File(plugin.getDataFolder() + "/playerdata",
-					"playerdata.yml");
+			configFile = new File(plugin.getDataFolder() + "/playerdata", "playerdata.yml");
 		}
 		config = YamlConfiguration.loadConfiguration(configFile);
 
 		// Look for defaults in the jar
-		final InputStream defConfigStream = plugin
-				.getResource("playerdata.yml");
+		final InputStream defConfigStream = plugin.getResource("playerdata.yml");
 		if (defConfigStream != null) {
-			final YamlConfiguration defConfig = YamlConfiguration
-					.loadConfiguration(defConfigStream);
+			final YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
 			config.setDefaults(defConfig);
 		}
 	}
 
-	public void runResults(RequirementsHolder holder, final Player player) {
+	public void runResults(final RequirementsHolder holder, final Player player) {
 
 		// Fire event so it can be cancelled
 		// Create the event here/
 		// TODO Implement logic for events with RequirementHolder
-		final RequirementCompleteEvent event = new RequirementCompleteEvent(
-				player, holder);
+		final RequirementCompleteEvent event = new RequirementCompleteEvent(player, holder);
 		// Call the event
 		Bukkit.getServer().getPluginManager().callEvent(event);
 
@@ -236,13 +222,11 @@ public class PlayerDataHandler {
 		try {
 			getConfig().save(configFile);
 		} catch (final IOException ex) {
-			plugin.getLogger().log(Level.SEVERE,
-					"Could not save config to " + configFile, ex);
+			plugin.getLogger().log(Level.SEVERE, "Could not save config to " + configFile, ex);
 		}
 	}
 
-	public void setCompletedRanks(final UUID uuid,
-			final List<String> completedRanks) {
+	public void setCompletedRanks(final UUID uuid, final List<String> completedRanks) {
 		config.set(uuid.toString() + ".completed ranks", completedRanks);
 	}
 
@@ -259,8 +243,7 @@ public class PlayerDataHandler {
 
 	public boolean hasLeaderboardExemption(final UUID uuid) {
 		//Validate.notNull(uuid, "UUID of a player is null!");
-		return config
-				.getBoolean(uuid.toString() + ".exempt leaderboard", false);
+		return config.getBoolean(uuid.toString() + ".exempt leaderboard", false);
 	}
 
 	public void hasLeaderboardExemption(final UUID uuid, final boolean value) {
@@ -277,12 +260,11 @@ public class PlayerDataHandler {
 
 	public boolean checkValidChosenPath(final Player player) {
 
-		final String groupName = plugin.getPermPlugHandler().getPrimaryGroup(
-				player);
+		final String groupName = plugin.getPermPlugHandler().getPrimaryGroup(player);
 		final String chosenPath = this.getChosenPath(player.getUniqueId());
 
-		final List<ChangeGroup> changeGroups = plugin.getPlayerChecker()
-				.getChangeGroupManager().getChangeGroups(groupName);
+		final List<ChangeGroup> changeGroups = plugin.getPlayerChecker().getChangeGroupManager()
+				.getChangeGroups(groupName);
 
 		boolean validChosenPath = false;
 
@@ -295,8 +277,7 @@ public class PlayerDataHandler {
 
 		if (!validChosenPath) {
 			// Somehow there wrong chosen path was still left over. Remove it.
-			plugin.getPlayerDataHandler().setChosenPath(player.getUniqueId(),
-					null);
+			plugin.getPlayerDataHandler().setChosenPath(player.getUniqueId(), null);
 		}
 
 		return validChosenPath;

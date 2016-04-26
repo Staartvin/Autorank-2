@@ -37,8 +37,7 @@ public class StatisticsAPIHandler implements DependencyHandler {
 	 */
 	@Override
 	public Plugin get() {
-		final Plugin plugin = this.plugin.getServer().getPluginManager()
-				.getPlugin("Statistics");
+		final Plugin plugin = this.plugin.getServer().getPluginManager().getPlugin("Statistics");
 
 		try {
 			// WorldGuard may not be loaded
@@ -46,9 +45,8 @@ public class StatisticsAPIHandler implements DependencyHandler {
 				return null; // Maybe you want throw an exception instead
 			}
 		} catch (final NoClassDefFoundError exception) {
-			this.plugin
-					.getLogger()
-					.info("Could not find Statistics because it's probably disabled! Does Statistics properly connect to your MySQL database?");
+			this.plugin.getLogger().info(
+					"Could not find Statistics because it's probably disabled! Does Statistics properly connect to your MySQL database?");
 			return null;
 		}
 
@@ -72,21 +70,21 @@ public class StatisticsAPIHandler implements DependencyHandler {
 			final int damageValue, final String worldName, final String statType) {
 		if (!isAvailable())
 			return 0;
-
+	
 		final StatData blockStat = getStatType(statType, playerName, worldName);
 		int value = 0;
 		boolean checkDamageValue = false;
-
+	
 		if (damageValue > 0) {
 			checkDamageValue = true;
 		}
-
+	
 		for (final Object[] vars : blockStat.getAllVariables()) {
-
+	
 			if (checkDamageValue) {
 				// VAR 0 = blockID, VAR 1 = damageValue, VAR 2 = (1 = break, 0 = place)
 				final byte[] byteArray = (byte[]) vars[1];
-
+	
 				if ((Integer) vars[0] == id
 						&& Integer.parseInt(new String(byteArray)) == damageValue) {
 					value += blockStat.getValue(vars);
@@ -97,10 +95,10 @@ public class StatisticsAPIHandler implements DependencyHandler {
 				}
 			}
 		}
-
+	
 		return value;
 	}
-
+	
 	public EntityType getEntityType(final String entityName) {
 		try {
 			return EntityType.valueOf(entityName.toUpperCase());
@@ -108,27 +106,27 @@ public class StatisticsAPIHandler implements DependencyHandler {
 			return null;
 		}
 	}
-
+	
 	public int getNormalStat(final String playerName, final String statName,
 			final String worldName) {
 		if (!isAvailable())
 			return 0;
-
+	
 		final StatData stat = getStatType(statName, playerName, worldName);
-
+	
 		int value = 0;
-
+	
 		for (final Object[] vars : stat.getAllVariables()) {
 			value += stat.getValue(vars);
 		}
-
+	
 		return value;
 	}
-
+	
 	public StatsPlayer getStats(final String playerName) {
 		return api.getPlayer(playerName);
 	}
-
+	
 	/**
 	 * Get the stats of a player, a new stat will be created if it didn't exist
 	 * yet.
@@ -141,29 +139,29 @@ public class StatisticsAPIHandler implements DependencyHandler {
 	/*public StatData getStatType(final String statName, final String playerName,
 			final String worldName) {
 		final StatsPlayer sPlayer = getStats(playerName);
-
+	
 		final Stat stat = getStat(statName);
-
+	
 		if (stat == null)
 			throw new IllegalArgumentException("Unknown stat '" + statName
 					+ "'!");
-
+	
 		StatData data = null;
-
+	
 		if (worldName != null) {
 			data = sPlayer.getStatData(stat, worldName, true);
 		} else {
 			data = sPlayer.getGlobalStatData(stat);
 		}
-
+	
 		return data;
 	}
-
+	
 	public int getTotalBlocksBroken(final String playerName,
 			final String worldName) {
 		if (!isAvailable())
 			return 0;
-
+	
 		if (worldName != null) {
 			return (int) Math.round(api.getTotalBlocksBroken(playerName,
 					worldName));
@@ -171,32 +169,32 @@ public class StatisticsAPIHandler implements DependencyHandler {
 			return (int) Math.round(api.getTotalBlocksBroken(playerName));
 		}
 	}
-
+	
 	public int getTotalBlocksMoved(final String playerName, final int type,
 			final String worldName) {
 		if (!isAvailable())
 			return 0;
-
+	
 		final String statName = "Move";
-
+	
 		final StatData stat = getStatType(statName, playerName, worldName);
-
+	
 		int value = 0;
-
+	
 		for (final Object[] vars : stat.getAllVariables()) {
 			if ((Integer) vars[0] == type) {
 				value += stat.getValue(vars);
 			}
 		}
-
+	
 		return value;
 	}
-
+	
 	public int getTotalBlocksPlaced(final String playerName,
 			final String worldName) {
 		if (!isAvailable())
 			return 0;
-
+	
 		if (worldName != null) {
 			return (int) Math.round(api.getTotalBlocksPlaced(playerName,
 					worldName));
@@ -204,28 +202,28 @@ public class StatisticsAPIHandler implements DependencyHandler {
 			return (int) Math.round(api.getTotalBlocksPlaced(playerName));
 		}
 	}
-
+	
 	public int getTotalMobsKilled(final String playerName,
 			final String mobName, final String worldName) {
 		if (!isAvailable())
 			return 0;
-
+	
 		final String statName = "Kill";
-
+	
 		final StatData data = getStatType(statName, playerName, worldName);
-
+	
 		final EntityType mob = getEntityType(mobName);
 		boolean checkEntityType = false;
 		int value = 0;
-
+	
 		if (mob != null) {
 			checkEntityType = true;
 		}
-
+	
 		for (final Object[] vars : data.getAllVariables()) {
-
+	
 			// var 0 is mob type
-
+	
 			if (checkEntityType) {
 				if (getEntityType(vars[0].toString()) != null
 						&& getEntityType(vars[0].toString()).equals(mob)) {
@@ -235,14 +233,14 @@ public class StatisticsAPIHandler implements DependencyHandler {
 				value += data.getValue(vars);
 			}
 		}
-
+	
 		return value;
 	}
-
+	
 	public int getTotalPlayTime(final String playerName, final String worldName) {
 		if (!isAvailable())
 			return 0;
-
+	
 		if (worldName != null) {
 			return (int) Math.round(api.getPlaytime(playerName, worldName));
 		} else {
@@ -253,19 +251,16 @@ public class StatisticsAPIHandler implements DependencyHandler {
 	*/
 
 	@SuppressWarnings("unused")
-	public int getNormalStat(final UUID uuid, final String statType,
-			final String worldName) {
+	public int getNormalStat(final UUID uuid, final String statType, final String worldName) {
 
 		final OfflineSession offlineSession = StatisticsAPI.getSession(uuid);
 		OnlineSession onlineSession = null;
 
 		if (plugin.getServer().getPlayer(uuid) != null) {
-			onlineSession = StatisticsAPI.getSession(plugin.getServer()
-					.getPlayer(uuid));
+			onlineSession = StatisticsAPI.getSession(plugin.getServer().getPlayer(uuid));
 		}
 
-		for (final NamedInteger n : OfflineSessionCache.fetch(uuid)
-				.getPlayerTotals().getNamedValues()) {
+		for (final NamedInteger n : OfflineSessionCache.fetch(uuid).getPlayerTotals().getNamedValues()) {
 			System.out.print("n: " + n.getName() + " value: " + n.getValue());
 		}
 
@@ -310,14 +305,12 @@ public class StatisticsAPIHandler implements DependencyHandler {
 
 			if (api != null) {
 				if (verbose) {
-					plugin.getLogger().info(
-							"Statistics has been found and can be used!");
+					plugin.getLogger().info("Statistics has been found and can be used!");
 				}
 				return true;
 			} else {
 				if (verbose) {
-					plugin.getLogger().info(
-							"Statistics has been found but cannot be used!");
+					plugin.getLogger().info("Statistics has been found but cannot be used!");
 				}
 				return false;
 			}

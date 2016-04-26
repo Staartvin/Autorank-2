@@ -11,7 +11,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import me.armar.plugins.autorank.Autorank;
 
 /**
- * This class is used to create a backup-data.yml that will store what files were backed up and when.
+ * This class is used to create a backup-data.yml that will store what files
+ * were backed up and when.
  * 
  * @author Staartvin
  */
@@ -27,7 +28,8 @@ public class BackupDataManager {
 
 	/**
 	 * Create a new backup data file if it did not exist already.
-	 * <br>If it already exists, it will be loaded into memory.
+	 * <br>
+	 * If it already exists, it will be loaded into memory.
 	 */
 	public void createNewFile() {
 		reloadConfig();
@@ -50,10 +52,8 @@ public class BackupDataManager {
 	 */
 	public void loadConfig() {
 
-		backupConfig
-				.options()
-				.header("Backup-data file"
-						+ "\nDon't edit this file if you don't know what you are doing. "
+		backupConfig.options()
+				.header("Backup-data file" + "\nDon't edit this file if you don't know what you are doing. "
 						+ "\nThis file is used by Autorank to check when the latest backups were made.");
 
 		backupConfig.addDefault("data", 0);
@@ -69,18 +69,15 @@ public class BackupDataManager {
 	@SuppressWarnings("deprecation")
 	public void reloadConfig() {
 		if (backupConfigFile == null) {
-			backupConfigFile = new File(plugin.getDataFolder()
-					.getAbsolutePath() + File.separator + "backups",
+			backupConfigFile = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "backups",
 					"backup-data.yml");
 		}
 		backupConfig = YamlConfiguration.loadConfiguration(backupConfigFile);
 
 		// Look for defaults in the jar
-		final InputStream defConfigStream = plugin
-				.getResource("backup-data.yml");
+		final InputStream defConfigStream = plugin.getResource("backup-data.yml");
 		if (defConfigStream != null) {
-			final YamlConfiguration defConfig = YamlConfiguration
-					.loadConfiguration(defConfigStream);
+			final YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
 			backupConfig.setDefaults(defConfig);
 		}
 	}
@@ -95,8 +92,7 @@ public class BackupDataManager {
 		try {
 			getConfig().save(backupConfigFile);
 		} catch (final IOException ex) {
-			plugin.getLogger().log(Level.SEVERE,
-					"Could not save config to " + backupConfigFile, ex);
+			plugin.getLogger().log(Level.SEVERE, "Could not save config to " + backupConfigFile, ex);
 		}
 	}
 

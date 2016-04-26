@@ -27,8 +27,11 @@ public abstract class AutorankCommand implements TabExecutor {
 
 	/**
 	 * Gets the permission that is used to check if a player has permission
-	 * <br>to perform this command. This is not always the case, so take care
-	 * <br>with using this method. Sometimes other permissions are used to check the player.
+	 * <br>
+	 * to perform this command. This is not always the case, so take care
+	 * <br>
+	 * with using this method. Sometimes other permissions are used to check the
+	 * player.
 	 */
 	public String getPermission() {
 		return permission;
@@ -36,7 +39,8 @@ public abstract class AutorankCommand implements TabExecutor {
 
 	/**
 	 * Gets the way this command is supposed to be used.
-	 * <br>For example, /ar times &lt;player&gt; &lt;type&gt;
+	 * <br>
+	 * For example, /ar times &lt;player&gt; &lt;type&gt;
 	 */
 	public String getUsage() {
 		return usage;
@@ -46,8 +50,8 @@ public abstract class AutorankCommand implements TabExecutor {
 	 * @see org.bukkit.command.CommandExecutor#onCommand(org.bukkit.command.CommandSender, org.bukkit.command.Command, java.lang.String, java.lang.String[])
 	 */
 	@Override
-	public abstract boolean onCommand(final CommandSender sender,
-			final Command cmd, final String label, final String[] args);
+	public abstract boolean onCommand(final CommandSender sender, final Command cmd, final String label,
+			final String[] args);
 
 	public void setDesc(final String desc) {
 		this.desc = desc;
@@ -65,6 +69,5 @@ public abstract class AutorankCommand implements TabExecutor {
 	 * @see org.bukkit.command.TabCompleter#onTabComplete(org.bukkit.command.CommandSender, org.bukkit.command.Command, java.lang.String, java.lang.String[])
 	 */
 	@Override
-	public abstract List<String> onTabComplete(CommandSender sender,
-			Command cmd, String commandLabel, String[] args);
+	public abstract List<String> onTabComplete(CommandSender sender, Command cmd, String commandLabel, String[] args);
 }

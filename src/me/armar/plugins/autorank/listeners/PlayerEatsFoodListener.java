@@ -36,8 +36,7 @@ public class PlayerEatsFoodListener implements Listener {
 			return;
 
 		// Stats is not available
-		if (!plugin.getDependencyManager().getDependency(dependency.STATS)
-				.isAvailable())
+		if (!plugin.getDependencyManager().getDependency(dependency.STATS).isAvailable())
 			return;
 
 		final Player p = event.getPlayer();
@@ -47,17 +46,14 @@ public class PlayerEatsFoodListener implements Listener {
 		if (foodName == null)
 			return;
 
-		final StatsAPIHandler handler = (StatsAPIHandler) plugin
-				.getDependencyManager().getDependency(dependency.STATS);
+		final StatsAPIHandler handler = (StatsAPIHandler) plugin.getDependencyManager().getDependency(dependency.STATS);
 
-		final Stat stat = handler.getAPI().getStatManager()
-				.getStat(FoodEatenStat.statName);
+		final Stat stat = handler.getAPI().getStatManager().getStat(FoodEatenStat.statName);
 
 		final StatsHolder holder = handler.getAPI().getPlayer(p.getUniqueId());
 
-		holder.addEntry(stat, new DefaultStatEntry(1, new MetadataPair(
-				"foodType", foodName), new MetadataPair("world", p.getWorld()
-				.getName())));
+		holder.addEntry(stat, new DefaultStatEntry(1, new MetadataPair("foodType", foodName),
+				new MetadataPair("world", p.getWorld().getName())));
 
 	}
 

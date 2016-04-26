@@ -33,8 +33,7 @@ public class PlayerJoinListener implements Listener {
 
 		// Refresh uuid of the player if it is outdated
 		if (plugin.getUUIDStorage().isOutdated(player.getName())) {
-			plugin.getUUIDStorage().storeUUID(player.getName(),
-					player.getUniqueId(), player.getName());
+			plugin.getUUIDStorage().storeUUID(player.getName(), player.getUniqueId(), player.getName());
 		}
 
 		// Cannot check player at this moment. -> try at next automatic task
@@ -57,27 +56,19 @@ public class PlayerJoinListener implements Listener {
 			// No update was available
 			if (plugin.getUpdateHandler().isUpdateAvailable()) {
 				// Schedule it later so it will appear at the bottom
-				plugin.getServer().getScheduler()
-						.runTaskLater(plugin, new Runnable() {
+				plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
 
-							@Override
-							public void run() {
-								// TODO Auto-generated method stub
-								player.sendMessage(ChatColor.GREEN
-										+ plugin.getUpdateHandler()
-												.getUpdater().getLatestName()
-										+ ChatColor.GOLD
-										+ " is now available for download!");
-								player.sendMessage(ChatColor.GREEN
-										+ "Available at: "
-										+ ChatColor.GOLD
-										+ plugin.getUpdateHandler()
-												.getUpdater()
-												.getLatestFileLink());
-								//player.sendMessage(ChatColor.GOLD + "Type " + ChatColor.GREEN + "'/ar update'" + ChatColor.GOLD + " to update Autorank.");	
-							}
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						player.sendMessage(ChatColor.GREEN + plugin.getUpdateHandler().getUpdater().getLatestName()
+								+ ChatColor.GOLD + " is now available for download!");
+						player.sendMessage(ChatColor.GREEN + "Available at: " + ChatColor.GOLD
+								+ plugin.getUpdateHandler().getUpdater().getLatestFileLink());
+						//player.sendMessage(ChatColor.GOLD + "Type " + ChatColor.GREEN + "'/ar update'" + ChatColor.GOLD + " to update Autorank.");	
+					}
 
-						}, 10L);
+				}, 10L);
 			}
 		}
 
@@ -87,21 +78,15 @@ public class PlayerJoinListener implements Listener {
 			if (plugin.getWarningManager().getHighestWarning() != null) {
 
 				// Schedule it later so it will appear at the bottom
-				plugin.getServer().getScheduler()
-						.runTaskLater(plugin, new Runnable() {
+				plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
 
-							@Override
-							public void run() {
-								player.sendMessage(ChatColor.BLUE
-										+ "<AUTORANK> "
-										+ ChatColor.RED
-										+ "Warning: "
-										+ ChatColor.GREEN
-										+ plugin.getWarningManager()
-												.getHighestWarning());
-							}
+					@Override
+					public void run() {
+						player.sendMessage(ChatColor.BLUE + "<AUTORANK> " + ChatColor.RED + "Warning: "
+								+ ChatColor.GREEN + plugin.getWarningManager().getHighestWarning());
+					}
 
-						}, 10L);
+				}, 10L);
 			}
 		}
 	}

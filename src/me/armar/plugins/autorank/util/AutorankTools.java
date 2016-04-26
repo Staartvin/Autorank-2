@@ -15,7 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import me.armar.plugins.autorank.language.Lang;
 
 /*
- * AutorankTools is a bunch of static methods, I put sendColoredMessage 
+ * AutorankTools is a bunch of static methods, I put sendColoredMessage
  * there so that if I ever wanted to change the message formatting I can just do that here.
  *
  */
@@ -103,19 +103,15 @@ public class AutorankTools {
 		}
 	}
 
-	public static void sendColoredMessage(final CommandSender sender,
-			final String msg) {
-		sender.sendMessage(ChatColor.translateAlternateColorCodes('&',
-				ChatColor.GREEN + msg));
+	public static void sendColoredMessage(final CommandSender sender, final String msg) {
+		sender.sendMessage(ChatColor.translateAlternateColorCodes('&', ChatColor.GREEN + msg));
 	}
 
 	public static void sendColoredMessage(final Player player, final String msg) {
-		player.sendMessage(ChatColor.translateAlternateColorCodes('&',
-				ChatColor.GREEN + msg));
+		player.sendMessage(ChatColor.translateAlternateColorCodes('&', ChatColor.GREEN + msg));
 	}
 
-	public static double stringtoDouble(final String string)
-			throws NumberFormatException {
+	public static double stringtoDouble(final String string) throws NumberFormatException {
 		double res = 0;
 
 		if (string != null)
@@ -125,8 +121,7 @@ public class AutorankTools {
 		return res;
 	}
 
-	public static int stringtoInt(final String string)
-			throws NumberFormatException {
+	public static int stringtoInt(final String string) throws NumberFormatException {
 		int res = 0;
 
 		if (string != null)
@@ -147,8 +142,7 @@ public class AutorankTools {
 
 		string = string.trim();
 
-		final Pattern pattern = Pattern
-				.compile("((\\d+)d)?((\\d+)h)?((\\d+)m)?");
+		final Pattern pattern = Pattern.compile("((\\d+)d)?((\\d+)h)?((\\d+)m)?");
 		final Matcher matcher = pattern.matcher(string);
 
 		matcher.find();
@@ -262,10 +256,10 @@ public class AutorankTools {
 			else
 				b.append(Lang.SECOND_SINGULAR.getConfigValue());
 		}
-		
+
 		// Replace last comma with an and if needed.
-		int index = b.lastIndexOf(",");
-		
+		final int index = b.lastIndexOf(",");
+
 		if (index != -1) {
 			b.replace(index, index + 1, " " + Lang.AND.getConfigValue());
 		}
@@ -284,8 +278,7 @@ public class AutorankTools {
 	 *            word.
 	 * @return string with all elements.
 	 */
-	public static String seperateList(final Collection<?> c,
-			final String endDivider) {
+	public static String seperateList(final Collection<?> c, final String endDivider) {
 		final Object[] array = c.toArray();
 		if (array.length == 1)
 			return array[0].toString();
@@ -310,8 +303,8 @@ public class AutorankTools {
 		return string.toString();
 	}
 
-	public static String makeProgressString(final Collection<?> c,
-			final String wordBetween, final Object currentValue) {
+	public static String makeProgressString(final Collection<?> c, final String wordBetween,
+			final Object currentValue) {
 		final Object[] array = c.toArray();
 
 		String extraSpace = " ";
@@ -327,11 +320,9 @@ public class AutorankTools {
 			final String object = array[i].toString();
 
 			if (i == 0) {
-				progress += currentValue + extraSpace + wordBetween + "/"
-						+ object + extraSpace + wordBetween;
+				progress += currentValue + extraSpace + wordBetween + "/" + object + extraSpace + wordBetween;
 			} else {
-				progress += " or " + currentValue + extraSpace + wordBetween
-						+ "/" + object + extraSpace + wordBetween;
+				progress += " or " + currentValue + extraSpace + wordBetween + "/" + object + extraSpace + wordBetween;
 			}
 		}
 
@@ -346,8 +337,8 @@ public class AutorankTools {
 	 * @param element element to get
 	 * @return String that was at the given splitted element
 	 */
-	public static String getStringFromSplitString(final String splitString,
-			final String splitterCharacter, final int element) {
+	public static String getStringFromSplitString(final String splitString, final String splitterCharacter,
+			final int element) {
 		final String[] split = splitString.split(splitterCharacter);
 
 		String returnString = null;
@@ -365,8 +356,8 @@ public class AutorankTools {
 		return returnString;
 	}
 
-	public static boolean containsAtLeast(final Player player,
-			final ItemStack item, final int amount, String displayName) {
+	public static boolean containsAtLeast(final Player player, final ItemStack item, final int amount,
+			String displayName) {
 		// Check if player has at least the x of an item WITH proper displayname
 
 		int count = 0;
@@ -385,8 +376,7 @@ public class AutorankTools {
 				continue;
 
 			// Check display name
-			if (!itemFound.hasItemMeta()
-					|| !itemFound.getItemMeta().hasDisplayName())
+			if (!itemFound.hasItemMeta() || !itemFound.getItemMeta().hasDisplayName())
 				continue;
 
 			if (itemFound.getItemMeta().getDisplayName().equals(displayName)) {
@@ -572,22 +562,18 @@ public class AutorankTools {
 		for (int i = 0; i < c.size(); i++) {
 
 			if (i == 0) {
-				builder.append(ChatColor.GRAY + array[i].toString()
-						+ ChatColor.RESET);
+				builder.append(ChatColor.GRAY + array[i].toString() + ChatColor.RESET);
 			} else if (i == (c.size() - 1)) {
-				builder.append(" and " + ChatColor.GRAY + array[i].toString()
-						+ ChatColor.RESET);
+				builder.append(" and " + ChatColor.GRAY + array[i].toString() + ChatColor.RESET);
 			} else {
-				builder.append(", " + ChatColor.GRAY + array[i].toString()
-						+ ChatColor.RESET);
+				builder.append(", " + ChatColor.GRAY + array[i].toString() + ChatColor.RESET);
 			}
 		}
 
 		return builder.toString();
 	}
 
-	public static String getStringFromArgs(final String[] args,
-			final int startArg) {
+	public static String getStringFromArgs(final String[] args, final int startArg) {
 		final StringBuilder string = new StringBuilder("");
 
 		for (int i = startArg; i < args.length; i++) {

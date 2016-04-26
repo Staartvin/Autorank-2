@@ -33,8 +33,7 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
 
 	private static HttpURLConnection createConnection() throws Exception {
 		final URL url = new URL(PROFILE_URL);
-		final HttpURLConnection connection = (HttpURLConnection) url
-				.openConnection();
+		final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		connection.setRequestMethod("POST");
 		connection.setRequestProperty("Content-Type", "application/json");
 		connection.setUseCaches(false);
@@ -45,8 +44,7 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
 
 	public static UUID fromBytes(final byte[] array) {
 		if (array.length != 16) {
-			throw new IllegalArgumentException("Illegal byte array length: "
-					+ array.length);
+			throw new IllegalArgumentException("Illegal byte array length: " + array.length);
 		}
 		final ByteBuffer byteBuffer = ByteBuffer.wrap(array);
 		final long mostSignificant = byteBuffer.getLong();
@@ -55,9 +53,8 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
 	}
 
 	private static UUID getUUID(final String id) {
-		return UUID.fromString(id.substring(0, 8) + "-" + id.substring(8, 12)
-				+ "-" + id.substring(12, 16) + "-" + id.substring(16, 20) + "-"
-				+ id.substring(20, 32));
+		return UUID.fromString(id.substring(0, 8) + "-" + id.substring(8, 12) + "-" + id.substring(12, 16) + "-"
+				+ id.substring(16, 20) + "-" + id.substring(20, 32));
 	}
 
 	public static UUID getUUIDOf(final String name) throws Exception {
@@ -71,8 +68,7 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
 		return byteBuffer.array();
 	}
 
-	private static void writeBody(final HttpURLConnection connection,
-			final String body) throws Exception {
+	private static void writeBody(final HttpURLConnection connection, final String body) throws Exception {
 		final OutputStream stream = connection.getOutputStream();
 		stream.write(body.getBytes());
 		stream.flush();
@@ -97,22 +93,18 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
 	@Override
 	public Map<String, UUID> call() throws Exception {
 		final Map<String, UUID> uuidMap = new HashMap<String, UUID>();
-		final int requests = (int) Math.ceil(names.size()
-				/ PROFILES_PER_REQUEST);
+		final int requests = (int) Math.ceil(names.size() / PROFILES_PER_REQUEST);
 		for (int i = 0; i < requests; i++) {
 			final HttpURLConnection connection = createConnection();
-			final String body = JSONArray.toJSONString(names.subList(i * 100,
-					Math.min((i + 1) * 100, names.size())));
+			final String body = JSONArray.toJSONString(names.subList(i * 100, Math.min((i + 1) * 100, names.size())));
 			writeBody(connection, body);
 			JSONArray array;
 
 			try {
-				array = (JSONArray) jsonParser.parse(new InputStreamReader(
-						connection.getInputStream()));
+				array = (JSONArray) jsonParser.parse(new InputStreamReader(connection.getInputStream()));
 			} catch (final Exception e) {
 
-				System.out.print("[Autorank] Could not fetch UUID of player '"
-						+ names.get(i) + "'!");
+				System.out.print("[Autorank] Could not fetch UUID of player '" + names.get(i) + "'!");
 				continue;
 			}
 
@@ -127,8 +119,7 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
 			}
 			if (rateLimiting && i != requests - 1) {
 				// Sleep for 10 minutes
-				Bukkit.getServer().getLogger()
-						.info("[Autorank] Waiting for 10 minutes");
+				Bukkit.getServer().getLogger().info("[Autorank] Waiting for 10 minutes");
 				Thread.sleep(60000L);
 			}
 		}

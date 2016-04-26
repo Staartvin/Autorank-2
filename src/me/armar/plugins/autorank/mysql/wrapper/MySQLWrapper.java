@@ -103,8 +103,7 @@ public class MySQLWrapper {
 		final ExecutorService executor = Executors.newFixedThreadPool(1);
 
 		// Initialise new callable class
-		final Callable<Integer> callable = new GrabDatabaseTimeTask(mysql,
-				uuid, table);
+		final Callable<Integer> callable = new GrabDatabaseTimeTask(mysql, uuid, table);
 
 		// Sumbit callable
 		final Future<Integer> futureValue = executor.submit(callable);
@@ -154,8 +153,7 @@ public class MySQLWrapper {
 		final ExecutorService executor = Executors.newFixedThreadPool(1);
 
 		// Initialise new callable class
-		final Callable<Integer> callable = new GrabDatabaseTimeTask(mysql,
-				uuid, table);
+		final Callable<Integer> callable = new GrabDatabaseTimeTask(mysql, uuid, table);
 
 		// Sumbit callable
 		final Future<Integer> futureValue = executor.submit(callable);
@@ -226,20 +224,18 @@ public class MySQLWrapper {
 			mysql.connect();
 		}
 
-		final String statement = "INSERT INTO " + table + " VALUES ('"
-				+ uuid.toString() + "', " + time + ", CURRENT_TIMESTAMP) "
-				+ "ON DUPLICATE KEY UPDATE " + "time=" + time;
+		final String statement = "INSERT INTO " + table + " VALUES ('" + uuid.toString() + "', " + time
+				+ ", CURRENT_TIMESTAMP) " + "ON DUPLICATE KEY UPDATE " + "time=" + time;
 
 		// Run async to prevent load issues.
-		plugin.getServer().getScheduler()
-				.runTaskAsynchronously(plugin, new Runnable() {
+		plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
 
-					@Override
-					public void run() {
-						// TODO Auto-generated method stub
-						mysql.execute(statement);
-					}
-				});
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				mysql.execute(statement);
+			}
+		});
 
 		// Update cache records
 		this.lastChecked.put(uuid, System.currentTimeMillis());
@@ -252,19 +248,17 @@ public class MySQLWrapper {
 			mysql.connect();
 		}
 
-		final String statement = "CREATE TABLE  IF NOT EXISTS " + table + " "
-				+ "(uuid VARCHAR(255) not NULL, " + " time INTEGER not NULL, "
-				+ " modified TIMESTAMP not NULL, " + " PRIMARY KEY ( uuid ))";
+		final String statement = "CREATE TABLE  IF NOT EXISTS " + table + " " + "(uuid VARCHAR(255) not NULL, "
+				+ " time INTEGER not NULL, " + " modified TIMESTAMP not NULL, " + " PRIMARY KEY ( uuid ))";
 
 		// Run async to prevent load issues.
-		plugin.getServer().getScheduler()
-				.runTaskAsynchronously(plugin, new Runnable() {
+		plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
 
-					@Override
-					public void run() {
-						mysql.execute(statement);
-					}
-				});
+			@Override
+			public void run() {
+				mysql.execute(statement);
+			}
+		});
 
 	}
 
@@ -272,7 +266,7 @@ public class MySQLWrapper {
 
 		final ConfigHandler configHandler = plugin.getConfigHandler();
 		/*final ConfigurationSection s = config.getConfigurationSection("sql");
-
+		
 		if (s == null) {
 			plugin.getLogger().warning(
 					"MySQL options are missing in the advancedconfig.yml!");
@@ -292,8 +286,7 @@ public class MySQLWrapper {
 				mysql = null;
 				plugin.getLogger().severe("Could not connect to " + hostname);
 			} else {
-				plugin.getLogger().info(
-						"Successfully established connection to " + hostname);
+				plugin.getLogger().info("Successfully established connection to " + hostname);
 			}
 		}
 	}

@@ -42,8 +42,7 @@ public class StatsAPIHandler implements DependencyHandler {
 	 */
 	@Override
 	public Plugin get() {
-		final Plugin plugin = this.plugin.getServer().getPluginManager()
-				.getPlugin("Stats");
+		final Plugin plugin = this.plugin.getServer().getPluginManager().getPlugin("Stats");
 
 		try {
 			// WorldGuard may not be loaded
@@ -51,9 +50,8 @@ public class StatsAPIHandler implements DependencyHandler {
 				return null; // Maybe you want throw an exception instead
 			}
 		} catch (final NoClassDefFoundError exception) {
-			this.plugin
-					.getLogger()
-					.info("Could not find Stats because it's probably disabled! Does Stats properly connect to your MySQL database?");
+			this.plugin.getLogger().info(
+					"Could not find Stats because it's probably disabled! Does Stats properly connect to your MySQL database?");
 			return null;
 		}
 
@@ -72,8 +70,8 @@ public class StatsAPIHandler implements DependencyHandler {
 	 * @return amount player placed/broke of a block
 	 */
 	@SuppressWarnings("deprecation")
-	public int getBlocksStat(final UUID uuid, final int id,
-			final int damageValue, final String worldName, final String statName) {
+	public int getBlocksStat(final UUID uuid, final int id, final int damageValue, final String worldName,
+			final String statName) {
 		if (!isAvailable())
 			return 0;
 
@@ -106,8 +104,7 @@ public class StatsAPIHandler implements DependencyHandler {
 
 			// Check correct id
 			if (metadata.containsKey("name")) {
-				final Material material = Material.matchMaterial(metadata.get(
-						"name").toString());
+				final Material material = Material.matchMaterial(metadata.get("name").toString());
 
 				if (material.getId() != id)
 					continue;
@@ -120,18 +117,18 @@ public class StatsAPIHandler implements DependencyHandler {
 
 		/*int value = 0;
 		
-
+		
 		if (damageValue > 0) {
 			checkDamageValue = true;
 		}
-
+		
 		for (final Object[] vars : blockStat.getAllVariables()) {
-
+		
 			if (checkDamageValue) {
 				// VAR 0 = blockID INT, VAR 1 = damageValue BYTE, VAR 2 = (true = break, false = place) BOOLEAN
-
+		
 				final byte byteValue = (Byte) vars[1];
-
+		
 				if ((Integer) vars[0] == id && byteValue == damageValue) {
 					value += blockStat.getValue(vars);
 				}
@@ -141,7 +138,7 @@ public class StatsAPIHandler implements DependencyHandler {
 				}
 			}
 		}
-
+		
 		return value;*/
 	}
 
@@ -153,8 +150,7 @@ public class StatsAPIHandler implements DependencyHandler {
 		}
 	}
 
-	public int getNormalStat(final UUID uuid, final String statName,
-			final String worldName) {
+	public int getNormalStat(final UUID uuid, final String statName, final String worldName) {
 		if (!isAvailable())
 			return 0;
 
@@ -177,11 +173,11 @@ public class StatsAPIHandler implements DependencyHandler {
 		return value;
 
 		/*
-
+		
 		for (final Object[] vars : stat.getAllVariables()) {
 			value += stat.getValue(vars);
 		}
-
+		
 		return value;*/
 	}
 
@@ -193,8 +189,7 @@ public class StatsAPIHandler implements DependencyHandler {
 	 * @param uuid UUID to get the stats of.
 	 * @return Requested stat of the player
 	 */
-	public Collection<StatEntry> getStatType(final String statName,
-			final UUID uuid) {
+	public Collection<StatEntry> getStatType(final String statName, final UUID uuid) {
 
 		if (uuid == null) {
 			return new ArrayList<StatEntry>();
@@ -203,8 +198,7 @@ public class StatsAPIHandler implements DependencyHandler {
 		final StatsHolder holder = stats.getUserManager().getUser(uuid);
 
 		if (holder == null) {
-			plugin.debugMessage("UUID '" + uuid.toString()
-					+ "' was not found in Stats database!");
+			plugin.debugMessage("UUID '" + uuid.toString() + "' was not found in Stats database!");
 
 			return new ArrayList<StatEntry>();
 		}
@@ -212,8 +206,7 @@ public class StatsAPIHandler implements DependencyHandler {
 		final Stat stat = stats.getStatManager().getStat(statName);
 
 		if (stat == null)
-			throw new IllegalArgumentException("Unknown stat '" + statName
-					+ "'!");
+			throw new IllegalArgumentException("Unknown stat '" + statName + "'!");
 
 		return holder.getStats(stat);
 	}
@@ -225,8 +218,7 @@ public class StatsAPIHandler implements DependencyHandler {
 		return this.getNormalStat(uuid, "Blocks broken", worldName);
 	}
 
-	public int getTotalBlocksMoved(final UUID uuid, final int type,
-			final String worldName) {
+	public int getTotalBlocksMoved(final UUID uuid, final int type, final String worldName) {
 		if (!isAvailable())
 			return 0;
 
@@ -246,8 +238,7 @@ public class StatsAPIHandler implements DependencyHandler {
 					continue;
 			}
 
-			if (metadata.containsKey("type")
-					&& (Integer) metadata.get("type") != type)
+			if (metadata.containsKey("type") && (Integer) metadata.get("type") != type)
 				continue;
 
 			value += s.getValue();
@@ -264,8 +255,7 @@ public class StatsAPIHandler implements DependencyHandler {
 		return this.getNormalStat(uuid, "Blocks placed", worldName);
 	}
 
-	public int getTotalMobsKilled(final UUID uuid, final String mobName,
-			final String worldName) {
+	public int getTotalMobsKilled(final UUID uuid, final String mobName, final String worldName) {
 		if (!isAvailable())
 			return 0;
 
@@ -277,27 +267,20 @@ public class StatsAPIHandler implements DependencyHandler {
 		if (mobName != null && !mobName.equals("")) {
 
 			if (mobName.equalsIgnoreCase("wither_skeleton")) {
-				return this.getSpecialMobsKilled(uuid, "WITHER SKELETON",
-						worldName);
+				return this.getSpecialMobsKilled(uuid, "WITHER SKELETON", worldName);
 			} else if (mobName.equalsIgnoreCase("charged_creeper")) {
-				return this.getSpecialMobsKilled(uuid, "POWERED CREEPER",
-						worldName);
+				return this.getSpecialMobsKilled(uuid, "POWERED CREEPER", worldName);
 			} else if (mobName.equalsIgnoreCase("spider_jockey")) {
-				return this.getSpecialMobsKilled(uuid, "SPIDER JOCKEY",
-						worldName);
+				return this.getSpecialMobsKilled(uuid, "SPIDER JOCKEY", worldName);
 			} else if (mobName.equalsIgnoreCase("chicken_jockey")) {
-				return this.getSpecialMobsKilled(uuid, "CHICKEN JOCKEY",
-						worldName);
+				return this.getSpecialMobsKilled(uuid, "CHICKEN JOCKEY", worldName);
 			} else if (mobName.equalsIgnoreCase("killer_rabbit")) {
-				return this.getSpecialMobsKilled(uuid, "KILLER RABBIT",
-						worldName);
+				return this.getSpecialMobsKilled(uuid, "KILLER RABBIT", worldName);
 			} else if (mobName.equalsIgnoreCase("elder_guardian")) {
-				return this.getSpecialMobsKilled(uuid, "ELDER GUARDIAN",
-						worldName);
+				return this.getSpecialMobsKilled(uuid, "ELDER GUARDIAN", worldName);
 			}
 
-			type = EntityType.valueOf(
-					mobName.toUpperCase().replaceAll(" ", "_")).toString();
+			type = EntityType.valueOf(mobName.toUpperCase().replaceAll(" ", "_")).toString();
 		}
 
 		final Collection<StatEntry> stat = getStatType(statName, uuid);
@@ -314,13 +297,11 @@ public class StatsAPIHandler implements DependencyHandler {
 					continue;
 			}
 
-			if (type != null && metadata.containsKey("entityType")
-					&& !metadata.get("entityType").equals(type))
+			if (type != null && metadata.containsKey("entityType") && !metadata.get("entityType").equals(type))
 				continue;
 
 			// If no type was given (so any mob can be killed, exclude 'player' kills, as most admins don't see players as a real mob).
-			if (type == null && metadata.containsKey("entityType")
-					&& metadata.get("entityType").equals("PLAYER"))
+			if (type == null && metadata.containsKey("entityType") && metadata.get("entityType").equals("PLAYER"))
 				continue;
 
 			value += s.getValue();
@@ -330,8 +311,7 @@ public class StatsAPIHandler implements DependencyHandler {
 		return value;
 	}
 
-	public int getSpecialMobsKilled(final UUID uuid, final String mobName,
-			final String worldName) {
+	public int getSpecialMobsKilled(final UUID uuid, final String mobName, final String worldName) {
 		if (!isAvailable())
 			return 0;
 
@@ -354,12 +334,10 @@ public class StatsAPIHandler implements DependencyHandler {
 					continue;
 			}
 
-			if (metadata.containsKey("entityType")
-					&& !metadata.get("entityType").equals(entityType))
+			if (metadata.containsKey("entityType") && !metadata.get("entityType").equals(entityType))
 				continue;
 
-			if (metadata.containsKey("extraType")
-					&& !metadata.get("extraType").equals(extraType))
+			if (metadata.containsKey("extraType") && !metadata.get("extraType").equals(extraType))
 				continue;
 
 			value += s.getValue();
@@ -376,8 +354,7 @@ public class StatsAPIHandler implements DependencyHandler {
 		return this.getNormalStat(uuid, "Playtime", worldName);
 	}
 
-	public int getFoodEaten(final UUID uuid, final String worldName,
-			final String foodType) {
+	public int getFoodEaten(final UUID uuid, final String worldName, final String foodType) {
 		if (!isAvailable())
 			return 0;
 
@@ -438,21 +415,18 @@ public class StatsAPIHandler implements DependencyHandler {
 			return false;
 		} else {
 
-			api = plugin.getServer().getServicesManager()
-					.getRegistration(StatsAPI.class).getProvider();
+			api = plugin.getServer().getServicesManager().getRegistration(StatsAPI.class).getProvider();
 
 			stats = (BukkitMain) get();
 
 			if (api != null) {
 				if (verbose) {
-					plugin.getLogger().info(
-							"Stats has been found and can be used!");
+					plugin.getLogger().info("Stats has been found and can be used!");
 				}
 				return true;
 			} else {
 				if (verbose) {
-					plugin.getLogger().info(
-							"Stats has been found but cannot be used!");
+					plugin.getLogger().info("Stats has been found but cannot be used!");
 				}
 				return false;
 			}

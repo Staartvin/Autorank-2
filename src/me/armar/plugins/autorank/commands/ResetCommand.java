@@ -24,42 +24,39 @@ public class ResetCommand extends AutorankCommand {
 	}
 
 	@Override
-	public boolean onCommand(final CommandSender sender, final Command cmd,
-			final String label, final String[] args) {
+	public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
-		if (!plugin.getCommandsManager().hasPermission("autorank.reset",
-				sender)) {
+		if (!plugin.getCommandsManager().hasPermission("autorank.reset", sender)) {
 			return true;
 		}
 
 		if (args.length != 3) {
-			
+
 			sender.sendMessage(Lang.INVALID_FORMAT.getConfigValue("/ar reset <player> <action>"));
 			return true;
 		}
-		
-		String target = args[1];
-		String action = args[2];
 
-		UUID uuid = plugin.getUUIDStorage().getStoredUUID(target);
-		
+		final String target = args[1];
+		final String action = args[2];
+
+		final UUID uuid = plugin.getUUIDStorage().getStoredUUID(target);
+
 		if (uuid == null) {
 			sender.sendMessage(Lang.PLAYER_IS_INVALID.getConfigValue(target));
 			return true;
 		}
-		
-		String realName = plugin.getUUIDStorage().getRealName(uuid);
-		
+
+		final String realName = plugin.getUUIDStorage().getRealName(uuid);
+
 		if (!action.equalsIgnoreCase("progress")) {
 			sender.sendMessage(ChatColor.RED + "Invalid action. You can only use: progress");
 		}
 
-		
 		if (action.equalsIgnoreCase("progress")) {
 			plugin.getPlayerDataHandler().setPlayerProgress(uuid, null);
 			sender.sendMessage(ChatColor.GREEN + "Reset progress of " + ChatColor.YELLOW + realName);
 		}
-		
+
 		return true;
 	}
 
@@ -67,8 +64,8 @@ public class ResetCommand extends AutorankCommand {
 	 * @see me.armar.plugins.autorank.commands.manager.AutorankCommand#onTabComplete(org.bukkit.command.CommandSender, org.bukkit.command.Command, java.lang.String, java.lang.String[])
 	 */
 	@Override
-	public List<String> onTabComplete(final CommandSender sender,
-			final Command cmd, final String commandLabel, final String[] args) {
+	public List<String> onTabComplete(final CommandSender sender, final Command cmd, final String commandLabel,
+			final String[] args) {
 		// TODO Auto-generated method stub
 		return null;
 	}

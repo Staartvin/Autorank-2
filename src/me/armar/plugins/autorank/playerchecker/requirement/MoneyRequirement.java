@@ -48,7 +48,7 @@ public class MoneyRequirement extends Requirement {
 	}
 
 	@Override
-	public boolean setOptions(String[] options) {
+	public boolean setOptions(final String[] options) {
 
 		try {
 			minMoney = Double.parseDouble(options[0]);

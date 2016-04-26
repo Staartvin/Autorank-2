@@ -33,8 +33,7 @@ public class GroupManagerHandler implements PermissionsHandler {
 	}
 
 	public String getGroup(final Player player) {
-		final AnjoPermissionsHandler handler = groupManager.getWorldsHolder()
-				.getWorldPermissions(player);
+		final AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldPermissions(player);
 		if (handler == null) {
 			return null;
 		}
@@ -47,8 +46,7 @@ public class GroupManagerHandler implements PermissionsHandler {
 
 		for (final World world : plugin.getServer().getWorlds()) {
 			final String worldName = world.getName();
-			final Collection<Group> worldGroup = groupManager.getWorldsHolder()
-					.getWorldData(worldName).getGroupList();
+			final Collection<Group> worldGroup = groupManager.getWorldsHolder().getWorldData(worldName).getGroupList();
 			final List<Group> list = new ArrayList<Group>(worldGroup);
 			for (final Group group : list) {
 				groups.add(group.getName());
@@ -65,13 +63,11 @@ public class GroupManagerHandler implements PermissionsHandler {
 
 	@Override
 	public String[] getPlayerGroups(final Player player) {
-		final AnjoPermissionsHandler handler = groupManager.getWorldsHolder()
-				.getWorldPermissions(player);
+		final AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldPermissions(player);
 		if (handler == null) {
 			return null;
 		}
-		final List<String> groups = Arrays.asList(handler
-				.getPrimaryGroup(player.getName()));
+		final List<String> groups = Arrays.asList(handler.getPrimaryGroup(player.getName()));
 		final String[] array = (String[]) groups.toArray();
 
 		final UUID uuid = player.getUniqueId();
@@ -79,8 +75,7 @@ public class GroupManagerHandler implements PermissionsHandler {
 		// Checking if player changed group
 		// Check if the latest known group is the current group. Otherwise, reset progress
 		final String currentGroup = array[0];
-		String latestKnownGroup = plugin.getPlayerDataHandler()
-				.getLastKnownGroup(uuid);
+		String latestKnownGroup = plugin.getPlayerDataHandler().getLastKnownGroup(uuid);
 
 		if (latestKnownGroup == null) {
 			plugin.getPlayerDataHandler().setLastKnownGroup(uuid, currentGroup);
@@ -89,8 +84,7 @@ public class GroupManagerHandler implements PermissionsHandler {
 		}
 		if (!latestKnownGroup.equalsIgnoreCase(currentGroup)) {
 			// Reset progress and update latest known group
-			plugin.getPlayerDataHandler().setPlayerProgress(uuid,
-					new ArrayList<Integer>());
+			plugin.getPlayerDataHandler().setPlayerProgress(uuid, new ArrayList<Integer>());
 			plugin.getPlayerDataHandler().setLastKnownGroup(uuid, currentGroup);
 			plugin.getPlayerDataHandler().setChosenPath(uuid, null);
 
@@ -101,8 +95,7 @@ public class GroupManagerHandler implements PermissionsHandler {
 	}
 
 	public String getPrefix(final Player player) {
-		final AnjoPermissionsHandler handler = groupManager.getWorldsHolder()
-				.getWorldPermissions(player);
+		final AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldPermissions(player);
 		if (handler == null) {
 			return null;
 		}
@@ -110,8 +103,7 @@ public class GroupManagerHandler implements PermissionsHandler {
 	}
 
 	public String getSuffix(final Player player) {
-		final AnjoPermissionsHandler handler = groupManager.getWorldsHolder()
-				.getWorldPermissions(player);
+		final AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldPermissions(player);
 		if (handler == null) {
 			return null;
 		}
@@ -120,13 +112,11 @@ public class GroupManagerHandler implements PermissionsHandler {
 
 	@Override
 	public String[] getWorldGroups(final Player player, final String world) {
-		return groupManager.getWorldsHolder().getWorldPermissions(world)
-				.getGroups(player.getName());
+		return groupManager.getWorldsHolder().getWorldPermissions(world).getGroups(player.getName());
 	}
 
 	public boolean hasPermission(final Player player, final String node) {
-		final AnjoPermissionsHandler handler = groupManager.getWorldsHolder()
-				.getWorldPermissions(player);
+		final AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldPermissions(player);
 		if (handler == null) {
 			return false;
 		}
@@ -134,13 +124,11 @@ public class GroupManagerHandler implements PermissionsHandler {
 	}
 
 	@Override
-	public boolean replaceGroup(final Player player, final String world,
-			final String groupFrom, final String groupTo) {
+	public boolean replaceGroup(final Player player, final String world, final String groupFrom, final String groupTo) {
 		return setGroup(player, groupTo, world);
 	}
 
-	public boolean setGroup(final Player player, final String group,
-			final String world) {
+	public boolean setGroup(final Player player, final String group, final String world) {
 		OverloadedWorldHolder handler;
 
 		if (world != null) {
@@ -156,8 +144,7 @@ public class GroupManagerHandler implements PermissionsHandler {
 	}
 
 	public boolean setupGroupManager() {
-		final PluginManager pluginManager = plugin.getServer()
-				.getPluginManager();
+		final PluginManager pluginManager = plugin.getServer().getPluginManager();
 		final Plugin GMplugin = pluginManager.getPlugin("GroupManager");
 
 		if (GMplugin != null && GMplugin.isEnabled()) {
@@ -178,7 +165,7 @@ public class GroupManagerHandler implements PermissionsHandler {
 	}
 
 	@Override
-	public boolean demotePlayer(Player player, String world, String groupFrom, String groupTo) {
+	public boolean demotePlayer(final Player player, final String world, final String groupFrom, final String groupTo) {
 		return setGroup(player, groupTo, world);
 	}
 }

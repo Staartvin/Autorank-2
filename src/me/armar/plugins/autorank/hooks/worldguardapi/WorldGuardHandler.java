@@ -34,8 +34,7 @@ public class WorldGuardHandler implements DependencyHandler {
 	 */
 	@Override
 	public Plugin get() {
-		final Plugin wgPlugin = plugin.getServer().getPluginManager()
-				.getPlugin("WorldGuard");
+		final Plugin wgPlugin = plugin.getServer().getPluginManager().getPlugin("WorldGuard");
 
 		// WorldGuard may not be loaded
 		if (wgPlugin == null || !(wgPlugin instanceof WorldGuardPlugin)) {
@@ -69,8 +68,7 @@ public class WorldGuardHandler implements DependencyHandler {
 
 		final Location loc = player.getLocation();
 
-		final RegionManager regManager = worldGuardAPI.getRegionManager(loc
-				.getWorld());
+		final RegionManager regManager = worldGuardAPI.getRegionManager(loc.getWorld());
 
 		if (regManager == null)
 			return false;
@@ -115,14 +113,12 @@ public class WorldGuardHandler implements DependencyHandler {
 			worldGuardAPI = (WorldGuardPlugin) get();
 			if (worldGuardAPI != null) {
 				if (verbose) {
-					plugin.getLogger().info(
-							"WorldGuard has been found and can be used!");
+					plugin.getLogger().info("WorldGuard has been found and can be used!");
 				}
 				return true;
 			} else {
 				if (verbose) {
-					plugin.getLogger().info(
-							"WorldGuard has been found but cannot be used!");
+					plugin.getLogger().info("WorldGuard has been found but cannot be used!");
 				}
 				return false;
 			}

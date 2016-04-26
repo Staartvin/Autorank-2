@@ -6,7 +6,6 @@ import org.bukkit.plugin.Plugin;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.DependencyHandler;
 
-
 /**
  * Handles all connections with Ultimate Core
  * <p>
@@ -29,8 +28,7 @@ public class UltimateCoreHandler implements DependencyHandler {
 	 */
 	@Override
 	public Plugin get() {
-		final Plugin plugin = this.instance.getServer().getPluginManager()
-				.getPlugin("UltimateCore");
+		final Plugin plugin = this.instance.getServer().getPluginManager().getPlugin("UltimateCore");
 
 		// UltimateCore may not be loaded
 		try { //Avoid ClassNotFound
@@ -41,8 +39,7 @@ public class UltimateCoreHandler implements DependencyHandler {
 		} catch (final Exception ex) {
 		}
 		try { //Avoid ClassNotFound
-			if (plugin != null
-					&& plugin instanceof bammerbom.ultimatecore.bukkit.UltimateCore) {
+			if (plugin != null && plugin instanceof bammerbom.ultimatecore.bukkit.UltimateCore) {
 				return plugin;
 			}
 		} catch (final Exception ex) {
@@ -84,14 +81,12 @@ public class UltimateCoreHandler implements DependencyHandler {
 			if (api != null) {
 
 				if (verbose) {
-					instance.getLogger().info(
-							"UltimateCore has been found and can be used!");
+					instance.getLogger().info("UltimateCore has been found and can be used!");
 				}
 				return true;
 			} else {
 				if (verbose) {
-					instance.getLogger().info(
-							"UltimateCore has been found but cannot be used!");
+					instance.getLogger().info("UltimateCore has been found but cannot be used!");
 				}
 				return false;
 			}
@@ -118,16 +113,16 @@ public class UltimateCoreHandler implements DependencyHandler {
 		}
 
 		// Remove support of UltimateCore 2.0 -- too old
+
+		/*		if (getVersion().equals(1)) {
+					final UCplayer user = UC.getPlayer(player);
 		
-/*		if (getVersion().equals(1)) {
-			final UCplayer user = UC.getPlayer(player);
-
-			if (user == null) {
-				return false;
-			}
-
-			return user.isAFK();
-		}*/
+					if (user == null) {
+						return false;
+					}
+		
+					return user.isAFK();
+				}*/
 		if (getVersion().equals(2)) {
 			final bammerbom.ultimatecore.bukkit.api.UPlayer user = bammerbom.ultimatecore.bukkit.api.UC
 					.getPlayer(player);

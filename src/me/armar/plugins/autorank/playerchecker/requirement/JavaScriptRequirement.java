@@ -36,31 +36,31 @@ public class JavaScriptRequirement extends Requirement {
 
 	@Override
 	public boolean meetsRequirement(final Player player) {
-		
+
 		// Put in some shortcuts
 		engine.put("Player", player);
-		
+
 		Object result = null;
-		
+
 		// Evaluate expression before storing it.
 		try {
 			result = engine.eval(code);
-			
+
 			if (!(result instanceof Boolean)) {
 				this.getAutorank().getLogger().warning("The expression '" + code + "' is not a valid expression!");
 				return false;
 			}
-		} catch (ScriptException e) {
+		} catch (final ScriptException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
 		}
-		
+
 		return (Boolean) result;
 	}
 
 	@Override
-	public boolean setOptions(String[] options) {
+	public boolean setOptions(final String[] options) {
 		if (options.length > 0) {
 			code = options[0];
 		}
@@ -70,7 +70,7 @@ public class JavaScriptRequirement extends Requirement {
 		}
 
 		engine = new ScriptEngineManager().getEngineByName("JavaScript");
-		
+
 		engine.put("Server", Bukkit.getServer());
 
 		return code != null && engine != null;

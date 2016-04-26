@@ -29,8 +29,7 @@ public class RoyalCommandsHandler implements DependencyHandler {
 	 */
 	@Override
 	public Plugin get() {
-		final Plugin plugin = this.plugin.getServer().getPluginManager()
-				.getPlugin("RoyalCommands");
+		final Plugin plugin = this.plugin.getServer().getPluginManager().getPlugin("RoyalCommands");
 
 		// WorldGuard may not be loaded
 		if (plugin == null || !(plugin instanceof RoyalCommands)) {
@@ -83,14 +82,12 @@ public class RoyalCommandsHandler implements DependencyHandler {
 
 			if (api != null) {
 				if (verbose) {
-					plugin.getLogger().info(
-							"RoyalCommands has been found and can be used!");
+					plugin.getLogger().info("RoyalCommands has been found and can be used!");
 				}
 				return true;
 			} else {
 				if (verbose) {
-					plugin.getLogger().info(
-							"RoyalCommands has been found but cannot be used!");
+					plugin.getLogger().info("RoyalCommands has been found but cannot be used!");
 				}
 				return false;
 			}

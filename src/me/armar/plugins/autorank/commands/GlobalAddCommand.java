@@ -27,22 +27,19 @@ public class GlobalAddCommand extends AutorankCommand {
 	}
 
 	@Override
-	public boolean onCommand(final CommandSender sender, final Command cmd,
-			final String label, final String[] args) {
+	public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
 		if (!plugin.getCommandsManager().hasPermission("autorank.gadd", sender)) {
 			return true;
 		}
 
 		if (args.length < 3) {
-			sender.sendMessage(Lang.INVALID_FORMAT
-					.getConfigValue("/ar gadd <player> <value>"));
+			sender.sendMessage(Lang.INVALID_FORMAT.getConfigValue("/ar gadd <player> <value>"));
 			return true;
 		}
 
 		if (!plugin.getMySQLWrapper().isMySQLEnabled()) {
-			sender.sendMessage(ChatColor.RED
-					+ Lang.MYSQL_IS_NOT_ENABLED.getConfigValue());
+			sender.sendMessage(ChatColor.RED + Lang.MYSQL_IS_NOT_ENABLED.getConfigValue());
 			return true;
 		}
 
@@ -52,7 +49,7 @@ public class GlobalAddCommand extends AutorankCommand {
 			sender.sendMessage(Lang.UNKNOWN_PLAYER.getConfigValue(args[1]));
 			return true;
 		}
-		
+
 		if (plugin.getUUIDStorage().hasRealName(uuid)) {
 			args[1] = plugin.getUUIDStorage().getRealName(uuid);
 		}
@@ -67,14 +64,12 @@ public class GlobalAddCommand extends AutorankCommand {
 				builder.append(args[i]);
 			}
 
-			if (!builder.toString().contains("m")
-					&& !builder.toString().contains("h")
+			if (!builder.toString().contains("m") && !builder.toString().contains("h")
 					&& !builder.toString().contains("d")) {
 				value = AutorankTools.stringtoInt(builder.toString().trim());
 				value += plugin.getPlaytimes().getGlobalTime(uuid);
 			} else {
-				value = AutorankTools.stringToTime(builder.toString(),
-						Time.MINUTES);
+				value = AutorankTools.stringToTime(builder.toString(), Time.MINUTES);
 				value += plugin.getPlaytimes().getGlobalTime(uuid);
 			}
 		}
@@ -85,11 +80,9 @@ public class GlobalAddCommand extends AutorankCommand {
 			} catch (final SQLException e) {
 				e.printStackTrace();
 			}
-			AutorankTools.sendColoredMessage(sender,
-					Lang.PLAYTIME_CHANGED.getConfigValue(args[1], value + ""));
+			AutorankTools.sendColoredMessage(sender, Lang.PLAYTIME_CHANGED.getConfigValue(args[1], value + ""));
 		} else {
-			AutorankTools.sendColoredMessage(sender, Lang.INVALID_FORMAT
-					.getConfigValue("/ar gadd [player] [value]"));
+			AutorankTools.sendColoredMessage(sender, Lang.INVALID_FORMAT.getConfigValue("/ar gadd [player] [value]"));
 		}
 
 		return true;
@@ -99,8 +92,8 @@ public class GlobalAddCommand extends AutorankCommand {
 	 * @see me.armar.plugins.autorank.commands.manager.AutorankCommand#onTabComplete(org.bukkit.command.CommandSender, org.bukkit.command.Command, java.lang.String, java.lang.String[])
 	 */
 	@Override
-	public List<String> onTabComplete(final CommandSender sender,
-			final Command cmd, final String commandLabel, final String[] args) {
+	public List<String> onTabComplete(final CommandSender sender, final Command cmd, final String commandLabel,
+			final String[] args) {
 		// TODO Auto-generated method stub
 		return null;
 	}

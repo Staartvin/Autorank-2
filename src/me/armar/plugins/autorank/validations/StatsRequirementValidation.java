@@ -63,17 +63,14 @@ public class StatsRequirementValidation {
 			return true;
 		}
 		for (final String group : plugin.getConfigHandler().getRanks()) {
-			final Set<String> reqs = plugin.getConfigHandler().getRequirements(
-					group);
+			final Set<String> reqs = plugin.getConfigHandler().getRequirements(group);
 
 			for (final String req : reqs) {
 				if (requiresStats(req)) {
-					if (plugin.getHookedStatsPlugin() == null
-							|| !plugin.getHookedStatsPlugin().isEnabled()) {
-						plugin.getWarningManager()
-								.registerWarning(
-										"You need to install Stats because you have Stats-required requirements listed in your config.",
-										5);
+					if (plugin.getHookedStatsPlugin() == null || !plugin.getHookedStatsPlugin().isEnabled()) {
+						plugin.getWarningManager().registerWarning(
+								"You need to install Stats because you have Stats-required requirements listed in your config.",
+								5);
 						return false;
 					}
 				}

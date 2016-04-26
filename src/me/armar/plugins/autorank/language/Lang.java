@@ -19,8 +19,7 @@ public enum Lang {
 	/**
 	 * &cYou have already completed this requirement!
 	 */
-	ALREADY_COMPLETED_REQUIREMENT("already-completed-requirement",
-			"&cYou have already completed this requirement!"),
+	ALREADY_COMPLETED_REQUIREMENT("already-completed-requirement", "&cYou have already completed this requirement!"),
 	/**
 	 * &3Autorank has been reloaded.
 	 */
@@ -28,8 +27,7 @@ public enum Lang {
 	/**
 	 * Travel at least {0} {1}.
 	 */
-	BLOCKS_MOVED_REQUIREMENT("blocks-moved-requirement",
-			"Travel at least {0} {1}"),
+	BLOCKS_MOVED_REQUIREMENT("blocks-moved-requirement", "Travel at least {0} {1}"),
 	/**
 	 * Break at least {0}.
 	 */
@@ -41,8 +39,7 @@ public enum Lang {
 	/**
 	 * Take at least {0} damage
 	 */
-	DAMAGE_TAKEN_REQUIREMENT("damage-taken-requirement",
-			"Take at least {0} damage"),
+	DAMAGE_TAKEN_REQUIREMENT("damage-taken-requirement", "Take at least {0} damage"),
 	/**
 	 * New data has been imported!
 	 */
@@ -58,8 +55,7 @@ public enum Lang {
 	/**
 	 * You do not meet requirements for #&6{0}&c:
 	 */
-	DO_NOT_MEET_REQUIREMENTS_FOR("do-not-meet-requirements-for",
-			"You do not meet requirements for #&6{0}&c:"),
+	DO_NOT_MEET_REQUIREMENTS_FOR("do-not-meet-requirements-for", "You do not meet requirements for #&6{0}&c:"),
 	/**
 	 * Done
 	 */
@@ -71,13 +67,11 @@ public enum Lang {
 	/**
 	 * Have at least {0} power in your faction.
 	 */
-	FACTIONS_POWER_REQUIREMENT("factions-power-requirement",
-			"Have at least {0} power in your faction"),
+	FACTIONS_POWER_REQUIREMENT("factions-power-requirement", "Have at least {0} power in your faction"),
 	/**
 	 * Catch at least {0} fish.
 	 */
-	FISH_CAUGHT_REQUIREMENT("fish-caught-requirement",
-			"Catch at least {0} fish"),
+	FISH_CAUGHT_REQUIREMENT("fish-caught-requirement", "Catch at least {0} fish"),
 	/**
 	 * Be in gamemode {0}.
 	 */
@@ -85,8 +79,7 @@ public enum Lang {
 	/**
 	 * Play for at least {0} on any of the servers.
 	 */
-	GLOBAL_TIME_REQUIREMENT("global-time-requirement",
-			"Play for at least {0} on any of the servers"),
+	GLOBAL_TIME_REQUIREMENT("global-time-requirement", "Play for at least {0} on any of the servers"),
 	/**
 	 * hours
 	 */
@@ -110,8 +103,7 @@ public enum Lang {
 	/**
 	 * Craft at least {0} item(s).
 	 */
-	ITEMS_CRAFTED_REQUIREMENT("items-crafted-requirement",
-			"Craft at least {0} item(s)"),
+	ITEMS_CRAFTED_REQUIREMENT("items-crafted-requirement", "Craft at least {0} item(s)"),
 	/**
 	 * Be at {0}.
 	 */
@@ -119,24 +111,19 @@ public enum Lang {
 	/**
 	 * Have at least power level {0}.
 	 */
-	MCMMO_POWER_LEVEL_REQUIREMENT("mcmmo-power-level-requirement",
-			"Have at least power level {0}"),
+	MCMMO_POWER_LEVEL_REQUIREMENT("mcmmo-power-level-requirement", "Have at least power level {0}"),
 	/**
 	 * Have at least level {0} in {1}.
 	 */
-	MCMMO_SKILL_LEVEL_REQUIREMENT("mcmmo-skill-level-requirement",
-			"Have at least level {0} in {1}"),
+	MCMMO_SKILL_LEVEL_REQUIREMENT("mcmmo-skill-level-requirement", "Have at least level {0} in {1}"),
 	/**
 	 * meets all the requirements for rank {0}
 	 */
-	MEETS_ALL_REQUIREMENTS("meets-all-requirements",
-			"meets all the requirements for rank {0}"),
+	MEETS_ALL_REQUIREMENTS("meets-all-requirements", "meets all the requirements for rank {0}"),
 	/**
 	 * meets all the requirements
 	 */
-	MEETS_ALL_REQUIREMENTS_WITHOUT_RANK_UP(
-			"meets-all-requirements-without-rank-up",
-			"meets all the requirements"),
+	MEETS_ALL_REQUIREMENTS_WITHOUT_RANK_UP("meets-all-requirements-without-rank-up", "meets all the requirements"),
 	/**
 	 * minutes
 	 */
@@ -184,13 +171,11 @@ public enum Lang {
 	/**
 	 * &6{0}&c has never been logged before.
 	 */
-	PLAYER_IS_INVALID("player-is-invalid",
-			"&6{0}&4 has never been logged before."),
+	PLAYER_IS_INVALID("player-is-invalid", "&6{0}&4 has never been logged before."),
 	/**
 	 * Kill at least {0} player(s).
 	 */
-	PLAYER_KILLS_REQUIREMENT("player-kills-requirement",
-			"Kill at least {0} player(s)"),
+	PLAYER_KILLS_REQUIREMENT("player-kills-requirement", "Kill at least {0} player(s)"),
 	/**
 	 * &6{0}&c is not online!
 	 */
@@ -214,8 +199,7 @@ public enum Lang {
 	/**
 	 * You have successfully completed requirement #{0}:
 	 */
-	SUCCESSFULLY_COMPLETED_REQUIREMENT("successfully-completed-requirement",
-			"You have successfully completed requirement &6{0}&a:"),
+	SUCCESSFULLY_COMPLETED_REQUIREMENT("successfully-completed-requirement", "You have successfully completed requirement &6{0}&a:"),
 	/**
 	 * Play for at least {0}.
 	 */
@@ -223,23 +207,19 @@ public enum Lang {
 	/**
 	 * Shear at least {0} sheep.
 	 */
-	TIMES_SHEARED_REQUIREMENT("times-sheared-requirement",
-			"Shear at least {0} sheep"),
+	TIMES_SHEARED_REQUIREMENT("times-sheared-requirement", "Shear at least {0} sheep"),
 	/**
 	 * Kill at least {0}.
 	 */
-	TOTAL_MOBS_KILLED_REQUIREMENT("total-mobs-killed-requirement",
-			"Kill at least {0}"),
+	TOTAL_MOBS_KILLED_REQUIREMENT("total-mobs-killed-requirement", "Kill at least {0}"),
 	/**
 	 * Be with this server for at least {0}.
 	 */
-	TOTAL_TIME_REQUIREMENT("total-time-requirement",
-			"Be with this server for at least {0}"),
+	TOTAL_TIME_REQUIREMENT("total-time-requirement", "Be with this server for at least {0}"),
 	/**
 	 * &cPlayer {0} is unknown and couldn't be identified.
 	 */
-	UNKNOWN_PLAYER("unknown-player",
-			"&cPlayer {0} is unknown and couldn't be identified."),
+	UNKNOWN_PLAYER("unknown-player", "&cPlayer {0} is unknown and couldn't be identified."),
 	/**
 	 * Vote at least {0} times.
 	 */
@@ -247,8 +227,7 @@ public enum Lang {
 	/**
 	 * Be in region '{0}'.
 	 */
-	WORLD_GUARD_REGION_REQUIREMENT("world-guard-region-requirement",
-			"Be in region {0}"),
+	WORLD_GUARD_REGION_REQUIREMENT("world-guard-region-requirement", "Be in region {0}"),
 	/**
 	 * Be in {0}.
 	 */
@@ -260,8 +239,7 @@ public enum Lang {
 	/**
 	 * Be from area '{0}'.
 	 */
-	ESSENTIALS_GEOIP_LOCATION_REQUIREMENT(
-			"essentials-geoip-location-requirement", "Be from area {0}"),
+	ESSENTIALS_GEOIP_LOCATION_REQUIREMENT("essentials-geoip-location-requirement", "Be from area {0}"),
 	/**
 	 * Be in biome '{0}'.
 	 */
@@ -307,11 +285,13 @@ public enum Lang {
 	 */
 	PROGRESS_RESET("progress-reset", "&eYour progress for the rank is reset."),
 	/**
-	 * &4You cannot use this command as this server has not enabled partial completion!
+	 * &4You cannot use this command as this server has not enabled partial
+	 * completion!
 	 */
 	PARTIAL_COMPLETION_NOT_ENABLED("partial-completion-not-enabled", "&4You cannot use this command as this server has not enabled partial completion!"),
 	/**
-	 * &4You have not specified a valid leaderboard type! &eOnly 'total', 'daily', 'weekly' and 'monthly' are allowed.
+	 * &4You have not specified a valid leaderboard type! &eOnly 'total',
+	 * 'daily', 'weekly' and 'monthly' are allowed.
 	 */
 	INVALID_LEADERBOARD_TYPE("invalid-leaderboard-type", "&4You have not specified a valid leaderboard type! &eOnly 'total', 'daily', 'weekly' and 'monthly' are allowed."),
 	/**
@@ -383,10 +363,10 @@ public enum Lang {
 	 */
 	LEADERBOARD_FOOTER("leaderboard-footer", "&a------------------------------------"),
 	/**
-	 * &4You have been demoted to {0} since you did not meet a specific requirement: {1}
+	 * &4You have been demoted to {0} since you did not meet a specific
+	 * requirement: {1}
 	 */
-	DERANK_MESSAGE("derank-message", "&4You have been demoted to {0} since you did not meet a specific requirement: {1}"),
-	;
+	DERANK_MESSAGE("derank-message", "&4You have been demoted to {0} since you did not meet a specific requirement: {1}"),;
 
 	private static FileConfiguration LANG;
 
@@ -419,8 +399,7 @@ public enum Lang {
 	 * @return value in config or otherwise default value
 	 */
 	public String getConfigValue(final String... args) {
-		String value = ChatColor.translateAlternateColorCodes('&',
-				LANG.getString(this.path, this.def));
+		String value = ChatColor.translateAlternateColorCodes('&', LANG.getString(this.path, this.def));
 
 		if (args == null)
 			return value;

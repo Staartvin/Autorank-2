@@ -21,8 +21,7 @@ public class DummyHandler implements StatsPlugin {
 	}
 
 	@Override
-	public int getNormalStat(final String statType, final UUID uuid,
-			final Object... arguments) {
+	public int getNormalStat(final String statType, final UUID uuid, final Object... arguments) {
 		// TODO Auto-generated method stub
 		return 0;
 	}

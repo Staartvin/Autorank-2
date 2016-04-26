@@ -29,8 +29,8 @@ public class PlayerPromoteEvent extends Event implements Cancellable {
 	 * @param groupFrom GroupFrom
 	 * @param groupTo GroupTo
 	 */
-	public PlayerPromoteEvent(final Player player, final String worldName,
-			final String groupFrom, final String groupTo) {
+	public PlayerPromoteEvent(final Player player, final String worldName, final String groupFrom,
+			final String groupTo) {
 		this.player = player;
 		this.worldName = worldName;
 		this.groupFrom = groupFrom;

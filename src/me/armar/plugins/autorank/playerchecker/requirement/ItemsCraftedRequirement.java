@@ -12,8 +12,7 @@ public class ItemsCraftedRequirement extends Requirement {
 	@Override
 	public String getDescription() {
 
-		String lang = Lang.ITEMS_CRAFTED_REQUIREMENT
-				.getConfigValue(itemsCrafted + "");
+		String lang = Lang.ITEMS_CRAFTED_REQUIREMENT.getConfigValue(itemsCrafted + "");
 
 		// Check if this requirement is world-specific
 		if (this.isWorldSpecific()) {
@@ -25,8 +24,7 @@ public class ItemsCraftedRequirement extends Requirement {
 
 	@Override
 	public String getProgress(final Player player) {
-		final int progressBar = this.getStatsPlugin().getNormalStat(
-				StatsHandler.statTypes.ITEMS_CRAFTED.toString(),
+		final int progressBar = this.getStatsPlugin().getNormalStat(StatsHandler.statTypes.ITEMS_CRAFTED.toString(),
 				player.getUniqueId(), this.getWorld());
 
 		return progressBar + "/" + itemsCrafted;
@@ -35,15 +33,14 @@ public class ItemsCraftedRequirement extends Requirement {
 	@Override
 	public boolean meetsRequirement(final Player player) {
 
-		final int realItemsCrafted = this.getStatsPlugin().getNormalStat(
-				StatsHandler.statTypes.ITEMS_CRAFTED.toString(),
-				player.getUniqueId(), this.getWorld());
+		final int realItemsCrafted = this.getStatsPlugin()
+				.getNormalStat(StatsHandler.statTypes.ITEMS_CRAFTED.toString(), player.getUniqueId(), this.getWorld());
 
 		return realItemsCrafted >= itemsCrafted;
 	}
 
 	@Override
-	public boolean setOptions(String[] options) {
+	public boolean setOptions(final String[] options) {
 
 		itemsCrafted = Integer.parseInt(options[0]);
 

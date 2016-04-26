@@ -45,7 +45,7 @@ public class ExpRequirement extends Requirement {
 	}
 
 	@Override
-	public boolean setOptions(String[] options) {
+	public boolean setOptions(final String[] options) {
 
 		minExp = AutorankTools.stringtoInt(options[0]);
 

@@ -22,14 +22,11 @@ public class SpawnFireworkResult extends Result {
 		if (player == null)
 			return false;
 
-		final Location loc = (target.equals("player")) ? player.getLocation()
-				: player.getWorld().getSpawnLocation();
+		final Location loc = (target.equals("player")) ? player.getLocation() : player.getWorld().getSpawnLocation();
 
-		final Firework fw = (Firework) loc.getWorld().spawnEntity(loc,
-				EntityType.FIREWORK);
+		final Firework fw = (Firework) loc.getWorld().spawnEntity(loc, EntityType.FIREWORK);
 		final FireworkMeta fwm = fw.getFireworkMeta();
-		final FireworkEffect effect = FireworkEffect.builder()
-				.withColor(colour).with(type).build();
+		final FireworkEffect effect = FireworkEffect.builder().withColor(colour).with(type).build();
 
 		fwm.addEffect(effect);
 		fwm.setPower(power);
@@ -50,8 +47,8 @@ public class SpawnFireworkResult extends Result {
 		target = options[0];
 		power = Integer.parseInt(options[1]);
 		type = Type.valueOf(options[2].toUpperCase().replace(" ", "_"));
-		colour = Color.fromRGB(Integer.parseInt(options[3]),
-				Integer.parseInt(options[4]), Integer.parseInt(options[5]));
+		colour = Color.fromRGB(Integer.parseInt(options[3]), Integer.parseInt(options[4]),
+				Integer.parseInt(options[5]));
 		// Colour is RGB code
 
 		return target != null;

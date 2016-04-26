@@ -12,8 +12,7 @@ public class DamageTakenRequirement extends Requirement {
 	@Override
 	public String getDescription() {
 
-		String lang = Lang.DAMAGE_TAKEN_REQUIREMENT
-				.getConfigValue(damageTaken + "");
+		String lang = Lang.DAMAGE_TAKEN_REQUIREMENT.getConfigValue(damageTaken + "");
 
 		// Check if this requirement is world-specific
 		if (this.isWorldSpecific()) {
@@ -25,8 +24,7 @@ public class DamageTakenRequirement extends Requirement {
 
 	@Override
 	public String getProgress(final Player player) {
-		final int damTaken = getStatsPlugin().getNormalStat(
-				StatsHandler.statTypes.DAMAGE_TAKEN.toString(),
+		final int damTaken = getStatsPlugin().getNormalStat(StatsHandler.statTypes.DAMAGE_TAKEN.toString(),
 				player.getUniqueId(), this.getWorld());
 
 		return damTaken + "/" + damageTaken;
@@ -35,15 +33,14 @@ public class DamageTakenRequirement extends Requirement {
 	@Override
 	public boolean meetsRequirement(final Player player) {
 
-		final int damTaken = getStatsPlugin().getNormalStat(
-				StatsHandler.statTypes.DAMAGE_TAKEN.toString(),
+		final int damTaken = getStatsPlugin().getNormalStat(StatsHandler.statTypes.DAMAGE_TAKEN.toString(),
 				player.getUniqueId(), this.getWorld());
 
 		return damTaken >= damageTaken;
 	}
 
 	@Override
-	public boolean setOptions(String[] options) {
+	public boolean setOptions(final String[] options) {
 
 		damageTaken = Integer.parseInt(options[0]);
 

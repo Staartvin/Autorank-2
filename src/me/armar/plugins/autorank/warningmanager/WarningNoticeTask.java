@@ -29,8 +29,7 @@ public class WarningNoticeTask implements Runnable {
 
 				if (plugin.getWarningManager().getHighestWarning() != null) {
 
-					p.sendMessage(ChatColor.BLUE + "<AUTORANK> "
-							+ ChatColor.RED + "Warning: " + ChatColor.GREEN
+					p.sendMessage(ChatColor.BLUE + "<AUTORANK> " + ChatColor.RED + "Warning: " + ChatColor.GREEN
 							+ plugin.getWarningManager().getHighestWarning());
 
 				}

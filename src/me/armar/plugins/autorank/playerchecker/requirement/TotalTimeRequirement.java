@@ -53,7 +53,7 @@ public class TotalTimeRequirement extends Requirement {
 	}
 
 	@Override
-	public boolean setOptions(String[] options) {
+	public boolean setOptions(final String[] options) {
 		if (options.length > 0) {
 			totalTime = AutorankTools.stringToTime(options[0], Time.MINUTES);
 		} else {

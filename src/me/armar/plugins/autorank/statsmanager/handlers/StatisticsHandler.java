@@ -16,8 +16,7 @@ public class StatisticsHandler implements StatsPlugin {
 
 	private final StatisticsAPIHandler statsApi;
 
-	public StatisticsHandler(final Autorank instance,
-			final StatisticsAPIHandler statsAPI) {
+	public StatisticsHandler(final Autorank instance, final StatisticsAPIHandler statsAPI) {
 		this.plugin = instance;
 
 		statsApi = statsAPI;
@@ -38,8 +37,7 @@ public class StatisticsHandler implements StatsPlugin {
 	}
 
 	@Override
-	public int getNormalStat(final String statType, final UUID uuid,
-			final Object... arguments) {
+	public int getNormalStat(final String statType, final UUID uuid, final Object... arguments) {
 		// First argument is always the name, second arg is always the world
 
 		final String correctName = getCorrectStatName(statType).toLowerCase();
@@ -124,8 +122,7 @@ public class StatisticsHandler implements StatsPlugin {
 	@Override
 	public boolean isEnabled() {
 		if (statsApi == null) {
-			plugin.getLogger().info(
-					"Statistics (by bitWolfy) api library was not found!");
+			plugin.getLogger().info("Statistics (by bitWolfy) api library was not found!");
 			return false;
 		}
 

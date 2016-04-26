@@ -15,7 +15,8 @@ import me.armar.plugins.autorank.Autorank;
 /**
  * This class allows developers to easily get UUIDs from names <br>
  * or to do the reverse. <br>
- * It has an implemented cache system, which makes sure it doesn't do a lookup <br>
+ * It has an implemented cache system, which makes sure it doesn't do a lookup
+ * <br>
  * when not needed.
  * <p>
  * Date created: 17:13:57 2 apr. 2014
@@ -38,7 +39,7 @@ public class UUIDManager {
 	// Whether to use cache or not
 	private static final boolean useCache = true;
 
-	public static void addCachedPlayer(final String playerName, final UUID uuid, String realName) {
+	public static void addCachedPlayer(final String playerName, final UUID uuid, final String realName) {
 		if (!useCache)
 			return;
 
@@ -72,8 +73,7 @@ public class UUIDManager {
 			return null;
 
 		if (players.get(uuid) == null) {
-			throw new NullPointerException("Could not get player from UUID "
-					+ uuid + "!");
+			throw new NullPointerException("Could not get player from UUID " + uuid + "!");
 		}
 
 		return players.get(uuid);
@@ -103,9 +103,8 @@ public class UUIDManager {
 			// Check if we have cached values
 			for (final UUID uuid : uuids) {
 
-				String playerName = plugin.getUUIDStorage()
-						.getRealName(uuid);
-				
+				String playerName = plugin.getUUIDStorage().getRealName(uuid);
+
 				if (playerName == null) {
 					// Real name was not found, use cached name.
 					playerName = plugin.getUUIDStorage().getCachedPlayerName(uuid);
@@ -136,7 +135,7 @@ public class UUIDManager {
 			// So we need to do a lookup.
 			// We have to make sure we only lookup the players that we haven't got cached values of yet.
 
-			// Remove uuids that don't need to be looked up anymore. 
+			// Remove uuids that don't need to be looked up anymore.
 			// Just for performance sake.
 			for (final UUID entry : players.keySet()) {
 				uuids.remove(entry);
@@ -158,9 +157,7 @@ public class UUIDManager {
 					response = fetcher.call();
 				} catch (final Exception e) {
 					if (e instanceof IOException) {
-						Bukkit.getLogger()
-								.warning(
-										"Tried to contact Mojang page for UUID lookup but failed.");
+						Bukkit.getLogger().warning("Tried to contact Mojang page for UUID lookup but failed.");
 						return;
 					}
 					e.printStackTrace();
@@ -232,8 +229,7 @@ public class UUIDManager {
 			}
 		}
 
-		throw new NullPointerException("Could not get UUID from player "
-				+ playerName + "!");
+		throw new NullPointerException("Could not get UUID from player " + playerName + "!");
 	}
 
 	/**
@@ -283,7 +279,7 @@ public class UUIDManager {
 			// So we need to do a lookup.
 			// We have to make sure we only lookup the players that we haven't got cached values of yet.
 
-			// Remove players that don't need to be looked up anymore. 
+			// Remove players that don't need to be looked up anymore.
 			// Just for performance sake.
 			for (final Entry<String, UUID> entry : uuids.entrySet()) {
 				names.remove(entry.getKey());
@@ -305,9 +301,7 @@ public class UUIDManager {
 					response = fetcher.call();
 				} catch (final Exception e) {
 					if (e instanceof IOException) {
-						Bukkit.getLogger()
-								.warning(
-										"Tried to contact Mojang page for UUID lookup but failed.");
+						Bukkit.getLogger().warning("Tried to contact Mojang page for UUID lookup but failed.");
 						return;
 					}
 					e.printStackTrace();

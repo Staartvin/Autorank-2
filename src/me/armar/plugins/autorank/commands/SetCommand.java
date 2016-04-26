@@ -26,14 +26,12 @@ public class SetCommand extends AutorankCommand {
 	}
 
 	@Override
-	public boolean onCommand(final CommandSender sender, final Command cmd,
-			final String label, final String[] args) {
+	public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
 		int value = -1;
 
 		if (args.length < 3) {
-			sender.sendMessage(Lang.INVALID_FORMAT
-					.getConfigValue("/ar set <player> <value>"));
+			sender.sendMessage(Lang.INVALID_FORMAT.getConfigValue("/ar set <player> <value>"));
 			return true;
 		}
 
@@ -45,35 +43,29 @@ public class SetCommand extends AutorankCommand {
 				builder.append(args[i]);
 			}
 
-			if (!builder.toString().contains("m")
-					&& !builder.toString().contains("h")
-					&& !builder.toString().contains("d")
-					&& !builder.toString().contains("s")) {
+			if (!builder.toString().contains("m") && !builder.toString().contains("h")
+					&& !builder.toString().contains("d") && !builder.toString().contains("s")) {
 				value = AutorankTools.stringtoInt(builder.toString().trim());
 			} else {
 
 				if (builder.toString().contains("s")) {
-					sender.sendMessage(ChatColor.RED
-							+ Lang.INVALID_FORMAT
-									.getConfigValue("(h)ours, (m)inutes or (d)ays"));
+					sender.sendMessage(
+							ChatColor.RED + Lang.INVALID_FORMAT.getConfigValue("(h)ours, (m)inutes or (d)ays"));
 					return true;
 				}
 
-				value = AutorankTools.stringToTime(builder.toString(),
-						Time.MINUTES);
+				value = AutorankTools.stringToTime(builder.toString(), Time.MINUTES);
 			}
 		}
 
 		if (value >= 0) {
 
 			if (args[1].equalsIgnoreCase(sender.getName())) {
-				if (!plugin.getCommandsManager().hasPermission(
-						"autorank.set.self", sender)) {
+				if (!plugin.getCommandsManager().hasPermission("autorank.set.self", sender)) {
 					return true;
 				}
 			} else {
-				if (!plugin.getCommandsManager().hasPermission(
-						"autorank.set.other", sender)) {
+				if (!plugin.getCommandsManager().hasPermission("autorank.set.other", sender)) {
 					return true;
 				}
 			}
@@ -84,19 +76,16 @@ public class SetCommand extends AutorankCommand {
 				sender.sendMessage(Lang.UNKNOWN_PLAYER.getConfigValue(args[1]));
 				return true;
 			}
-			
+
 			if (plugin.getUUIDStorage().hasRealName(uuid)) {
 				args[1] = plugin.getUUIDStorage().getRealName(uuid);
 			}
 
 			plugin.getPlaytimes().setLocalTime(uuid, value);
-			AutorankTools.sendColoredMessage(
-					sender,
-					Lang.PLAYTIME_CHANGED.getConfigValue(args[1], value
-							+ " " +  Lang.MINUTE_PLURAL.getConfigValue()));
+			AutorankTools.sendColoredMessage(sender,
+					Lang.PLAYTIME_CHANGED.getConfigValue(args[1], value + " " + Lang.MINUTE_PLURAL.getConfigValue()));
 		} else {
-			AutorankTools.sendColoredMessage(sender, Lang.INVALID_FORMAT
-					.getConfigValue("/ar set <player> <value>"));
+			AutorankTools.sendColoredMessage(sender, Lang.INVALID_FORMAT.getConfigValue("/ar set <player> <value>"));
 		}
 
 		return true;
@@ -106,8 +95,8 @@ public class SetCommand extends AutorankCommand {
 	 * @see me.armar.plugins.autorank.commands.manager.AutorankCommand#onTabComplete(org.bukkit.command.CommandSender, org.bukkit.command.Command, java.lang.String, java.lang.String[])
 	 */
 	@Override
-	public List<String> onTabComplete(final CommandSender sender,
-			final Command cmd, final String commandLabel, final String[] args) {
+	public List<String> onTabComplete(final CommandSender sender, final Command cmd, final String commandLabel,
+			final String[] args) {
 		// TODO Auto-generated method stub
 
 		return null;

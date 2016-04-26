@@ -30,8 +30,7 @@ public class NameFetcher implements Callable<Map<UUID, String>> {
 	private static final String PROFILE_URL = "https://sessionserver.mojang.com/session/minecraft/profile/";
 
 	public static String fromStream(final InputStream in) throws IOException {
-		final BufferedReader reader = new BufferedReader(new InputStreamReader(
-				in));
+		final BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 		final StringBuilder out = new StringBuilder();
 		final String newLine = System.getProperty("line.separator");
 		String line;
@@ -60,8 +59,7 @@ public class NameFetcher implements Callable<Map<UUID, String>> {
 		final Map<UUID, String> uuidStringMap = new HashMap<UUID, String>();
 		for (final UUID uuid : uuids) {
 			final HttpURLConnection connection = (HttpURLConnection) new URL(
-					PROFILE_URL + uuid.toString().replace("-", ""))
-					.openConnection();
+					PROFILE_URL + uuid.toString().replace("-", "")).openConnection();
 
 			JSONObject response = null;
 
@@ -69,15 +67,13 @@ public class NameFetcher implements Callable<Map<UUID, String>> {
 
 			String fromStream = null;
 			try {
-				response = (JSONObject) jsonParser.parse(new InputStreamReader(
-						connection.getInputStream()));
+				response = (JSONObject) jsonParser.parse(new InputStreamReader(connection.getInputStream()));
 
 				name = (String) response.get("name");
 
 			} catch (final ParseException e) {
-				// Try converting the stream to a string and removing all the spaces. 
-				fromStream = fromStream(connection.getInputStream())
-						.replaceAll(" ", "");
+				// Try converting the stream to a string and removing all the spaces.
+				fromStream = fromStream(connection.getInputStream()).replaceAll(" ", "");
 
 				// Parse again
 				response = (JSONObject) jsonParser.parse(fromStream);
@@ -86,22 +82,18 @@ public class NameFetcher implements Callable<Map<UUID, String>> {
 				name = (String) response.get("name");
 
 				if (name == null) {
-					System.out.print("[Autorank] Could not parse uuid '"
-							+ uuid.toString() + "' to name!");
+					System.out.print("[Autorank] Could not parse uuid '" + uuid.toString() + "' to name!");
 					continue;
 				}
 
 				final String error = (String) response.get("error");
-				final String errorMessage = (String) response
-						.get("errorMessage");
+				final String errorMessage = (String) response.get("errorMessage");
 				if (error != null && error.length() > 0) {
 					throw new IllegalStateException(errorMessage);
 				}
 			} finally {
 				if (name == null || response == null) {
-					System.out
-							.print("[Autorank] Could not find name of account with uuid: '"
-									+ uuid.toString() + "'");
+					System.out.print("[Autorank] Could not find name of account with uuid: '" + uuid.toString() + "'");
 				}
 			}
 

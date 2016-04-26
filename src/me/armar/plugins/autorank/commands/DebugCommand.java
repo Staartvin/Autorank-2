@@ -22,26 +22,21 @@ public class DebugCommand extends AutorankCommand {
 	}
 
 	@Override
-	public boolean onCommand(final CommandSender sender, final Command cmd,
-			final String label, final String[] args) {
+	public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
 		// This will create a 'debug.txt' file containing a lot of information about the plugin
-		if (!plugin.getCommandsManager()
-				.hasPermission("autorank.debug", sender)) {
+		if (!plugin.getCommandsManager().hasPermission("autorank.debug", sender)) {
 			return true;
 		}
 
-		plugin.getServer().getScheduler()
-				.runTaskAsynchronously(plugin, new Runnable() {
-					@Override
-					public void run() {
-						final String fileName = plugin.getDebugger()
-								.createDebugFile();
+		plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+			@Override
+			public void run() {
+				final String fileName = plugin.getDebugger().createDebugFile();
 
-						sender.sendMessage(ChatColor.GREEN + "Debug file '"
-								+ fileName + "' created!");
-					}
-				});
+				sender.sendMessage(ChatColor.GREEN + "Debug file '" + fileName + "' created!");
+			}
+		});
 
 		return true;
 	}
@@ -50,8 +45,8 @@ public class DebugCommand extends AutorankCommand {
 	 * @see me.armar.plugins.autorank.commands.manager.AutorankCommand#onTabComplete(org.bukkit.command.CommandSender, org.bukkit.command.Command, java.lang.String, java.lang.String[])
 	 */
 	@Override
-	public List<String> onTabComplete(final CommandSender sender,
-			final Command cmd, final String commandLabel, final String[] args) {
+	public List<String> onTabComplete(final CommandSender sender, final Command cmd, final String commandLabel,
+			final String[] args) {
 		// TODO Auto-generated method stub
 		return null;
 	}

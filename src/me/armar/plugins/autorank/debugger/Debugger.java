@@ -24,10 +24,8 @@ import me.armar.plugins.autorank.Autorank;
  */
 public class Debugger {
 
-	private final static DateFormat dateFormat = new SimpleDateFormat(
-			"yyyyMMddHHmmss");
-	private final static DateFormat humanDateFormat = new SimpleDateFormat(
-			"yyyy-MM-dd HH:mm:ss");
+	private final static DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+	private final static DateFormat humanDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	private final Autorank plugin;
 
 	public Debugger(final Autorank instance) {
@@ -36,14 +34,15 @@ public class Debugger {
 
 	/**
 	 * Creates a debug file which is based on the current status of Autorank.
-	 * <br>The file will be created in the folder 'debugger' and will have the name 'debug-yyyyMMddHHmmss'.
+	 * <br>
+	 * The file will be created in the folder 'debugger' and will have the name
+	 * 'debug-yyyyMMddHHmmss'.
 	 */
 	public String createDebugFile() {
 
 		final String dateFormatSave = dateFormat.format(new Date());
 		// Creates a new file
-		final File txt = new File(plugin.getDataFolder() + "/debugger",
-				"debug-" + dateFormatSave + ".txt");
+		final File txt = new File(plugin.getDataFolder() + "/debugger", "debug-" + dateFormatSave + ".txt");
 		try {
 			txt.getParentFile().mkdirs();
 			txt.createNewFile();
@@ -65,9 +64,11 @@ public class Debugger {
 
 		//write stuff
 		try {
-			out.write("This is a debug file of Autorank. You should give this to an author or ticket manager of Autorank.");
+			out.write(
+					"This is a debug file of Autorank. You should give this to an author or ticket manager of Autorank.");
 			out.newLine();
-			out.write("You can go to http://pastebin.com/ and paste this file. Then, give the link and state the problems you're having in a ticket on the Autorank page.");
+			out.write(
+					"You can go to http://pastebin.com/ and paste this file. Then, give the link and state the problems you're having in a ticket on the Autorank page.");
 			out.newLine();
 			out.write("");
 			out.newLine();
@@ -77,26 +78,22 @@ public class Debugger {
 			out.write("");
 			out.newLine();
 
-			out.write("Autorank version: "
-					+ plugin.getDescription().getVersion());
+			out.write("Autorank version: " + plugin.getDescription().getVersion());
 			out.newLine();
 			out.write("");
 			out.newLine();
 
-			out.write("Server implementation: "
-					+ plugin.getServer().getVersion());
+			out.write("Server implementation: " + plugin.getServer().getVersion());
 			out.newLine();
 			out.write("");
 			out.newLine();
 
-			out.write("Server version: "
-					+ plugin.getServer().getBukkitVersion());
+			out.write("Server version: " + plugin.getServer().getBukkitVersion());
 			out.newLine();
 			out.write("");
 			out.newLine();
 
-			out.write("Server warning state: "
-					+ plugin.getServer().getWarningState());
+			out.write("Server warning state: " + plugin.getServer().getWarningState());
 			out.newLine();
 			out.write("");
 			out.newLine();
@@ -114,8 +111,7 @@ public class Debugger {
 			out.write("");
 			out.newLine();
 
-			final String usedConfig = (plugin.getConfigHandler()
-					.useAdvancedConfig() ? "AdvancedConfig.yml"
+			final String usedConfig = (plugin.getConfigHandler().useAdvancedConfig() ? "AdvancedConfig.yml"
 					: "SimpleConfig.yml");
 
 			out.write("Config used: " + usedConfig);
@@ -148,8 +144,7 @@ public class Debugger {
 			out.write("");
 			out.newLine();
 
-			out.write("Loaded addons: "
-					+ plugin.getAddonManager().getLoadedAddons().toString());
+			out.write("Loaded addons: " + plugin.getAddonManager().getLoadedAddons().toString());
 			out.newLine();
 			out.write("");
 			out.newLine();
@@ -159,7 +154,7 @@ public class Debugger {
 			e.printStackTrace();
 			try {
 				out.close();
-			} catch (IOException e1) {
+			} catch (final IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}

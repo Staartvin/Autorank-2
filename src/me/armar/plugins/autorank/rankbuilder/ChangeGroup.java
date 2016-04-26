@@ -89,12 +89,12 @@ public class ChangeGroup {
 		if (this.checkDerankableRequirements(player)) {
 			return false;
 		}
-		
+
 		if (checkRequirements(player)) {
 
 			// final UUID uuid =
 			// UUIDManager.getUUIDFromPlayer(player.getName());
-			UUID uuid = plugin.getUUIDStorage().getStoredUUID(player.getName());
+			final UUID uuid = plugin.getUUIDStorage().getStoredUUID(player.getName());
 
 			// Apply all 'main' results
 
@@ -123,7 +123,7 @@ public class ChangeGroup {
 	public boolean checkRequirements(final Player player) {
 
 		// final UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
-		UUID uuid = plugin.getUUIDStorage().getStoredUUID(player.getName());
+		final UUID uuid = plugin.getUUIDStorage().getStoredUUID(player.getName());
 
 		// Player already got this rank
 		if (plugin.getPlayerDataHandler().hasCompletedRank(uuid, parentGroup)) {
@@ -156,17 +156,20 @@ public class ChangeGroup {
 		return true;
 	}
 
-	/** Check whether a player should be deranked based on its requirements
+	/**
+	 * Check whether a player should be deranked based on its requirements
+	 * 
 	 * @param player Player to check.
 	 * @return true if the player will be deranked, false otherwise.
 	 */
-	public boolean checkDerankableRequirements(Player player) {
+	public boolean checkDerankableRequirements(final Player player) {
 		// Player can never be deranked with this option set to false.
-		if (!plugin.getConfigHandler().allowDeranking()) return false;
+		if (!plugin.getConfigHandler().allowDeranking())
+			return false;
 
 		// final UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
-		UUID uuid = plugin.getUUIDStorage().getStoredUUID(player.getName());	
-		
+		final UUID uuid = plugin.getUUIDStorage().getStoredUUID(player.getName());
+
 		for (final RequirementsHolder holder : this.getRequirementsHolders()) {
 			if (holder == null)
 				continue;
@@ -182,8 +185,8 @@ public class ChangeGroup {
 						continue;
 					}
 
-					plugin.debugMessage("Demote player " + player.getName()
-							+ " to " + this.getPreviousGroup() + " since he doesn't meet a requirement (that requirement is also derankable).");
+					plugin.debugMessage("Demote player " + player.getName() + " to " + this.getPreviousGroup()
+							+ " since he doesn't meet a requirement (that requirement is also derankable).");
 
 					// When rank is changed: reset progress and update last
 					// known group
@@ -196,14 +199,15 @@ public class ChangeGroup {
 
 					plugin.getPermPlugHandler().getPermissionPlugin().demotePlayer(player, null, this.getParentGroup(),
 							this.getPreviousGroup());
-					
+
 					// Find the commands that have to be run
-					List<String> commands = plugin.getConfigHandler().getCommandsOnDerank(this.getParentGroup(), plugin.getConfigHandler().getRequirementNameOfId(this.getParentGroup(), holder.getReqID()));
-					
+					final List<String> commands = plugin.getConfigHandler().getCommandsOnDerank(this.getParentGroup(),
+							plugin.getConfigHandler().getRequirementNameOfId(this.getParentGroup(), holder.getReqID()));
+
 					// Run the commands
-					for (String command: commands) {
+					for (final String command : commands) {
 						final String cmd = command.replace("&p", player.getName());
-						
+
 						if (!Bukkit.isPrimaryThread()) {
 							plugin.getServer().getScheduler().runTask(plugin, new Runnable() {
 
@@ -212,17 +216,17 @@ public class ChangeGroup {
 									// Run command sync if we are currently not in main thread.
 									plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), cmd);
 								}
-								
+
 							});
 						} else {
 							plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), cmd);
 						}
-						
-						
+
 					}
-					
+
 					// Send player message telling them they have deranked
-					player.sendMessage(Lang.DERANK_MESSAGE.getConfigValue(this.getPreviousGroup(), holder.getDescription()));
+					player.sendMessage(
+							Lang.DERANK_MESSAGE.getConfigValue(this.getPreviousGroup(), holder.getDescription()));
 					return true;
 				}
 			}
@@ -236,7 +240,7 @@ public class ChangeGroup {
 	public List<RequirementsHolder> getFailedRequirementsHolders(final Player player) {
 		final List<RequirementsHolder> holders = new ArrayList<RequirementsHolder>();
 
-		for (RequirementsHolder holder : this.getRequirementsHolders()) {
+		for (final RequirementsHolder holder : this.getRequirementsHolders()) {
 			if (holder != null)
 				if (holder.meetsRequirement(player, player.getUniqueId())) {
 					holders.add(holder);
@@ -257,11 +261,11 @@ public class ChangeGroup {
 	// return requirements;
 	// }
 
-	public void setRequirementHolders(List<RequirementsHolder> holders) {
+	public void setRequirementHolders(final List<RequirementsHolder> holders) {
 		this.requirementsHolders = holders;
 	}
 
-	public void addRequirementHolder(RequirementsHolder holder) {
+	public void addRequirementHolder(final RequirementsHolder holder) {
 		requirementsHolders.add(holder);
 	}
 
@@ -282,7 +286,7 @@ public class ChangeGroup {
 		return previousGroup;
 	}
 
-	public void setPreviousGroup(String previousGroup) {
+	public void setPreviousGroup(final String previousGroup) {
 		this.previousGroup = previousGroup;
 	}
 }

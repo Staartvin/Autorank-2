@@ -24,8 +24,7 @@ public class HooksCommand extends AutorankCommand {
 	}
 
 	@Override
-	public boolean onCommand(final CommandSender sender, final Command cmd,
-			final String label, final String[] args) {
+	public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
 		sender.sendMessage(ChatColor.GOLD + "Autorank Hooks:");
 
@@ -34,11 +33,9 @@ public class HooksCommand extends AutorankCommand {
 			if (dep == dependency.AUTORANK)
 				continue;
 
-			final DependencyHandler handler = plugin.getDependencyManager()
-					.getDependency(dep);
+			final DependencyHandler handler = plugin.getDependencyManager().getDependency(dep);
 
-			final StringBuilder message = new StringBuilder(ChatColor.GRAY
-					+ dep.toString() + ": " + ChatColor.RESET);
+			final StringBuilder message = new StringBuilder(ChatColor.GRAY + dep.toString() + ": " + ChatColor.RESET);
 
 			if (handler.isAvailable()) {
 				message.append(ChatColor.GREEN + "AVAILABLE");
@@ -56,8 +53,8 @@ public class HooksCommand extends AutorankCommand {
 	 * @see me.armar.plugins.autorank.commands.manager.AutorankCommand#onTabComplete(org.bukkit.command.CommandSender, org.bukkit.command.Command, java.lang.String, java.lang.String[])
 	 */
 	@Override
-	public List<String> onTabComplete(final CommandSender sender,
-			final Command cmd, final String commandLabel, final String[] args) {
+	public List<String> onTabComplete(final CommandSender sender, final Command cmd, final String commandLabel,
+			final String[] args) {
 		// TODO Auto-generated method stub
 		return null;
 	}

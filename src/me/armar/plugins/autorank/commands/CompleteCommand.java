@@ -26,19 +26,16 @@ public class CompleteCommand extends AutorankCommand {
 	}
 
 	@Override
-	public boolean onCommand(final CommandSender sender, final Command cmd,
-			final String label, final String[] args) {
+	public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
 		// Implemented /ar complete #
 		if (args.length != 2) {
-			sender.sendMessage(Lang.INVALID_FORMAT
-					.getConfigValue("/ar complete #"));
+			sender.sendMessage(Lang.INVALID_FORMAT.getConfigValue("/ar complete #"));
 			return true;
 		}
 
 		if (!(sender instanceof Player)) {
-			sender.sendMessage(Lang.YOU_ARE_A_ROBOT
-					.getConfigValue("you can't rank up, silly.."));
+			sender.sendMessage(Lang.YOU_ARE_A_ROBOT.getConfigValue("you can't rank up, silly.."));
 			return true;
 		}
 
@@ -47,8 +44,7 @@ public class CompleteCommand extends AutorankCommand {
 			return true;
 		}
 
-		if (!plugin.getCommandsManager().hasPermission("autorank.complete",
-				sender))
+		if (!plugin.getCommandsManager().hasPermission("autorank.complete", sender))
 			return true;
 
 		final Player player = (Player) sender;
@@ -62,9 +58,7 @@ public class CompleteCommand extends AutorankCommand {
 				completionID = 1;
 			}
 		} catch (final Exception e) {
-			player.sendMessage(ChatColor.RED
-					+ Lang.INVALID_NUMBER
-							.getConfigValue(new String[] { args[1] }));
+			player.sendMessage(ChatColor.RED + Lang.INVALID_NUMBER.getConfigValue(new String[] { args[1] }));
 			return true;
 		}
 
@@ -72,8 +66,8 @@ public class CompleteCommand extends AutorankCommand {
 
 //		final List<Requirement> requirements = plugin.getPlayerChecker()
 //				.getAllRequirements(player);
-		
-		List<RequirementsHolder> holders = plugin.getPlayerChecker().getAllRequirementsHolders(player);
+
+		final List<RequirementsHolder> holders = plugin.getPlayerChecker().getAllRequirementsHolders(player);
 
 		if (holders.size() == 0) {
 			player.sendMessage(ChatColor.RED + "You don't have a next rank up!");
@@ -82,8 +76,7 @@ public class CompleteCommand extends AutorankCommand {
 
 		// Rank player as he has fulfilled all requirements
 		if (holders.size() == 0) {
-			player.sendMessage(ChatColor.GREEN
-					+ "You don't have any requirements left.");
+			player.sendMessage(ChatColor.GREEN + "You don't have any requirements left.");
 			return true;
 		} else {
 			// Get the specified requirement
@@ -94,38 +87,31 @@ public class CompleteCommand extends AutorankCommand {
 			// Human logic = first number is 1 not 0.
 			final RequirementsHolder holder = holders.get((completionID - 1));
 
-			if (plugin.getPlayerDataHandler().hasCompletedRequirement(
-					(completionID - 1), uuid)) {
-				player.sendMessage(ChatColor.RED
-						+ Lang.ALREADY_COMPLETED_REQUIREMENT.getConfigValue());
+			if (plugin.getPlayerDataHandler().hasCompletedRequirement((completionID - 1), uuid)) {
+				player.sendMessage(ChatColor.RED + Lang.ALREADY_COMPLETED_REQUIREMENT.getConfigValue());
 				return true;
 			}
 
 			if (holder.meetsRequirement(player, uuid)) {
 				// Player meets requirement
-				player.sendMessage(ChatColor.GREEN
-						+ Lang.SUCCESSFULLY_COMPLETED_REQUIREMENT
-								.getConfigValue(completionID + ""));
+				player.sendMessage(
+						ChatColor.GREEN + Lang.SUCCESSFULLY_COMPLETED_REQUIREMENT.getConfigValue(completionID + ""));
 				player.sendMessage(ChatColor.AQUA + holder.getDescription());
 
 				// Run results
 				plugin.getPlayerDataHandler().runResults(holder, player);
 
 				// Log that a player has passed this requirement
-				plugin.getPlayerDataHandler().addPlayerProgress(uuid,
-						(completionID - 1));
+				plugin.getPlayerDataHandler().addPlayerProgress(uuid, (completionID - 1));
 
 			} else {
 				// player does not meet requirements
-				player.sendMessage(ChatColor.RED
-						+ Lang.DO_NOT_MEET_REQUIREMENTS_FOR
-								.getConfigValue(completionID + ""));
+				player.sendMessage(ChatColor.RED + Lang.DO_NOT_MEET_REQUIREMENTS_FOR.getConfigValue(completionID + ""));
 				player.sendMessage(ChatColor.AQUA + holder.getDescription());
-				player.sendMessage(ChatColor.GREEN + "Current: "
-						+ ChatColor.GOLD + holder.getProgress(player));
+				player.sendMessage(ChatColor.GREEN + "Current: " + ChatColor.GOLD + holder.getProgress(player));
 			}
 		}
-		
+
 		return true;
 	}
 
@@ -133,8 +119,8 @@ public class CompleteCommand extends AutorankCommand {
 	 * @see me.armar.plugins.autorank.commands.manager.AutorankCommand#onTabComplete(org.bukkit.command.CommandSender, org.bukkit.command.Command, java.lang.String, java.lang.String[])
 	 */
 	@Override
-	public List<String> onTabComplete(final CommandSender sender,
-			final Command cmd, final String commandLabel, final String[] args) {
+	public List<String> onTabComplete(final CommandSender sender, final Command cmd, final String commandLabel,
+			final String[] args) {
 		// TODO Auto-generated method stub
 		return null;
 	}

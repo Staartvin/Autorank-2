@@ -26,19 +26,16 @@ public class TrackCommand extends AutorankCommand {
 	}
 
 	@Override
-	public boolean onCommand(final CommandSender sender, final Command cmd,
-			final String label, final String[] args) {
+	public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
 		// Implemented /ar track #
 		if (args.length != 2) {
-			sender.sendMessage(Lang.INVALID_FORMAT
-					.getConfigValue("/ar track #"));
+			sender.sendMessage(Lang.INVALID_FORMAT.getConfigValue("/ar track #"));
 			return true;
 		}
 
 		if (!(sender instanceof Player)) {
-			sender.sendMessage(Lang.YOU_ARE_A_ROBOT
-					.getConfigValue("you don't make progress, silly.."));
+			sender.sendMessage(Lang.YOU_ARE_A_ROBOT.getConfigValue("you don't make progress, silly.."));
 			return true;
 		}
 
@@ -50,8 +47,7 @@ public class TrackCommand extends AutorankCommand {
 			return true;
 		}*/
 
-		if (!plugin.getCommandsManager()
-				.hasPermission("autorank.track", sender))
+		if (!plugin.getCommandsManager().hasPermission("autorank.track", sender))
 			return true;
 
 		final Player player = (Player) sender;
@@ -65,20 +61,16 @@ public class TrackCommand extends AutorankCommand {
 				completionID = 1;
 			}
 		} catch (final Exception e) {
-			player.sendMessage(ChatColor.RED
-					+ Lang.INVALID_NUMBER
-							.getConfigValue(new String[] { args[1] }));
+			player.sendMessage(ChatColor.RED + Lang.INVALID_NUMBER.getConfigValue(new String[] { args[1] }));
 			return true;
 		}
 
 		final UUID uuid = plugin.getUUIDStorage().getStoredUUID(player.getName());
 
-		final List<RequirementsHolder> holders = plugin.getPlayerChecker()
-				.getAllRequirementsHolders(player);
+		final List<RequirementsHolder> holders = plugin.getPlayerChecker().getAllRequirementsHolders(player);
 
 		if (holders.size() == 0) {
-			player.sendMessage(ChatColor.RED
-					+ "You don't have any requirements!");
+			player.sendMessage(ChatColor.RED + "You don't have any requirements!");
 			return true;
 		}
 
@@ -86,8 +78,7 @@ public class TrackCommand extends AutorankCommand {
 
 		// Rank player as he has fulfilled all requirements
 		if (holders.size() == 0) {
-			player.sendMessage(ChatColor.GREEN
-					+ "You don't have any requirements left.");
+			player.sendMessage(ChatColor.GREEN + "You don't have any requirements left.");
 			return true;
 		} else {
 			// Get the specified requirement
@@ -103,23 +94,18 @@ public class TrackCommand extends AutorankCommand {
 			// Human logic = first number is 1 not 0.
 			final RequirementsHolder holder = holders.get((completionID - 1));
 
-			if (plugin.getPlayerDataHandler().hasCompletedRequirement(
-					(completionID - 1), uuid)) {
-				player.sendMessage(ChatColor.RED
-						+ Lang.ALREADY_COMPLETED_REQUIREMENT.getConfigValue());
+			if (plugin.getPlayerDataHandler().hasCompletedRequirement((completionID - 1), uuid)) {
+				player.sendMessage(ChatColor.RED + Lang.ALREADY_COMPLETED_REQUIREMENT.getConfigValue());
 				return true;
 			}
 
-			player.sendMessage(ChatColor.RED
-					+ Lang.REQUIREMENT_PROGRESS.getConfigValue(completionID
-							+ ""));
+			player.sendMessage(ChatColor.RED + Lang.REQUIREMENT_PROGRESS.getConfigValue(completionID + ""));
 			player.sendMessage(ChatColor.AQUA + holder.getDescription());
-			player.sendMessage(ChatColor.GREEN + "Current: " + ChatColor.GOLD
-					+ holder.getProgress(player));
+			player.sendMessage(ChatColor.GREEN + "Current: " + ChatColor.GOLD + holder.getProgress(player));
 		}
 
 		/*for (Requirement requirement: requirements) {
-
+		
 			
 		}*/
 
@@ -130,8 +116,8 @@ public class TrackCommand extends AutorankCommand {
 	 * @see me.armar.plugins.autorank.commands.manager.AutorankCommand#onTabComplete(org.bukkit.command.CommandSender, org.bukkit.command.Command, java.lang.String, java.lang.String[])
 	 */
 	@Override
-	public List<String> onTabComplete(final CommandSender sender,
-			final Command cmd, final String commandLabel, final String[] args) {
+	public List<String> onTabComplete(final CommandSender sender, final Command cmd, final String commandLabel,
+			final String[] args) {
 		// TODO Auto-generated method stub
 		return null;
 	}

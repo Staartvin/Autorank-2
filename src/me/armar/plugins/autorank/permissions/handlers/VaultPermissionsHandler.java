@@ -56,7 +56,7 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 	public boolean addGroup(final Player player, final String world, final String group) {
 		if (permission == null)
 			return false;
-		
+
 		return permission.playerAddGroup(world, player, group);
 		// return permission.playerAddGroup(world, player.getName(), group);
 	}
@@ -249,7 +249,7 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 	}
 
 	@Override
-	public boolean demotePlayer(Player player, String world, String groupFrom, String groupTo) {
+	public boolean demotePlayer(final Player player, String world, final String groupFrom, final String groupTo) {
 		// Temporary fix for bPermissions
 		if (world == null && permission.getName().toLowerCase().contains("bpermissions")) {
 			world = player.getWorld().getName();

@@ -35,7 +35,7 @@ public class TimesCommand extends AutorankCommand {
 		}
 
 		String targetName = "";
-		
+
 		// A player specified a target
 		if (args.length > 1) {
 
@@ -44,46 +44,46 @@ public class TimesCommand extends AutorankCommand {
 			}
 
 			targetName = args[1];
-			
+
 		} else if (sender instanceof Player) {
 			if (!plugin.getCommandsManager().hasPermission("autorank.times", sender)) {
 				return true;
 			}
 
 			targetName = sender.getName();
-			
+
 		} else {
 			AutorankTools.sendColoredMessage(sender, Lang.CANNOT_CHECK_CONSOLE.getConfigValue());
 			return true;
 		}
-		
-		UUID uuid = plugin.getUUIDStorage().getStoredUUID(targetName);
-		
+
+		final UUID uuid = plugin.getUUIDStorage().getStoredUUID(targetName);
+
 		if (uuid == null) {
 			sender.sendMessage(Lang.UNKNOWN_PLAYER.getConfigValue(targetName));
 			return true;
 		}
-		
+
 		// Now show data for target.
 		targetName = plugin.getUUIDStorage().getRealName(uuid);
-		
+
 		if (targetName == null) {
 			// This player has no real name stored -> use cached name
 			targetName = plugin.getUUIDStorage().getCachedPlayerName(uuid);
 		}
-		
-		int daily = plugin.getPlaytimes().getTime(dataType.DAILY_TIME, uuid);
-		int weekly = plugin.getPlaytimes().getTime(dataType.WEEKLY_TIME, uuid);
-		int monthly = plugin.getPlaytimes().getTime(dataType.MONTHLY_TIME, uuid);
-		int total = plugin.getPlaytimes().getTime(dataType.TOTAL_TIME, uuid);
-		
+
+		final int daily = plugin.getPlaytimes().getTime(dataType.DAILY_TIME, uuid);
+		final int weekly = plugin.getPlaytimes().getTime(dataType.WEEKLY_TIME, uuid);
+		final int monthly = plugin.getPlaytimes().getTime(dataType.MONTHLY_TIME, uuid);
+		final int total = plugin.getPlaytimes().getTime(dataType.TOTAL_TIME, uuid);
+
 		sender.sendMessage(Lang.AR_TIMES_HEADER.getConfigValue(targetName));
 		sender.sendMessage(Lang.AR_TIMES_PLAYER_PLAYED.getConfigValue(targetName));
 		sender.sendMessage(Lang.AR_TIMES_TODAY.getConfigValue(AutorankTools.timeToString(daily, Time.MINUTES)));
 		sender.sendMessage(Lang.AR_TIMES_THIS_WEEK.getConfigValue(AutorankTools.timeToString(weekly, Time.MINUTES)));
 		sender.sendMessage(Lang.AR_TIMES_THIS_MONTH.getConfigValue(AutorankTools.timeToString(monthly, Time.MINUTES)));
 		sender.sendMessage(Lang.AR_TIMES_TOTAL.getConfigValue(AutorankTools.timeToString(total, Time.MINUTES)));
-		
+
 		return true;
 	}
 

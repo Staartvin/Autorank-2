@@ -35,15 +35,11 @@ public class PermissionsBukkitHandler implements PermissionsHandler {
 	 * @param group Group to add the player to
 	 * @return true if done, false if failed
 	 */
-	public boolean addGroup(final Player player, final String world,
-			final String group) {
+	public boolean addGroup(final Player player, final String world, final String group) {
 		// PermissionsBukkit doesn't have a method to set the actual group. Therefore we need to do it with commands...
 		// Come on PermBukkit. Fix your API..
-		plugin.getServer()
-				.dispatchCommand(
-						plugin.getServer().getConsoleSender(),
-						"permissions player addgroup " + player.getName() + " "
-								+ group);
+		plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(),
+				"permissions player addgroup " + player.getName() + " " + group);
 		return true;
 		// There is no way to check if the command was successful.
 	}
@@ -69,8 +65,7 @@ public class PermissionsBukkitHandler implements PermissionsHandler {
 	@Override
 	public String[] getPlayerGroups(final Player player) {
 		@SuppressWarnings("deprecation")
-		final List<Group> groups = permissionsBukkit
-				.getGroups(player.getName());
+		final List<Group> groups = permissionsBukkit.getGroups(player.getName());
 		final String[] newGroups = new String[groups.size()];
 
 		for (int i = 0; i < groups.size(); i++) {
@@ -83,8 +78,7 @@ public class PermissionsBukkitHandler implements PermissionsHandler {
 	@Override
 	public String[] getWorldGroups(final Player player, final String world) {
 		@SuppressWarnings("deprecation")
-		final List<Group> groups = permissionsBukkit
-				.getGroups(player.getName());
+		final List<Group> groups = permissionsBukkit.getGroups(player.getName());
 		final String[] arrayGroups = new String[groups.size()];
 
 		for (int i = 0; i < groups.size(); i++) {
@@ -102,28 +96,22 @@ public class PermissionsBukkitHandler implements PermissionsHandler {
 	 * @param group Group to remove the player from
 	 * @return true if done, false if failed
 	 */
-	public boolean removeGroup(final Player player, final String world,
-			final String group) {
+	public boolean removeGroup(final Player player, final String world, final String group) {
 		// PermissionsBukkit doesn't have a method to set the actual group. Therefore we need to do it with commands...
 		// Come on PermBukkit. Fix your API..
-		plugin.getServer().dispatchCommand(
-				plugin.getServer().getConsoleSender(),
-				"permissions player removegroup " + player.getName() + " "
-						+ group);
+		plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(),
+				"permissions player removegroup " + player.getName() + " " + group);
 		return true;
 		// There is no way to check if the command was successful.
 	}
 
 	@Override
-	public boolean replaceGroup(final Player player, final String world,
-			final String oldGroup, final String newGroup) {
-		return (addGroup(player, world, newGroup) && removeGroup(player, world,
-				oldGroup));
+	public boolean replaceGroup(final Player player, final String world, final String oldGroup, final String newGroup) {
+		return (addGroup(player, world, newGroup) && removeGroup(player, world, oldGroup));
 	}
 
 	private boolean setupPermissionsBukkit() {
-		final PluginManager pluginManager = plugin.getServer()
-				.getPluginManager();
+		final PluginManager pluginManager = plugin.getServer().getPluginManager();
 		final Plugin permBukkit = pluginManager.getPlugin("PermissionsBukkit");
 
 		if (permBukkit != null && permBukkit.isEnabled()) {
@@ -143,8 +131,7 @@ public class PermissionsBukkitHandler implements PermissionsHandler {
 	}
 
 	@Override
-	public boolean demotePlayer(Player player, String world, String groupFrom, String groupTo) {
-		return (addGroup(player, world, groupTo) && removeGroup(player, world,
-				groupFrom));
+	public boolean demotePlayer(final Player player, final String world, final String groupFrom, final String groupTo) {
+		return (addGroup(player, world, groupTo) && removeGroup(player, world, groupFrom));
 	}
 }

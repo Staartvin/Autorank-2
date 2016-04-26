@@ -13,7 +13,9 @@ import me.armar.plugins.autorank.hooks.DependencyManager.dependency;
 
 /**
  * This class has all methods to get data from the configs.
- * <br>The configurations of the Settings.yml, AdvancedConfig.yml and SimpleConfig.yml can be reached from here.
+ * <br>
+ * The configurations of the Settings.yml, AdvancedConfig.yml and
+ * SimpleConfig.yml can be reached from here.
  * 
  * @author Staartvin
  * 
@@ -32,32 +34,30 @@ public class ConfigHandler {
 
 	/**
 	 * Should we only show the commands on /ar help that a player has access to?
+	 * 
 	 * @return true if we should, false otherwise.
 	 */
 	public boolean doBaseHelpPageOnPermission() {
-		return plugin.getSettingsConfig().getBoolean(
-				"show help command based on permission", false);
+		return plugin.getSettingsConfig().getBoolean("show help command based on permission", false);
 	}
 
 	/**
 	 * Should we check for a new version online?
+	 * 
 	 * @return true if we should, false otherwise.
 	 */
 	public boolean doCheckForNewerVersion() {
-		return plugin.getSettingsConfig().getBoolean(
-				"auto-updater.check-for-new-versions", true);
+		return plugin.getSettingsConfig().getBoolean("auto-updater.check-for-new-versions", true);
 	}
 
 	public String getCheckCommandLayout() {
-		return plugin
-				.getSettingsConfig()
-				.getString(
-						"check command layout",
-						"&p has played for &time and is in group(s) &groups. Requirements to be ranked up: &reqs");
+		return plugin.getSettingsConfig().getString("check command layout",
+				"&p has played for &time and is in group(s) &groups. Requirements to be ranked up: &reqs");
 	}
 
 	/**
 	 * How often should we check players?
+	 * 
 	 * @return how many minutes we should wait before checking players again.
 	 */
 	public int getIntervalTime() {
@@ -91,14 +91,12 @@ public class ConfigHandler {
 	}
 
 	public String getRankChange(final String group) {
-		return plugin.getAdvancedConfig().getString(
-				"ranks." + group + ".results.rank change");
+		return plugin.getAdvancedConfig().getString("ranks." + group + ".results.rank change");
 	}
 
 	public Set<String> getRanks() {
 		if (this.useAdvancedConfig()) {
-			return plugin.getAdvancedConfig().getConfigurationSection("ranks")
-					.getKeys(false);
+			return plugin.getAdvancedConfig().getConfigurationSection("ranks").getKeys(false);
 		} else {
 			return plugin.getSimpleConfig().getKeys(false);
 		}
@@ -126,7 +124,9 @@ public class ConfigHandler {
 	}
 
 	/**
-	 * Gets the value string that is associated with the given requirement name in a given group.
+	 * Gets the value string that is associated with the given requirement name
+	 * in a given group.
+	 * 
 	 * @param requirement Name of the requirement.
 	 * @param group Name of the group.
 	 * @return the value string, can be null.
@@ -135,15 +135,10 @@ public class ConfigHandler {
 
 		// Correct config
 		String result;
-		result = (plugin.getAdvancedConfig().get(
-				"ranks." + group + ".requirements." + requirement + ".value") != null) ? plugin
-				.getAdvancedConfig()
-				.get("ranks." + group + ".requirements." + requirement
-						+ ".value").toString()
-				: plugin.getAdvancedConfig()
-						.getString(
-								"ranks." + group + ".requirements."
-										+ requirement).toString();
+		result = (plugin.getAdvancedConfig().get("ranks." + group + ".requirements." + requirement + ".value") != null)
+				? plugin.getAdvancedConfig().get("ranks." + group + ".requirements." + requirement + ".value")
+						.toString()
+				: plugin.getAdvancedConfig().getString("ranks." + group + ".requirements." + requirement).toString();
 
 		return result;
 	}
@@ -151,14 +146,10 @@ public class ConfigHandler {
 	public Set<String> getRequirements(final String group) {
 		Set<String> requirements;
 		try {
-			requirements = plugin
-					.getAdvancedConfig()
-					.getConfigurationSection("ranks." + group + ".requirements")
+			requirements = plugin.getAdvancedConfig().getConfigurationSection("ranks." + group + ".requirements")
 					.getKeys(false);
 		} catch (final NullPointerException e) {
-			plugin.getLogger().severe(
-					"Error occured when trying to get requirements for group '"
-							+ group + "'!");
+			plugin.getLogger().severe("Error occured when trying to get requirements for group '" + group + "'!");
 			return Collections.emptySet();
 		}
 
@@ -166,49 +157,39 @@ public class ConfigHandler {
 	}
 
 	public String getResult(final String result, final String group) {
+		return plugin.getAdvancedConfig().get("ranks." + group + ".results." + result).toString();
+	}
+
+	public String getResultOfRequirement(final String requirement, final String group, final String result) {
+		return plugin.getAdvancedConfig().get("ranks." + group + ".requirements." + requirement + ".results." + result)
+				.toString();
+	}
+
+	public String getWorldOfRequirement(final String requirement, final String group) {
 		return plugin.getAdvancedConfig()
-				.get("ranks." + group + ".results." + result).toString();
+				.getString("ranks." + group + ".requirements." + requirement + ".options.world", null);
 	}
 
-	public String getResultOfRequirement(final String requirement,
-			final String group, final String result) {
-		return plugin
-				.getAdvancedConfig()
-				.get("ranks." + group + ".requirements." + requirement
-						+ ".results." + result).toString();
-	}
-
-	public String getWorldOfRequirement(final String requirement,
-			final String group) {
-		return plugin.getAdvancedConfig().getString(
-				"ranks." + group + ".requirements." + requirement
-						+ ".options.world", null);
-	}
-
-	public boolean isRequirementWorldSpecific(final String requirement,
-			final String group) {
+	public boolean isRequirementWorldSpecific(final String requirement, final String group) {
 		return this.getWorldOfRequirement(requirement, group) != null;
 	}
 
 	public Set<String> getResults(final String group) {
-		final Set<String> results = plugin.getAdvancedConfig()
-				.getConfigurationSection("ranks." + group + ".results")
+		final Set<String> results = plugin.getAdvancedConfig().getConfigurationSection("ranks." + group + ".results")
 				.getKeys(false);
 
 		return results;
 	}
 
-	public List<String> getResultsOfRequirement(final String requirement,
-			final String group) {
+	public List<String> getResultsOfRequirement(final String requirement, final String group) {
 		Set<String> results = new HashSet<String>();
 
-		results = (plugin.getAdvancedConfig().getConfigurationSection(
-				"ranks." + group + ".requirements." + requirement + ".results") != null) ? plugin
-				.getAdvancedConfig()
-				.getConfigurationSection(
-						"ranks." + group + ".requirements." + requirement
-								+ ".results").getKeys(false)
-				: new HashSet<String>();
+		results = (plugin.getAdvancedConfig()
+				.getConfigurationSection("ranks." + group + ".requirements." + requirement + ".results") != null)
+						? plugin.getAdvancedConfig()
+								.getConfigurationSection("ranks." + group + ".requirements." + requirement + ".results")
+								.getKeys(false)
+						: new HashSet<String>();
 
 		return Lists.newArrayList(results);
 	}
@@ -221,9 +202,8 @@ public class ConfigHandler {
 	 * @return true if optional; false otherwise
 	 */
 	public boolean isOptional(final String requirement, final String group) {
-		final boolean optional = plugin.getAdvancedConfig().getBoolean(
-				"ranks." + group + ".requirements." + requirement
-						+ ".options.optional", false);
+		final boolean optional = plugin.getAdvancedConfig()
+				.getBoolean("ranks." + group + ".requirements." + requirement + ".options.optional", false);
 
 		return optional;
 	}
@@ -242,8 +222,7 @@ public class ConfigHandler {
 	 * @return true if has to, false otherwise.
 	 */
 	public boolean useAdvancedDependencyLogs() {
-		return plugin.getSettingsConfig().getBoolean(
-				"advanced dependency output", false);
+		return plugin.getSettingsConfig().getBoolean("advanced dependency output", false);
 	}
 
 	/**
@@ -258,31 +237,28 @@ public class ConfigHandler {
 
 	/**
 	 * Should we use auto completion for a certain requirement in a group.
+	 * 
 	 * @param group Group to check for.
 	 * @param requirement Requirement to check for.
 	 * @return true if we should, false otherwise.
 	 */
-	public boolean useAutoCompletion(final String group,
-			final String requirement) {
+	public boolean useAutoCompletion(final String group, final String requirement) {
 		final boolean optional = isOptional(requirement, group);
 
 		if (optional) {
 			// Not defined (Optional + not defined = false)
-			if (plugin.getAdvancedConfig().get(
-					"ranks." + group + ".requirements." + requirement
-							+ ".options.auto complete") == null) {
+			if (plugin.getAdvancedConfig()
+					.get("ranks." + group + ".requirements." + requirement + ".options.auto complete") == null) {
 				return false;
 			} else {
 				// Defined (Optional + defined = defined)
-				return plugin.getAdvancedConfig().getBoolean(
-						"ranks." + group + ".requirements." + requirement
-								+ ".options.auto complete");
+				return plugin.getAdvancedConfig()
+						.getBoolean("ranks." + group + ".requirements." + requirement + ".options.auto complete");
 			}
 		} else {
 			// Not defined (Not optional + not defined = true)
-			if (plugin.getAdvancedConfig().get(
-					"ranks." + group + ".requirements." + requirement
-							+ ".options.auto complete") == null) {
+			if (plugin.getAdvancedConfig()
+					.get("ranks." + group + ".requirements." + requirement + ".options.auto complete") == null) {
 
 				// If partial completion is false, we do not auto complete
 				if (!usePartialCompletion()) {
@@ -291,9 +267,8 @@ public class ConfigHandler {
 				return true;
 			} else {
 				// Defined (Not optional + defined = defined)
-				return plugin.getAdvancedConfig().getBoolean(
-						"ranks." + group + ".requirements." + requirement
-								+ ".options.auto complete");
+				return plugin.getAdvancedConfig()
+						.getBoolean("ranks." + group + ".requirements." + requirement + ".options.auto complete");
 			}
 		}
 	}
@@ -316,8 +291,7 @@ public class ConfigHandler {
 	 * Are we using partial completion?
 	 */
 	public boolean usePartialCompletion() {
-		return plugin.getSettingsConfig().getBoolean("use partial completion",
-				false);
+		return plugin.getSettingsConfig().getBoolean("use partial completion", false);
 	}
 
 	/**
@@ -331,8 +305,7 @@ public class ConfigHandler {
 	 */
 	public dependency useTimeOf() {
 
-		final String timePlugin = plugin.getSettingsConfig().getString(
-				"use time of", "Autorank");
+		final String timePlugin = plugin.getSettingsConfig().getString("use time of", "Autorank");
 
 		if (timePlugin.equalsIgnoreCase("Stats"))
 			return dependency.STATS;
@@ -343,12 +316,10 @@ public class ConfigHandler {
 	}
 
 	public boolean allowInfiniteRanking() {
-		return plugin.getSettingsConfig().getBoolean("allow infinite ranking",
-				false);
+		return plugin.getSettingsConfig().getBoolean("allow infinite ranking", false);
 	}
 
-	public List<String[]> getOptions(final String requirement,
-			final String group) {
+	public List<String[]> getOptions(final String requirement, final String group) {
 		// Grab options from string
 		final String org = this.getRequirement(requirement, group);
 
@@ -357,12 +328,12 @@ public class ConfigHandler {
 		final String[] split = org.split(",");
 
 		for (final String sp : split) {
-			StringBuilder builder = new StringBuilder(sp);
-			
+			final StringBuilder builder = new StringBuilder(sp);
+
 			if (builder.charAt(0) == '(') {
 				builder.deleteCharAt(0);
 			}
-			
+
 			if (builder.charAt(builder.length() - 1) == ')') {
 				builder.deleteCharAt(builder.length() - 1);
 			}
@@ -379,65 +350,73 @@ public class ConfigHandler {
 	}
 
 	public boolean onlyUsePrimaryGroupVault() {
-		return plugin.getSettingsConfig().getBoolean(
-				"use primary group for vault", true);
+		return plugin.getSettingsConfig().getBoolean("use primary group for vault", true);
 	}
 
 	// A display name for a changegroup is when the changegroup is a copy of another group.
 	public String getDisplayName(final String group) {
-		final String displayName = plugin.getAdvancedConfig().getString(
-				"ranks." + group + ".options.display name", group);
+		final String displayName = plugin.getAdvancedConfig().getString("ranks." + group + ".options.display name",
+				group);
 
 		return displayName;
 	}
-	
+
 	/**
 	 * Should we broadcast in the server when any time gets reset?
 	 */
 	public boolean shouldBroadcastDataReset() {
 		return plugin.getSettingsConfig().getBoolean("broadcast resetting of data files", true);
 	}
-	
+
 	/**
 	 * Does this server allow deranking for certain groups?
 	 */
 	public boolean allowDeranking() {
 		return plugin.getSettingsConfig().getBoolean("allow deranking", false);
 	}
-	
+
 	/**
-	 * Check whether a specific requirement of a group will derank a player if it is not met.
+	 * Check whether a specific requirement of a group will derank a player if
+	 * it is not met.
+	 * 
 	 * @param groupName Name of the group
 	 * @param requirement Name of the requirement
 	 * @return true if it is derankable, false otherwise.
 	 */
-	public boolean isRequirementDerankable(String groupName, String requirement) {
-		return plugin.getAdvancedConfig().getBoolean("ranks." + groupName + ".requirements." + requirement + ".options.derankable", false);
+	public boolean isRequirementDerankable(final String groupName, final String requirement) {
+		return plugin.getAdvancedConfig()
+				.getBoolean("ranks." + groupName + ".requirements." + requirement + ".options.derankable", false);
 	}
-	
+
 	/**
-	 * Get the commands (as strings) that have to be performed when a player deranks due to a certain requirement in a group.
+	 * Get the commands (as strings) that have to be performed when a player
+	 * deranks due to a certain requirement in a group.
+	 * 
 	 * @param groupName Name of the group the player is in
 	 * @param requirement Name of the requirement that triggered the derank.
 	 * @return list of commands to run.
 	 */
-	public List<String> getCommandsOnDerank(String groupName, String requirement) {
-		return plugin.getAdvancedConfig().getStringList("ranks." + groupName + ".requirements." + requirement + ".options.commands on derank");
+	public List<String> getCommandsOnDerank(final String groupName, final String requirement) {
+		return plugin.getAdvancedConfig()
+				.getStringList("ranks." + groupName + ".requirements." + requirement + ".options.commands on derank");
 	}
-	
+
 	/**
-	 * Get the name of a requirement (in the config) from a group with a specific requirement id.
+	 * Get the name of a requirement (in the config) from a group with a
+	 * specific requirement id.
+	 * 
 	 * @param groupName Name of the group the requirement belongs to.
 	 * @param reqID ID of the requirement
-	 * @return Name of the requirement (as specified in the config) or null if not found.
+	 * @return Name of the requirement (as specified in the config) or null if
+	 *         not found.
 	 */
-	public String getRequirementNameOfId(String groupName, int reqID) {
-		for (String req: this.getRequirements(groupName)) {
+	public String getRequirementNameOfId(final String groupName, final int reqID) {
+		for (final String req : this.getRequirements(groupName)) {
 			if (this.getReqId(req, groupName) == reqID) {
 				return req;
 			}
 		}
-		
+
 		return null;
 	}
 

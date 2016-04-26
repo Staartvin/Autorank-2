@@ -73,7 +73,7 @@ public class FoodEatenRequirement extends Requirement {
 	}
 
 	@Override
-	public boolean setOptions(String[] options) {
+	public boolean setOptions(final String[] options) {
 
 		final int total = Integer.parseInt(options[0]);
 		String foodType = "";

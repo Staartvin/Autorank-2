@@ -103,8 +103,7 @@ public abstract class Requirement {
 	 * @return true if completed, false otherwise.
 	 */
 	public final boolean isCompleted(final int reqID, final UUID uuid) {
-		return autorank.getPlayerDataHandler().hasCompletedRequirement(reqID,
-				uuid);
+		return autorank.getPlayerDataHandler().hasCompletedRequirement(reqID, uuid);
 	}
 
 	/**

@@ -37,8 +37,7 @@ public class StatsHandler implements StatsPlugin {
 	}
 
 	@Override
-	public int getNormalStat(final String statType, final UUID uuid,
-			final Object... arguments) {
+	public int getNormalStat(final String statType, final UUID uuid, final Object... arguments) {
 		// First argument is the world (or null)
 
 		final String correctName = getCorrectStatName(statType).toLowerCase();
@@ -66,23 +65,18 @@ public class StatsHandler implements StatsPlugin {
 		} else if (correctName.equals("mobs_killed")) {
 			// Handle mobs killed
 			// arg[2] == mobType
-			value = statsApi.getTotalMobsKilled(uuid, (String) arguments[1],
-					worldName);
+			value = statsApi.getTotalMobsKilled(uuid, (String) arguments[1], worldName);
 		} else if (correctName.equals("damage_taken")) {
 			// Handle damage taken
 			value = statsApi.getNormalStat(uuid, "Damage taken", worldName);
 		} else if (correctName.equals("blocks_placed")) {
 			// Handle blocks placed
-			value = statsApi.getBlocksStat(uuid,
-					Integer.parseInt((String) arguments[1]),
-					Integer.parseInt((String) arguments[2]), worldName,
-					"Blocks placed");
+			value = statsApi.getBlocksStat(uuid, Integer.parseInt((String) arguments[1]),
+					Integer.parseInt((String) arguments[2]), worldName, "Blocks placed");
 		} else if (correctName.equals("blocks_broken")) {
 			// Handle blocks broken
-			value = statsApi.getBlocksStat(uuid,
-					Integer.parseInt((String) arguments[1]),
-					Integer.parseInt((String) arguments[2]), worldName,
-					"Blocks broken");
+			value = statsApi.getBlocksStat(uuid, Integer.parseInt((String) arguments[1]),
+					Integer.parseInt((String) arguments[2]), worldName, "Blocks broken");
 		} else if (correctName.equals("total_blocks_placed")) {
 			// Handle total blocks placed
 			value = statsApi.getTotalBlocksPlaced(uuid, worldName);
@@ -94,8 +88,7 @@ public class StatsHandler implements StatsPlugin {
 			value = statsApi.getTotalPlayTime(uuid, worldName);
 		} else if (correctName.equals("blocks_moved")) {
 			// Handle time played
-			value = statsApi.getTotalBlocksMoved(uuid, (Integer) arguments[1],
-					worldName);
+			value = statsApi.getTotalBlocksMoved(uuid, (Integer) arguments[1], worldName);
 		} else if (correctName.equals("fish_caught")) {
 			// Handle time played
 			value = statsApi.getNormalStat(uuid, "Fish caught", worldName);
@@ -107,8 +100,7 @@ public class StatsHandler implements StatsPlugin {
 			value = statsApi.getNormalStat(uuid, "Shears", worldName);
 		} else if (correctName.equals("food_eaten")) {
 			// Handle food eaten
-			value = statsApi.getFoodEaten(uuid, worldName,
-					(String) arguments[1]);
+			value = statsApi.getFoodEaten(uuid, worldName, (String) arguments[1]);
 		}
 
 		return value;
@@ -117,8 +109,7 @@ public class StatsHandler implements StatsPlugin {
 	@Override
 	public boolean isEnabled() {
 		if (statsApi == null) {
-			plugin.getLogger().info(
-					"Stats (by Lolmewn) api library was not found!");
+			plugin.getLogger().info("Stats (by Lolmewn) api library was not found!");
 			return false;
 		}
 
@@ -130,7 +121,7 @@ public class StatsHandler implements StatsPlugin {
 		/*if (!statsApi.compatibleStatsVersion(plugin.getServer()
 				.getPluginManager().getPlugin("Stats").getDescription()
 				.getVersion())) {
-			plugin.getLogger().info("This version of Stats (by Lolmewn) is not supported by Autorank!"); 
+			plugin.getLogger().info("This version of Stats (by Lolmewn) is not supported by Autorank!");
 			return false;
 		}*/
 

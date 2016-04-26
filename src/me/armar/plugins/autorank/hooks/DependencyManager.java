@@ -47,11 +47,7 @@ public class DependencyManager {
 	 */
 	public enum dependency {
 
-		AUTORANK, ESSENTIALS,
-		FACTIONS, MCMMO, ONTIME, 
-		ROYALCOMMANDS, STATS, VAULT,
-		WORLDGUARD, ULTIMATECORE, STATISTICS, 
-		AFKTERMINATOR, ACIDISLAND, ASKYBLOCK
+		AUTORANK, ESSENTIALS, FACTIONS, MCMMO, ONTIME, ROYALCOMMANDS, STATS, VAULT, WORLDGUARD, ULTIMATECORE, STATISTICS, AFKTERMINATOR, ACIDISLAND, ASKYBLOCK
 	};
 
 	private final HashMap<dependency, DependencyHandler> handlers = new HashMap<dependency, DependencyHandler>();
@@ -71,32 +67,29 @@ public class DependencyManager {
 		handlers.put(dependency.MCMMO, new McMMOHandler(instance));
 		handlers.put(dependency.ESSENTIALS, new EssentialsHandler(instance));
 		handlers.put(dependency.VAULT, new VaultHandler(instance));
-		handlers.put(dependency.ROYALCOMMANDS, new RoyalCommandsHandler(
-				instance));
+		handlers.put(dependency.ROYALCOMMANDS, new RoyalCommandsHandler(instance));
 		handlers.put(dependency.ONTIME, new OnTimeHandler(instance));
 		handlers.put(dependency.STATS, new StatsAPIHandler(instance));
 		handlers.put(dependency.ULTIMATECORE, new UltimateCoreHandler(instance));
 		handlers.put(dependency.STATISTICS, new StatisticsAPIHandler(instance));
-		handlers.put(dependency.AFKTERMINATOR, new AFKTerminatorHandler(
-				instance));
-		handlers.put(dependency.ACIDISLAND, new AcidIslandHandler(
-				instance));
-		handlers.put(dependency.ASKYBLOCK, new ASkyBlockHandler(
-				instance));
+		handlers.put(dependency.AFKTERMINATOR, new AFKTerminatorHandler(instance));
+		handlers.put(dependency.ACIDISLAND, new AcidIslandHandler(instance));
+		handlers.put(dependency.ASKYBLOCK, new ASkyBlockHandler(instance));
 
 		statsPluginManager = new StatsPluginManager(instance);
 	}
 
 	/**
 	 * Gets a specific dependency.
+	 * 
 	 * @param dep Dependency to get.
-	 * @return the {@linkplain DependencyHandler} that is associated with the given {@linkplain dependency}, can be null.
+	 * @return the {@linkplain DependencyHandler} that is associated with the
+	 *         given {@linkplain dependency}, can be null.
 	 */
 	public DependencyHandler getDependency(final dependency dep) {
 
 		if (!handlers.containsKey(dep)) {
-			throw new IllegalArgumentException("Unknown dependency '"
-					+ dep.toString() + "'");
+			throw new IllegalArgumentException("Unknown dependency '" + dep.toString() + "'");
 		} else {
 			return handlers.get(dep);
 		}
@@ -108,7 +101,9 @@ public class DependencyManager {
 
 	/**
 	 * Gets whether the given player is AFK.
-	 * <br>Obeys the AFK setting in the Settings.yml.
+	 * <br>
+	 * Obeys the AFK setting in the Settings.yml.
+	 * 
 	 * @param player Player to check.
 	 * @return true if the player is supspected of being AFK, false otherwise.
 	 */
@@ -119,20 +114,16 @@ public class DependencyManager {
 
 		if (handlers.get(dependency.ESSENTIALS).isAvailable()) {
 			plugin.debugMessage("Using Essentials for AFK");
-			return ((EssentialsHandler) handlers.get(dependency.ESSENTIALS))
-					.isAFK(player);
+			return ((EssentialsHandler) handlers.get(dependency.ESSENTIALS)).isAFK(player);
 		} else if (handlers.get(dependency.ROYALCOMMANDS).isAvailable()) {
 			plugin.debugMessage("Using RoyalCommands for AFK");
-			return ((RoyalCommandsHandler) handlers
-					.get(dependency.ROYALCOMMANDS)).isAFK(player);
+			return ((RoyalCommandsHandler) handlers.get(dependency.ROYALCOMMANDS)).isAFK(player);
 		} else if (handlers.get(dependency.ULTIMATECORE).isAvailable()) {
 			plugin.debugMessage("Using UltimateCore for AFK");
-			return ((UltimateCoreHandler) handlers.get(dependency.ULTIMATECORE))
-					.isAFK(player);
+			return ((UltimateCoreHandler) handlers.get(dependency.ULTIMATECORE)).isAFK(player);
 		} else if (handlers.get(dependency.AFKTERMINATOR).isAvailable()) {
 			plugin.debugMessage("Using AFKTerminator for AFK");
-			return ((AFKTerminatorHandler) handlers
-					.get(dependency.AFKTERMINATOR)).isAFK(player);
+			return ((AFKTerminatorHandler) handlers.get(dependency.AFKTERMINATOR)).isAFK(player);
 		}
 		// No suitable plugin found
 		return false;
@@ -149,16 +140,14 @@ public class DependencyManager {
 
 		// Make seperate loading bar
 		if (plugin.getConfigHandler().useAdvancedDependencyLogs()) {
-			plugin.getLogger().info(
-					"---------------[Autorank Dependencies]---------------");
+			plugin.getLogger().info("---------------[Autorank Dependencies]---------------");
 			plugin.getLogger().info("Searching dependencies...");
 		}
 
 		// Load all dependencies
 		for (final DependencyHandler depHandler : handlers.values()) {
 			// Make sure to respect settings
-			depHandler.setup(plugin.getConfigHandler()
-					.useAdvancedDependencyLogs());
+			depHandler.setup(plugin.getConfigHandler().useAdvancedDependencyLogs());
 		}
 
 		if (plugin.getConfigHandler().useAdvancedDependencyLogs()) {
@@ -171,8 +160,7 @@ public class DependencyManager {
 
 		if (plugin.getConfigHandler().useAdvancedDependencyLogs()) {
 			// Make seperate stop loading bar
-			plugin.getLogger().info(
-					"---------------[Autorank Dependencies]---------------");
+			plugin.getLogger().info("---------------[Autorank Dependencies]---------------");
 		}
 
 		plugin.getLogger().info("Loaded libraries and dependencies");

@@ -34,8 +34,7 @@ public class UpdateHandler {
 			return plugin.checkForUpdate();
 		} else {
 			// We checked less than an hour ago. (Recent enough)
-			return (updater.getResult()
-					.equals(Updater.UpdateResult.UPDATE_AVAILABLE));
+			return (updater.getResult().equals(Updater.UpdateResult.UPDATE_AVAILABLE));
 		}
 	}
 

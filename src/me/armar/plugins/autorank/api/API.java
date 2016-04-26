@@ -43,12 +43,14 @@ public class API {
 	}
 
 	/**
-	 * Gets all {@linkplain RequirementsHolder}s for a player at the exact moment.
+	 * Gets all {@linkplain RequirementsHolder}s for a player at the exact
+	 * moment.
 	 * This does not consider already finished requirement but just mirrors the
 	 * config file.
 	 * 
 	 * @param player Player to get the requirements from.
-	 * @return a list of {@linkplain RequirementsHolder}s; An empty list when none are found.
+	 * @return a list of {@linkplain RequirementsHolder}s; An empty list when
+	 *         none are found.
 	 */
 	public List<RequirementsHolder> getAllRequirements(final Player player) {
 		return plugin.getPlayerChecker().getAllRequirementsHolders(player);
@@ -58,7 +60,8 @@ public class API {
 	 * Gets all {@linkplain RequirementsHolder}s that are not yet completed.
 	 * 
 	 * @param player Player to get the failed requirements for.
-	 * @return list of {@linkplain RequirementsHolder}s that still have to be completed.
+	 * @return list of {@linkplain RequirementsHolder}s that still have to be
+	 *         completed.
 	 */
 	public List<RequirementsHolder> getFailedRequirementsHolders(final Player player) {
 		return plugin.getPlayerChecker().getFailedRequirementsHolders(player);
@@ -88,7 +91,8 @@ public class API {
 	/**
 	 * Gets the local play time of this player on this server according to
 	 * Autorank. (in minutes)<br>
-	 * This method will grab the time from the data.yml used by Autorank and <br>
+	 * This method will grab the time from the data.yml used by Autorank and
+	 * <br>
 	 * this is not dependend on other plugins.
 	 * 
 	 * @deprecated Use getLocalPlayTime(UUID uuid) instead.
@@ -146,8 +150,7 @@ public class API {
 	 * @return A list of permission groups
 	 */
 	public List<String> getPermissionGroups(final Player player) {
-		final String[] groups = plugin.getPermPlugHandler()
-				.getPermissionPlugin().getPlayerGroups(player);
+		final String[] groups = plugin.getPermPlugHandler().getPermissionPlugin().getPlayerGroups(player);
 
 		final List<String> permGroups = new ArrayList<String>();
 
@@ -171,7 +174,8 @@ public class API {
 
 	/**
 	 * Gets the local play time (playtime on this server) of a player. <br>
-	 * The time given depends on what plugin is used for keeping track of time. <br>
+	 * The time given depends on what plugin is used for keeping track of time.
+	 * <br>
 	 * The time is always given in seconds.
 	 * <p>
 	 * 
@@ -192,8 +196,7 @@ public class API {
 	 * @param uniqueName Unique name identifier for the requirement
 	 * @param clazz Requirement class that does all the logic
 	 */
-	public void registerRequirement(final String uniqueName,
-			final Class<? extends Requirement> clazz) {
+	public void registerRequirement(final String uniqueName, final Class<? extends Requirement> clazz) {
 		plugin.getLogger().info("Loaded custom requirement: " + uniqueName);
 
 		plugin.registerRequirement(uniqueName, clazz);
@@ -209,8 +212,7 @@ public class API {
 	 * @param uniqueName Unique name identifier for the result
 	 * @param clazz Result class that does all the logic
 	 */
-	public void registerResult(final String uniqueName,
-			final Class<? extends Result> clazz) {
+	public void registerResult(final String uniqueName, final Class<? extends Result> clazz) {
 		plugin.getLogger().info("Loaded custom result: " + uniqueName);
 
 		plugin.registerResult(uniqueName, clazz);

@@ -41,7 +41,7 @@ public class PermissionRequirement extends Requirement {
 	}
 
 	@Override
-	public boolean setOptions(String[] options) {
+	public boolean setOptions(final String[] options) {
 
 		try {
 			permission = options[0];

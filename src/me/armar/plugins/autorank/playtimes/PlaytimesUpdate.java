@@ -9,7 +9,7 @@ import me.armar.plugins.autorank.hooks.DependencyManager;
 import me.armar.plugins.autorank.playtimes.Playtimes.dataType;
 
 /*
- * PlaytimesUpdate does an update on all online players 
+ * PlaytimesUpdate does an update on all online players
  * every 5 minutes (set lower atm for debugging).
  * 
  */
@@ -32,14 +32,13 @@ public class PlaytimesUpdate implements Runnable {
 
 	private void updateMinutesPlayed(final Player player) {
 		// Changed this so it is readable ;)
-		// OP's should also get time added. 
+		// OP's should also get time added.
 		// When a player has a wildcard permission ('*') it should still update.
 
 		// Check for leaderboard exempt permission -> updates value of leaderboard exemption
 		plugin.getPlayerChecker().doLeaderboardExemptCheck(player);
 
-		if (player.hasPermission("autorank.rsefrxsgtse")
-				|| !player.hasPermission("autorank.timeexclude")) {
+		if (player.hasPermission("autorank.rsefrxsgtse") || !player.hasPermission("autorank.timeexclude")) {
 
 			final DependencyManager depManager = plugin.getDependencyManager();
 
@@ -51,10 +50,9 @@ public class PlaytimesUpdate implements Runnable {
 			final UUID uuid = plugin.getUUIDStorage().getStoredUUID(player.getName());
 
 			// Modify local time
-			for (dataType type: dataType.values()) {
+			for (final dataType type : dataType.values()) {
 				playtimes.modifyTime(uuid, Playtimes.INTERVAL_MINUTES, type);
 			}
-			
 
 			// Modify global time
 			if (playtimes.isMySQLEnabled()) {
@@ -69,15 +67,14 @@ public class PlaytimesUpdate implements Runnable {
 
 	private void updateMinutesPlayed() {
 		plugin.debugMessage("Checking players for automatic ranking");
-		
+
 		// Check whether the files are still up to date.
 		plugin.getPlaytimes().doCalendarCheck();
 
 		for (final Player player : plugin.getServer().getOnlinePlayers()) {
 
 			if (player.getPlayer() == null) {
-				plugin.debugMessage("Could not update play time of "
-						+ player.getName() + " as (s)he is not online!");
+				plugin.debugMessage("Could not update play time of " + player.getName() + " as (s)he is not online!");
 				continue;
 			}
 

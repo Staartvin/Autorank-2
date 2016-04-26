@@ -1,6 +1,5 @@
 package me.armar.plugins.autorank.playerchecker.requirement;
 
-
 import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.language.Lang;
@@ -29,7 +28,7 @@ public class WorldRequirement extends Requirement {
 	}
 
 	@Override
-	public boolean setOptions(String[] options) {
+	public boolean setOptions(final String[] options) {
 
 		if (options.length > 0) {
 			worldName = options[0];

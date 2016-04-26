@@ -29,8 +29,7 @@ public class AFKTerminatorHandler implements DependencyHandler {
 	 */
 	@Override
 	public Plugin get() {
-		final Plugin plugin = this.plugin.getServer().getPluginManager()
-				.getPlugin("afkTerminator");
+		final Plugin plugin = this.plugin.getServer().getPluginManager().getPlugin("afkTerminator");
 
 		// WorldGuard may not be loaded
 		if (plugin == null || !(plugin instanceof AfkTerminator)) {
@@ -82,14 +81,12 @@ public class AFKTerminatorHandler implements DependencyHandler {
 		} else {
 			if (isInstalled()) {
 				if (verbose) {
-					plugin.getLogger().info(
-							"AfkTerminator has been found and can be used!");
+					plugin.getLogger().info("AfkTerminator has been found and can be used!");
 				}
 				return true;
 			} else {
 				if (verbose) {
-					plugin.getLogger().info(
-							"AfkTerminator has been found but cannot be used!");
+					plugin.getLogger().info("AfkTerminator has been found but cannot be used!");
 				}
 				return false;
 			}
