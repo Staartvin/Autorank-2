@@ -58,7 +58,7 @@ public class MobKillsRequirement extends Requirement {
 				player.getUniqueId(), this.getWorld(), mobType);
 
 		String entityType = mobType;
-		
+
 		if (mobType == null) {
 			entityType = "mobs";
 		}

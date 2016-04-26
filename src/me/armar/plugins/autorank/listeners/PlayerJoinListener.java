@@ -65,7 +65,7 @@ public class PlayerJoinListener implements Listener {
 								+ ChatColor.GOLD + " is now available for download!");
 						player.sendMessage(ChatColor.GREEN + "Available at: " + ChatColor.GOLD
 								+ plugin.getUpdateHandler().getUpdater().getLatestFileLink());
-						//player.sendMessage(ChatColor.GOLD + "Type " + ChatColor.GREEN + "'/ar update'" + ChatColor.GOLD + " to update Autorank.");	
+						//player.sendMessage(ChatColor.GOLD + "Type " + ChatColor.GREEN + "'/ar update'" + ChatColor.GOLD + " to update Autorank.");
 					}
 
 				}, 10L);

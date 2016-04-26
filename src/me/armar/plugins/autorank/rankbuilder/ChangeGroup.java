@@ -36,7 +36,8 @@ public class ChangeGroup {
 	// another changegroup.
 	// Previous group is the group a player will be demoted to if he doesn't
 	// meet certain requirements.
-	private String parentGroup, internalGroup, displayName, previousGroup;
+	// The next group is the group that this ChangeGroup will rank the player to.
+	private String parentGroup, internalGroup, displayName, previousGroup, nextGroup;
 
 	private final Autorank plugin;
 
@@ -288,5 +289,13 @@ public class ChangeGroup {
 
 	public void setPreviousGroup(final String previousGroup) {
 		this.previousGroup = previousGroup;
+	}
+
+	public String getNextGroup() {
+		return nextGroup;
+	}
+
+	public void setNextGroup(final String nextGroup) {
+		this.nextGroup = nextGroup;
 	}
 }

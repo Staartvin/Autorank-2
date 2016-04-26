@@ -10,7 +10,9 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.addons.AddOnManager;
 import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 import me.armar.plugins.autorank.playerchecker.result.Result;
+import me.armar.plugins.autorank.rankbuilder.ChangeGroup;
 import me.armar.plugins.autorank.rankbuilder.holders.RequirementsHolder;
+import me.armar.plugins.autorank.util.AutorankTools;
 
 /**
  * <b>Autorank's API class:</b>
@@ -132,15 +134,38 @@ public class API {
 	 * player will be ranked up to that group and not the 'global results'
 	 * group.
 	 * 
-	 * @deprecated No longer used, will always return null: it has no function
-	 *             anymore.
 	 * @param player Player to get the next rank up for.
 	 * @return The name of the group the player will be ranked to; null when no
 	 *         rank up.
 	 */
 	@Deprecated
 	public String getNextRankupGroup(final Player player) {
-		return null;
+		// Do not rank a player when he is excluded
+		if (AutorankTools.isExcluded(player))
+			return null;
+
+		// only first group - will cause problems
+		final String groupName = plugin.getPermPlugHandler().getPrimaryGroup(player);
+
+		final List<ChangeGroup> changes = plugin.getPlayerChecker().getChangeGroupManager().getChangeGroups(groupName);
+
+		if (changes == null || changes.size() == 0) {
+			return null;
+		}
+
+		String chosenPath = plugin.getPlayerDataHandler().getChosenPath(player.getUniqueId());
+
+		if (!plugin.getPlayerDataHandler().checkValidChosenPath(player)) {
+			chosenPath = "unknown";
+		}
+
+		final ChangeGroup changeGroup = plugin.getPlayerChecker().getChangeGroupManager().matchChangeGroup(groupName,
+				chosenPath);
+
+		if (changeGroup == null)
+			return null;
+
+		return changeGroup.getNextGroup();
 	}
 
 	/**

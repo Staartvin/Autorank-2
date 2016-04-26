@@ -295,6 +295,11 @@ public class ChangeGroupBuilder {
 					rankChangeName = rankChange[1].trim();
 				}
 
+				// Set next rank up group
+				for (final ChangeGroup changeGroup : changeGroups.get(group)) {
+					changeGroup.setNextGroup(rankChangeName);
+				}
+
 				if (changeGroups.get(rankChangeName) != null) {
 					for (final ChangeGroup changeGroup : changeGroups.get(rankChangeName)) {
 						if (changeGroup == null)
