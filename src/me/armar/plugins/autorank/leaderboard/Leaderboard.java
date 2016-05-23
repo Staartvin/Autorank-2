@@ -104,13 +104,8 @@ public class Leaderboard {
 				continue;
 			}
 
-			System.out.println("uuids:" + uuids);
-			System.out.println("uuids.get():" + uuids.get(i));
-
 			// Get the cached value of this uuid
 			final String playerName = plugin.getUUIDStorage().getCachedPlayerName(uuids.get(i));
-
-			System.out.println("playerName:" + playerName);
 
 			if (playerName == null) {
 				plugin.debugMessage("Could not get cached player name of uuid '" + uuids.get(i) + "'!");
