@@ -2,11 +2,7 @@ package me.armar.plugins.autorank.mysql.wrapper;
 
 import java.util.HashMap;
 import java.util.UUID;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.config.ConfigHandler;
@@ -33,6 +29,8 @@ public class MySQLWrapper {
 	private final HashMap<UUID, Long> lastChecked = new HashMap<UUID, Long>();
 	// Stores the last received global time for a player
 	private final HashMap<UUID, Integer> lastReceivedTime = new HashMap<UUID, Integer>();
+	// Thread pool for saving and retrieving data.
+	private ExecutorService executor = Executors.newFixedThreadPool(1);
 
 	private SQLDataStorage mysql;
 	private final Autorank plugin;
@@ -98,9 +96,8 @@ public class MySQLWrapper {
 		if (mysql.isClosed()) {
 			mysql.connect();
 		}
+
 		// Retrieve database time
-		// Setup executor service with pool = 1
-		final ExecutorService executor = Executors.newFixedThreadPool(1);
 
 		// Initialise new callable class
 		final Callable<Integer> callable = new GrabDatabaseTimeTask(mysql, uuid, table);
@@ -148,9 +145,8 @@ public class MySQLWrapper {
 		if (mysql.isClosed()) {
 			mysql.connect();
 		}
+
 		// Retrieve database time
-		// Setup executor service with pool = 1
-		final ExecutorService executor = Executors.newFixedThreadPool(1);
 
 		// Initialise new callable class
 		final Callable<Integer> callable = new GrabDatabaseTimeTask(mysql, uuid, table);
@@ -295,6 +291,15 @@ public class MySQLWrapper {
 	 * Disconnect from database manually.
 	 */
 	public void disconnectDatabase() {
+		executor.shutdown();
+		plugin.getLogger().info("Awaiting termination of MySQL thread...");
+		try {
+			executor.awaitTermination(10, TimeUnit.MINUTES);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+			plugin.getLogger().warning("Failed to await termination of thread pool. Interrupted.");
+		}
+
 		if (mysql != null) {
 			mysql.closeConnection();
 		}
