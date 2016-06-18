@@ -79,6 +79,8 @@ public class CheckCommand extends AutorankCommand {
 
 		}
 
+		final UUID uuid = plugin.getUUIDStorage().getStoredUUID(player.getName());
+
 		// Start building layout
 
 		String layout = plugin.getConfigHandler().getCheckCommandLayout();
@@ -86,6 +88,8 @@ public class CheckCommand extends AutorankCommand {
 		layout = layout.replace("&p", player.getName());
 		layout = layout.replace("&time", AutorankTools
 				.timeToString(plugin.getPlaytimes().getTimeOfPlayer(player.getName(), true), Time.SECONDS));
+		layout = layout.replace("&globaltime", AutorankTools
+				.timeToString(plugin.getPlaytimes().getGlobalTime(uuid), Time.MINUTES);
 
 		final StringBuilder groupsString = new StringBuilder("");
 
