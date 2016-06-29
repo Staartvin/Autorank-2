@@ -10,6 +10,7 @@ import me.armar.plugins.autorank.hooks.statsapi.StatsAPIHandler;
 import me.armar.plugins.autorank.statsmanager.handlers.DummyHandler;
 import me.armar.plugins.autorank.statsmanager.handlers.StatisticsHandler;
 import me.armar.plugins.autorank.statsmanager.handlers.StatsHandler;
+import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 
 /**
  * This class decides which Stats plugin will be used for getting stat data.
@@ -98,7 +99,7 @@ public class StatsPluginManager {
 			plugin.getLogger().info("Hooked into Statistics (by bitWolfy)");
 		} else {
 			// Use dummy handler if no stats plugin was found
-			statsPlugin = new DummyHandler();
+			statsPlugin = (StatsPlugin) new DummyHandler();
 
 			plugin.getLogger().info("No stats plugin found! Most requirements cannot be used!");
 
