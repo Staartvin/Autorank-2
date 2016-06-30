@@ -2,7 +2,14 @@ package me.armar.plugins.autorank.mysql.wrapper;
 
 import java.util.HashMap;
 import java.util.UUID;
-import java.util.concurrent.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+
+import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.config.ConfigHandler;
@@ -30,7 +37,7 @@ public class MySQLWrapper {
 	// Stores the last received global time for a player
 	private final HashMap<UUID, Integer> lastReceivedTime = new HashMap<UUID, Integer>();
 	// Thread pool for saving and retrieving data.
-	private ExecutorService executor = Executors.newFixedThreadPool(1);
+	private ExecutorService executor = Executors.newSingleThreadExecutor();
 
 	private SQLDataStorage mysql;
 	private final Autorank plugin;
@@ -98,7 +105,6 @@ public class MySQLWrapper {
 		}
 
 		// Retrieve database time
-
 		// Initialise new callable class
 		final Callable<Integer> callable = new GrabDatabaseTimeTask(mysql, uuid, table);
 
@@ -110,6 +116,7 @@ public class MySQLWrapper {
 		int value = -1;
 
 		try {
+			plugin.debugMessage("Gcheck performed " + (Thread.currentThread().getName().contains("Server thread") ? "not ASYNC" : "ASYNC") + " (" + Thread.currentThread().getName() + ")");
 			value = futureValue.get();
 		} catch (final InterruptedException e) {
 			e.printStackTrace();
@@ -159,6 +166,7 @@ public class MySQLWrapper {
 		int value = -1;
 
 		try {
+			plugin.debugMessage("Fresh Gcheck performed " + (Thread.currentThread().getName().contains("Server thread") ? "not ASYNC" : "ASYNC") + " (" + Thread.currentThread().getName() + ")");
 			value = futureValue.get();
 		} catch (final InterruptedException e) {
 			e.printStackTrace();
@@ -181,21 +189,21 @@ public class MySQLWrapper {
 		// Checks whether the last check was five minutes ago.
 		// When the last check was more than five minutes ago,
 		// the database time is 'outdated'
-
+		
 		// Never checked
 		if (!lastChecked.containsKey(uuid)) {
 			return true;
 		}
-
+		
 		final long currentTime = System.currentTimeMillis();
-
+		
 		final long lastCheckedTime = lastChecked.get(uuid);
-
+		
 		// Weird time received.
 		if (lastCheckedTime <= 0) {
 			return true;
 		}
-
+		
 		// Get the difference in minutes
 		if ((currentTime - lastCheckedTime) / 60000 >= Playtimes.INTERVAL_MINUTES) {
 			return true;
@@ -230,6 +238,7 @@ public class MySQLWrapper {
 			public void run() {
 				// TODO Auto-generated method stub
 				mysql.execute(statement);
+				mysql.closeConnection();
 			}
 		});
 
@@ -303,5 +312,25 @@ public class MySQLWrapper {
 		if (mysql != null) {
 			mysql.closeConnection();
 		}
+	}
+	
+	public void refreshGlobalTime() {
+		
+		// Do nothing if MySQL is not enabled
+		if (!this.isMySQLEnabled()) return;
+		
+		// Spawn an async thread that will update all the times every x minutes.
+		plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new Runnable() {
+
+			@Override
+			public void run() {	
+				for (Player p: plugin.getServer().getOnlinePlayers()) {
+					// Update fresh database time.
+					getFreshDatabaseTime(p.getUniqueId());
+				}
+			}
+			
+		}, 20, 20 * 60 * Playtimes.INTERVAL_MINUTES);
+		
 	}
 }

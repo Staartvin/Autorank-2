@@ -53,37 +53,46 @@ public class GlobalAddCommand extends AutorankCommand {
 		if (plugin.getUUIDStorage().hasRealName(uuid)) {
 			args[1] = plugin.getUUIDStorage().getRealName(uuid);
 		}
+		
+		plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
 
-		int value = -1;
+			@Override
+			public void run() {
+				int value = -1;
 
-		if (args.length > 2) {
+				if (args.length > 2) {
 
-			final StringBuilder builder = new StringBuilder();
+					final StringBuilder builder = new StringBuilder();
 
-			for (int i = 2; i < args.length; i++) {
-				builder.append(args[i]);
+					for (int i = 2; i < args.length; i++) {
+						builder.append(args[i]);
+					}
+
+					if (!builder.toString().contains("m") && !builder.toString().contains("h")
+							&& !builder.toString().contains("d")) {
+						value = AutorankTools.stringtoInt(builder.toString().trim());
+						value += plugin.getPlaytimes().getFreshGlobalTime(uuid);
+					} else {
+						value = AutorankTools.stringToTime(builder.toString(), Time.MINUTES);
+						value += plugin.getPlaytimes().getFreshGlobalTime(uuid);
+					}
+				}
+
+				if (value >= 0) {
+					try {
+						plugin.getPlaytimes().setGlobalTime(uuid, value);
+					} catch (final SQLException e) {
+						e.printStackTrace();
+					}
+					AutorankTools.sendColoredMessage(sender, Lang.PLAYTIME_CHANGED.getConfigValue(args[1], value + ""));
+				} else {
+					AutorankTools.sendColoredMessage(sender, Lang.INVALID_FORMAT.getConfigValue("/ar gadd [player] [value]"));
+				}
 			}
+		
+		});
 
-			if (!builder.toString().contains("m") && !builder.toString().contains("h")
-					&& !builder.toString().contains("d")) {
-				value = AutorankTools.stringtoInt(builder.toString().trim());
-				value += plugin.getPlaytimes().getGlobalTime(uuid);
-			} else {
-				value = AutorankTools.stringToTime(builder.toString(), Time.MINUTES);
-				value += plugin.getPlaytimes().getGlobalTime(uuid);
-			}
-		}
-
-		if (value >= 0) {
-			try {
-				plugin.getPlaytimes().setGlobalTime(uuid, value);
-			} catch (final SQLException e) {
-				e.printStackTrace();
-			}
-			AutorankTools.sendColoredMessage(sender, Lang.PLAYTIME_CHANGED.getConfigValue(args[1], value + ""));
-		} else {
-			AutorankTools.sendColoredMessage(sender, Lang.INVALID_FORMAT.getConfigValue("/ar gadd [player] [value]"));
-		}
+		
 
 		return true;
 	}

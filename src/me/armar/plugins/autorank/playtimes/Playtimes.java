@@ -232,7 +232,7 @@ public class Playtimes {
 		return plugin.getMySQLWrapper().getDatabaseTime(uuid);
 	}
 
-	private int getFreshGlobalTime(final UUID uuid) {
+	public int getFreshGlobalTime(final UUID uuid) {
 		if (uuid == null)
 			return -1;
 		return plugin.getMySQLWrapper().getFreshDatabaseTime(uuid);
@@ -396,6 +396,7 @@ public class Playtimes {
 				e.printStackTrace();
 			}
 		}
+
 	}
 
 	public void modifyLocalTime(final UUID uuid, final int timeDifference) throws IllegalArgumentException {

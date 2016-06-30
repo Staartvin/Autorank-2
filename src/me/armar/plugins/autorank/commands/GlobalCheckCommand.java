@@ -28,12 +28,14 @@ public class GlobalCheckCommand extends AutorankCommand {
 
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
-
+		
 		// This is a global check. It will not show you the database numbers
 		if (!plugin.getMySQLWrapper().isMySQLEnabled()) {
 			sender.sendMessage(ChatColor.RED + Lang.MYSQL_IS_NOT_ENABLED.getConfigValue());
 			return true;
 		}
+		
+		
 
 		if (args.length > 1) {
 
@@ -53,15 +55,25 @@ public class GlobalCheckCommand extends AutorankCommand {
 
 				final UUID uuid = plugin.getUUIDStorage().getStoredUUID(args[1]);
 
-				final int minutes = plugin.getPlaytimes().getGlobalTime(uuid);
+				
+				plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
 
-				if (minutes < 0) {
-					sender.sendMessage(Lang.PLAYER_IS_INVALID.getConfigValue(args[1]));
-					return true;
-				}
+					@Override
+					public void run() {
+						final int minutes = plugin.getPlaytimes().getGlobalTime(uuid);
 
-				AutorankTools.sendColoredMessage(sender, player.getName() + " has played for "
-						+ AutorankTools.timeToString(minutes, Time.MINUTES) + " across all servers.");
+						if (minutes < 0) {
+							sender.sendMessage(Lang.PLAYER_IS_INVALID.getConfigValue(args[1]));
+							return;
+						}
+
+						AutorankTools.sendColoredMessage(sender, player.getName() + " has played for "
+								+ AutorankTools.timeToString(minutes, Time.MINUTES) + " across all servers.");
+						
+					}
+					
+				});
+				
 				// Do no check. Players can't be checked on global times (at the
 				// moment)
 				// check(sender, player);
@@ -78,11 +90,17 @@ public class GlobalCheckCommand extends AutorankCommand {
 			final Player player = (Player) sender;
 
 			final UUID uuid = plugin.getUUIDStorage().getStoredUUID(player.getName());
+			
+			plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+				public void run() {
+					AutorankTools.sendColoredMessage(sender,
+							"You have played for "
+									+ AutorankTools.timeToString(plugin.getPlaytimes().getGlobalTime(uuid), Time.MINUTES)
+									+ " across all servers.");
+				}
+			});
 
-			AutorankTools.sendColoredMessage(sender,
-					"You have played for "
-							+ AutorankTools.timeToString(plugin.getPlaytimes().getGlobalTime(uuid), Time.MINUTES)
-							+ " across all servers.");
+			
 
 		} else {
 			AutorankTools.sendColoredMessage(sender, Lang.CANNOT_CHECK_CONSOLE.getConfigValue());

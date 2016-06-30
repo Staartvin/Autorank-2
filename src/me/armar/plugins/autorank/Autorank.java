@@ -412,6 +412,9 @@ public class Autorank extends JavaPlugin {
 
 		// Check whether the data files are still up to date.
 		this.getPlaytimes().doCalendarCheck();
+		
+		// Spawn thread to check if MySQL database times are up to date
+		this.getMySQLWrapper().refreshGlobalTime();
 	}
 
 	public AddOnManager getAddonManager() {
