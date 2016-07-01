@@ -515,6 +515,7 @@ public class Playtimes {
 
 		for (final dataType type : Playtimes.dataType.values()) {
 			if (plugin.getPlaytimes().shouldResetDatafile(type)) {
+				
 				// We should reset it now, it has expired.
 				plugin.getPlaytimes().resetDatafile(type);
 

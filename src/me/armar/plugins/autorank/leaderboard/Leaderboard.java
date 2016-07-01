@@ -136,7 +136,7 @@ public class Leaderboard {
 	 * @param type Type of leaderboard to send.
 	 */
 	public void sendLeaderboard(final CommandSender sender, final dataType type) {
-		if (shouldUpdateLeaderboard()) {
+		if (shouldUpdateLeaderboard(type)) {
 			// Update leaderboard because it is not valid anymore.
 			// Run async because it uses UUID lookup
 			plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
@@ -155,7 +155,7 @@ public class Leaderboard {
 	}
 
 	public void broadcastLeaderboard(final dataType type) {
-		if (shouldUpdateLeaderboard()) {
+		if (shouldUpdateLeaderboard(type)) {
 			// Update leaderboard because it is not valid anymore.
 			// Run async because it uses UUID lookup
 			plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
@@ -177,11 +177,15 @@ public class Leaderboard {
 		}
 	}
 
-	private boolean shouldUpdateLeaderboard() {
-		if (System.currentTimeMillis() - plugin.getInternalProps().getLeaderboardLastUpdateTime() > (60000 * validTime))
+	private boolean shouldUpdateLeaderboard(dataType type) {
+		if (System.currentTimeMillis()
+				- plugin.getInternalProps().getLeaderboardLastUpdateTime() > (60000 * validTime)) {
 			return true;
-		else
+		} else if (plugin.getInternalProps().getCachedLeaderboard(type).size() <= 2) {
+			return true;
+		} else {
 			return false;
+		}
 	}
 
 	public void sendMessages(final CommandSender sender, final dataType type) {
@@ -196,7 +200,7 @@ public class Leaderboard {
 	 * @param type Type of leaderboard to update.
 	 */
 	public void updateLeaderboard(final dataType type) {
-		plugin.debugMessage("Updating leaderboard '" + type.toString() + "'!");
+		plugin.debugMessage(ChatColor.BLUE + "Updating leaderboard '" + type.toString() + "'!");
 
 		final Map<UUID, Integer> sortedPlaytimes = getSortedPlaytimes(type);
 		final Iterator<Entry<UUID, Integer>> itr = sortedPlaytimes.entrySet().iterator();
@@ -294,13 +298,14 @@ public class Leaderboard {
 	}
 
 	public void updateAllLeaderboards() {
-		if (!shouldUpdateLeaderboard())
-			return;
 
 		plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
 			@Override
 			public void run() {
 				for (final dataType type : dataType.values()) {
+					if (!shouldUpdateLeaderboard(type))
+						continue;
+					
 					updateLeaderboard(type);
 				}
 			}
