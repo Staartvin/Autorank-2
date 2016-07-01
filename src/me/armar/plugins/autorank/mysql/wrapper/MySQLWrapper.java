@@ -16,6 +16,7 @@ import me.armar.plugins.autorank.config.ConfigHandler;
 import me.armar.plugins.autorank.config.ConfigHandler.MySQLOptions;
 import me.armar.plugins.autorank.data.SQLDataStorage;
 import me.armar.plugins.autorank.playtimes.Playtimes;
+import net.md_5.bungee.api.ChatColor;
 
 /**
  * This class keeps all incoming and outgoing connections under control.
@@ -46,10 +47,6 @@ public class MySQLWrapper {
 		plugin = instance;
 
 		sqlSetup();
-
-		if (mysql != null) {
-			setupTable();
-		}
 	}
 
 	/**
@@ -116,7 +113,9 @@ public class MySQLWrapper {
 		int value = -1;
 
 		try {
-			plugin.debugMessage("Gcheck performed " + (Thread.currentThread().getName().contains("Server thread") ? "not ASYNC" : "ASYNC") + " (" + Thread.currentThread().getName() + ")");
+			plugin.debugMessage("Gcheck performed "
+					+ (Thread.currentThread().getName().contains("Server thread") ? "not ASYNC" : "ASYNC") + " ("
+					+ Thread.currentThread().getName() + ")");
 			value = futureValue.get();
 		} catch (final InterruptedException e) {
 			e.printStackTrace();
@@ -166,7 +165,9 @@ public class MySQLWrapper {
 		int value = -1;
 
 		try {
-			plugin.debugMessage("Fresh Gcheck performed " + (Thread.currentThread().getName().contains("Server thread") ? "not ASYNC" : "ASYNC") + " (" + Thread.currentThread().getName() + ")");
+			plugin.debugMessage("Fresh Gcheck performed "
+					+ (Thread.currentThread().getName().contains("Server thread") ? "not ASYNC" : "ASYNC") + " ("
+					+ Thread.currentThread().getName() + ")");
 			value = futureValue.get();
 		} catch (final InterruptedException e) {
 			e.printStackTrace();
@@ -189,21 +190,21 @@ public class MySQLWrapper {
 		// Checks whether the last check was five minutes ago.
 		// When the last check was more than five minutes ago,
 		// the database time is 'outdated'
-		
+
 		// Never checked
 		if (!lastChecked.containsKey(uuid)) {
 			return true;
 		}
-		
+
 		final long currentTime = System.currentTimeMillis();
-		
+
 		final long lastCheckedTime = lastChecked.get(uuid);
-		
+
 		// Weird time received.
 		if (lastCheckedTime <= 0) {
 			return true;
 		}
-		
+
 		// Get the difference in minutes
 		if ((currentTime - lastCheckedTime) / 60000 >= Playtimes.INTERVAL_MINUTES) {
 			return true;
@@ -287,12 +288,23 @@ public class MySQLWrapper {
 			table = configHandler.getMySQLSettings(MySQLOptions.TABLE);
 
 			mysql = new SQLDataStorage(hostname, username, password, database);
-			if (!mysql.connect()) {
-				mysql = null;
-				plugin.getLogger().severe("Could not connect to " + hostname);
-			} else {
-				plugin.getLogger().info("Successfully established connection to " + hostname);
-			}
+
+			plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+
+				public void run() {
+					if (!mysql.connect()) {
+						mysql = null;
+						plugin.getLogger().severe("Could not connect to " + hostname);
+						plugin.debugMessage(ChatColor.RED + "Could not connect to MYSQL!");
+					} else {
+						plugin.getLogger().info("Successfully established connection to " + hostname);
+					}
+					
+					if (mysql != null) {
+						setupTable();
+					}
+				}
+			});
 		}
 	}
 
@@ -313,24 +325,25 @@ public class MySQLWrapper {
 			mysql.closeConnection();
 		}
 	}
-	
+
 	public void refreshGlobalTime() {
-		
+
 		// Do nothing if MySQL is not enabled
-		if (!this.isMySQLEnabled()) return;
-		
+		if (!this.isMySQLEnabled())
+			return;
+
 		// Spawn an async thread that will update all the times every x minutes.
 		plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new Runnable() {
 
 			@Override
-			public void run() {	
-				for (Player p: plugin.getServer().getOnlinePlayers()) {
+			public void run() {
+				for (Player p : plugin.getServer().getOnlinePlayers()) {
 					// Update fresh database time.
 					getFreshDatabaseTime(p.getUniqueId());
 				}
 			}
-			
+
 		}, 20, 20 * 60 * Playtimes.INTERVAL_MINUTES);
-		
+
 	}
 }

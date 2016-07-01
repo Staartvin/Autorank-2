@@ -2,6 +2,7 @@ package me.armar.plugins.autorank;
 
 import java.io.IOException;
 
+import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.armar.plugins.autorank.addons.AddOnManager;
@@ -143,7 +144,9 @@ public class Autorank extends JavaPlugin {
 		if (!this.getConfigHandler().useDebugOutput())
 			return;
 
-		System.out.print("[Autorank debug] " + message);
+		this.getServer().getConsoleSender().sendMessage("[Autorank DEBUG] " + ChatColor.translateAlternateColorCodes('&', message));
+		
+		//System.out.print("[Autorank debug] " + message);
 	}
 
 	/* (non-Javadoc)
