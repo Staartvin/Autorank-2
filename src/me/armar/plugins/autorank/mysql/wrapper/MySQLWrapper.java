@@ -239,7 +239,6 @@ public class MySQLWrapper {
 			public void run() {
 				// TODO Auto-generated method stub
 				mysql.execute(statement);
-				mysql.closeConnection();
 			}
 		});
 
