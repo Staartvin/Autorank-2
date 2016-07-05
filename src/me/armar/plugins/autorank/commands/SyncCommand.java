@@ -2,6 +2,7 @@ package me.armar.plugins.autorank.commands;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.UUID;
 
 import org.bukkit.ChatColor;
@@ -35,6 +36,13 @@ public class SyncCommand extends AutorankCommand {
 			sender.hasPermission(ChatColor.RED + "You probably meant /ar syncstats or /ar sync!");
 			return true;
 		}
+		
+		// If reverse is true, we don't put info TO the database, but we get info FROM the database.
+		boolean reverse = false;
+		
+		if (args.length > 1 && args[1].equalsIgnoreCase("reverse")) {
+			reverse = true;
+		}
 
 		if (!plugin.getConfigHandler().useMySQL()) {
 			sender.sendMessage(Lang.MYSQL_IS_NOT_ENABLED.getConfigValue());
@@ -42,32 +50,52 @@ public class SyncCommand extends AutorankCommand {
 		}
 
 		sender.sendMessage(
-				ChatColor.RED + "You do not have to use this command regularly. Use this only one time per server.");
+				ChatColor.RED + "You do not have to use this command regularly.");
 
-		// Do this async as we are accessing mysql database.
-		plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+		if (reverse) {
+			plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
 
-			@Override
-			public void run() {
-				// Update all mysql records
-				for (final UUID uuid : plugin.getPlaytimes().getUUIDKeys(dataType.TOTAL_TIME)) {
-					final int localTime = plugin.getPlaytimes().getLocalTime(uuid);
-
-					if (localTime <= 0)
-						continue;
-
-					final int globalTime = plugin.getPlaytimes().getGlobalTime(uuid);
-
-					// Update record
-					try {
-						plugin.getPlaytimes().setGlobalTime(uuid, localTime + globalTime);
-					} catch (final SQLException e) {
-						e.printStackTrace();
+				@Override
+				public void run() {
+					int count = 0;
+					
+					// Update all data.yml records
+					for (Entry<UUID, Integer> entry : plugin.getMySQLWrapper().getAllPlayersFromDatabase().entrySet()) {
+						plugin.getPlaytimes().setLocalTime(entry.getKey(), entry.getValue());
+						count++;
 					}
+					
+					sender.sendMessage(ChatColor.GREEN + "Successfully updated Data.yml from " + count + " MySQL database records!");
 				}
-				sender.sendMessage(ChatColor.GREEN + "Successfully updated MySQL records!");
-			}
-		});
+			});
+		} else {
+			// Do this async as we are accessing mysql database.
+			plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+
+				@Override
+				public void run() {
+					// Update all mysql records
+					for (final UUID uuid : plugin.getPlaytimes().getUUIDKeys(dataType.TOTAL_TIME)) {
+						final int localTime = plugin.getPlaytimes().getLocalTime(uuid);
+
+						if (localTime <= 0)
+							continue;
+
+						final int globalTime = plugin.getPlaytimes().getGlobalTime(uuid);
+
+						// Update record
+						try {
+							plugin.getPlaytimes().setGlobalTime(uuid, localTime + globalTime);
+						} catch (final SQLException e) {
+							e.printStackTrace();
+						}
+					}
+					sender.sendMessage(ChatColor.GREEN + "Successfully updated MySQL records!");
+				}
+			});
+		}
+		
+		
 		return true;
 	}
 

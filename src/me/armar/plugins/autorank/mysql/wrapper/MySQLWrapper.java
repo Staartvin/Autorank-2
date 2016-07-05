@@ -298,7 +298,7 @@ public class MySQLWrapper {
 					} else {
 						plugin.getLogger().info("Successfully established connection to " + hostname);
 					}
-					
+
 					if (mysql != null) {
 						setupTable();
 					}
@@ -344,5 +344,42 @@ public class MySQLWrapper {
 
 		}, 20, 20 * 60 * Playtimes.INTERVAL_MINUTES);
 
+	}
+
+	/**
+	 * Gets all the times of the players in the MySQL database
+	 * @return A hashmap containing all uuids that are in the database, or an empty one if MySQL is disabled
+	 */
+	public HashMap<UUID, Integer> getAllPlayersFromDatabase() {
+		HashMap<UUID, Integer> times = new HashMap<>();
+
+		if (!this.isMySQLEnabled())
+			return times;
+
+		// Check if connection is still alive
+		if (mysql.isClosed()) {
+			mysql.connect();
+		}
+
+		// Retrieve database time
+
+		// Initialise new callable class
+		final Callable<HashMap<UUID, Integer>> callable = new GrabAllTimesTask(mysql, table);
+
+		// Sumbit callable
+		final Future<HashMap<UUID, Integer>> futureValue = executor.submit(callable);
+
+		try {
+			plugin.debugMessage("Fresh AllCheck performed "
+					+ (Thread.currentThread().getName().contains("Server thread") ? "not ASYNC" : "ASYNC") + " ("
+					+ Thread.currentThread().getName() + ")");
+			times = futureValue.get();
+		} catch (final InterruptedException e) {
+			e.printStackTrace();
+		} catch (final ExecutionException e) {
+			e.printStackTrace();
+		}
+
+		return times;
 	}
 }
