@@ -2,6 +2,7 @@ package me.armar.plugins.autorank.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -401,78 +402,78 @@ public class AutorankTools {
 			return null;
 
 		switch (item.getType()) {
-		case APPLE:
-			return "APPLE";
-		case BAKED_POTATO:
-			return "BAKED_POTATO";
-		case BREAD:
-			return "BREAD";
-		case CAKE_BLOCK: // not working atm
-			return "CAKE_BLOCK";
-		case CARROT_ITEM:
-			return "CARROT_ITEM";
-		case COOKED_CHICKEN:
-			return "COOKED_CHICKEN";
-		case COOKED_FISH: {
-			if (item.getDurability() == (short) 1) {
-				return "COOKED_SALMON";
+			case APPLE:
+				return "APPLE";
+			case BAKED_POTATO:
+				return "BAKED_POTATO";
+			case BREAD:
+				return "BREAD";
+			case CAKE_BLOCK: // not working atm
+				return "CAKE_BLOCK";
+			case CARROT_ITEM:
+				return "CARROT_ITEM";
+			case COOKED_CHICKEN:
+				return "COOKED_CHICKEN";
+			case COOKED_FISH: {
+				if (item.getDurability() == (short) 1) {
+					return "COOKED_SALMON";
+				}
+				return "COOKED_FISH";
 			}
-			return "COOKED_FISH";
-		}
-		case COOKED_MUTTON:
-			return "COOKED_MUTTON";
-		case GRILLED_PORK:
-			return "GRILLED_PORK";
-		case COOKED_RABBIT:
-			return "COOKED_RABBIT";
-		case COOKIE:
-			return "COOKIE";
-		case GOLDEN_APPLE: {
-			if (item.getDurability() == (short) 1) {
-				return "ENCHANTED_GOLDEN_APPLE";
+			case COOKED_MUTTON:
+				return "COOKED_MUTTON";
+			case GRILLED_PORK:
+				return "GRILLED_PORK";
+			case COOKED_RABBIT:
+				return "COOKED_RABBIT";
+			case COOKIE:
+				return "COOKIE";
+			case GOLDEN_APPLE: {
+				if (item.getDurability() == (short) 1) {
+					return "ENCHANTED_GOLDEN_APPLE";
+				}
+				return "GOLDEN_APPLE";
 			}
-			return "GOLDEN_APPLE";
-		}
-		case GOLDEN_CARROT:
-			return "GOLDEN_CARROT";
-		case MELON:
-			return "MELON";
-		case MUSHROOM_SOUP:
-			return "MUSHROOM_SOUP";
-		case RABBIT_STEW:
-			return "RABBIT_STEW";
-		case RAW_BEEF:
-			return "RAW_BEEF";
-		case RAW_CHICKEN:
-			return "RAW_CHICKEN";
-		case RAW_FISH: {
-			if (item.getDurability() == (short) 1) {
-				return "RAW_SALMON";
-			} else if (item.getDurability() == (short) 2) {
-				return "CLOWNFISH";
-			} else if (item.getDurability() == (short) 3) {
-				return "PUFFERFISH";
+			case GOLDEN_CARROT:
+				return "GOLDEN_CARROT";
+			case MELON:
+				return "MELON";
+			case MUSHROOM_SOUP:
+				return "MUSHROOM_SOUP";
+			case RABBIT_STEW:
+				return "RABBIT_STEW";
+			case RAW_BEEF:
+				return "RAW_BEEF";
+			case RAW_CHICKEN:
+				return "RAW_CHICKEN";
+			case RAW_FISH: {
+				if (item.getDurability() == (short) 1) {
+					return "RAW_SALMON";
+				} else if (item.getDurability() == (short) 2) {
+					return "CLOWNFISH";
+				} else if (item.getDurability() == (short) 3) {
+					return "PUFFERFISH";
+				}
+				return "RAW_FISH";
 			}
-			return "RAW_FISH";
-		}
-		case POISONOUS_POTATO:
-			return "POISONOUS_POTATO";
-		case POTATO:
-			return "POTATO";
-		case PUMPKIN_PIE:
-			return "PUMPKIN_PIE";
-		case MUTTON:
-			return "MUTTON"; // raw
-		case COOKED_BEEF:
-			return "COOKED_BEEF";
-		case RABBIT:
-			return "RABBIT";
-		case ROTTEN_FLESH:
-			return "ROTTEN_FLESH";
-		case SPIDER_EYE:
-			return "SPIDER_EYE";
-		default:
-			return null;
+			case POISONOUS_POTATO:
+				return "POISONOUS_POTATO";
+			case POTATO:
+				return "POTATO";
+			case PUMPKIN_PIE:
+				return "PUMPKIN_PIE";
+			case MUTTON:
+				return "MUTTON"; // raw
+			case COOKED_BEEF:
+				return "COOKED_BEEF";
+			case RABBIT:
+				return "RABBIT";
+			case ROTTEN_FLESH:
+				return "ROTTEN_FLESH";
+			case SPIDER_EYE:
+				return "SPIDER_EYE";
+			default:
+				return null;
 		}
 	}
 
@@ -586,5 +587,31 @@ public class AutorankTools {
 		}
 
 		return string.toString();
+	}
+
+	public static HashMap<String, Object> makeStatsInfo(Object... strings) {
+		HashMap<String, Object> hashmap = new HashMap<>();
+		for (int i=0;i<strings.length;i+=2) {
+			Object string = strings[i];
+			
+			// Either key or value is null
+			if (string == null || strings[i+1] == null) {
+				continue;
+			}
+			
+			try {
+				int value = Integer.parseInt(strings[i+1].toString());
+				
+				if (value < 0) {
+					continue;
+				}
+			} catch (NumberFormatException e) {
+				// It's not a number, so skip the check.
+			}
+			
+			hashmap.put(string.toString(), strings[i+1]);
+		}
+		
+		return hashmap;
 	}
 }
