@@ -311,6 +311,8 @@ public class ConfigHandler {
 			return dependency.STATS;
 		else if (timePlugin.equalsIgnoreCase("OnTime"))
 			return dependency.ONTIME;
+		else if (timePlugin.equals("Statz"))
+			return dependency.STATZ;
 		else
 			return dependency.AUTORANK;
 	}
