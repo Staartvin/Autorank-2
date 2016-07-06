@@ -32,6 +32,7 @@ use time of: Autorank
 # 1. Autorank
 # 2. Stats
 # 3. OnTime
+# 4. Statz
 # If no valid time plugin was found, it defaults to Autorank
 
 leaderboard layout: '&6&r | &b&p - &7&d %day%, &h %hour% and &m %minute%.'
