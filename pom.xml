@@ -248,5 +248,12 @@
 			<version>3.0.3</version>
 		</dependency>
 
+		<dependency>
+			<groupId>me.staartvin.Statz</groupId>
+			<artifactId>Statz</artifactId>
+			<version>1.0</version>
+		</dependency>
+
+
 	</dependencies>
 </project>
