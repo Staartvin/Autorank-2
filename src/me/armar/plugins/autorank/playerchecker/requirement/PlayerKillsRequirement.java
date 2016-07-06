@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.statsmanager.handlers.StatsHandler;
+import me.armar.plugins.autorank.util.AutorankTools;
 
 public class PlayerKillsRequirement extends Requirement {
 
@@ -23,16 +24,19 @@ public class PlayerKillsRequirement extends Requirement {
 
 	@Override
 	public String getProgress(final Player player) {
-		final int killed = getStatsPlugin().getNormalStat(StatsHandler.statTypes.PLAYERS_KILLED.toString(),
-				player.getUniqueId(), this.getWorld());
+		final int killed = getStatsPlugin().getNormalStat(StatsHandler.statTypes.PLAYERS_KILLED,
+				player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld()));
 
 		return killed + "/" + totalPlayersKilled + " player(s)";
 	}
 
 	@Override
 	public boolean meetsRequirement(final Player player) {
-		final int killed = getStatsPlugin().getNormalStat(StatsHandler.statTypes.PLAYERS_KILLED.toString(),
-				player.getUniqueId(), this.getWorld());
+		if (!getStatsPlugin().isEnabled())
+			return false;
+		
+		final int killed = getStatsPlugin().getNormalStat(StatsHandler.statTypes.PLAYERS_KILLED,
+				player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld()));
 
 		return killed >= totalPlayersKilled;
 	}

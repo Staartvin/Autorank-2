@@ -11,6 +11,8 @@ import org.bukkit.command.CommandSender;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.playtimes.Playtimes.dataType;
+import me.armar.plugins.autorank.statsmanager.StatsPlugin;
+import me.armar.plugins.autorank.util.AutorankTools;
 
 public class SyncStatsCommand extends AutorankCommand {
 
@@ -43,7 +45,7 @@ public class SyncStatsCommand extends AutorankCommand {
 			final OfflinePlayer p = plugin.getServer().getOfflinePlayer(uuid);
 
 			// Time is stored in seconds
-			final int statsPlayTime = plugin.getHookedStatsPlugin().getNormalStat("time_played", p.getUniqueId());
+			final int statsPlayTime = plugin.getHookedStatsPlugin().getNormalStat(StatsPlugin.statTypes.TIME_PLAYED, p.getUniqueId(), AutorankTools.makeStatsInfo());
 
 			if (statsPlayTime <= 0) {
 				continue;

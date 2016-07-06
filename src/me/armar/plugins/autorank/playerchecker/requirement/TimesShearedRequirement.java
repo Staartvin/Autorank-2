@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.statsmanager.handlers.StatsHandler;
+import me.armar.plugins.autorank.util.AutorankTools;
 
 public class TimesShearedRequirement extends Requirement {
 
@@ -23,8 +24,8 @@ public class TimesShearedRequirement extends Requirement {
 
 	@Override
 	public String getProgress(final Player player) {
-		final int progressBar = this.getStatsPlugin().getNormalStat(StatsHandler.statTypes.TIMES_SHEARED.toString(),
-				player.getUniqueId(), this.getWorld());
+		final int progressBar = this.getStatsPlugin().getNormalStat(StatsHandler.statTypes.TIMES_SHEARED,
+				player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld()));
 
 		// progress = progress.concat(progressBar + "/" + timesSheared);
 		return progressBar + "/" + timesShorn;
@@ -32,8 +33,11 @@ public class TimesShearedRequirement extends Requirement {
 
 	@Override
 	public boolean meetsRequirement(final Player player) {
-		return this.getStatsPlugin().getNormalStat(StatsHandler.statTypes.TIMES_SHEARED.toString(),
-				player.getUniqueId(), this.getWorld()) >= timesShorn;
+		if (!getStatsPlugin().isEnabled())
+			return false;
+		
+		return this.getStatsPlugin().getNormalStat(StatsHandler.statTypes.TIMES_SHEARED,
+				player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld())) >= timesShorn;
 	}
 
 	@Override

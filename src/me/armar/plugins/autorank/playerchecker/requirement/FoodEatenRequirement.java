@@ -43,8 +43,8 @@ public class FoodEatenRequirement extends Requirement {
 		final int amount = foodEaten.getAmount();
 		String foodType = foodEaten.getFoodName();
 
-		final int totalFoodEaten = getStatsPlugin().getNormalStat(StatsHandler.statTypes.FOOD_EATEN.toString(),
-				player.getUniqueId(), this.getWorld(), foodType);
+		final int totalFoodEaten = getStatsPlugin().getNormalStat(StatsHandler.statTypes.FOOD_EATEN,
+				player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld(), "foodType", foodType));
 
 		if (foodType == null) {
 			foodType = "food";
@@ -66,8 +66,8 @@ public class FoodEatenRequirement extends Requirement {
 		final int amount = foodEaten.getAmount();
 		final String foodType = foodEaten.getFoodName();
 
-		final int totalFoodEaten = getStatsPlugin().getNormalStat(StatsHandler.statTypes.FOOD_EATEN.toString(),
-				player.getUniqueId(), this.getWorld(), foodType);
+		final int totalFoodEaten = getStatsPlugin().getNormalStat(StatsHandler.statTypes.FOOD_EATEN,
+				player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld(), "foodType", foodType));
 
 		return totalFoodEaten >= amount;
 	}

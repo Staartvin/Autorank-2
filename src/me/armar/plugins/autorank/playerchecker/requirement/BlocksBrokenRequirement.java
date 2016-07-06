@@ -5,49 +5,34 @@ import org.bukkit.inventory.ItemStack;
 
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.statsmanager.handlers.StatsHandler;
+import me.armar.plugins.autorank.util.AutorankTools;
 
 public class BlocksBrokenRequirement extends Requirement {
 
 	BlocksWrapper wrapper = null;
 
-	// private int blockID = -1;
-	// private int blocksBroken = 0;
-	// private int damageValue = -1;
-
-	@SuppressWarnings("deprecation")
 	@Override
 	public String getDescription() {
-		final int blockID = wrapper.getBlockId();
-		final int damageValue = wrapper.getDamageValue();
+		final ItemStack item = wrapper.getItem();
 
-		final String displayName = wrapper.getDisplayName();
+		final StringBuilder arg = new StringBuilder(item.getAmount() + " ");
 
-		String message = wrapper.getBlocksBroken() + " ";
-
-		if (blockID > 0 && damageValue >= 0) {
-
-			if (displayName.equals("")) {
-				final ItemStack item = new ItemStack(blockID, 1, (short) damageValue);
-
-				message = message.concat(item.getType().name().replace("_", "").toLowerCase() + " ");
+		if (wrapper.getDisplayName() != null) {
+			// Show displayname instead of material name
+			arg.append(wrapper.getDisplayName());
+		} else {
+			if (item.getType().toString().contains("AIR")) {
+				arg.append("blocks");
 			} else {
-				message = message.concat(displayName + " ");
+				arg.append(item.getType().toString().replace("_", " ").toLowerCase());
 			}
-
-		} else if (blockID > 0) {
-			if (displayName.equals("")) {
-				final ItemStack item = new ItemStack(blockID, 1);
-
-				message = message.concat(item.getType().name().replace("_", "").toLowerCase() + " ");
-			} else {
-				message = message.concat(displayName + " ");
+			
+			if (wrapper.showShortValue()) {
+				arg.append(" (Dam. value: " + item.getDurability() + ")");
 			}
-
 		}
 
-		message = message.concat("blocks");
-
-		String lang = Lang.BROKEN_BLOCKS_REQUIREMENT.getConfigValue(message);
+		String lang = Lang.BROKEN_BLOCKS_REQUIREMENT.getConfigValue(arg.toString());
 
 		// Check if this requirement is world-specific
 		if (this.isWorldSpecific()) {
@@ -57,90 +42,97 @@ public class BlocksBrokenRequirement extends Requirement {
 		return lang;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public String getProgress(final Player player) {
 
 		int progressBar = 0;
 
-		if (wrapper.getBlockId() < 0) {
-			progressBar = getStatsPlugin().getNormalStat(StatsHandler.statTypes.TOTAL_BLOCKS_BROKEN.toString(),
-					player.getUniqueId());
+		if (wrapper.getItem().getTypeId() < 0) {
+			progressBar = getStatsPlugin().getNormalStat(StatsHandler.statTypes.TOTAL_BLOCKS_BROKEN,
+					player.getUniqueId(), AutorankTools.makeStatsInfo());
 		} else {
-			progressBar = getStatsPlugin().getNormalStat(StatsHandler.statTypes.BLOCKS_BROKEN.toString(),
-					player.getUniqueId(), this.getWorld(), wrapper.getBlockId() + "", wrapper.getDamageValue() + "");
+			progressBar = getStatsPlugin().getNormalStat(StatsHandler.statTypes.BLOCKS_BROKEN, player.getUniqueId(),
+					AutorankTools.makeStatsInfo("world", this.getWorld(), "typeID", wrapper.getItem().getTypeId(), "dataValue",
+							wrapper.getItem().getDurability()));
 		}
 
 		return progressBar + "/" + wrapper.getBlocksBroken();
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean meetsRequirement(final Player player) {
 
 		if (!getStatsPlugin().isEnabled())
 			return false;
 
-		final int blockID = wrapper.getBlockId();
-		final int damageValue = wrapper.getDamageValue();
+		final int blockID = wrapper.getItem().getTypeId();
 		final int blocksBroken = wrapper.getBlocksBroken();
 
 		int progress = 0;
 
 		if (blockID > 0) {
-			progress = getStatsPlugin().getNormalStat(StatsHandler.statTypes.BLOCKS_BROKEN.toString(),
-					player.getUniqueId(), this.getWorld(), blockID + "", damageValue + "");
+			progress = getStatsPlugin().getNormalStat(StatsHandler.statTypes.BLOCKS_BROKEN, player.getUniqueId(),
+					AutorankTools.makeStatsInfo("world", this.getWorld(), "typeID", wrapper.getItem().getTypeId(), "dataValue",
+							wrapper.getItem().getDurability()));
 		} else {
-			progress = getStatsPlugin().getNormalStat(StatsHandler.statTypes.TOTAL_BLOCKS_BROKEN.toString(),
-					player.getUniqueId());
+			progress = getStatsPlugin().getNormalStat(StatsHandler.statTypes.TOTAL_BLOCKS_BROKEN, player.getUniqueId(),
+					AutorankTools.makeStatsInfo());
 		}
 
 		return progress >= blocksBroken;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean setOptions(final String[] options) {
-		int blocksBroken = 0;
-		int blockId = -1;
-		int damageValue = -1;
-		String displayName = "";
+		int id = -1;
+		int amount = 1;
+		short data = 0;
+
+		String displayName = null;
+		boolean showShortValue = false;
+		boolean useDisplayName = false;
 
 		if (options.length > 0) {
-			blocksBroken = Integer.parseInt(options[0].trim());
-		}
+			amount = Integer.parseInt(options[0].trim());
+		}		
 		if (options.length > 1) {
-			blockId = Integer.parseInt(options[0].trim());
-			blocksBroken = Integer.parseInt(options[1].trim());
-		}
+			id = AutorankTools.stringtoInt(options[0]);
+			amount = Integer.parseInt(options[1].trim());
+		}		
 		if (options.length > 2) {
-			damageValue = Integer.parseInt(options[2].trim());
+			data = (short) AutorankTools.stringtoInt(options[2]);
+			// Short value can make a difference, thus we show it.
+			showShortValue = true;
 		}
 		if (options.length > 3) {
-			displayName = options[3].trim();
+			// Displayname
+			displayName = options[3];
+		}
+		if (options.length > 4) {
+			// use display name?
+			useDisplayName = (options[4].equalsIgnoreCase("true") ? true : false);
 		}
 
-		wrapper = new BlocksWrapper(blockId, blocksBroken, damageValue, displayName);
+		// item = new ItemStack(id, 1, (short) 0, data);
+		final ItemStack item = new ItemStack(id, amount, data);
 
-		return wrapper != null;
+		wrapper = new BlocksWrapper(item, displayName, showShortValue, useDisplayName);
+
+		wrapper.setBlocksBroken(amount);
+
+		return wrapper != null && amount > 0;
 	}
 }
 
-class BlocksWrapper {
+class BlocksWrapper extends ItemWrapper {
 
-	private int blockId, blocksBroken, damageValue;
-	private String displayName;
+	private int blocksBroken; // How many items does the player need to break?
 
-	public BlocksWrapper(final int blockId, final int blocksBroken, final int damageValue, final String displayName) {
-		this.setBlockId(blockId);
-		this.setBlocksBroken(blocksBroken);
-		this.setDamageValue(damageValue);
-		this.setDisplayName(displayName);
-	}
-
-	public int getBlockId() {
-		return blockId;
-	}
-
-	public void setBlockId(final int blockId) {
-		this.blockId = blockId;
+	public BlocksWrapper(ItemStack item, String displayName, boolean showShortValue, boolean useDisplayName) {
+		super(item, displayName, showShortValue, useDisplayName);
 	}
 
 	public int getBlocksBroken() {
@@ -150,21 +142,4 @@ class BlocksWrapper {
 	public void setBlocksBroken(final int blocksBroken) {
 		this.blocksBroken = blocksBroken;
 	}
-
-	public int getDamageValue() {
-		return damageValue;
-	}
-
-	public void setDamageValue(final int damageValue) {
-		this.damageValue = damageValue;
-	}
-
-	public String getDisplayName() {
-		return displayName;
-	}
-
-	public void setDisplayName(final String displayName) {
-		this.displayName = displayName;
-	}
-
 }

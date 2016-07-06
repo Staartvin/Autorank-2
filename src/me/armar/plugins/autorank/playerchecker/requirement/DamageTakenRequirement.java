@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.statsmanager.handlers.StatsHandler;
+import me.armar.plugins.autorank.util.AutorankTools;
 
 public class DamageTakenRequirement extends Requirement {
 
@@ -24,8 +25,8 @@ public class DamageTakenRequirement extends Requirement {
 
 	@Override
 	public String getProgress(final Player player) {
-		final int damTaken = getStatsPlugin().getNormalStat(StatsHandler.statTypes.DAMAGE_TAKEN.toString(),
-				player.getUniqueId(), this.getWorld());
+		final int damTaken = getStatsPlugin().getNormalStat(StatsHandler.statTypes.DAMAGE_TAKEN,
+				player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld()));
 
 		return damTaken + "/" + damageTaken;
 	}
@@ -33,8 +34,11 @@ public class DamageTakenRequirement extends Requirement {
 	@Override
 	public boolean meetsRequirement(final Player player) {
 
-		final int damTaken = getStatsPlugin().getNormalStat(StatsHandler.statTypes.DAMAGE_TAKEN.toString(),
-				player.getUniqueId(), this.getWorld());
+		if (!getStatsPlugin().isEnabled())
+			return false;
+		
+		final int damTaken = getStatsPlugin().getNormalStat(StatsHandler.statTypes.DAMAGE_TAKEN,
+				player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld()));
 
 		return damTaken >= damageTaken;
 	}

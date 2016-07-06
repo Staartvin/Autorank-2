@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.statsmanager.handlers.StatsHandler;
+import me.armar.plugins.autorank.util.AutorankTools;
 
 public class BlocksMovedRequirement extends Requirement {
 
@@ -26,8 +27,8 @@ public class BlocksMovedRequirement extends Requirement {
 	@Override
 	public String getProgress(final Player player) {
 
-		final int progressBar = getStatsPlugin().getNormalStat(StatsHandler.statTypes.BLOCKS_MOVED.toString(),
-				player.getUniqueId(), this.getWorld(), wrapper.getRawMovementType());
+		final int progressBar = getStatsPlugin().getNormalStat(StatsHandler.statTypes.BLOCKS_MOVED,
+				player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld(), "moveType", wrapper.getRawMovementType()));
 
 		return progressBar + "/" + wrapper.getBlocksMoved() + " (" + wrapper.getMovementType() + ")";
 	}
@@ -35,11 +36,12 @@ public class BlocksMovedRequirement extends Requirement {
 	@Override
 	public boolean meetsRequirement(final Player player) {
 
-		if (getStatsPlugin().isEnabled())
+		if (!getStatsPlugin().isEnabled()) {
 			return false;
+		}
 
-		final int count = this.getStatsPlugin().getNormalStat(StatsHandler.statTypes.BLOCKS_MOVED.toString(),
-				player.getUniqueId(), this.getWorld(), wrapper.getRawMovementType());
+		final int count = getStatsPlugin().getNormalStat(StatsHandler.statTypes.BLOCKS_MOVED,
+				player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld(), "moveType", wrapper.getRawMovementType()));
 
 		return count >= wrapper.getBlocksMoved();
 	}
