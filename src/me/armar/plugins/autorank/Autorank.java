@@ -145,8 +145,6 @@ public class Autorank extends JavaPlugin {
 			return;
 
 		this.getServer().getConsoleSender().sendMessage("[Autorank DEBUG] " + ChatColor.translateAlternateColorCodes('&', message));
-		
-		//System.out.print("[Autorank debug] " + message);
 	}
 
 	/* (non-Javadoc)
