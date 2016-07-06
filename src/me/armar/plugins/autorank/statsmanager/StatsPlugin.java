@@ -1,16 +1,13 @@
 package me.armar.plugins.autorank.statsmanager;
 
+import java.util.HashMap;
 import java.util.UUID;
 
-public interface StatsPlugin {
+public abstract class StatsPlugin {
 
-	/**
-	 * Get the correct name of this stat
-	 * 
-	 * @param statType stat name that can be incorrect
-	 * @return official name of the stat or null if not valid
-	 */
-	public String getCorrectStatName(String statType);
+	public static enum statTypes {
+		BLOCKS_BROKEN, BLOCKS_MOVED, BLOCKS_PLACED, DAMAGE_TAKEN, FISH_CAUGHT, ITEMS_CRAFTED, MOBS_KILLED, PLAYERS_KILLED, TIME_PLAYED, TIMES_SHEARED, TOTAL_BLOCKS_BROKEN, TOTAL_BLOCKS_PLACED, VOTES, FOOD_EATEN
+	}
 
 	/**
 	 * Get the value of a stat. You can only get stats that are of a certain
@@ -24,15 +21,15 @@ public interface StatsPlugin {
 	 * @param arguments Provide arguments for the stat (worldName).
 	 *            1st argument has to be the world (can be null)
 	 * @return value of the stat; -1 when the current stats plugin doesn't
-	 *         support this stat; -2 if stat name is invalid
+	 *         support this stat
 	 */
-	public int getNormalStat(String statType, UUID uuid, Object... arguments);
+	public abstract int getNormalStat(statTypes statType, UUID uuid, HashMap<String, Object> arguments);
 
 	/**
 	 * Check whether the current stats plugin is enabled or not.
 	 * 
 	 * @return true if enabled; false otherwise
 	 */
-	public boolean isEnabled();
+	public abstract boolean isEnabled();
 
 }

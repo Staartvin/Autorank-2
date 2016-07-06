@@ -1,5 +1,6 @@
 package me.armar.plugins.autorank.statsmanager.handlers;
 
+import java.util.HashMap;
 import java.util.UUID;
 
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
@@ -12,16 +13,10 @@ import me.armar.plugins.autorank.statsmanager.StatsPlugin;
  * @author Staartvin
  * 
  */
-public class DummyHandler implements StatsPlugin {
+public class DummyHandler extends StatsPlugin {
 
 	@Override
-	public String getCorrectStatName(final String statType) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public int getNormalStat(final String statType, final UUID uuid, final Object... arguments) {
+	public int getNormalStat(statTypes statType, final UUID uuid, HashMap<String, Object> arguments) {
 		// TODO Auto-generated method stub
 		return 0;
 	}

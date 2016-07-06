@@ -1,16 +1,14 @@
 package me.armar.plugins.autorank.statsmanager.handlers;
 
+import java.util.HashMap;
 import java.util.UUID;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.statsapi.StatsAPIHandler;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 
-public class StatsHandler implements StatsPlugin {
+public class StatsHandler extends StatsPlugin {
 
-	public static enum statTypes {
-		BLOCKS_BROKEN, BLOCKS_MOVED, BLOCKS_PLACED, DAMAGE_TAKEN, FISH_CAUGHT, ITEMS_CRAFTED, MOBS_KILLED, PLAYERS_KILLED, TIME_PLAYED, TIMES_SHEARED, TOTAL_BLOCKS_BROKEN, TOTAL_BLOCKS_PLACED, VOTES, FOOD_EATEN
-	}
 
 	private final Autorank plugin;
 
@@ -23,84 +21,64 @@ public class StatsHandler implements StatsPlugin {
 	}
 
 	@Override
-	public String getCorrectStatName(String statType) {
+	public int getNormalStat(statTypes statType, final UUID uuid, final HashMap<String, Object> arguments) {
+		// First argument is the world (or null)
 
-		statType = statType.replace(" ", "_");
+		String worldName = null;
 
-		for (final statTypes t : statTypes.values()) {
-			if (t.name().equalsIgnoreCase(statType)) {
-				return t.name();
+		if (arguments != null) {
+			if (arguments.containsKey("world")) {
+				worldName = (arguments.get("world") != null ? arguments.get("world").toString() : null);
 			}
 		}
 
-		return null;
-	}
-
-	@Override
-	public int getNormalStat(final String statType, final UUID uuid, final Object... arguments) {
-		// First argument is the world (or null)
-
-		final String correctName = getCorrectStatName(statType).toLowerCase();
-
-		// Invalid name
-		if (correctName == null) {
-			return -2;
-		}
-
-		//final String playerName = (String) arguments[0];
-		String worldName = null;
-
-		if (arguments.length > 1) {
-			worldName = (String) arguments[0];
-		}
-
 		int value = -1;
-
-		if (correctName.equals("votes")) {
+		
+		if (statType.equals(statTypes.VOTES)) {
 			// Handle voting
 			value = statsApi.getNormalStat(uuid, "Votes", worldName);
-		} else if (correctName.equals("players_killed")) {
+		} else if (statType.equals(statTypes.PLAYERS_KILLED)) {
 			// Handle players killed
 			value = statsApi.getTotalMobsKilled(uuid, "player", worldName);
-		} else if (correctName.equals("mobs_killed")) {
+		} else if (statType.equals(statTypes.MOBS_KILLED)) {
 			// Handle mobs killed
 			// arg[2] == mobType
-			value = statsApi.getTotalMobsKilled(uuid, (String) arguments[1], worldName);
-		} else if (correctName.equals("damage_taken")) {
+			value = statsApi.getTotalMobsKilled(uuid, arguments.get("mobType").toString(), worldName);
+		} else if (statType.equals(statTypes.DAMAGE_TAKEN)) {
 			// Handle damage taken
 			value = statsApi.getNormalStat(uuid, "Damage taken", worldName);
-		} else if (correctName.equals("blocks_placed")) {
+		} else if (statType.equals(statTypes.BLOCKS_PLACED)) {
 			// Handle blocks placed
-			value = statsApi.getBlocksStat(uuid, Integer.parseInt((String) arguments[1]),
-					Integer.parseInt((String) arguments[2]), worldName, "Blocks placed");
-		} else if (correctName.equals("blocks_broken")) {
+			value = statsApi.getBlocksStat(uuid, Integer.parseInt(arguments.get("typeID").toString()),
+					Integer.parseInt(arguments.get("dataValue").toString()), worldName, "Blocks placed");
+		} else if (statType.equals(statTypes.BLOCKS_BROKEN)) {
 			// Handle blocks broken
-			value = statsApi.getBlocksStat(uuid, Integer.parseInt((String) arguments[1]),
-					Integer.parseInt((String) arguments[2]), worldName, "Blocks broken");
-		} else if (correctName.equals("total_blocks_placed")) {
+			value = statsApi.getBlocksStat(uuid, Integer.parseInt(arguments.get("typeID").toString()),
+					Integer.parseInt(arguments.get("dataValue").toString()), worldName, "Blocks broken");
+		} else if (statType.equals(statTypes.TOTAL_BLOCKS_PLACED)) {
 			// Handle total blocks placed
 			value = statsApi.getTotalBlocksPlaced(uuid, worldName);
-		} else if (correctName.equals("total_blocks_broken")) {
+		} else if (statType.equals(statTypes.TOTAL_BLOCKS_BROKEN)) {
 			// Handle total blocks placed
 			value = statsApi.getTotalBlocksBroken(uuid, worldName);
-		} else if (correctName.equals("time_played")) {
+		} else if (statType.equals(statTypes.TIME_PLAYED)) {
 			// Handle time played
 			value = statsApi.getTotalPlayTime(uuid, worldName);
-		} else if (correctName.equals("blocks_moved")) {
+		} else if (statType.equals(statTypes.BLOCKS_MOVED)) {
 			// Handle time played
-			value = statsApi.getTotalBlocksMoved(uuid, (Integer) arguments[1], worldName);
-		} else if (correctName.equals("fish_caught")) {
+			value = statsApi.getTotalBlocksMoved(uuid, (Integer) arguments.get("moveType"), worldName);
+		} else if (statType.equals(statTypes.FISH_CAUGHT)) {
 			// Handle time played
 			value = statsApi.getNormalStat(uuid, "Fish caught", worldName);
-		} else if (correctName.equals("items_crafted")) {
+		} else if (statType.equals(statTypes.ITEMS_CRAFTED)) {
 			// Handle time played
 			value = statsApi.getNormalStat(uuid, "Items crafted", worldName);
-		} else if (correctName.equals("times_sheared")) {
+		} else if (statType.equals(statTypes.TIMES_SHEARED)) {
 			// Handle time played
 			value = statsApi.getNormalStat(uuid, "Shears", worldName);
-		} else if (correctName.equals("food_eaten")) {
+		} else if (statType.equals(statTypes.FOOD_EATEN)) {
 			// Handle food eaten
-			value = statsApi.getFoodEaten(uuid, worldName, (String) arguments[1]);
+			value = statsApi.getFoodEaten(uuid, worldName, arguments.get("foodType").toString());
 		}
 
 		return value;

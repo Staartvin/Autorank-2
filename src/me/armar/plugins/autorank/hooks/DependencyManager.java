@@ -16,6 +16,7 @@ import me.armar.plugins.autorank.hooks.royalcommandsapi.RoyalCommandsHandler;
 import me.armar.plugins.autorank.hooks.statisticsapi.StatisticsAPIHandler;
 import me.armar.plugins.autorank.hooks.statsapi.StatsAPIHandler;
 import me.armar.plugins.autorank.hooks.statsapi.customstats.CustomStatsManager;
+import me.armar.plugins.autorank.hooks.statzapi.StatzAPIHandler;
 import me.armar.plugins.autorank.hooks.ultimatecoreapi.UltimateCoreHandler;
 import me.armar.plugins.autorank.hooks.vaultapi.VaultHandler;
 import me.armar.plugins.autorank.hooks.worldguardapi.WorldGuardHandler;
@@ -47,7 +48,7 @@ public class DependencyManager {
 	 */
 	public enum dependency {
 
-		AUTORANK, ESSENTIALS, FACTIONS, MCMMO, ONTIME, ROYALCOMMANDS, STATS, VAULT, WORLDGUARD, ULTIMATECORE, STATISTICS, AFKTERMINATOR, ACIDISLAND, ASKYBLOCK
+		AUTORANK, ESSENTIALS, FACTIONS, MCMMO, ONTIME, ROYALCOMMANDS, STATS, VAULT, WORLDGUARD, ULTIMATECORE, STATISTICS, AFKTERMINATOR, ACIDISLAND, ASKYBLOCK, STATZ
 	};
 
 	private final HashMap<dependency, DependencyHandler> handlers = new HashMap<dependency, DependencyHandler>();
@@ -75,6 +76,7 @@ public class DependencyManager {
 		handlers.put(dependency.AFKTERMINATOR, new AFKTerminatorHandler(instance));
 		handlers.put(dependency.ACIDISLAND, new AcidIslandHandler(instance));
 		handlers.put(dependency.ASKYBLOCK, new ASkyBlockHandler(instance));
+		handlers.put(dependency.STATZ, new StatzAPIHandler(instance));
 
 		statsPluginManager = new StatsPluginManager(instance);
 	}

@@ -7,10 +7,11 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.DependencyManager.dependency;
 import me.armar.plugins.autorank.hooks.statisticsapi.StatisticsAPIHandler;
 import me.armar.plugins.autorank.hooks.statsapi.StatsAPIHandler;
+import me.armar.plugins.autorank.hooks.statzapi.StatzAPIHandler;
 import me.armar.plugins.autorank.statsmanager.handlers.DummyHandler;
 import me.armar.plugins.autorank.statsmanager.handlers.StatisticsHandler;
 import me.armar.plugins.autorank.statsmanager.handlers.StatsHandler;
-import me.armar.plugins.autorank.statsmanager.StatsPlugin;
+import me.armar.plugins.autorank.statsmanager.handlers.StatzHandler;
 
 /**
  * This class decides which Stats plugin will be used for getting stat data.
@@ -40,6 +41,16 @@ public class StatsPluginManager {
 
 	public boolean findStatistics() {
 		final Plugin x = plugin.getServer().getPluginManager().getPlugin("Statistics");
+		// Main == Stats main class
+		if (x != null && x instanceof JavaPlugin) {
+			return true;
+		}
+
+		return false;
+	}
+	
+	public boolean findStatz() {
+		final Plugin x = plugin.getServer().getPluginManager().getPlugin("Statz");
 		// Main == Stats main class
 		if (x != null && x instanceof JavaPlugin) {
 			return true;
@@ -97,7 +108,26 @@ public class StatsPluginManager {
 			}
 
 			plugin.getLogger().info("Hooked into Statistics (by bitWolfy)");
-		} else {
+		} else if (findStatz()) {
+
+			plugin.getLogger().info("Found Statz plugin: Statz (by Staartvin)");
+
+			statsPlugin = new StatzHandler(plugin,
+					(StatzAPIHandler) plugin.getDependencyManager().getDependency(dependency.STATZ));
+
+			if (statsPlugin == null) {
+				plugin.getLogger().info("Couldn't hook into Statz! StatzHandler was unable to hook.");
+				return;
+			}
+
+			if (!statsPlugin.isEnabled()) {
+				plugin.getLogger().info(
+						"Couldn't hook into Statz! Make sure the version is correct!");
+				return;
+			}
+
+			plugin.getLogger().info("Hooked into Statz (by Staartvin)");
+		}else {
 			// Use dummy handler if no stats plugin was found
 			statsPlugin = (StatsPlugin) new DummyHandler();
 

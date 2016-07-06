@@ -295,7 +295,7 @@ public class StatisticsAPIHandler implements DependencyHandler {
 	public boolean setup(final boolean verbose) {
 		if (!isInstalled()) {
 			if (verbose) {
-				plugin.getLogger().info("Stats has not been found!");
+				plugin.getLogger().info("Statistics has not been found!");
 			}
 			return false;
 		} else {
