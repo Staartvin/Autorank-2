@@ -95,6 +95,7 @@ public class RequirementsHolder {
 						noErrors = false;
 					}
 				}
+				
 				result = noErrors;
 				break; // We performed results for a requirement, so we should
 						// stop now.
