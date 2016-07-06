@@ -211,8 +211,8 @@ public class ChangeGroupBuilder {
 				final List<String[]> optionsList = configHandler.getOptions(requirement, group);
 
 				for (final String[] options : optionsList) {
-					final Requirement newRequirement = createRequirement(AutorankTools.getCorrectName(requirement),
-							options, optional, realResults, configHandler.useAutoCompletion(group, requirement), reqId);
+					final Requirement newRequirement = createRequirement(correctName,
+							options, optional, realResults, configHandler.useAutoCompletion(group, requirement), reqId, requirement, group);
 
 					if (newRequirement == null)
 						continue;
@@ -326,14 +326,14 @@ public class ChangeGroupBuilder {
 	}
 
 	private Requirement createRequirement(final String type, final String[] options, final boolean optional,
-			final List<Result> results, final boolean autoComplete, final int reqId) {
+			final List<Result> results, final boolean autoComplete, final int reqId, String originalName, String originalGroup) {
 		final Requirement res = requirementBuilder.create(type);
 
 		if (res != null) {
 			res.setAutorank(plugin);
 
-			final String errorMessage = "Could not setup requirement '" + type
-					+ "'! It's invalid: check the wiki for documentation.";
+			final String errorMessage = "Could not set up requirement '" + originalName
+					+ "' of " + originalGroup + "! It's invalid: check the wiki for documentation.";
 
 			try {
 				if (!res.setOptions(options)) {
