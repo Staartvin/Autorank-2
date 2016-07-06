@@ -15,8 +15,10 @@ import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
 import me.armar.plugins.autorank.hooks.DependencyManager.dependency;
 import me.armar.plugins.autorank.hooks.ontimeapi.OnTimeHandler;
 import me.armar.plugins.autorank.hooks.statsapi.StatsAPIHandler;
+import me.armar.plugins.autorank.hooks.statzapi.StatzAPIHandler;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
+import me.armar.plugins.autorank.statsmanager.StatsPlugin.statTypes;
 import me.armar.plugins.autorank.statsmanager.handlers.StatsHandler;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
@@ -313,6 +315,9 @@ public class Playtimes {
 			playTime = ((OnTimeHandler) plugin.getDependencyManager().getDependency(dependency.ONTIME))
 					.getPlayTime(playerName);
 			// Time is in minutes, so convert to seconds
+			playTime = playTime * 60;
+		} else if (timePlugin.equals(dependency.STATZ)) {
+			playTime = (int) ((StatzAPIHandler) plugin.getDependencyManager().getDependency(dependency.STATZ)).getTotalOf(uuid, statTypes.TIME_PLAYED, null);
 			playTime = playTime * 60;
 		} else {
 
