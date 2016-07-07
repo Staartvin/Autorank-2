@@ -39,6 +39,10 @@ import me.armar.plugins.autorank.playerchecker.requirement.HasItemRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.InBiomeRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.ItemsCraftedRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.JavaScriptRequirement;
+import me.armar.plugins.autorank.playerchecker.requirement.JobsCurrentPointsRequirement;
+import me.armar.plugins.autorank.playerchecker.requirement.JobsExperienceRequirement;
+import me.armar.plugins.autorank.playerchecker.requirement.JobsLevelRequirement;
+import me.armar.plugins.autorank.playerchecker.requirement.JobsTotalPointsRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.LocationRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.McMMOPowerLevelRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.McMMOSkillLevelRequirement;
@@ -336,6 +340,10 @@ public class Autorank extends JavaPlugin {
 		req.registerRequirement("acidisland level", AcidIslandLevelRequirement.class);
 		req.registerRequirement("askyblock level", ASkyBlockLevelRequirement.class);
 		req.registerRequirement("javascript", JavaScriptRequirement.class);
+		req.registerRequirement("jobs current points", JobsCurrentPointsRequirement.class);
+		req.registerRequirement("jobs total points", JobsTotalPointsRequirement.class);
+		req.registerRequirement("jobs level", JobsLevelRequirement.class);
+		req.registerRequirement("jobs experience", JobsExperienceRequirement.class);
 
 		// Register 'main' results
 		res.registerResult("command", CommandResult.class);

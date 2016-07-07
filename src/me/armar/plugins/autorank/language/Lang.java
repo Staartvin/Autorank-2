@@ -366,7 +366,24 @@ public enum Lang {
 	 * &4You have been demoted to {0} since you did not meet a specific
 	 * requirement: {1}
 	 */
-	DERANK_MESSAGE("derank-message", "&4You have been demoted to {0} since you did not meet a specific requirement: {1}"),;
+	DERANK_MESSAGE("derank-message", "&4You have been demoted to {0} since you did not meet a specific requirement: {1}"),
+	/**
+	 * Have at least {0} points in Jobs
+	 */
+	JOBS_CURRENT_POINTS_REQUIREMENT("jobs-current-points-requirement", "Have at least {0} points in Jobs"),
+	/**
+	 * Have at least {0} points in total in Jobs
+	 */
+	JOBS_TOTAL_POINTS_REQUIREMENT("jobs-total-points-requirement", "Have at least {0} points in total in Jobs"),
+	/**
+	 * Have at least {0} experience in the job '{1}'
+	 */
+	JOBS_EXPERIENCE_REQUIREMENT("jobs-experience-requirement", "Have at least {0} experience in the job '{1}'"),
+	/**
+	 * Have at least level {0} in the job '{1}'
+	 */
+	JOBS_LEVEL_REQUIREMENT("jobs-level-requirement", "Have at least level {0} in the job '{1}'"),
+	;
 
 	private static FileConfiguration LANG;
 
@@ -398,7 +415,7 @@ public enum Lang {
 	 * @param args arguments that need to be given. (Can be null)
 	 * @return value in config or otherwise default value
 	 */
-	public String getConfigValue(final String... args) {
+	public String getConfigValue(final Object... args) {
 		String value = ChatColor.translateAlternateColorCodes('&', LANG.getString(this.path, this.def));
 
 		if (args == null)
@@ -408,7 +425,7 @@ public enum Lang {
 				return value;
 
 			for (int i = 0; i < args.length; i++) {
-				value = value.replace("{" + i + "}", args[i]);
+				value = value.replace("{" + i + "}", args[i].toString());
 			}
 		}
 

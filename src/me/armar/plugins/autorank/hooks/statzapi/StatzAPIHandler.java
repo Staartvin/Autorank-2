@@ -10,7 +10,7 @@ import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.staartvin.statz.Statz;
 import me.staartvin.statz.database.datatype.RowRequirement;
 import me.staartvin.statz.datamanager.PlayerStat;
-
+import me.staartvin.statz.hooks.Dependency;
 /**
  * Handles all connections with Statz
  * <p>
@@ -169,6 +169,12 @@ public class StatzAPIHandler implements DependencyHandler {
 			return 0;
 
 		return (double) value;
+	}
+	
+	public me.staartvin.statz.hooks.DependencyHandler getDependencyHandler(Dependency dep) {
+		if (!this.isAvailable()) return null;
+
+		return statz.getStatzAPI().getDependencyHandler(dep);
 	}
 
 }
