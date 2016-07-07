@@ -24,7 +24,9 @@ import me.staartvin.statz.hooks.handlers.UltimateCoreHandler;
  * 
  */
 public class DependencyManager {
-
+// Test
+	
+	
 	/**
 	 * Enum containing all dependencies Autorank has.<br>
 	 * Some are optional, some not. This enumeration is used to dynamically load
