@@ -382,8 +382,7 @@ public enum Lang {
 	/**
 	 * Have at least level {0} in the job '{1}'
 	 */
-	JOBS_LEVEL_REQUIREMENT("jobs-level-requirement", "Have at least level {0} in the job '{1}'"),
-	;
+	JOBS_LEVEL_REQUIREMENT("jobs-level-requirement", "Have at least level {0} in the job '{1}'"),;
 
 	private static FileConfiguration LANG;
 

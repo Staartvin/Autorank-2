@@ -36,9 +36,9 @@ public class FishCaughtRequirement extends Requirement {
 
 		if (!getStatsPlugin().isEnabled())
 			return false;
-		
-		final int fish = this.getStatsPlugin().getNormalStat(StatsHandler.statTypes.FISH_CAUGHT,
-				player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld()));
+
+		final int fish = this.getStatsPlugin().getNormalStat(StatsHandler.statTypes.FISH_CAUGHT, player.getUniqueId(),
+				AutorankTools.makeStatsInfo("world", this.getWorld()));
 
 		return fish >= fishCaught;
 	}

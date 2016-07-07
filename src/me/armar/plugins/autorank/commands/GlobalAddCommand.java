@@ -53,7 +53,7 @@ public class GlobalAddCommand extends AutorankCommand {
 		if (plugin.getUUIDStorage().hasRealName(uuid)) {
 			args[1] = plugin.getUUIDStorage().getRealName(uuid);
 		}
-		
+
 		plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
 
 			@Override
@@ -86,13 +86,12 @@ public class GlobalAddCommand extends AutorankCommand {
 					}
 					AutorankTools.sendColoredMessage(sender, Lang.PLAYTIME_CHANGED.getConfigValue(args[1], value + ""));
 				} else {
-					AutorankTools.sendColoredMessage(sender, Lang.INVALID_FORMAT.getConfigValue("/ar gadd [player] [value]"));
+					AutorankTools.sendColoredMessage(sender,
+							Lang.INVALID_FORMAT.getConfigValue("/ar gadd [player] [value]"));
 				}
 			}
-		
-		});
 
-		
+		});
 
 		return true;
 	}

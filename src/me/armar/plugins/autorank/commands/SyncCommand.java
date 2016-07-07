@@ -36,10 +36,10 @@ public class SyncCommand extends AutorankCommand {
 			sender.hasPermission(ChatColor.RED + "You probably meant /ar syncstats or /ar sync!");
 			return true;
 		}
-		
+
 		// If reverse is true, we don't put info TO the database, but we get info FROM the database.
 		boolean reverse = false;
-		
+
 		if (args.length > 1 && args[1].equalsIgnoreCase("reverse")) {
 			reverse = true;
 		}
@@ -49,8 +49,7 @@ public class SyncCommand extends AutorankCommand {
 			return true;
 		}
 
-		sender.sendMessage(
-				ChatColor.RED + "You do not have to use this command regularly.");
+		sender.sendMessage(ChatColor.RED + "You do not have to use this command regularly.");
 
 		if (reverse) {
 			plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
@@ -58,14 +57,15 @@ public class SyncCommand extends AutorankCommand {
 				@Override
 				public void run() {
 					int count = 0;
-					
+
 					// Update all data.yml records
 					for (Entry<UUID, Integer> entry : plugin.getMySQLWrapper().getAllPlayersFromDatabase().entrySet()) {
 						plugin.getPlaytimes().setLocalTime(entry.getKey(), entry.getValue());
 						count++;
 					}
-					
-					sender.sendMessage(ChatColor.GREEN + "Successfully updated Data.yml from " + count + " MySQL database records!");
+
+					sender.sendMessage(ChatColor.GREEN + "Successfully updated Data.yml from " + count
+							+ " MySQL database records!");
 				}
 			});
 		} else {
@@ -94,8 +94,7 @@ public class SyncCommand extends AutorankCommand {
 				}
 			});
 		}
-		
-		
+
 		return true;
 	}
 

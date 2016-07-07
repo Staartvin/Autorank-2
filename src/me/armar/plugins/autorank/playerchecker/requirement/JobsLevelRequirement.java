@@ -76,9 +76,9 @@ public class JobsLevelRequirement extends Requirement {
 	public boolean setOptions(final String[] options) {
 
 		level = Integer.parseInt(options[0]);
-		
+
 		if (options.length > 1) {
-			jobName = options[1];	
+			jobName = options[1];
 		}
 
 		return level != -1 && jobName != null;

@@ -277,31 +277,31 @@ public class Metrics {
 			final char chr = text.charAt(index);
 
 			switch (chr) {
-			case '"':
-			case '\\':
-				builder.append('\\');
-				builder.append(chr);
-				break;
-			case '\b':
-				builder.append("\\b");
-				break;
-			case '\t':
-				builder.append("\\t");
-				break;
-			case '\n':
-				builder.append("\\n");
-				break;
-			case '\r':
-				builder.append("\\r");
-				break;
-			default:
-				if (chr < ' ') {
-					final String t = "000" + Integer.toHexString(chr);
-					builder.append("\\u" + t.substring(t.length() - 4));
-				} else {
+				case '"':
+				case '\\':
+					builder.append('\\');
 					builder.append(chr);
-				}
-				break;
+					break;
+				case '\b':
+					builder.append("\\b");
+					break;
+				case '\t':
+					builder.append("\\t");
+					break;
+				case '\n':
+					builder.append("\\n");
+					break;
+				case '\r':
+					builder.append("\\r");
+					break;
+				default:
+					if (chr < ' ') {
+						final String t = "000" + Integer.toHexString(chr);
+						builder.append("\\u" + t.substring(t.length() - 4));
+					} else {
+						builder.append(chr);
+					}
+					break;
 			}
 		}
 		builder.append('"');

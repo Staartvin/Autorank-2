@@ -24,8 +24,8 @@ public class PlayerKillsRequirement extends Requirement {
 
 	@Override
 	public String getProgress(final Player player) {
-		final int killed = getStatsPlugin().getNormalStat(StatsHandler.statTypes.PLAYERS_KILLED,
-				player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld()));
+		final int killed = getStatsPlugin().getNormalStat(StatsHandler.statTypes.PLAYERS_KILLED, player.getUniqueId(),
+				AutorankTools.makeStatsInfo("world", this.getWorld()));
 
 		return killed + "/" + totalPlayersKilled + " player(s)";
 	}
@@ -34,9 +34,9 @@ public class PlayerKillsRequirement extends Requirement {
 	public boolean meetsRequirement(final Player player) {
 		if (!getStatsPlugin().isEnabled())
 			return false;
-		
-		final int killed = getStatsPlugin().getNormalStat(StatsHandler.statTypes.PLAYERS_KILLED,
-				player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld()));
+
+		final int killed = getStatsPlugin().getNormalStat(StatsHandler.statTypes.PLAYERS_KILLED, player.getUniqueId(),
+				AutorankTools.makeStatsInfo("world", this.getWorld()));
 
 		return killed >= totalPlayersKilled;
 	}

@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.hooks.statisticsapi.StatisticsAPIHandler;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
+import me.staartvin.statz.hooks.handlers.StatisticsAPIHandler;
 
 public class StatisticsHandler extends StatsPlugin {
 

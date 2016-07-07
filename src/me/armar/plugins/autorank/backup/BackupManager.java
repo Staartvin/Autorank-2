@@ -77,7 +77,7 @@ public class BackupManager {
 
 				// Older than a day
 				if ((System.currentTimeMillis() - backupDataManager.getLatestBackup("data")) > 86400000) {
-					plugin.getLogger().info("Making a backup of data.yml.");
+					plugin.debugMessage(ChatColor.RED + "Making a backup of data.yml.");
 
 					plugin.getBackupManager().backupFile("Data.yml", plugin.getDataFolder().getAbsolutePath()
 							+ File.separator + "backups" + File.separator + "data.yml");
@@ -88,7 +88,7 @@ public class BackupManager {
 
 				// Older than a day
 				if ((System.currentTimeMillis() - backupDataManager.getLatestBackup("playerdata")) > 86400000) {
-					plugin.getLogger().info("Making a backup of playerdata.yml.");
+					plugin.debugMessage(ChatColor.RED + "Making a backup of playerdata.yml.");
 
 					// Before running, backup stuff.
 					plugin.getBackupManager().backupFile("/playerdata/playerdata.yml",

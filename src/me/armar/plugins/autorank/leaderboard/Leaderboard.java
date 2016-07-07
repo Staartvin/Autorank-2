@@ -305,7 +305,7 @@ public class Leaderboard {
 				for (final dataType type : dataType.values()) {
 					if (!shouldUpdateLeaderboard(type))
 						continue;
-					
+
 					updateLeaderboard(type);
 				}
 			}

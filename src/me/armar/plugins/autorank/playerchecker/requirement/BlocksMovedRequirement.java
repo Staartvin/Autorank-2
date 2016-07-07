@@ -28,7 +28,8 @@ public class BlocksMovedRequirement extends Requirement {
 	public String getProgress(final Player player) {
 
 		final int progressBar = getStatsPlugin().getNormalStat(StatsHandler.statTypes.BLOCKS_MOVED,
-				player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld(), "moveType", wrapper.getRawMovementType()));
+				player.getUniqueId(),
+				AutorankTools.makeStatsInfo("world", this.getWorld(), "moveType", wrapper.getRawMovementType()));
 
 		return progressBar + "/" + wrapper.getBlocksMoved() + " (" + wrapper.getMovementType() + ")";
 	}
@@ -40,8 +41,8 @@ public class BlocksMovedRequirement extends Requirement {
 			return false;
 		}
 
-		final int count = getStatsPlugin().getNormalStat(StatsHandler.statTypes.BLOCKS_MOVED,
-				player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld(), "moveType", wrapper.getRawMovementType()));
+		final int count = getStatsPlugin().getNormalStat(StatsHandler.statTypes.BLOCKS_MOVED, player.getUniqueId(),
+				AutorankTools.makeStatsInfo("world", this.getWorld(), "moveType", wrapper.getRawMovementType()));
 
 		return count >= wrapper.getBlocksMoved();
 	}
@@ -79,20 +80,20 @@ class BlocksMovedWrapper {
 
 	private String getMovementString(final int moveType) {
 		switch (moveType) {
-		case 0:
-			return "by foot";
-		case 1:
-			return "by boat";
-		case 2:
-			return "by cart";
-		case 3:
-			return "by pig";
-		case 4:
-			return "by piggy-cart";
-		case 5:
-			return "by horse";
-		default:
-			return "by foot";
+			case 0:
+				return "by foot";
+			case 1:
+				return "by boat";
+			case 2:
+				return "by cart";
+			case 3:
+				return "by pig";
+			case 4:
+				return "by piggy-cart";
+			case 5:
+				return "by horse";
+			default:
+				return "by foot";
 		}
 	}
 

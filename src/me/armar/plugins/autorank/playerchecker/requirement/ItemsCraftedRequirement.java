@@ -36,9 +36,9 @@ public class ItemsCraftedRequirement extends Requirement {
 
 		if (!getStatsPlugin().isEnabled())
 			return false;
-		
-		final int realItemsCrafted = this.getStatsPlugin()
-				.getNormalStat(StatsHandler.statTypes.ITEMS_CRAFTED, player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld()));
+
+		final int realItemsCrafted = this.getStatsPlugin().getNormalStat(StatsHandler.statTypes.ITEMS_CRAFTED,
+				player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld()));
 
 		return realItemsCrafted >= itemsCrafted;
 	}

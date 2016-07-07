@@ -55,8 +55,8 @@ public class MobKillsRequirement extends Requirement {
 	@Override
 	public String getProgress(final Player player) {
 
-		final int killed = getStatsPlugin().getNormalStat(StatsHandler.statTypes.MOBS_KILLED,
-				player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld(), "mobType", mobType));
+		final int killed = getStatsPlugin().getNormalStat(StatsHandler.statTypes.MOBS_KILLED, player.getUniqueId(),
+				AutorankTools.makeStatsInfo("world", this.getWorld(), "mobType", mobType));
 
 		String entityType = mobType;
 
@@ -73,8 +73,8 @@ public class MobKillsRequirement extends Requirement {
 		if (!this.getStatsPlugin().isEnabled())
 			return false;
 
-		final int killed = getStatsPlugin().getNormalStat(StatsHandler.statTypes.MOBS_KILLED,
-				player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld(), "mobType", mobType));
+		final int killed = getStatsPlugin().getNormalStat(StatsHandler.statTypes.MOBS_KILLED, player.getUniqueId(),
+				AutorankTools.makeStatsInfo("world", this.getWorld(), "mobType", mobType));
 
 		return killed >= totalMobsKilled;
 	}

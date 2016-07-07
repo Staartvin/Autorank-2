@@ -76,9 +76,9 @@ public class JobsExperienceRequirement extends Requirement {
 	public boolean setOptions(final String[] options) {
 
 		experience = Integer.parseInt(options[0]);
-		
+
 		if (options.length > 1) {
-			jobName = options[1];	
+			jobName = options[1];
 		}
 
 		return experience != -1 && jobName != null;

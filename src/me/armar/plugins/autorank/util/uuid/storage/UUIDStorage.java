@@ -67,7 +67,7 @@ public class UUIDStorage {
 		// Convert old format to new UUID storage format
 		// convertNamesToUUIDs();
 
-		plugin.getLogger().info("Loaded stored uuids.");
+		plugin.debugMessage(ChatColor.RED + "Loaded stored uuids.");
 	}
 
 	public void saveAllFiles() {

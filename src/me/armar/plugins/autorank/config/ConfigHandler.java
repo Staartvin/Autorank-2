@@ -75,18 +75,18 @@ public class ConfigHandler {
 
 	public String getMySQLSettings(final MySQLOptions option) {
 		switch (option) {
-		case HOSTNAME:
-			return plugin.getSettingsConfig().getString("sql.hostname");
-		case USERNAME:
-			return plugin.getSettingsConfig().getString("sql.username");
-		case PASSWORD:
-			return plugin.getSettingsConfig().getString("sql.password");
-		case DATABASE:
-			return plugin.getSettingsConfig().getString("sql.database");
-		case TABLE:
-			return plugin.getSettingsConfig().getString("sql.table");
-		default:
-			return null;
+			case HOSTNAME:
+				return plugin.getSettingsConfig().getString("sql.hostname");
+			case USERNAME:
+				return plugin.getSettingsConfig().getString("sql.username");
+			case PASSWORD:
+				return plugin.getSettingsConfig().getString("sql.password");
+			case DATABASE:
+				return plugin.getSettingsConfig().getString("sql.database");
+			case TABLE:
+				return plugin.getSettingsConfig().getString("sql.table");
+			default:
+				return null;
 		}
 	}
 

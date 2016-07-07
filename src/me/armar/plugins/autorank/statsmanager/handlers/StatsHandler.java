@@ -4,11 +4,10 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.hooks.statsapi.StatsAPIHandler;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
+import me.staartvin.statz.hooks.handlers.StatsAPIHandler;
 
 public class StatsHandler extends StatsPlugin {
-
 
 	private final Autorank plugin;
 
@@ -33,7 +32,7 @@ public class StatsHandler extends StatsPlugin {
 		}
 
 		int value = -1;
-		
+
 		if (statType.equals(statTypes.VOTES)) {
 			// Handle voting
 			value = statsApi.getNormalStat(uuid, "Votes", worldName);
@@ -78,7 +77,8 @@ public class StatsHandler extends StatsPlugin {
 			value = statsApi.getNormalStat(uuid, "Shears", worldName);
 		} else if (statType.equals(statTypes.FOOD_EATEN)) {
 			// Handle food eaten
-			value = statsApi.getFoodEaten(uuid, worldName, arguments.get("foodType").toString());
+			//value = statsApi.getFoodEaten(uuid, worldName, arguments.get("foodType").toString());
+			// TODO: Not supported by Stats. Fix so only checks amount and not what kind of food.
 		}
 
 		return value;
@@ -99,7 +99,7 @@ public class StatsHandler extends StatsPlugin {
 		/*if (!statsApi.compatibleStatsVersion(plugin.getServer()
 				.getPluginManager().getPlugin("Stats").getDescription()
 				.getVersion())) {
-			plugin.getLogger().info("This version of Stats (by Lolmewn) is not supported by Autorank!");
+			plugin.debugMessage(ChatColor.RED + "This version of Stats (by Lolmewn) is not supported by Autorank!");
 			return false;
 		}*/
 

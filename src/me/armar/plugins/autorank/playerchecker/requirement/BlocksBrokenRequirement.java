@@ -26,7 +26,7 @@ public class BlocksBrokenRequirement extends Requirement {
 			} else {
 				arg.append(item.getType().toString().replace("_", " ").toLowerCase());
 			}
-			
+
 			if (wrapper.showShortValue()) {
 				arg.append(" (Dam. value: " + item.getDurability() + ")");
 			}
@@ -53,8 +53,8 @@ public class BlocksBrokenRequirement extends Requirement {
 					player.getUniqueId(), AutorankTools.makeStatsInfo());
 		} else {
 			progressBar = getStatsPlugin().getNormalStat(StatsHandler.statTypes.BLOCKS_BROKEN, player.getUniqueId(),
-					AutorankTools.makeStatsInfo("world", this.getWorld(), "typeID", wrapper.getItem().getTypeId(), "dataValue",
-							wrapper.getItem().getDurability()));
+					AutorankTools.makeStatsInfo("world", this.getWorld(), "typeID", wrapper.getItem().getTypeId(),
+							"dataValue", wrapper.getItem().getDurability()));
 		}
 
 		return progressBar + "/" + wrapper.getBlocksBroken();
@@ -74,8 +74,8 @@ public class BlocksBrokenRequirement extends Requirement {
 
 		if (blockID > 0) {
 			progress = getStatsPlugin().getNormalStat(StatsHandler.statTypes.BLOCKS_BROKEN, player.getUniqueId(),
-					AutorankTools.makeStatsInfo("world", this.getWorld(), "typeID", wrapper.getItem().getTypeId(), "dataValue",
-							wrapper.getItem().getDurability()));
+					AutorankTools.makeStatsInfo("world", this.getWorld(), "typeID", wrapper.getItem().getTypeId(),
+							"dataValue", wrapper.getItem().getDurability()));
 		} else {
 			progress = getStatsPlugin().getNormalStat(StatsHandler.statTypes.TOTAL_BLOCKS_BROKEN, player.getUniqueId(),
 					AutorankTools.makeStatsInfo());
@@ -97,11 +97,11 @@ public class BlocksBrokenRequirement extends Requirement {
 
 		if (options.length > 0) {
 			amount = Integer.parseInt(options[0].trim());
-		}		
+		}
 		if (options.length > 1) {
 			id = AutorankTools.stringtoInt(options[0]);
 			amount = Integer.parseInt(options[1].trim());
-		}		
+		}
 		if (options.length > 2) {
 			data = (short) AutorankTools.stringtoInt(options[2]);
 			// Short value can make a difference, thus we show it.

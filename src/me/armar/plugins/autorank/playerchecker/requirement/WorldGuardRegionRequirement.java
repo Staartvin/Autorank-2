@@ -2,9 +2,9 @@ package me.armar.plugins.autorank.playerchecker.requirement;
 
 import org.bukkit.entity.Player;
 
-import me.armar.plugins.autorank.hooks.DependencyManager.dependency;
-import me.armar.plugins.autorank.hooks.worldguardapi.WorldGuardHandler;
 import me.armar.plugins.autorank.language.Lang;
+import me.staartvin.statz.hooks.Dependency;
+import me.staartvin.statz.hooks.handlers.WorldGuardHandler;
 
 /**
  * This requirement checks for WorldGuard region
@@ -48,7 +48,7 @@ public class WorldGuardRegionRequirement extends Requirement {
 		}
 
 		final WorldGuardHandler wgH = (WorldGuardHandler) this.getAutorank().getDependencyManager()
-				.getDependency(dependency.WORLDGUARD);
+				.getDependencyHandler(Dependency.WORLDGUARD);
 
 		return wgH.isInRegion(player, regionName);
 	}

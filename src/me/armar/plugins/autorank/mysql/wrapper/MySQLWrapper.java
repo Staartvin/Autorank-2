@@ -290,13 +290,14 @@ public class MySQLWrapper {
 
 			plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
 
+				@Override
 				public void run() {
 					if (!mysql.connect()) {
 						mysql = null;
 						plugin.getLogger().severe("Could not connect to " + hostname);
 						plugin.debugMessage(ChatColor.RED + "Could not connect to MYSQL!");
 					} else {
-						plugin.getLogger().info("Successfully established connection to " + hostname);
+						plugin.debugMessage(ChatColor.RED + "Successfully established connection to " + hostname);
 					}
 
 					if (mysql != null) {
@@ -312,7 +313,7 @@ public class MySQLWrapper {
 	 */
 	public void disconnectDatabase() {
 		executor.shutdown();
-		plugin.getLogger().info("Awaiting termination of MySQL thread...");
+		plugin.debugMessage(ChatColor.RED + "Awaiting termination of MySQL thread...");
 		try {
 			executor.awaitTermination(10, TimeUnit.MINUTES);
 		} catch (InterruptedException e) {

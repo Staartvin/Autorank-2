@@ -4,9 +4,9 @@ import java.text.DecimalFormat;
 
 import org.bukkit.entity.Player;
 
-import me.armar.plugins.autorank.hooks.DependencyManager.dependency;
-import me.armar.plugins.autorank.hooks.factionsapi.FactionsHandler;
 import me.armar.plugins.autorank.language.Lang;
+import me.staartvin.statz.hooks.Dependency;
+import me.staartvin.statz.hooks.handlers.FactionsHandler;
 
 public class FactionPowerRequirement extends Requirement {
 
@@ -29,7 +29,7 @@ public class FactionPowerRequirement extends Requirement {
 	public String getProgress(final Player player) {
 		final DecimalFormat df = new DecimalFormat("#.##");
 		final String doubleRounded = df
-				.format(((FactionsHandler) getAutorank().getDependencyManager().getDependency(dependency.FACTIONS))
+				.format(((FactionsHandler) getAutorank().getDependencyManager().getDependencyHandler(Dependency.FACTIONS))
 						.getFactionPower(player));
 
 		return doubleRounded + "/" + factionPower;
@@ -46,7 +46,7 @@ public class FactionPowerRequirement extends Requirement {
 		}
 
 		final FactionsHandler fHandler = (FactionsHandler) this.getAutorank().getDependencyManager()
-				.getDependency(dependency.FACTIONS);
+				.getDependencyHandler(Dependency.FACTIONS);
 
 		final double factionPower = fHandler.getFactionPower(player);
 

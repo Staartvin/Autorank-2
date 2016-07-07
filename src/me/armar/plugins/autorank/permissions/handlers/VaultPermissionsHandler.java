@@ -5,12 +5,11 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.RegisteredServiceProvider;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.permissions.PermissionsHandler;
-import net.milkbowl.vault.Vault;
+import me.staartvin.statz.hooks.Dependency;
+import me.staartvin.statz.hooks.handlers.VaultHandler;
 import net.milkbowl.vault.permission.Permission;
 
 /**
@@ -25,8 +24,8 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 	private final Autorank plugin;
 
 	public VaultPermissionsHandler(final Autorank plugin) {
-		if (!setupPermissions(plugin)) {
-
+		if (!((VaultHandler) plugin.getDependencyManager().getDependencyHandler(Dependency.VAULT)).setupPermissions()) {
+			
 			// Only shutdown Autorank when Vault is needed and not found.
 			// Delay shutdown so Autorank can start successfully.
 			plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
@@ -38,6 +37,8 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 				}
 			}, 60L);
 		}
+		
+		permission = VaultHandler.permission;
 
 		this.plugin = plugin;
 	}
@@ -217,24 +218,6 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 		}
 
 		return worked1 && worked2;
-	}
-
-	private boolean setupPermissions(final Autorank plugin) {
-
-		final Plugin vPlugin = plugin.getServer().getPluginManager().getPlugin("Vault");
-
-		if (vPlugin == null || !(vPlugin instanceof Vault)) {
-			return false;
-		}
-
-		final RegisteredServiceProvider<Permission> permissionProvider = plugin.getServer().getServicesManager()
-				.getRegistration(net.milkbowl.vault.permission.Permission.class);
-
-		if (permissionProvider != null) {
-			permission = permissionProvider.getProvider();
-		}
-
-		return permission != null;
 	}
 
 	/*

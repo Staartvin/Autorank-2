@@ -4,9 +4,9 @@ import java.util.UUID;
 
 import org.bukkit.entity.Player;
 
-import me.armar.plugins.autorank.hooks.DependencyManager.dependency;
-import me.armar.plugins.autorank.hooks.acidislandapi.AcidIslandHandler;
 import me.armar.plugins.autorank.language.Lang;
+import me.staartvin.statz.hooks.Dependency;
+import me.staartvin.statz.hooks.handlers.AcidIslandHandler;
 
 public class AcidIslandLevelRequirement extends Requirement {
 
@@ -28,7 +28,7 @@ public class AcidIslandLevelRequirement extends Requirement {
 	@Override
 	public String getProgress(final Player player) {
 		final AcidIslandHandler handler = (AcidIslandHandler) this.getAutorank().getDependencyManager()
-				.getDependency(dependency.ACIDISLAND);
+				.getDependencyHandler(Dependency.ACIDISLAND);
 
 		final UUID uuid = this.getAutorank().getUUIDStorage().getStoredUUID(player.getName());
 
@@ -41,7 +41,7 @@ public class AcidIslandLevelRequirement extends Requirement {
 	public boolean meetsRequirement(final Player player) {
 
 		final AcidIslandHandler handler = (AcidIslandHandler) this.getAutorank().getDependencyManager()
-				.getDependency(dependency.ACIDISLAND);
+				.getDependencyHandler(Dependency.ACIDISLAND);
 
 		final UUID uuid = this.getAutorank().getUUIDStorage().getStoredUUID(player.getName());
 

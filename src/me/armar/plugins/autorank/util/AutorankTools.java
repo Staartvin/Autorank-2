@@ -591,27 +591,27 @@ public class AutorankTools {
 
 	public static HashMap<String, Object> makeStatsInfo(Object... strings) {
 		HashMap<String, Object> hashmap = new HashMap<>();
-		for (int i=0;i<strings.length;i+=2) {
+		for (int i = 0; i < strings.length; i += 2) {
 			Object string = strings[i];
-			
+
 			// Either key or value is null
-			if (string == null || strings[i+1] == null) {
+			if (string == null || strings[i + 1] == null) {
 				continue;
 			}
-			
+
 			try {
-				int value = Integer.parseInt(strings[i+1].toString());
-				
+				int value = Integer.parseInt(strings[i + 1].toString());
+
 				if (value < 0) {
 					continue;
 				}
 			} catch (NumberFormatException e) {
 				// It's not a number, so skip the check.
 			}
-			
-			hashmap.put(string.toString(), strings[i+1]);
+
+			hashmap.put(string.toString(), strings[i + 1]);
 		}
-		
+
 		return hashmap;
 	}
 }

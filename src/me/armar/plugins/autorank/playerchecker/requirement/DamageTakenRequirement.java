@@ -25,8 +25,8 @@ public class DamageTakenRequirement extends Requirement {
 
 	@Override
 	public String getProgress(final Player player) {
-		final int damTaken = getStatsPlugin().getNormalStat(StatsHandler.statTypes.DAMAGE_TAKEN,
-				player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld()));
+		final int damTaken = getStatsPlugin().getNormalStat(StatsHandler.statTypes.DAMAGE_TAKEN, player.getUniqueId(),
+				AutorankTools.makeStatsInfo("world", this.getWorld()));
 
 		return damTaken + "/" + damageTaken;
 	}
@@ -36,9 +36,9 @@ public class DamageTakenRequirement extends Requirement {
 
 		if (!getStatsPlugin().isEnabled())
 			return false;
-		
-		final int damTaken = getStatsPlugin().getNormalStat(StatsHandler.statTypes.DAMAGE_TAKEN,
-				player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld()));
+
+		final int damTaken = getStatsPlugin().getNormalStat(StatsHandler.statTypes.DAMAGE_TAKEN, player.getUniqueId(),
+				AutorankTools.makeStatsInfo("world", this.getWorld()));
 
 		return damTaken >= damageTaken;
 	}

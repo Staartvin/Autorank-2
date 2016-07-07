@@ -9,7 +9,7 @@ import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.staartvin.statz.database.datatype.RowRequirement;
 
 public class StatzHandler extends StatsPlugin {
-	
+
 	private final Autorank plugin;
 
 	private final StatzAPIHandler statzApi;
@@ -34,31 +34,43 @@ public class StatzHandler extends StatsPlugin {
 		double value = 0;
 
 		switch (statType) {
-			case VOTES: case PLAYERS_KILLED: case DAMAGE_TAKEN: case TOTAL_BLOCKS_PLACED: case TOTAL_BLOCKS_BROKEN:
-			case TIME_PLAYED: case FISH_CAUGHT: case ITEMS_CRAFTED: case TIMES_SHEARED: 
+			case VOTES:
+			case PLAYERS_KILLED:
+			case DAMAGE_TAKEN:
+			case TOTAL_BLOCKS_PLACED:
+			case TOTAL_BLOCKS_BROKEN:
+			case TIME_PLAYED:
+			case FISH_CAUGHT:
+			case ITEMS_CRAFTED:
+			case TIMES_SHEARED:
 				value = statzApi.getTotalOf(uuid, statType, worldName);
 				break;
 			case MOBS_KILLED:
 				if (!arguments.containsKey("mobType")) {
 					value = statzApi.getSpecificData(uuid, statType);
 				} else {
-					value = statzApi.getSpecificData(uuid, statType, new RowRequirement("mob", arguments.get("mobType").toString()));
+					value = statzApi.getSpecificData(uuid, statType,
+							new RowRequirement("mob", arguments.get("mobType").toString()));
 				}
-				
+
 				break;
-			case BLOCKS_PLACED: case BLOCKS_BROKEN:
+			case BLOCKS_PLACED:
+			case BLOCKS_BROKEN:
 				if (!arguments.containsKey("dataValue")) {
-					value = statzApi.getSpecificData(uuid, statType, new RowRequirement("typeid", arguments.get("typeID").toString()));
+					value = statzApi.getSpecificData(uuid, statType,
+							new RowRequirement("typeid", arguments.get("typeID").toString()));
 				} else {
-					value = statzApi.getSpecificData(uuid, statType, new RowRequirement("typeid", arguments.get("typeID").toString()), new RowRequirement("datavalue", arguments.get("dataValue").toString()));
+					value = statzApi.getSpecificData(uuid, statType,
+							new RowRequirement("typeid", arguments.get("typeID").toString()),
+							new RowRequirement("datavalue", arguments.get("dataValue").toString()));
 				}
-				
+
 				break;
 			case BLOCKS_MOVED:
 				String moveType = "";
-				
+
 				int moveTypeInt = (Integer) arguments.get("moveType");
-				
+
 				if (moveTypeInt == 1) {
 					moveType = "BOAT";
 				} else if (moveTypeInt == 2) {
@@ -72,14 +84,15 @@ public class StatzHandler extends StatsPlugin {
 				} else {
 					moveType = "WALK";
 				}
-				
+
 				value = statzApi.getSpecificData(uuid, statType, new RowRequirement("moveType", moveType));
 				break;
 			case FOOD_EATEN:
 				if (!arguments.containsKey("foodType")) {
 					value = statzApi.getSpecificData(uuid, statType);
 				} else {
-					value = statzApi.getSpecificData(uuid, statType, new RowRequirement("foodEaten", arguments.get("foodType").toString()));
+					value = statzApi.getSpecificData(uuid, statType,
+							new RowRequirement("foodEaten", arguments.get("foodType").toString()));
 				}
 				break;
 			default:

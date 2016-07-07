@@ -148,7 +148,8 @@ public class Autorank extends JavaPlugin {
 		if (!this.getConfigHandler().useDebugOutput())
 			return;
 
-		this.getServer().getConsoleSender().sendMessage("[Autorank DEBUG] " + ChatColor.translateAlternateColorCodes('&', message));
+		this.getServer().getConsoleSender()
+				.sendMessage("[Autorank DEBUG] " + ChatColor.translateAlternateColorCodes('&', message));
 	}
 
 	/* (non-Javadoc)
@@ -421,7 +422,7 @@ public class Autorank extends JavaPlugin {
 
 		// Check whether the data files are still up to date.
 		this.getPlaytimes().doCalendarCheck();
-		
+
 		// Spawn thread to check if MySQL database times are up to date
 		this.getMySQLWrapper().refreshGlobalTime();
 	}

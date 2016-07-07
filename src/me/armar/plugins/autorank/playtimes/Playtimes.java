@@ -13,14 +13,15 @@ import java.util.UUID;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
 import me.armar.plugins.autorank.hooks.DependencyManager.dependency;
-import me.armar.plugins.autorank.hooks.ontimeapi.OnTimeHandler;
-import me.armar.plugins.autorank.hooks.statsapi.StatsAPIHandler;
 import me.armar.plugins.autorank.hooks.statzapi.StatzAPIHandler;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin.statTypes;
 import me.armar.plugins.autorank.statsmanager.handlers.StatsHandler;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
+import me.staartvin.statz.hooks.Dependency;
+import me.staartvin.statz.hooks.handlers.OnTimeHandler;
+import me.staartvin.statz.hooks.handlers.StatsAPIHandler;
 
 public class Playtimes {
 
@@ -301,7 +302,7 @@ public class Playtimes {
 
 			if (stats instanceof StatsHandler) {
 				// In seconds
-				playTime = ((StatsAPIHandler) plugin.getDependencyManager().getDependency(dependency.STATS))
+				playTime = ((StatsAPIHandler) plugin.getDependencyManager().getDependencyHandler(Dependency.STATS))
 						.getTotalPlayTime(uuid, null);
 			} else {
 
@@ -312,12 +313,13 @@ public class Playtimes {
 				playTime = this.getLocalTime(uuid) * 60;
 			}
 		} else if (timePlugin.equals(dependency.ONTIME)) {
-			playTime = ((OnTimeHandler) plugin.getDependencyManager().getDependency(dependency.ONTIME))
+			playTime = ((OnTimeHandler) plugin.getDependencyManager().getDependencyHandler(Dependency.ON_TIME))
 					.getPlayTime(playerName);
 			// Time is in minutes, so convert to seconds
 			playTime = playTime * 60;
 		} else if (timePlugin.equals(dependency.STATZ)) {
-			playTime = (int) ((StatzAPIHandler) plugin.getDependencyManager().getDependency(dependency.STATZ)).getTotalOf(uuid, statTypes.TIME_PLAYED, null);
+			playTime = (int) ((StatzAPIHandler) plugin.getDependencyManager().getDependency(dependency.STATZ))
+					.getTotalOf(uuid, statTypes.TIME_PLAYED, null);
 			playTime = playTime * 60;
 		} else {
 
@@ -520,7 +522,7 @@ public class Playtimes {
 
 		for (final dataType type : Playtimes.dataType.values()) {
 			if (plugin.getPlaytimes().shouldResetDatafile(type)) {
-				
+
 				// We should reset it now, it has expired.
 				plugin.getPlaytimes().resetDatafile(type);
 

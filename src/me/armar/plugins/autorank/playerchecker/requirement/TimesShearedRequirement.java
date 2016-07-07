@@ -35,9 +35,9 @@ public class TimesShearedRequirement extends Requirement {
 	public boolean meetsRequirement(final Player player) {
 		if (!getStatsPlugin().isEnabled())
 			return false;
-		
-		return this.getStatsPlugin().getNormalStat(StatsHandler.statTypes.TIMES_SHEARED,
-				player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld())) >= timesShorn;
+
+		return this.getStatsPlugin().getNormalStat(StatsHandler.statTypes.TIMES_SHEARED, player.getUniqueId(),
+				AutorankTools.makeStatsInfo("world", this.getWorld())) >= timesShorn;
 	}
 
 	@Override

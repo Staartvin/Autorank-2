@@ -112,7 +112,6 @@ public class PermissionsPluginManager {
 
 		for (final String group : groups) {
 			// Check for every group if it is defined in the config -> if so, it probably is the primary group
-
 			for (final String rank : ranks) {
 				if (group.equalsIgnoreCase(rank)) {
 					// Return rank name as in config

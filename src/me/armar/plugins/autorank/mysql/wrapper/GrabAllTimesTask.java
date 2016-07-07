@@ -45,7 +45,7 @@ public class GrabAllTimesTask implements Callable<HashMap<UUID, Integer>> {
 			return times;
 
 		try {
-			while(rs.next()) {
+			while (rs.next()) {
 				times.put(UUID.fromString(rs.getString(1)), rs.getInt(2));
 			}
 		} catch (final SQLException e) {

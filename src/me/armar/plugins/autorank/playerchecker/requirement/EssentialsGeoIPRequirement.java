@@ -2,9 +2,9 @@ package me.armar.plugins.autorank.playerchecker.requirement;
 
 import org.bukkit.entity.Player;
 
-import me.armar.plugins.autorank.hooks.DependencyManager.dependency;
-import me.armar.plugins.autorank.hooks.essentialsapi.EssentialsHandler;
 import me.armar.plugins.autorank.language.Lang;
+import me.staartvin.statz.hooks.Dependency;
+import me.staartvin.statz.hooks.handlers.EssentialsHandler;
 
 public class EssentialsGeoIPRequirement extends Requirement {
 
@@ -37,7 +37,7 @@ public class EssentialsGeoIPRequirement extends Requirement {
 	@Override
 	public boolean setOptions(final String[] options) {
 
-		essHandler = (EssentialsHandler) this.getDependencyManager().getDependency(dependency.ESSENTIALS);
+		essHandler = (EssentialsHandler) this.getDependencyManager().getDependencyHandler(Dependency.ESSENTIALS);
 
 		if (options.length != 1) {
 			return false;

@@ -2,9 +2,9 @@ package me.armar.plugins.autorank.playerchecker.requirement;
 
 import org.bukkit.entity.Player;
 
-import me.armar.plugins.autorank.hooks.DependencyManager.dependency;
-import me.armar.plugins.autorank.hooks.mcmmoapi.McMMOHandler;
 import me.armar.plugins.autorank.language.Lang;
+import me.staartvin.statz.hooks.Dependency;
+import me.staartvin.statz.hooks.handlers.McMMOHandler;
 
 public class McMMOSkillLevelRequirement extends Requirement {
 
@@ -50,7 +50,7 @@ public class McMMOSkillLevelRequirement extends Requirement {
 	@Override
 	public boolean setOptions(final String[] options) {
 
-		handler = (McMMOHandler) this.getDependencyManager().getDependency(dependency.MCMMO);
+		handler = (McMMOHandler) this.getDependencyManager().getDependencyHandler(Dependency.MCMMO);
 
 		if (options.length > 0) {
 			skillLevel = Integer.parseInt(options[0]);
