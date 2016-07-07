@@ -1,5 +1,15 @@
 package me.armar.plugins.autorank.commands;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.api.events.CheckCommandEvent;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
@@ -8,15 +18,6 @@ import me.armar.plugins.autorank.rankbuilder.ChangeGroup;
 import me.armar.plugins.autorank.rankbuilder.holders.RequirementsHolder;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 public class CheckCommand extends AutorankCommand {
 

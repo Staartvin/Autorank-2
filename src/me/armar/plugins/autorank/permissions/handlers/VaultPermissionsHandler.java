@@ -10,7 +10,6 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.permissions.PermissionsHandler;
 import me.staartvin.statz.hooks.Dependency;
 import me.staartvin.statz.hooks.handlers.VaultHandler;
-import net.milkbowl.vault.permission.Permission;
 
 /**
  * @author Staartvin & DeathStampler (see replaceGroup())
@@ -20,7 +19,6 @@ import net.milkbowl.vault.permission.Permission;
  */
 public class VaultPermissionsHandler implements PermissionsHandler {
 
-	private static Permission permission = null;
 	private final Autorank plugin;
 
 	public VaultPermissionsHandler(final Autorank plugin) {
@@ -37,8 +35,6 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 				}
 			}, 60L);
 		}
-		
-		permission = VaultHandler.permission;
 
 		this.plugin = plugin;
 	}
@@ -55,10 +51,10 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 	 * @return true if done, false if failed
 	 */
 	public boolean addGroup(final Player player, final String world, final String group) {
-		if (permission == null)
+		if (VaultHandler.permission == null)
 			return false;
 
-		return permission.playerAddGroup(world, player, group);
+		return VaultHandler.permission.playerAddGroup(world, player, group);
 		// return permission.playerAddGroup(world, player.getName(), group);
 	}
 
@@ -70,16 +66,16 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 	 */
 	@Override
 	public String[] getGroups() {
-		if (permission == null) {
+		if (VaultHandler.permission == null) {
 			return new String[10];
 		}
 
-		return permission.getGroups();
+		return VaultHandler.permission.getGroups();
 	}
 
 	@Override
 	public String[] getPlayerGroups(final Player player) {
-		if (permission == null)
+		if (VaultHandler.permission == null)
 			return new String[10];
 
 		String[] groups = null;
@@ -90,9 +86,9 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 
 		// Let players choose.
 		if (plugin.getConfigHandler().onlyUsePrimaryGroupVault()) {
-			groups = new String[] { permission.getPrimaryGroup(player) };
+			groups = new String[] { VaultHandler.permission.getPrimaryGroup(player) };
 		} else {
-			groups = permission.getPlayerGroups(player);
+			groups = VaultHandler.permission.getPlayerGroups(player);
 		}
 
 		// Checking if player changed group
@@ -121,11 +117,11 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 	@SuppressWarnings("deprecation")
 	@Override
 	public String[] getWorldGroups(final Player player, final String world) {
-		if (permission == null) {
+		if (VaultHandler.permission == null) {
 			return new String[10];
 		}
 
-		return permission.getPlayerGroups(world, player.getName());
+		return VaultHandler.permission.getPlayerGroups(world, player.getName());
 	}
 
 	/**
@@ -140,17 +136,17 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 	 * @return true if done, false if failed
 	 */
 	public boolean removeGroup(final Player player, final String world, final String group) {
-		if (permission == null)
+		if (VaultHandler.permission == null)
 			return false;
 
-		return permission.playerRemoveGroup(world, player, group);
+		return VaultHandler.permission.playerRemoveGroup(world, player, group);
 		// return permission.playerRemoveGroup(world, player.getName(), group);
 	}
 
 	@Override
 	public boolean replaceGroup(final Player player, String world, final String oldGroup, final String newGroup) {
 		// Temporary fix for bPermissions
-		if (world == null && permission.getName().toLowerCase().contains("bpermissions")) {
+		if (world == null && VaultHandler.permission.getName().toLowerCase().contains("bpermissions")) {
 			world = player.getWorld().getName();
 		}
 
@@ -185,7 +181,7 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 			// other groups after we added the new group the player was ranked
 			// up to.
 			// Thanks to @DeathStampler for this code and info.
-			if (permission.getName().toLowerCase().contains("permissionsex")) {
+			if (VaultHandler.permission.getName().toLowerCase().contains("permissionsex")) {
 				// Normally the player should have one more group at this point.
 				if (groupsAfterAdd.length >= (groupsBeforeAdd.length + 1)) {
 					// We have one more groups than before. Great. Let's remove
@@ -228,13 +224,13 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
-		return permission.getName();
+		return VaultHandler.permission.getName();
 	}
 
 	@Override
 	public boolean demotePlayer(final Player player, String world, final String groupFrom, final String groupTo) {
 		// Temporary fix for bPermissions
-		if (world == null && permission.getName().toLowerCase().contains("bpermissions")) {
+		if (world == null && VaultHandler.permission.getName().toLowerCase().contains("bpermissions")) {
 			world = player.getWorld().getName();
 		}
 
