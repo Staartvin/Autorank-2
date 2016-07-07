@@ -134,11 +134,12 @@
 		</dependency>
 
 		<dependency>
-			<groupId>me.staartvin.Statz</groupId>
+			<groupId>Statz</groupId>
 			<artifactId>Statz</artifactId>
-			<version>1.1</version>
+			<version>1.1-Dev-${BUILD_NUMBER}</version>
 		</dependency>
-		
+
+
 		<dependency>
 			<groupId>net.milkbowl.vault</groupId>
 			<artifactId>Vault</artifactId>
