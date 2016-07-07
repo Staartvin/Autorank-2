@@ -58,7 +58,7 @@ public class CompleteCommand extends AutorankCommand {
 				completionID = 1;
 			}
 		} catch (final Exception e) {
-			player.sendMessage(ChatColor.RED + Lang.INVALID_NUMBER.getConfigValue(new String[] { args[1] }));
+			player.sendMessage(ChatColor.RED + Lang.INVALID_NUMBER.getConfigValue(args[1]));
 			return true;
 		}
 

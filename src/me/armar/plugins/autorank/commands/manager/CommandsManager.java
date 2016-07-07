@@ -104,7 +104,7 @@ public class CommandsManager implements TabExecutor {
 	 */
 	public boolean hasPermission(final String permission, final CommandSender sender) {
 		if (!sender.hasPermission(permission)) {
-			sender.sendMessage(ChatColor.RED + Lang.NO_PERMISSION.getConfigValue(new String[] { permission }));
+			sender.sendMessage(ChatColor.RED + Lang.NO_PERMISSION.getConfigValue(permission));
 			return false;
 		}
 		return true;
