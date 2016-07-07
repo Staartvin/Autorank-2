@@ -133,12 +133,13 @@
 			<version>3.0.3</version>
 		</dependency>
 
-<!-- Test -->
+		<!-- Test -->
 		<dependency>
 			<groupId>Statz</groupId>
 			<artifactId>Statz</artifactId>
-			<version>1.1-Dev-${BUILD_NUMBER}</version>
+			<version>1.1</version>
 		</dependency>
+
 
 
 		<dependency>
