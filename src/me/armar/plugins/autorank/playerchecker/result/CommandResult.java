@@ -14,11 +14,14 @@ public class CommandResult extends Result {
 	@Override
 	public boolean applyResult(final Player player) {
 		if (server != null) {
-			for (final String command : commands) {
-				final String cmd = command.replace("&p", player.getName());
-				server.dispatchCommand(server.getConsoleSender(), cmd);
-			}
-
+			this.getAutorank().getServer().getScheduler().runTask(this.getAutorank(), new Runnable() {
+				public void run() {
+					for (final String command : commands) {
+						final String cmd = command.replace("&p", player.getName());
+						server.dispatchCommand(server.getConsoleSender(), cmd);
+					}
+				}
+			});
 		}
 		return server != null;
 	}
