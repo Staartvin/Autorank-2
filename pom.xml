@@ -133,7 +133,6 @@
 			<version>3.0.3</version>
 		</dependency>
 
-		<!-- Test -->
 		<dependency>
 			<groupId>Statz</groupId>
 			<artifactId>Statz</artifactId>
