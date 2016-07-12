@@ -74,6 +74,10 @@ ranks:
 #       acidisland level: 10 (Player needs to have at least an island level of 10) (AcidIsland required)
 #       askyblock level: 10 (Player needs to have at least an island level of 10) (ASkyBlock required)
 #       javascript: Player.getHealth() > 15;You need at least 15 hearts of health. (This first part must be true for this evaluations to be true, the second part is the description that is shown.)
+#       jobs current points: 10 (Player needs to have at least 10 points (at the moment of checking) in Jobs) (requires Jobs)
+#       jobs total points: 100 (Player needs to have at least 100 points in total in Jobs) (requires Jobs)
+#       jobs level: 50;mining (A player has to have at least level 50 in job 'mining') (requires Jobs)
+#       jobs experience: 100;mining (A player needs to have at least 100 exp in the job 'mining') (requires Jobs)
 #
 #   results:
 #       rank change: new-rank
