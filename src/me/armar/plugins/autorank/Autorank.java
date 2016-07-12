@@ -167,8 +167,6 @@ public class Autorank extends JavaPlugin {
 
 		getUUIDStorage().saveAllFiles();
 
-		setPlaytimes(null);
-
 		setWarningManager(null);
 
 		setLanguageHandler(null);
@@ -178,6 +176,8 @@ public class Autorank extends JavaPlugin {
 		setAddonManager(null);
 
 		setDebugger(null);
+		
+		setPlaytimes(null);
 
 		setCommandsManager(null);
 

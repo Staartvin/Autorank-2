@@ -158,5 +158,15 @@ public class DependencyManager {
 
 		return statz.getDependencyHandler(dep);
 	}
+	
+	public StatzAPIHandler getStatzConnector() {
+		StatzAPIHandler statz = (StatzAPIHandler) plugin.getDependencyManager().getDependency(dependency.STATZ);
+
+		if (statz == null || !statz.isAvailable()) {
+			return null;
+		}
+		
+		return statz;
+	}
 
 }
