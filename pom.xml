@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>Autorank</groupId>
 	<artifactId>Autorank</artifactId>
-	<version>3.7.6-Dev-${BUILD_NUMBER}</version>
+	<version>3.8<!-- -Dev-${BUILD_NUMBER} --></version>
 	<name>Autorank</name>
 	<description>Maven project for Bukkit plugin Autorank</description>
 	<url>http://dev.bukkit.org/server-mods/autorank/</url>
@@ -92,8 +92,6 @@
 			<artifactId>bukkit-permissions</artifactId>
 			<version>2.5</version>
 		</dependency>
-
-
 
 		<!-- OLD STATS <dependency> <groupId>nl.lolmewn.stats</groupId> <artifactId>Stats</artifactId> 
 			<version>2.0.1</version> <scope>provided</scope> <type>jar</type> </dependency> -->
