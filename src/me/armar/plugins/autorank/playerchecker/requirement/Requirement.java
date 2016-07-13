@@ -161,7 +161,7 @@ public abstract class Requirement {
 	 * @param options Each element is an element supplied by the config.
 	 * @return true if everything was setup correctly; false otherwise
 	 */
-	public abstract boolean setOptions(String[] options);
+	public abstract boolean setOptions(String[] options) throws NoClassDefFoundError;
 
 	/**
 	 * Set the requirement id of this requirement

@@ -58,6 +58,6 @@ public class McMMOSkillLevelRequirement extends Requirement {
 		if (options.length > 1) {
 			skillName = options[1];
 		}
-		return skillLevel != -1;
+		return skillLevel != -1 && handler != null;
 	}
 }

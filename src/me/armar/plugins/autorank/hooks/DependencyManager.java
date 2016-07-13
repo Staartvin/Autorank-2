@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.statzapi.StatzAPIHandler;
+import me.armar.plugins.autorank.hooks.vaultapi.VaultHandler;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.armar.plugins.autorank.statsmanager.StatsPluginManager;
 import me.staartvin.statz.hooks.Dependency;
@@ -41,7 +42,7 @@ public class DependencyManager {
 	 */
 	public enum dependency {
 
-		AUTORANK, STATS, STATZ, ONTIME
+		AUTORANK, STATS, STATZ, ONTIME, VAULT
 	};
 
 	private final HashMap<dependency, DependencyHandler> handlers = new HashMap<dependency, DependencyHandler>();
@@ -55,6 +56,7 @@ public class DependencyManager {
 
 		// Register handlers
 		handlers.put(dependency.STATZ, new StatzAPIHandler(instance));
+		handlers.put(dependency.VAULT, new VaultHandler(instance));
 
 		statsPluginManager = new StatsPluginManager(instance);
 	}

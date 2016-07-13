@@ -44,6 +44,6 @@ public class McMMOPowerLevelRequirement extends Requirement {
 
 		}
 
-		return powerLevel != -1;
+		return powerLevel != -1 && handler != null;
 	}
 }

@@ -2,8 +2,8 @@ package me.armar.plugins.autorank.playerchecker.requirement;
 
 import org.bukkit.entity.Player;
 
+import me.armar.plugins.autorank.hooks.vaultapi.VaultHandler;
 import me.armar.plugins.autorank.language.Lang;
-import me.staartvin.statz.hooks.handlers.VaultHandler;
 
 public class MoneyRequirement extends Requirement {
 

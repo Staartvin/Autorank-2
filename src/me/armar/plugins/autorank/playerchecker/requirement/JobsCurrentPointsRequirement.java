@@ -11,6 +11,7 @@ import me.staartvin.statz.hooks.handlers.JobsHandler;
 public class JobsCurrentPointsRequirement extends Requirement {
 
 	int currentPoints = -1;
+	private JobsHandler jobsHandler;
 
 	@Override
 	public String getDescription() {
@@ -30,15 +31,6 @@ public class JobsCurrentPointsRequirement extends Requirement {
 
 		double points = -1;
 
-		StatzAPIHandler statz = (StatzAPIHandler) this.getAutorank().getDependencyManager()
-				.getDependency(dependency.STATZ);
-
-		if (statz == null || !statz.isAvailable()) {
-			points = -1;
-		}
-
-		JobsHandler jobsHandler = (JobsHandler) statz.getDependencyHandler(Dependency.JOBS);
-
 		if (jobsHandler == null || !jobsHandler.isAvailable()) {
 			points = -1;
 		} else {
@@ -53,15 +45,6 @@ public class JobsCurrentPointsRequirement extends Requirement {
 
 		double points = -1;
 
-		StatzAPIHandler statz = (StatzAPIHandler) this.getAutorank().getDependencyManager()
-				.getDependency(dependency.STATZ);
-
-		if (statz == null || !statz.isAvailable()) {
-			points = -1;
-		}
-
-		JobsHandler jobsHandler = (JobsHandler) statz.getDependencyHandler(Dependency.JOBS);
-
 		if (jobsHandler == null || !jobsHandler.isAvailable()) {
 			points = -1;
 		} else {
@@ -73,9 +56,10 @@ public class JobsCurrentPointsRequirement extends Requirement {
 
 	@Override
 	public boolean setOptions(final String[] options) {
+		jobsHandler = (JobsHandler) this.getAutorank().getDependencyManager().getDependencyHandler(Dependency.JOBS);
 
 		currentPoints = Integer.parseInt(options[0]);
 
-		return currentPoints != -1;
+		return currentPoints != -1 && jobsHandler != null;
 	}
 }

@@ -7,9 +7,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.hooks.vaultapi.VaultHandler;
 import me.armar.plugins.autorank.permissions.PermissionsHandler;
-import me.staartvin.statz.hooks.Dependency;
-import me.staartvin.statz.hooks.handlers.VaultHandler;
 
 /**
  * @author Staartvin & DeathStampler (see replaceGroup())
@@ -22,7 +21,7 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 	private final Autorank plugin;
 
 	public VaultPermissionsHandler(final Autorank plugin) {
-		if (!((VaultHandler) plugin.getDependencyManager().getDependencyHandler(Dependency.VAULT)).setupPermissions()) {
+		if (VaultHandler.permission == null) {
 			
 			// Only shutdown Autorank when Vault is needed and not found.
 			// Delay shutdown so Autorank can start successfully.

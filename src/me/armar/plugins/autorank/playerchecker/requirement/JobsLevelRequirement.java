@@ -12,6 +12,7 @@ public class JobsLevelRequirement extends Requirement {
 
 	int level = -1;
 	String jobName;
+	private JobsHandler jobsHandler;
 
 	@Override
 	public String getDescription() {
@@ -31,15 +32,6 @@ public class JobsLevelRequirement extends Requirement {
 
 		double points = -1;
 
-		StatzAPIHandler statz = (StatzAPIHandler) this.getAutorank().getDependencyManager()
-				.getDependency(dependency.STATZ);
-
-		if (statz == null || !statz.isAvailable()) {
-			points = -1;
-		}
-
-		JobsHandler jobsHandler = (JobsHandler) statz.getDependencyHandler(Dependency.JOBS);
-
 		if (jobsHandler == null || !jobsHandler.isAvailable()) {
 			points = -1;
 		} else {
@@ -54,15 +46,6 @@ public class JobsLevelRequirement extends Requirement {
 
 		double points = -1;
 
-		StatzAPIHandler statz = (StatzAPIHandler) this.getAutorank().getDependencyManager()
-				.getDependency(dependency.STATZ);
-
-		if (statz == null || !statz.isAvailable()) {
-			points = -1;
-		}
-
-		JobsHandler jobsHandler = (JobsHandler) statz.getDependencyHandler(Dependency.JOBS);
-
 		if (jobsHandler == null || !jobsHandler.isAvailable()) {
 			points = -1;
 		} else {
@@ -74,6 +57,8 @@ public class JobsLevelRequirement extends Requirement {
 
 	@Override
 	public boolean setOptions(final String[] options) {
+		
+		jobsHandler = (JobsHandler) this.getAutorank().getDependencyManager().getDependencyHandler(Dependency.JOBS);
 
 		level = Integer.parseInt(options[0]);
 
@@ -81,6 +66,6 @@ public class JobsLevelRequirement extends Requirement {
 			jobName = options[1];
 		}
 
-		return level != -1 && jobName != null;
+		return level != -1 && jobName != null && jobsHandler != null;
 	}
 }

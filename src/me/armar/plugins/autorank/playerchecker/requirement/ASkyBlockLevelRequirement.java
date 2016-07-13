@@ -11,6 +11,7 @@ import me.staartvin.statz.hooks.handlers.ASkyBlockHandler;
 public class ASkyBlockLevelRequirement extends Requirement {
 
 	private int islandLevel = -1;
+	private ASkyBlockHandler handler;
 
 	@Override
 	public String getDescription() {
@@ -27,8 +28,6 @@ public class ASkyBlockLevelRequirement extends Requirement {
 
 	@Override
 	public String getProgress(final Player player) {
-		final ASkyBlockHandler handler = (ASkyBlockHandler) this.getAutorank().getDependencyManager()
-				.getDependencyHandler(Dependency.ASKYBLOCK);
 
 		final UUID uuid = this.getAutorank().getUUIDStorage().getStoredUUID(player.getName());
 
@@ -40,9 +39,6 @@ public class ASkyBlockLevelRequirement extends Requirement {
 	@Override
 	public boolean meetsRequirement(final Player player) {
 
-		final ASkyBlockHandler handler = (ASkyBlockHandler) this.getAutorank().getDependencyManager()
-				.getDependencyHandler(Dependency.ASKYBLOCK);
-
 		final UUID uuid = this.getAutorank().getUUIDStorage().getStoredUUID(player.getName());
 
 		final int islandLevel = handler.getIslandLevel(uuid);
@@ -53,8 +49,11 @@ public class ASkyBlockLevelRequirement extends Requirement {
 	@Override
 	public boolean setOptions(final String[] options) {
 
+		handler = (ASkyBlockHandler) this.getAutorank().getDependencyManager()
+				.getDependencyHandler(Dependency.ASKYBLOCK);
+		
 		islandLevel = Integer.parseInt(options[0]);
 
-		return islandLevel != -1;
+		return islandLevel != -1 && handler != null;
 	}
 }

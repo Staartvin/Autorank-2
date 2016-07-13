@@ -11,6 +11,7 @@ import me.staartvin.statz.hooks.handlers.AcidIslandHandler;
 public class AcidIslandLevelRequirement extends Requirement {
 
 	private int islandLevel = -1;
+	private AcidIslandHandler handler;
 
 	@Override
 	public String getDescription() {
@@ -27,8 +28,6 @@ public class AcidIslandLevelRequirement extends Requirement {
 
 	@Override
 	public String getProgress(final Player player) {
-		final AcidIslandHandler handler = (AcidIslandHandler) this.getAutorank().getDependencyManager()
-				.getDependencyHandler(Dependency.ACIDISLAND);
 
 		final UUID uuid = this.getAutorank().getUUIDStorage().getStoredUUID(player.getName());
 
@@ -38,10 +37,7 @@ public class AcidIslandLevelRequirement extends Requirement {
 	}
 
 	@Override
-	public boolean meetsRequirement(final Player player) {
-
-		final AcidIslandHandler handler = (AcidIslandHandler) this.getAutorank().getDependencyManager()
-				.getDependencyHandler(Dependency.ACIDISLAND);
+	public boolean meetsRequirement(final Player player) {		
 
 		final UUID uuid = this.getAutorank().getUUIDStorage().getStoredUUID(player.getName());
 
@@ -52,9 +48,11 @@ public class AcidIslandLevelRequirement extends Requirement {
 
 	@Override
 	public boolean setOptions(final String[] options) {
-
+		handler = (AcidIslandHandler) this.getAutorank().getDependencyManager()
+				.getDependencyHandler(Dependency.ACIDISLAND);
+		
 		islandLevel = Integer.parseInt(options[0]);
 
-		return islandLevel != -1;
+		return islandLevel != -1 && handler != null;
 	}
 }

@@ -341,6 +341,11 @@ public class ChangeGroupBuilder {
 					plugin.getLogger().severe(errorMessage);
 					plugin.getWarningManager().registerWarning(errorMessage, 10);
 				}
+			} catch (NoClassDefFoundError e) {
+				plugin.getLogger().severe("You are using requirement " + originalName + " in " + originalGroup
+						+ " but you don't have Statz installed! Make sure to install Statz for this to work.");
+				plugin.getWarningManager().registerWarning("You are using requirement " + originalName + " in " + originalGroup
+						+ " but you don't have Statz installed! Make sure to install Statz for this to work.", 10);
 			} catch (final Exception e) {
 				plugin.getLogger().severe(errorMessage);
 				plugin.getWarningManager().registerWarning(errorMessage, 10);

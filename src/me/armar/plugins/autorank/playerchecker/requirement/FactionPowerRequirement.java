@@ -11,6 +11,7 @@ import me.staartvin.statz.hooks.handlers.FactionsHandler;
 public class FactionPowerRequirement extends Requirement {
 
 	double factionPower = -1;
+	private FactionsHandler handler;
 
 	@Override
 	public String getDescription() {
@@ -28,9 +29,7 @@ public class FactionPowerRequirement extends Requirement {
 	@Override
 	public String getProgress(final Player player) {
 		final DecimalFormat df = new DecimalFormat("#.##");
-		final String doubleRounded = df
-				.format(((FactionsHandler) getAutorank().getDependencyManager().getDependencyHandler(Dependency.FACTIONS))
-						.getFactionPower(player));
+		final String doubleRounded = df.format(handler.getFactionPower(player));
 
 		return doubleRounded + "/" + factionPower;
 	}
@@ -45,18 +44,17 @@ public class FactionPowerRequirement extends Requirement {
 				return false;
 		}
 
-		final FactionsHandler fHandler = (FactionsHandler) this.getAutorank().getDependencyManager()
-				.getDependencyHandler(Dependency.FACTIONS);
-
-		final double factionPower = fHandler.getFactionPower(player);
+		final double factionPower = handler.getFactionPower(player);
 
 		return factionPower >= this.factionPower;
 	}
 
 	@Override
 	public boolean setOptions(final String[] options) {
+		handler = (FactionsHandler) this.getAutorank().getDependencyManager().getDependencyHandler(Dependency.FACTIONS);
+
 		factionPower = Double.parseDouble(options[0]);
 
-		return factionPower != -1;
+		return factionPower != -1 && handler != null;
 	}
 }

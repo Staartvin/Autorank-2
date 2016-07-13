@@ -17,6 +17,7 @@ import me.staartvin.statz.hooks.handlers.WorldGuardHandler;
 public class WorldGuardRegionRequirement extends Requirement {
 
 	String regionName = null;
+	private WorldGuardHandler handler;
 
 	@Override
 	public String getDescription() {
@@ -47,18 +48,18 @@ public class WorldGuardRegionRequirement extends Requirement {
 				return false;
 		}
 
-		final WorldGuardHandler wgH = (WorldGuardHandler) this.getAutorank().getDependencyManager()
-				.getDependencyHandler(Dependency.WORLDGUARD);
-
-		return wgH.isInRegion(player, regionName);
+		return handler.isInRegion(player, regionName);
 	}
 
 	@Override
 	public boolean setOptions(final String[] options) {
+		handler = (WorldGuardHandler) this.getAutorank().getDependencyManager()
+				.getDependencyHandler(Dependency.WORLDGUARD);
+		
 		if (options.length > 0) {
 			regionName = options[0].trim();
 		}
 
-		return regionName != null;
+		return regionName != null && handler != null;
 	}
 }
