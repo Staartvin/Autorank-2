@@ -2,8 +2,6 @@ package me.armar.plugins.autorank.playerchecker.requirement;
 
 import org.bukkit.entity.Player;
 
-import me.armar.plugins.autorank.hooks.DependencyManager.dependency;
-import me.armar.plugins.autorank.hooks.statzapi.StatzAPIHandler;
 import me.armar.plugins.autorank.language.Lang;
 import me.staartvin.statz.hooks.Dependency;
 import me.staartvin.statz.hooks.handlers.JobsHandler;
