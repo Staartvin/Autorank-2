@@ -1,5 +1,6 @@
 package me.armar.plugins.autorank.playerchecker.requirement;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -52,9 +53,22 @@ public class BlocksPlacedRequirement extends Requirement {
 			progressBar = getStatsPlugin().getNormalStat(StatsHandler.statTypes.TOTAL_BLOCKS_PLACED,
 					player.getUniqueId(), AutorankTools.makeStatsInfo());
 		} else {
-			progressBar = getStatsPlugin().getNormalStat(StatsHandler.statTypes.BLOCKS_PLACED, player.getUniqueId(),
-					AutorankTools.makeStatsInfo("world", this.getWorld(), "typeID", wrapper.getItem().getTypeId(),
-							"dataValue", wrapper.getItem().getDurability()));
+			if (wrapper.showShortValue()) {
+				// Use datavalue
+				progressBar = getStatsPlugin().getNormalStat(StatsHandler.statTypes.BLOCKS_PLACED, player.getUniqueId(),
+						AutorankTools.makeStatsInfo("world", this.getWorld(), "typeID", wrapper.getItem().getTypeId(),
+								"dataValue", wrapper.getItem().getDurability()));
+			} else {
+				if (wrapper.getItem().getType() == Material.AIR) {
+					// Id was not given so only check amount
+					progressBar = getStatsPlugin().getNormalStat(StatsHandler.statTypes.BLOCKS_PLACED, player.getUniqueId(),
+							AutorankTools.makeStatsInfo("world", this.getWorld()));
+				} else {
+					// ID was given, but no data value
+					progressBar = getStatsPlugin().getNormalStat(StatsHandler.statTypes.BLOCKS_PLACED, player.getUniqueId(),
+							AutorankTools.makeStatsInfo("world", this.getWorld(), "typeID", wrapper.getItem().getTypeId()));
+				}
+			}
 		}
 
 		return progressBar + "/" + wrapper.getBlocksPlaced();
@@ -66,21 +80,32 @@ public class BlocksPlacedRequirement extends Requirement {
 		if (!getStatsPlugin().isEnabled())
 			return false;
 
-		final int blockID = wrapper.getItem().getTypeId();
-		final int blocksPlaced = wrapper.getBlocksPlaced();
-
 		int progress = 0;
 
-		if (blockID > 0) {
+		if (wrapper.getItem().getTypeId() < 0) {
 			progress = getStatsPlugin().getNormalStat(StatsHandler.statTypes.BLOCKS_PLACED, player.getUniqueId(),
 					AutorankTools.makeStatsInfo("world", this.getWorld(), "typeID", wrapper.getItem().getTypeId(),
 							"dataValue", wrapper.getItem().getDurability()));
 		} else {
-			progress = getStatsPlugin().getNormalStat(StatsHandler.statTypes.TOTAL_BLOCKS_PLACED, player.getUniqueId(),
-					AutorankTools.makeStatsInfo());
+			if (wrapper.showShortValue()) {
+				// Use datavalue
+				progress = getStatsPlugin().getNormalStat(StatsHandler.statTypes.BLOCKS_PLACED, player.getUniqueId(),
+						AutorankTools.makeStatsInfo("world", this.getWorld(), "typeID", wrapper.getItem().getTypeId(),
+								"dataValue", wrapper.getItem().getDurability()));
+			} else {
+				if (wrapper.getItem().getType() == Material.AIR) {
+					// Id was not given so only check amount
+					progress = getStatsPlugin().getNormalStat(StatsHandler.statTypes.BLOCKS_PLACED, player.getUniqueId(),
+							AutorankTools.makeStatsInfo("world", this.getWorld()));
+				} else {
+					// ID was given, but no data value
+					progress = getStatsPlugin().getNormalStat(StatsHandler.statTypes.BLOCKS_PLACED, player.getUniqueId(),
+							AutorankTools.makeStatsInfo("world", this.getWorld(), "typeID", wrapper.getItem().getTypeId()));
+				}
+			}
 		}
 
-		return progress >= blocksPlaced;
+		return progress >= wrapper.getBlocksPlaced();
 	}
 
 	@SuppressWarnings("deprecation")
