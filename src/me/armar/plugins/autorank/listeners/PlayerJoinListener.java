@@ -48,9 +48,14 @@ public class PlayerJoinListener implements Listener {
 		// Do leaderboard exemption check
 		plugin.getPlayerChecker().doLeaderboardExemptCheck(player);
 
-		// Perform check for player on login
-		plugin.getPlayerChecker().checkPlayer(player);
-
+		plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+			public void run() {
+				// Perform check for player on login
+				plugin.getPlayerChecker().checkPlayer(player);
+			}
+		});
+		
+		
 		// Player isn't allowed to see messages.
 		if (player.hasPermission("autorank.noticeonupdate")) {
 
