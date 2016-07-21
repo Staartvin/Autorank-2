@@ -44,7 +44,7 @@ public class SQLDataStorage {
 	 */
 	public boolean connect() {
 		try {
-			Class.forName("com.mysql.jdbc.Driver").newInstance();
+			//Class.forName("com.mysql.jdbc.Driver").newInstance();
 
 			final String url = "jdbc:mysql://" + hostname + "/" + database;
 
@@ -132,6 +132,9 @@ public class SQLDataStorage {
 	 * @return true if closed, false if open.
 	 */
 	public boolean isClosed() {
+		
+		if (conn == null) return true;
+		
 		try {
 			return conn.isClosed();
 		} catch (final SQLException e) {
