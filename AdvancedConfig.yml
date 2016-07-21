@@ -78,6 +78,10 @@ ranks:
 #       jobs total points: 100 (Player needs to have at least 100 points in total in Jobs) (requires Jobs)
 #       jobs level: 50;mining (A player has to have at least level 50 in job 'mining') (requires Jobs)
 #       jobs experience: 100;mining (A player needs to have at least 100 exp in the job 'mining') (requires Jobs)
+#       grief prevention claims: 100 (A player needs to have at least 100 claims in Grief Prevention) (requires GriefPrevention)
+#       grief prevention claimed blocks: 150 (A player needs to have at least 150 blocks claimed in Grief Prevention) (requires GriefPrevention)
+#       grief prevention remaining blocks: 20 (A player needs to have at least 20 blocks left over to claim in Grief Prevention) (requires GriefPrevention)
+#       grief prevention bonus blocks: 60 (A player needs to have at least 60 bonus blocks in Grief Prevention) (requires GriefPrevention)
 #
 #   results:
 #       rank change: new-rank

@@ -382,7 +382,23 @@ public enum Lang {
 	/**
 	 * Have at least level {0} in the job '{1}'
 	 */
-	JOBS_LEVEL_REQUIREMENT("jobs-level-requirement", "Have at least level {0} in the job '{1}'"),;
+	JOBS_LEVEL_REQUIREMENT("jobs-level-requirement", "Have at least level {0} in the job '{1}'"),
+	/**
+	 * Have at least {0} claims in GriefPrevention
+	 */
+	GRIEF_PREVENTION_CLAIMS_COUNT_REQUIREMENT("grief-prevention-claims-count-requirement", "Have at least {0} claims in GriefPrevention"),
+	/**
+	 * Have at least {0} claimed blocks in GriefPrevention
+	 */
+	GRIEF_PREVENTION_CLAIMED_BLOCKS_REQUIREMENT("grief-prevention-claimed-blocks-requirement", "Have at least {0} claimed blocks in GriefPrevention"),
+	/**
+	 * Have at least {0} remaining blocks to use in claims in GriefPrevention
+	 */
+	GRIEF_PREVENTION_REMAINING_BLOCKS_REQUIREMENT("grief-prevention-remaining-blocks-requirement", "Have at least {0} remaining blocks to use in claims in GriefPrevention"),
+	/**
+	 * Have at least {0} bonus blocks in GriefPrevention
+	 */
+	GRIEF_PREVENTION_BONUS_BLOCKS_REQUIREMENT("grief-prevention-bonus-blocks-requirement", "Have at least {0} bonus blocks in GriefPrevention"),;
 
 	private static FileConfiguration LANG;
 

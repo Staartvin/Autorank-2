@@ -35,6 +35,10 @@ import me.armar.plugins.autorank.playerchecker.requirement.FishCaughtRequirement
 import me.armar.plugins.autorank.playerchecker.requirement.FoodEatenRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.GamemodeRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.GlobalTimeRequirement;
+import me.armar.plugins.autorank.playerchecker.requirement.GriefPreventionBonusBlocksRequirement;
+import me.armar.plugins.autorank.playerchecker.requirement.GriefPreventionClaimedBlocksRequirement;
+import me.armar.plugins.autorank.playerchecker.requirement.GriefPreventionClaimsCountRequirement;
+import me.armar.plugins.autorank.playerchecker.requirement.GriefPreventionRemainingBlocksRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.HasItemRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.InBiomeRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.ItemsCraftedRequirement;
@@ -87,7 +91,6 @@ import me.armar.plugins.autorank.warningmanager.WarningManager;
  */
 public class Autorank extends JavaPlugin {
 
-	// Updated for Minecraft 1.9.2
 	private AddOnManager addonManager;
 	private SimpleYamlConfiguration advancedConfig;
 	private CommandsManager commandsManager;
@@ -345,6 +348,10 @@ public class Autorank extends JavaPlugin {
 		req.registerRequirement("jobs total points", JobsTotalPointsRequirement.class);
 		req.registerRequirement("jobs level", JobsLevelRequirement.class);
 		req.registerRequirement("jobs experience", JobsExperienceRequirement.class);
+		req.registerRequirement("grief prevention claims", GriefPreventionClaimsCountRequirement.class);
+		req.registerRequirement("grief prevention claimed blocks", GriefPreventionClaimedBlocksRequirement.class);
+		req.registerRequirement("grief prevention remaining blocks", GriefPreventionRemainingBlocksRequirement.class);
+		req.registerRequirement("grief prevention bonus blocks", GriefPreventionBonusBlocksRequirement.class);
 
 		// Register 'main' results
 		res.registerResult("command", CommandResult.class);
