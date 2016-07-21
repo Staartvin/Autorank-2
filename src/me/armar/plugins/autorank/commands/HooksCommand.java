@@ -7,8 +7,8 @@ import org.bukkit.command.CommandSender;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
-import me.armar.plugins.autorank.hooks.DependencyHandler;
 import me.armar.plugins.autorank.hooks.DependencyManager.dependency;
+import me.staartvin.statz.hooks.Dependency;
 import net.md_5.bungee.api.ChatColor;
 
 public class HooksCommand extends AutorankCommand {
@@ -26,14 +26,17 @@ public class HooksCommand extends AutorankCommand {
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
+		if (!plugin.getDependencyManager().getDependency(dependency.STATZ).isAvailable()) {
+			sender.sendMessage(ChatColor.RED + "Cannot show dependencies as Statz is not installed");
+			return true;
+		}
+		
 		sender.sendMessage(ChatColor.GOLD + "Autorank Hooks:");
-
-		for (final dependency dep : dependency.values()) {
+		
+		for (final Dependency dep : Dependency.values()) {
 			// There is no dependency handler for Autorank
-			if (dep == dependency.AUTORANK)
-				continue;
-
-			final DependencyHandler handler = plugin.getDependencyManager().getDependency(dep);
+			
+			final me.staartvin.statz.hooks.DependencyHandler handler = plugin.getDependencyManager().getDependencyHandler(dep);
 
 			final StringBuilder message = new StringBuilder(ChatColor.GRAY + dep.toString() + ": " + ChatColor.RESET);
 
