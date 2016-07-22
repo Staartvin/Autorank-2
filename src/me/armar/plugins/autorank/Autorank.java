@@ -170,53 +170,11 @@ public class Autorank extends JavaPlugin {
 
 		getUUIDStorage().saveAllFiles();
 
-		setWarningManager(null);
-
-		setLanguageHandler(null);
-
-		setLeaderboard(null);
-
-		setAddonManager(null);
-
-		setDebugger(null);
-		
-		setPlaytimes(null);
-
-		setCommandsManager(null);
-
-		setValidateHandler(null);
-
-		setPlayerChecker(null);
-
-		setPermPlugHandler(null);
-
-		setDependencyManager(null);
-
 		// Close database connection
 		this.getMySQLWrapper().disconnectDatabase();
 
-		setMySQLWrapper(null);
-
-		setUpdateHandler(null);
-
-		setConfigHandler(null);
-
 		// Save playerdata.yml
 		this.getPlayerDataHandler().saveConfig();
-
-		setPlayerDataHandler(null);
-
-		setSimpleConfig(null);
-
-		setAdvancedConfig(null);
-
-		setSettingsConfig(null);
-
-		setUUIDStorage(null);
-
-		setBackupManager(null);
-
-		setInternalProps(null);
 
 		getLogger().info(String.format("Autorank %s has been disabled!", getDescription().getVersion()));
 	}
