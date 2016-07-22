@@ -147,9 +147,15 @@ public class AutorankTools {
 		final Matcher matcher = pattern.matcher(string);
 
 		matcher.find();
+		
 		final String days = matcher.group(2);
 		final String hours = matcher.group(4);
-		final String minutes = matcher.group(6);
+		String minutes = matcher.group(6);
+		
+		// No day or hours or minute was given, so default to minutes.
+		if (days == null && hours == null & minutes == null) {
+			minutes = string;
+		}
 
 		res += stringtoDouble(minutes);
 		res += stringtoDouble(hours) * 60;
