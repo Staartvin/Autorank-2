@@ -7,10 +7,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
+import org.bukkit.entity.Player;
 
 import com.google.common.collect.Lists;
 
@@ -40,6 +40,11 @@ import me.armar.plugins.autorank.commands.TimesCommand;
 import me.armar.plugins.autorank.commands.TrackCommand;
 import me.armar.plugins.autorank.commands.ViewCommand;
 import me.armar.plugins.autorank.language.Lang;
+import me.armar.plugins.autorank.util.AutorankTools;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
 
 /**
  * This class will manage all incoming command requests.
@@ -127,17 +132,55 @@ public class CommandsManager implements TabExecutor {
 
 		final String action = args[0];
 
+		List<String> suggestions = new ArrayList<>();
+		List<String> bestSuggestions = new ArrayList<>();
+
 		// Go through every list and check if that action is in there.
 		for (final Entry<List<String>, AutorankCommand> entry : registeredCommands.entrySet()) {
 
+			String suggestion = AutorankTools.findClosestSuggestion(action, entry.getKey());
+
+			if (suggestion != null) {
+				suggestions.add(suggestion);
+			}
+
 			for (final String actionString : entry.getKey()) {
+
 				if (actionString.equalsIgnoreCase(action)) {
 					return entry.getValue().onCommand(sender, cmd, label, args);
 				}
 			}
 		}
 
+		// Search for suggestions if argument was not found
+		for (String suggestion : suggestions) {
+			String[] split = suggestion.split(";");
+
+			int editDistance = Integer.parseInt(split[1]);
+
+			// Only give suggestion if edit distance is small
+			if (editDistance <= 2) {
+				bestSuggestions.add(split[0]);
+			}
+		}
+		
 		sender.sendMessage(ChatColor.RED + "Command not recognised!");
+		
+		if (!bestSuggestions.isEmpty()) {
+			BaseComponent[] builder = new ComponentBuilder("Did you perhaps mean ").color(ChatColor.DARK_AQUA)
+					.append("/ar ").color(ChatColor.GREEN).append(AutorankTools.seperateList(bestSuggestions, "or")).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("These are suggestions based on your input.").create()))
+					.append("?").color(ChatColor.DARK_AQUA).create();
+			
+			if (sender instanceof Player) {
+				Player p = (Player) sender;
+				
+				p.spigot().sendMessage(builder);
+			} else {
+				sender.sendMessage(ChatColor.DARK_AQUA + "Did you perhaps mean " + ChatColor.GREEN + "/ar "
+						+ AutorankTools.seperateList(bestSuggestions, "or") + ChatColor.DARK_AQUA + "?");
+			}
+		}
+
 		sender.sendMessage(ChatColor.YELLOW + "Use '/ar help' for a list of commands.");
 		return true;
 	}
