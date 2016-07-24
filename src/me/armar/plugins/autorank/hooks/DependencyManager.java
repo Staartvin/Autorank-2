@@ -90,7 +90,7 @@ public class DependencyManager {
 	 * @return true if the player is supspected of being AFK, false otherwise.
 	 */
 	public boolean isAFK(final Player player) {
-		if (!plugin.getConfigHandler().useAFKIntegration()) {
+		if (!plugin.getConfigHandler().useAFKIntegration() || !this.getDependency(dependency.STATZ).isAvailable()) {
 			return false;
 		}
 		
