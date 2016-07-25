@@ -398,7 +398,15 @@ public enum Lang {
 	/**
 	 * Have at least {0} bonus blocks in GriefPrevention
 	 */
-	GRIEF_PREVENTION_BONUS_BLOCKS_REQUIREMENT("grief-prevention-bonus-blocks-requirement", "Have at least {0} bonus blocks in GriefPrevention"),;
+	GRIEF_PREVENTION_BONUS_BLOCKS_REQUIREMENT("grief-prevention-bonus-blocks-requirement", "Have at least {0} bonus blocks in GriefPrevention"),
+	/**
+	 * Obtain Achievement '{0}'
+	 */
+	ACHIEVEMENT_SINGLE_REQUIREMENT("achievement-single-requirement", "Obtain Achievement '{0}'"),
+	/**
+	 * Obtain at least {0} achievements
+	 */
+	ACHIEVEMENT_MULTIPLE_REQUIREMENT("achievement-multiple-requirement", "Obtain at least {0} achievements"),;
 
 	private static FileConfiguration LANG;
 

@@ -82,6 +82,8 @@ ranks:
 #       grief prevention claimed blocks: 150 (A player needs to have at least 150 blocks claimed in Grief Prevention) (requires GriefPrevention)
 #       grief prevention remaining blocks: 20 (A player needs to have at least 20 blocks left over to claim in Grief Prevention) (requires GriefPrevention)
 #       grief prevention bonus blocks: 60 (A player needs to have at least 60 bonus blocks in Grief Prevention) (requires GriefPrevention)
+#       has achievement: 10 (A player needs to have at least 10 achievements.)
+#       (also possible:) has achievement: BREED_COW (A player has to have a specific achievement. For a list of achievements, see https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Achievement.html)
 #
 #   results:
 #       rank change: new-rank
