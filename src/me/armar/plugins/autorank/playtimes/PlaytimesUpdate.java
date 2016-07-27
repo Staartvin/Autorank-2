@@ -68,8 +68,13 @@ public class PlaytimesUpdate implements Runnable {
 	private void updateMinutesPlayed() {
 		plugin.debugMessage("Checking players for automatic ranking");
 
-		// Check whether the files are still up to date.
-		plugin.getPlaytimes().doCalendarCheck();
+		plugin.getServer().getScheduler().runTask(plugin, new Runnable() {
+			public void run() {
+				// Check whether the files are still up to date - Do this synchronously
+				plugin.getPlaytimes().doCalendarCheck();
+			}
+		});
+		
 
 		for (final Player player : plugin.getServer().getOnlinePlayers()) {
 
