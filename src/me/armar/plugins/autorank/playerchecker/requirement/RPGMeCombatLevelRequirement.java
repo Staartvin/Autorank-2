@@ -19,6 +19,7 @@ public class RPGMeCombatLevelRequirement extends Requirement {
 
 	@Override
 	public String getProgress(final Player player) {
+		
 		int level = 0;
 
 		level = handler.getCombatLevel(player);
@@ -28,6 +29,8 @@ public class RPGMeCombatLevelRequirement extends Requirement {
 
 	@Override
 	public boolean meetsRequirement(final Player player) {
+		
+		if (!handler.isAvailable()) return false;
 
 		return handler.getCombatLevel(player) >= skillLevel;
 	}
@@ -41,6 +44,6 @@ public class RPGMeCombatLevelRequirement extends Requirement {
 			skillLevel = Integer.parseInt(options[0]);
 		}
 
-		return skillLevel != -1 && handler != null;
+		return skillLevel != -1 && handler != null && handler.isAvailable();
 	}
 }
