@@ -61,12 +61,13 @@ public class BlocksBrokenRequirement extends Requirement {
 			} else {
 				if (wrapper.getItem().getType() == Material.AIR) {
 					// Id was not given so only check amount
-					progressBar = getStatsPlugin().getNormalStat(StatsHandler.statTypes.BLOCKS_BROKEN, player.getUniqueId(),
-							AutorankTools.makeStatsInfo("world", this.getWorld()));
+					progressBar = getStatsPlugin().getNormalStat(StatsHandler.statTypes.BLOCKS_BROKEN,
+							player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld()));
 				} else {
 					// ID was given, but no data value
-					progressBar = getStatsPlugin().getNormalStat(StatsHandler.statTypes.BLOCKS_BROKEN, player.getUniqueId(),
-							AutorankTools.makeStatsInfo("world", this.getWorld(), "typeID", wrapper.getItem().getTypeId()));
+					progressBar = getStatsPlugin().getNormalStat(StatsHandler.statTypes.BLOCKS_BROKEN,
+							player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld(), "typeID",
+									wrapper.getItem().getTypeId()));
 				}
 			}
 		}
@@ -99,12 +100,13 @@ public class BlocksBrokenRequirement extends Requirement {
 			} else {
 				if (wrapper.getItem().getType() == Material.AIR) {
 					// Id was not given so only check amount
-					progress = getStatsPlugin().getNormalStat(StatsHandler.statTypes.BLOCKS_BROKEN, player.getUniqueId(),
-							AutorankTools.makeStatsInfo("world", this.getWorld()));
+					progress = getStatsPlugin().getNormalStat(StatsHandler.statTypes.BLOCKS_BROKEN,
+							player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld()));
 				} else {
 					// ID was given, but no data value
-					progress = getStatsPlugin().getNormalStat(StatsHandler.statTypes.BLOCKS_BROKEN, player.getUniqueId(),
-							AutorankTools.makeStatsInfo("world", this.getWorld(), "typeID", wrapper.getItem().getTypeId()));
+					progress = getStatsPlugin().getNormalStat(StatsHandler.statTypes.BLOCKS_BROKEN,
+							player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld(), "typeID",
+									wrapper.getItem().getTypeId()));
 				}
 			}
 		}

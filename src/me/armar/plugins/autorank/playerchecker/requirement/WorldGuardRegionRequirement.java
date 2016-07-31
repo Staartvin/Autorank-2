@@ -55,7 +55,7 @@ public class WorldGuardRegionRequirement extends Requirement {
 	public boolean setOptions(final String[] options) {
 		handler = (WorldGuardHandler) this.getAutorank().getDependencyManager()
 				.getDependencyHandler(Dependency.WORLDGUARD);
-		
+
 		if (options.length > 0) {
 			regionName = options[0].trim();
 		}

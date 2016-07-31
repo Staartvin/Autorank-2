@@ -406,7 +406,21 @@ public enum Lang {
 	/**
 	 * Obtain at least {0} achievements
 	 */
-	ACHIEVEMENT_MULTIPLE_REQUIREMENT("achievement-multiple-requirement", "Obtain at least {0} achievements"),;
+	ACHIEVEMENT_MULTIPLE_REQUIREMENT("achievement-multiple-requirement", "Obtain at least {0} achievements"),
+
+	/**
+	 * Have at least a combined level {0} of RPGMe.
+	 */
+	RPGME_POWER_LEVEL_REQUIREMENT("rpgme-power-level-requirement", "Have at least a combined level {0} of RPGMe."),
+	/**
+	 * Have at least level {0} in {1} in RPGme.
+	 */
+	RPGME_SKILL_LEVEL_REQUIREMENT("rpgme-skill-level-requirement", "Have at least level {0} in {1} in RPGme."),
+
+	/**
+	 * Have at least a combat level of {0} in RPGme.
+	 */
+	RPGME_COMBAT_LEVEL_REQUIREMENT("rpgme-combat-level-requirement", "Have at least a combat level of {0} in RPGme."),;
 
 	private static FileConfiguration LANG;
 

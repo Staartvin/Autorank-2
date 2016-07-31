@@ -22,7 +22,7 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 
 	public VaultPermissionsHandler(final Autorank plugin) {
 		if (VaultHandler.permission == null) {
-			
+
 			// Only shutdown Autorank when Vault is needed and not found.
 			// Delay shutdown so Autorank can start successfully.
 			plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable() {

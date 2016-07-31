@@ -132,9 +132,10 @@ public class SQLDataStorage {
 	 * @return true if closed, false if open.
 	 */
 	public boolean isClosed() {
-		
-		if (conn == null) return true;
-		
+
+		if (conn == null)
+			return true;
+
 		try {
 			return conn.isClosed();
 		} catch (final SQLException e) {

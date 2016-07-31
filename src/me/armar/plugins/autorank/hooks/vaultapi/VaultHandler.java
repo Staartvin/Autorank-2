@@ -95,7 +95,7 @@ public class VaultHandler implements DependencyHandler {
 			}
 		}
 	}
-	
+
 	private boolean setupEconomy() {
 		final RegisteredServiceProvider<Economy> economyProvider = Bukkit.getServer().getServicesManager()
 				.getRegistration(net.milkbowl.vault.economy.Economy.class);

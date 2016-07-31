@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
 
-public class AchiementRequirement extends Requirement {
+public class AchievementRequirement extends Requirement {
 
 	int achievementCount = -1;
 	Achievement achievement = null;

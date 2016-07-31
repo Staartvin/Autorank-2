@@ -54,8 +54,7 @@ public class PlayerJoinListener implements Listener {
 				plugin.getPlayerChecker().checkPlayer(player);
 			}
 		});
-		
-		
+
 		// Player isn't allowed to see messages.
 		if (player.hasPermission("autorank.noticeonupdate")) {
 

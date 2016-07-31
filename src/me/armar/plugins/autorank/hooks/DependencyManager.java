@@ -25,9 +25,8 @@ import me.staartvin.statz.hooks.handlers.UltimateCoreHandler;
  * 
  */
 public class DependencyManager {
-// Test
-	
-	
+	// Test
+
 	/**
 	 * Enum containing all dependencies Autorank has.<br>
 	 * Some are optional, some not. This enumeration is used to dynamically load
@@ -93,7 +92,6 @@ public class DependencyManager {
 		if (!plugin.getConfigHandler().useAFKIntegration() || !this.getDependency(dependency.STATZ).isAvailable()) {
 			return false;
 		}
-		
 
 		if (this.getDependencyHandler(Dependency.ESSENTIALS).isAvailable()) {
 			plugin.debugMessage("Using Essentials for AFK");
@@ -108,7 +106,7 @@ public class DependencyManager {
 			plugin.debugMessage("Using AfkTerminator for AFK");
 			return ((AFKTerminatorHandler) this.getDependencyHandler(Dependency.AFKTERMINATOR)).isAFK(player);
 		}
-		
+
 		// No suitable plugin found
 		return false;
 	}
@@ -160,14 +158,14 @@ public class DependencyManager {
 
 		return statz.getDependencyHandler(dep);
 	}
-	
+
 	public StatzAPIHandler getStatzConnector() {
 		StatzAPIHandler statz = (StatzAPIHandler) plugin.getDependencyManager().getDependency(dependency.STATZ);
 
 		if (statz == null || !statz.isAvailable()) {
 			return null;
 		}
-		
+
 		return statz;
 	}
 

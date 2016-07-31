@@ -51,7 +51,7 @@ public class ASkyBlockLevelRequirement extends Requirement {
 
 		handler = (ASkyBlockHandler) this.getAutorank().getDependencyManager()
 				.getDependencyHandler(Dependency.ASKYBLOCK);
-		
+
 		islandLevel = Integer.parseInt(options[0]);
 
 		return islandLevel != -1 && handler != null;

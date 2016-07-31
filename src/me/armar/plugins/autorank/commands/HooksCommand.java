@@ -30,13 +30,14 @@ public class HooksCommand extends AutorankCommand {
 			sender.sendMessage(ChatColor.RED + "Cannot show dependencies as Statz is not installed");
 			return true;
 		}
-		
+
 		sender.sendMessage(ChatColor.GOLD + "Autorank Hooks:");
-		
+
 		for (final Dependency dep : Dependency.values()) {
 			// There is no dependency handler for Autorank
-			
-			final me.staartvin.statz.hooks.DependencyHandler handler = plugin.getDependencyManager().getDependencyHandler(dep);
+
+			final me.staartvin.statz.hooks.DependencyHandler handler = plugin.getDependencyManager()
+					.getDependencyHandler(dep);
 
 			final StringBuilder message = new StringBuilder(ChatColor.GRAY + dep.toString() + ": " + ChatColor.RESET);
 

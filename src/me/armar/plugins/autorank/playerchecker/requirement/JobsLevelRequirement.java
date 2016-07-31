@@ -55,7 +55,7 @@ public class JobsLevelRequirement extends Requirement {
 
 	@Override
 	public boolean setOptions(final String[] options) {
-		
+
 		jobsHandler = (JobsHandler) this.getAutorank().getDependencyManager().getDependencyHandler(Dependency.JOBS);
 
 		level = Integer.parseInt(options[0]);

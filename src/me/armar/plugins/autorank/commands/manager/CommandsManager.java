@@ -163,17 +163,19 @@ public class CommandsManager implements TabExecutor {
 				bestSuggestions.add(split[0]);
 			}
 		}
-		
+
 		sender.sendMessage(ChatColor.RED + "Command not recognised!");
-		
+
 		if (!bestSuggestions.isEmpty()) {
 			BaseComponent[] builder = new ComponentBuilder("Did you perhaps mean ").color(ChatColor.DARK_AQUA)
-					.append("/ar ").color(ChatColor.GREEN).append(AutorankTools.seperateList(bestSuggestions, "or")).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("These are suggestions based on your input.").create()))
+					.append("/ar ").color(ChatColor.GREEN).append(AutorankTools.seperateList(bestSuggestions, "or"))
+					.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+							new ComponentBuilder("These are suggestions based on your input.").create()))
 					.append("?").color(ChatColor.DARK_AQUA).create();
-			
+
 			if (sender instanceof Player) {
 				Player p = (Player) sender;
-				
+
 				p.spigot().sendMessage(builder);
 			} else {
 				sender.sendMessage(ChatColor.DARK_AQUA + "Did you perhaps mean " + ChatColor.GREEN + "/ar "

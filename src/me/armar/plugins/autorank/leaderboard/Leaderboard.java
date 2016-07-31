@@ -111,7 +111,7 @@ public class Leaderboard {
 				plugin.debugMessage("Could not get cached player name of uuid '" + uuids.get(i) + "'!");
 				continue;
 			}
-			
+
 			// If UUID is null, we can't do anything with it.
 			if (uuids.get(i) == null) {
 				continue;

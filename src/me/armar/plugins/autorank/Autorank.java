@@ -23,7 +23,7 @@ import me.armar.plugins.autorank.mysql.wrapper.MySQLWrapper;
 import me.armar.plugins.autorank.permissions.PermissionsPluginManager;
 import me.armar.plugins.autorank.playerchecker.PlayerChecker;
 import me.armar.plugins.autorank.playerchecker.requirement.ASkyBlockLevelRequirement;
-import me.armar.plugins.autorank.playerchecker.requirement.AchiementRequirement;
+import me.armar.plugins.autorank.playerchecker.requirement.AchievementRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.AcidIslandLevelRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.BlocksBrokenRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.BlocksMovedRequirement;
@@ -55,6 +55,8 @@ import me.armar.plugins.autorank.playerchecker.requirement.MobKillsRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.MoneyRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.PermissionRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.PlayerKillsRequirement;
+import me.armar.plugins.autorank.playerchecker.requirement.RPGMeCombatLevelRequirement;
+import me.armar.plugins.autorank.playerchecker.requirement.RPGMeSkillLevelRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 import me.armar.plugins.autorank.playerchecker.requirement.TimeRequirement;
 import me.armar.plugins.autorank.playerchecker.requirement.TimesShearedRequirement;
@@ -311,7 +313,9 @@ public class Autorank extends JavaPlugin {
 		req.registerRequirement("grief prevention claimed blocks", GriefPreventionClaimedBlocksRequirement.class);
 		req.registerRequirement("grief prevention remaining blocks", GriefPreventionRemainingBlocksRequirement.class);
 		req.registerRequirement("grief prevention bonus blocks", GriefPreventionBonusBlocksRequirement.class);
-		req.registerRequirement("has achievement", AchiementRequirement.class);
+		req.registerRequirement("has achievement", AchievementRequirement.class);
+		req.registerRequirement("rpgme skill level", RPGMeSkillLevelRequirement.class);
+		req.registerRequirement("rpgme combat level", RPGMeCombatLevelRequirement.class);
 
 		// Register 'main' results
 		res.registerResult("command", CommandResult.class);

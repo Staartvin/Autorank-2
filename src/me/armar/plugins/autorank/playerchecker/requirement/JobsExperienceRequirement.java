@@ -57,7 +57,7 @@ public class JobsExperienceRequirement extends Requirement {
 	public boolean setOptions(final String[] options) {
 
 		jobsHandler = (JobsHandler) this.getAutorank().getDependencyManager().getDependencyHandler(Dependency.JOBS);
-		
+
 		experience = Integer.parseInt(options[0]);
 
 		if (options.length > 1) {

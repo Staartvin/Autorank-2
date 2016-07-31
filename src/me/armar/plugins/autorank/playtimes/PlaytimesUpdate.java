@@ -74,7 +74,6 @@ public class PlaytimesUpdate implements Runnable {
 				plugin.getPlaytimes().doCalendarCheck();
 			}
 		});
-		
 
 		for (final Player player : plugin.getServer().getOnlinePlayers()) {
 

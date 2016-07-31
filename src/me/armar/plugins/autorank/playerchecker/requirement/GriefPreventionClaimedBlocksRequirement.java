@@ -37,7 +37,8 @@ public class GriefPreventionClaimedBlocksRequirement extends Requirement {
 	@Override
 	public boolean setOptions(final String[] options) {
 
-		handler = (GriefPreventionHandler) this.getDependencyManager().getDependencyHandler(Dependency.GRIEF_PREVENTION);
+		handler = (GriefPreventionHandler) this.getDependencyManager()
+				.getDependencyHandler(Dependency.GRIEF_PREVENTION);
 
 		if (options.length > 0) {
 			claimedBlocks = Integer.parseInt(options[0]);

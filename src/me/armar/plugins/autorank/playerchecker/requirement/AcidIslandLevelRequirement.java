@@ -37,7 +37,7 @@ public class AcidIslandLevelRequirement extends Requirement {
 	}
 
 	@Override
-	public boolean meetsRequirement(final Player player) {		
+	public boolean meetsRequirement(final Player player) {
 
 		final UUID uuid = this.getAutorank().getUUIDStorage().getStoredUUID(player.getName());
 
@@ -50,7 +50,7 @@ public class AcidIslandLevelRequirement extends Requirement {
 	public boolean setOptions(final String[] options) {
 		handler = (AcidIslandHandler) this.getAutorank().getDependencyManager()
 				.getDependencyHandler(Dependency.ACIDISLAND);
-		
+
 		islandLevel = Integer.parseInt(options[0]);
 
 		return islandLevel != -1 && handler != null;
