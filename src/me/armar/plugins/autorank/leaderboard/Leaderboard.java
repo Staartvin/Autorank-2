@@ -121,7 +121,11 @@ public class Leaderboard {
 			// uuids in existence.
 			if (type == dataType.TOTAL_TIME) {
 
-				times.put(uuids.get(i), (plugin.getPlaytimes().getTimeOfPlayer(playerName, true) / 60));
+				if (plugin.getConfigHandler().useGlobalTimeInLeaderboard()) {
+					times.put(uuids.get(i), plugin.getPlaytimes().getGlobalTime(uuids.get(i)));
+				} else {
+					times.put(uuids.get(i), (plugin.getPlaytimes().getTimeOfPlayer(playerName, true) / 60));
+				}			
 			} else {
 				times.put(uuids.get(i), plugin.getPlaytimes().getTime(type, uuids.get(i)));
 			}

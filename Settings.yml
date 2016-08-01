@@ -107,3 +107,7 @@ allow deranking: false
 # You will also have to specify which requirements are 'derankable'.
 # When you set this to true, make sure to also set 'allow infinite ranking' to true.
 # For more info, see this wiki article: https://github.com/Armarr/Autorank-2/wiki/What-are-these-derankable-requirements-you-are-talking-about%3F
+
+use global time in leaderboard: false
+# By default, Autorank will use the local time of a player when for the leaderboard. When this is set to true,
+# /ar leaderboard will be sorted on the global time of a player (provided that it exists).

@@ -421,5 +421,9 @@ public class ConfigHandler {
 
 		return null;
 	}
+	
+	public boolean useGlobalTimeInLeaderboard() {
+		return plugin.getSettingsConfig().getBoolean("use global time in leaderboard", false);
+	}
 
 }
