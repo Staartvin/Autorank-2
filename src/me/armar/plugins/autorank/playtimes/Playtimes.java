@@ -532,7 +532,6 @@ public class Playtimes {
 
 					if (plugin.getConfigHandler().shouldBroadcastDataReset()) {
 						// Should we broadcast the reset?
-
 						plugin.getServer().broadcastMessage(Lang.RESET_DAILY_TIME.getConfigValue());
 					}
 
@@ -558,6 +557,13 @@ public class Playtimes {
 				plugin.getInternalProps().setTrackedDataType(type, value);
 				// We reset leaderboard time so it refreshes again.
 				plugin.getInternalProps().setLeaderboardLastUpdateTime(0);
+				
+				// Update leaderboard of reset time
+				plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+					public void run() {
+						plugin.getLeaderboard().updateLeaderboard(type);
+					}
+				});
 			}
 		}
 	}
