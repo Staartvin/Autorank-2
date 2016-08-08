@@ -70,12 +70,6 @@
 			<id>Spigot-repo</id>
 			<url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
 		</repository>
-
-		<repository>
-			<id>Plugin Metrics</id>
-			<url>http://repo.mcstats.org/content/repositories/public/</url>
-		</repository>
-
 	</repositories>
 
 	<dependencies>
@@ -91,6 +85,12 @@
 			<groupId>com.platymuus</groupId>
 			<artifactId>bukkit-permissions</artifactId>
 			<version>2.5</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>metrics</artifactId>
+					<groupId>org.mcstats.bukkit</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<!-- OLD STATS <dependency> <groupId>nl.lolmewn.stats</groupId> <artifactId>Stats</artifactId> 
@@ -100,12 +100,12 @@
 			<version>3.0.2-SNAPSHOT</version> <scope>provided</scope> <type>jar</type> 
 			</dependency> -->
 
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.mcstats.bukkit</groupId>
 			<artifactId>metrics</artifactId>
 			<version>R7</version>
 			<type>jar</type>
-		</dependency>
+		</dependency> -->
 
 
 		<dependency>
@@ -132,7 +132,6 @@
 			<artifactId>Statz</artifactId>
 			<version>LATEST</version>
 		</dependency>
-
 
 		<dependency>
 			<groupId>net.milkbowl.vault</groupId>

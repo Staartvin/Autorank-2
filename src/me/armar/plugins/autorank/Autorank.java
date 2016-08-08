@@ -1,7 +1,5 @@
 package me.armar.plugins.autorank;
 
-import java.io.IOException;
-
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -17,8 +15,6 @@ import me.armar.plugins.autorank.internalproperties.InternalProperties;
 import me.armar.plugins.autorank.language.LanguageHandler;
 import me.armar.plugins.autorank.leaderboard.Leaderboard;
 import me.armar.plugins.autorank.listeners.PlayerJoinListener;
-import me.armar.plugins.autorank.metrics.Metrics;
-import me.armar.plugins.autorank.metrics.Metrics.Graph;
 import me.armar.plugins.autorank.mysql.wrapper.MySQLWrapper;
 import me.armar.plugins.autorank.permissions.PermissionsPluginManager;
 import me.armar.plugins.autorank.playerchecker.PlayerChecker;
@@ -102,8 +98,6 @@ public class Autorank extends JavaPlugin {
 	private DependencyManager dependencyManager;
 	private LanguageHandler languageHandler;
 	private Leaderboard leaderboard;
-	// Metrics (for custom data)
-	private me.armar.plugins.autorank.metrics.Metrics metrics;
 	private MySQLWrapper mysqlWrapper;
 	private PermissionsPluginManager permPlugHandler;
 	private PlayerChecker playerChecker;
@@ -368,11 +362,6 @@ public class Autorank extends JavaPlugin {
 
 		getLogger().info(String.format("Autorank %s has been enabled!", getDescription().getVersion()));
 
-		// Start collecting data
-		if (!startMetrics()) {
-			getLogger().info("Failed to start Metrics, you can ignore this message.");
-		}
-
 		debugMessage("Autorank debug is turned on!");
 
 		// Extra warning for dev users
@@ -589,49 +578,6 @@ public class Autorank extends JavaPlugin {
 
 	public void setWarningManager(final WarningManager warningManager) {
 		this.warningManager = warningManager;
-	}
-
-	/**
-	 * Starts the metrics of Autorank.
-	 * 
-	 * @return true if succesfully started, false otherwise.
-	 */
-	private boolean startMetrics() {
-		// Try to start metrics
-		try {
-			// Initialise
-			metrics = new me.armar.plugins.autorank.metrics.Metrics(this);
-
-			// Setup graph for MySQL
-			final Graph mysqlUsedGraph = metrics.createGraph("Using MySQL");
-
-			mysqlUsedGraph.addPlotter(new Metrics.Plotter("MySQL") {
-
-				@Override
-				public int getValue() {
-					return getConfigHandler().useMySQL() ? 1 : 0;
-				}
-
-			});
-
-			mysqlUsedGraph.addPlotter(new Metrics.Plotter("No MySQL") {
-
-				@Override
-				public int getValue() {
-					if (!getConfigHandler().useMySQL())
-						return 1;
-					else
-						return 0;
-				}
-
-			});
-
-			metrics.start();
-			return true;
-		} catch (final IOException e) {
-			// Failed to submit the stats :-(
-			return false;
-		}
 	}
 
 	public UUIDStorage getUUIDStorage() {
