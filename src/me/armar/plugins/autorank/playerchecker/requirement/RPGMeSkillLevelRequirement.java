@@ -40,8 +40,9 @@ public class RPGMeSkillLevelRequirement extends Requirement {
 	@Override
 	public boolean meetsRequirement(final Player player) {
 
-		if (!handler.isAvailable()) return false;
-		
+		if (!handler.isAvailable())
+			return false;
+
 		if (skillName.equalsIgnoreCase("all")) {
 			return handler.getTotalLevel(player) >= skillLevel;
 		} else {

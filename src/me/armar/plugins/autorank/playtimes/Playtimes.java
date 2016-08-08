@@ -557,7 +557,7 @@ public class Playtimes {
 				plugin.getInternalProps().setTrackedDataType(type, value);
 				// We reset leaderboard time so it refreshes again.
 				plugin.getInternalProps().setLeaderboardLastUpdateTime(0);
-				
+
 				// Update leaderboard of reset time
 				plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
 					public void run() {

@@ -20,28 +20,8 @@ public class MobKillsRequirement extends Requirement {
 		if (mobType == null || mobType.trim().equals("")) {
 			desc = Lang.TOTAL_MOBS_KILLED_REQUIREMENT.getConfigValue(totalMobsKilled + " mobs");
 		} else {
-			String entityName;
-
-			if (mobType.equalsIgnoreCase("wither_skeleton")) {
-				entityName = "WITHER SKELETON";
-			} else if (mobType.equalsIgnoreCase("charged_creeper")) {
-				entityName = "CHARGED CREEPER";
-			} else if (mobType.equalsIgnoreCase("spider_jockey")) {
-				entityName = "SPIDER JOCKEY";
-			} else if (mobType.equalsIgnoreCase("chicken_jockey")) {
-				entityName = "CHICKEN JOCKEY";
-			} else if (mobType.equalsIgnoreCase("killer_rabbit")) {
-				entityName = "KILLER RABBIT";
-			} else if (mobType.equalsIgnoreCase("elder_guardian")) {
-				entityName = "ELDER GUARDIAN";
-			} else {
-				entityName = EntityType.valueOf(mobType.toUpperCase()).toString();
-			}
-
-			entityName = entityName.replace("_", " ");
-
 			desc = Lang.TOTAL_MOBS_KILLED_REQUIREMENT
-					.getConfigValue(totalMobsKilled + " " + entityName.toLowerCase() + "(s)");
+					.getConfigValue(totalMobsKilled + " " + mobType.toLowerCase() + "(s)");
 		}
 
 		// Check if this requirement is world-specific
@@ -86,6 +66,24 @@ public class MobKillsRequirement extends Requirement {
 
 		if (options.length > 1) {
 			mobType = options[1].trim().replace(" ", "_");
+
+			if (mobType.equalsIgnoreCase("wither_skeleton")) {
+				mobType = "WITHER SKELETON";
+			} else if (mobType.equalsIgnoreCase("charged_creeper")) {
+				mobType = "POWERED CREEPER";
+			} else if (mobType.equalsIgnoreCase("spider_jockey")) {
+				mobType = "SPIDER JOCKEY";
+			} else if (mobType.equalsIgnoreCase("chicken_jockey")) {
+				mobType = "CHICKEN JOCKEY";
+			} else if (mobType.equalsIgnoreCase("killer_rabbit")) {
+				mobType = "KILLER RABBIT";
+			} else if (mobType.equalsIgnoreCase("elder_guardian")) {
+				mobType = "ELDER GUARDIAN";
+			} else if (mobType.equalsIgnoreCase("cave_spider")) {
+				mobType = "CAVESPIDER";
+			} else {
+				mobType = EntityType.valueOf(mobType.toUpperCase()).toString();
+			}
 		}
 
 		return totalMobsKilled != -1;
