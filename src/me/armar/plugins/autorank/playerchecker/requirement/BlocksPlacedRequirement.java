@@ -49,7 +49,7 @@ public class BlocksPlacedRequirement extends Requirement {
 
 		int progressBar = 0;
 
-		if (wrapper.getItem().getTypeId() < 0) {
+		if (wrapper.getItem().getTypeId() <= 0 && !wrapper.showShortValue()) {
 			progressBar = getStatsPlugin().getNormalStat(StatsHandler.statTypes.TOTAL_BLOCKS_PLACED,
 					player.getUniqueId(), AutorankTools.makeStatsInfo());
 		} else {
@@ -83,10 +83,9 @@ public class BlocksPlacedRequirement extends Requirement {
 
 		int progress = 0;
 
-		if (wrapper.getItem().getTypeId() < 0) {
-			progress = getStatsPlugin().getNormalStat(StatsHandler.statTypes.BLOCKS_PLACED, player.getUniqueId(),
-					AutorankTools.makeStatsInfo("world", this.getWorld(), "typeID", wrapper.getItem().getTypeId(),
-							"dataValue", wrapper.getItem().getDurability()));
+		if (wrapper.getItem().getTypeId() <= 0 && !wrapper.showShortValue()) {
+			progress = getStatsPlugin().getNormalStat(StatsHandler.statTypes.TOTAL_BLOCKS_PLACED, player.getUniqueId(),
+					AutorankTools.makeStatsInfo("world", this.getWorld()));
 		} else {
 			if (wrapper.showShortValue()) {
 				// Use datavalue

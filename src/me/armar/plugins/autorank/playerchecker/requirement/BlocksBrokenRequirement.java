@@ -49,7 +49,7 @@ public class BlocksBrokenRequirement extends Requirement {
 
 		int progressBar = 0;
 
-		if (wrapper.getItem().getTypeId() < 0 && !wrapper.showShortValue()) {
+		if (wrapper.getItem().getTypeId() <= 0 && !wrapper.showShortValue()) {
 			progressBar = getStatsPlugin().getNormalStat(StatsHandler.statTypes.TOTAL_BLOCKS_BROKEN,
 					player.getUniqueId(), AutorankTools.makeStatsInfo());
 		} else {
@@ -87,10 +87,9 @@ public class BlocksBrokenRequirement extends Requirement {
 
 		int progress = 0;
 
-		if (blockID < 0 && !wrapper.showShortValue()) {
-			progress = getStatsPlugin().getNormalStat(StatsHandler.statTypes.BLOCKS_BROKEN, player.getUniqueId(),
-					AutorankTools.makeStatsInfo("world", this.getWorld(), "typeID", wrapper.getItem().getTypeId(),
-							"dataValue", wrapper.getItem().getDurability()));
+		if (blockID <= 0 && !wrapper.showShortValue()) {
+			progress = getStatsPlugin().getNormalStat(StatsHandler.statTypes.TOTAL_BLOCKS_BROKEN, player.getUniqueId(),
+					AutorankTools.makeStatsInfo("world", this.getWorld()));
 		} else {
 			if (wrapper.showShortValue()) {
 				// Use datavalue
@@ -145,10 +144,9 @@ public class BlocksBrokenRequirement extends Requirement {
 			// use display name?
 			useDisplayName = (options[4].equalsIgnoreCase("true") ? true : false);
 		}
-
-		// item = new ItemStack(id, 1, (short) 0, data);
-		final ItemStack item = new ItemStack(id, amount, data);
-
+		
+		ItemStack item = new ItemStack(id, amount, data);
+		
 		wrapper = new BlocksWrapper(item, displayName, showShortValue, useDisplayName);
 
 		wrapper.setBlocksBroken(amount);
