@@ -157,7 +157,6 @@ public class CheckCommand extends AutorankCommand {
 					metRequirements.add(reqID);
 					continue;
 				} else {
-
 					// Only check if player has done this when partial
 					// completion is used
 					if (plugin.getConfigHandler().usePartialCompletion()) {
@@ -179,7 +178,7 @@ public class CheckCommand extends AutorankCommand {
 					continue;
 				}
 			} else {
-
+				
 				if (!plugin.getConfigHandler().usePartialCompletion()) {
 
 					// Doesn't auto complete and doesn't meet requirement, then

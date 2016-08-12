@@ -261,9 +261,9 @@ public class ConfigHandler {
 					.get("ranks." + group + ".requirements." + requirement + ".options.auto complete") == null) {
 
 				// If partial completion is false, we do not auto complete
-				if (!usePartialCompletion()) {
+				/*if (!usePartialCompletion()) {
 					return false;
-				}
+				}*/
 				return true;
 			} else {
 				// Defined (Not optional + defined = defined)
