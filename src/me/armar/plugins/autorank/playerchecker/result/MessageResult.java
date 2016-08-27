@@ -11,7 +11,11 @@ public class MessageResult extends Result {
 		if (player == null) {
 			return false;
 		}
-		player.sendMessage(msg.replaceAll("(&([a-z0-9]))", "\u00A7$2"));
+		
+		msg = msg.replace("&p", player.getName());
+		msg = msg.replaceAll("(&([a-z0-9]))", "\u00A7$2");	
+		
+		player.sendMessage(msg);
 		return msg != null;
 	}
 
