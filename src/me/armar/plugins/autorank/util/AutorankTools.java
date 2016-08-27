@@ -28,6 +28,7 @@ public class AutorankTools {
 	}
 
 	private static List<String> reqTypes = new ArrayList<String>();
+	private static List<String> resTypes = new ArrayList<String>();
 
 	/**
 	 * This will return the correct type of the requirement.
@@ -38,7 +39,7 @@ public class AutorankTools {
 	 * @param oldName Name of the requirement to search for.
 	 * @return correct requirement name or old name if none was found.
 	 */
-	public static String getCorrectName(String oldName) {
+	public static String getCorrectReqName(String oldName) {
 
 		// Remove all numbers from string
 		oldName = oldName.replaceAll("[^a-zA-Z\\s]", "").trim();
@@ -57,6 +58,38 @@ public class AutorankTools {
 			// Did not match correctly, search for next word.
 			continue;
 
+		}
+
+		return null;
+	}
+	
+	/**
+	 * This will return the correct type of the result.
+	 * As admins might want to use multiple results of the same type, they
+	 * only have to specify the name of it with a unique identifier.
+	 * E.g. command1, command2 or message1, message2, etc.
+	 * 
+	 * @param oldName Name of the result to search for.
+	 * @return correct result name or old name if none was found.
+	 */
+	public static String getCorrectResName(String oldName) {
+
+		// Remove all numbers from string
+		oldName = oldName.replaceAll("[^a-zA-Z\\s]", "").trim();
+
+		for (final String type : resTypes) {
+			if (!oldName.contains(type)) {
+				continue;
+			}
+			
+			// Contains word
+
+			if (type.length() == oldName.length()) {
+				return type;
+			}
+
+			// Did not match correctly, search for next word.
+			continue;
 		}
 
 		return null;
@@ -94,13 +127,26 @@ public class AutorankTools {
 	/**
 	 * Register requirement name so it can be used to get the correct name.
 	 * If a requirement is not passed through this method, it will not show up
-	 * in {@link #getCorrectName(String)}.
+	 * in {@link #getCorrectReqName(String)}.
 	 * 
 	 * @param type Requirement name
 	 */
 	public static void registerRequirement(final String type) {
 		if (!reqTypes.contains(type)) {
 			reqTypes.add(type);
+		}
+	}
+	
+	/**
+	 * Register result name so it can be used to get the correct name.
+	 * If a result is not passed through this method, it will not show up
+	 * in {@link #getCorrectResName(String)}.
+	 * 
+	 * @param type Result name
+	 */
+	public static void registerResult(final String type) {
+		if (!resTypes.contains(type)) {
+			resTypes.add(type);
 		}
 	}
 

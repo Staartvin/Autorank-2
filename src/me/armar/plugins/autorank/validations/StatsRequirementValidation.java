@@ -15,7 +15,7 @@ public class StatsRequirementValidation {
 	}
 
 	private boolean requiresStats(final String req) {
-		final String correctName = AutorankTools.getCorrectName(req);
+		final String correctName = AutorankTools.getCorrectReqName(req);
 
 		if (correctName == null) {
 			return false;

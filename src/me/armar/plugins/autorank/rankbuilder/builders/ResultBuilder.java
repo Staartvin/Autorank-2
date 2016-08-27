@@ -6,6 +6,7 @@ import java.util.Map;
 import org.bukkit.Bukkit;
 
 import me.armar.plugins.autorank.playerchecker.result.Result;
+import me.armar.plugins.autorank.util.AutorankTools;
 import net.md_5.bungee.api.ChatColor;
 
 public class ResultBuilder {
@@ -32,6 +33,9 @@ public class ResultBuilder {
 
 	public void registerResult(final String type, final Class<? extends Result> result) {
 		results.put(type, result);
+
+		// Add type to the list of AutorankTools so it can use the correct name.
+		AutorankTools.registerResult(type);
 	}
 
 }
