@@ -21,7 +21,7 @@ public class MobKillsRequirement extends Requirement {
 			desc = Lang.TOTAL_MOBS_KILLED_REQUIREMENT.getConfigValue(totalMobsKilled + " mobs");
 		} else {
 			desc = Lang.TOTAL_MOBS_KILLED_REQUIREMENT
-					.getConfigValue(totalMobsKilled + " " + mobType.toLowerCase() + "(s)");
+					.getConfigValue(totalMobsKilled + " " + mobType.toLowerCase().replace("_", " ") + "(s)");
 		}
 
 		// Check if this requirement is world-specific
@@ -79,8 +79,6 @@ public class MobKillsRequirement extends Requirement {
 				mobType = "KILLER RABBIT";
 			} else if (mobType.equalsIgnoreCase("elder_guardian")) {
 				mobType = "ELDER GUARDIAN";
-			} else if (mobType.equalsIgnoreCase("cave_spider")) {
-				mobType = "CAVESPIDER";
 			} else {
 				mobType = EntityType.valueOf(mobType.toUpperCase()).toString();
 			}
