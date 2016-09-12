@@ -90,6 +90,7 @@ import me.armar.plugins.autorank.warningmanager.WarningManager;
  */
 public class Autorank extends JavaPlugin {
 
+	// Test
 	private AddOnManager addonManager;
 	private SimpleYamlConfiguration advancedConfig;
 	private CommandsManager commandsManager;
