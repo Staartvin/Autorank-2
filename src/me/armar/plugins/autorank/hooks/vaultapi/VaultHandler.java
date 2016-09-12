@@ -82,7 +82,7 @@ public class VaultHandler implements DependencyHandler {
 		} else {
 			vault = (Vault) get();
 
-			if (vault != null && setupEconomy() && setupPermissions()) {
+			if (vault != null && setupPermissions() && setupEconomy()) {
 				if (verbose) {
 					plugin.getLogger().info("Vault has been found and can be used!");
 				}
