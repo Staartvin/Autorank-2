@@ -43,8 +43,37 @@ public class GlobalCheckCommand extends AutorankCommand {
 
 			final Player player = plugin.getServer().getPlayer(args[1]);
 			if (player == null) {
-				sender.sendMessage(Lang.PLAYER_NOT_ONLINE.getConfigValue(args[1]));
+
+				final UUID uuid = plugin.getUUIDStorage().getStoredUUID(args[1]);
+
+				if (plugin.getUUIDStorage().hasRealName(uuid)) {
+					args[1] = plugin.getUUIDStorage().getRealName(uuid);
+				}
+
+				if (uuid == null) {
+					sender.sendMessage(Lang.PLAYER_NOT_ONLINE.getConfigValue(args[1]));
+					return true;
+				}
+
+				plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+
+					@Override
+					public void run() {
+						final int minutes = plugin.getPlaytimes().getGlobalTime(uuid);
+
+						if (minutes < 0) {
+							sender.sendMessage(Lang.PLAYER_IS_INVALID.getConfigValue(args[1]));
+							return;
+						}
+
+						AutorankTools.sendColoredMessage(sender, args[1] + " has played for "
+								+ AutorankTools.timeToString(minutes, Time.MINUTES) + " across all servers.");
+
+					}
+
+				});
 				return true;
+
 			} else {
 				if (player.hasPermission("autorank.exclude")) {
 					sender.sendMessage(ChatColor.RED + Lang.PLAYER_IS_EXCLUDED.getConfigValue(player.getName()));
