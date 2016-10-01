@@ -1,6 +1,5 @@
 main: me.armar.plugins.autorank.Autorank
 name: Autorank
-softdepend: [Vault, GroupManager, Privileges, bPermissions, PermissionsEx, PermissionsBukkit, DroxPerms, PowerfulPerms, Statz]
 url: http://dev.bukkit.org/bukkit-plugins/autorank/
 version: ${project.version}
 authors: [Idrrp, Armarr, Staartvin]
