@@ -229,15 +229,20 @@ public class Autorank extends JavaPlugin {
 		// Load dependency manager
 		setDependencyManager(new DependencyManager(this));
 
-		try {
-			// Load dependencies
-			dependencyManager.loadDependencies();
-		} catch (final Throwable t) {
+		getServer().getScheduler().runTaskLater(this, new Runnable() {
+			@Override
+			public void run() {
+				try {
+					// Load dependencies
+					dependencyManager.loadDependencies();
+				} catch (final Throwable t) {
 
-			// When an error occured!
+					// When an error occured!
 
-			getLogger().severe("Could not hook into a dependency: \nCause: " + t.getCause());
-		}
+					getLogger().severe("Could not hook into a dependency: \nCause: " + t.getCause());
+				}
+			}
+		}, 1L);
 
 		// Create playtime class
 		setPlaytimes(new Playtimes(this));
