@@ -3,7 +3,7 @@ name: Autorank
 url: http://dev.bukkit.org/bukkit-plugins/autorank/
 version: ${project.version}
 authors: [Idrrp, Armarr, Staartvin]
-softdepend: [Vault]
+softdepend: [Vault, GroupManager, Privileges, bPermissions, PermissionsEx, PermissionsBukkit, DroxPerms, PowerfulPerms, Statz]
 description: Reward players based on their stats.
 commands:
     autorank:
