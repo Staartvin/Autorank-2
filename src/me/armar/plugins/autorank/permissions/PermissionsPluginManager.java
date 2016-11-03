@@ -35,7 +35,6 @@ public class PermissionsPluginManager {
 
 	public PermissionsPluginManager(final Autorank plugin) {
 		this.plugin = plugin;
-		searchPermPlugin();
 	}
 
 	protected boolean findGroupManager(final Autorank plugin) {
@@ -66,7 +65,7 @@ public class PermissionsPluginManager {
 		return permissionPlugin;
 	}
 
-	private void searchPermPlugin() {
+	public void searchPermPlugin() {
 		if (findGroupManager(plugin)) {
 			// use Groupmanager
 			permissionPlugin = new GroupManagerHandler(plugin);

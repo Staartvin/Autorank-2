@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.hooks.DependencyManager.dependency;
 import me.armar.plugins.autorank.hooks.vaultapi.VaultHandler;
 import me.armar.plugins.autorank.permissions.PermissionsHandler;
 
@@ -21,8 +22,7 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 	private final Autorank plugin;
 
 	public VaultPermissionsHandler(final Autorank plugin) {
-		if (VaultHandler.permission == null) {
-
+		if (!plugin.getDependencyManager().getDependency(dependency.VAULT).isAvailable()) {
 			plugin.getLogger().severe("Autorank did not find Vault when it started its boot sequence. This could cause problems!");
 		}
 
