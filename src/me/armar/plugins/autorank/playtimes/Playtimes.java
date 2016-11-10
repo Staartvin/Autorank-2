@@ -227,17 +227,17 @@ public class Playtimes {
 	 * 
 	 * @param uuid
 	 *            UUID to check for
-	 * @return Global playtime across all servers or -1 if no time was found
+	 * @return Global playtime across all servers or 0 if no time was found
 	 */
 	public int getGlobalTime(final UUID uuid) {
 		if (uuid == null)
-			return -1;
+			return 0;
 		return plugin.getMySQLWrapper().getDatabaseTime(uuid);
 	}
 
 	public int getFreshGlobalTime(final UUID uuid) {
 		if (uuid == null)
-			return -1;
+			return 0;
 		return plugin.getMySQLWrapper().getFreshDatabaseTime(uuid);
 	}
 
@@ -247,11 +247,11 @@ public class Playtimes {
 	 * 
 	 * @param uuid
 	 *            UUID to get the time for
-	 * @return play time of that account or -1 if not found.
+	 * @return play time of that account or 0 if not found.
 	 */
 	public int getLocalTime(final UUID uuid) {
 		if (uuid == null)
-			return -1;
+			return 0;
 
 		final SimpleYamlConfiguration data = this.getDataFile(dataType.TOTAL_TIME);
 
