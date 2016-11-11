@@ -86,15 +86,14 @@ public class MySQLWrapper {
 	 */
 	public int getDatabaseTime(final UUID uuid) {
 
-		
 		// Do not make a call to the database every time.
 		// Instead, only call once every 5 minutes.
 		if (!isOutOfDate(uuid)) {
-			
+
 			int cachedTime = getCachedGlobalTime(uuid);
 			plugin.debugMessage("Obtained cached global time of '" + uuid.toString() + "' with value " + cachedTime);
-			
-			return cachedTime; 
+
+			return cachedTime;
 		}
 
 		// Mysql is not enabled
@@ -118,7 +117,7 @@ public class MySQLWrapper {
 		int value = -1;
 
 		plugin.debugMessage("Obtaining global time of '" + uuid.toString() + "'");
-		
+
 		try {
 			plugin.debugMessage("Gcheck performed "
 					+ (Thread.currentThread().getName().contains("Server thread") ? "not ASYNC" : "ASYNC") + " ("
@@ -133,7 +132,7 @@ public class MySQLWrapper {
 		// Store last received time and last received value
 		lastChecked.put(uuid, System.currentTimeMillis());
 		lastReceivedTime.put(uuid, value);
-		
+
 		plugin.debugMessage("Obtained fresh global time of '" + uuid.toString() + "' with value " + value);
 
 		return value;
@@ -153,7 +152,7 @@ public class MySQLWrapper {
 	 */
 	public int getFreshDatabaseTime(final UUID uuid) {
 		plugin.debugMessage("Obtaining fresh global time of '" + uuid.toString() + "'");
-		
+
 		// Mysql is not enabled
 		if (!isMySQLEnabled())
 			return -1;
@@ -189,7 +188,7 @@ public class MySQLWrapper {
 		// Store last received time and last received value
 		lastChecked.put(uuid, System.currentTimeMillis());
 		lastReceivedTime.put(uuid, value);
-		
+
 		plugin.debugMessage("Obtained fresh global time of '" + uuid.toString() + "' with value " + value);
 
 		return value;
@@ -235,7 +234,7 @@ public class MySQLWrapper {
 	public void setGlobalTime(final UUID uuid, final int time) {
 
 		plugin.debugMessage("Setting global time of '" + uuid.toString() + "' to " + time);
-		
+
 		if (!isMySQLEnabled())
 			return;
 

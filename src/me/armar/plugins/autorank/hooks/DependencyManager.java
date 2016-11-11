@@ -146,7 +146,7 @@ public class DependencyManager {
 		}
 
 		plugin.getLogger().info("Loaded libraries and dependencies");
-		
+
 		// After loading dependencies, search permissions plugin
 		plugin.getPermPlugHandler().searchPermPlugin();
 	}

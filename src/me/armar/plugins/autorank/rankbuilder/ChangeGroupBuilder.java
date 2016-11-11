@@ -237,14 +237,13 @@ public class ChangeGroupBuilder {
 			}
 
 			for (final String resu : configHandler.getResults(group)) {
-				
+
 				final String correctResult = AutorankTools.getCorrectResName(resu);
 
 				if (correctResult == null) {
-					throw new IllegalArgumentException(
-							"Result '" + resu + "' of group '" + group + "' is unknown!");
+					throw new IllegalArgumentException("Result '" + resu + "' of group '" + group + "' is unknown!");
 				}
-				
+
 				final Result result = createResult(correctResult, configHandler.getResult(resu, group));
 
 				if (result == null)

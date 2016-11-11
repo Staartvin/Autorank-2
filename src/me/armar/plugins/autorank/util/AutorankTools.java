@@ -62,7 +62,7 @@ public class AutorankTools {
 
 		return null;
 	}
-	
+
 	/**
 	 * This will return the correct type of the result.
 	 * As admins might want to use multiple results of the same type, they
@@ -81,7 +81,7 @@ public class AutorankTools {
 			if (!oldName.contains(type)) {
 				continue;
 			}
-			
+
 			// Contains word
 
 			if (type.length() == oldName.length()) {
@@ -136,7 +136,7 @@ public class AutorankTools {
 			reqTypes.add(type);
 		}
 	}
-	
+
 	/**
 	 * Register result name so it can be used to get the correct name.
 	 * If a result is not passed through this method, it will not show up

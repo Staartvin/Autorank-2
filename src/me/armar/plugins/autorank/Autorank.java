@@ -235,7 +235,7 @@ public class Autorank extends JavaPlugin {
 				try {
 					// Load dependencies
 					dependencyManager.loadDependencies();
-					
+
 				} catch (final Throwable t) {
 
 					// When an error occured!

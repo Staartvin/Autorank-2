@@ -429,7 +429,7 @@ public class ConfigHandler {
 	public boolean useGlobalTimeInLeaderboard() {
 		return plugin.getSettingsConfig().getBoolean("use global time in leaderboard", false);
 	}
-	
+
 	/**
 	 * Check whether an admin has disabled automatic ranking.
 	 * @return true if it is disabled, false otherwise.

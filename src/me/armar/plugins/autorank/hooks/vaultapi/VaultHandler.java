@@ -88,12 +88,14 @@ public class VaultHandler implements DependencyHandler {
 				}
 				return true;
 			} else {
-				
+
 				if (verbose) {
 					if (permission == null) {
-						plugin.getLogger().info("Vault has been found but cannot be used! (no supported permissions plugin)");
+						plugin.getLogger()
+								.info("Vault has been found but cannot be used! (no supported permissions plugin)");
 					} else if (economy == null) {
-						plugin.getLogger().info("Vault has been found but cannot be used! (no supported economy plugin)");
+						plugin.getLogger()
+								.info("Vault has been found but cannot be used! (no supported economy plugin)");
 					} else {
 						plugin.getLogger().info("Vault has been found but cannot be used! (unknown reason)");
 					}

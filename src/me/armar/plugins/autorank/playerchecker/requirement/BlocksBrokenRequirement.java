@@ -144,9 +144,9 @@ public class BlocksBrokenRequirement extends Requirement {
 			// use display name?
 			useDisplayName = (options[4].equalsIgnoreCase("true") ? true : false);
 		}
-		
+
 		ItemStack item = new ItemStack(id, amount, data);
-		
+
 		wrapper = new BlocksWrapper(item, displayName, showShortValue, useDisplayName);
 
 		wrapper.setBlocksBroken(amount);

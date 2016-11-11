@@ -178,7 +178,7 @@ public class CheckCommand extends AutorankCommand {
 					continue;
 				}
 			} else {
-				
+
 				if (!plugin.getConfigHandler().usePartialCompletion()) {
 
 					// Doesn't auto complete and doesn't meet requirement, then
