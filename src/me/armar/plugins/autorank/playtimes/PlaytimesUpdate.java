@@ -59,9 +59,11 @@ public class PlaytimesUpdate implements Runnable {
 				playtimes.modifyGlobalTime(uuid, Playtimes.INTERVAL_MINUTES);
 			}
 
-			// Check if player meets requirements
-			plugin.getPlayerChecker().checkPlayer(player);
-
+			// Only check a player if it is not disabled in the Settings.yml
+			if (!plugin.getConfigHandler().isAutomaticRankingDisabled()) {
+				// Check if player meets requirements
+				plugin.getPlayerChecker().checkPlayer(player);
+			}
 		}
 	}
 

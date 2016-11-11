@@ -422,8 +422,20 @@ public class ConfigHandler {
 		return null;
 	}
 
+	/**
+	 * Should we display the global time in the leaderboard of Autorank. 
+	 * @return true if we should, false otherwise.
+	 */
 	public boolean useGlobalTimeInLeaderboard() {
 		return plugin.getSettingsConfig().getBoolean("use global time in leaderboard", false);
+	}
+	
+	/**
+	 * Check whether an admin has disabled automatic ranking.
+	 * @return true if it is disabled, false otherwise.
+	 */
+	public boolean isAutomaticRankingDisabled() {
+		return plugin.getSettingsConfig().getBoolean("disable automatic rank checking", false);
 	}
 
 }

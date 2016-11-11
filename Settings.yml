@@ -111,3 +111,7 @@ allow deranking: false
 use global time in leaderboard: false
 # By default, Autorank will use the local time of a player when for the leaderboard. When this is set to true,
 # /ar leaderboard will be sorted on the global time of a player (provided that it exists).
+
+disable automatic rank checking: false
+# By default, Autorank will check whether a player meets all requirements for it groups every x minutes.
+# If you want to disable this feature and let players manually check whether they completed all requirements, set this to false.
