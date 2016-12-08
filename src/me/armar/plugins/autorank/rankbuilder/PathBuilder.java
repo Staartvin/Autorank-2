@@ -173,7 +173,7 @@ public class PathBuilder {
 
 				if (correctName == null) {
 					throw new IllegalArgumentException(
-							"Prerequisites '" + prereqName + "' of path '" + pathName + "' is unknown!");
+							"Prerequisite '" + prereqName + "' of path '" + pathName + "' is unknown!");
 				}
 
 				// Create a holder for the path
