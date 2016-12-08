@@ -8,6 +8,7 @@ import me.armar.plugins.autorank.api.API;
 import me.armar.plugins.autorank.backup.BackupManager;
 import me.armar.plugins.autorank.commands.manager.CommandsManager;
 import me.armar.plugins.autorank.config.ConfigHandler;
+import me.armar.plugins.autorank.config.PathsFileHandler;
 import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
 import me.armar.plugins.autorank.debugger.Debugger;
 import me.armar.plugins.autorank.hooks.DependencyManager;
@@ -106,6 +107,7 @@ public class Autorank extends JavaPlugin {
 	private PlayerDataHandler playerDataHandler;
 	private SimpleYamlConfiguration settingsConfig;
 	private SimpleYamlConfiguration simpleConfig;
+	private PathsFileHandler pathsFileHandler;
 	private InternalProperties internalProps;
 	private UUIDStorage uuidStorage;
 
@@ -187,6 +189,10 @@ public class Autorank extends JavaPlugin {
 		setSimpleConfig(new SimpleYamlConfiguration(this, "SimpleConfig.yml", null, "Simple config"));
 		setAdvancedConfig(new SimpleYamlConfiguration(this, "AdvancedConfig.yml", null, "Advanced config"));
 		setSettingsConfig(new SimpleYamlConfiguration(this, "Settings.yml", null, "Settings config"));
+		setPathsFileHandler(new PathsFileHandler(this));
+
+		// Create new paths.yml
+		this.getPathsFileHandler().createNewFile();
 
 		setInternalProps(new InternalProperties(this));
 
@@ -609,5 +615,13 @@ public class Autorank extends JavaPlugin {
 
 	public void setInternalProps(final InternalProperties internalProps) {
 		this.internalProps = internalProps;
+	}
+
+	public PathsFileHandler getPathsFileHandler() {
+		return pathsFileHandler;
+	}
+
+	public void setPathsFileHandler(PathsFileHandler pathsFileHandler) {
+		this.pathsFileHandler = pathsFileHandler;
 	}
 }

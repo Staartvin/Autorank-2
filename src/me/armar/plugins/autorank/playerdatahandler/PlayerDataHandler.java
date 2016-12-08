@@ -16,7 +16,7 @@ import org.bukkit.entity.Player;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.api.events.RequirementCompleteEvent;
 import me.armar.plugins.autorank.playerchecker.result.Result;
-import me.armar.plugins.autorank.rankbuilder.ChangeGroup;
+import me.armar.plugins.autorank.rankbuilder.Path;
 import me.armar.plugins.autorank.rankbuilder.holders.RequirementsHolder;
 
 /**
@@ -263,13 +263,12 @@ public class PlayerDataHandler {
 		final String groupName = plugin.getPermPlugHandler().getPrimaryGroup(player);
 		final String chosenPath = this.getChosenPath(player.getUniqueId());
 
-		final List<ChangeGroup> changeGroups = plugin.getPlayerChecker().getChangeGroupManager()
-				.getChangeGroups(groupName);
+		final List<Path> changeGroups = plugin.getPlayerChecker().getChangeGroupManager().getChangeGroups(groupName);
 
 		boolean validChosenPath = false;
 
 		// Check whether the chosen path equals one of the change groups
-		for (final ChangeGroup group : changeGroups) {
+		for (final Path group : changeGroups) {
 			if (group.getInternalGroup().equals(chosenPath)) {
 				validChosenPath = true;
 			}

@@ -363,7 +363,9 @@ public class MySQLWrapper {
 
 	/**
 	 * Gets all the times of the players in the MySQL database
-	 * @return A hashmap containing all uuids that are in the database, or an empty one if MySQL is disabled
+	 * 
+	 * @return A hashmap containing all uuids that are in the database, or an
+	 *         empty one if MySQL is disabled
 	 */
 	public HashMap<UUID, Integer> getAllPlayersFromDatabase() {
 		HashMap<UUID, Integer> times = new HashMap<>();

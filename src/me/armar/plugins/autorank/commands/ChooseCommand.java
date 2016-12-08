@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
-import me.armar.plugins.autorank.rankbuilder.ChangeGroup;
+import me.armar.plugins.autorank.rankbuilder.Path;
 import me.armar.plugins.autorank.util.AutorankTools;
 
 public class ChooseCommand extends AutorankCommand {
@@ -49,8 +49,7 @@ public class ChooseCommand extends AutorankCommand {
 
 		final String groupName = plugin.getAPI().getPrimaryGroup(player);
 
-		final List<ChangeGroup> changeGroups = plugin.getPlayerChecker().getChangeGroupManager()
-				.getChangeGroups(groupName);
+		final List<Path> changeGroups = plugin.getPlayerChecker().getChangeGroupManager().getChangeGroups(groupName);
 
 		if (changeGroups == null || changeGroups.size() == 1) {
 			sender.sendMessage(Lang.ONLY_DEFAULT_PATH.getConfigValue());
@@ -62,7 +61,7 @@ public class ChooseCommand extends AutorankCommand {
 			return true;
 		}
 
-		final ChangeGroup changeGroup = plugin.getPlayerChecker().getChangeGroupManager()
+		final Path changeGroup = plugin.getPlayerChecker().getChangeGroupManager()
 				.matchChangeGroupFromDisplayName(groupName, pathName.toLowerCase());
 
 		if (changeGroup == null) {
@@ -95,10 +94,9 @@ public class ChooseCommand extends AutorankCommand {
 
 		final String groupName = plugin.getPermPlugHandler().getPrimaryGroup(player);
 
-		final List<ChangeGroup> changeGroups = plugin.getPlayerChecker().getChangeGroupManager()
-				.getChangeGroups(groupName);
+		final List<Path> changeGroups = plugin.getPlayerChecker().getChangeGroupManager().getChangeGroups(groupName);
 
-		for (final ChangeGroup changeGroup : changeGroups) {
+		for (final Path changeGroup : changeGroups) {
 			possibilities.add(changeGroup.getDisplayName());
 		}
 

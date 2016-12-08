@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
-import me.armar.plugins.autorank.rankbuilder.ChangeGroup;
+import me.armar.plugins.autorank.rankbuilder.Path;
 import me.armar.plugins.autorank.util.AutorankTools;
 
 public class ViewCommand extends AutorankCommand {
@@ -52,8 +52,7 @@ public class ViewCommand extends AutorankCommand {
 
 		if (pathName.equals("list")) {
 
-			final List<ChangeGroup> groups = plugin.getPlayerChecker().getChangeGroupManager()
-					.getChangeGroups(groupName);
+			final List<Path> groups = plugin.getPlayerChecker().getChangeGroupManager().getChangeGroups(groupName);
 
 			if (groups.isEmpty()) {
 				sender.sendMessage(Lang.ONLY_DEFAULT_PATH.getConfigValue());
@@ -67,7 +66,7 @@ public class ViewCommand extends AutorankCommand {
 			return true;
 		}
 
-		final ChangeGroup changeGroup = plugin.getPlayerChecker().getChangeGroupManager()
+		final Path changeGroup = plugin.getPlayerChecker().getChangeGroupManager()
 				.matchChangeGroupFromDisplayName(groupName, pathName.toLowerCase());
 
 		if (changeGroup == null) {
@@ -76,8 +75,8 @@ public class ViewCommand extends AutorankCommand {
 		}
 
 		final List<String> messages = plugin.getPlayerChecker().getRequirementsInStringList(
-				changeGroup.getRequirementsHolders(),
-				plugin.getPlayerChecker().getMetRequirementsHolders(changeGroup.getRequirementsHolders(), player));
+				changeGroup.getRequirements(),
+				plugin.getPlayerChecker().getMetRequirementsHolders(changeGroup.getRequirements(), player));
 
 		for (final String message : messages) {
 			AutorankTools.sendColoredMessage(sender, message);
@@ -106,13 +105,12 @@ public class ViewCommand extends AutorankCommand {
 
 		final String groupName = plugin.getPermPlugHandler().getPrimaryGroup(player);
 
-		final List<ChangeGroup> changeGroups = plugin.getPlayerChecker().getChangeGroupManager()
-				.getChangeGroups(groupName);
+		final List<Path> changeGroups = plugin.getPlayerChecker().getChangeGroupManager().getChangeGroups(groupName);
 
 		// List shows a list of changegroups to view
 		possibilities.add("list");
 
-		for (final ChangeGroup changeGroup : changeGroups) {
+		for (final Path changeGroup : changeGroups) {
 			possibilities.add(changeGroup.getDisplayName());
 		}
 

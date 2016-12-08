@@ -8,8 +8,8 @@ import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.language.Lang;
-import me.armar.plugins.autorank.rankbuilder.ChangeGroup;
-import me.armar.plugins.autorank.rankbuilder.ChangeGroupManager;
+import me.armar.plugins.autorank.rankbuilder.PathManager;
+import me.armar.plugins.autorank.rankbuilder.Path;
 import me.armar.plugins.autorank.rankbuilder.holders.RequirementsHolder;
 import me.armar.plugins.autorank.util.AutorankTools;
 
@@ -27,14 +27,14 @@ import me.armar.plugins.autorank.util.AutorankTools;
 public class PlayerChecker {
 
 	private final Autorank plugin;
-	private final ChangeGroupManager changeGroupManager;
+	private final PathManager changeGroupManager;
 
 	// private final Map<String, List<RankChange>> rankChanges = new
 	// HashMap<String, List<RankChange>>();
 
 	public PlayerChecker(final Autorank plugin) {
 		this.plugin = plugin;
-		this.changeGroupManager = new ChangeGroupManager(plugin);
+		this.changeGroupManager = new PathManager(plugin);
 	}
 
 	/*
@@ -53,7 +53,7 @@ public class PlayerChecker {
 		// only first group - will cause problems
 		final String groupName = plugin.getPermPlugHandler().getPrimaryGroup(player);
 
-		final List<ChangeGroup> changes = changeGroupManager.getChangeGroups(groupName);
+		final List<Path> changes = changeGroupManager.getChangeGroups(groupName);
 
 		if (changes == null || changes.size() == 0) {
 			return false;
@@ -65,7 +65,7 @@ public class PlayerChecker {
 			chosenPath = "unknown";
 		}
 
-		final ChangeGroup changeGroup = this.getChangeGroupManager().matchChangeGroup(groupName, chosenPath);
+		final Path changeGroup = this.getChangeGroupManager().matchChangeGroup(groupName, chosenPath);
 
 		if (changeGroup == null)
 			return false;
@@ -80,7 +80,7 @@ public class PlayerChecker {
 		// only first group - will cause problems
 		final String groupName = plugin.getPermPlugHandler().getPrimaryGroup(player);
 
-		final ChangeGroup chosenChangeGroup = changeGroupManager.matchChangeGroup(groupName,
+		final Path chosenChangeGroup = changeGroupManager.matchChangeGroup(groupName,
 				plugin.getPlayerDataHandler().getChosenPath(player.getUniqueId()));
 
 		if (chosenChangeGroup == null) {
@@ -88,8 +88,8 @@ public class PlayerChecker {
 			// Get all requirements of all changegroups together
 			final List<RequirementsHolder> reqs = new ArrayList<RequirementsHolder>();
 
-			for (final ChangeGroup changeGroup : changeGroupManager.getChangeGroups(groupName)) {
-				for (final RequirementsHolder req : changeGroup.getRequirementsHolders()) {
+			for (final Path changeGroup : changeGroupManager.getChangeGroups(groupName)) {
+				for (final RequirementsHolder req : changeGroup.getRequirements()) {
 					reqs.add(req);
 				}
 			}
@@ -98,7 +98,7 @@ public class PlayerChecker {
 
 		}
 
-		return chosenChangeGroup.getRequirementsHolders();
+		return chosenChangeGroup.getRequirements();
 
 		/*
 		 * final List<RankChange> changes = rankChanges.get(group); if (changes
@@ -112,7 +112,7 @@ public class PlayerChecker {
 		// only first group - will cause problems
 		final String groupName = plugin.getPermPlugHandler().getPrimaryGroup(player);
 
-		final ChangeGroup chosenChangeGroup = changeGroupManager.matchChangeGroup(groupName,
+		final Path chosenChangeGroup = changeGroupManager.matchChangeGroup(groupName,
 				plugin.getPlayerDataHandler().getChosenPath(player.getUniqueId()));
 
 		if (chosenChangeGroup == null) {
@@ -120,7 +120,7 @@ public class PlayerChecker {
 			// Get all requirments of all changegroups together
 			final List<RequirementsHolder> holders = new ArrayList<RequirementsHolder>();
 
-			for (final ChangeGroup changeGroup : changeGroupManager.getChangeGroups(groupName)) {
+			for (final Path changeGroup : changeGroupManager.getChangeGroups(groupName)) {
 				for (final RequirementsHolder holder : changeGroup.getFailedRequirementsHolders(player)) {
 					holders.add(holder);
 				}
@@ -147,7 +147,7 @@ public class PlayerChecker {
 				player.hasPermission("autorank.leaderboard.exempt"));
 	}
 
-	public ChangeGroupManager getChangeGroupManager() {
+	public PathManager getChangeGroupManager() {
 		return changeGroupManager;
 	}
 

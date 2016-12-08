@@ -13,46 +13,45 @@ import me.armar.plugins.autorank.playerchecker.result.Result;
 import me.armar.plugins.autorank.rankbuilder.holders.RequirementsHolder;
 
 /**
- * Represents a group of changes, including all requirements and results.
+ * Represents a path that a player can take, including all requirements and results.
  * <p>
  * Date created: 14:23:30 5 aug. 2015
  * 
  * @author Staartvin
  * 
  */
-public class ChangeGroup {
+public class Path {
 
-	// A requirementsholder represents one or more requirements tied together
-	private List<RequirementsHolder> requirementsHolders = new ArrayList<RequirementsHolder>();
+	// A requirements holder is a holder for one or more requirements that can be met simultaneously. 
+	private List<RequirementsHolder> prerequisites = new ArrayList<>();
+	private List<RequirementsHolder> requirements = new ArrayList<RequirementsHolder>();
 	private List<Result> results = new ArrayList<Result>();
 
-	// Parent group is the group that a player must be in for this ChangeGroup
+	// Parent group is the group that a player must be in for this Path
 	// to have effect.
 	// Internal group is the internally used name (in the config) of this
-	// ChangeGroup. It's linked to the parentGroup but has to be unique in the
+	// Path. It's linked to the parentGroup but has to be unique in the
 	// config.
 	// It therefore always contains a '-copy-*' part.
 	// The display name is the name shown when this changegroup is a copy of
 	// another changegroup.
 	// Previous group is the group a player will be demoted to if he doesn't
 	// meet certain requirements.
-	// The next group is the group that this ChangeGroup will rank the player to.
-	private String parentGroup, internalGroup, displayName, previousGroup, nextGroup;
+	// The next group is the group that this Path will rank the player to.
+	//private String parentGroup, internalGroup, displayName, previousGroup, nextGroup;
 
 	private final Autorank plugin;
 
-	public ChangeGroup(final Autorank plugin, final List<RequirementsHolder> holders, final List<Result> results) {
-		this.plugin = plugin;
-		this.setRequirementHolders(holders);
-		this.setResults(results);
-	}
-
-	public ChangeGroup(final Autorank plugin) {
+	public Path(final Autorank plugin) {
 		this.plugin = plugin;
 	}
 
-	public List<RequirementsHolder> getRequirementsHolders() {
-		return requirementsHolders;
+	public List<RequirementsHolder> getRequirements() {
+		return requirements;
+	}
+	
+	public List<RequirementsHolder> getPrerequisites() {
+		return requirements;
 	}
 
 	/*
@@ -68,7 +67,7 @@ public class ChangeGroup {
 		this.results = results;
 	}
 
-	public String getParentGroup() {
+	/*public String getParentGroup() {
 		return parentGroup;
 	}
 
@@ -82,7 +81,7 @@ public class ChangeGroup {
 
 	public void setInternalGroup(final String internalGroup) {
 		this.internalGroup = internalGroup;
-	}
+	}*/
 
 	public boolean applyChange(final Player player) {
 		boolean result = true;
@@ -131,7 +130,7 @@ public class ChangeGroup {
 			return false;
 		}
 
-		for (final RequirementsHolder holder : this.getRequirementsHolders()) {
+		for (final RequirementsHolder holder : this.getRequirements()) {
 			if (holder == null)
 				return false;
 
@@ -171,7 +170,7 @@ public class ChangeGroup {
 		// final UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
 		final UUID uuid = plugin.getUUIDStorage().getStoredUUID(player.getName());
 
-		for (final RequirementsHolder holder : this.getRequirementsHolders()) {
+		for (final RequirementsHolder holder : this.getRequirements()) {
 			if (holder == null)
 				continue;
 
@@ -241,7 +240,7 @@ public class ChangeGroup {
 	public List<RequirementsHolder> getFailedRequirementsHolders(final Player player) {
 		final List<RequirementsHolder> holders = new ArrayList<RequirementsHolder>();
 
-		for (final RequirementsHolder holder : this.getRequirementsHolders()) {
+		for (final RequirementsHolder holder : this.getRequirements()) {
 			if (holder != null)
 				if (holder.meetsRequirement(player, player.getUniqueId())) {
 					holders.add(holder);
@@ -262,15 +261,23 @@ public class ChangeGroup {
 	// return requirements;
 	// }
 
-	public void setRequirementHolders(final List<RequirementsHolder> holders) {
-		this.requirementsHolders = holders;
+	public void setRequirements(final List<RequirementsHolder> holders) {
+		this.requirements = holders;
+	}
+	
+	public void addResult(Result result) {
+		this.results.add(result);
 	}
 
-	public void addRequirementHolder(final RequirementsHolder holder) {
-		requirementsHolders.add(holder);
+	public void addRequirement(final RequirementsHolder requirement) {
+		requirements.add(requirement);
+	}
+	
+	public void addPrerequisite(final RequirementsHolder prerequisite) {
+		this.prerequisites.add(prerequisite);
 	}
 
-	@Override
+	/*@Override
 	public String toString() {
 		return displayName;
 	}
@@ -297,5 +304,5 @@ public class ChangeGroup {
 
 	public void setNextGroup(final String nextGroup) {
 		this.nextGroup = nextGroup;
-	}
+	}*/
 }

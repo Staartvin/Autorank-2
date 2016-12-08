@@ -10,7 +10,7 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.addons.AddOnManager;
 import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
 import me.armar.plugins.autorank.playerchecker.result.Result;
-import me.armar.plugins.autorank.rankbuilder.ChangeGroup;
+import me.armar.plugins.autorank.rankbuilder.Path;
 import me.armar.plugins.autorank.rankbuilder.holders.RequirementsHolder;
 import me.armar.plugins.autorank.util.AutorankTools;
 
@@ -147,7 +147,7 @@ public class API {
 		// only first group - will cause problems
 		final String groupName = plugin.getPermPlugHandler().getPrimaryGroup(player);
 
-		final List<ChangeGroup> changes = plugin.getPlayerChecker().getChangeGroupManager().getChangeGroups(groupName);
+		final List<Path> changes = plugin.getPlayerChecker().getChangeGroupManager().getChangeGroups(groupName);
 
 		if (changes == null || changes.size() == 0) {
 			return null;
@@ -159,7 +159,7 @@ public class API {
 			chosenPath = "unknown";
 		}
 
-		final ChangeGroup changeGroup = plugin.getPlayerChecker().getChangeGroupManager().matchChangeGroup(groupName,
+		final Path changeGroup = plugin.getPlayerChecker().getChangeGroupManager().matchChangeGroup(groupName,
 				chosenPath);
 
 		if (changeGroup == null)

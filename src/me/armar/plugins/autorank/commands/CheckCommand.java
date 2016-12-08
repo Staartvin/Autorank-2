@@ -14,7 +14,7 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.api.events.CheckCommandEvent;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
-import me.armar.plugins.autorank.rankbuilder.ChangeGroup;
+import me.armar.plugins.autorank.rankbuilder.Path;
 import me.armar.plugins.autorank.rankbuilder.holders.RequirementsHolder;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
@@ -50,11 +50,10 @@ public class CheckCommand extends AutorankCommand {
 		final String groupName = plugin.getPermPlugHandler().getPrimaryGroup(player);
 
 		String chosenPath = plugin.getPlayerDataHandler().getChosenPath(uuid);
-		final ChangeGroup chosenChangeGroup = plugin.getPlayerChecker().getChangeGroupManager()
-				.matchChangeGroup(groupName, chosenPath);
+		final Path chosenChangeGroup = plugin.getPlayerChecker().getChangeGroupManager().matchChangeGroup(groupName,
+				chosenPath);
 
-		final List<ChangeGroup> changeGroups = plugin.getPlayerChecker().getChangeGroupManager()
-				.getChangeGroups(groupName);
+		final List<Path> changeGroups = plugin.getPlayerChecker().getChangeGroupManager().getChangeGroups(groupName);
 
 		if (!plugin.getPlayerDataHandler().checkValidChosenPath(player)) {
 			chosenPath = "unknown";
@@ -107,7 +106,7 @@ public class CheckCommand extends AutorankCommand {
 		List<RequirementsHolder> holders = null;
 
 		if (chosenChangeGroup != null) {
-			holders = chosenChangeGroup.getRequirementsHolders();
+			holders = chosenChangeGroup.getRequirements();
 		}
 
 		if (holders == null || holders.size() == 0) {

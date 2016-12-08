@@ -75,18 +75,18 @@ public class ConfigHandler {
 
 	public String getMySQLSettings(final MySQLOptions option) {
 		switch (option) {
-			case HOSTNAME:
-				return plugin.getSettingsConfig().getString("sql.hostname");
-			case USERNAME:
-				return plugin.getSettingsConfig().getString("sql.username");
-			case PASSWORD:
-				return plugin.getSettingsConfig().getString("sql.password");
-			case DATABASE:
-				return plugin.getSettingsConfig().getString("sql.database");
-			case TABLE:
-				return plugin.getSettingsConfig().getString("sql.table");
-			default:
-				return null;
+		case HOSTNAME:
+			return plugin.getSettingsConfig().getString("sql.hostname");
+		case USERNAME:
+			return plugin.getSettingsConfig().getString("sql.username");
+		case PASSWORD:
+			return plugin.getSettingsConfig().getString("sql.password");
+		case DATABASE:
+			return plugin.getSettingsConfig().getString("sql.database");
+		case TABLE:
+			return plugin.getSettingsConfig().getString("sql.table");
+		default:
+			return null;
 		}
 	}
 
@@ -423,7 +423,8 @@ public class ConfigHandler {
 	}
 
 	/**
-	 * Should we display the global time in the leaderboard of Autorank. 
+	 * Should we display the global time in the leaderboard of Autorank.
+	 * 
 	 * @return true if we should, false otherwise.
 	 */
 	public boolean useGlobalTimeInLeaderboard() {
@@ -432,6 +433,7 @@ public class ConfigHandler {
 
 	/**
 	 * Check whether an admin has disabled automatic ranking.
+	 * 
 	 * @return true if it is disabled, false otherwise.
 	 */
 	public boolean isAutomaticRankingDisabled() {

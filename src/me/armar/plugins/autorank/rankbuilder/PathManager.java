@@ -8,33 +8,33 @@ import java.util.Map.Entry;
 import me.armar.plugins.autorank.Autorank;
 
 /**
- * Handles all things that have to do with change groups checking
+ * Handles all things that have to do with paths checking
  * <p>
  * Date created: 16:32:49 5 aug. 2015
  * 
  * @author Staartvin
  * 
  */
-public class ChangeGroupManager {
+public class PathManager {
 
 	private final Autorank plugin;
-	private ChangeGroupBuilder builder;
+	private PathBuilder builder;
 
 	// The String is a name of the group, used to get the change groups from that group.
 	// The List contains all change groups that this parent group has.
-	// One ChangeGroup class represents one path to take in the group
-	private final HashMap<String, List<ChangeGroup>> changeGroups = new HashMap<String, List<ChangeGroup>>();
+	// One Path class represents one path to take in the group
+	private final HashMap<String, List<Path>> changeGroups = new HashMap<String, List<Path>>();
 
-	public ChangeGroupManager(final Autorank plugin) {
+	public PathManager(final Autorank plugin) {
 		this.plugin = plugin;
-		setBuilder(new ChangeGroupBuilder(plugin));
+		setBuilder(new PathBuilder(plugin));
 	}
 
-	public ChangeGroupBuilder getBuilder() {
+	public PathBuilder getBuilder() {
 		return builder;
 	}
 
-	public void setBuilder(final ChangeGroupBuilder builder) {
+	public void setBuilder(final PathBuilder builder) {
 		this.builder = builder;
 	}
 
@@ -44,9 +44,9 @@ public class ChangeGroupManager {
 		changeGroups.clear();
 
 		if (plugin.getConfigHandler().useAdvancedConfig()) {
-			builder.initialiseChangeGroups(false, plugin.getAdvancedConfig(), changeGroups);
+			builder.initialisePaths(false, plugin.getAdvancedConfig(), changeGroups);
 		} else {
-			builder.initialiseChangeGroups(true, plugin.getSimpleConfig(), changeGroups);
+			builder.initialisePaths(true, plugin.getSimpleConfig(), changeGroups);
 		}
 
 		for (final String message : debugChangeGroups(true)) {
@@ -60,20 +60,20 @@ public class ChangeGroupManager {
 
 		final List<String> messages = new ArrayList<String>();
 
-		messages.add(" ------------------- ChangeGroup debug info ------------------- ");
+		messages.add(" ------------------- Path debug info ------------------- ");
 
-		for (final Entry<String, List<ChangeGroup>> entry : changeGroups.entrySet()) {
+		for (final Entry<String, List<Path>> entry : changeGroups.entrySet()) {
 			final String groupName = entry.getKey();
-			final List<ChangeGroup> groups = entry.getValue();
+			final List<Path> groups = entry.getValue();
 
 			messages.add("Group: " + groupName);
 
-			for (final ChangeGroup group : groups) {
+			for (final Path group : groups) {
 				messages.add("- " + group.getInternalGroup());
 
 				// Provide more info
 				if (deepInfo) {
-					messages.add("    - " + group.getRequirementsHolders().size() + " requirements");
+					messages.add("    - " + group.getRequirements().size() + " requirements");
 					messages.add("    - " + group.getResults().size() + " results");
 				}
 			}
@@ -85,10 +85,10 @@ public class ChangeGroupManager {
 		return messages;
 	}
 
-	public List<ChangeGroup> getChangeGroups(final String groupName) {
+	public List<Path> getChangeGroups(final String groupName) {
 		// return empty list if nothing found
 		if (!changeGroups.containsKey(groupName))
-			return new ArrayList<ChangeGroup>();
+			return new ArrayList<Path>();
 
 		return changeGroups.get(groupName);
 	}
@@ -96,12 +96,12 @@ public class ChangeGroupManager {
 	/**
 	 * Get the changegroup that corresponds to the given 'chosenpath' variable.
 	 * 
-	 * @param parentGroup Group that the ChangeGroup belongs to
-	 * @param chosenPath The internal name of the ChangeGroup
-	 * @return a ChangeGroup class that corresponds to the internal name given.
+	 * @param parentGroup Group that the Path belongs to
+	 * @param chosenPath The internal name of the Path
+	 * @return a Path class that corresponds to the internal name given.
 	 */
-	public ChangeGroup matchChangeGroup(final String parentGroup, final String chosenPath) {
-		final List<ChangeGroup> changeGroup = this.getChangeGroups(parentGroup);
+	public Path matchChangeGroup(final String parentGroup, final String chosenPath) {
+		final List<Path> changeGroup = this.getChangeGroups(parentGroup);
 
 		if (changeGroup == null)
 			return null;
@@ -111,7 +111,7 @@ public class ChangeGroupManager {
 			return changeGroup.get(0);
 		}
 
-		for (final ChangeGroup change : changeGroup) {
+		for (final Path change : changeGroup) {
 			final String internalName = change.getInternalGroup();
 
 			if (internalName.equals(chosenPath)) {
@@ -121,10 +121,10 @@ public class ChangeGroupManager {
 		return null;
 	}
 
-	public ChangeGroup matchChangeGroupFromDisplayName(final String parentGroup, final String displayName) {
-		final List<ChangeGroup> changeGroupList = this.getChangeGroups(parentGroup);
+	public Path matchChangeGroupFromDisplayName(final String parentGroup, final String displayName) {
+		final List<Path> changeGroupList = this.getChangeGroups(parentGroup);
 
-		for (final ChangeGroup group : changeGroupList) {
+		for (final Path group : changeGroupList) {
 			if (group.getDisplayName().toLowerCase().equals(displayName)) {
 				return group;
 			}

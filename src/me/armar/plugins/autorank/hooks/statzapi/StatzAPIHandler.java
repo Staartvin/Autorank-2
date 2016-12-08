@@ -118,52 +118,52 @@ public class StatzAPIHandler implements DependencyHandler {
 		Object value;
 
 		switch (statType) {
-			case VOTES:
-				value = statz.getStatzAPI().getSpecificData(PlayerStat.VOTES, uuid, conditions);
-				break;
-			case DAMAGE_TAKEN:
-				value = statz.getStatzAPI().getSpecificData(PlayerStat.DAMAGE_TAKEN, uuid, conditions);
-				break;
-			case MOBS_KILLED:
-				value = statz.getStatzAPI().getSpecificData(PlayerStat.KILLS_MOBS, uuid, conditions);
-				break;
-			case PLAYERS_KILLED:
-				value = statz.getStatzAPI().getSpecificData(PlayerStat.KILLS_PLAYERS, uuid, conditions);
-				break;
-			case BLOCKS_MOVED:
-				value = statz.getStatzAPI().getSpecificData(PlayerStat.DISTANCE_TRAVELLED, uuid, conditions);
-				break;
-			case BLOCKS_PLACED:
-				value = statz.getStatzAPI().getSpecificData(PlayerStat.BLOCKS_PLACED, uuid, conditions);
-				break;
-			case BLOCKS_BROKEN:
-				value = statz.getStatzAPI().getSpecificData(PlayerStat.BLOCKS_BROKEN, uuid, conditions);
-				break;
-			case TIME_PLAYED:
-				value = statz.getStatzAPI().getSpecificData(PlayerStat.TIME_PLAYED, uuid, conditions);
-				break;
-			case ITEMS_CRAFTED:
-				value = statz.getStatzAPI().getSpecificData(PlayerStat.ITEMS_CRAFTED, uuid, conditions);
-				break;
-			case FISH_CAUGHT:
-				value = statz.getStatzAPI().getSpecificData(PlayerStat.ITEMS_CAUGHT, uuid, conditions);
-				break;
-			case TIMES_SHEARED:
-				value = statz.getStatzAPI().getSpecificData(PlayerStat.TIMES_SHORN, uuid, conditions);
-				break;
-			case TOTAL_BLOCKS_BROKEN:
-				value = statz.getStatzAPI().getSpecificData(PlayerStat.BLOCKS_BROKEN, uuid, conditions);
-				break;
-			case TOTAL_BLOCKS_PLACED:
-				value = statz.getStatzAPI().getSpecificData(PlayerStat.BLOCKS_PLACED, uuid, conditions);
-				break;
-			case FOOD_EATEN:
-				value = statz.getStatzAPI().getSpecificData(PlayerStat.FOOD_EATEN, uuid, conditions);
-				break;
-			default:
-				// Unknown statType
-				value = 0;
-				break;
+		case VOTES:
+			value = statz.getStatzAPI().getSpecificData(PlayerStat.VOTES, uuid, conditions);
+			break;
+		case DAMAGE_TAKEN:
+			value = statz.getStatzAPI().getSpecificData(PlayerStat.DAMAGE_TAKEN, uuid, conditions);
+			break;
+		case MOBS_KILLED:
+			value = statz.getStatzAPI().getSpecificData(PlayerStat.KILLS_MOBS, uuid, conditions);
+			break;
+		case PLAYERS_KILLED:
+			value = statz.getStatzAPI().getSpecificData(PlayerStat.KILLS_PLAYERS, uuid, conditions);
+			break;
+		case BLOCKS_MOVED:
+			value = statz.getStatzAPI().getSpecificData(PlayerStat.DISTANCE_TRAVELLED, uuid, conditions);
+			break;
+		case BLOCKS_PLACED:
+			value = statz.getStatzAPI().getSpecificData(PlayerStat.BLOCKS_PLACED, uuid, conditions);
+			break;
+		case BLOCKS_BROKEN:
+			value = statz.getStatzAPI().getSpecificData(PlayerStat.BLOCKS_BROKEN, uuid, conditions);
+			break;
+		case TIME_PLAYED:
+			value = statz.getStatzAPI().getSpecificData(PlayerStat.TIME_PLAYED, uuid, conditions);
+			break;
+		case ITEMS_CRAFTED:
+			value = statz.getStatzAPI().getSpecificData(PlayerStat.ITEMS_CRAFTED, uuid, conditions);
+			break;
+		case FISH_CAUGHT:
+			value = statz.getStatzAPI().getSpecificData(PlayerStat.ITEMS_CAUGHT, uuid, conditions);
+			break;
+		case TIMES_SHEARED:
+			value = statz.getStatzAPI().getSpecificData(PlayerStat.TIMES_SHORN, uuid, conditions);
+			break;
+		case TOTAL_BLOCKS_BROKEN:
+			value = statz.getStatzAPI().getSpecificData(PlayerStat.BLOCKS_BROKEN, uuid, conditions);
+			break;
+		case TOTAL_BLOCKS_PLACED:
+			value = statz.getStatzAPI().getSpecificData(PlayerStat.BLOCKS_PLACED, uuid, conditions);
+			break;
+		case FOOD_EATEN:
+			value = statz.getStatzAPI().getSpecificData(PlayerStat.FOOD_EATEN, uuid, conditions);
+			break;
+		default:
+			// Unknown statType
+			value = 0;
+			break;
 		}
 
 		if (value == null)
