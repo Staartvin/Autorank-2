@@ -9,7 +9,6 @@ import org.bukkit.entity.Player;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.pathbuilder.Path;
-import me.armar.plugins.autorank.pathbuilder.PathManager;
 import me.armar.plugins.autorank.pathbuilder.holders.RequirementsHolder;
 import me.armar.plugins.autorank.pathbuilder.result.Result;
 import me.armar.plugins.autorank.util.AutorankTools;
