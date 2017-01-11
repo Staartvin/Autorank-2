@@ -8,11 +8,9 @@ import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.addons.AddOnManager;
-import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
-import me.armar.plugins.autorank.playerchecker.result.Result;
-import me.armar.plugins.autorank.rankbuilder.Path;
-import me.armar.plugins.autorank.rankbuilder.holders.RequirementsHolder;
-import me.armar.plugins.autorank.util.AutorankTools;
+import me.armar.plugins.autorank.pathbuilder.holders.RequirementsHolder;
+import me.armar.plugins.autorank.pathbuilder.requirement.Requirement;
+import me.armar.plugins.autorank.pathbuilder.result.Result;
 
 /**
  * <b>Autorank's API class:</b>
@@ -91,6 +89,13 @@ public class API {
 	}
 
 	/**
+	 * @see #getLocalTime(Player)
+	 **/
+	public int getLocalPlayTime(final UUID uuid) {
+		return plugin.getPlaytimes().getLocalTime(uuid);
+	}
+
+	/**
 	 * Gets the local play time of this player on this server according to
 	 * Autorank. (in minutes)<br>
 	 * This method will grab the time from the data.yml used by Autorank and
@@ -110,62 +115,12 @@ public class API {
 	}
 
 	/**
-	 * @see #getLocalTime(Player)
-	 **/
-	public int getLocalPlayTime(final UUID uuid) {
-		return plugin.getPlaytimes().getLocalTime(uuid);
-	}
-
-	/**
 	 * Gets the database name Autorank stores its global times in.
 	 * 
 	 * @return name of database
 	 */
 	public String getMySQLDatabase() {
-		return plugin.getMySQLWrapper().getDatabaseName();
-	}
-
-	/**
-	 * Gets the permission group that the player will be ranked up to after
-	 * he completes all requirements.
-	 * <p>
-	 * <b>NOTE:</b> This does not mean the player will always be ranked up to
-	 * this group. If a requirement has its own <i>'rank change'</i> result, the
-	 * player will be ranked up to that group and not the 'global results'
-	 * group.
-	 * 
-	 * @param player Player to get the next rank up for.
-	 * @return The name of the group the player will be ranked to; null when no
-	 *         rank up.
-	 */
-	@Deprecated
-	public String getNextRankupGroup(final Player player) {
-		// Do not rank a player when he is excluded
-		if (AutorankTools.isExcluded(player))
-			return null;
-
-		// only first group - will cause problems
-		final String groupName = plugin.getPermPlugHandler().getPrimaryGroup(player);
-
-		final List<Path> changes = plugin.getPlayerChecker().getChangeGroupManager().getChangeGroups(groupName);
-
-		if (changes == null || changes.size() == 0) {
-			return null;
-		}
-
-		String chosenPath = plugin.getPlayerDataHandler().getChosenPath(player.getUniqueId());
-
-		if (!plugin.getPlayerDataHandler().checkValidChosenPath(player)) {
-			chosenPath = "unknown";
-		}
-
-		final Path changeGroup = plugin.getPlayerChecker().getChangeGroupManager().matchChangeGroup(groupName,
-				chosenPath);
-
-		if (changeGroup == null)
-			return null;
-
-		return changeGroup.getNextGroup();
+		return plugin.getMySQLManager().getDatabaseName();
 	}
 
 	/**
@@ -185,16 +140,6 @@ public class API {
 		}
 
 		return permGroups;
-	}
-
-	/**
-	 * Gets the primary permissions group of a player.
-	 * 
-	 * @param player Player to get the primary group of
-	 * @return Name of the group that seems primary for Autorank.
-	 */
-	public String getPrimaryGroup(final Player player) {
-		return plugin.getPermPlugHandler().getPrimaryGroup(player);
 	}
 
 	/**

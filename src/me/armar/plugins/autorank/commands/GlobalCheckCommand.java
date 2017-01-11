@@ -30,7 +30,7 @@ public class GlobalCheckCommand extends AutorankCommand {
 	public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
 		// This is a global check. It will not show you the database numbers
-		if (!plugin.getMySQLWrapper().isMySQLEnabled()) {
+		if (!plugin.getMySQLManager().isMySQLEnabled()) {
 			sender.sendMessage(ChatColor.RED + Lang.MYSQL_IS_NOT_ENABLED.getConfigValue());
 			return true;
 		}

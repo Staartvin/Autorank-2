@@ -20,8 +20,8 @@ import me.armar.plugins.autorank.Autorank;
  */
 public class BackupManager {
 
-	private final Autorank plugin;
 	private final BackupDataManager backupDataManager;
+	private final Autorank plugin;
 
 	public BackupManager(final Autorank plugin) {
 		this.plugin = plugin;

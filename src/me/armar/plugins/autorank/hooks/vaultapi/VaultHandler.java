@@ -22,8 +22,8 @@ public class VaultHandler implements DependencyHandler {
 
 	public static Economy economy = null;
 	public static Permission permission = null;
-	private Vault vault;
 	private final Autorank plugin;
+	private Vault vault;
 
 	public VaultHandler(final Autorank instance) {
 		plugin = instance;

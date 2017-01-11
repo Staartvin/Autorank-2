@@ -79,13 +79,13 @@ public class LeaderboardCommand extends AutorankCommand {
 
 		if (force) {
 			// Forcely update leaderboard first.
-			plugin.getLeaderboard().updateLeaderboard(type);
+			plugin.getLeaderboardManager().updateLeaderboard(type);
 		}
 
 		if (!broadcast) {
-			plugin.getLeaderboard().sendLeaderboard(sender, type);
+			plugin.getLeaderboardManager().sendLeaderboard(sender, type);
 		} else {
-			plugin.getLeaderboard().broadcastLeaderboard(type);
+			plugin.getLeaderboardManager().broadcastLeaderboard(type);
 		}
 
 		return true;

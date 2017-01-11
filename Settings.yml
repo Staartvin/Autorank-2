@@ -8,9 +8,6 @@
 #                                                                           #
 #############################################################################
 
-use advanced config: false
-# If this is false, the SimpleConfig will be used for ranking.
-
 afk integration: true
 # If a compatible AFK plugin is found Autorank will not count online time for AFK players
 # This option is always on when using the SimpleConfig
@@ -46,7 +43,7 @@ leaderboard length: 5
 # &tm : Total amount of minutes
 # &th : Total amount of hours
 
-check command layout: '&p has played for &time and is in &groups. Requirements to be ranked up: &reqs'
+check command layout: '&p has played for &time and is on path ''&path''. Requirements to be ranked up: &reqs'
 # Changes the layout of the /ar check command.
 # &p : Player name
 # &time : time in hours, minutes and seconds
@@ -83,11 +80,6 @@ use debug: false
 # Only set this to true when you want to debug Autorank
 # When this is true, Autorank will spit out debug messages
 
-allow infinite ranking: false
-# When this is false, players will only be able to rank up a certain rank once. 
-# When a player ranks up, and gets deranked manually by a staff member, he will be stuck on that rank forever, as he has already completed that rank before.
-# Set this to true when you're having problems with players not ranking up.
-
 show warnings: true
 # Whether Autorank has to show critical warnings.
 # Leave this set to true. You can only change it to false when Autorank is giving you false warnings.
@@ -101,17 +93,10 @@ broadcast resetting of data files: true
 # When a new day, week or month starts, Autorank will reset the times of all players (except the total time, this is always preserved).
 # If this value is set to true, Autorank will broadcast to all players when their data gets reset.
 
-allow deranking: false
-# Sometimes you want a player to derank when certain requirements are not met. 
-# When this is set to true, a player that does not have the requirements that have a derankable flag, will be deranked to their previous rank.
-# You will also have to specify which requirements are 'derankable'.
-# When you set this to true, make sure to also set 'allow infinite ranking' to true.
-# For more info, see this wiki article: https://github.com/Armarr/Autorank-2/wiki/What-are-these-derankable-requirements-you-are-talking-about%3F
-
 use global time in leaderboard: false
 # By default, Autorank will use the local time of a player when for the leaderboard. When this is set to true,
 # /ar leaderboard will be sorted on the global time of a player (provided that it exists).
 
-disable automatic rank checking: false
-# By default, Autorank will check whether a player meets all requirements for it groups every x minutes.
-# If you want to disable this feature and let players manually check whether they completed all requirements, set this to false.
+disable automatic path checking: false
+# By default, Autorank will check whether a player meets all requirements for its path every x minutes.
+# If you want to disable this feature and let players manually check whether they completed all requirements, set this to true.

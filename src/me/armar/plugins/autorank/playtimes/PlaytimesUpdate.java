@@ -30,6 +30,27 @@ public class PlaytimesUpdate implements Runnable {
 		updateMinutesPlayed();
 	}
 
+	private void updateMinutesPlayed() {
+		plugin.debugMessage("Checking players for automatic ranking");
+
+		plugin.getServer().getScheduler().runTask(plugin, new Runnable() {
+			public void run() {
+				// Check whether the files are still up to date - Do this synchronously
+				plugin.getPlaytimes().doCalendarCheck();
+			}
+		});
+
+		for (final Player player : plugin.getServer().getOnlinePlayers()) {
+
+			if (player.getPlayer() == null) {
+				plugin.debugMessage("Could not update play time of " + player.getName() + " as (s)he is not online!");
+				continue;
+			}
+
+			updateMinutesPlayed(player);
+		}
+	}
+
 	private void updateMinutesPlayed(final Player player) {
 		// Changed this so it is readable ;)
 		// OP's should also get time added.
@@ -60,31 +81,10 @@ public class PlaytimesUpdate implements Runnable {
 			}
 
 			// Only check a player if it is not disabled in the Settings.yml
-			if (!plugin.getConfigHandler().isAutomaticRankingDisabled()) {
+			if (!plugin.getConfigHandler().isAutomaticPathDisabled()) {
 				// Check if player meets requirements
 				plugin.getPlayerChecker().checkPlayer(player);
 			}
-		}
-	}
-
-	private void updateMinutesPlayed() {
-		plugin.debugMessage("Checking players for automatic ranking");
-
-		plugin.getServer().getScheduler().runTask(plugin, new Runnable() {
-			public void run() {
-				// Check whether the files are still up to date - Do this synchronously
-				plugin.getPlaytimes().doCalendarCheck();
-			}
-		});
-
-		for (final Player player : plugin.getServer().getOnlinePlayers()) {
-
-			if (player.getPlayer() == null) {
-				plugin.debugMessage("Could not update play time of " + player.getName() + " as (s)he is not online!");
-				continue;
-			}
-
-			updateMinutesPlayed(player);
 		}
 	}
 

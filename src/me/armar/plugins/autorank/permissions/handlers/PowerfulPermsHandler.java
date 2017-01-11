@@ -21,8 +21,8 @@ import me.armar.plugins.autorank.permissions.PermissionsHandler;
  */
 public class PowerfulPermsHandler implements PermissionsHandler {
 
-	private PowerfulPermsPlugin powerfulPerms;
 	private final Autorank plugin;
+	private PowerfulPermsPlugin powerfulPerms;
 
 	public PowerfulPermsHandler(final Autorank plugin) {
 		this.plugin = plugin;
@@ -45,6 +45,12 @@ public class PowerfulPermsHandler implements PermissionsHandler {
 		// There is no way to check if the command was successful.
 	}
 
+	@Override
+	public boolean demotePlayer(final Player player, final String world, final String groupFrom, final String groupTo) {
+		return (addGroup(player, world, groupTo)/* && removeGroup(player, world,
+												groupFrom)*/);
+	}
+
 	/**
 	 * Get all known groups
 	 * 
@@ -65,6 +71,15 @@ public class PowerfulPermsHandler implements PermissionsHandler {
 		}
 
 		return newGroups;
+	}
+
+	/* (non-Javadoc)
+	 * @see me.armar.plugins.autorank.permissions.PermissionsHandler#getName()
+	 */
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return "PowerfulPerms";
 	}
 
 	@Override
@@ -121,20 +136,5 @@ public class PowerfulPermsHandler implements PermissionsHandler {
 		}
 
 		return powerfulPerms != null;
-	}
-
-	/* (non-Javadoc)
-	 * @see me.armar.plugins.autorank.permissions.PermissionsHandler#getName()
-	 */
-	@Override
-	public String getName() {
-		// TODO Auto-generated method stub
-		return "PowerfulPerms";
-	}
-
-	@Override
-	public boolean demotePlayer(final Player player, final String world, final String groupFrom, final String groupTo) {
-		return (addGroup(player, world, groupTo)/* && removeGroup(player, world,
-												groupFrom)*/);
 	}
 }

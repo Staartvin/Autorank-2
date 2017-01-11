@@ -41,7 +41,7 @@ public class DependencyManager {
 	 */
 	public enum dependency {
 
-		AUTORANK, STATS, STATZ, ONTIME, VAULT
+		AUTORANK, ONTIME, STATS, STATZ, VAULT
 	};
 
 	private final HashMap<dependency, DependencyHandler> handlers = new HashMap<dependency, DependencyHandler>();
@@ -76,8 +76,28 @@ public class DependencyManager {
 		}
 	}
 
+	public me.staartvin.statz.hooks.DependencyHandler getDependencyHandler(Dependency dep) {
+		StatzAPIHandler statz = (StatzAPIHandler) plugin.getDependencyManager().getDependency(dependency.STATZ);
+
+		if (statz == null || !statz.isAvailable()) {
+			return null;
+		}
+
+		return statz.getDependencyHandler(dep);
+	}
+
 	public StatsPlugin getStatsPlugin() {
 		return statsPluginManager.getStatsPlugin();
+	}
+
+	public StatzAPIHandler getStatzConnector() {
+		StatzAPIHandler statz = (StatzAPIHandler) plugin.getDependencyManager().getDependency(dependency.STATZ);
+
+		if (statz == null || !statz.isAvailable()) {
+			return null;
+		}
+
+		return statz;
 	}
 
 	/**
@@ -149,26 +169,6 @@ public class DependencyManager {
 
 		// After loading dependencies, search permissions plugin
 		plugin.getPermPlugHandler().searchPermPlugin();
-	}
-
-	public me.staartvin.statz.hooks.DependencyHandler getDependencyHandler(Dependency dep) {
-		StatzAPIHandler statz = (StatzAPIHandler) plugin.getDependencyManager().getDependency(dependency.STATZ);
-
-		if (statz == null || !statz.isAvailable()) {
-			return null;
-		}
-
-		return statz.getDependencyHandler(dep);
-	}
-
-	public StatzAPIHandler getStatzConnector() {
-		StatzAPIHandler statz = (StatzAPIHandler) plugin.getDependencyManager().getDependency(dependency.STATZ);
-
-		if (statz == null || !statz.isAvailable()) {
-			return null;
-		}
-
-		return statz;
 	}
 
 }

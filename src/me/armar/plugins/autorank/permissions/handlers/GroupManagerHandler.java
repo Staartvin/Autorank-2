@@ -32,6 +32,11 @@ public class GroupManagerHandler implements PermissionsHandler {
 		setupGroupManager();
 	}
 
+	@Override
+	public boolean demotePlayer(final Player player, final String world, final String groupFrom, final String groupTo) {
+		return setGroup(player, groupTo, world);
+	}
+
 	public String getGroup(final Player player) {
 		final AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldPermissions(player);
 		if (handler == null) {
@@ -61,6 +66,15 @@ public class GroupManagerHandler implements PermissionsHandler {
 		return groupArray;
 	}
 
+	/* (non-Javadoc)
+	 * @see me.armar.plugins.autorank.permissions.PermissionsHandler#getName()
+	 */
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return "GroupManager";
+	}
+
 	@Override
 	public String[] getPlayerGroups(final Player player) {
 		final AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldPermissions(player);
@@ -75,18 +89,18 @@ public class GroupManagerHandler implements PermissionsHandler {
 		// Checking if player changed group
 		// Check if the latest known group is the current group. Otherwise, reset progress
 		final String currentGroup = array[0];
-		String latestKnownGroup = plugin.getPlayerDataHandler().getLastKnownGroup(uuid);
+		String latestKnownGroup = plugin.getPlayerDataConfig().getLastKnownGroup(uuid);
 
 		if (latestKnownGroup == null) {
-			plugin.getPlayerDataHandler().setLastKnownGroup(uuid, currentGroup);
+			plugin.getPlayerDataConfig().setLastKnownGroup(uuid, currentGroup);
 
 			latestKnownGroup = currentGroup;
 		}
 		if (!latestKnownGroup.equalsIgnoreCase(currentGroup)) {
 			// Reset progress and update latest known group
-			plugin.getPlayerDataHandler().setPlayerProgress(uuid, new ArrayList<Integer>());
-			plugin.getPlayerDataHandler().setLastKnownGroup(uuid, currentGroup);
-			plugin.getPlayerDataHandler().setChosenPath(uuid, null);
+			plugin.getPlayerDataConfig().setPlayerProgress(uuid, new ArrayList<Integer>());
+			plugin.getPlayerDataConfig().setLastKnownGroup(uuid, currentGroup);
+			plugin.getPlayerDataConfig().setChosenPath(uuid, null);
 
 			plugin.debugMessage("Reset player data for " + player.getName());
 		}
@@ -153,19 +167,5 @@ public class GroupManagerHandler implements PermissionsHandler {
 		}
 
 		return groupManager != null;
-	}
-
-	/* (non-Javadoc)
-	 * @see me.armar.plugins.autorank.permissions.PermissionsHandler#getName()
-	 */
-	@Override
-	public String getName() {
-		// TODO Auto-generated method stub
-		return "GroupManager";
-	}
-
-	@Override
-	public boolean demotePlayer(final Player player, final String world, final String groupFrom, final String groupTo) {
-		return setGroup(player, groupTo, world);
 	}
 }

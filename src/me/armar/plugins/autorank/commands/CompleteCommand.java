@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
-import me.armar.plugins.autorank.rankbuilder.holders.RequirementsHolder;
+import me.armar.plugins.autorank.pathbuilder.holders.RequirementsHolder;
 
 public class CompleteCommand extends AutorankCommand {
 
@@ -87,7 +87,7 @@ public class CompleteCommand extends AutorankCommand {
 			// Human logic = first number is 1 not 0.
 			final RequirementsHolder holder = holders.get((completionID - 1));
 
-			if (plugin.getPlayerDataHandler().hasCompletedRequirement((completionID - 1), uuid)) {
+			if (plugin.getPlayerDataConfig().hasCompletedRequirement((completionID - 1), uuid)) {
 				player.sendMessage(ChatColor.RED + Lang.ALREADY_COMPLETED_REQUIREMENT.getConfigValue());
 				return true;
 			}
@@ -99,10 +99,10 @@ public class CompleteCommand extends AutorankCommand {
 				player.sendMessage(ChatColor.AQUA + holder.getDescription());
 
 				// Run results
-				plugin.getPlayerDataHandler().runResults(holder, player);
+				plugin.getPlayerDataConfig().runResults(holder, player);
 
 				// Log that a player has passed this requirement
-				plugin.getPlayerDataHandler().addPlayerProgress(uuid, (completionID - 1));
+				plugin.getPlayerDataConfig().addPlayerProgress(uuid, (completionID - 1));
 
 			} else {
 				// player does not meet requirements

@@ -53,7 +53,7 @@ public class ResetCommand extends AutorankCommand {
 		}
 
 		if (action.equalsIgnoreCase("progress")) {
-			plugin.getPlayerDataHandler().setPlayerProgress(uuid, null);
+			plugin.getPlayerDataConfig().setPlayerProgress(uuid, null);
 			sender.sendMessage(ChatColor.GREEN + "Reset progress of " + ChatColor.YELLOW + realName);
 		}
 

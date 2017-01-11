@@ -47,11 +47,11 @@ public class WarningManager {
 
 	private final Autorank plugin;
 
+	private final HashMap<String, Integer> warnings = new HashMap<String, Integer>();
+
 	public WarningManager(final Autorank plugin) {
 		this.plugin = plugin;
 	}
-
-	private final HashMap<String, Integer> warnings = new HashMap<String, Integer>();
 
 	private String findHighestPriorityWarning() {
 		String highestWarning = null;

@@ -166,7 +166,7 @@
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="20" corner="BOTTOM_RIGHT" language="java" name="me.armar.plugins.autorank.data.SimpleYamlConfiguration" 
+  <class id="20" corner="BOTTOM_RIGHT" language="java" name="me.armar.plugins.autorank.config.SimpleYamlConfiguration" 
     project="Autorank2" file="/Autorank2/src/me/armar/plugins/autorank/data/SimpleYamlConfiguration.java" binary="false">    
     <position height="-1" width="-1" x="1416" y="115"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -174,7 +174,7 @@
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="21" corner="BOTTOM_RIGHT" language="java" name="me.armar.plugins.autorank.data.SQLDataStorage" 
+  <class id="21" corner="BOTTOM_RIGHT" language="java" name="me.armar.plugins.autorank.data.mysql.SQLDataStorage" 
     project="Autorank2" file="/Autorank2/src/me/armar/plugins/autorank/data/SQLDataStorage.java" binary="false">    
     <position height="-1" width="-1" x="1764" y="346"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      

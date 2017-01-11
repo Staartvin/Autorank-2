@@ -8,9 +8,10 @@ import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.language.Lang;
-import me.armar.plugins.autorank.rankbuilder.PathManager;
-import me.armar.plugins.autorank.rankbuilder.Path;
-import me.armar.plugins.autorank.rankbuilder.holders.RequirementsHolder;
+import me.armar.plugins.autorank.pathbuilder.Path;
+import me.armar.plugins.autorank.pathbuilder.PathManager;
+import me.armar.plugins.autorank.pathbuilder.holders.RequirementsHolder;
+import me.armar.plugins.autorank.pathbuilder.result.Result;
 import me.armar.plugins.autorank.util.AutorankTools;
 
 /*
@@ -27,22 +28,10 @@ import me.armar.plugins.autorank.util.AutorankTools;
 public class PlayerChecker {
 
 	private final Autorank plugin;
-	private final PathManager changeGroupManager;
-
-	// private final Map<String, List<RankChange>> rankChanges = new
-	// HashMap<String, List<RankChange>>();
 
 	public PlayerChecker(final Autorank plugin) {
 		this.plugin = plugin;
-		this.changeGroupManager = new PathManager(plugin);
 	}
-
-	/*
-	 * public void addRankChange(final String name, final RankChange change) {
-	 * if (rankChanges.get(name) == null) { final List<RankChange> list = new
-	 * ArrayList<RankChange>(); list.add(change); rankChanges.put(name, list); }
-	 * else { rankChanges.get(name).add(change); } }
-	 */
 
 	public boolean checkPlayer(final Player player) {
 
@@ -50,108 +39,21 @@ public class PlayerChecker {
 		if (AutorankTools.isExcluded(player))
 			return false;
 
-		// only first group - will cause problems
-		final String groupName = plugin.getPermPlugHandler().getPrimaryGroup(player);
+		// Get chosen path 
+		Path chosenPath = plugin.getPathManager().getCurrentPath(player.getUniqueId());
 
-		final List<Path> changes = changeGroupManager.getChangeGroups(groupName);
-
-		if (changes == null || changes.size() == 0) {
-			return false;
-		}
-
-		String chosenPath = plugin.getPlayerDataHandler().getChosenPath(player.getUniqueId());
-
-		if (!plugin.getPlayerDataHandler().checkValidChosenPath(player)) {
-			chosenPath = "unknown";
-		}
-
-		final Path changeGroup = this.getChangeGroupManager().matchChangeGroup(groupName, chosenPath);
-
-		if (changeGroup == null)
+		if (chosenPath == null)
 			return false;
 
-		// TODO account for chosen path
-
-		return changeGroup.applyChange(player);
-	}
-
-	public List<RequirementsHolder> getAllRequirementsHolders(final Player player) {
-
-		// only first group - will cause problems
-		final String groupName = plugin.getPermPlugHandler().getPrimaryGroup(player);
-
-		final Path chosenChangeGroup = changeGroupManager.matchChangeGroup(groupName,
-				plugin.getPlayerDataHandler().getChosenPath(player.getUniqueId()));
-
-		if (chosenChangeGroup == null) {
-
-			// Get all requirements of all changegroups together
-			final List<RequirementsHolder> reqs = new ArrayList<RequirementsHolder>();
-
-			for (final Path changeGroup : changeGroupManager.getChangeGroups(groupName)) {
-				for (final RequirementsHolder req : changeGroup.getRequirements()) {
-					reqs.add(req);
-				}
-			}
-
-			return reqs;
-
-		}
-
-		return chosenChangeGroup.getRequirements();
-
-		/*
-		 * final List<RankChange> changes = rankChanges.get(group); if (changes
-		 * != null) { for (final RankChange change : changes) {
-		 * result.put(change, change.getReq()); } }
-		 */
-	}
-
-	public List<RequirementsHolder> getFailedRequirementsHolders(final Player player) {
-
-		// only first group - will cause problems
-		final String groupName = plugin.getPermPlugHandler().getPrimaryGroup(player);
-
-		final Path chosenChangeGroup = changeGroupManager.matchChangeGroup(groupName,
-				plugin.getPlayerDataHandler().getChosenPath(player.getUniqueId()));
-
-		if (chosenChangeGroup == null) {
-
-			// Get all requirments of all changegroups together
-			final List<RequirementsHolder> holders = new ArrayList<RequirementsHolder>();
-
-			for (final Path changeGroup : changeGroupManager.getChangeGroups(groupName)) {
-				for (final RequirementsHolder holder : changeGroup.getFailedRequirementsHolders(player)) {
-					holders.add(holder);
-				}
-			}
-
-			return holders;
-		}
-
-		return chosenChangeGroup.getFailedRequirementsHolders(player);
-
-		/*
-		 * final List<RankChange> changes = rankChanges.get(group); if (changes
-		 * != null) { for (final RankChange change : changes) {
-		 * result.put(change, change.getReq()); } }
-		 */
-	}
-
-	public List<String> toStringList() {
-		return changeGroupManager.debugChangeGroups(true);
+		return chosenPath.applyChange(player);
 	}
 
 	public void doLeaderboardExemptCheck(final Player player) {
-		plugin.getPlayerDataHandler().hasLeaderboardExemption(player.getUniqueId(),
+		plugin.getPlayerDataConfig().hasLeaderboardExemption(player.getUniqueId(),
 				player.hasPermission("autorank.leaderboard.exempt"));
 	}
 
-	public PathManager getChangeGroupManager() {
-		return changeGroupManager;
-	}
-
-	public List<String> getRequirementsInStringList(final List<RequirementsHolder> holders,
+	public List<String> formatRequirementsToList(final List<RequirementsHolder> holders,
 			final List<Integer> metRequirements) {
 		// Converts requirements into a list of readable requirements
 
@@ -183,6 +85,53 @@ public class PlayerChecker {
 
 		return messages;
 
+	}
+
+	public List<String> formatResultsToList(List<Result> results) {
+		// Converts requirements into a list of readable requirements
+
+		final List<String> messages = new ArrayList<String>();
+
+		messages.add(ChatColor.GRAY + " ------------ ");
+
+		for (int i = 0; i < results.size(); i++) {
+			final Result result = results.get(i);
+
+			if (result != null) {
+				final StringBuilder message = new StringBuilder("     " + ChatColor.GOLD + (i + 1) + ". ");
+
+				message.append(ChatColor.RED + result.getDescription());
+
+				messages.add(message.toString());
+
+			}
+		}
+
+		return messages;
+
+	}
+
+	public List<RequirementsHolder> getAllRequirementsHolders(final Player player) {
+		// Get chosen path 
+		Path chosenPath = plugin.getPathManager().getCurrentPath(player.getUniqueId());
+
+		if (chosenPath != null) {
+			return chosenPath.getRequirements();
+		} else {
+			return new ArrayList<RequirementsHolder>();
+		}
+	}
+
+	public List<RequirementsHolder> getFailedRequirementsHolders(final Player player) {
+
+		// Get chosen path 
+		Path chosenPath = plugin.getPathManager().getCurrentPath(player.getUniqueId());
+
+		if (chosenPath != null) {
+			return chosenPath.getFailedRequirementsHolders(player);
+		} else {
+			return new ArrayList<RequirementsHolder>();
+		}
 	}
 
 	public List<Integer> getMetRequirementsHolders(final List<RequirementsHolder> holders, final Player player) {
@@ -229,7 +178,7 @@ public class PlayerChecker {
 					if (plugin.getConfigHandler().usePartialCompletion()) {
 						// Player does not meet requirements, but has done this
 						// already
-						if (plugin.getPlayerDataHandler().hasCompletedRequirement(reqID, player.getUniqueId())) {
+						if (plugin.getPlayerDataConfig().hasCompletedRequirement(reqID, player.getUniqueId())) {
 							metRequirements.add(reqID);
 							continue;
 						}
@@ -265,7 +214,7 @@ public class PlayerChecker {
 				}
 
 				// Do not auto complete
-				if (plugin.getPlayerDataHandler().hasCompletedRequirement(reqID, player.getUniqueId())) {
+				if (plugin.getPlayerDataConfig().hasCompletedRequirement(reqID, player.getUniqueId())) {
 					// Player has completed requirement already
 					metRequirements.add(reqID);
 					continue;

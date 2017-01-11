@@ -44,6 +44,11 @@ public class PermissionsBukkitHandler implements PermissionsHandler {
 		// There is no way to check if the command was successful.
 	}
 
+	@Override
+	public boolean demotePlayer(final Player player, final String world, final String groupFrom, final String groupTo) {
+		return (addGroup(player, world, groupTo) && removeGroup(player, world, groupFrom));
+	}
+
 	/**
 	 * Get all known groups
 	 * 
@@ -60,6 +65,15 @@ public class PermissionsBukkitHandler implements PermissionsHandler {
 		}
 
 		return newGroups;
+	}
+
+	/* (non-Javadoc)
+	 * @see me.armar.plugins.autorank.permissions.PermissionsHandler#getName()
+	 */
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return "PermissionsBukkit";
 	}
 
 	@Override
@@ -119,19 +133,5 @@ public class PermissionsBukkitHandler implements PermissionsHandler {
 		}
 
 		return permissionsBukkit != null;
-	}
-
-	/* (non-Javadoc)
-	 * @see me.armar.plugins.autorank.permissions.PermissionsHandler#getName()
-	 */
-	@Override
-	public String getName() {
-		// TODO Auto-generated method stub
-		return "PermissionsBukkit";
-	}
-
-	@Override
-	public boolean demotePlayer(final Player player, final String world, final String groupFrom, final String groupTo) {
-		return (addGroup(player, world, groupTo) && removeGroup(player, world, groupFrom));
 	}
 }

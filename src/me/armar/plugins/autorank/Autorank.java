@@ -1,5 +1,6 @@
 package me.armar.plugins.autorank;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -7,71 +8,71 @@ import me.armar.plugins.autorank.addons.AddOnManager;
 import me.armar.plugins.autorank.api.API;
 import me.armar.plugins.autorank.backup.BackupManager;
 import me.armar.plugins.autorank.commands.manager.CommandsManager;
-import me.armar.plugins.autorank.config.ConfigHandler;
-import me.armar.plugins.autorank.config.PathsFileHandler;
-import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
+import me.armar.plugins.autorank.config.InternalPropertiesConfig;
+import me.armar.plugins.autorank.config.PathsConfig;
+import me.armar.plugins.autorank.config.PlayerDataConfig;
+import me.armar.plugins.autorank.config.SettingsConfig;
+import me.armar.plugins.autorank.data.mysql.MySQLManager;
 import me.armar.plugins.autorank.debugger.Debugger;
 import me.armar.plugins.autorank.hooks.DependencyManager;
-import me.armar.plugins.autorank.internalproperties.InternalProperties;
 import me.armar.plugins.autorank.language.LanguageHandler;
-import me.armar.plugins.autorank.leaderboard.Leaderboard;
+import me.armar.plugins.autorank.leaderboard.LeaderboardHandler;
 import me.armar.plugins.autorank.listeners.PlayerJoinListener;
-import me.armar.plugins.autorank.mysql.wrapper.MySQLWrapper;
+import me.armar.plugins.autorank.pathbuilder.PathManager;
+import me.armar.plugins.autorank.pathbuilder.builders.RequirementBuilder;
+import me.armar.plugins.autorank.pathbuilder.builders.ResultBuilder;
+import me.armar.plugins.autorank.pathbuilder.requirement.ASkyBlockLevelRequirement;
+import me.armar.plugins.autorank.pathbuilder.requirement.AchievementRequirement;
+import me.armar.plugins.autorank.pathbuilder.requirement.AcidIslandLevelRequirement;
+import me.armar.plugins.autorank.pathbuilder.requirement.BlocksBrokenRequirement;
+import me.armar.plugins.autorank.pathbuilder.requirement.BlocksMovedRequirement;
+import me.armar.plugins.autorank.pathbuilder.requirement.BlocksPlacedRequirement;
+import me.armar.plugins.autorank.pathbuilder.requirement.DamageTakenRequirement;
+import me.armar.plugins.autorank.pathbuilder.requirement.EssentialsGeoIPRequirement;
+import me.armar.plugins.autorank.pathbuilder.requirement.ExpRequirement;
+import me.armar.plugins.autorank.pathbuilder.requirement.FactionPowerRequirement;
+import me.armar.plugins.autorank.pathbuilder.requirement.FishCaughtRequirement;
+import me.armar.plugins.autorank.pathbuilder.requirement.FoodEatenRequirement;
+import me.armar.plugins.autorank.pathbuilder.requirement.GamemodeRequirement;
+import me.armar.plugins.autorank.pathbuilder.requirement.GlobalTimeRequirement;
+import me.armar.plugins.autorank.pathbuilder.requirement.GriefPreventionBonusBlocksRequirement;
+import me.armar.plugins.autorank.pathbuilder.requirement.GriefPreventionClaimedBlocksRequirement;
+import me.armar.plugins.autorank.pathbuilder.requirement.GriefPreventionClaimsCountRequirement;
+import me.armar.plugins.autorank.pathbuilder.requirement.GriefPreventionRemainingBlocksRequirement;
+import me.armar.plugins.autorank.pathbuilder.requirement.HasItemRequirement;
+import me.armar.plugins.autorank.pathbuilder.requirement.InBiomeRequirement;
+import me.armar.plugins.autorank.pathbuilder.requirement.ItemsCraftedRequirement;
+import me.armar.plugins.autorank.pathbuilder.requirement.JavaScriptRequirement;
+import me.armar.plugins.autorank.pathbuilder.requirement.JobsCurrentPointsRequirement;
+import me.armar.plugins.autorank.pathbuilder.requirement.JobsExperienceRequirement;
+import me.armar.plugins.autorank.pathbuilder.requirement.JobsLevelRequirement;
+import me.armar.plugins.autorank.pathbuilder.requirement.JobsTotalPointsRequirement;
+import me.armar.plugins.autorank.pathbuilder.requirement.LocationRequirement;
+import me.armar.plugins.autorank.pathbuilder.requirement.McMMOPowerLevelRequirement;
+import me.armar.plugins.autorank.pathbuilder.requirement.McMMOSkillLevelRequirement;
+import me.armar.plugins.autorank.pathbuilder.requirement.MobKillsRequirement;
+import me.armar.plugins.autorank.pathbuilder.requirement.MoneyRequirement;
+import me.armar.plugins.autorank.pathbuilder.requirement.PermissionRequirement;
+import me.armar.plugins.autorank.pathbuilder.requirement.PlayerKillsRequirement;
+import me.armar.plugins.autorank.pathbuilder.requirement.RPGMeCombatLevelRequirement;
+import me.armar.plugins.autorank.pathbuilder.requirement.RPGMeSkillLevelRequirement;
+import me.armar.plugins.autorank.pathbuilder.requirement.Requirement;
+import me.armar.plugins.autorank.pathbuilder.requirement.TimeRequirement;
+import me.armar.plugins.autorank.pathbuilder.requirement.TimesShearedRequirement;
+import me.armar.plugins.autorank.pathbuilder.requirement.TotalTimeRequirement;
+import me.armar.plugins.autorank.pathbuilder.requirement.TotalVotesRequirement;
+import me.armar.plugins.autorank.pathbuilder.requirement.WorldGuardRegionRequirement;
+import me.armar.plugins.autorank.pathbuilder.requirement.WorldRequirement;
+import me.armar.plugins.autorank.pathbuilder.result.CommandResult;
+import me.armar.plugins.autorank.pathbuilder.result.EffectResult;
+import me.armar.plugins.autorank.pathbuilder.result.MessageResult;
+import me.armar.plugins.autorank.pathbuilder.result.RankChangeResult;
+import me.armar.plugins.autorank.pathbuilder.result.Result;
+import me.armar.plugins.autorank.pathbuilder.result.SpawnFireworkResult;
+import me.armar.plugins.autorank.pathbuilder.result.TeleportResult;
 import me.armar.plugins.autorank.permissions.PermissionsPluginManager;
 import me.armar.plugins.autorank.playerchecker.PlayerChecker;
-import me.armar.plugins.autorank.playerchecker.requirement.ASkyBlockLevelRequirement;
-import me.armar.plugins.autorank.playerchecker.requirement.AchievementRequirement;
-import me.armar.plugins.autorank.playerchecker.requirement.AcidIslandLevelRequirement;
-import me.armar.plugins.autorank.playerchecker.requirement.BlocksBrokenRequirement;
-import me.armar.plugins.autorank.playerchecker.requirement.BlocksMovedRequirement;
-import me.armar.plugins.autorank.playerchecker.requirement.BlocksPlacedRequirement;
-import me.armar.plugins.autorank.playerchecker.requirement.DamageTakenRequirement;
-import me.armar.plugins.autorank.playerchecker.requirement.EssentialsGeoIPRequirement;
-import me.armar.plugins.autorank.playerchecker.requirement.ExpRequirement;
-import me.armar.plugins.autorank.playerchecker.requirement.FactionPowerRequirement;
-import me.armar.plugins.autorank.playerchecker.requirement.FishCaughtRequirement;
-import me.armar.plugins.autorank.playerchecker.requirement.FoodEatenRequirement;
-import me.armar.plugins.autorank.playerchecker.requirement.GamemodeRequirement;
-import me.armar.plugins.autorank.playerchecker.requirement.GlobalTimeRequirement;
-import me.armar.plugins.autorank.playerchecker.requirement.GriefPreventionBonusBlocksRequirement;
-import me.armar.plugins.autorank.playerchecker.requirement.GriefPreventionClaimedBlocksRequirement;
-import me.armar.plugins.autorank.playerchecker.requirement.GriefPreventionClaimsCountRequirement;
-import me.armar.plugins.autorank.playerchecker.requirement.GriefPreventionRemainingBlocksRequirement;
-import me.armar.plugins.autorank.playerchecker.requirement.HasItemRequirement;
-import me.armar.plugins.autorank.playerchecker.requirement.InBiomeRequirement;
-import me.armar.plugins.autorank.playerchecker.requirement.ItemsCraftedRequirement;
-import me.armar.plugins.autorank.playerchecker.requirement.JavaScriptRequirement;
-import me.armar.plugins.autorank.playerchecker.requirement.JobsCurrentPointsRequirement;
-import me.armar.plugins.autorank.playerchecker.requirement.JobsExperienceRequirement;
-import me.armar.plugins.autorank.playerchecker.requirement.JobsLevelRequirement;
-import me.armar.plugins.autorank.playerchecker.requirement.JobsTotalPointsRequirement;
-import me.armar.plugins.autorank.playerchecker.requirement.LocationRequirement;
-import me.armar.plugins.autorank.playerchecker.requirement.McMMOPowerLevelRequirement;
-import me.armar.plugins.autorank.playerchecker.requirement.McMMOSkillLevelRequirement;
-import me.armar.plugins.autorank.playerchecker.requirement.MobKillsRequirement;
-import me.armar.plugins.autorank.playerchecker.requirement.MoneyRequirement;
-import me.armar.plugins.autorank.playerchecker.requirement.PermissionRequirement;
-import me.armar.plugins.autorank.playerchecker.requirement.PlayerKillsRequirement;
-import me.armar.plugins.autorank.playerchecker.requirement.RPGMeCombatLevelRequirement;
-import me.armar.plugins.autorank.playerchecker.requirement.RPGMeSkillLevelRequirement;
-import me.armar.plugins.autorank.playerchecker.requirement.Requirement;
-import me.armar.plugins.autorank.playerchecker.requirement.TimeRequirement;
-import me.armar.plugins.autorank.playerchecker.requirement.TimesShearedRequirement;
-import me.armar.plugins.autorank.playerchecker.requirement.TotalTimeRequirement;
-import me.armar.plugins.autorank.playerchecker.requirement.TotalVotesRequirement;
-import me.armar.plugins.autorank.playerchecker.requirement.WorldGuardRegionRequirement;
-import me.armar.plugins.autorank.playerchecker.requirement.WorldRequirement;
-import me.armar.plugins.autorank.playerchecker.result.CommandResult;
-import me.armar.plugins.autorank.playerchecker.result.EffectResult;
-import me.armar.plugins.autorank.playerchecker.result.MessageResult;
-import me.armar.plugins.autorank.playerchecker.result.RankChangeResult;
-import me.armar.plugins.autorank.playerchecker.result.Result;
-import me.armar.plugins.autorank.playerchecker.result.SpawnFireworkResult;
-import me.armar.plugins.autorank.playerchecker.result.TeleportResult;
-import me.armar.plugins.autorank.playerdatahandler.PlayerDataHandler;
 import me.armar.plugins.autorank.playtimes.Playtimes;
-import me.armar.plugins.autorank.rankbuilder.builders.RequirementBuilder;
-import me.armar.plugins.autorank.rankbuilder.builders.ResultBuilder;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.armar.plugins.autorank.statsmanager.handlers.DummyHandler;
 import me.armar.plugins.autorank.updater.UpdateHandler;
@@ -91,69 +92,53 @@ import me.armar.plugins.autorank.warningmanager.WarningManager;
  */
 public class Autorank extends JavaPlugin {
 
-	// Test
+	public static Autorank getAutorank() {
+		return (Autorank) Bukkit.getPluginManager().getPlugin("Autorank");
+	}
+
+	// ---------- INITIALIZING VARIABLES ---------- \\
+	// 
+	//
+	//
+
+	// Managers
+	private PathManager pathManager;
 	private AddOnManager addonManager;
-	private SimpleYamlConfiguration advancedConfig;
-	private CommandsManager commandsManager;
-	private ConfigHandler configHandler;
-	private Debugger debugger;
-	private DependencyManager dependencyManager;
-	private LanguageHandler languageHandler;
-	private Leaderboard leaderboard;
-	private MySQLWrapper mysqlWrapper;
-	private PermissionsPluginManager permPlugHandler;
-	private PlayerChecker playerChecker;
-	private Playtimes playtimes;
-	private PlayerDataHandler playerDataHandler;
-	private SimpleYamlConfiguration settingsConfig;
-	private SimpleYamlConfiguration simpleConfig;
-	private PathsFileHandler pathsFileHandler;
-	private InternalProperties internalProps;
-	private UUIDStorage uuidStorage;
-
 	private BackupManager backupManager;
+	private CommandsManager commandsManager;
+	private DependencyManager dependencyManager;
+	private LeaderboardHandler leaderboardManager;
 
+	// Handlers
+	private LanguageHandler languageHandler;
+	private PermissionsPluginManager permPlugHandler;
 	private UpdateHandler updateHandler;
 
+	// Miscalleaneous
+	private PlayerChecker playerChecker;
+	private Playtimes playtimes;
+
+	// Data connection
+	private MySQLManager mysqlManager;
+
+	// UUID storage
+	private UUIDStorage uuidStorage;
+
+	// Validation & Warning
 	private ValidateHandler validateHandler;
-
 	private WarningManager warningManager;
+	private Debugger debugger;
 
-	/**
-	 * This method can only be performed from the main class as it tries to do
-	 * {@link #getFile()}
-	 * 
-	 * @return Whether an update is available
-	 */
-	public boolean checkForUpdate() {
+	// Configs
+	private SettingsConfig settingsConfig;
+	private InternalPropertiesConfig internalPropertiesConfig;
+	private PathsConfig pathsConfig;
+	private PlayerDataConfig playerDataConfig;
 
-		// We are not allowed to check for new versions.
-		if (!updateHandler.doCheckForNewVersion())
-			return false;
-
-		final Updater updater = new Updater(this, 34447, this.getFile(), Updater.UpdateType.NO_DOWNLOAD, false);
-		updateHandler.setUpdater(updater);
-
-		return (updater.getResult().equals(Updater.UpdateResult.UPDATE_AVAILABLE));
-
-	}
-
-	/**
-	 * Sends a message via the debug channel of Autorank.
-	 * <br>
-	 * It will only show up in console if the debug option in the Settings.yml
-	 * is turned on.
-	 * 
-	 * @param message Message to send.
-	 */
-	public void debugMessage(final String message) {
-		// Don't put out debug message when it is not needed.
-		if (!this.getConfigHandler().useDebugOutput())
-			return;
-
-		this.getServer().getConsoleSender()
-				.sendMessage("[Autorank DEBUG] " + ChatColor.translateAlternateColorCodes('&', message));
-	}
+	// ---------- onEnable() & onDisable() ---------- \\
+	// 
+	//
+	//
 
 	/* (non-Javadoc)
 	 * @see org.bukkit.plugin.java.JavaPlugin#onDisable()
@@ -165,16 +150,20 @@ public class Autorank extends JavaPlugin {
 		// but when a player /reloads, the server creates an instance of the
 		// plugin which causes duplicate tasks to run.
 		getServer().getScheduler().cancelTasks(this);
-
+		
+		// ------------- Save files and databases -------------
+		
 		playtimes.save();
 
 		getUUIDStorage().saveAllFiles();
 
 		// Close database connection
-		this.getMySQLWrapper().disconnectDatabase();
+		this.getMySQLManager().disconnectDatabase();
 
 		// Save playerdata.yml
-		this.getPlayerDataHandler().saveConfig();
+		this.getPlayerDataConfig().saveConfig();
+		
+		// ------------- Say bye-bye -------------
 
 		getLogger().info(String.format("Autorank %s has been disabled!", getDescription().getVersion()));
 	}
@@ -185,56 +174,100 @@ public class Autorank extends JavaPlugin {
 	@Override
 	public void onEnable() {
 
+		// ------------- Create files & folders -------------
+
 		// Register configs
-		setSimpleConfig(new SimpleYamlConfiguration(this, "SimpleConfig.yml", null, "Simple config"));
-		setAdvancedConfig(new SimpleYamlConfiguration(this, "AdvancedConfig.yml", null, "Advanced config"));
-		setSettingsConfig(new SimpleYamlConfiguration(this, "Settings.yml", null, "Settings config"));
-		setPathsFileHandler(new PathsFileHandler(this));
+		setPathsConfig(new PathsConfig(this));
+		setSettingsConfig(new SettingsConfig(this));
+		setInternalPropertiesConfig(new InternalPropertiesConfig(this));
+		setPlayerDataConfig(new PlayerDataConfig(this));
 
-		// Create new paths.yml
-		this.getPathsFileHandler().createNewFile();
+		// Create new configs
+		this.getPathsConfig().createNewFile();
+		this.getSettingsConfig().createNewFile();
+		this.getInternalPropertiesConfig().loadFile();
+		this.getPlayerDataConfig().createNewFile();
 
-		setInternalProps(new InternalProperties(this));
-
-		// Create config handler
-		setConfigHandler(new ConfigHandler(this));
-
-		// Create internal properties file
-		this.getInternalProps().loadFile();
+		// ------------- Initialize managers -------------
 
 		// Create backup manager
 		setBackupManager(new BackupManager(this));
 
-		// Create uuid storage
-		setUUIDStorage(new UUIDStorage(this));
-
-		// Load uuids - ready for new ones
-		getUUIDStorage().createNewFiles();
-
 		// Create warning manager
 		setWarningManager(new WarningManager(this));
 
-		// Create requirement handler
-		setPlayerDataHandler(new PlayerDataHandler(this));
-
-		// Create files
-		playerDataHandler.createNewFile();
-
-		// Create update handler
-		setUpdateHandler(new UpdateHandler(this));
-
-		// Register listeners
-		getServer().getPluginManager().registerEvents(new PlayerJoinListener(this), this);
-
-		// Create language classes
-		setLanguageHandler(new LanguageHandler(this));
-
 		// Create MySQL Wrapper
-		setMySQLWrapper(new MySQLWrapper(this));
+		setMySQLManager(new MySQLManager(this));
 
 		// Load dependency manager
 		setDependencyManager(new DependencyManager(this));
 
+		// Create commands manager
+		setCommandsManager(new CommandsManager(this));
+
+		// Create Addon Manager
+		setAddonManager(new AddOnManager(this));
+
+		// ------------- Initialize handlers -------------
+
+		// Create update handler
+		setUpdateHandler(new UpdateHandler(this));
+
+		// Create language classes
+		setLanguageHandler(new LanguageHandler(this));
+
+		// Create permission plugin handler class
+		setPermPlugHandler(new PermissionsPluginManager(this));
+
+		// Create validate handler
+		setValidateHandler(new ValidateHandler(this));
+
+		// Create leaderboard class
+		setLeaderboardManager(new LeaderboardHandler(this));
+
+		// ------------- Initialize storage -------------
+
+		// Create uuid storage
+		setUUIDStorage(new UUIDStorage(this));
+
+		// ------------- Initialize others -------------
+
+		// Create playtime class
+		setPlaytimes(new Playtimes(this));
+
+		// Create player check class
+		setPlayerChecker(new PlayerChecker(this));
+
+		// Set debugger
+		setDebugger(new Debugger(this));
+
+		// Load uuids - ready for new ones
+		getUUIDStorage().createNewFiles();
+
+		// ------------- Create files & folders -------------
+
+		// Setup language file
+		languageHandler.createNewFile();
+		
+		// Initialize paths
+		getPathManager().initialiseFromConfigs();
+
+		// Start warning task if a warning has been found
+		if (getWarningManager().getHighestWarning() != null) {
+			getWarningManager().startWarningTask();
+		}
+
+		// ------------- Register listeners -------------
+
+		// Register listeners
+		getServer().getPluginManager().registerEvents(new PlayerJoinListener(this), this);
+
+		// ------------- Initialize requirements and results -------------
+		this.initializeReqsAndRes();
+
+		// ------------- Schedule tasks -------------
+
+		// Load all third party dependencies
 		getServer().getScheduler().runTaskLater(this, new Runnable() {
 			@Override
 			public void run() {
@@ -250,36 +283,57 @@ public class Autorank extends JavaPlugin {
 				}
 			}
 		}, 1L);
+		
+		// ------------- Register commands -------------
 
-		// Create playtime class
-		setPlaytimes(new Playtimes(this));
+		// Register command
+		getCommand("autorank").setExecutor(getCommandsManager());
+		
+		// ------------- Log messages -------------
 
-		// Refresh player data - store it so we can cancel it later
-		// uuidRefresherTask =
-		// this.getServer().getScheduler().runTaskAsynchronously(this, new
-		// UUIDRefresher(this));
+		// Debug message telling what plugin is used for timing.
+		getLogger().info("Using timings of: " + getConfigHandler().useTimeOf().toString().toLowerCase());
 
-		// Convert data folder
-		// playtimes.convertToUUIDStorage();
+		debugMessage("Autorank debug is turned on!");
 
-		// Create permission plugin handler class
-		setPermPlugHandler(new PermissionsPluginManager(this));
+		// ------------- Check version -------------
+		
+		// Extra warning for dev users
+		if (isDevVersion()) {
+			this.getLogger().warning("You're running a DEV version, be sure to backup your Autorank folder!");
+			this.getLogger().warning(
+					"DEV versions are not guaranteed to be stable and generally shouldn't be used on big production servers with lots of players.");
+		}
+		
+		// ------------- Do miscalleaneous tasks -------------
 
-		// Create player check class
-		setPlayerChecker(new PlayerChecker(this));
+		// Start automatic backup
+		this.getBackupManager().startBackupSystem();
 
-		// Create validate handler
-		setValidateHandler(new ValidateHandler(this));
+		// Try to update all leaderboards if needed.
+		this.getLeaderboardManager().updateAllLeaderboards();
 
-		// Create leaderboard class
-		setLeaderboard(new Leaderboard(this));
+		// Convert all UUIDS to lowercase.
+		this.getUUIDStorage().transferUUIDs();
 
-		// Create commands manager
-		setCommandsManager(new CommandsManager(this));
+		// Check whether the data files are still up to date.
+		this.getPlaytimes().doCalendarCheck();
 
-		final RequirementBuilder req = this.getPlayerChecker().getChangeGroupManager().getBuilder()
-				.getRequirementBuilder();
-		final ResultBuilder res = this.getPlayerChecker().getChangeGroupManager().getBuilder().getResultBuilder();
+		// Spawn thread to check if MySQL database times are up to date
+		this.getMySQLManager().refreshGlobalTime();
+		
+		// ------------- Say Welcome! -------------
+		getLogger().info(String.format("Autorank %s has been enabled!", getDescription().getVersion()));
+	}
+
+	// ---------- CONVENIENCE METHODS ---------- \\
+	// 
+	//
+	//
+
+	private void initializeReqsAndRes() {
+		final RequirementBuilder req = this.getPathManager().getBuilder().getRequirementBuilder();
+		final ResultBuilder res = this.getPathManager().getBuilder().getResultBuilder();
 
 		// Register 'main' requirements
 		req.registerRequirement("exp", ExpRequirement.class);
@@ -331,101 +385,42 @@ public class Autorank extends JavaPlugin {
 		res.registerResult("rank change", RankChangeResult.class);
 		res.registerResult("tp", TeleportResult.class);
 		res.registerResult("firework", SpawnFireworkResult.class);
-
-		// Load requirements and results per group from config
-		// playerChecker.getChangeGroupManager().initialiseFromConfigs();
-
-		// Load again after 5 seconds so custom commands can be listed
-		getServer().getScheduler().runTaskLaterAsynchronously(this, new Runnable() {
-			@Override
-			public void run() {
-
-				getPlayerChecker().getChangeGroupManager().initialiseFromConfigs();
-
-				// Validate configs after that
-				if (configHandler.useAdvancedConfig()) {
-					getValidateHandler().validateConfigGroups(getAdvancedConfig());
-				} else {
-					getValidateHandler().validateConfigGroups(getSimpleConfig());
-				}
-
-				// Start warning task if a warning has been found
-				if (getWarningManager().getHighestWarning() != null) {
-					getWarningManager().startWarningTask();
-				}
-			}
-		}, 100);
-
-		// Register command
-		getCommand("autorank").setExecutor(getCommandsManager());
-
-		// Setup language file
-		languageHandler.createNewFile();
-
-		// Set debugger
-		setDebugger(new Debugger(this));
-
-		// Debug message telling what plugin is used for timing.
-		getLogger().info("Using timings of: " + getConfigHandler().useTimeOf().toString().toLowerCase());
-
-		// Note that custom requirements and results are not yet loaded into
-		// memory.
-		// TODO Add support for custom requirements and results.
-		setAddonManager(new AddOnManager(this));
-
-		getLogger().info(String.format("Autorank %s has been enabled!", getDescription().getVersion()));
-
-		debugMessage("Autorank debug is turned on!");
-
-		// Extra warning for dev users
-		if (isDevVersion()) {
-			this.getLogger().warning("You're running a DEV version, be sure to backup your Autorank folder!");
-			this.getLogger().warning(
-					"DEV versions are not guaranteed to be stable and generally shouldn't be used on big production servers with lots of players.");
-		}
-
-		// Start automatic backup
-		this.getBackupManager().startBackupSystem();
-
-		// Try to update all leaderboards if needed.
-		this.getLeaderboard().updateAllLeaderboards();
-
-		// Convert all UUIDS to lowercase.
-		this.getUUIDStorage().transferUUIDs();
-
-		// Check whether the data files are still up to date.
-		this.getPlaytimes().doCalendarCheck();
-
-		// Spawn thread to check if MySQL database times are up to date
-		this.getMySQLWrapper().refreshGlobalTime();
 	}
 
-	public AddOnManager getAddonManager() {
-		return addonManager;
+	/**
+	 * This method can only be performed from the main class as it tries to do
+	 * {@link #getFile()}
+	 * 
+	 * @return Whether an update is available
+	 */
+	public boolean checkForUpdate() {
+
+		// We are not allowed to check for new versions.
+		if (!updateHandler.doCheckForNewVersion())
+			return false;
+
+		final Updater updater = new Updater(this, 34447, this.getFile(), Updater.UpdateType.NO_DOWNLOAD, false);
+		updateHandler.setUpdater(updater);
+
+		return (updater.getResult().equals(Updater.UpdateResult.UPDATE_AVAILABLE));
+
 	}
 
-	public SimpleYamlConfiguration getAdvancedConfig() {
-		return advancedConfig;
-	}
+	/**
+	 * Sends a message via the debug channel of Autorank.
+	 * <br>
+	 * It will only show up in console if the debug option in the Settings.yml
+	 * is turned on.
+	 * 
+	 * @param message Message to send.
+	 */
+	public void debugMessage(final String message) {
+		// Don't put out debug message when it is not needed.
+		if (!this.getConfigHandler().useDebugOutput())
+			return;
 
-	public API getAPI() {
-		return new API(this);
-	}
-
-	public CommandsManager getCommandsManager() {
-		return commandsManager;
-	}
-
-	public ConfigHandler getConfigHandler() {
-		return configHandler;
-	}
-
-	public Debugger getDebugger() {
-		return debugger;
-	}
-
-	public DependencyManager getDependencyManager() {
-		return dependencyManager;
+		this.getServer().getConsoleSender()
+				.sendMessage("[Autorank DEBUG] " + ChatColor.translateAlternateColorCodes('&', message));
 	}
 
 	/**
@@ -436,54 +431,6 @@ public class Autorank extends JavaPlugin {
 	 */
 	public StatsPlugin getHookedStatsPlugin() {
 		return getDependencyManager().getStatsPlugin();
-	}
-
-	public LanguageHandler getLanguageHandler() {
-		return languageHandler;
-	}
-
-	public Leaderboard getLeaderboard() {
-		return leaderboard;
-	}
-
-	public MySQLWrapper getMySQLWrapper() {
-		return mysqlWrapper;
-	}
-
-	public PermissionsPluginManager getPermPlugHandler() {
-		return permPlugHandler;
-	}
-
-	public PlayerChecker getPlayerChecker() {
-		return playerChecker;
-	}
-
-	public Playtimes getPlaytimes() {
-		return playtimes;
-	}
-
-	public PlayerDataHandler getPlayerDataHandler() {
-		return playerDataHandler;
-	}
-
-	public SimpleYamlConfiguration getSettingsConfig() {
-		return settingsConfig;
-	}
-
-	public SimpleYamlConfiguration getSimpleConfig() {
-		return simpleConfig;
-	}
-
-	public UpdateHandler getUpdateHandler() {
-		return updateHandler;
-	}
-
-	public ValidateHandler getValidateHandler() {
-		return validateHandler;
-	}
-
-	public WarningManager getWarningManager() {
-		return warningManager;
 	}
 
 	/**
@@ -501,8 +448,7 @@ public class Autorank extends JavaPlugin {
 	 *      registerRequirement()}
 	 */
 	public void registerRequirement(final String name, final Class<? extends Requirement> requirement) {
-		this.getPlayerChecker().getChangeGroupManager().getBuilder().getRequirementBuilder().registerRequirement(name,
-				requirement);
+		this.getPathManager().getBuilder().getRequirementBuilder().registerRequirement(name, requirement);
 	}
 
 	/**
@@ -510,7 +456,7 @@ public class Autorank extends JavaPlugin {
 	 *      registerResult()}
 	 */
 	public void registerResult(final String name, final Class<? extends Result> result) {
-		this.getPlayerChecker().getChangeGroupManager().getBuilder().getResultBuilder().registerResult(name, result);
+		this.getPathManager().getBuilder().getResultBuilder().registerResult(name, result);
 	}
 
 	/**
@@ -521,20 +467,85 @@ public class Autorank extends JavaPlugin {
 		getServer().getPluginManager().enablePlugin(this);
 	}
 
+	// ---------- GETTERS & SETTERS ---------- \\
+	// 
+	//
+	//
+
+	public LanguageHandler getLanguageHandler() {
+		return languageHandler;
+	}
+
+	public PermissionsPluginManager getPermPlugHandler() {
+		return permPlugHandler;
+	}
+
+	public PlayerChecker getPlayerChecker() {
+		return playerChecker;
+	}
+
+	public Playtimes getPlaytimes() {
+		return playtimes;
+	}
+
+	public UpdateHandler getUpdateHandler() {
+		return updateHandler;
+	}
+
+	public UUIDStorage getUUIDStorage() {
+		return uuidStorage;
+	}
+
+	public ValidateHandler getValidateHandler() {
+		return validateHandler;
+	}
+
+	public WarningManager getWarningManager() {
+		return warningManager;
+	}
+
+	public AddOnManager getAddonManager() {
+		return addonManager;
+	}
+
+	public API getAPI() {
+		return new API(this);
+	}
+
+	public BackupManager getBackupManager() {
+		return backupManager;
+	}
+
+	public CommandsManager getCommandsManager() {
+		return commandsManager;
+	}
+
+	public SettingsConfig getConfigHandler() {
+		return settingsConfig;
+	}
+
+	public Debugger getDebugger() {
+		return debugger;
+	}
+
+	public DependencyManager getDependencyManager() {
+		return dependencyManager;
+	}
+
 	public void setAddonManager(final AddOnManager addonManager) {
 		this.addonManager = addonManager;
 	}
 
-	private void setAdvancedConfig(final SimpleYamlConfiguration advancedConfig) {
-		this.advancedConfig = advancedConfig;
+	public void setBackupManager(final BackupManager backupManager) {
+		this.backupManager = backupManager;
 	}
 
 	public void setCommandsManager(final CommandsManager commandsManager) {
 		this.commandsManager = commandsManager;
 	}
 
-	public void setConfigHandler(final ConfigHandler configHandler) {
-		this.configHandler = configHandler;
+	public void setConfigHandler(final SettingsConfig configHandler) {
+		this.settingsConfig = configHandler;
 	}
 
 	public void setDebugger(final Debugger debugger) {
@@ -549,12 +560,18 @@ public class Autorank extends JavaPlugin {
 		this.languageHandler = lHandler;
 	}
 
-	private void setLeaderboard(final Leaderboard leaderboard) {
-		this.leaderboard = leaderboard;
+	/**
+	 * @return the internalPropertiesConfig
+	 */
+	public InternalPropertiesConfig getInternalPropertiesConfig() {
+		return internalPropertiesConfig;
 	}
 
-	public void setMySQLWrapper(final MySQLWrapper mysqlWrapper) {
-		this.mysqlWrapper = mysqlWrapper;
+	/**
+	 * @param internalPropertiesConfig the internalPropertiesConfig to set
+	 */
+	public void setInternalPropertiesConfig(InternalPropertiesConfig internalPropertiesConfig) {
+		this.internalPropertiesConfig = internalPropertiesConfig;
 	}
 
 	public void setPermPlugHandler(final PermissionsPluginManager permPlugHandler) {
@@ -569,20 +586,12 @@ public class Autorank extends JavaPlugin {
 		this.playtimes = playtimes;
 	}
 
-	public void setPlayerDataHandler(final PlayerDataHandler requirementHandler) {
-		this.playerDataHandler = requirementHandler;
-	}
-
-	public void setSettingsConfig(final SimpleYamlConfiguration settingsConfig) {
-		this.settingsConfig = settingsConfig;
-	}
-
-	private void setSimpleConfig(final SimpleYamlConfiguration simpleConfig) {
-		this.simpleConfig = simpleConfig;
-	}
-
 	public void setUpdateHandler(final UpdateHandler updateHandler) {
 		this.updateHandler = updateHandler;
+	}
+
+	public void setUUIDStorage(final UUIDStorage uuidStorage) {
+		this.uuidStorage = uuidStorage;
 	}
 
 	public void setValidateHandler(final ValidateHandler validateHandler) {
@@ -593,35 +602,57 @@ public class Autorank extends JavaPlugin {
 		this.warningManager = warningManager;
 	}
 
-	public UUIDStorage getUUIDStorage() {
-		return uuidStorage;
+	/**
+	 * @return the settingsConfig
+	 */
+	public SettingsConfig getSettingsConfig() {
+		return settingsConfig;
 	}
 
-	public void setUUIDStorage(final UUIDStorage uuidStorage) {
-		this.uuidStorage = uuidStorage;
+	/**
+	 * @param settingsConfig the settingsConfig to set
+	 */
+	public void setSettingsConfig(SettingsConfig settingsConfig) {
+		this.settingsConfig = settingsConfig;
 	}
 
-	public BackupManager getBackupManager() {
-		return backupManager;
+	public PlayerDataConfig getPlayerDataConfig() {
+		return playerDataConfig;
 	}
 
-	public void setBackupManager(final BackupManager backupManager) {
-		this.backupManager = backupManager;
+	public void setPlayerDataConfig(PlayerDataConfig playerDataConfig) {
+		this.playerDataConfig = playerDataConfig;
 	}
 
-	public InternalProperties getInternalProps() {
-		return internalProps;
+	public PathsConfig getPathsConfig() {
+		return pathsConfig;
 	}
 
-	public void setInternalProps(final InternalProperties internalProps) {
-		this.internalProps = internalProps;
+	public void setPathsConfig(PathsConfig pathsConfig) {
+		this.pathsConfig = pathsConfig;
 	}
 
-	public PathsFileHandler getPathsFileHandler() {
-		return pathsFileHandler;
+	public PathManager getPathManager() {
+		return pathManager;
 	}
 
-	public void setPathsFileHandler(PathsFileHandler pathsFileHandler) {
-		this.pathsFileHandler = pathsFileHandler;
+	public void setPathManager(PathManager pathManager) {
+		this.pathManager = pathManager;
+	}
+
+	public LeaderboardHandler getLeaderboardManager() {
+		return leaderboardManager;
+	}
+
+	public void setLeaderboardManager(LeaderboardHandler leaderboardManager) {
+		this.leaderboardManager = leaderboardManager;
+	}
+
+	public MySQLManager getMySQLManager() {
+		return mysqlManager;
+	}
+
+	public void setMySQLManager(MySQLManager mysqlManager) {
+		this.mysqlManager = mysqlManager;
 	}
 }

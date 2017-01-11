@@ -5,7 +5,7 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-import me.armar.plugins.autorank.rankbuilder.holders.RequirementsHolder;
+import me.armar.plugins.autorank.pathbuilder.holders.RequirementsHolder;
 
 /**
  * This event is called when a player meets the requirement for a group and

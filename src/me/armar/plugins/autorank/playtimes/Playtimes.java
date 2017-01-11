@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.data.SimpleYamlConfiguration;
+import me.armar.plugins.autorank.config.SimpleYamlConfiguration;
 import me.armar.plugins.autorank.hooks.DependencyManager.dependency;
 import me.armar.plugins.autorank.hooks.statzapi.StatzAPIHandler;
 import me.armar.plugins.autorank.language.Lang;
@@ -25,21 +25,21 @@ import me.staartvin.statz.hooks.handlers.StatsAPIHandler;
 
 public class Playtimes {
 
-	public static int INTERVAL_MINUTES;
-
-	private final Autorank plugin;
-	private final PlaytimesSave save;
-	// Used to store what plugin Autorank uses for checking the time
-	private final dependency timePlugin;
-
 	// Autorank keeps track of total time, time online on one day, time online
 	// in a week and time online in a month.
 	// There are all tracked in minutes.
 	public static enum dataType {
-		TOTAL_TIME, DAILY_TIME, WEEKLY_TIME, MONTHLY_TIME
-	};
+		DAILY_TIME, MONTHLY_TIME, TOTAL_TIME, WEEKLY_TIME
+	}
 
+	public static int INTERVAL_MINUTES;
 	private final HashMap<dataType, SimpleYamlConfiguration> dataFiles = new HashMap<dataType, SimpleYamlConfiguration>();
+	private final Autorank plugin;
+
+	private final PlaytimesSave save;;
+
+	// Used to store what plugin Autorank uses for checking the time
+	private final dependency timePlugin;
 
 	private final PlaytimesUpdate update;
 
@@ -50,13 +50,12 @@ public class Playtimes {
 
 		plugin.getLogger().info("Interval check every " + INTERVAL_MINUTES + " minutes.");
 
-		dataFiles.put(dataType.TOTAL_TIME, new SimpleYamlConfiguration(plugin, "Data.yml", null, "Total data"));
-		dataFiles.put(dataType.DAILY_TIME,
-				new SimpleYamlConfiguration(plugin, "/data/daily_time.yml", null, "Daily data"));
+		dataFiles.put(dataType.TOTAL_TIME, new SimpleYamlConfiguration(plugin, "Data.yml", "Total data"));
+		dataFiles.put(dataType.DAILY_TIME, new SimpleYamlConfiguration(plugin, "/data/daily_time.yml", "Daily data"));
 		dataFiles.put(dataType.WEEKLY_TIME,
-				new SimpleYamlConfiguration(plugin, "/data/weekly_time.yml", null, "Weekly data"));
+				new SimpleYamlConfiguration(plugin, "/data/weekly_time.yml", "Weekly data"));
 		dataFiles.put(dataType.MONTHLY_TIME,
-				new SimpleYamlConfiguration(plugin, "/data/monthly_time.yml", null, "Monthly data"));
+				new SimpleYamlConfiguration(plugin, "/data/monthly_time.yml", "Monthly data"));
 		// this.data = new SimpleYamlConfiguration(plugin, "Data.yml", null,
 		// "Data");
 
@@ -168,8 +167,67 @@ public class Playtimes {
 		});
 	}
 
+	public void doCalendarCheck() {
+		// Check if all data files are still up to date.
+		// Check if daily, weekly or monthly files should be reset.
+
+		final Calendar cal = Calendar.getInstance();
+		cal.setFirstDayOfWeek(Calendar.MONDAY);
+
+		for (final dataType type : Playtimes.dataType.values()) {
+			if (plugin.getPlaytimes().shouldResetDatafile(type)) {
+
+				// We should reset it now, it has expired.
+				plugin.getPlaytimes().resetDatafile(type);
+
+				int value = 0;
+				if (type == dataType.DAILY_TIME) {
+					value = cal.get(Calendar.DAY_OF_WEEK);
+
+					if (plugin.getConfigHandler().shouldBroadcastDataReset()) {
+						// Should we broadcast the reset?
+						plugin.getServer().broadcastMessage(Lang.RESET_DAILY_TIME.getConfigValue());
+					}
+
+				} else if (type == dataType.WEEKLY_TIME) {
+					value = cal.get(Calendar.WEEK_OF_YEAR);
+
+					if (plugin.getConfigHandler().shouldBroadcastDataReset()) {
+						// Should we broadcast the reset?
+
+						plugin.getServer().broadcastMessage(Lang.RESET_WEEKLY_TIME.getConfigValue());
+					}
+				} else if (type == dataType.MONTHLY_TIME) {
+					value = cal.get(Calendar.MONTH);
+
+					if (plugin.getConfigHandler().shouldBroadcastDataReset()) {
+						// Should we broadcast the reset?
+
+						plugin.getServer().broadcastMessage(Lang.RESET_MONTHLY_TIME.getConfigValue());
+					}
+				}
+
+				// Update tracked data type
+				plugin.getInternalPropertiesConfig().setTrackedDataType(type, value);
+				// We reset leaderboard time so it refreshes again.
+				plugin.getInternalPropertiesConfig().setLeaderboardLastUpdateTime(0);
+
+				// Update leaderboard of reset time
+				plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+					public void run() {
+						plugin.getLeaderboardManager().updateLeaderboard(type);
+					}
+				});
+			}
+		}
+	}
+
 	public Autorank getAutorank() {
 		return plugin;
+	}
+
+	public SimpleYamlConfiguration getDataFile(final dataType type) {
+		return dataFiles.get(type);
 	}
 
 	private String getDurationString(int seconds) {
@@ -221,6 +279,12 @@ public class Playtimes {
 		return builder.toString();
 	}
 
+	public int getFreshGlobalTime(final UUID uuid) {
+		if (uuid == null)
+			return 0;
+		return plugin.getMySQLManager().getFreshDatabaseTime(uuid);
+	}
+
 	/**
 	 * Returns total playtime across all servers (Multiple servers write to 1
 	 * database and get the total playtime from there)
@@ -232,13 +296,7 @@ public class Playtimes {
 	public int getGlobalTime(final UUID uuid) {
 		if (uuid == null)
 			return 0;
-		return plugin.getMySQLWrapper().getDatabaseTime(uuid);
-	}
-
-	public int getFreshGlobalTime(final UUID uuid) {
-		if (uuid == null)
-			return 0;
-		return plugin.getMySQLWrapper().getFreshDatabaseTime(uuid);
+		return plugin.getMySQLManager().getDatabaseTime(uuid);
 	}
 
 	/**
@@ -270,6 +328,13 @@ public class Playtimes {
 		}
 
 		return playerNames;
+	}
+
+	public int getTime(final dataType type, final UUID uuid) {
+		// Get time of a player with specific type
+		final SimpleYamlConfiguration data = this.getDataFile(type);
+
+		return data.getInt(uuid.toString(), 0);
 	}
 
 	/**
@@ -368,16 +433,16 @@ public class Playtimes {
 
 	public void importData() {
 		final SimpleYamlConfiguration data = this.getDataFile(dataType.TOTAL_TIME);
-		data.reload();
+		data.reloadFile();
 	}
 
 	public boolean isMySQLEnabled() {
-		return plugin.getMySQLWrapper().isMySQLEnabled();
+		return plugin.getMySQLManager().isMySQLEnabled();
 	}
 
 	public void modifyGlobalTime(final UUID uuid, final int timeDifference) throws IllegalArgumentException {
 		// Check for MySQL
-		if (!plugin.getMySQLWrapper().isMySQLEnabled()) {
+		if (!plugin.getMySQLManager().isMySQLEnabled()) {
 			try {
 				throw new SQLException("MySQL database is not enabled so you can't modify database!");
 			} catch (final SQLException e) {
@@ -415,66 +480,13 @@ public class Playtimes {
 		}
 	}
 
-	public void save() {
-		for (final Entry<dataType, SimpleYamlConfiguration> entry : dataFiles.entrySet()) {
-			entry.getValue().save();
+	public void modifyTime(final UUID uuid, final int timeDifference, final dataType type) {
+
+		final int time = this.getTime(type, uuid);
+
+		if (time >= 0) {
+			setTime(type, time + timeDifference, uuid);
 		}
-	}
-
-	public void setGlobalTime(final UUID uuid, final int time) throws SQLException {
-		// Check for MySQL
-		if (!plugin.getMySQLWrapper().isMySQLEnabled()) {
-			throw new SQLException("MySQL database is not enabled so you can't set items to it!");
-		}
-
-		plugin.getMySQLWrapper().setGlobalTime(uuid, time);
-	}
-
-	public void setLocalTime(final UUID uuid, final int time) {
-		final SimpleYamlConfiguration data = this.getDataFile(dataType.TOTAL_TIME);
-		data.set(uuid.toString(), time);
-	}
-
-	public SimpleYamlConfiguration getDataFile(final dataType type) {
-		return dataFiles.get(type);
-	}
-
-	public void setTime(final dataType type, final int value, final UUID uuid) {
-		// Set time of a player of a specific type
-
-		final SimpleYamlConfiguration data = this.getDataFile(type);
-
-		data.set(uuid.toString(), value);
-	}
-
-	public int getTime(final dataType type, final UUID uuid) {
-		// Get time of a player with specific type
-		final SimpleYamlConfiguration data = this.getDataFile(type);
-
-		return data.getInt(uuid.toString(), 0);
-	}
-
-	public boolean shouldResetDatafile(final dataType type) {
-		// Should we reset a specific data file?
-		// Compare date to last date in internal properties
-		final Calendar cal = Calendar.getInstance();
-		cal.setFirstDayOfWeek(Calendar.MONDAY);
-
-		if (type == dataType.DAILY_TIME) {
-			if (cal.get(Calendar.DAY_OF_WEEK) != plugin.getInternalProps().getTrackedDataType(type)) {
-				return true;
-			}
-		} else if (type == dataType.WEEKLY_TIME) {
-			if (cal.get(Calendar.WEEK_OF_YEAR) != plugin.getInternalProps().getTrackedDataType(type)) {
-				return true;
-			}
-		} else if (type == dataType.MONTHLY_TIME) {
-			if (cal.get(Calendar.MONTH) != plugin.getInternalProps().getTrackedDataType(type)) {
-				return true;
-			}
-		}
-
-		return false;
 	}
 
 	public void resetDatafile(final dataType type) {
@@ -492,79 +504,66 @@ public class Playtimes {
 		// Create a new file so it's empty
 		if (type == dataType.DAILY_TIME) {
 			dataFiles.put(dataType.DAILY_TIME,
-					new SimpleYamlConfiguration(plugin, "/data/daily_time.yml", null, "Daily data"));
+					new SimpleYamlConfiguration(plugin, "/data/daily_time.yml", "Daily data"));
 		} else if (type == dataType.WEEKLY_TIME) {
 			dataFiles.put(dataType.WEEKLY_TIME,
-					new SimpleYamlConfiguration(plugin, "/data/weekly_time.yml", null, "Weekly data"));
+					new SimpleYamlConfiguration(plugin, "/data/weekly_time.yml", "Weekly data"));
 		} else if (type == dataType.MONTHLY_TIME) {
 			dataFiles.put(dataType.MONTHLY_TIME,
-					new SimpleYamlConfiguration(plugin, "/data/monthly_time.yml", null, "Monthly data"));
+					new SimpleYamlConfiguration(plugin, "/data/monthly_time.yml", "Monthly data"));
 		} else if (type == dataType.TOTAL_TIME) {
-			dataFiles.put(dataType.TOTAL_TIME, new SimpleYamlConfiguration(plugin, "Data.yml", null, "Total data"));
+			dataFiles.put(dataType.TOTAL_TIME, new SimpleYamlConfiguration(plugin, "Data.yml", "Total data"));
 		}
 	}
 
-	public void modifyTime(final UUID uuid, final int timeDifference, final dataType type) {
-
-		final int time = this.getTime(type, uuid);
-
-		if (time >= 0) {
-			setTime(type, time + timeDifference, uuid);
+	public void save() {
+		for (final Entry<dataType, SimpleYamlConfiguration> entry : dataFiles.entrySet()) {
+			entry.getValue().saveFile();
 		}
 	}
 
-	public void doCalendarCheck() {
-		// Check if all data files are still up to date.
-		// Check if daily, weekly or monthly files should be reset.
+	public void setGlobalTime(final UUID uuid, final int time) throws SQLException {
+		// Check for MySQL
+		if (!plugin.getMySQLManager().isMySQLEnabled()) {
+			throw new SQLException("MySQL database is not enabled so you can't set items to it!");
+		}
 
+		plugin.getMySQLManager().setGlobalTime(uuid, time);
+	}
+
+	public void setLocalTime(final UUID uuid, final int time) {
+		final SimpleYamlConfiguration data = this.getDataFile(dataType.TOTAL_TIME);
+		data.set(uuid.toString(), time);
+	}
+
+	public void setTime(final dataType type, final int value, final UUID uuid) {
+		// Set time of a player of a specific type
+
+		final SimpleYamlConfiguration data = this.getDataFile(type);
+
+		data.set(uuid.toString(), value);
+	}
+
+	public boolean shouldResetDatafile(final dataType type) {
+		// Should we reset a specific data file?
+		// Compare date to last date in internal properties
 		final Calendar cal = Calendar.getInstance();
 		cal.setFirstDayOfWeek(Calendar.MONDAY);
 
-		for (final dataType type : Playtimes.dataType.values()) {
-			if (plugin.getPlaytimes().shouldResetDatafile(type)) {
-
-				// We should reset it now, it has expired.
-				plugin.getPlaytimes().resetDatafile(type);
-
-				int value = 0;
-				if (type == dataType.DAILY_TIME) {
-					value = cal.get(Calendar.DAY_OF_WEEK);
-
-					if (plugin.getConfigHandler().shouldBroadcastDataReset()) {
-						// Should we broadcast the reset?
-						plugin.getServer().broadcastMessage(Lang.RESET_DAILY_TIME.getConfigValue());
-					}
-
-				} else if (type == dataType.WEEKLY_TIME) {
-					value = cal.get(Calendar.WEEK_OF_YEAR);
-
-					if (plugin.getConfigHandler().shouldBroadcastDataReset()) {
-						// Should we broadcast the reset?
-
-						plugin.getServer().broadcastMessage(Lang.RESET_WEEKLY_TIME.getConfigValue());
-					}
-				} else if (type == dataType.MONTHLY_TIME) {
-					value = cal.get(Calendar.MONTH);
-
-					if (plugin.getConfigHandler().shouldBroadcastDataReset()) {
-						// Should we broadcast the reset?
-
-						plugin.getServer().broadcastMessage(Lang.RESET_MONTHLY_TIME.getConfigValue());
-					}
-				}
-
-				// Update tracked data type
-				plugin.getInternalProps().setTrackedDataType(type, value);
-				// We reset leaderboard time so it refreshes again.
-				plugin.getInternalProps().setLeaderboardLastUpdateTime(0);
-
-				// Update leaderboard of reset time
-				plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
-					public void run() {
-						plugin.getLeaderboard().updateLeaderboard(type);
-					}
-				});
+		if (type == dataType.DAILY_TIME) {
+			if (cal.get(Calendar.DAY_OF_WEEK) != plugin.getInternalPropertiesConfig().getTrackedDataType(type)) {
+				return true;
+			}
+		} else if (type == dataType.WEEKLY_TIME) {
+			if (cal.get(Calendar.WEEK_OF_YEAR) != plugin.getInternalPropertiesConfig().getTrackedDataType(type)) {
+				return true;
+			}
+		} else if (type == dataType.MONTHLY_TIME) {
+			if (cal.get(Calendar.MONTH) != plugin.getInternalPropertiesConfig().getTrackedDataType(type)) {
+				return true;
 			}
 		}
+
+		return false;
 	}
 }

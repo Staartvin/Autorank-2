@@ -53,6 +53,12 @@ public abstract class AutorankCommand implements TabExecutor {
 	public abstract boolean onCommand(final CommandSender sender, final Command cmd, final String label,
 			final String[] args);
 
+	/* (non-Javadoc)
+	 * @see org.bukkit.command.TabCompleter#onTabComplete(org.bukkit.command.CommandSender, org.bukkit.command.Command, java.lang.String, java.lang.String[])
+	 */
+	@Override
+	public abstract List<String> onTabComplete(CommandSender sender, Command cmd, String commandLabel, String[] args);
+
 	public void setDesc(final String desc) {
 		this.desc = desc;
 	}
@@ -64,10 +70,4 @@ public abstract class AutorankCommand implements TabExecutor {
 	public void setUsage(final String usage) {
 		this.usage = usage;
 	}
-
-	/* (non-Javadoc)
-	 * @see org.bukkit.command.TabCompleter#onTabComplete(org.bukkit.command.CommandSender, org.bukkit.command.Command, java.lang.String, java.lang.String[])
-	 */
-	@Override
-	public abstract List<String> onTabComplete(CommandSender sender, Command cmd, String commandLabel, String[] args);
 }

@@ -28,10 +28,8 @@ import me.armar.plugins.autorank.Autorank;
  */
 public class UUIDStorage {
 
-	private final HashMap<String, FileConfiguration> configs = new HashMap<String, FileConfiguration>();
 	private final HashMap<String, File> configFiles = new HashMap<String, File>();
-
-	private final Autorank plugin;
+	private final HashMap<String, FileConfiguration> configs = new HashMap<String, FileConfiguration>();
 
 	private final String desFolder;
 
@@ -40,6 +38,8 @@ public class UUIDStorage {
 
 	private final List<String> fileSuffixes = Arrays.asList("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l",
 			"m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "other");
+
+	private final Autorank plugin;
 
 	public UUIDStorage(final Autorank instance) {
 		this.plugin = instance;
@@ -70,10 +70,68 @@ public class UUIDStorage {
 		plugin.debugMessage(ChatColor.RED + "Loaded stored uuids.");
 	}
 
-	public void saveAllFiles() {
-		for (final String suffix : fileSuffixes) {
-			saveConfig(suffix);
+	public FileConfiguration findCorrectConfig(String playerName) {
+
+		// Everything is now stored in lowercase.
+		playerName = playerName.toLowerCase();
+
+		final String key = findMatchingKey(playerName);
+
+		final FileConfiguration config = configs.get(key);
+
+		return config;
+	}
+
+	public String findMatchingKey(String text) {
+		text = text.toLowerCase();
+
+		for (final String key : fileSuffixes) {
+			// Don't check for that one.
+			if (key.equals("other"))
+				continue;
+
+			// Check if name starts with letter
+			if (text.startsWith(key)) {
+				return key;
+			}
 		}
+
+		// return 'uuids_other.yml'
+		return "other";
+	}
+
+	public String getCachedPlayerName(final UUID uuid) {
+		for (final String suffix : fileSuffixes) {
+			final FileConfiguration config = getConfig(suffix);
+
+			for (final String fPlayerName : config.getKeys(false)) {
+				final String fuuid = config.getString(fPlayerName + ".uuid");
+
+				// Skip this player, as there is no uuid
+				if (fuuid == null)
+					continue;
+
+				if (fuuid.equals(uuid.toString())) {
+					return fPlayerName;
+				}
+			}
+		}
+
+		return null;
+	}
+
+	public String getCachedPlayerName(final UUID uuid, final String key) {
+		final FileConfiguration config = configs.get(key);
+
+		for (final String fPlayerName : config.getKeys(false)) {
+			final String fuuid = config.getString(fPlayerName + ".uuid");
+
+			if (fuuid.equals(uuid.toString())) {
+				return fPlayerName;
+			}
+		}
+
+		return null;
 	}
 
 	public FileConfiguration getConfig(final String key) {
@@ -84,6 +142,76 @@ public class UUIDStorage {
 		}
 
 		return config;
+	}
+
+	public int getLastUpdateTime(String playerName) {
+
+		// Everything is now stored in lowercase.
+		playerName = playerName.toLowerCase();
+
+		final long lastUpdateTime = findCorrectConfig(playerName).getLong(playerName + ".updateTime", -1);
+
+		if (lastUpdateTime < 0) {
+			return -1;
+		}
+
+		final long difference = System.currentTimeMillis() - lastUpdateTime;
+
+		final int timeDifference = Math.round(difference / 3600000);
+
+		return timeDifference;
+	}
+
+	public String getRealName(final UUID uuid) {
+		// Returns the real name of the player, or the cached lower case name if no real name exists.
+		final String cachedName = this.getCachedPlayerName(uuid);
+
+		if (cachedName == null)
+			return null;
+
+		final FileConfiguration config = this.findCorrectConfig(cachedName);
+
+		if (config == null)
+			return null;
+
+		final Object realNameObject = config.get(cachedName + ".realName", null);
+
+		return (realNameObject != null ? realNameObject.toString() : null);
+	}
+
+	public UUID getStoredUUID(String playerName) {
+
+		// Everything is now stored in lowercase.
+		playerName = playerName.toLowerCase();
+
+		final String uuidString = findCorrectConfig(playerName).getString(playerName + ".uuid", null);
+
+		if (uuidString == null) {
+			return null;
+		}
+
+		return UUID.fromString(uuidString);
+	}
+
+	public boolean hasRealName(final UUID uuid) {
+		return getRealName(uuid) != null;
+	}
+
+	public boolean isAlreadyStored(final UUID uuid) {
+		return getCachedPlayerName(uuid) != null;
+	}
+
+	public boolean isAlreadyStored(final UUID uuid, final String key) {
+		return getCachedPlayerName(uuid, key) != null;
+	}
+
+	public boolean isOutdated(String playerName) {
+
+		// Everything is now stored in lowercase.
+		playerName = playerName.toLowerCase();
+
+		final int time = getLastUpdateTime(playerName);
+		return (time > expirationDate || time < 0);
 	}
 
 	public void loadConfig(final String key) {
@@ -111,6 +239,12 @@ public class UUIDStorage {
 		configFiles.put(key, configFile);
 	}
 
+	public void saveAllFiles() {
+		for (final String suffix : fileSuffixes) {
+			saveConfig(suffix);
+		}
+	}
+
 	public void saveConfig(final String key) {
 		final File configFile = configFiles.get(key);
 		final FileConfiguration config = configs.get(key);
@@ -124,77 +258,6 @@ public class UUIDStorage {
 		} catch (final IOException ex) {
 			plugin.getLogger().log(Level.SEVERE, "Could not save config to " + configFile, ex);
 		}
-	}
-
-	public String findMatchingKey(String text) {
-		text = text.toLowerCase();
-
-		for (final String key : fileSuffixes) {
-			// Don't check for that one.
-			if (key.equals("other"))
-				continue;
-
-			// Check if name starts with letter
-			if (text.startsWith(key)) {
-				return key;
-			}
-		}
-
-		// return 'uuids_other.yml'
-		return "other";
-	}
-
-	public FileConfiguration findCorrectConfig(String playerName) {
-
-		// Everything is now stored in lowercase.
-		playerName = playerName.toLowerCase();
-
-		final String key = findMatchingKey(playerName);
-
-		final FileConfiguration config = configs.get(key);
-
-		return config;
-	}
-
-	public boolean isOutdated(String playerName) {
-
-		// Everything is now stored in lowercase.
-		playerName = playerName.toLowerCase();
-
-		final int time = getLastUpdateTime(playerName);
-		return (time > expirationDate || time < 0);
-	}
-
-	public UUID getStoredUUID(String playerName) {
-
-		// Everything is now stored in lowercase.
-		playerName = playerName.toLowerCase();
-
-		final String uuidString = findCorrectConfig(playerName).getString(playerName + ".uuid", null);
-
-		if (uuidString == null) {
-			return null;
-		}
-
-		return UUID.fromString(uuidString);
-	}
-
-	public int getLastUpdateTime(String playerName) {
-
-		// Everything is now stored in lowercase.
-		playerName = playerName.toLowerCase();
-
-		final long lastUpdateTime = findCorrectConfig(playerName).getLong(playerName + ".updateTime", -1);
-
-		if (lastUpdateTime < 0) {
-			return -1;
-		}
-
-		final long difference = System.currentTimeMillis() - lastUpdateTime;
-
-		final int timeDifference = Math.round(difference / 3600000);
-
-		return timeDifference;
 	}
 
 	public void storeUUID(String playerName, final UUID uuid, final String realName) {
@@ -246,48 +309,6 @@ public class UUIDStorage {
 		// + uuid + "!");
 	}
 
-	public String getCachedPlayerName(final UUID uuid, final String key) {
-		final FileConfiguration config = configs.get(key);
-
-		for (final String fPlayerName : config.getKeys(false)) {
-			final String fuuid = config.getString(fPlayerName + ".uuid");
-
-			if (fuuid.equals(uuid.toString())) {
-				return fPlayerName;
-			}
-		}
-
-		return null;
-	}
-
-	public String getCachedPlayerName(final UUID uuid) {
-		for (final String suffix : fileSuffixes) {
-			final FileConfiguration config = getConfig(suffix);
-
-			for (final String fPlayerName : config.getKeys(false)) {
-				final String fuuid = config.getString(fPlayerName + ".uuid");
-
-				// Skip this player, as there is no uuid
-				if (fuuid == null)
-					continue;
-
-				if (fuuid.equals(uuid.toString())) {
-					return fPlayerName;
-				}
-			}
-		}
-
-		return null;
-	}
-
-	public boolean isAlreadyStored(final UUID uuid, final String key) {
-		return getCachedPlayerName(uuid, key) != null;
-	}
-
-	public boolean isAlreadyStored(final UUID uuid) {
-		return getCachedPlayerName(uuid) != null;
-	}
-
 	public void transferUUIDs() {
 		// Since Autorank 3.7.1, all names of players are stored lowercase. For
 		// version that update from pre-3.7.1, all names should be converted to
@@ -295,7 +316,7 @@ public class UUIDStorage {
 		// This method checks every uuid and converts it to lowercase. It
 		// returns how many uuids it changed.
 
-		if (plugin.getInternalProps().hasTransferredUUIDs())
+		if (plugin.getInternalPropertiesConfig().hasTransferredUUIDs())
 			return; // UUIDs were already successfully converted.
 
 		plugin.getServer().getConsoleSender().sendMessage("[Autorank] " + ChatColor.RED
@@ -328,28 +349,7 @@ public class UUIDStorage {
 				+ "All UUID files were properly converted. Please restart your server!");
 
 		// Changed all names, now update boolean in internal properties.
-		plugin.getInternalProps().hasTransferredUUIDs(true);
-	}
-
-	public String getRealName(final UUID uuid) {
-		// Returns the real name of the player, or the cached lower case name if no real name exists.
-		final String cachedName = this.getCachedPlayerName(uuid);
-
-		if (cachedName == null)
-			return null;
-
-		final FileConfiguration config = this.findCorrectConfig(cachedName);
-
-		if (config == null)
-			return null;
-
-		final Object realNameObject = config.get(cachedName + ".realName", null);
-
-		return (realNameObject != null ? realNameObject.toString() : null);
-	}
-
-	public boolean hasRealName(final UUID uuid) {
-		return getRealName(uuid) != null;
+		plugin.getInternalPropertiesConfig().hasTransferredUUIDs(true);
 	}
 
 }

@@ -22,8 +22,8 @@ import me.staartvin.statz.hooks.Dependency;
  */
 public class StatzAPIHandler implements DependencyHandler {
 
-	private Statz statz;
 	private final Autorank plugin;
+	private Statz statz;
 
 	public StatzAPIHandler(final Autorank instance) {
 		plugin = instance;
@@ -51,64 +51,11 @@ public class StatzAPIHandler implements DependencyHandler {
 		return plugin;
 	}
 
-	/* (non-Javadoc)
-	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#isAvailable()
-	 */
-	@Override
-	public boolean isAvailable() {
-		return statz != null;
-	}
-
-	/* (non-Javadoc)
-	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#isInstalled()
-	 */
-	@Override
-	public boolean isInstalled() {
-		final Plugin plugin = get();
-
-		return plugin != null && plugin.isEnabled();
-	}
-
-	/* (non-Javadoc)
-	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#setup()
-	 */
-	@Override
-	public boolean setup(final boolean verbose) {
-		if (!isInstalled()) {
-			if (verbose) {
-				plugin.getLogger().info("Statz has not been found!");
-			}
-			return false;
-		} else {
-			statz = (Statz) get();
-
-			if (statz != null) {
-				if (verbose) {
-					plugin.getLogger().info("Statz has been found and can be used!");
-				}
-				return true;
-			} else {
-				if (verbose) {
-					plugin.getLogger().info("Statz has been found but cannot be used!");
-				}
-				return false;
-			}
-		}
-	}
-
-	public double getTotalOf(UUID uuid, StatsPlugin.statTypes statType, String worldName) {
+	public me.staartvin.statz.hooks.DependencyHandler getDependencyHandler(Dependency dep) {
 		if (!this.isAvailable())
-			return -1;
+			return null;
 
-		double value;
-
-		if (worldName == null) {
-			value = getSpecificData(uuid, statType);
-		} else {
-			value = getSpecificData(uuid, statType, new RowRequirement("world", worldName));
-		}
-
-		return value;
+		return statz.getStatzAPI().getDependencyHandler(dep);
 	}
 
 	public double getSpecificData(UUID uuid, StatsPlugin.statTypes statType, RowRequirement... conditions) {
@@ -172,11 +119,64 @@ public class StatzAPIHandler implements DependencyHandler {
 		return (double) value;
 	}
 
-	public me.staartvin.statz.hooks.DependencyHandler getDependencyHandler(Dependency dep) {
+	public double getTotalOf(UUID uuid, StatsPlugin.statTypes statType, String worldName) {
 		if (!this.isAvailable())
-			return null;
+			return -1;
 
-		return statz.getStatzAPI().getDependencyHandler(dep);
+		double value;
+
+		if (worldName == null) {
+			value = getSpecificData(uuid, statType);
+		} else {
+			value = getSpecificData(uuid, statType, new RowRequirement("world", worldName));
+		}
+
+		return value;
+	}
+
+	/* (non-Javadoc)
+	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#isAvailable()
+	 */
+	@Override
+	public boolean isAvailable() {
+		return statz != null;
+	}
+
+	/* (non-Javadoc)
+	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#isInstalled()
+	 */
+	@Override
+	public boolean isInstalled() {
+		final Plugin plugin = get();
+
+		return plugin != null && plugin.isEnabled();
+	}
+
+	/* (non-Javadoc)
+	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#setup()
+	 */
+	@Override
+	public boolean setup(final boolean verbose) {
+		if (!isInstalled()) {
+			if (verbose) {
+				plugin.getLogger().info("Statz has not been found!");
+			}
+			return false;
+		} else {
+			statz = (Statz) get();
+
+			if (statz != null) {
+				if (verbose) {
+					plugin.getLogger().info("Statz has been found and can be used!");
+				}
+				return true;
+			} else {
+				if (verbose) {
+					plugin.getLogger().info("Statz has been found but cannot be used!");
+				}
+				return false;
+			}
+		}
 	}
 
 }

@@ -26,18 +26,18 @@ import me.armar.plugins.autorank.Autorank;
  */
 public class UUIDManager {
 
-	private static Autorank plugin;
-
-	static {
-		plugin = (Autorank) Bukkit.getPluginManager().getPlugin("Autorank");
-	}
-
 	private static Map<UUID, String> foundPlayers = new HashMap<UUID, String>();
 
 	private static Map<String, UUID> foundUUIDs = new HashMap<String, UUID>();
 
+	private static Autorank plugin;
+
 	// Whether to use cache or not
 	private static final boolean useCache = true;
+
+	static {
+		plugin = (Autorank) Bukkit.getPluginManager().getPlugin("Autorank");
+	}
 
 	public static void addCachedPlayer(final String playerName, final UUID uuid, final String realName) {
 		if (!useCache)

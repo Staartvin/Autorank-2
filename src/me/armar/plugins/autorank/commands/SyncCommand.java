@@ -59,7 +59,7 @@ public class SyncCommand extends AutorankCommand {
 					int count = 0;
 
 					// Update all data.yml records
-					for (Entry<UUID, Integer> entry : plugin.getMySQLWrapper().getAllPlayersFromDatabase().entrySet()) {
+					for (Entry<UUID, Integer> entry : plugin.getMySQLManager().getAllPlayersFromDatabase().entrySet()) {
 						plugin.getPlaytimes().setLocalTime(entry.getKey(), entry.getValue());
 						count++;
 					}

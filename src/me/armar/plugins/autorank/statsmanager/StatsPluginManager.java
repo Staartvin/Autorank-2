@@ -30,8 +30,8 @@ public class StatsPluginManager {
 		plugin = instance;
 	}
 
-	public boolean findStats() {
-		final Plugin x = plugin.getServer().getPluginManager().getPlugin("Stats");
+	public boolean findStatistics() {
+		final Plugin x = plugin.getServer().getPluginManager().getPlugin("Statistics");
 		// Main == Stats main class
 		if (x != null && x instanceof JavaPlugin) {
 			return true;
@@ -40,8 +40,8 @@ public class StatsPluginManager {
 		return false;
 	}
 
-	public boolean findStatistics() {
-		final Plugin x = plugin.getServer().getPluginManager().getPlugin("Statistics");
+	public boolean findStats() {
+		final Plugin x = plugin.getServer().getPluginManager().getPlugin("Stats");
 		// Main == Stats main class
 		if (x != null && x instanceof JavaPlugin) {
 			return true;

@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
-import me.armar.plugins.autorank.rankbuilder.Path;
+import me.armar.plugins.autorank.pathbuilder.Path;
 import me.armar.plugins.autorank.util.AutorankTools;
 
 public class ChooseCommand extends AutorankCommand {
@@ -47,34 +47,30 @@ public class ChooseCommand extends AutorankCommand {
 
 		final String pathName = AutorankTools.getStringFromArgs(args, 1);
 
-		final String groupName = plugin.getAPI().getPrimaryGroup(player);
+		// Get current path
+		Path activePath = plugin.getPathManager().getCurrentPath(player.getUniqueId());
 
-		final List<Path> changeGroups = plugin.getPlayerChecker().getChangeGroupManager().getChangeGroups(groupName);
-
-		if (changeGroups == null || changeGroups.size() == 1) {
-			sender.sendMessage(Lang.ONLY_DEFAULT_PATH.getConfigValue());
-			return true;
-		}
-
-		if (pathName.equalsIgnoreCase(plugin.getPlayerDataHandler().getChosenPath(player.getUniqueId()))) {
+		if (activePath != null && activePath.getDisplayName().equalsIgnoreCase(pathName)) {
 			sender.sendMessage(Lang.ALREADY_ON_THIS_PATH.getConfigValue());
 			return true;
 		}
 
-		final Path changeGroup = plugin.getPlayerChecker().getChangeGroupManager()
-				.matchChangeGroupFromDisplayName(groupName, pathName.toLowerCase());
+		// Try to find path that matches given name
+		Path targetPath = plugin.getPathManager().matchPath(pathName, false);
 
-		if (changeGroup == null) {
+		if (targetPath == null) {
 			sender.sendMessage(Lang.NO_PATH_FOUND_WITH_THAT_NAME.getConfigValue());
 			return true;
 		}
 
-		plugin.getPlayerDataHandler().setChosenPath(player.getUniqueId(), changeGroup.getInternalGroup());
+		// Set chosen path to target path
+		plugin.getPlayerDataConfig().setChosenPath(player.getUniqueId(), targetPath.getDisplayName());
 
 		// Reset progress
-		plugin.getPlayerDataHandler().setPlayerProgress(player.getUniqueId(), new ArrayList<Integer>());
+		plugin.getPlayerDataConfig().setPlayerProgress(player.getUniqueId(), new ArrayList<Integer>());
 
-		sender.sendMessage(Lang.CHOSEN_PATH.getConfigValue(changeGroup.getDisplayName()));
+		// Give player confirmation message.
+		sender.sendMessage(Lang.CHOSEN_PATH.getConfigValue(targetPath.getDisplayName()));
 		sender.sendMessage(Lang.PROGRESS_RESET.getConfigValue());
 
 		return true;
@@ -92,12 +88,10 @@ public class ChooseCommand extends AutorankCommand {
 
 		final List<String> possibilities = new ArrayList<String>();
 
-		final String groupName = plugin.getPermPlugHandler().getPrimaryGroup(player);
+		final List<Path> possiblePaths = plugin.getPathManager().getPossiblePaths(player);
 
-		final List<Path> changeGroups = plugin.getPlayerChecker().getChangeGroupManager().getChangeGroups(groupName);
-
-		for (final Path changeGroup : changeGroups) {
-			possibilities.add(changeGroup.getDisplayName());
+		for (Path possiblePath : possiblePaths) {
+			possibilities.add(possiblePath.getDisplayName());
 		}
 
 		return possibilities;

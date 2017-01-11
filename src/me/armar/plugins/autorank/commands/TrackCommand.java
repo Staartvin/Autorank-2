@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
-import me.armar.plugins.autorank.rankbuilder.holders.RequirementsHolder;
+import me.armar.plugins.autorank.pathbuilder.holders.RequirementsHolder;
 
 public class TrackCommand extends AutorankCommand {
 
@@ -94,7 +94,7 @@ public class TrackCommand extends AutorankCommand {
 			// Human logic = first number is 1 not 0.
 			final RequirementsHolder holder = holders.get((completionID - 1));
 
-			if (plugin.getPlayerDataHandler().hasCompletedRequirement((completionID - 1), uuid)) {
+			if (plugin.getPlayerDataConfig().hasCompletedRequirement((completionID - 1), uuid)) {
 				player.sendMessage(ChatColor.RED + Lang.ALREADY_COMPLETED_REQUIREMENT.getConfigValue());
 				return true;
 			}

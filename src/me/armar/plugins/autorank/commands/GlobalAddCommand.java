@@ -38,7 +38,7 @@ public class GlobalAddCommand extends AutorankCommand {
 			return true;
 		}
 
-		if (!plugin.getMySQLWrapper().isMySQLEnabled()) {
+		if (!plugin.getMySQLManager().isMySQLEnabled()) {
 			sender.sendMessage(ChatColor.RED + Lang.MYSQL_IS_NOT_ENABLED.getConfigValue());
 			return true;
 		}

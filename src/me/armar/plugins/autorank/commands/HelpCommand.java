@@ -41,6 +41,16 @@ public class HelpCommand extends AutorankCommand {
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see me.armar.plugins.autorank.commands.manager.AutorankCommand#onTabComplete(org.bukkit.command.CommandSender, org.bukkit.command.Command, java.lang.String, java.lang.String[])
+	 */
+	@Override
+	public List<String> onTabComplete(final CommandSender sender, final Command cmd, final String commandLabel,
+			final String[] args) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	private void showHelpPages(final CommandSender sender, int page) {
 		List<AutorankCommand> commands = new ArrayList<AutorankCommand>(
 				plugin.getCommandsManager().getRegisteredCommands().values());
@@ -100,15 +110,5 @@ public class HelpCommand extends AutorankCommand {
 		}
 
 		sender.sendMessage(ChatColor.BLUE + "Page " + page + " of " + maxPages);
-	}
-
-	/* (non-Javadoc)
-	 * @see me.armar.plugins.autorank.commands.manager.AutorankCommand#onTabComplete(org.bukkit.command.CommandSender, org.bukkit.command.Command, java.lang.String, java.lang.String[])
-	 */
-	@Override
-	public List<String> onTabComplete(final CommandSender sender, final Command cmd, final String commandLabel,
-			final String[] args) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }

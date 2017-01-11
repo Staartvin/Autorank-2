@@ -47,6 +47,10 @@ public class BackupDataManager {
 		return backupConfig;
 	}
 
+	public long getLatestBackup(final String file) {
+		return backupConfig.getLong(file, -1);
+	}
+
 	/**
 	 * Loads the backup data file of Autorank (backup-data.yml).
 	 */
@@ -94,9 +98,5 @@ public class BackupDataManager {
 		} catch (final IOException ex) {
 			plugin.getLogger().log(Level.SEVERE, "Could not save config to " + backupConfigFile, ex);
 		}
-	}
-
-	public long getLatestBackup(final String file) {
-		return backupConfig.getLong(file, -1);
 	}
 }

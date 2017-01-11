@@ -103,19 +103,11 @@ public class Debugger {
 			out.write("");
 			out.newLine();
 
-			for (final String change : plugin.getPlayerChecker().toStringList()) {
+			for (final String change : plugin.getPathManager().debugPaths()) {
 				out.write(change);
 				out.newLine();
 			}
 
-			out.write("");
-			out.newLine();
-
-			final String usedConfig = (plugin.getConfigHandler().useAdvancedConfig() ? "AdvancedConfig.yml"
-					: "SimpleConfig.yml");
-
-			out.write("Config used: " + usedConfig);
-			out.newLine();
 			out.write("");
 			out.newLine();
 

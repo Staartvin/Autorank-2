@@ -49,6 +49,42 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 		// return permission.playerAddGroup(world, player.getName(), group);
 	}
 
+	@Override
+	public boolean demotePlayer(final Player player, String world, final String groupFrom, final String groupTo) {
+		// Temporary fix for bPermissions
+		if (world == null && VaultHandler.permission.getName().toLowerCase().contains("bpermissions")) {
+			world = player.getWorld().getName();
+		}
+
+		// Let get the player groups before we change them.
+		final String[] groupsBeforeAdd = getPlayerGroups(player);
+
+		// Output array for debug
+		for (final String group : groupsBeforeAdd) {
+			plugin.debugMessage("Group of " + player.getName() + " before removing: " + group);
+		}
+
+		String[] groupsAfterAdd = null;
+
+		final boolean worked1 = removeGroup(player, world, groupFrom);
+
+		boolean worked2 = false;
+
+		if (worked1) {
+			// There should be a difference between the two.
+			groupsAfterAdd = getPlayerGroups(player);
+
+			// Output array for debug
+			for (final String group : groupsAfterAdd) {
+				plugin.debugMessage("Group of " + player.getName() + " after removing: " + group);
+			}
+
+			worked2 = addGroup(player, world, groupTo);
+		}
+
+		return worked1 && worked2;
+	}
+
 	/**
 	 * Get all known groups
 	 * 
@@ -62,6 +98,17 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 		}
 
 		return VaultHandler.permission.getGroups();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see me.armar.plugins.autorank.permissions.PermissionsHandler#getName()
+	 */
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return VaultHandler.permission.getName();
 	}
 
 	@Override
@@ -86,18 +133,18 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 		// Check if the latest known group is the current group. Otherwise,
 		// reset progress
 		final String currentGroup = groups[0];
-		String latestKnownGroup = plugin.getPlayerDataHandler().getLastKnownGroup(uuid);
+		String latestKnownGroup = plugin.getPlayerDataConfig().getLastKnownGroup(uuid);
 
 		if (latestKnownGroup == null) {
-			plugin.getPlayerDataHandler().setLastKnownGroup(uuid, currentGroup);
+			plugin.getPlayerDataConfig().setLastKnownGroup(uuid, currentGroup);
 
 			latestKnownGroup = currentGroup;
 		}
 		if (!latestKnownGroup.equalsIgnoreCase(currentGroup)) {
 			// Reset progress and update latest known group
-			plugin.getPlayerDataHandler().setPlayerProgress(uuid, new ArrayList<Integer>());
-			plugin.getPlayerDataHandler().setLastKnownGroup(uuid, currentGroup);
-			plugin.getPlayerDataHandler().setChosenPath(uuid, null);
+			plugin.getPlayerDataConfig().setPlayerProgress(uuid, new ArrayList<Integer>());
+			plugin.getPlayerDataConfig().setLastKnownGroup(uuid, currentGroup);
+			plugin.getPlayerDataConfig().setChosenPath(uuid, null);
 
 			plugin.debugMessage("Reset player data for " + player.getName());
 		}
@@ -202,53 +249,6 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 			} else {
 				worked2 = removeGroup(player, world, oldGroup);
 			}
-		}
-
-		return worked1 && worked2;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see me.armar.plugins.autorank.permissions.PermissionsHandler#getName()
-	 */
-	@Override
-	public String getName() {
-		// TODO Auto-generated method stub
-		return VaultHandler.permission.getName();
-	}
-
-	@Override
-	public boolean demotePlayer(final Player player, String world, final String groupFrom, final String groupTo) {
-		// Temporary fix for bPermissions
-		if (world == null && VaultHandler.permission.getName().toLowerCase().contains("bpermissions")) {
-			world = player.getWorld().getName();
-		}
-
-		// Let get the player groups before we change them.
-		final String[] groupsBeforeAdd = getPlayerGroups(player);
-
-		// Output array for debug
-		for (final String group : groupsBeforeAdd) {
-			plugin.debugMessage("Group of " + player.getName() + " before removing: " + group);
-		}
-
-		String[] groupsAfterAdd = null;
-
-		final boolean worked1 = removeGroup(player, world, groupFrom);
-
-		boolean worked2 = false;
-
-		if (worked1) {
-			// There should be a difference between the two.
-			groupsAfterAdd = getPlayerGroups(player);
-
-			// Output array for debug
-			for (final String group : groupsAfterAdd) {
-				plugin.debugMessage("Group of " + player.getName() + " after removing: " + group);
-			}
-
-			worked2 = addGroup(player, world, groupTo);
 		}
 
 		return worked1 && worked2;
