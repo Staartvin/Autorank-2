@@ -213,12 +213,6 @@ public class PathBuilder {
 						newRequirement.setWorld(plugin.getPathsConfig().getWorldOfRequirement(pathName, reqName));
 					}
 
-					// Set whether this requirement will derank a player if it
-					// is not met.
-					if (plugin.getPathsConfig().isRequirementDerankable(pathName, reqName)) {
-						reqHolder.setDerankable(true);
-					}
-
 					// Add requirement to holder
 					reqHolder.addRequirement(newRequirement);
 				}
@@ -257,6 +251,9 @@ public class PathBuilder {
 
 				// Create a holder for the path
 				final RequirementsHolder prereqHolder = new RequirementsHolder(plugin);
+				
+				// Make sure to tell it that this is storing prerequisites
+				prereqHolder.setPrerequisite(true);
 
 				// Option strings seperated
 				final List<String[]> optionsList = plugin.getPathsConfig().getPrerequisiteOptions(pathName,

@@ -29,7 +29,8 @@ import me.armar.plugins.autorank.pathbuilder.result.Result;
  */
 public class RequirementsHolder {
 
-	private boolean isDerankable = false;
+	// Is this requirements holder used as a prerequisite
+	private boolean isPrerequisite = false;
 
 	private final Autorank plugin;
 
@@ -163,16 +164,6 @@ public class RequirementsHolder {
 		return new ArrayList<Result>();
 	}
 
-	/**
-	 * Check whether a player could be deranked if he does not meet this
-	 * requirement.
-	 * 
-	 * @return true if he can be demoted, false otherwise.
-	 */
-	public boolean isDerankable() {
-		return isDerankable;
-	}
-
 	public boolean isOptional() {
 		// If any requirement is optional, they are all optional
 		for (final Requirement r : this.getRequirements()) {
@@ -200,17 +191,37 @@ public class RequirementsHolder {
 				return true;
 			}
 
-			// If this requirement doesn't auto complete and hasn't already
-			// been completed, return false;
-			if (!r.useAutoCompletion() && !plugin.getPlayerDataConfig().hasCompletedRequirement(reqID, uuid)) {
-				return false;
+			
+			if (this.isPrerequisite) {
+				// If this requirement doesn't auto complete and hasn't already
+				// been completed, return false;
+				if (!r.useAutoCompletion() && !plugin.getPlayerDataConfig().hasCompletedPrerequisite(reqID, uuid)) {
+					return false;
+				}
+			} else {
+				// If this requirement doesn't auto complete and hasn't already
+				// been completed, return false;
+				if (!r.useAutoCompletion() && !plugin.getPlayerDataConfig().hasCompletedRequirement(reqID, uuid)) {
+					return false;
+				}
 			}
+			
+			if (this.isPrerequisite) {
+				// Player has completed it already but this requirement is NOT derankable
+				// If it is derankable, we don't want this method to return true when it is already completed.
+				if (plugin.getPlayerDataConfig().hasCompletedPrerequisite(reqID, uuid)) {
+					return true;
+				}
+			} else {
+				// Player has completed it already but this requirement is NOT derankable
+				// If it is derankable, we don't want this method to return true when it is already completed.
+				if (plugin.getPlayerDataConfig().hasCompletedRequirement(reqID, uuid)) {
+					return true;
+				}
+			}
+			
 
-			// Player has completed it already but this requirement is NOT derankable
-			// If it is derankable, we don't want this method to return true when it is already completed.
-			if (plugin.getPlayerDataConfig().hasCompletedRequirement(reqID, uuid) && !this.isDerankable()) {
-				return true;
-			}
+			
 
 			if (!r.meetsRequirement(player)) {
 				continue;
@@ -222,7 +233,11 @@ public class RequirementsHolder {
 
 				// Player has not completed this requirement -> perform
 				// results
-				plugin.getPlayerDataConfig().addPlayerProgress(uuid, reqID);
+				if (this.isPrerequisite) {
+					//plugin.getPlayerDataConfig().addCompletedPrerequisite(uuid, reqID);
+				} else {
+					plugin.getPlayerDataConfig().addCompletedRequirement(uuid, reqID);
+				}
 
 				boolean noErrors = true;
 				for (final Result realResult : results) {
@@ -240,11 +255,7 @@ public class RequirementsHolder {
 
 		return result;
 	}
-
-	public void setDerankable(final boolean isDerankable) {
-		this.isDerankable = isDerankable;
-	}
-
+	
 	public void setRequirements(final List<Requirement> requirements) {
 		this.requirements = requirements;
 	}
@@ -256,5 +267,13 @@ public class RequirementsHolder {
 		}
 
 		return false;
+	}
+
+	public boolean isPrerequisite() {
+		return isPrerequisite;
+	}
+
+	public void setPrerequisite(boolean isPrerequisite) {
+		this.isPrerequisite = isPrerequisite;
 	}
 }

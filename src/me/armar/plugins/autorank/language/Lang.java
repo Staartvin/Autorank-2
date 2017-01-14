@@ -29,9 +29,9 @@ public enum Lang {
 	 */
 	ACID_ISLAND_LEVEL_REQUIREMENT("acid-island-level-requirement", "Have at least an (acid) island level of {0}."),
 	/**
-	 * but has already completed this rankup before.
+	 * but has already completed this path before.
 	 */
-	ALREADY_COMPLETED_RANK("already-completed-rank", "but has already completed this rankup before."),
+	ALREADY_COMPLETED_PATH("already-completed-path", "but has already completed this path before."),
 	/**
 	 * &cYou have already completed this requirement!
 	 */
@@ -73,9 +73,9 @@ public enum Lang {
 	 */
 	ASKYBLOCK_LEVEL_REQUIREMENT("askyblock-level-requirement", "Have at least an (skyblock) island level of {0}."),
 	/**
-	 * &3Autorank has been reloaded.
+	 * &3Autorank's files have been reloaded.
 	 */
-	AUTORANK_RELOADED("autorank-reloaded", "&3Autorank has been reloaded."),
+	AUTORANK_RELOADED("autorank-reloaded", "&3Autorank's files have been reloaded."),
 	/**
 	 * Travel at least {0} {1}.
 	 */

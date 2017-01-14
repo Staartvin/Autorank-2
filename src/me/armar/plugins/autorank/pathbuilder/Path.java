@@ -50,14 +50,8 @@ public class Path {
 	public boolean applyChange(final Player player) {
 		boolean result = true;
 
-		/*if (this.checkDerankableRequirements(player)) {
-			return false;
-		}*/
-
 		if (meetRequirements(player)) {
 
-			// final UUID uuid =
-			// UUIDManager.getUUIDFromPlayer(player.getName());
 			final UUID uuid = plugin.getUUIDStorage().getStoredUUID(player.getName());
 
 			// Apply all 'main' results
@@ -96,87 +90,6 @@ public class Path {
 		return displayName;
 	}
 
-	/**
-	 * Check whether a player should be deranked based on its requirements
-	 * 
-	 * @param player Player to check.
-	 * @return true if the player will be deranked, false otherwise.
-	 */
-	/*public boolean checkDerankableRequirements(final Player player) {
-		// Player can never be deranked with this option set to false.
-		if (!plugin.getConfigHandler().allowDeranking())
-			return false;
-	
-		// final UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
-		final UUID uuid = plugin.getUUIDStorage().getStoredUUID(player.getName());
-	
-		for (final RequirementsHolder holder : this.getRequirements()) {
-			if (holder == null)
-				continue;
-	
-			// Holder does not meet requirements, so not all requirements are
-			// met!
-			if (!holder.meetsRequirement(player, uuid)) {
-				if (holder.isDerankable()) {
-					// Does not meet requirement and is derankable, so demote.
-	
-					// We don't know the previous group, so we can't demote.
-					if (this.getPreviousGroup() == null) {
-						continue;
-					}
-	
-					plugin.debugMessage("Demote player " + player.getName() + " to " + this.getPreviousGroup()
-							+ " since he doesn't meet a requirement (that requirement is also derankable).");
-	
-					// When rank is changed: reset progress and update last
-					// known group
-					plugin.getPlayerDataHandler().setPlayerProgress(uuid, new ArrayList<Integer>());
-	
-					plugin.getPlayerDataHandler().setLastKnownGroup(uuid, this.getPreviousGroup());
-	
-					// Reset chosen path as the player is moved to another group
-					plugin.getPlayerDataHandler().setChosenPath(uuid, null);
-	
-					plugin.getPermPlugHandler().getPermissionPlugin().demotePlayer(player, null, this.getParentGroup(),
-							this.getPreviousGroup());
-	
-					// Find the commands that have to be run
-					final List<String> commands = plugin.getConfigHandler().getCommandsOnDerank(this.getParentGroup(),
-							plugin.getConfigHandler().getRequirementNameOfId(this.getParentGroup(), holder.getReqID()));
-	
-					// Run the commands
-					for (final String command : commands) {
-						final String cmd = command.replace("&p", player.getName());
-	
-						if (!Bukkit.isPrimaryThread()) {
-							plugin.getServer().getScheduler().runTask(plugin, new Runnable() {
-	
-								@Override
-								public void run() {
-									// Run command sync if we are currently not in main thread.
-									plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), cmd);
-								}
-	
-							});
-						} else {
-							plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), cmd);
-						}
-	
-					}
-	
-					// Send player message telling them they have deranked
-					player.sendMessage(
-							Lang.DERANK_MESSAGE.getConfigValue(this.getPreviousGroup(), holder.getDescription()));
-					return true;
-				}
-			}
-	
-		}
-	
-		// When never returning true, return true at false!
-		return false;
-	}*/
-
 	public List<RequirementsHolder> getFailedRequirementsHolders(final Player player) {
 		final List<RequirementsHolder> holders = new ArrayList<RequirementsHolder>();
 
@@ -191,23 +104,12 @@ public class Path {
 	}
 
 	public List<RequirementsHolder> getPrerequisites() {
-		return requirements;
+		return prerequisites;
 	}
 
 	public List<RequirementsHolder> getRequirements() {
 		return requirements;
 	}
-
-	// // Grabs all requirements of all holders
-	// public List<Requirement> getAllRequirements() {
-	// List<Requirement> requirements = new ArrayList<Requirement>();
-	//
-	// for (RequirementsHolder holder: this.getRequirementsHolders()) {
-	// requirements.addAll(holder.getRequirements());
-	// }
-	//
-	// return requirements;
-	// }
 
 	public List<Result> getResults() {
 		return results;
@@ -215,7 +117,6 @@ public class Path {
 
 	public boolean meetRequirements(final Player player) {
 
-		// final UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
 		final UUID uuid = plugin.getUUIDStorage().getStoredUUID(player.getName());
 
 		// Get chosen path of player

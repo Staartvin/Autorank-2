@@ -129,7 +129,7 @@ public class CheckCommand extends AutorankCommand {
 						continue;
 
 					if (!plugin.getPlayerDataConfig().hasCompletedRequirement(reqID, uuid)) {
-						plugin.getPlayerDataConfig().addPlayerProgress(uuid, reqID);
+						plugin.getPlayerDataConfig().addCompletedRequirement(uuid, reqID);
 
 						// Run results
 						plugin.getPlayerDataConfig().runResults(holder, player);
@@ -202,7 +202,7 @@ public class CheckCommand extends AutorankCommand {
 		String reqMessage2 = "";
 
 		if (plugin.getPlayerDataConfig().hasCompletedPath(uuid, activePath.getDisplayName())) {
-			reqMessage2 = " " + Lang.ALREADY_COMPLETED_RANK.getConfigValue();
+			reqMessage2 = " " + Lang.ALREADY_COMPLETED_PATH.getConfigValue();
 		} else {
 			reqMessage2 = Lang.RANKED_UP_NOW.getConfigValue();
 		}

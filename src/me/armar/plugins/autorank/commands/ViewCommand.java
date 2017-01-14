@@ -113,9 +113,11 @@ public class ViewCommand extends AutorankCommand {
 
 				List<RequirementsHolder> holders = targetPath.getPrerequisites();
 
+				sender.sendMessage("LENGTH: " + holders.size());
+				
 				// Set messages depending on console or player
 				List<String> messages = (isPlayer
-						? plugin.getPlayerChecker().formatRequirementsToList(targetPath.getRequirements(),
+						? plugin.getPlayerChecker().formatRequirementsToList(holders,
 								plugin.getPlayerChecker().getMetRequirementsHolders(holders, (Player) sender))
 						: plugin.getPlayerChecker().formatRequirementsToList(holders, new ArrayList<Integer>()));
 
@@ -148,7 +150,7 @@ public class ViewCommand extends AutorankCommand {
 
 				// Set messages depending on console or player
 				List<String> messages = (isPlayer
-						? plugin.getPlayerChecker().formatRequirementsToList(targetPath.getRequirements(),
+						? plugin.getPlayerChecker().formatRequirementsToList(holders,
 								plugin.getPlayerChecker().getMetRequirementsHolders(holders, (Player) sender))
 						: plugin.getPlayerChecker().formatRequirementsToList(holders, new ArrayList<Integer>()));
 

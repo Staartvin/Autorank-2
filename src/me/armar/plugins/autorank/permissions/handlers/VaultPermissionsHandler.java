@@ -142,7 +142,7 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 		}
 		if (!latestKnownGroup.equalsIgnoreCase(currentGroup)) {
 			// Reset progress and update latest known group
-			plugin.getPlayerDataConfig().setPlayerProgress(uuid, new ArrayList<Integer>());
+			plugin.getPlayerDataConfig().setCompletedRequirements(uuid, new ArrayList<Integer>());
 			plugin.getPlayerDataConfig().setLastKnownGroup(uuid, currentGroup);
 			plugin.getPlayerDataConfig().setChosenPath(uuid, null);
 

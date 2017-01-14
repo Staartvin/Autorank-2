@@ -102,7 +102,7 @@ public class CompleteCommand extends AutorankCommand {
 				plugin.getPlayerDataConfig().runResults(holder, player);
 
 				// Log that a player has passed this requirement
-				plugin.getPlayerDataConfig().addPlayerProgress(uuid, (completionID - 1));
+				plugin.getPlayerDataConfig().addCompletedRequirement(uuid, (completionID - 1));
 
 			} else {
 				// player does not meet requirements

@@ -1,6 +1,5 @@
 package me.armar.plugins.autorank.config;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -77,23 +76,62 @@ public class PlayerDataConfig {
 		config.saveFile();
 	}
 
-	public void addCompletedPath(final UUID uuid, final String pathName) {
-		final List<String> completed = getCompletedPaths(uuid);
-
-		completed.add(pathName);
-
-		setCompletedPaths(uuid, completed);
-	}
-
-	public void addPlayerProgress(final UUID uuid, final int reqID) {
-		final List<Integer> progress = getProgress(uuid);
+	public void addCompletedRequirement(final UUID uuid, final int reqID) {
+		final List<Integer> progress = getCompletedRequirements(uuid);
 
 		if (hasCompletedRequirement(reqID, uuid))
 			return;
 
 		progress.add(reqID);
 
-		setPlayerProgress(uuid, progress);
+		setCompletedRequirements(uuid, progress);
+	}
+
+	public void setCompletedRequirements(final UUID uuid, final List<Integer> requirements) {
+		config.set(uuid.toString() + ".completed requirements", requirements);
+	}
+	
+	public List<Integer> getCompletedRequirements(final UUID uuid) {
+		return config.getIntegerList(uuid.toString() + ".completed requirements");
+	}
+	
+	public boolean hasCompletedRequirement(final int reqID, final UUID uuid) {
+		final List<Integer> completedRequirement = getCompletedRequirements(uuid);
+
+		return completedRequirement.contains(reqID);
+	}
+	
+	public void addCompletedPrerequisite(final UUID uuid, final int preReqID) {
+		final List<Integer> progress = getCompletedPrerequisites(uuid);
+
+		if (hasCompletedPrerequisite(preReqID, uuid))
+			return;
+
+		progress.add(preReqID);
+
+		setCompletedPrerequisites(uuid, progress);
+	}
+
+	public void setCompletedPrerequisites(final UUID uuid, final List<Integer> prerequisites) {
+		config.set(uuid.toString() + ".completed prerequisites", prerequisites);
+	}
+	
+	public List<Integer> getCompletedPrerequisites(final UUID uuid) {
+		return config.getIntegerList(uuid.toString() + ".completed prerequisites");
+	}
+	
+	public boolean hasCompletedPrerequisite(final int reqID, final UUID uuid) {
+		final List<Integer> completedPrerequisites = getCompletedPrerequisites(uuid);
+
+		return completedPrerequisites.contains(reqID);
+	}
+
+	public void addCompletedPath(final UUID uuid, final String pathName) {
+		final List<String> completed = getCompletedPaths(uuid);
+
+		completed.add(pathName);
+
+		setCompletedPaths(uuid, completed);
 	}
 
 	public boolean checkValidChosenPath(final Player player) {
@@ -181,14 +219,6 @@ public class PlayerDataConfig {
 		return config.getString(uuid.toString() + ".last group");
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<Integer> getProgress(final UUID uuid) {
-		//UUID uuid = UUIDManager.getUUIDFromPlayer(playerName);
-		//Validate.notNull(uuid, "UUID of a player is null!");
-
-		return (List<Integer>) config.getList(uuid.toString() + ".progress", new ArrayList<Integer>());
-	}
-
 	public boolean hasCompletedPath(final UUID uuid, final String pathName) {
 		// If player can rank up forever on the same rank, we will always return false.
 		if (plugin.getPathsConfig().allowInfinitePathing(pathName)) {
@@ -198,11 +228,6 @@ public class PlayerDataConfig {
 		return getCompletedPaths(uuid).contains(pathName);
 	}
 
-	public boolean hasCompletedRequirement(final int reqID, final UUID uuid) {
-		final List<Integer> progress = getProgress(uuid);
-
-		return progress.contains(reqID);
-	}
 
 	public boolean hasLeaderboardExemption(final UUID uuid) {
 		//Validate.notNull(uuid, "UUID of a player is null!");
@@ -246,11 +271,5 @@ public class PlayerDataConfig {
 	public void setLastKnownGroup(final UUID uuid, final String group) {
 		//UUID uuid = UUIDManager.getUUIDFromPlayer(playerName);
 		config.set(uuid.toString() + ".last group", group);
-	}
-
-	public void setPlayerProgress(final UUID uuid, final List<Integer> progress) {
-		//UUID uuid = UUIDManager.getUUIDFromPlayer(playerName);
-
-		config.set(uuid.toString() + ".progress", progress);
 	}
 }

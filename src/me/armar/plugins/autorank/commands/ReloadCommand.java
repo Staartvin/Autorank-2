@@ -28,9 +28,16 @@ public class ReloadCommand extends AutorankCommand {
 		if (!plugin.getCommandsManager().hasPermission("autorank.reload", sender)) {
 			return true;
 		}
-
+		
+		// Reload files
+		plugin.getPathsConfig().reloadConfig();
+		plugin.getPlayerDataConfig().reloadConfig();
+		plugin.getSettingsConfig().reloadConfig();
+		
+		// Rebuild paths
+		plugin.getPathManager().initialiseFromConfigs();
+		
 		AutorankTools.sendColoredMessage(sender, Lang.AUTORANK_RELOADED.getConfigValue());
-		plugin.reload();
 
 		return true;
 	}

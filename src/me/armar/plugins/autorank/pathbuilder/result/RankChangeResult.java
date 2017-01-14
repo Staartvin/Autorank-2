@@ -46,7 +46,7 @@ public class RankChangeResult extends Result {
 		final UUID uuid = player.getUniqueId();
 
 		// When rank is changed: reset progress and update last known group
-		getAutorank().getPlayerDataConfig().setPlayerProgress(uuid, new ArrayList<Integer>());
+		getAutorank().getPlayerDataConfig().setCompletedRequirements(uuid, new ArrayList<Integer>());
 
 		getAutorank().getPlayerDataConfig().setLastKnownGroup(uuid, to);
 

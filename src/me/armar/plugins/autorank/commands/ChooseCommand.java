@@ -74,7 +74,7 @@ public class ChooseCommand extends AutorankCommand {
 		plugin.getPlayerDataConfig().setChosenPath(player.getUniqueId(), targetPath.getDisplayName());
 
 		// Reset progress
-		plugin.getPlayerDataConfig().setPlayerProgress(player.getUniqueId(), new ArrayList<Integer>());
+		plugin.getPlayerDataConfig().setCompletedRequirements(player.getUniqueId(), new ArrayList<Integer>());
 
 		// Give player confirmation message.
 		sender.sendMessage(Lang.CHOSEN_PATH.getConfigValue(targetPath.getDisplayName()));

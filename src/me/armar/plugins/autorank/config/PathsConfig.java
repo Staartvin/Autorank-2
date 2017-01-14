@@ -305,16 +305,12 @@ public class PathsConfig {
 
 		// Prerequisites before a player can choose this path
 		//getConfig().addDefault(pathName + ".prerequisites.rank", "Test");
-		getConfig().addDefault(pathName + ".prerequisites.world", "Good olde world");
+		getConfig().addDefault(pathName + ".prerequisites.world", "world_nether");
 		getConfig().addDefault(pathName + ".prerequisites.money", 1000);
 
 		// Requirements a player must meet to complete this path
-		getConfig().addDefault(pathName + ".requirements.damage taken", 500);
-		getConfig().addDefault(pathName + ".requirements.votes", 120);
 		getConfig().addDefault(pathName + ".requirements.money", 10000);
-		getConfig().addDefault(pathName + ".requirements.players killed", 25);
-		getConfig().addDefault(pathName + ".requirements.in biome", "RIVER");
-		getConfig().addDefault(pathName + ".requirements.fish caught", 50);
+		getConfig().addDefault(pathName + ".requirements.blocks broken", 50);
 
 		// Results that will be fired when a player completes this path
 		getConfig().addDefault(pathName + ".results.rank change", "TestGroup2");
