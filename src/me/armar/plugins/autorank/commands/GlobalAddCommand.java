@@ -71,16 +71,16 @@ public class GlobalAddCommand extends AutorankCommand {
 					if (!builder.toString().contains("m") && !builder.toString().contains("h")
 							&& !builder.toString().contains("d")) {
 						value = AutorankTools.stringtoInt(builder.toString().trim());
-						value += plugin.getPlaytimes().getFreshGlobalTime(uuid);
+						value += plugin.getFlatFileManager().getFreshGlobalTime(uuid);
 					} else {
 						value = AutorankTools.stringToTime(builder.toString(), Time.MINUTES);
-						value += plugin.getPlaytimes().getFreshGlobalTime(uuid);
+						value += plugin.getFlatFileManager().getFreshGlobalTime(uuid);
 					}
 				}
 
 				if (value >= 0) {
 					try {
-						plugin.getPlaytimes().setGlobalTime(uuid, value);
+						plugin.getFlatFileManager().setGlobalTime(uuid, value);
 					} catch (final SQLException e) {
 						e.printStackTrace();
 					}

@@ -10,7 +10,7 @@ import org.bukkit.command.CommandSender;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
-import me.armar.plugins.autorank.playtimes.Playtimes.dataType;
+import me.armar.plugins.autorank.data.flatfile.FlatFileManager.dataType;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.armar.plugins.autorank.util.AutorankTools;
 
@@ -40,7 +40,7 @@ public class SyncStatsCommand extends AutorankCommand {
 		int count = 0;
 
 		// Sync playtime of every player
-		for (final UUID uuid : plugin.getPlaytimes().getUUIDKeys(dataType.TOTAL_TIME)) {
+		for (final UUID uuid : plugin.getFlatFileManager().getUUIDKeys(dataType.TOTAL_TIME)) {
 
 			final OfflinePlayer p = plugin.getServer().getOfflinePlayer(uuid);
 
@@ -53,7 +53,7 @@ public class SyncStatsCommand extends AutorankCommand {
 			}
 
 			// Update time
-			plugin.getPlaytimes().setLocalTime(uuid, Math.round(statsPlayTime / 60));
+			plugin.getFlatFileManager().setLocalTime(dataType.TOTAL_TIME, Math.round(statsPlayTime / 60), uuid);
 
 			// Increment count
 			count++;

@@ -14,13 +14,13 @@ import org.bukkit.entity.Player;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.config.SettingsConfig;
 import me.armar.plugins.autorank.config.SettingsConfig.MySQLOptions;
-import me.armar.plugins.autorank.playtimes.Playtimes;
+import me.armar.plugins.autorank.playtimes.PlaytimeManager;
 import net.md_5.bungee.api.ChatColor;
 
 /**
  * This class keeps all incoming and outgoing connections under control.
  * It sends MySQL queries and can locate the database.
- * Previously, {@link me.armar.plugins.autorank.playtimes.Playtimes} kept all
+ * Previously, {@link me.armar.plugins.autorank.playtimes.PlaytimeManager} kept all
  * MySQL, but it wasn't neatly organised.
  * MySQLManager class is (hopefully) fail-prove and organised.
  * 
@@ -274,7 +274,7 @@ public class MySQLManager {
 		}
 
 		// Get the difference in minutes
-		if ((currentTime - lastCheckedTime) / 60000 >= Playtimes.INTERVAL_MINUTES) {
+		if ((currentTime - lastCheckedTime) / 60000 >= PlaytimeManager.INTERVAL_MINUTES) {
 			return true;
 		} else {
 			return false;
@@ -298,7 +298,7 @@ public class MySQLManager {
 				}
 			}
 
-		}, 20, 20 * 60 * Playtimes.INTERVAL_MINUTES);
+		}, 20, 20 * 60 * PlaytimeManager.INTERVAL_MINUTES);
 
 	}
 

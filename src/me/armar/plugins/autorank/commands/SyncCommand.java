@@ -11,8 +11,8 @@ import org.bukkit.command.CommandSender;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
+import me.armar.plugins.autorank.data.flatfile.FlatFileManager.dataType;
 import me.armar.plugins.autorank.language.Lang;
-import me.armar.plugins.autorank.playtimes.Playtimes.dataType;
 
 public class SyncCommand extends AutorankCommand {
 
@@ -60,7 +60,7 @@ public class SyncCommand extends AutorankCommand {
 
 					// Update all data.yml records
 					for (Entry<UUID, Integer> entry : plugin.getMySQLManager().getAllPlayersFromDatabase().entrySet()) {
-						plugin.getPlaytimes().setLocalTime(entry.getKey(), entry.getValue());
+						plugin.getFlatFileManager().setLocalTime(dataType.TOTAL_TIME, entry.getValue(), entry.getKey());
 						count++;
 					}
 
@@ -75,17 +75,17 @@ public class SyncCommand extends AutorankCommand {
 				@Override
 				public void run() {
 					// Update all mysql records
-					for (final UUID uuid : plugin.getPlaytimes().getUUIDKeys(dataType.TOTAL_TIME)) {
-						final int localTime = plugin.getPlaytimes().getLocalTime(uuid);
+					for (final UUID uuid : plugin.getFlatFileManager().getUUIDKeys(dataType.TOTAL_TIME)) {
+						final int localTime = plugin.getFlatFileManager().getLocalTime(uuid);
 
 						if (localTime <= 0)
 							continue;
 
-						final int globalTime = plugin.getPlaytimes().getGlobalTime(uuid);
+						final int globalTime = plugin.getFlatFileManager().getGlobalTime(uuid);
 
 						// Update record
 						try {
-							plugin.getPlaytimes().setGlobalTime(uuid, localTime + globalTime);
+							plugin.getFlatFileManager().setGlobalTime(uuid, localTime + globalTime);
 						} catch (final SQLException e) {
 							e.printStackTrace();
 						}

@@ -83,7 +83,7 @@ public class GlobalSetCommand extends AutorankCommand {
 			}
 
 			try {
-				plugin.getPlaytimes().setGlobalTime(uuid, value);
+				plugin.getFlatFileManager().setGlobalTime(uuid, value);
 			} catch (final SQLException e) {
 				sender.sendMessage(Lang.MYSQL_IS_NOT_ENABLED.getConfigValue());
 				return true;

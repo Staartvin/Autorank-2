@@ -1,28 +1,27 @@
-package me.armar.plugins.autorank.playtimes;
+package me.armar.plugins.autorank.data.flatfile;
 
 import java.util.UUID;
 
 import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.data.flatfile.FlatFileManager.dataType;
 import me.armar.plugins.autorank.hooks.DependencyManager;
-import me.armar.plugins.autorank.playtimes.Playtimes.dataType;
+import me.armar.plugins.autorank.playtimes.PlaytimeManager;
 
 /*
- * PlaytimesUpdate does an update on all online players
+ * UpdatePlaytime does an update on all online players
  * every 5 minutes (set lower atm for debugging).
  * 
  */
-public class PlaytimesUpdate implements Runnable {
+public class UpdatePlaytime implements Runnable {
 
-	private final Playtimes playtimes;
 	private final Autorank plugin;
+	private FlatFileManager flatFileManager;
 
-	public PlaytimesUpdate(final Playtimes playtimes, final Autorank plugin) {
-		this.playtimes = playtimes;
-
+	public UpdatePlaytime(final FlatFileManager flatFileManager, final Autorank plugin) {
 		this.plugin = plugin;
-
+		this.flatFileManager = flatFileManager;
 	}
 
 	@Override
@@ -36,7 +35,7 @@ public class PlaytimesUpdate implements Runnable {
 		plugin.getServer().getScheduler().runTask(plugin, new Runnable() {
 			public void run() {
 				// Check whether the files are still up to date - Do this synchronously
-				plugin.getPlaytimes().doCalendarCheck();
+				flatFileManager.doCalendarCheck();
 			}
 		});
 
@@ -72,12 +71,12 @@ public class PlaytimesUpdate implements Runnable {
 
 			// Modify local time
 			for (final dataType type : dataType.values()) {
-				playtimes.modifyTime(uuid, Playtimes.INTERVAL_MINUTES, type);
+				flatFileManager.addLocalTime(uuid, PlaytimeManager.INTERVAL_MINUTES, type);
 			}
 
 			// Modify global time
-			if (playtimes.isMySQLEnabled()) {
-				playtimes.modifyGlobalTime(uuid, Playtimes.INTERVAL_MINUTES);
+			if (plugin.getMySQLManager().isMySQLEnabled()) {
+				flatFileManager.addGlobalTime(uuid, PlaytimeManager.INTERVAL_MINUTES);
 			}
 
 			// Only check a player if it is not disabled in the Settings.yml

@@ -85,14 +85,14 @@ public class API {
 	}
 
 	public int getGlobalPlayTime(final UUID uuid) {
-		return plugin.getPlaytimes().getGlobalTime(uuid);
+		return plugin.getFlatFileManager().getGlobalTime(uuid);
 	}
 
 	/**
 	 * @see #getLocalTime(Player)
 	 **/
 	public int getLocalPlayTime(final UUID uuid) {
-		return plugin.getPlaytimes().getLocalTime(uuid);
+		return plugin.getFlatFileManager().getLocalTime(uuid);
 	}
 
 	/**
@@ -111,7 +111,7 @@ public class API {
 		final UUID uuid = plugin.getUUIDStorage().getStoredUUID(player.getName());
 		//UUIDManager.getUUIDFromPlayer(player.getName());
 
-		return plugin.getPlaytimes().getLocalTime(uuid);
+		return plugin.getFlatFileManager().getLocalTime(uuid);
 	}
 
 	/**

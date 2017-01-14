@@ -7,8 +7,8 @@ import org.bukkit.command.CommandSender;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
+import me.armar.plugins.autorank.data.flatfile.FlatFileManager.dataType;
 import me.armar.plugins.autorank.language.Lang;
-import me.armar.plugins.autorank.playtimes.Playtimes.dataType;
 
 public class LeaderboardCommand extends AutorankCommand {
 

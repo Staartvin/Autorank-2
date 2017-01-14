@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.playtimes.Playtimes.dataType;
+import me.armar.plugins.autorank.data.flatfile.FlatFileManager.dataType;
 
 /**
  * This class manages the internalprop.yml that stores all internal properties

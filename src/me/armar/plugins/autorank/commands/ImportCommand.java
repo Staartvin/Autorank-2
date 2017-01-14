@@ -30,7 +30,7 @@ public class ImportCommand extends AutorankCommand {
 		}
 
 		AutorankTools.sendColoredMessage(sender, Lang.DATA_IMPORTED.getConfigValue());
-		plugin.getPlaytimes().importData();
+		plugin.getFlatFileManager().importData();
 
 		return true;
 	}

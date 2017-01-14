@@ -128,9 +128,6 @@ public class PowerfulPermsHandler implements PermissionsHandler {
 		final PluginManager pluginManager = plugin.getServer().getPluginManager();
 		final Plugin permPlugin = pluginManager.getPlugin("PowerfulPerms");
 
-		System.out.println("PowerfulPerms: " + permPlugin);
-		System.out.println("PowerfulPerms enabled: " + permPlugin.isEnabled());
-
 		if (permPlugin != null && permPlugin.isEnabled()) {
 			powerfulPerms = (PowerfulPermsPlugin) permPlugin;
 		}

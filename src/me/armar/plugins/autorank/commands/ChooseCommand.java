@@ -3,6 +3,7 @@ package me.armar.plugins.autorank.commands;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -60,6 +61,12 @@ public class ChooseCommand extends AutorankCommand {
 
 		if (targetPath == null) {
 			sender.sendMessage(Lang.NO_PATH_FOUND_WITH_THAT_NAME.getConfigValue());
+			return true;
+		}
+		
+		if (!targetPath.meetsPrerequisites(player)) {
+			sender.sendMessage(ChatColor.RED + "You do not meet the prerequisites of this path!");
+			sender.sendMessage(ChatColor.RED + "Type " + ChatColor.GOLD + "/ar view prereq " + targetPath.getDisplayName() + ChatColor.RED + " to see a list of prerequisites.");
 			return true;
 		}
 

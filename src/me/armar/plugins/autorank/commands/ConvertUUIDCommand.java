@@ -48,9 +48,9 @@ public class ConvertUUIDCommand extends AutorankCommand {
 			}
 
 			// Convert data.yml
-			plugin.getPlaytimes().convertToUUIDStorage();
+			//plugin.getPlaytimes().convertToUUIDStorage();
 
-			sender.sendMessage(ChatColor.RED + "Converting data.yml to use new UUID format.");
+			sender.sendMessage(ChatColor.RED + "This operation is not supported anymore!");
 		} else {
 			sender.sendMessage(ChatColor.RED + "Unknown file. Can convert either 'data' or 'playerdata'.");
 		}

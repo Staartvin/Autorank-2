@@ -16,8 +16,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.data.flatfile.FlatFileManager.dataType;
 import me.armar.plugins.autorank.language.Lang;
-import me.armar.plugins.autorank.playtimes.Playtimes.dataType;
 import me.armar.plugins.autorank.util.AutorankTools;
 
 /**
@@ -113,7 +113,7 @@ public class LeaderboardHandler {
 	 */
 	private Map<UUID, Integer> getSortedPlaytimes(final dataType type) {
 
-		final List<UUID> uuids = plugin.getPlaytimes().getUUIDKeys(type);
+		final List<UUID> uuids = plugin.getFlatFileManager().getUUIDKeys(type);
 
 		final HashMap<UUID, Integer> times = new HashMap<UUID, Integer>();
 
@@ -145,12 +145,12 @@ public class LeaderboardHandler {
 			if (type == dataType.TOTAL_TIME) {
 
 				if (plugin.getConfigHandler().useGlobalTimeInLeaderboard()) {
-					times.put(uuids.get(i), plugin.getPlaytimes().getGlobalTime(uuids.get(i)));
+					times.put(uuids.get(i), plugin.getFlatFileManager().getGlobalTime(uuids.get(i)));
 				} else {
 					times.put(uuids.get(i), (plugin.getPlaytimes().getTimeOfPlayer(playerName, true) / 60));
 				}
 			} else {
-				times.put(uuids.get(i), plugin.getPlaytimes().getTime(type, uuids.get(i)));
+				times.put(uuids.get(i), plugin.getFlatFileManager().getLocalTime(type, uuids.get(i)));
 			}
 
 		}

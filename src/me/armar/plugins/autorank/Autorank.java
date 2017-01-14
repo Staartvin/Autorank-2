@@ -12,6 +12,7 @@ import me.armar.plugins.autorank.config.InternalPropertiesConfig;
 import me.armar.plugins.autorank.config.PathsConfig;
 import me.armar.plugins.autorank.config.PlayerDataConfig;
 import me.armar.plugins.autorank.config.SettingsConfig;
+import me.armar.plugins.autorank.data.flatfile.FlatFileManager;
 import me.armar.plugins.autorank.data.mysql.MySQLManager;
 import me.armar.plugins.autorank.debugger.Debugger;
 import me.armar.plugins.autorank.hooks.DependencyManager;
@@ -72,7 +73,7 @@ import me.armar.plugins.autorank.pathbuilder.result.SpawnFireworkResult;
 import me.armar.plugins.autorank.pathbuilder.result.TeleportResult;
 import me.armar.plugins.autorank.permissions.PermissionsPluginManager;
 import me.armar.plugins.autorank.playerchecker.PlayerChecker;
-import me.armar.plugins.autorank.playtimes.Playtimes;
+import me.armar.plugins.autorank.playtimes.PlaytimeManager;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.armar.plugins.autorank.statsmanager.handlers.DummyHandler;
 import me.armar.plugins.autorank.updater.UpdateHandler;
@@ -116,10 +117,11 @@ public class Autorank extends JavaPlugin {
 
 	// Miscalleaneous
 	private PlayerChecker playerChecker;
-	private Playtimes playtimes;
+	private PlaytimeManager playtimes;
 
 	// Data connection
 	private MySQLManager mysqlManager;
+	private FlatFileManager flatFileManager;
 
 	// UUID storage
 	private UUIDStorage uuidStorage;
@@ -153,7 +155,7 @@ public class Autorank extends JavaPlugin {
 		
 		// ------------- Save files and databases -------------
 		
-		playtimes.save();
+		this.getFlatFileManager().saveFiles();
 
 		getUUIDStorage().saveAllFiles();
 
@@ -196,8 +198,11 @@ public class Autorank extends JavaPlugin {
 		// Create warning manager
 		setWarningManager(new WarningManager(this));
 
-		// Create MySQL Wrapper
+		// Create MySQL Manager
 		setMySQLManager(new MySQLManager(this));
+		
+		// Create FlatFile Manager
+		setFlatFileManager(new FlatFileManager(this));
 
 		// Load dependency manager
 		setDependencyManager(new DependencyManager(this));
@@ -207,6 +212,9 @@ public class Autorank extends JavaPlugin {
 
 		// Create Addon Manager
 		setAddonManager(new AddOnManager(this));
+		
+		// Create Path Manager
+		setPathManager(new PathManager(this));
 
 		// ------------- Initialize handlers -------------
 
@@ -233,7 +241,7 @@ public class Autorank extends JavaPlugin {
 		// ------------- Initialize others -------------
 
 		// Create playtime class
-		setPlaytimes(new Playtimes(this));
+		setPlaytimes(new PlaytimeManager(this));
 
 		// Create player check class
 		setPlayerChecker(new PlayerChecker(this));
@@ -249,8 +257,8 @@ public class Autorank extends JavaPlugin {
 		// Setup language file
 		languageHandler.createNewFile();
 		
-		// Initialize paths
-		getPathManager().initialiseFromConfigs();
+		// ------------- Initialize requirements and results -------------
+		this.initializeReqsAndRes();	
 
 		// Start warning task if a warning has been found
 		if (getWarningManager().getHighestWarning() != null) {
@@ -262,9 +270,6 @@ public class Autorank extends JavaPlugin {
 		// Register listeners
 		getServer().getPluginManager().registerEvents(new PlayerJoinListener(this), this);
 
-		// ------------- Initialize requirements and results -------------
-		this.initializeReqsAndRes();
-
 		// ------------- Schedule tasks -------------
 
 		// Load all third party dependencies
@@ -275,6 +280,10 @@ public class Autorank extends JavaPlugin {
 					// Load dependencies
 					dependencyManager.loadDependencies();
 
+					// After dependencies, load paths
+					// Initialize paths
+					getPathManager().initialiseFromConfigs();
+					
 				} catch (final Throwable t) {
 
 					// When an error occured!
@@ -317,7 +326,7 @@ public class Autorank extends JavaPlugin {
 		this.getUUIDStorage().transferUUIDs();
 
 		// Check whether the data files are still up to date.
-		this.getPlaytimes().doCalendarCheck();
+		this.getFlatFileManager().doCalendarCheck();
 
 		// Spawn thread to check if MySQL database times are up to date
 		this.getMySQLManager().refreshGlobalTime();
@@ -484,7 +493,7 @@ public class Autorank extends JavaPlugin {
 		return playerChecker;
 	}
 
-	public Playtimes getPlaytimes() {
+	public PlaytimeManager getPlaytimes() {
 		return playtimes;
 	}
 
@@ -582,7 +591,7 @@ public class Autorank extends JavaPlugin {
 		this.playerChecker = playerChecker;
 	}
 
-	private void setPlaytimes(final Playtimes playtimes) {
+	private void setPlaytimes(final PlaytimeManager playtimes) {
 		this.playtimes = playtimes;
 	}
 
@@ -654,5 +663,13 @@ public class Autorank extends JavaPlugin {
 
 	public void setMySQLManager(MySQLManager mysqlManager) {
 		this.mysqlManager = mysqlManager;
+	}
+
+	public FlatFileManager getFlatFileManager() {
+		return flatFileManager;
+	}
+
+	public void setFlatFileManager(FlatFileManager flatFileManager) {
+		this.flatFileManager = flatFileManager;
 	}
 }

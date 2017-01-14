@@ -8,6 +8,8 @@ import org.bukkit.ChatColor;
 import com.google.common.io.Files;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.data.flatfile.FlatFileManager;
+import me.armar.plugins.autorank.data.flatfile.FlatFileManager.dataType;
 
 /**
  * Class that allows to backup files before overwriting them.
@@ -77,10 +79,14 @@ public class BackupManager {
 
 				// Older than a day
 				if ((System.currentTimeMillis() - backupDataManager.getLatestBackup("data")) > 86400000) {
-					plugin.debugMessage(ChatColor.RED + "Making a backup of data.yml.");
+					plugin.debugMessage(ChatColor.RED + "Making a backup of all data files!");
 
-					plugin.getBackupManager().backupFile("Data.yml", plugin.getDataFolder().getAbsolutePath()
-							+ File.separator + "backups" + File.separator + "data.yml");
+					for (dataType type : dataType.values()) {
+						String path = FlatFileManager.dataTypePaths.get(type);
+						
+						plugin.getBackupManager().backupFile(path, plugin.getDataFolder().getAbsolutePath()
+								+ File.separator + "backups" + File.separator + path.replace("/data/", ""));
+					}
 
 					// Update latest backup time
 					backupDataManager.getConfig().set("data", System.currentTimeMillis());
@@ -88,12 +94,12 @@ public class BackupManager {
 
 				// Older than a day
 				if ((System.currentTimeMillis() - backupDataManager.getLatestBackup("playerdata")) > 86400000) {
-					plugin.debugMessage(ChatColor.RED + "Making a backup of playerdata.yml.");
+					plugin.debugMessage(ChatColor.RED + "Making a backup of PlayerData file!");
 
 					// Before running, backup stuff.
-					plugin.getBackupManager().backupFile("/playerdata/playerdata.yml",
+					plugin.getBackupManager().backupFile("/playerdata/PlayerData.yml",
 							plugin.getDataFolder().getAbsolutePath() + File.separator + "backups" + File.separator
-									+ "playerdata.yml");
+									+ "PlayerData.yml");
 
 					// Update latest backup time
 					backupDataManager.getConfig().set("playerdata", System.currentTimeMillis());
