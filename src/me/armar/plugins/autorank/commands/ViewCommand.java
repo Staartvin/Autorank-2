@@ -91,29 +91,34 @@ public class ViewCommand extends AutorankCommand {
 
 			}
 
-		} else if (args.length == 3) {
+		} else if (args.length > 2) {
 			// /ar view (req/prereq/result) (name of path)
-
-			pathName = AutorankTools.getStringFromArgs(args, 2);
 			String viewType = args[1];
 
 			if (!viewType.contains("prereq") && !viewType.contains("req") && !viewType.contains("res")) {
-				sender.sendMessage(Lang.INVALID_FORMAT.getConfigValue("/ar view reqs/prereqs/res <path name>"));
-				return true;
+				pathName = AutorankTools.getStringFromArgs(args, 1);
+				viewType = null;
+			} else {
+				pathName = AutorankTools.getStringFromArgs(args, 2);
+				
+				viewType = args[1];
 			}
-
+			
 			Path targetPath = plugin.getPathManager().matchPath(pathName, false);
 
 			if (targetPath == null) {
 				sender.sendMessage(Lang.NO_PATH_FOUND_WITH_THAT_NAME.getConfigValue());
 				return true;
 			}
+			
+			if (viewType == null) {
+				sender.sendMessage(Lang.INVALID_FORMAT.getConfigValue("/ar view reqs/prereqs/res " + targetPath.getDisplayName()));
+				return true;
+			}
 
 			if (viewType.contains("prereq")) {
 
 				List<RequirementsHolder> holders = targetPath.getPrerequisites();
-
-				sender.sendMessage("LENGTH: " + holders.size());
 				
 				// Set messages depending on console or player
 				List<String> messages = (isPlayer

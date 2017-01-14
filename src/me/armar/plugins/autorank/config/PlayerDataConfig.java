@@ -128,6 +128,10 @@ public class PlayerDataConfig {
 
 	public void addCompletedPath(final UUID uuid, final String pathName) {
 		final List<String> completed = getCompletedPaths(uuid);
+		
+		if (completed.contains(pathName)) {
+			return;
+		}
 
 		completed.add(pathName);
 

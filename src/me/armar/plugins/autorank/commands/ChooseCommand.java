@@ -64,6 +64,13 @@ public class ChooseCommand extends AutorankCommand {
 			return true;
 		}
 		
+		// TODO: currently, if you change the display name, the user can retake a path even though the internal name did not change.
+		
+		if (plugin.getPlayerDataConfig().hasCompletedPath(player.getUniqueId(), targetPath.getDisplayName()) && !plugin.getPathsConfig().allowInfinitePathing(targetPath.getDisplayName())) {
+			sender.sendMessage(ChatColor.RED + "You already completed this path before. You are not allowed to retake it!");
+			return true;
+		}
+		
 		if (!targetPath.meetsPrerequisites(player)) {
 			sender.sendMessage(ChatColor.RED + "You do not meet the prerequisites of this path!");
 			sender.sendMessage(ChatColor.RED + "Type " + ChatColor.GOLD + "/ar view prereq " + targetPath.getDisplayName() + ChatColor.RED + " to see a list of prerequisites.");

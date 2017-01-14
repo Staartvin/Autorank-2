@@ -78,6 +78,12 @@ public class Path {
 					}
 				}
 			}
+			
+			// After getting results, chosen path is reset.
+			plugin.getPlayerDataConfig().setChosenPath(uuid, null);
+			
+			// Reset progress
+			plugin.getPlayerDataConfig().setCompletedRequirements(uuid, null);
 
 		} else {
 			result = false;
