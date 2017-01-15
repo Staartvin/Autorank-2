@@ -1,13 +1,10 @@
 package me.armar.plugins.autorank.permissions.handlers;
 
-import java.util.ArrayList;
-import java.util.UUID;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.hooks.DependencyManager.dependency;
+import me.armar.plugins.autorank.hooks.DependencyManager.AutorankDependency;
 import me.armar.plugins.autorank.hooks.vaultapi.VaultHandler;
 import me.armar.plugins.autorank.permissions.PermissionsHandler;
 
@@ -22,7 +19,7 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 	private final Autorank plugin;
 
 	public VaultPermissionsHandler(final Autorank plugin) {
-		if (!plugin.getDependencyManager().getDependency(dependency.VAULT).isAvailable()) {
+		if (!plugin.getDependencyManager().getDependency(AutorankDependency.VAULT).isAvailable()) {
 			plugin.getLogger().severe(
 					"Autorank did not find Vault when it started its boot sequence. This could cause problems!");
 		}
@@ -120,33 +117,11 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 
 		final Autorank plugin = (Autorank) Bukkit.getPluginManager().getPlugin("Autorank");
 
-		final UUID uuid = player.getUniqueId();
-
 		// Let players choose.
 		if (plugin.getConfigHandler().onlyUsePrimaryGroupVault()) {
 			groups = new String[] { VaultHandler.permission.getPrimaryGroup(player) };
 		} else {
 			groups = VaultHandler.permission.getPlayerGroups(player);
-		}
-
-		// Checking if player changed group
-		// Check if the latest known group is the current group. Otherwise,
-		// reset progress
-		final String currentGroup = groups[0];
-		String latestKnownGroup = plugin.getPlayerDataConfig().getLastKnownGroup(uuid);
-
-		if (latestKnownGroup == null) {
-			plugin.getPlayerDataConfig().setLastKnownGroup(uuid, currentGroup);
-
-			latestKnownGroup = currentGroup;
-		}
-		if (!latestKnownGroup.equalsIgnoreCase(currentGroup)) {
-			// Reset progress and update latest known group
-			plugin.getPlayerDataConfig().setCompletedRequirements(uuid, new ArrayList<Integer>());
-			plugin.getPlayerDataConfig().setLastKnownGroup(uuid, currentGroup);
-			plugin.getPlayerDataConfig().setChosenPath(uuid, null);
-
-			plugin.debugMessage("Reset player data for " + player.getName());
 		}
 
 		return groups;

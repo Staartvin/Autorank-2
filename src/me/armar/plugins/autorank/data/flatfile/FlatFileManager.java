@@ -28,13 +28,13 @@ public class FlatFileManager {
 
 	private Autorank plugin;
 
-	public static enum dataType {
+	public static enum TimeType {
 		DAILY_TIME, MONTHLY_TIME, TOTAL_TIME, WEEKLY_TIME
 	}
 
-	public static HashMap<dataType, String> dataTypePaths = new HashMap<>();
+	public static HashMap<TimeType, String> dataTypePaths = new HashMap<>();
 
-	private final HashMap<dataType, SimpleYamlConfiguration> dataFiles = new HashMap<dataType, SimpleYamlConfiguration>();
+	private final HashMap<TimeType, SimpleYamlConfiguration> dataFiles = new HashMap<TimeType, SimpleYamlConfiguration>();
 
 	public FlatFileManager(Autorank instance) {
 		this.plugin = instance;
@@ -47,19 +47,19 @@ public class FlatFileManager {
 
 	public void loadDataFiles() {
 
-		dataTypePaths.put(dataType.TOTAL_TIME, "/data/Total_time.yml");
-		dataTypePaths.put(dataType.DAILY_TIME, "/data/Daily_time.yml");
-		dataTypePaths.put(dataType.WEEKLY_TIME, "/data/Weekly_time.yml");
-		dataTypePaths.put(dataType.MONTHLY_TIME, "/data/Monthly_time.yml");
+		dataTypePaths.put(TimeType.TOTAL_TIME, "/data/Total_time.yml");
+		dataTypePaths.put(TimeType.DAILY_TIME, "/data/Daily_time.yml");
+		dataTypePaths.put(TimeType.WEEKLY_TIME, "/data/Weekly_time.yml");
+		dataTypePaths.put(TimeType.MONTHLY_TIME, "/data/Monthly_time.yml");
 
-		dataFiles.put(dataType.TOTAL_TIME,
-				new SimpleYamlConfiguration(plugin, dataTypePaths.get(dataType.TOTAL_TIME), "Total data"));
-		dataFiles.put(dataType.DAILY_TIME,
-				new SimpleYamlConfiguration(plugin, dataTypePaths.get(dataType.DAILY_TIME), "Daily data"));
-		dataFiles.put(dataType.WEEKLY_TIME,
-				new SimpleYamlConfiguration(plugin, dataTypePaths.get(dataType.WEEKLY_TIME), "Weekly data"));
-		dataFiles.put(dataType.MONTHLY_TIME,
-				new SimpleYamlConfiguration(plugin, dataTypePaths.get(dataType.MONTHLY_TIME), "Monthly data"));
+		dataFiles.put(TimeType.TOTAL_TIME,
+				new SimpleYamlConfiguration(plugin, dataTypePaths.get(TimeType.TOTAL_TIME), "Total data"));
+		dataFiles.put(TimeType.DAILY_TIME,
+				new SimpleYamlConfiguration(plugin, dataTypePaths.get(TimeType.DAILY_TIME), "Daily data"));
+		dataFiles.put(TimeType.WEEKLY_TIME,
+				new SimpleYamlConfiguration(plugin, dataTypePaths.get(TimeType.WEEKLY_TIME), "Weekly data"));
+		dataFiles.put(TimeType.MONTHLY_TIME,
+				new SimpleYamlConfiguration(plugin, dataTypePaths.get(TimeType.MONTHLY_TIME), "Monthly data"));
 	}
 
 	public void registerTasks() {
@@ -75,7 +75,7 @@ public class FlatFileManager {
 	}
 
 	public void saveFiles() {
-		for (final Entry<dataType, SimpleYamlConfiguration> entry : dataFiles.entrySet()) {
+		for (final Entry<TimeType, SimpleYamlConfiguration> entry : dataFiles.entrySet()) {
 			entry.getValue().saveFile();
 		}
 	}
@@ -91,14 +91,14 @@ public class FlatFileManager {
 		final Calendar cal = Calendar.getInstance();
 		cal.setFirstDayOfWeek(Calendar.MONDAY);
 
-		for (final dataType type : dataType.values()) {
+		for (final TimeType type : TimeType.values()) {
 			if (this.shouldResetDatafile(type)) {
 
 				// We should reset it now, it has expired.
 				this.resetDatafile(type);
 
 				int value = 0;
-				if (type == dataType.DAILY_TIME) {
+				if (type == TimeType.DAILY_TIME) {
 					value = cal.get(Calendar.DAY_OF_WEEK);
 
 					if (plugin.getConfigHandler().shouldBroadcastDataReset()) {
@@ -106,7 +106,7 @@ public class FlatFileManager {
 						plugin.getServer().broadcastMessage(Lang.RESET_DAILY_TIME.getConfigValue());
 					}
 
-				} else if (type == dataType.WEEKLY_TIME) {
+				} else if (type == TimeType.WEEKLY_TIME) {
 					value = cal.get(Calendar.WEEK_OF_YEAR);
 
 					if (plugin.getConfigHandler().shouldBroadcastDataReset()) {
@@ -114,7 +114,7 @@ public class FlatFileManager {
 
 						plugin.getServer().broadcastMessage(Lang.RESET_WEEKLY_TIME.getConfigValue());
 					}
-				} else if (type == dataType.MONTHLY_TIME) {
+				} else if (type == TimeType.MONTHLY_TIME) {
 					value = cal.get(Calendar.MONTH);
 
 					if (plugin.getConfigHandler().shouldBroadcastDataReset()) {
@@ -125,7 +125,7 @@ public class FlatFileManager {
 				}
 
 				// Update tracked data type
-				plugin.getInternalPropertiesConfig().setTrackedDataType(type, value);
+				plugin.getInternalPropertiesConfig().setTrackedTimeType(type, value);
 				// We reset leaderboard time so it refreshes again.
 				plugin.getInternalPropertiesConfig().setLeaderboardLastUpdateTime(0);
 
@@ -139,7 +139,7 @@ public class FlatFileManager {
 		}
 	}
 
-	public SimpleYamlConfiguration getDataFile(final dataType type) {
+	public SimpleYamlConfiguration getDataFile(final TimeType type) {
 		return dataFiles.get(type);
 	}
 
@@ -152,7 +152,7 @@ public class FlatFileManager {
 		plugin.getMySQLManager().setGlobalTime(uuid, time);
 	}
 
-	public void setLocalTime(final dataType type, final int value, final UUID uuid) {
+	public void setLocalTime(final TimeType type, final int value, final UUID uuid) {
 		// Set time of a player of a specific type
 
 		final SimpleYamlConfiguration data = this.getDataFile(type);
@@ -160,22 +160,22 @@ public class FlatFileManager {
 		data.set(uuid.toString(), value);
 	}
 
-	public boolean shouldResetDatafile(final dataType type) {
+	public boolean shouldResetDatafile(final TimeType type) {
 		// Should we reset a specific data file?
 		// Compare date to last date in internal properties
 		final Calendar cal = Calendar.getInstance();
 		cal.setFirstDayOfWeek(Calendar.MONDAY);
 
-		if (type == dataType.DAILY_TIME) {
-			if (cal.get(Calendar.DAY_OF_WEEK) != plugin.getInternalPropertiesConfig().getTrackedDataType(type)) {
+		if (type == TimeType.DAILY_TIME) {
+			if (cal.get(Calendar.DAY_OF_WEEK) != plugin.getInternalPropertiesConfig().getTrackedTimeType(type)) {
 				return true;
 			}
-		} else if (type == dataType.WEEKLY_TIME) {
-			if (cal.get(Calendar.WEEK_OF_YEAR) != plugin.getInternalPropertiesConfig().getTrackedDataType(type)) {
+		} else if (type == TimeType.WEEKLY_TIME) {
+			if (cal.get(Calendar.WEEK_OF_YEAR) != plugin.getInternalPropertiesConfig().getTrackedTimeType(type)) {
 				return true;
 			}
-		} else if (type == dataType.MONTHLY_TIME) {
-			if (cal.get(Calendar.MONTH) != plugin.getInternalPropertiesConfig().getTrackedDataType(type)) {
+		} else if (type == TimeType.MONTHLY_TIME) {
+			if (cal.get(Calendar.MONTH) != plugin.getInternalPropertiesConfig().getTrackedTimeType(type)) {
 				return true;
 			}
 		}
@@ -214,7 +214,7 @@ public class FlatFileManager {
 
 	}
 
-	public void addLocalTime(final UUID uuid, final int timeDifference, final dataType type) {
+	public void addLocalTime(final UUID uuid, final int timeDifference, final TimeType type) {
 
 		final int time = this.getLocalTime(type, uuid);
 
@@ -255,7 +255,7 @@ public class FlatFileManager {
 		if (uuid == null)
 			return 0;
 
-		final SimpleYamlConfiguration data = this.getDataFile(dataType.TOTAL_TIME);
+		final SimpleYamlConfiguration data = this.getDataFile(TimeType.TOTAL_TIME);
 
 		return data.getInt(uuid.toString(), 0);
 	}
@@ -272,14 +272,14 @@ public class FlatFileManager {
 		// Keep a counter of archived items
 		int counter = 0;
 
-		for (final UUID uuid : getUUIDKeys(dataType.TOTAL_TIME)) {
+		for (final UUID uuid : getUUIDKeys(TimeType.TOTAL_TIME)) {
 			final int time = this.getLocalTime(uuid);
 
 			// Found a record to be archived
 			if (time < minimum) {
 				counter++;
 
-				final SimpleYamlConfiguration data = this.getDataFile(dataType.TOTAL_TIME);
+				final SimpleYamlConfiguration data = this.getDataFile(TimeType.TOTAL_TIME);
 				// Remove record
 				data.set(uuid.toString(), null);
 			}
@@ -289,7 +289,7 @@ public class FlatFileManager {
 		return counter;
 	}
 
-	public List<String> getPlayerKeys(final dataType type) {
+	public List<String> getPlayerKeys(final TimeType type) {
 		final List<UUID> uuids = getUUIDKeys(type);
 
 		final List<String> playerNames = new ArrayList<String>();
@@ -303,14 +303,14 @@ public class FlatFileManager {
 		return playerNames;
 	}
 
-	public int getLocalTime(final dataType type, final UUID uuid) {
+	public int getLocalTime(final TimeType type, final UUID uuid) {
 		// Get time of a player with specific type
 		final SimpleYamlConfiguration data = this.getDataFile(type);
 
 		return data.getInt(uuid.toString(), 0);
 	}
 
-	public void resetDatafile(final dataType type) {
+	public void resetDatafile(final TimeType type) {
 		final SimpleYamlConfiguration data = this.getDataFile(type);
 
 		plugin.debugMessage("Resetting data file '" + type + "'!");
@@ -325,22 +325,22 @@ public class FlatFileManager {
 		}
 
 		// Create a new file so it's empty
-		if (type == dataType.DAILY_TIME) {
-			dataFiles.put(dataType.DAILY_TIME,
-					new SimpleYamlConfiguration(plugin, dataTypePaths.get(dataType.DAILY_TIME), "Daily data"));
-		} else if (type == dataType.WEEKLY_TIME) {
-			dataFiles.put(dataType.WEEKLY_TIME,
-					new SimpleYamlConfiguration(plugin, dataTypePaths.get(dataType.WEEKLY_TIME), "Weekly data"));
-		} else if (type == dataType.MONTHLY_TIME) {
-			dataFiles.put(dataType.MONTHLY_TIME,
-					new SimpleYamlConfiguration(plugin, dataTypePaths.get(dataType.MONTHLY_TIME), "Monthly data"));
-		} else if (type == dataType.TOTAL_TIME) {
-			dataFiles.put(dataType.TOTAL_TIME,
-					new SimpleYamlConfiguration(plugin, dataTypePaths.get(dataType.TOTAL_TIME), "Total data"));
+		if (type == TimeType.DAILY_TIME) {
+			dataFiles.put(TimeType.DAILY_TIME,
+					new SimpleYamlConfiguration(plugin, dataTypePaths.get(TimeType.DAILY_TIME), "Daily data"));
+		} else if (type == TimeType.WEEKLY_TIME) {
+			dataFiles.put(TimeType.WEEKLY_TIME,
+					new SimpleYamlConfiguration(plugin, dataTypePaths.get(TimeType.WEEKLY_TIME), "Weekly data"));
+		} else if (type == TimeType.MONTHLY_TIME) {
+			dataFiles.put(TimeType.MONTHLY_TIME,
+					new SimpleYamlConfiguration(plugin, dataTypePaths.get(TimeType.MONTHLY_TIME), "Monthly data"));
+		} else if (type == TimeType.TOTAL_TIME) {
+			dataFiles.put(TimeType.TOTAL_TIME,
+					new SimpleYamlConfiguration(plugin, dataTypePaths.get(TimeType.TOTAL_TIME), "Total data"));
 		}
 	}
 
-	public List<UUID> getUUIDKeys(final dataType type) {
+	public List<UUID> getUUIDKeys(final TimeType type) {
 
 		final List<UUID> uuids = new ArrayList<UUID>();
 
@@ -374,7 +374,7 @@ public class FlatFileManager {
 	}
 
 	public void importData() {
-		final SimpleYamlConfiguration data = this.getDataFile(dataType.TOTAL_TIME);
+		final SimpleYamlConfiguration data = this.getDataFile(TimeType.TOTAL_TIME);
 		data.reloadFile();
 	}
 

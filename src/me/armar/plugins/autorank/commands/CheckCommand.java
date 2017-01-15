@@ -132,7 +132,7 @@ public class CheckCommand extends AutorankCommand {
 						plugin.getPlayerDataConfig().addCompletedRequirement(uuid, reqID);
 
 						// Run results
-						plugin.getPlayerDataConfig().runResults(holder, player);
+						holder.runResults(player);
 					}
 					metRequirements.add(reqID);
 					continue;

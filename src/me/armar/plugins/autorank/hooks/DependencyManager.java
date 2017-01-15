@@ -39,12 +39,12 @@ public class DependencyManager {
 	 * @author Staartvin
 	 * 
 	 */
-	public enum dependency {
+	public enum AutorankDependency {
 
 		AUTORANK, ONTIME, STATS, STATZ, VAULT
 	};
 
-	private final HashMap<dependency, DependencyHandler> handlers = new HashMap<dependency, DependencyHandler>();
+	private final HashMap<AutorankDependency, DependencyHandler> handlers = new HashMap<AutorankDependency, DependencyHandler>();
 
 	private final Autorank plugin;
 
@@ -54,30 +54,30 @@ public class DependencyManager {
 		plugin = instance;
 
 		// Register handlers
-		handlers.put(dependency.STATZ, new StatzAPIHandler(instance));
-		handlers.put(dependency.VAULT, new VaultHandler(instance));
+		handlers.put(AutorankDependency.STATZ, new StatzAPIHandler(instance));
+		handlers.put(AutorankDependency.VAULT, new VaultHandler(instance));
 
 		statsPluginManager = new StatsPluginManager(instance);
 	}
 
 	/**
-	 * Gets a specific dependency.
+	 * Gets a specific AutorankDependency.
 	 * 
 	 * @param dep Dependency to get.
 	 * @return the {@linkplain DependencyHandler} that is associated with the
-	 *         given {@linkplain dependency}, can be null.
+	 *         given {@linkplain AutorankDependency}, can be null.
 	 */
-	public DependencyHandler getDependency(final dependency dep) {
+	public DependencyHandler getDependency(final AutorankDependency dep) {
 
 		if (!handlers.containsKey(dep)) {
-			throw new IllegalArgumentException("Unknown dependency '" + dep.toString() + "'");
+			throw new IllegalArgumentException("Unknown AutorankDependency '" + dep.toString() + "'");
 		} else {
 			return handlers.get(dep);
 		}
 	}
 
 	public me.staartvin.statz.hooks.DependencyHandler getDependencyHandler(Dependency dep) {
-		StatzAPIHandler statz = (StatzAPIHandler) plugin.getDependencyManager().getDependency(dependency.STATZ);
+		StatzAPIHandler statz = (StatzAPIHandler) plugin.getDependencyManager().getDependency(AutorankDependency.STATZ);
 
 		if (statz == null || !statz.isAvailable()) {
 			return null;
@@ -91,7 +91,7 @@ public class DependencyManager {
 	}
 
 	public StatzAPIHandler getStatzConnector() {
-		StatzAPIHandler statz = (StatzAPIHandler) plugin.getDependencyManager().getDependency(dependency.STATZ);
+		StatzAPIHandler statz = (StatzAPIHandler) plugin.getDependencyManager().getDependency(AutorankDependency.STATZ);
 
 		if (statz == null || !statz.isAvailable()) {
 			return null;
@@ -109,7 +109,7 @@ public class DependencyManager {
 	 * @return true if the player is supspected of being AFK, false otherwise.
 	 */
 	public boolean isAFK(final Player player) {
-		if (!plugin.getConfigHandler().useAFKIntegration() || !this.getDependency(dependency.STATZ).isAvailable()) {
+		if (!plugin.getConfigHandler().useAFKIntegration() || !this.getDependency(AutorankDependency.STATZ).isAvailable()) {
 			return false;
 		}
 

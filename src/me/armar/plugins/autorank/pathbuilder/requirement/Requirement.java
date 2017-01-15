@@ -40,7 +40,7 @@ public abstract class Requirement {
 	}
 
 	/**
-	 * Gets the dependency manager of Autorank that is used to connect to other
+	 * Gets the AutorankDependency manager of Autorank that is used to connect to other
 	 * plugins. <br>
 	 * Can be used to get other information off of other plugins.
 	 * 

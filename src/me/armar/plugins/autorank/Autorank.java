@@ -204,7 +204,7 @@ public class Autorank extends JavaPlugin {
 		// Create FlatFile Manager
 		setFlatFileManager(new FlatFileManager(this));
 
-		// Load dependency manager
+		// Load AutorankDependency manager
 		setDependencyManager(new DependencyManager(this));
 
 		// Create commands manager
@@ -288,7 +288,7 @@ public class Autorank extends JavaPlugin {
 
 					// When an error occured!
 
-					getLogger().severe("Could not hook into a dependency: \nCause: " + t.getCause());
+					getLogger().severe("Could not hook into a AutorankDependency: \nCause: " + t.getCause());
 				}
 			}
 		}, 1L);

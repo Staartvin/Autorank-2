@@ -16,7 +16,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.data.flatfile.FlatFileManager.dataType;
+import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
 
@@ -79,7 +79,7 @@ public class LeaderboardHandler {
 		layout = plugin.getConfigHandler().getLeaderboardLayout();
 	}
 
-	public void broadcastLeaderboard(final dataType type) {
+	public void broadcastLeaderboard(final TimeType type) {
 		if (shouldUpdateLeaderboard(type)) {
 			// Update leaderboard because it is not valid anymore.
 			// Run async because it uses UUID lookup
@@ -108,10 +108,10 @@ public class LeaderboardHandler {
 	 * <br>
 	 * This map is sorted on player time.
 	 * 
-	 * @param type dataType to get the sort for.
+	 * @param type TimeType to get the sort for.
 	 * @return a sorted map.
 	 */
-	private Map<UUID, Integer> getSortedPlaytimes(final dataType type) {
+	private Map<UUID, Integer> getSortedPlaytimes(final TimeType type) {
 
 		final List<UUID> uuids = plugin.getFlatFileManager().getUUIDKeys(type);
 
@@ -142,7 +142,7 @@ public class LeaderboardHandler {
 
 			// Use cache on .getTimeOfPlayer() so that we don't refresh all
 			// uuids in existence.
-			if (type == dataType.TOTAL_TIME) {
+			if (type == TimeType.TOTAL_TIME) {
 
 				if (plugin.getConfigHandler().useGlobalTimeInLeaderboard()) {
 					times.put(uuids.get(i), plugin.getFlatFileManager().getGlobalTime(uuids.get(i)));
@@ -167,7 +167,7 @@ public class LeaderboardHandler {
 	 * @param sender Sender to send it to.
 	 * @param type Type of leaderboard to send.
 	 */
-	public void sendLeaderboard(final CommandSender sender, final dataType type) {
+	public void sendLeaderboard(final CommandSender sender, final TimeType type) {
 		if (shouldUpdateLeaderboard(type)) {
 			// Update leaderboard because it is not valid anymore.
 			// Run async because it uses UUID lookup
@@ -186,13 +186,13 @@ public class LeaderboardHandler {
 		}
 	}
 
-	public void sendMessages(final CommandSender sender, final dataType type) {
+	public void sendMessages(final CommandSender sender, final TimeType type) {
 		for (final String msg : plugin.getInternalPropertiesConfig().getCachedLeaderboard(type)) {
 			AutorankTools.sendColoredMessage(sender, msg);
 		}
 	}
 
-	private boolean shouldUpdateLeaderboard(dataType type) {
+	private boolean shouldUpdateLeaderboard(TimeType type) {
 		if (System.currentTimeMillis()
 				- plugin.getInternalPropertiesConfig().getLeaderboardLastUpdateTime() > (60000 * validTime)) {
 			return true;
@@ -208,7 +208,7 @@ public class LeaderboardHandler {
 		plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
 			@Override
 			public void run() {
-				for (final dataType type : dataType.values()) {
+				for (final TimeType type : TimeType.values()) {
 					if (!shouldUpdateLeaderboard(type))
 						continue;
 
@@ -223,7 +223,7 @@ public class LeaderboardHandler {
 	 * 
 	 * @param type Type of leaderboard to update.
 	 */
-	public void updateLeaderboard(final dataType type) {
+	public void updateLeaderboard(final TimeType type) {
 		plugin.debugMessage(ChatColor.BLUE + "Updating leaderboard '" + type.toString() + "'!");
 
 		final Map<UUID, Integer> sortedPlaytimes = getSortedPlaytimes(type);
@@ -233,13 +233,13 @@ public class LeaderboardHandler {
 
 		final List<String> stringList = new ArrayList<String>();
 
-		if (type == dataType.TOTAL_TIME) {
+		if (type == TimeType.TOTAL_TIME) {
 			stringList.add(Lang.LEADERBOARD_HEADER_ALL_TIME.getConfigValue());
-		} else if (type == dataType.DAILY_TIME) {
+		} else if (type == TimeType.DAILY_TIME) {
 			stringList.add(Lang.LEADERBOARD_HEADER_DAILY.getConfigValue());
-		} else if (type == dataType.WEEKLY_TIME) {
+		} else if (type == TimeType.WEEKLY_TIME) {
 			stringList.add(Lang.LEADERBOARD_HEADER_WEEKLY.getConfigValue());
-		} else if (type == dataType.MONTHLY_TIME) {
+		} else if (type == TimeType.MONTHLY_TIME) {
 			stringList.add(Lang.LEADERBOARD_HEADER_MONTHLY.getConfigValue());
 		}
 

@@ -3,7 +3,7 @@ package me.armar.plugins.autorank.playtimes;
 import java.util.UUID;
 
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.hooks.DependencyManager.dependency;
+import me.armar.plugins.autorank.hooks.DependencyManager.AutorankDependency;
 import me.armar.plugins.autorank.hooks.statzapi.StatzAPIHandler;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin.statTypes;
@@ -24,7 +24,7 @@ public class PlaytimeManager {
 	private final Autorank plugin;
 
 	// What plugin should Autorank use to check time?
-	private final dependency timePlugin;
+	private final AutorankDependency timePlugin;
 
 	public PlaytimeManager(final Autorank plugin) {
 		this.plugin = plugin;
@@ -49,7 +49,7 @@ public class PlaytimeManager {
 			@Override
 			public void run() {
 
-				final SimpleYamlConfiguration data = getDataFile(dataType.TOTAL_TIME);
+				final SimpleYamlConfiguration data = getDataFile(TimeType.TOTAL_TIME);
 
 				// Before running, backup stuff.
 				plugin.getBackupManager().backupFile("Data.yml", null);
@@ -127,7 +127,7 @@ public class PlaytimeManager {
 		}
 
 		// Determine what plugin to use for getting the time.
-		if (timePlugin.equals(dependency.STATS)) {
+		if (timePlugin.equals(AutorankDependency.STATS)) {
 			final StatsPlugin stats = plugin.getHookedStatsPlugin();
 
 			if (stats instanceof StatsHandler) {
@@ -142,13 +142,13 @@ public class PlaytimeManager {
 				// Stats not found, using Autorank's system.
 				playTime = plugin.getFlatFileManager().getLocalTime(uuid) * 60;
 			}
-		} else if (timePlugin.equals(dependency.ONTIME)) {
+		} else if (timePlugin.equals(AutorankDependency.ONTIME)) {
 			playTime = ((OnTimeHandler) plugin.getDependencyManager().getDependencyHandler(Dependency.ON_TIME))
 					.getPlayTime(playerName);
 			// Time is in minutes, so convert to seconds
 			playTime = playTime * 60;
-		} else if (timePlugin.equals(dependency.STATZ)) {
-			playTime = (int) ((StatzAPIHandler) plugin.getDependencyManager().getDependency(dependency.STATZ))
+		} else if (timePlugin.equals(AutorankDependency.STATZ)) {
+			playTime = (int) ((StatzAPIHandler) plugin.getDependencyManager().getDependency(AutorankDependency.STATZ))
 					.getTotalOf(uuid, statTypes.TIME_PLAYED, null);
 			playTime = playTime * 60;
 		} else {

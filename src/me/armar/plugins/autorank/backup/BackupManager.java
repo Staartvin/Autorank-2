@@ -9,7 +9,7 @@ import com.google.common.io.Files;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.data.flatfile.FlatFileManager;
-import me.armar.plugins.autorank.data.flatfile.FlatFileManager.dataType;
+import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
 
 /**
  * Class that allows to backup files before overwriting them.
@@ -81,7 +81,7 @@ public class BackupManager {
 				if ((System.currentTimeMillis() - backupDataManager.getLatestBackup("data")) > 86400000) {
 					plugin.debugMessage(ChatColor.RED + "Making a backup of all data files!");
 
-					for (dataType type : dataType.values()) {
+					for (TimeType type : TimeType.values()) {
 						String path = FlatFileManager.dataTypePaths.get(type);
 						
 						plugin.getBackupManager().backupFile(path, plugin.getDataFolder().getAbsolutePath()

@@ -23,12 +23,10 @@ public class SimpleYamlConfiguration extends YamlConfiguration {
 	File file;
 
 	/**
-	 * Creates a new YAML file.
+	 * Create a new YAML file.
 	 * 
 	 * @param plugin Plugin to create it for.
 	 * @param fileName Path of the file.
-	 * @param configDefaults Defaults with which we should copy the new file,
-	 *            can be null for an empty file.
 	 * @param name Name of the file that is used to show in the console.
 	 */
 	public SimpleYamlConfiguration(final JavaPlugin plugin, final String fileName, final String name) {
@@ -60,10 +58,16 @@ public class SimpleYamlConfiguration extends YamlConfiguration {
 
 	}
 
+	/**
+	 * Get the internal YAML file.
+	 */
 	public File getInternalFile() {
 		return file;
 	}
 
+	/**
+	 * Load the YAML file.
+	 */
 	public void loadFile() {
 		try {
 			this.load(file);
@@ -76,11 +80,17 @@ public class SimpleYamlConfiguration extends YamlConfiguration {
 		}
 	}
 
+	/**
+	 * Reload the YAML file.
+	 */
 	public void reloadFile() {
 		loadFile();
 		saveFile();
 	}
 
+	/**
+	 * Save the YAML file.
+	 */
 	public void saveFile() {
 		try {
 			this.save(file);

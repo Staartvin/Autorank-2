@@ -4,16 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.data.flatfile.FlatFileManager.dataType;
+import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
 
 /**
- * This class manages the internalprop.yml that stores all internal properties
+ * This class manages the internalprops.yml file. It is used to store data that is not specific to players or admins,
  * <br>
- * of Autorank. Think of the cached leaderboard, the last time something was
+ * but is used internally (hence the name) by Autorank. Think of the cached leaderboard, the last time something was
  * updated, etc.
  * <br>
  * This file should not be altered by the server owner, since Autorank manages
- * this.
+ * it.
  * 
  * @author Staartvin
  *
@@ -27,43 +27,70 @@ public class InternalPropertiesConfig {
 		this.plugin = instance;
 	}
 
-	public List<String> getCachedLeaderboard(final dataType type) {
+	/**
+	 * Get the cached leaderboard for a certain time {@linkplain TimeType}.
+	 * @param type Type of time
+	 * @return the cached leaderboard for the given time type.
+	 */
+	public List<String> getCachedLeaderboard(final TimeType type) {
 		// Type is the leaderboard type you want to get (all time, daily, weekly or monthly)
 		return config.getStringList("leaderboards." + type.toString().toLowerCase() + ".cached leaderboard");
 	}
 
+	/**
+	 * Get the last time any of the leaderboard was updated (UNIX timestamp).
+	 * @return a UNIX timestamp or 0 if never updated before.
+	 */
 	public long getLeaderboardLastUpdateTime() {
 		return config.getLong("leaderboard last updated", 0);
 	}
 
-	public int getTrackedDataType(final dataType type) {
-		if (type == dataType.DAILY_TIME) {
+	/**
+	 * 
+	 * Get the last stored value of a time type.
+	 * Autorank stores the current day, week and month. On a new calendar day, any of will be changed (as a new day has arrived).
+	 * Autorank then knows a new day/week/month has arrived, so it can reset the data files.
+	 * @param type type of time
+	 * @return the previously stored value. Returns 1 if nothing was stored yet or 0 if you try to access the total time.
+	 */
+	public int getTrackedTimeType(final TimeType type) {
+		if (type == TimeType.DAILY_TIME) {
 			return config.getInt("tracked day", 1);
-		} else if (type == dataType.WEEKLY_TIME) {
+		} else if (type == TimeType.WEEKLY_TIME) {
 			return config.getInt("tracked week", 1);
-		} else if (type == dataType.MONTHLY_TIME) {
+		} else if (type == TimeType.MONTHLY_TIME) {
 			return config.getInt("tracked month", 1);
 		} else {
 			return 0;
 		}
 	}
 
+	/**
+	 * Get whether the UUIDS have been converted to a new format.
+	 * Since Autorank 3.7.1, a new format of storing player names was
+	 *	introduced. If all values were properly converted, this method will
+	 *	return true.
+	 *	If it hasn't been run before or did not successfully convert all
+	 *	names, it will return false.
+	 * @return true if the uuids are stored in the new format, false otherwise.
+	 */
 	public boolean hasTransferredUUIDs() {
-		// Since Autorank 3.7.1, a new format of storing player names was
-		// introduced. If all values were properly converted, this method will
-		// return true.
-		// If it hasn't been run before or did not successfully convert all
-		// names, it will return false.
-
 		return config.getBoolean("has converted uuids", false);
 	}
 
+	/**
+	 * Set whether the UUIDS have been correctly converted to a new format.
+	 * @param value Value of the conversion
+	 */
 	public void hasTransferredUUIDs(final boolean value) {
 		config.set("has converted uuids", true);
 
 		config.saveFile();
 	}
 
+	/**
+	 * Load the internalprops.yml file.
+	 */
 	public void loadFile() {
 		config = new SimpleYamlConfiguration(plugin, "internalprops.yml", "Internal properties");
 
@@ -96,24 +123,38 @@ public class InternalPropertiesConfig {
 		config.saveFile();
 	}
 
-	public void setCachedLeaderboard(final dataType type, final List<String> cachedLeaderboard) {
+	/**
+	 * Set the cached leaderboard for a certain time type.
+	 * @param type Type of time
+	 * @param cachedLeaderboard A list of strings
+	 */
+	public void setCachedLeaderboard(final TimeType type, final List<String> cachedLeaderboard) {
 		config.set("leaderboards." + type.toString().toLowerCase() + ".cached leaderboard", cachedLeaderboard);
 
 		config.saveFile();
 	}
 
+	/**
+	 * Set the time any leaderboard was last updated.
+	 * @param time Last update time (UNIX timestamp)
+	 */
 	public void setLeaderboardLastUpdateTime(final long time) {
 		config.set("leaderboard last updated", time);
 
 		config.saveFile();
 	}
 
-	public void setTrackedDataType(final dataType type, final int value) {
-		if (type == dataType.DAILY_TIME) {
+	/**
+	 * Set the value of a time type. See {@link #getTrackedTimeType(TimeType)} for more info.
+	 * @param type Type of time
+	 * @param value Value to set the time to.
+	 */
+	public void setTrackedTimeType(final TimeType type, final int value) {
+		if (type == TimeType.DAILY_TIME) {
 			config.set("tracked day", value);
-		} else if (type == dataType.WEEKLY_TIME) {
+		} else if (type == TimeType.WEEKLY_TIME) {
 			config.set("tracked week", value);
-		} else if (type == dataType.MONTHLY_TIME) {
+		} else if (type == TimeType.MONTHLY_TIME) {
 			config.set("tracked month", value);
 		} else {
 			return;

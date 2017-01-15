@@ -4,7 +4,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.hooks.DependencyManager.dependency;
+import me.armar.plugins.autorank.hooks.DependencyManager.AutorankDependency;
 import me.armar.plugins.autorank.hooks.statzapi.StatzAPIHandler;
 import me.armar.plugins.autorank.statsmanager.handlers.DummyHandler;
 import me.armar.plugins.autorank.statsmanager.handlers.StatisticsHandler;
@@ -114,7 +114,7 @@ public class StatsPluginManager {
 			plugin.getLogger().info("Found Statz plugin: Statz (by Staartvin)");
 
 			statsPlugin = new StatzHandler(plugin,
-					(StatzAPIHandler) plugin.getDependencyManager().getDependency(dependency.STATZ));
+					(StatzAPIHandler) plugin.getDependencyManager().getDependency(AutorankDependency.STATZ));
 
 			if (statsPlugin == null) {
 				plugin.getLogger().info("Couldn't hook into Statz! StatzHandler was unable to hook.");

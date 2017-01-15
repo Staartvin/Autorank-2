@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
 
 import org.anjocaido.groupmanager.GroupManager;
 import org.anjocaido.groupmanager.data.Group;
@@ -83,27 +82,6 @@ public class GroupManagerHandler implements PermissionsHandler {
 		}
 		final List<String> groups = Arrays.asList(handler.getPrimaryGroup(player.getName()));
 		final String[] array = (String[]) groups.toArray();
-
-		final UUID uuid = player.getUniqueId();
-
-		// Checking if player changed group
-		// Check if the latest known group is the current group. Otherwise, reset progress
-		final String currentGroup = array[0];
-		String latestKnownGroup = plugin.getPlayerDataConfig().getLastKnownGroup(uuid);
-
-		if (latestKnownGroup == null) {
-			plugin.getPlayerDataConfig().setLastKnownGroup(uuid, currentGroup);
-
-			latestKnownGroup = currentGroup;
-		}
-		if (!latestKnownGroup.equalsIgnoreCase(currentGroup)) {
-			// Reset progress and update latest known group
-			plugin.getPlayerDataConfig().setCompletedRequirements(uuid, new ArrayList<Integer>());
-			plugin.getPlayerDataConfig().setLastKnownGroup(uuid, currentGroup);
-			plugin.getPlayerDataConfig().setChosenPath(uuid, null);
-
-			plugin.debugMessage("Reset player data for " + player.getName());
-		}
 
 		return array;
 	}

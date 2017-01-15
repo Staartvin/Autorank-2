@@ -3,23 +3,14 @@ package me.armar.plugins.autorank.config;
 import java.util.List;
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.api.events.RequirementCompleteEvent;
-import me.armar.plugins.autorank.pathbuilder.Path;
-import me.armar.plugins.autorank.pathbuilder.holders.RequirementsHolder;
-import me.armar.plugins.autorank.pathbuilder.result.Result;
 
 /**
- * PlayerDataConfig will keep track of the latest known group and progress a
- * player made (via /ar complete)
- * When the last known group is not equal to the current group of a player, all
- * progress should be reset as a player is not longer in the same group.
+ * PlayerDataConfig stores all the properties of players. Autorank needs to store which path a player has chosen and which requirements they already met.
  * 
- * PlayerDataConfig uses a file (/playerdata/playerdata.yml) which keeps
+ * PlayerDataConfig uses a file (/playerdata/Playerdata.yml) which keeps
  * tracks of these things.
  * 
  * @author Staartvin
@@ -48,12 +39,19 @@ public class PlayerDataConfig {
 		}, 1200, 2400);
 	}
 
+	/**
+	 * Create a new PlayerData.yml file.
+	 */
 	public void createNewFile() {
 		config = new SimpleYamlConfiguration(plugin, "/playerdata/" + fileName, fileName);
 
 		plugin.getLogger().info("PlayerData file loaded (" + fileName + ")");
 	}
 
+	/**
+	 * Get the PlayerData.yml file.
+	 * @return the PlayerData.yml
+	 */
 	public FileConfiguration getConfig() {
 		if (config != null) {
 			return (FileConfiguration) config;
@@ -62,12 +60,18 @@ public class PlayerDataConfig {
 		return null;
 	}
 
+	/**
+	 * Reload the PlayerData.yml file.
+	 */
 	public void reloadConfig() {
 		if (config != null) {
 			config.reloadFile();
 		}
 	}
 
+	/**
+	 * Save the PlayerData.yml file.
+	 */
 	public void saveConfig() {
 		if (config == null) {
 			return;
@@ -76,6 +80,11 @@ public class PlayerDataConfig {
 		config.saveFile();
 	}
 
+	/**
+	 * Add a requirement that is completed by a player.
+	 * @param uuid UUID of the player
+	 * @param reqID ID of the requirement
+	 */
 	public void addCompletedRequirement(final UUID uuid, final int reqID) {
 		final List<Integer> progress = getCompletedRequirements(uuid);
 
@@ -87,20 +96,42 @@ public class PlayerDataConfig {
 		setCompletedRequirements(uuid, progress);
 	}
 
+	/**
+	 * Set the completed requirements a player has.
+	 * @param uuid UUID of the player
+	 * @param requirements Requirements that the player completed.
+	 */
 	public void setCompletedRequirements(final UUID uuid, final List<Integer> requirements) {
 		config.set(uuid.toString() + ".completed requirements", requirements);
 	}
 	
+	/**
+	 * Get a list of completed requirements of a player.
+	 * <br>This list is reset when a player chooses a new path or completes a path.
+	 * @param uuid UUID of the player
+	 * @return a list of requirements a player completed.
+	 */
 	public List<Integer> getCompletedRequirements(final UUID uuid) {
 		return config.getIntegerList(uuid.toString() + ".completed requirements");
 	}
 	
+	/**
+	 * Check whether a player completed a specific requirement.
+	 * @param reqID ID of requirement
+	 * @param uuid UUID of the player
+	 * @return true if the player completed the given requirement. False otherwise.
+	 */
 	public boolean hasCompletedRequirement(final int reqID, final UUID uuid) {
 		final List<Integer> completedRequirement = getCompletedRequirements(uuid);
 
 		return completedRequirement.contains(reqID);
 	}
 	
+	/**
+	 * Add a prerequisite that is completed by a player.
+	 * @param uuid UUID of the player
+	 * @param preReqID ID of the prerequisite
+	 */
 	public void addCompletedPrerequisite(final UUID uuid, final int preReqID) {
 		final List<Integer> progress = getCompletedPrerequisites(uuid);
 
@@ -112,20 +143,42 @@ public class PlayerDataConfig {
 		setCompletedPrerequisites(uuid, progress);
 	}
 
+	/**
+	 * Set the completed prerequisites a player has.
+	 * @param uuid UUID of the player
+	 * @param prerequisites Prerequisites that the player completed.
+	 */
 	public void setCompletedPrerequisites(final UUID uuid, final List<Integer> prerequisites) {
 		config.set(uuid.toString() + ".completed prerequisites", prerequisites);
 	}
 	
+	/**
+	 * Get a list of completed prerequisites of a player.
+	 * <br>This list is reset when a player chooses a new path or completes a path.
+	 * @param uuid UUID of the player
+	 * @return a list of prerequisites a player completed.
+	 */
 	public List<Integer> getCompletedPrerequisites(final UUID uuid) {
 		return config.getIntegerList(uuid.toString() + ".completed prerequisites");
 	}
 	
-	public boolean hasCompletedPrerequisite(final int reqID, final UUID uuid) {
+	/**
+	 * Check whether a player completed a specific prerequisite.
+	 * @param preReqID ID of prerequisite
+	 * @param uuid UUID of the player
+	 * @return true if the player completed the given prerequisite. False otherwise.
+	 */
+	public boolean hasCompletedPrerequisite(final int preReqId, final UUID uuid) {
 		final List<Integer> completedPrerequisites = getCompletedPrerequisites(uuid);
 
-		return completedPrerequisites.contains(reqID);
+		return completedPrerequisites.contains(preReqId);
 	}
 
+	/**
+	 * Add a path that is completed by a player.
+	 * @param uuid UUID of the player
+	 * @param pathName Name (internal name) of the path
+	 */
 	public void addCompletedPath(final UUID uuid, final String pathName) {
 		final List<String> completed = getCompletedPaths(uuid);
 		
@@ -138,29 +191,10 @@ public class PlayerDataConfig {
 		setCompletedPaths(uuid, completed);
 	}
 
-	public boolean checkValidChosenPath(final Player player) {
-
-		final String chosenPath = this.getChosenPath(player.getUniqueId());
-
-		final List<Path> definedPaths = plugin.getPathManager().getPaths();
-
-		boolean validChosenPath = false;
-
-		// Check whether the chosen path exists
-		for (final Path definedPath : definedPaths) {
-			if (definedPath.getInternalName().equals(chosenPath)) {
-				validChosenPath = true;
-			}
-		}
-
-		if (!validChosenPath) {
-			// Somehow there wrong chosen path was still left over. Remove it.
-			this.setChosenPath(player.getUniqueId(), null);
-		}
-
-		return validChosenPath;
-	}
-
+	/**
+	 * In an earlier version of Autorank, the PlayerData.yml file stored users as usernames. This function can be used to change the usernames to UUIDs.
+	 * This will probably be removed in the future.
+	 */
 	public void convertNamesToUUIDs() {
 
 		if (convertingData)
@@ -206,23 +240,32 @@ public class PlayerDataConfig {
 	}
 
 
+	/**
+	 * Get the path a player has chosen.
+	 * @param uuid UUID of the player
+	 * @return name of the path a player has chosen, or 'unknown' if (s)he did not choose a path (yet).
+	 */
 	public String getChosenPath(final UUID uuid) {
 		return config.getString(uuid.toString() + ".chosen path", "unknown");
 	}
 
+	/**
+	 * Get a list of paths that a player completed.
+	 * @param uuid UUID of the player
+	 * @return a list of path names that the given player completed.
+	 */
 	private List<String> getCompletedPaths(final UUID uuid) {
 		final List<String> completed = config.getStringList(uuid.toString() + ".completed paths");
 
 		return completed;
 	}
 
-	public String getLastKnownGroup(final UUID uuid) {
-		//Validate.notNull(uuid, "UUID of a player is null!");
-
-		//UUID uuid = UUIDManager.getUUIDFromPlayer(playerName);
-		return config.getString(uuid.toString() + ".last group");
-	}
-
+	/**
+	 * Check whether a player has completed a specific path.
+	 * @param uuid UUID of the player
+	 * @param pathName Name of path
+	 * @return true if the given player has completed the given path. False otherwise.
+	 */
 	public boolean hasCompletedPath(final UUID uuid, final String pathName) {
 		// If player can rank up forever on the same rank, we will always return false.
 		if (plugin.getPathsConfig().allowInfinitePathing(pathName)) {
@@ -233,47 +276,40 @@ public class PlayerDataConfig {
 	}
 
 
+	/**
+	 * Check whether a player is exempted from appearing on any leaderboard.
+	 * @param uuid UUID of the player
+	 * @return true if the given player is not allowed to be shown on any leaderboard. False otherwise.
+	 */
 	public boolean hasLeaderboardExemption(final UUID uuid) {
 		//Validate.notNull(uuid, "UUID of a player is null!");
 		return config.getBoolean(uuid.toString() + ".exempt leaderboard", false);
 	}
 
+	/**
+	 * Set whether a player is exempted from appearing on any leaderboard.
+	 * @param uuid UUID of the player
+	 * @param value Value to set the exemption status to.
+	 */
 	public void hasLeaderboardExemption(final UUID uuid, final boolean value) {
 		config.set(uuid.toString() + ".exempt leaderboard", value);
 	}
 
-	public void runResults(final RequirementsHolder holder, final Player player) {
-
-		// Fire event so it can be cancelled
-		// Create the event here/
-		// TODO Implement logic for events with RequirementHolder
-		final RequirementCompleteEvent event = new RequirementCompleteEvent(player, holder);
-		// Call the event
-		Bukkit.getServer().getPluginManager().callEvent(event);
-
-		// Check if event is cancelled.
-		if (event.isCancelled())
-			return;
-
-		// Run results
-		final List<Result> results = holder.getResults();
-
-		// Apply result
-		for (final Result realResult : results) {
-			realResult.applyResult(player);
-		}
-	}
-
+	/**
+	 * Set the path that a player has chosen.
+	 * @param uuid UUID of the player
+	 * @param path Name of path
+	 */
 	public void setChosenPath(final UUID uuid, final String path) {
 		config.set(uuid.toString() + ".chosen path", path);
 	}
 
+	/**
+	 * Set the paths that a player has completed.
+	 * @param uuid UUID of the player
+	 * @param completedPaths Paths that the player has completed
+	 */
 	public void setCompletedPaths(final UUID uuid, final List<String> completedPaths) {
 		config.set(uuid.toString() + ".completed paths", completedPaths);
-	}
-
-	public void setLastKnownGroup(final UUID uuid, final String group) {
-		//UUID uuid = UUIDManager.getUUIDFromPlayer(playerName);
-		config.set(uuid.toString() + ".last group", group);
 	}
 }

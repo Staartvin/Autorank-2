@@ -5,7 +5,7 @@ import java.util.UUID;
 import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.data.flatfile.FlatFileManager.dataType;
+import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
 import me.armar.plugins.autorank.hooks.DependencyManager;
 import me.armar.plugins.autorank.playtimes.PlaytimeManager;
 
@@ -70,7 +70,7 @@ public class UpdatePlaytime implements Runnable {
 			final UUID uuid = plugin.getUUIDStorage().getStoredUUID(player.getName());
 
 			// Modify local time
-			for (final dataType type : dataType.values()) {
+			for (final TimeType type : TimeType.values()) {
 				flatFileManager.addLocalTime(uuid, PlaytimeManager.INTERVAL_MINUTES, type);
 			}
 

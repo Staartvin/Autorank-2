@@ -99,7 +99,7 @@ public class CompleteCommand extends AutorankCommand {
 				player.sendMessage(ChatColor.AQUA + holder.getDescription());
 
 				// Run results
-				plugin.getPlayerDataConfig().runResults(holder, player);
+				holder.runResults(player);
 
 				// Log that a player has passed this requirement
 				plugin.getPlayerDataConfig().addCompletedRequirement(uuid, (completionID - 1));

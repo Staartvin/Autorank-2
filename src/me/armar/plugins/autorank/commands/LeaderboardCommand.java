@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
-import me.armar.plugins.autorank.data.flatfile.FlatFileManager.dataType;
+import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
 import me.armar.plugins.autorank.language.Lang;
 
 public class LeaderboardCommand extends AutorankCommand {
@@ -56,20 +56,20 @@ public class LeaderboardCommand extends AutorankCommand {
 		}
 
 		String leaderboardType = "total";
-		dataType type = null;
+		TimeType type = null;
 
 		if (args.length > 1 && !args[1].equalsIgnoreCase("force") && !args[1].equalsIgnoreCase("broadcast")) {
 			leaderboardType = args[1].toLowerCase();
 		}
 
 		if (leaderboardType.equalsIgnoreCase("total")) {
-			type = dataType.TOTAL_TIME;
+			type = TimeType.TOTAL_TIME;
 		} else if (leaderboardType.equalsIgnoreCase("daily") || leaderboardType.contains("day")) {
-			type = dataType.DAILY_TIME;
+			type = TimeType.DAILY_TIME;
 		} else if (leaderboardType.contains("week")) {
-			type = dataType.WEEKLY_TIME;
+			type = TimeType.WEEKLY_TIME;
 		} else if (leaderboardType.contains("month")) {
-			type = dataType.MONTHLY_TIME;
+			type = TimeType.MONTHLY_TIME;
 		}
 
 		if (type == null) {

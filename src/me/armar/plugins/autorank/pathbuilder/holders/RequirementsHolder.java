@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.api.events.RequirementCompleteEvent;
 import me.armar.plugins.autorank.pathbuilder.requirement.Requirement;
 import me.armar.plugins.autorank.pathbuilder.result.Result;
 
@@ -267,6 +269,25 @@ public class RequirementsHolder {
 		}
 
 		return false;
+	}
+
+	public void runResults(final Player player) {
+
+		// Fire event so it can be cancelled
+		// Create the event here/
+		// TODO Implement logic for events with RequirementHolder
+		final RequirementCompleteEvent event = new RequirementCompleteEvent(player, this);
+		// Call the event
+		Bukkit.getServer().getPluginManager().callEvent(event);
+
+		// Check if event is cancelled.
+		if (event.isCancelled())
+			return;
+
+		// Apply result
+		for (final Result realResult : this.getResults()) {
+			realResult.applyResult(player);
+		}
 	}
 
 	public boolean isPrerequisite() {

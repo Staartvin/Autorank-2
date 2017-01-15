@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.config.SettingsConfig;
-import me.armar.plugins.autorank.config.SettingsConfig.MySQLOptions;
+import me.armar.plugins.autorank.config.SettingsConfig.MySQLCredentials;
 import me.armar.plugins.autorank.playtimes.PlaytimeManager;
 import net.md_5.bungee.api.ChatColor;
 
@@ -371,11 +371,11 @@ public class MySQLManager {
 
 		if (configHandler.useMySQL()) {
 
-			hostname = configHandler.getMySQLSettings(MySQLOptions.HOSTNAME);
-			username = configHandler.getMySQLSettings(MySQLOptions.USERNAME);
-			password = configHandler.getMySQLSettings(MySQLOptions.PASSWORD);
-			database = configHandler.getMySQLSettings(MySQLOptions.DATABASE);
-			table = configHandler.getMySQLSettings(MySQLOptions.TABLE);
+			hostname = configHandler.getMySQLCredentials(MySQLCredentials.HOSTNAME);
+			username = configHandler.getMySQLCredentials(MySQLCredentials.USERNAME);
+			password = configHandler.getMySQLCredentials(MySQLCredentials.PASSWORD);
+			database = configHandler.getMySQLCredentials(MySQLCredentials.DATABASE);
+			table = configHandler.getMySQLCredentials(MySQLCredentials.TABLE);
 
 			mysql = new SQLDataStorage(hostname, username, password, database);
 

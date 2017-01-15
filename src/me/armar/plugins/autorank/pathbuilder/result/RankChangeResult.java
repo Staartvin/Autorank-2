@@ -48,8 +48,6 @@ public class RankChangeResult extends Result {
 		// When rank is changed: reset progress and update last known group
 		getAutorank().getPlayerDataConfig().setCompletedRequirements(uuid, new ArrayList<Integer>());
 
-		getAutorank().getPlayerDataConfig().setLastKnownGroup(uuid, to);
-
 		// Reset chosen path as the player is moved to another group
 		getAutorank().getPlayerDataConfig().setChosenPath(uuid, null);
 

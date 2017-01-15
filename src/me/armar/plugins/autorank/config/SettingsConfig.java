@@ -3,19 +3,21 @@ package me.armar.plugins.autorank.config;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.hooks.DependencyManager.dependency;
+import me.armar.plugins.autorank.hooks.DependencyManager.AutorankDependency;
 
 /**
- * This class has all methods to get data from the configs.
- * <br>
- * The configurations of the Settings.yml can be reached from here.
+ * This class is used to access the properties of the Settings.yml file.
+ * All global configurations options can be accessed via this clas..
  * 
  * @author Staartvin
  * 
  */
 public class SettingsConfig {
 
-	public enum MySQLOptions {
+	/**
+	 * The different type of credentials that is used to connect to a MySQL database.
+	 */
+	public enum MySQLCredentials {
 		DATABASE, HOSTNAME, PASSWORD, TABLE, USERNAME
 	}
 
@@ -29,12 +31,19 @@ public class SettingsConfig {
 		plugin = instance;
 	}
 
+	/**
+	 * Create a new Settings.yml file.
+	 */
 	public void createNewFile() {
 		config = new SimpleYamlConfiguration(plugin, fileName, fileName);
 
 		plugin.getLogger().info("Settings file loaded (Settings.yml)");
 	}
 
+	/**
+	 * Get the Settings.yml file.
+	 * @return
+	 */
 	public FileConfiguration getConfig() {
 		if (config != null) {
 			return (FileConfiguration) config;
@@ -43,12 +52,18 @@ public class SettingsConfig {
 		return null;
 	}
 
+	/**
+	 * Reload the Settings.yml file.
+	 */
 	public void reloadConfig() {
 		if (config != null) {
 			config.reloadFile();
 		}
 	}
 
+	/**
+	 * Save the Settings.yml file.
+	 */
 	public void saveConfig() {
 		if (config == null) {
 			return;
@@ -58,47 +73,61 @@ public class SettingsConfig {
 	}
 
 	/**
-	 * Should we only show the commands on /ar help that a player has access to?
-	 * 
-	 * @return true if we should, false otherwise.
+	 * Check whether Autorank should display only the commands that a player is able to perform when showing the help pages.
+	 * @return true if Autorank should take permissions into consideration, false otherwise.
 	 */
-	public boolean doBaseHelpPageOnPermission() {
+	public boolean doBaseHelpPageOnPermissions() {
 		return this.getConfig().getBoolean("show help command based on permission", false);
 	}
 
 	/**
-	 * Should we check for a new version online?
-	 * 
-	 * @return true if we should, false otherwise.
+	 * Check whether Autorank should validate whether there is a new version of Autorank available online.
+	 * @return true if Autorank should, false otherwise.
 	 */
 	public boolean doCheckForNewerVersion() {
 		return this.getConfig().getBoolean("auto-updater.check-for-new-versions", true);
 	}
 
+	/**
+	 * Get the layout of the /ar check command. 
+	 * @return the layout of the /ar check command.
+	 */
 	public String getCheckCommandLayout() {
 		return this.getConfig().getString("check command layout",
-				"&p has played for &time and is in group(s) &groups. Requirements to be ranked up: &reqs");
+				"&p has played for &time and is on path '&path'. Requirements to be ranked up: &reqs");
 	}
 
 	/**
-	 * How often should we check players?
-	 * 
-	 * @return how many minutes we should wait before checking players again.
+	 * Get the time (in minutes) to let Autorank wait before checking players again.
+	 * @return interval time in minutes
 	 */
 	public int getIntervalTime() {
 		return this.getConfig().getInt("interval check", 5);
 	}
 
+	/**
+	 * Get the layout of the leaderboards.
+	 * @return the layout of the /ar leaderboard command
+	 */
 	public String getLeaderboardLayout() {
 		return this.getConfig().getString("leaderboard layout",
 				"&6&r | &b&p - &7&d day(s), &h hour(s) and &m minute(s).");
 	}
 
+	/**
+	 * Get the number of players Autorank should display on any leaderboard.
+	 * @return number of players to show. By default 10.
+	 */
 	public int getLeaderboardLength() {
 		return this.getConfig().getInt("leaderboard length", 10);
 	}
 
-	public String getMySQLSettings(final MySQLOptions option) {
+	/**
+	 * Get the value of a specific MySQL credential.
+	 * @param option Type of credential
+	 * @return the value for the given MySQL credential.
+	 */
+	public String getMySQLCredentials(final MySQLCredentials option) {
 		switch (option) {
 		case HOSTNAME:
 			return this.getConfig().getString("sql.hostname");
@@ -116,99 +145,110 @@ public class SettingsConfig {
 	}
 
 	/**
-	 * Check whether an admin has disabled automatic ranking.
-	 * 
-	 * @return true if it is disabled, false otherwise.
+	 * Check whether Autorank should disable automatically checking whether a player has completed a path.
+	 * @return true if Autorank should disable it, false otherwise.
 	 */
 	public boolean isAutomaticPathDisabled() {
 		return this.getConfig().getBoolean("disable automatic path checking", false);
 	}
 
+	/**
+	 * Check whether Autorank should only use the primary permission group that Vault returns instead of using all the permission groups of a player.
+	 * @return true if Autorank should, false otherwise.
+	 */
 	public boolean onlyUsePrimaryGroupVault() {
 		return this.getConfig().getBoolean("use primary group for vault", true);
 	}
 
 	/**
-	 * Should we broadcast in the server when any time gets reset?
+	 * Check whether Autorank should broadcast a message to all online players when a {@link TimeType} file is reset.
+	 * @return true if Autorank should notice all players. False otherwise.
 	 */
 	public boolean shouldBroadcastDataReset() {
 		return this.getConfig().getBoolean("broadcast resetting of data files", true);
 	}
 
+	/**
+	 * Check whether Autorank should output warnings (when an admin comes online) if there are any.
+	 * @return true if Autorank should output warnings, false otherwise.
+	 */
 	public boolean showWarnings() {
 		return this.getConfig().getBoolean("show warnings", true);
 	}
 
 	/**
 	 * Check whether Autorank should log detailed information about <br>
-	 * the found dependencies.
+	 * the found third party plugins.
 	 * 
-	 * @return true if has to, false otherwise.
+	 * @return true if Autorank should, false otherwise.
 	 */
 	public boolean useAdvancedDependencyLogs() {
-		return this.getConfig().getBoolean("advanced dependency output", false);
+		return this.getConfig().getBoolean("advanced AutorankDependency output", false);
 	}
 
 	/**
-	 * Whether Autorank should care about players that are AFK or not. <br>
+	 * Check whether Autorank should take AFK into account when calculating online time of a player.
+	 * If this is true, Autorank can use third party plugins to detect whether a player is AFK.
+	 * See {@link me.armar.plugins.autorank.hooks.DependencyManager#isAFK(org.bukkit.entity.Player)}.
 	 * 
-	 * @return true when AFK integration should be used; false otherwise.
+	 * @return true when AFK integration should be used, false otherwise.
 	 */
 	public boolean useAFKIntegration() {
 		return this.getConfig().getBoolean("afk integration", true);
 	}
 
 	/**
-	 * Should we output debug messages?
+	 * Check whether Autorank should output debug messages to the server console.
 	 */
 	public boolean useDebugOutput() {
 		return this.getConfig().getBoolean("use debug", false);
 	}
 
 	/**
-	 * Should we display the global time in the leaderboard of Autorank.
+	 * Check whether Autorank should display the global time of players instead of their local time in any of the leaderboards.
 	 * 
-	 * @return true if we should, false otherwise.
+	 * @return true if Autorank should, false otherwise.
 	 */
 	public boolean useGlobalTimeInLeaderboard() {
 		return this.getConfig().getBoolean("use global time in leaderboard", false);
 	}
 
 	/**
-	 * Should we use the MySQL database?
+	 * Check whether Autorank should use MySQL to store global times of players.
 	 */
 	public boolean useMySQL() {
 		return this.getConfig().getBoolean("sql.enabled");
 	}
 
 	/**
-	 * Are we using partial completion?
+	 * Check whether Autorank should use partial completion. If this is set to true, Autorank will mark completed requirements when a player is on a path so
+	 * that they don't have to meet all requirements at the same time. Instead, they can first complete requirement 1 and then 2, and Autorank will still consider
+	 * the path as completed.
 	 */
 	public boolean usePartialCompletion() {
 		return this.getConfig().getBoolean("use partial completion", true);
 	}
 
 	/**
-	 * Get the plugin that is used to get the time a player played on this
-	 * server. <br>
+	 * Get the plugin that is used to get the local play time of player.
 	 * This is only accounted for the local time. The global time is still
 	 * calculated by Autorank.
 	 * 
-	 * @return {@link me.armar.plugins.autorank.hooks.DependencyManager.dependency}
-	 *         object that is used
+	 * @return {@link me.armar.plugins.autorank.hooks.DependencyManager.AutorankDependency}
+	 *         AutorankDependency that is used
 	 */
-	public dependency useTimeOf() {
+	public AutorankDependency useTimeOf() {
 
 		final String timePlugin = this.getConfig().getString("use time of", "Autorank");
 
 		if (timePlugin.equalsIgnoreCase("Stats"))
-			return dependency.STATS;
+			return AutorankDependency.STATS;
 		else if (timePlugin.equalsIgnoreCase("OnTime"))
-			return dependency.ONTIME;
+			return AutorankDependency.ONTIME;
 		else if (timePlugin.equals("Statz"))
-			return dependency.STATZ;
+			return AutorankDependency.STATZ;
 		else
-			return dependency.AUTORANK;
+			return AutorankDependency.AUTORANK;
 	}
 
 }
