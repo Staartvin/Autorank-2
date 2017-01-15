@@ -17,6 +17,8 @@ public class ValidateHandler {
 
 		boolean correctSetup = false;
 
+		//TODO: Make validation working again
+		
 		// Simple logic to find out what config to check for.
 //		if (autorank.getConfigHandler().useAdvancedConfig()) {
 //			correctSetup = permGroupValidate.validateAdvancedGroups(config);

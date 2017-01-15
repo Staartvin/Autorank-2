@@ -15,6 +15,8 @@ import org.bukkit.configuration.file.FileConfiguration;
  * @author Staartvin and gomeow
  * 
  */
+
+// TODO: Remove unnecessary lang options
 public enum Lang {
 	/**
 	 * Obtain at least {0} achievements
@@ -259,9 +261,9 @@ public enum Lang {
 	 */
 	MCMMO_SKILL_LEVEL_REQUIREMENT("mcmmo-skill-level-requirement", "Have at least level {0} in {1}"),
 	/**
-	 * meets all the requirements for rank {0}
+	 * meets all the requirements for path {0}
 	 */
-	MEETS_ALL_REQUIREMENTS("meets-all-requirements", "meets all the requirements for rank {0}"),
+	MEETS_ALL_REQUIREMENTS("meets-all-requirements", "meets all the requirements for path {0}"),
 	/**
 	 * meets all the requirements
 	 */
@@ -287,17 +289,17 @@ public enum Lang {
 	 */
 	MYSQL_IS_NOT_ENABLED("mysql-is-not-enabled", "&cMySQL is not enabled!"),
 	/**
-	 * none (no rankup found)
+	 * none (no path found)
 	 */
-	NO_FURTHER_RANKUP_FOUND("no-further-rankup-found", "none (no rankup found)"),
+	NO_FURTHER_RANKUP_FOUND("no-further-rankup-found", "none (no path found)"),
 	/**
 	 * no groups
 	 */
 	NO_GROUPS("no-groups", "no groups"),
 	/**
-	 * and does not have a next rankup
+	 * and does not have a next path
 	 */
-	NO_NEXT_RANK("no-next-rankup", "Does not have a next rankup."),
+	NO_NEXT_RANK("no-next-rankup", "Does not have a next path."),
 	/**
 	 * &4There was no ranking path found with that name.
 	 */
