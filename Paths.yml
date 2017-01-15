@@ -1,0 +1,17 @@
+# Paths file - This file will contain all paths that a player is allowed to take. Previously known as 'AdvancedConfig.yml'.
+# This file contains (by default) a Test group that shows the basic syntax of this file. 
+# For more information, go to <LINK HERE>.
+Test:
+  prerequisites:
+    world: world_nether
+    money: 1000
+  requirements:
+    money: 10000
+    blocks broken: 50
+  results:
+    rank change: TestGroup2
+    command: broadcast &p has just completed path 'Default'!
+    command2: give &p 1 100
+    message: Congratulations, you completed the 'Default' path!
+  options:
+    display name: Test path

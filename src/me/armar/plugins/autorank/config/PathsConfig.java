@@ -294,7 +294,7 @@ public class PathsConfig {
 
 	public void loadConfig() {
 
-		getConfig().options()
+		/*getConfig().options()
 				.header("Paths file - This file will contain all paths that a player is allowed to take. Previously known as 'AdvancedConfig.yml'."
 						+ "\nThis file contains (by default) a Test group that shows the basic syntax of this file. "
 						+ "\nFor more information, go to <LINK HERE>.");
@@ -319,7 +319,7 @@ public class PathsConfig {
 		getConfig().addDefault(pathName + ".results.message", "Congratulations, you completed the 'Default' path!");
 
 		getConfig().options().copyDefaults(true);
-		saveConfig();
+		saveConfig();*/
 	}
 
 	/**
