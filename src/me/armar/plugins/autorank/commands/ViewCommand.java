@@ -16,6 +16,9 @@ import me.armar.plugins.autorank.pathbuilder.holders.RequirementsHolder;
 import me.armar.plugins.autorank.pathbuilder.result.Result;
 import me.armar.plugins.autorank.util.AutorankTools;
 
+/**
+ * The command delegator for the '/ar view' command.
+ */
 public class ViewCommand extends AutorankCommand {
 
 	private final Autorank plugin;

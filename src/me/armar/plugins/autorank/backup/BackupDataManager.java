@@ -12,7 +12,7 @@ import me.armar.plugins.autorank.Autorank;
 
 /**
  * This class is used to create a backup-data.yml that will store what files
- * were backed up and when.
+ * were backed up and at what time.
  * 
  * @author Staartvin
  */
@@ -40,6 +40,10 @@ public class BackupDataManager {
 		plugin.getLogger().info("Backup data file loaded (backup-data.yml)");
 	}
 
+	/**
+	 * Get the backup-data.yml file.
+	 * @return
+	 */
 	public FileConfiguration getConfig() {
 		if (backupConfig == null) {
 			this.reloadConfig();
@@ -47,12 +51,17 @@ public class BackupDataManager {
 		return backupConfig;
 	}
 
+	/**
+	 * Get the last time a backup was made for a specific file.
+	 * @param file File to check
+	 * @return the last time a file was backed up (UNIX timestamp), or -1 if it was never backed up.
+	 */
 	public long getLatestBackup(final String file) {
 		return backupConfig.getLong(file, -1);
 	}
 
 	/**
-	 * Loads the backup data file of Autorank (backup-data.yml).
+	 * Load the backup data file of Autorank (backup-data.yml).
 	 */
 	public void loadConfig() {
 
@@ -68,7 +77,7 @@ public class BackupDataManager {
 	}
 
 	/**
-	 * Reloads backup data config.
+	 * Reload the backup-data.yml file.
 	 */
 	@SuppressWarnings("deprecation")
 	public void reloadConfig() {
@@ -87,7 +96,7 @@ public class BackupDataManager {
 	}
 
 	/**
-	 * Saves backup data config.
+	 * Save the backup-data.yml file.
 	 */
 	public void saveConfig() {
 		if (backupConfig == null || backupConfigFile == null) {

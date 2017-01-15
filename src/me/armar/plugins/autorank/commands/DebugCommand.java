@@ -9,6 +9,9 @@ import org.bukkit.command.CommandSender;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 
+/**
+ * The command delegator for the '/ar debug' command.
+ */
 public class DebugCommand extends AutorankCommand {
 
 	private final Autorank plugin;

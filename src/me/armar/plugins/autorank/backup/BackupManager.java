@@ -12,11 +12,7 @@ import me.armar.plugins.autorank.data.flatfile.FlatFileManager;
 import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
 
 /**
- * Class that allows to backup files before overwriting them.
- * Stores functions to backup.
- * <p>
- * Date created: 15:25:43 12 dec. 2014
- * 
+ * This class is used to backup several data files of Autorank.
  * @author Staartvin
  * 
  */
@@ -36,7 +32,7 @@ public class BackupManager {
 	 * Backup a file to a folder.
 	 * 
 	 * @param sourceFileName Path of file to backup
-	 * @param storePath Path to backup the file to, can be null.
+	 * @param storePath Path to backup the file to, can be null
 	 */
 	public void backupFile(final String sourceFileName, final String storePath) {
 		// CAN ONLY COPY YML
@@ -67,9 +63,8 @@ public class BackupManager {
 	}
 
 	/**
-	 * Starts internal backup system of Autorank.
-	 * <br>
-	 * This will make a backup of each file every day.
+	 * Start the internal backup system of Autorank.
+	 * This will make a backup of each data file every 24 hours.
 	 */
 	public void startBackupSystem() {
 		// Makes a backup every day

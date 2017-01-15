@@ -9,6 +9,9 @@ import org.bukkit.command.CommandSender;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 
+/**
+ * The command delegator for the '/ar convert' command.
+ */
 public class ConvertUUIDCommand extends AutorankCommand {
 
 	private final Autorank plugin;

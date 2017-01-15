@@ -52,6 +52,11 @@ import net.md_5.bungee.api.chat.HoverEvent;
  * A specific {@linkplain AutorankCommand} class handles the task of performing
  * the command.
  * 
+ * <br><br>
+ * Commands are stored in a hashmap. The key of this hashmap is a list of strings. These strings represent what text you should enter to perform this command.
+ * For example, 'times' is stored for the '/ar times' command. The value of the hashmap is a {@linkplain AutorankCommand} class that performs the actual logic
+ * of the command. 
+ * 
  */
 public class CommandsManager implements TabExecutor {
 
@@ -93,18 +98,22 @@ public class CommandsManager implements TabExecutor {
 		registeredCommands.put(Arrays.asList("reset"), new ResetCommand(plugin));
 	}
 
+	/**
+	 * Get a hashmap of commands that are used. For more info, see {@link CommandsManager}.
+	 * @return a hashmap of commands
+	 */
 	public HashMap<List<String>, AutorankCommand> getRegisteredCommands() {
 		return registeredCommands;
 	}
 
 	/**
-	 * Gets whether the sender has the given permission.
+	 * Get whether the given sender has the given permission.
 	 * <br>
 	 * Will also send a 'you don't have this permission' message if the sender
 	 * does not have the given permission.
 	 * 
-	 * @param permission Permission to check.
-	 * @param sender Sender to check.
+	 * @param permission Permission to check
+	 * @param sender Sender to check
 	 * @return true if this sender has the given permission, false otherwise.
 	 */
 	public boolean hasPermission(final String permission, final CommandSender sender) {

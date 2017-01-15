@@ -12,6 +12,9 @@ import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
 
+/**
+ * The command delegator for the '/ar archive' command.
+ */
 public class ArchiveCommand extends AutorankCommand {
 
 	private final Autorank plugin;

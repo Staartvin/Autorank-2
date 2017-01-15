@@ -14,6 +14,9 @@ import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.pathbuilder.Path;
 import me.armar.plugins.autorank.util.AutorankTools;
 
+/**
+ * The command delegator for the '/ar choose' command.
+ */
 public class ChooseCommand extends AutorankCommand {
 
 	private final Autorank plugin;

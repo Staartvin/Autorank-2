@@ -11,6 +11,9 @@ import me.armar.plugins.autorank.hooks.DependencyManager.AutorankDependency;
 import me.staartvin.statz.hooks.Dependency;
 import net.md_5.bungee.api.ChatColor;
 
+/**
+ * The command delegator for the '/ar hooks' command.
+ */
 public class HooksCommand extends AutorankCommand {
 
 	private final Autorank plugin;

@@ -11,6 +11,9 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
 
+/**
+ * The command delegator for the '/ar reset' command.
+ */
 public class ResetCommand extends AutorankCommand {
 
 	private final Autorank plugin;

@@ -10,6 +10,9 @@ import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
 
+/**
+ * The command delegator for the '/ar reload' command.
+ */
 public class ReloadCommand extends AutorankCommand {
 
 	private final Autorank plugin;

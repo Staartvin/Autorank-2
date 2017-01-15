@@ -19,6 +19,9 @@ import me.armar.plugins.autorank.pathbuilder.holders.RequirementsHolder;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
 
+/**
+ * The command delegator for the '/ar check' command.
+ */
 public class CheckCommand extends AutorankCommand {
 
 	private final Autorank plugin;

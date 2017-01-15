@@ -14,6 +14,9 @@ import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
 import net.md_5.bungee.api.ChatColor;
 
+/**
+ * The command delegator for the '/ar gadd' command.
+ */
 public class GlobalAddCommand extends AutorankCommand {
 
 	private final Autorank plugin;

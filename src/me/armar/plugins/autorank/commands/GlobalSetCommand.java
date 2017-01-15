@@ -14,6 +14,9 @@ import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
 
+/**
+ * The command delegator for the '/ar gset' command.
+ */
 public class GlobalSetCommand extends AutorankCommand {
 
 	private final Autorank plugin;

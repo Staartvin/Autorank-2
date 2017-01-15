@@ -8,8 +8,6 @@ import org.bukkit.command.TabExecutor;
 
 /**
  * This class represents an Autorank command, such as /ar check or /ar times.
- * <p>
- * Date created: 17:29:59 13 jul. 2014
  * 
  * @author Staartvin
  * 
@@ -19,27 +17,25 @@ public abstract class AutorankCommand implements TabExecutor {
 	private String desc = "", usage = "", permission = "";
 
 	/**
-	 * Gets the description that is used for this command, can be null or empty.
+	 * Get the description that is used for this command, can be null or empty.
 	 */
 	public String getDescription() {
 		return desc;
 	}
 
 	/**
-	 * Gets the permission that is used to check if a player has permission
-	 * <br>
-	 * to perform this command. This is not always the case, so take care
-	 * <br>
-	 * with using this method. Sometimes other permissions are used to check the
-	 * player.
+	 * Get the permission that is used to check if a player has permission
+	 * to perform this command. Note that a command does not have a permission
+	 * that necessarily fits the command. Sometimes, multiple permissions are
+	 * needed to check
+	 * if a player has access to this command.
 	 */
 	public String getPermission() {
 		return permission;
 	}
 
 	/**
-	 * Gets the way this command is supposed to be used.
-	 * <br>
+	 * Get the way this command is supposed to be used.
 	 * For example, /ar times &lt;player&gt; &lt;type&gt;
 	 */
 	public String getUsage() {
@@ -59,14 +55,26 @@ public abstract class AutorankCommand implements TabExecutor {
 	@Override
 	public abstract List<String> onTabComplete(CommandSender sender, Command cmd, String commandLabel, String[] args);
 
+	/**
+	 * Set the description of this command.
+	 * @param desc Description of command
+	 */
 	public void setDesc(final String desc) {
 		this.desc = desc;
 	}
 
+	/**
+	 * Set the permission of this command.
+	 * @param perm Permission of command
+	 */
 	public void setPermission(final String perm) {
 		this.permission = perm;
 	}
 
+	/**
+	 * Set the usage of this command.
+	 * @param usage Usage of command
+	 */
 	public void setUsage(final String usage) {
 		this.usage = usage;
 	}

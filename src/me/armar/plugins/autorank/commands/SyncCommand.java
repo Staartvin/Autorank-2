@@ -14,6 +14,9 @@ import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
 import me.armar.plugins.autorank.language.Lang;
 
+/**
+ * The command delegator for the '/ar sync' command.
+ */
 public class SyncCommand extends AutorankCommand {
 
 	private final Autorank plugin;

@@ -13,6 +13,9 @@ import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.pathbuilder.holders.RequirementsHolder;
 
+/**
+ * The command delegator for the '/ar complete' command.
+ */
 public class CompleteCommand extends AutorankCommand {
 
 	private final Autorank plugin;

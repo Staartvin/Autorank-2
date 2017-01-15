@@ -13,6 +13,10 @@ import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
 
+
+/**
+ * The command delegator for the '/ar add' command.
+ */
 public class AddCommand extends AutorankCommand {
 
 	private final Autorank plugin;
