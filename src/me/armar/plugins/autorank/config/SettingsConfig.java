@@ -3,6 +3,7 @@ package me.armar.plugins.autorank.config;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
 import me.armar.plugins.autorank.hooks.DependencyManager.AutorankDependency;
 
 /**

@@ -1,6 +1,5 @@
 package me.armar.plugins.autorank.commands;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.UUID;
@@ -79,19 +78,14 @@ public class SyncCommand extends AutorankCommand {
 				public void run() {
 					// Update all mysql records
 					for (final UUID uuid : plugin.getFlatFileManager().getUUIDKeys(TimeType.TOTAL_TIME)) {
-						final int localTime = plugin.getFlatFileManager().getLocalTime(uuid);
+						final int localTime = plugin.getFlatFileManager().getLocalTime(TimeType.TOTAL_TIME,uuid);
 
 						if (localTime <= 0)
 							continue;
 
-						final int globalTime = plugin.getFlatFileManager().getGlobalTime(uuid);
+						final int globalTime = plugin.getMySQLManager().getGlobalTime(uuid);
 
-						// Update record
-						try {
-							plugin.getFlatFileManager().setGlobalTime(uuid, localTime + globalTime);
-						} catch (final SQLException e) {
-							e.printStackTrace();
-						}
+						plugin.getMySQLManager().setGlobalTime(uuid, localTime + globalTime);
 					}
 					sender.sendMessage(ChatColor.GREEN + "Successfully updated MySQL records!");
 				}

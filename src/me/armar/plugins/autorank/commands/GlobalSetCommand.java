@@ -1,6 +1,5 @@
 package me.armar.plugins.autorank.commands;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 
@@ -85,9 +84,7 @@ public class GlobalSetCommand extends AutorankCommand {
 				args[1] = plugin.getUUIDStorage().getRealName(uuid);
 			}
 
-			try {
-				plugin.getFlatFileManager().setGlobalTime(uuid, value);
-			} catch (final SQLException e) {
+			if (!plugin.getMySQLManager().setGlobalTime(uuid, value)) {
 				sender.sendMessage(Lang.MYSQL_IS_NOT_ENABLED.getConfigValue());
 				return true;
 			}

@@ -1,6 +1,5 @@
 package me.armar.plugins.autorank.data.flatfile;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -11,23 +10,29 @@ import java.util.UUID;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.config.SimpleYamlConfiguration;
+import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.playtimes.PlaytimeManager;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
 /**
- * Class description
- * <p>
- * Date created: 20:27:16
- * 11 jan. 2017
+ * This class is used for getting and setting play time data of players.
  * 
  * @author "Staartvin"
+ *
+ */
+/**
+ * Type a nice description here
  *
  */
 public class FlatFileManager {
 
 	private Autorank plugin;
 
+	/**
+	 * This enum represents a specific time type (daily time, monthly time,
+	 * etc.)
+	 */
 	public static enum TimeType {
 		DAILY_TIME, MONTHLY_TIME, TOTAL_TIME, WEEKLY_TIME
 	}
@@ -45,6 +50,9 @@ public class FlatFileManager {
 		this.registerTasks();
 	}
 
+	/**
+	 * Load all the data files (daily time, weekly time, etc.).
+	 */
 	public void loadDataFiles() {
 
 		dataTypePaths.put(TimeType.TOTAL_TIME, "/data/Total_time.yml");
@@ -62,6 +70,9 @@ public class FlatFileManager {
 				new SimpleYamlConfiguration(plugin, dataTypePaths.get(TimeType.MONTHLY_TIME), "Monthly data"));
 	}
 
+	/**
+	 * Register tasks for saving and updating time of players.
+	 */
 	public void registerTasks() {
 		// Run save task every 30 seconds
 		plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new Runnable() {
@@ -74,6 +85,9 @@ public class FlatFileManager {
 				PlaytimeManager.INTERVAL_MINUTES * 20 * 60, PlaytimeManager.INTERVAL_MINUTES * 20 * 60);
 	}
 
+	/**
+	 * Save all data files.
+	 */
 	public void saveFiles() {
 		for (final Entry<TimeType, SimpleYamlConfiguration> entry : dataFiles.entrySet()) {
 			entry.getValue().saveFile();
@@ -81,8 +95,10 @@ public class FlatFileManager {
 	}
 
 	/**
-	 * Checks whether all the /data files are still correct or if they should be
-	 * reset.
+	 * Check whether all the data files are still correct or if they should be
+	 * reset. Autorank stores what values were previously found for the day,
+	 * week and month and compares these to the current values.
+	 * If a new day has arrived, the daily time file has to be reset.
 	 */
 	public void doCalendarCheck() {
 		// Check if all data files are still up to date.
@@ -139,19 +155,21 @@ public class FlatFileManager {
 		}
 	}
 
+	/**
+	 * Get a data file for a specific time type.
+	 * @param type Type of time
+	 * @return a data file where the given time type is stored.
+	 */
 	public SimpleYamlConfiguration getDataFile(final TimeType type) {
 		return dataFiles.get(type);
 	}
 
-	public void setGlobalTime(final UUID uuid, final int time) throws SQLException {
-		// Check for MySQL
-		if (!plugin.getMySQLManager().isMySQLEnabled()) {
-			throw new SQLException("MySQL database is not enabled so you can't set items to it!");
-		}
-
-		plugin.getMySQLManager().setGlobalTime(uuid, time);
-	}
-
+	/**
+	 * Set the local play time of a player.
+	 * @param type Type of time
+	 * @param value Value (in minutes) to set the play time to.
+	 * @param uuid UUID of the player
+	 */
 	public void setLocalTime(final TimeType type, final int value, final UUID uuid) {
 		// Set time of a player of a specific type
 
@@ -160,6 +178,11 @@ public class FlatFileManager {
 		data.set(uuid.toString(), value);
 	}
 
+	/**
+	 * Check whether Autorank should reset a specific data file.
+	 * @param type Type of time
+	 * @return true if Autorank should reset the file, false otherwise.
+	 */
 	public boolean shouldResetDatafile(final TimeType type) {
 		// Should we reset a specific data file?
 		// Compare date to last date in internal properties
@@ -183,37 +206,12 @@ public class FlatFileManager {
 		return false;
 	}
 
-	public void addGlobalTime(final UUID uuid, final int timeDifference) throws IllegalArgumentException {
-		// Check for MySQL
-		if (!plugin.getMySQLManager().isMySQLEnabled()) {
-			try {
-				throw new SQLException("MySQL database is not enabled so you can't modify database!");
-			} catch (final SQLException e) {
-				e.printStackTrace();
-				return;
-			}
-		}
-
-		final int time = getFreshGlobalTime(uuid);
-
-		if (time >= 0) {
-			try {
-				setGlobalTime(uuid, time + timeDifference);
-			} catch (final SQLException e) {
-				e.printStackTrace();
-				return;
-			}
-		} else {
-			// First entry.
-			try {
-				setGlobalTime(uuid, timeDifference);
-			} catch (final SQLException e) {
-				e.printStackTrace();
-			}
-		}
-
-	}
-
+	/**
+	 * Add local play time of a player to the currently stored play time.
+	 * @param uuid UUID of the player
+	 * @param timeDifference Time (in minutes) to add
+	 * @param type Type of time
+	 */
 	public void addLocalTime(final UUID uuid, final int timeDifference, final TimeType type) {
 
 		final int time = this.getLocalTime(type, uuid);
@@ -223,57 +221,19 @@ public class FlatFileManager {
 		}
 	}
 
-	public int getFreshGlobalTime(final UUID uuid) {
-		if (uuid == null)
-			return 0;
-		return plugin.getMySQLManager().getFreshDatabaseTime(uuid);
-	}
-
 	/**
-	 * Returns total playtime across all servers (Multiple servers write to 1
-	 * database and get the total playtime from there)
-	 * 
-	 * @param uuid
-	 *            UUID to check for
-	 * @return Global playtime across all servers or 0 if no time was found
-	 */
-	public int getGlobalTime(final UUID uuid) {
-		if (uuid == null)
-			return 0;
-		return plugin.getMySQLManager().getDatabaseTime(uuid);
-	}
-
-	/**
-	 * Returns playtime on this particular server It reads from the local
-	 * data.yml
-	 * 
-	 * @param uuid
-	 *            UUID to get the time for
-	 * @return play time of that account or 0 if not found.
-	 */
-	public int getLocalTime(final UUID uuid) {
-		if (uuid == null)
-			return 0;
-
-		final SimpleYamlConfiguration data = this.getDataFile(TimeType.TOTAL_TIME);
-
-		return data.getInt(uuid.toString(), 0);
-	}
-
-	/**
-	 * Archive old records. Records below the minimum will be removed because
+	 * Archive old records. Records below the minimum value will be removed because
 	 * they are 'inactive'.
 	 * 
-	 * @param minimum
-	 *            Lowest threshold to check for
-	 * @return Amount of records removed
+	 * @param minimum Lowest threshold to check for
+	 * @return Number of records that were removed
 	 */
 	public int archive(final int minimum) {
 		// Keep a counter of archived items
 		int counter = 0;
 
 		for (final UUID uuid : getUUIDKeys(TimeType.TOTAL_TIME)) {
-			final int time = this.getLocalTime(uuid);
+			final int time = this.getLocalTime(TimeType.TOTAL_TIME, uuid);
 
 			// Found a record to be archived
 			if (time < minimum) {
@@ -289,6 +249,11 @@ public class FlatFileManager {
 		return counter;
 	}
 
+	/**
+	 * Get a list of all the player names that are stored in a data file
+	 * @param type Type of time.
+	 * @return a list of names of players that are stored in the given data file.
+	 */
 	public List<String> getPlayerKeys(final TimeType type) {
 		final List<UUID> uuids = getUUIDKeys(type);
 
@@ -303,6 +268,14 @@ public class FlatFileManager {
 		return playerNames;
 	}
 
+	
+	/**
+	 * Get the local play time of a player on this server as stored by Autorank.
+	 * 
+	 * @param uuid UUID of the player
+	 * @param type Type of time
+	 * @return play time of that player or 0 if not found.
+	 */
 	public int getLocalTime(final TimeType type, final UUID uuid) {
 		// Get time of a player with specific type
 		final SimpleYamlConfiguration data = this.getDataFile(type);
@@ -310,6 +283,10 @@ public class FlatFileManager {
 		return data.getInt(uuid.toString(), 0);
 	}
 
+	/**
+	 * Reset the data file of certain time type.
+	 * @param type Type of time
+	 */
 	public void resetDatafile(final TimeType type) {
 		final SimpleYamlConfiguration data = this.getDataFile(type);
 
@@ -339,7 +316,12 @@ public class FlatFileManager {
 					new SimpleYamlConfiguration(plugin, dataTypePaths.get(TimeType.TOTAL_TIME), "Total data"));
 		}
 	}
-
+	
+	/**
+	 * Get a list of all the player UUIDs that are stored in a data file
+	 * @param type Type of time.
+	 * @return a list of UUIDs of players that are stored in the given data file.
+	 */
 	public List<UUID> getUUIDKeys(final TimeType type) {
 
 		final List<UUID> uuids = new ArrayList<UUID>();
@@ -351,19 +333,11 @@ public class FlatFileManager {
 			try {
 				uuid = UUID.fromString(uuidString);
 			} catch (final IllegalArgumentException e) {
-				/*
-				 * plugin.getLogger().severe( "Player '" + uuidString +
-				 * "' is not converted yet!");
-				 */
 				continue;
 			}
 
 			// Invalid uuid
 			if (uuid == null) {
-				/*
-				 * plugin.getLogger().severe( "Player '" + uuidString +
-				 * "' is not converted yet!");
-				 */
 				continue;
 			}
 
@@ -373,6 +347,9 @@ public class FlatFileManager {
 		return uuids;
 	}
 
+	/**
+	 * Import total play time from the current {@link TimeType.TOTAL_TIME} data file.
+	 */
 	public void importData() {
 		final SimpleYamlConfiguration data = this.getDataFile(TimeType.TOTAL_TIME);
 		data.reloadFile();

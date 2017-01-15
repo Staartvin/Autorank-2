@@ -1,5 +1,6 @@
 package me.armar.plugins.autorank.data.mysql;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.UUID;
 import java.util.concurrent.Callable;
@@ -128,6 +129,49 @@ public class MySQLManager {
 
 	public String getDatabaseName() {
 		return database;
+	}
+	
+
+	public void addGlobalTime(final UUID uuid, final int timeDifference) throws IllegalArgumentException {
+		// Check for MySQL
+		if (!plugin.getMySQLManager().isMySQLEnabled()) {
+			try {
+				throw new SQLException("MySQL database is not enabled so you can't modify database!");
+			} catch (final SQLException e) {
+				e.printStackTrace();
+				return;
+			}
+		}
+
+		final int time = getFreshGlobalTime(uuid);
+
+		if (time >= 0) {
+			setGlobalTime(uuid, time + timeDifference);
+		} else {
+			setGlobalTime(uuid, timeDifference);
+		}
+
+	}
+	
+	public int getFreshGlobalTime(final UUID uuid) {
+		if (uuid == null)
+			return 0;
+		return plugin.getMySQLManager().getFreshDatabaseTime(uuid);
+	}
+	
+
+	/**
+	 * Returns total playtime across all servers (Multiple servers write to 1
+	 * database and get the total playtime from there)
+	 * 
+	 * @param uuid
+	 *            UUID to check for
+	 * @return Global playtime across all servers or 0 if no time was found
+	 */
+	public int getGlobalTime(final UUID uuid) {
+		if (uuid == null)
+			return 0;
+		return plugin.getMySQLManager().getDatabaseTime(uuid);
 	}
 
 	/**
@@ -308,12 +352,12 @@ public class MySQLManager {
 	 * @param uuid UUID to set the time of
 	 * @param time Time to change to
 	 */
-	public void setGlobalTime(final UUID uuid, final int time) {
+	public boolean setGlobalTime(final UUID uuid, final int time) {
 
 		plugin.debugMessage("Setting global time of '" + uuid.toString() + "' to " + time);
 
 		if (!isMySQLEnabled())
-			return;
+			return false;
 
 		// Check if connection is still alive
 		if (mysql.isClosed()) {
@@ -336,6 +380,8 @@ public class MySQLManager {
 		// Update cache records
 		this.lastChecked.put(uuid, System.currentTimeMillis());
 		this.lastReceivedTime.put(uuid, time);
+		
+		return true;
 	}
 
 	public void setupTable() {

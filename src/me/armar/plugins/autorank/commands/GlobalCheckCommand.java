@@ -62,7 +62,7 @@ public class GlobalCheckCommand extends AutorankCommand {
 
 					@Override
 					public void run() {
-						final int minutes = plugin.getFlatFileManager().getGlobalTime(uuid);
+						final int minutes = plugin.getMySQLManager().getGlobalTime(uuid);
 
 						if (minutes < 0) {
 							sender.sendMessage(Lang.PLAYER_IS_INVALID.getConfigValue(args[1]));
@@ -89,7 +89,7 @@ public class GlobalCheckCommand extends AutorankCommand {
 
 					@Override
 					public void run() {
-						final int minutes = plugin.getFlatFileManager().getGlobalTime(uuid);
+						final int minutes = plugin.getMySQLManager().getGlobalTime(uuid);
 
 						if (minutes < 0) {
 							sender.sendMessage(Lang.PLAYER_IS_INVALID.getConfigValue(args[1]));
@@ -126,7 +126,7 @@ public class GlobalCheckCommand extends AutorankCommand {
 					AutorankTools
 							.sendColoredMessage(sender,
 									"You have played for " + AutorankTools
-											.timeToString(plugin.getFlatFileManager().getGlobalTime(uuid), Time.MINUTES)
+											.timeToString(plugin.getMySQLManager().getGlobalTime(uuid), Time.MINUTES)
 											+ " across all servers.");
 				}
 			});

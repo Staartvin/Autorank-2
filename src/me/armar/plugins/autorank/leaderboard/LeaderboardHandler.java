@@ -145,7 +145,7 @@ public class LeaderboardHandler {
 			if (type == TimeType.TOTAL_TIME) {
 
 				if (plugin.getConfigHandler().useGlobalTimeInLeaderboard()) {
-					times.put(uuids.get(i), plugin.getFlatFileManager().getGlobalTime(uuids.get(i)));
+					times.put(uuids.get(i), plugin.getMySQLManager().getGlobalTime(uuids.get(i)));
 				} else {
 					times.put(uuids.get(i), (plugin.getPlaytimes().getTimeOfPlayer(playerName, true) / 60));
 				}

@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.addons.AddOnManager;
+import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
 import me.armar.plugins.autorank.pathbuilder.holders.RequirementsHolder;
 import me.armar.plugins.autorank.pathbuilder.requirement.Requirement;
 import me.armar.plugins.autorank.pathbuilder.result.Result;
@@ -75,7 +76,7 @@ public class API {
 	 * @return play time of a player. 0 if no entry was found.
 	 */
 	public int getGlobalPlayTime(final UUID uuid) {
-		return plugin.getFlatFileManager().getGlobalTime(uuid);
+		return plugin.getMySQLManager().getGlobalTime(uuid);
 	}
 
 	/**
@@ -88,7 +89,7 @@ public class API {
 	 * @return play time of this player or 0 if not found.
 	 */
 	public int getLocalPlayTime(final UUID uuid) {
-		return plugin.getFlatFileManager().getLocalTime(uuid);
+		return plugin.getFlatFileManager().getLocalTime(TimeType.TOTAL_TIME, uuid);
 	}
 
 	/**

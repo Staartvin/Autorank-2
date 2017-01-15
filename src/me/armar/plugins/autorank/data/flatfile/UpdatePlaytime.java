@@ -76,7 +76,7 @@ public class UpdatePlaytime implements Runnable {
 
 			// Modify global time
 			if (plugin.getMySQLManager().isMySQLEnabled()) {
-				flatFileManager.addGlobalTime(uuid, PlaytimeManager.INTERVAL_MINUTES);
+				plugin.getMySQLManager().addGlobalTime(uuid, PlaytimeManager.INTERVAL_MINUTES);
 			}
 
 			// Only check a player if it is not disabled in the Settings.yml

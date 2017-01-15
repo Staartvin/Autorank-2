@@ -3,6 +3,7 @@ package me.armar.plugins.autorank.playtimes;
 import java.util.UUID;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
 import me.armar.plugins.autorank.hooks.DependencyManager.AutorankDependency;
 import me.armar.plugins.autorank.hooks.statzapi.StatzAPIHandler;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
@@ -35,72 +36,6 @@ public class PlaytimeManager {
 
 		timePlugin = plugin.getConfigHandler().useTimeOf();
 	}
-
-	/**
-	 * Use this method to convert an old data.yml (that was storing player
-	 * names) to the new format (storing UUIDs).
-	 * 
-	 */
-	/*public void convertToUUIDStorage() {
-
-		// Run async to prevent load-time problems.
-		plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
-
-			@Override
-			public void run() {
-
-				final SimpleYamlConfiguration data = getDataFile(TimeType.TOTAL_TIME);
-
-				// Before running, backup stuff.
-				plugin.getBackupManager().backupFile("Data.yml", null);
-
-				// First archive all names below 1
-				archive(1);
-
-				final Set<String> records = data.getKeys(false);
-
-				final int size = records.size();
-
-				// 9 items per second
-				final int speed = 9;
-				final int duration = (int) Math.floor(size / speed);
-				final String timeName = getDurationString(duration);
-
-				plugin.getLogger().warning("Starting converting data.yml");
-				plugin.getLogger().warning("Conversion will take approx. " + timeName + "( guess for your data.yml)");
-
-				for (final String record : records) {
-					// UUID contains dashes and playernames do not, so if it
-					// contains dashes
-					// it is probably a UUID and thus we should skip it.
-					if (record.contains("-"))
-						continue;
-
-					final UUID uuid = plugin.getUUIDStorage().getStoredUUID(record);
-
-					// Could not convert this name to uuid
-					if (uuid == null) {
-						plugin.getLogger().severe("Could not find UUID of " + record);
-						continue;
-					}
-
-					// Get the time that player has played.
-					final int minutesPlayed = data.getInt(record, 0);
-
-					// Remove the data from the file.
-					data.set(record, null);
-
-					// Add new data (in UUID form to the file)
-					data.set(uuid.toString(), minutesPlayed);
-				}
-
-				saveFiles();
-
-				plugin.getLogger().info("Converted data.yml to UUID format");
-			}
-
-		});
-	}*/
 
 	/**
 	 * Get the time of a player. <br>
@@ -140,7 +75,7 @@ public class PlaytimeManager {
 					return playTime;
 
 				// Stats not found, using Autorank's system.
-				playTime = plugin.getFlatFileManager().getLocalTime(uuid) * 60;
+				playTime = plugin.getFlatFileManager().getLocalTime(TimeType.TOTAL_TIME, uuid) * 60;
 			}
 		} else if (timePlugin.equals(AutorankDependency.ONTIME)) {
 			playTime = ((OnTimeHandler) plugin.getDependencyManager().getDependencyHandler(Dependency.ON_TIME))
@@ -157,7 +92,7 @@ public class PlaytimeManager {
 				return playTime;
 
 			// Use internal system of Autorank.
-			playTime = plugin.getFlatFileManager().getLocalTime(uuid) * 60;
+			playTime = plugin.getFlatFileManager().getLocalTime(TimeType.TOTAL_TIME, uuid) * 60;
 		}
 
 		return playTime;

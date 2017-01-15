@@ -1,6 +1,5 @@
 package me.armar.plugins.autorank.commands;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 
@@ -74,18 +73,17 @@ public class GlobalAddCommand extends AutorankCommand {
 					if (!builder.toString().contains("m") && !builder.toString().contains("h")
 							&& !builder.toString().contains("d")) {
 						value = AutorankTools.stringtoInt(builder.toString().trim());
-						value += plugin.getFlatFileManager().getFreshGlobalTime(uuid);
+						value += plugin.getMySQLManager().getFreshGlobalTime(uuid);
 					} else {
 						value = AutorankTools.stringToTime(builder.toString(), Time.MINUTES);
-						value += plugin.getFlatFileManager().getFreshGlobalTime(uuid);
+						value += plugin.getMySQLManager().getFreshGlobalTime(uuid);
 					}
 				}
 
 				if (value >= 0) {
-					try {
-						plugin.getFlatFileManager().setGlobalTime(uuid, value);
-					} catch (final SQLException e) {
-						e.printStackTrace();
+					if (!plugin.getMySQLManager().setGlobalTime(uuid, value)) {
+						sender.sendMessage(Lang.MYSQL_IS_NOT_ENABLED.getConfigValue());
+						return;
 					}
 					AutorankTools.sendColoredMessage(sender, Lang.PLAYTIME_CHANGED.getConfigValue(args[1], value + ""));
 				} else {

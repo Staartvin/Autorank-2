@@ -84,7 +84,7 @@ public class CheckCommand extends AutorankCommand {
 		layout = layout.replace("&time", AutorankTools
 				.timeToString(plugin.getPlaytimes().getTimeOfPlayer(player.getName(), true), Time.SECONDS));
 		layout = layout.replace("&globaltime",
-				AutorankTools.timeToString(plugin.getFlatFileManager().getGlobalTime(uuid), Time.MINUTES));
+				AutorankTools.timeToString(plugin.getMySQLManager().getGlobalTime(uuid), Time.MINUTES));
 
 		boolean showReqs = false;
 
