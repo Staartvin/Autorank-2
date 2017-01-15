@@ -277,9 +277,9 @@ public class PathBuilder {
 
 			// Now add display name to this path.
 			path.setDisplayName(plugin.getPathsConfig().getDisplayName(pathName));
-
-			System.out.println("Display name: " + plugin.getPathsConfig().getDisplayName(pathName));
-			System.out.println("Display name 2: " + path.getDisplayName());
+			
+			// Set internal name
+			path.setInternalName(pathName);
 
 			// Add path to list of paths
 			paths.add(path);

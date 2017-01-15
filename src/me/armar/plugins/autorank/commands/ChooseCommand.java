@@ -57,28 +57,35 @@ public class ChooseCommand extends AutorankCommand {
 		}
 
 		// Try to find path that matches given name
-		Path targetPath = plugin.getPathManager().matchPath(pathName, false);
+		Path targetPath = plugin.getPathManager().matchPathbyDisplayName(pathName, false);
 
 		if (targetPath == null) {
 			sender.sendMessage(Lang.NO_PATH_FOUND_WITH_THAT_NAME.getConfigValue());
 			return true;
 		}
-		
-		// TODO: currently, if you change the display name, the user can retake a path even though the internal name did not change.
-		
-		if (plugin.getPlayerDataConfig().hasCompletedPath(player.getUniqueId(), targetPath.getDisplayName()) && !plugin.getPathsConfig().allowInfinitePathing(targetPath.getDisplayName())) {
-			sender.sendMessage(ChatColor.RED + "You already completed this path before. You are not allowed to retake it!");
+
+		if (plugin.getPathManager().getCurrentPath(player.getUniqueId()) != null && plugin.getPathManager()
+				.getCurrentPath(player.getUniqueId()).getInternalName().equals(targetPath.getInternalName())) {
+			sender.sendMessage(ChatColor.RED + "You are already on this path! No need for choosing it now!");
 			return true;
 		}
-		
+
+		if (plugin.getPlayerDataConfig().hasCompletedPath(player.getUniqueId(), targetPath.getInternalName())
+				&& !plugin.getPathsConfig().allowInfinitePathing(targetPath.getInternalName())) {
+			sender.sendMessage(
+					ChatColor.RED + "You already completed this path before. You are not allowed to retake it!");
+			return true;
+		}
+
 		if (!targetPath.meetsPrerequisites(player)) {
 			sender.sendMessage(ChatColor.RED + "You do not meet the prerequisites of this path!");
-			sender.sendMessage(ChatColor.RED + "Type " + ChatColor.GOLD + "/ar view prereq " + targetPath.getDisplayName() + ChatColor.RED + " to see a list of prerequisites.");
+			sender.sendMessage(ChatColor.RED + "Type " + ChatColor.GOLD + "/ar view prereq "
+					+ targetPath.getDisplayName() + ChatColor.RED + " to see a list of prerequisites.");
 			return true;
 		}
 
 		// Set chosen path to target path
-		plugin.getPlayerDataConfig().setChosenPath(player.getUniqueId(), targetPath.getDisplayName());
+		plugin.getPlayerDataConfig().setChosenPath(player.getUniqueId(), targetPath.getInternalName());
 
 		// Reset progress
 		plugin.getPlayerDataConfig().setCompletedRequirements(player.getUniqueId(), new ArrayList<Integer>());

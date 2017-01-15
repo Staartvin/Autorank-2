@@ -43,7 +43,7 @@ public class PathManager {
 		messages.add(" ------------------- Path debug info ------------------- ");
 
 		for (Path path : paths) {
-			String pathName = path.getDisplayName();
+			String pathName = path.getInternalName();
 			List<RequirementsHolder> requirements = path.getRequirements();
 			List<RequirementsHolder> prerequisites = path.getPrerequisites();
 			List<Result> results = path.getResults();
@@ -51,6 +51,8 @@ public class PathManager {
 			int count = 1;
 
 			messages.add("Path: " + pathName);
+			
+			messages.add("Display name: " + path.getDisplayName());
 
 			messages.add("Prerequisites: ");
 
@@ -104,7 +106,7 @@ public class PathManager {
 			return null;
 		}
 
-		return this.matchPath(chosenPath, true);
+		return this.matchPathbyInternalName(chosenPath, true);
 	}
 
 	/**
@@ -161,7 +163,7 @@ public class PathManager {
 	 *            wording, taking into account case sensitivity.
 	 * @return matching path or null if none found.
 	 */
-	public Path matchPath(String chosenPath, boolean isCaseSensitive) {
+	public Path matchPathbyDisplayName(String chosenPath, boolean isCaseSensitive) {
 		for (final Path path : this.getPaths()) {
 
 			if (isCaseSensitive) {
@@ -170,6 +172,32 @@ public class PathManager {
 				}
 			} else {
 				if (path.getDisplayName().equalsIgnoreCase(chosenPath)) {
+					return path;
+				}
+			}
+		}
+
+		return null;
+	}
+	
+	/**
+	 * 
+	 * Get the path that corresponds to the given chosenPath string.
+	 * 
+	 * @param chosenPath The internal name of the path
+	 * @param isCaseSensitive true if we only match paths that have the exact
+	 *            wording, taking into account case sensitivity.
+	 * @return matching path or null if none found.
+	 */
+	public Path matchPathbyInternalName(String chosenPath, boolean isCaseSensitive) {
+		for (final Path path : this.getPaths()) {
+
+			if (isCaseSensitive) {
+				if (path.getInternalName().equals(chosenPath)) {
+					return path;
+				}
+			} else {
+				if (path.getInternalName().equalsIgnoreCase(chosenPath)) {
 					return path;
 				}
 			}

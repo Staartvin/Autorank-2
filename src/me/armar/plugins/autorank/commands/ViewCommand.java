@@ -75,7 +75,7 @@ public class ViewCommand extends AutorankCommand {
 
 				// Show details of path
 
-				Path targetPath = plugin.getPathManager().matchPath(pathName, false);
+				Path targetPath = plugin.getPathManager().matchPathbyDisplayName(pathName, false);
 
 				if (targetPath == null) {
 					sender.sendMessage(Lang.NO_PATH_FOUND_WITH_THAT_NAME.getConfigValue());
@@ -104,7 +104,7 @@ public class ViewCommand extends AutorankCommand {
 				viewType = args[1];
 			}
 			
-			Path targetPath = plugin.getPathManager().matchPath(pathName, false);
+			Path targetPath = plugin.getPathManager().matchPathbyDisplayName(pathName, false);
 
 			if (targetPath == null) {
 				sender.sendMessage(Lang.NO_PATH_FOUND_WITH_THAT_NAME.getConfigValue());

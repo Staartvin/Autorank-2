@@ -146,9 +146,9 @@ public class PlayerDataConfig {
 
 		boolean validChosenPath = false;
 
-		// Check whether the chosen path equals one of the change groups
+		// Check whether the chosen path exists
 		for (final Path definedPath : definedPaths) {
-			if (definedPath.getDisplayName().equals(chosenPath)) {
+			if (definedPath.getInternalName().equals(chosenPath)) {
 				validChosenPath = true;
 			}
 		}

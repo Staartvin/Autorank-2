@@ -201,7 +201,7 @@ public class CheckCommand extends AutorankCommand {
 
 		String reqMessage2 = "";
 
-		if (plugin.getPlayerDataConfig().hasCompletedPath(uuid, activePath.getDisplayName())) {
+		if (plugin.getPlayerDataConfig().hasCompletedPath(uuid, activePath.getInternalName())) {
 			reqMessage2 = " " + Lang.ALREADY_COMPLETED_PATH.getConfigValue();
 		} else {
 			reqMessage2 = Lang.RANKED_UP_NOW.getConfigValue();

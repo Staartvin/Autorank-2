@@ -22,7 +22,9 @@ import me.armar.plugins.autorank.pathbuilder.result.Result;
 public class Path {
 
 	// The display name is the name that will be shown to the player.
-	private String displayName = "";
+	// The internal name is used to find the properties of the path in paths.yml
+	private String displayName = "", internalName = "";
+	
 	private final Autorank plugin;
 	// A requirements holder is a holder for one or more requirements that can be met simultaneously. 
 	private List<RequirementsHolder> prerequisites = new ArrayList<>();
@@ -64,12 +66,12 @@ public class Path {
 			}
 
 			// Player already got this path
-			if (plugin.getPlayerDataConfig().hasCompletedPath(uuid, currentPath.getDisplayName())) {
+			if (plugin.getPlayerDataConfig().hasCompletedPath(uuid, currentPath.getInternalName())) {
 				return false;
 			}
 
 			// Add progress of completed requirements
-			plugin.getPlayerDataConfig().addCompletedPath(uuid, currentPath.getDisplayName());
+			plugin.getPlayerDataConfig().addCompletedPath(uuid, currentPath.getInternalName());
 
 			for (final Result r : this.getResults()) {
 				if (r != null) {
@@ -133,7 +135,7 @@ public class Path {
 		}
 
 		// Player already completed this path
-		if (plugin.getPlayerDataConfig().hasCompletedPath(uuid, currentPath.getDisplayName())) {
+		if (plugin.getPlayerDataConfig().hasCompletedPath(uuid, currentPath.getInternalName())) {
 			return false;
 		}
 
@@ -192,5 +194,13 @@ public class Path {
 	@Override
 	public String toString() {
 		return displayName;
+	}
+
+	public String getInternalName() {
+		return internalName;
+	}
+
+	public void setInternalName(String internalName) {
+		this.internalName = internalName;
 	}
 }
