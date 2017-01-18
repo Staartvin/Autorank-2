@@ -115,11 +115,6 @@ public enum Lang {
 	 */
 	DAY_SINGULAR("day-singular", "day"),
 	/**
-	 * &4You have been demoted to {0} since you did not meet a specific
-	 * requirement: {1}
-	 */
-	DERANK_MESSAGE("derank-message", "&4You have been demoted to {0} since you did not meet a specific requirement: {1}"),
-	/**
 	 * You do not meet requirements for #&6{0}&c:
 	 */
 	DO_NOT_MEET_REQUIREMENTS_FOR("do-not-meet-requirements-for", "You do not meet requirements for #&6{0}&c:"),
@@ -291,15 +286,7 @@ public enum Lang {
 	/**
 	 * none (no path found)
 	 */
-	NO_FURTHER_RANKUP_FOUND("no-further-rankup-found", "none (no path found)"),
-	/**
-	 * no groups
-	 */
-	NO_GROUPS("no-groups", "no groups"),
-	/**
-	 * and does not have a next path
-	 */
-	NO_NEXT_RANK("no-next-rankup", "Does not have a next path."),
+	NO_FURTHER_PATH_FOUND("no-further-path-found", "none (no path found)"),
 	/**
 	 * &4There was no ranking path found with that name.
 	 */
@@ -308,10 +295,6 @@ public enum Lang {
 	 * &cYou need ({0}) for that!
 	 */
 	NO_PERMISSION("no-permission", "&cYou need ({0}) for that!"),
-	/**
-	 * &4You don't have to choose a path for this rank, there is only one.
-	 */
-	ONLY_DEFAULT_PATH("only-default-path", "&4You don't have to choose a path for this rank, there is only one."),
 	/**
 	 * Optional
 	 */
@@ -358,9 +341,9 @@ public enum Lang {
 	 */
 	RANK_CHANGE_RESULT("rank-change-result", "Change rank to {0}."),
 	/**
-	 * and will now be ranked up.
+	 * and now completed his path.
 	 */
-	RANKED_UP_NOW("ranked-up-now", " and will now be ranked up."),
+	COMPLETED_PATH_NOW("completed-path-now", " and now completed his path."),
 	/**
 	 * Progress of requirement {0}:
 	 */
@@ -409,7 +392,6 @@ public enum Lang {
 	 * Get teleported to {0}.
 	 */
 	TELEPORT_RESULT("teleport-result", "Get teleported to {0}."),
-
 	/**
 	 * Play for at least {0}.
 	 */
@@ -418,7 +400,6 @@ public enum Lang {
 	 * Shear at least {0} sheep.
 	 */
 	TIMES_SHEARED_REQUIREMENT("times-sheared-requirement", "Shear at least {0} sheep"),
-
 	/**
 	 * Kill at least {0}.
 	 */

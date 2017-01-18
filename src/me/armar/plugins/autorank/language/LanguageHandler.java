@@ -11,7 +11,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import me.armar.plugins.autorank.Autorank;
 
 /**
- * @author Vincent Return the language being used.
+ * This class 
+ * @author Staartvin Return the language being used.
  */
 public class LanguageHandler {
 
@@ -23,6 +24,9 @@ public class LanguageHandler {
 		plugin = autorank;
 	}
 
+	/**
+	 * Create a new language file.
+	 */
 	public void createNewFile() {
 		reloadConfig();
 		saveConfig();

@@ -79,6 +79,10 @@ public class LeaderboardHandler {
 		layout = plugin.getConfigHandler().getLeaderboardLayout();
 	}
 
+	/**
+	 * Broadcast a leaderboard to all online players.
+	 * @param type Type of leaderboard
+	 */
 	public void broadcastLeaderboard(final TimeType type) {
 		if (shouldUpdateLeaderboard(type)) {
 			// Update leaderboard because it is not valid anymore.
@@ -103,7 +107,7 @@ public class LeaderboardHandler {
 	}
 
 	/**
-	 * Gets a map, the key is the UUID of a player and the value is time that
+	 * Get a hashmap, the key is the UUID of a player and the value is time that
 	 * player has played.
 	 * <br>
 	 * This map is sorted on player time.
@@ -162,7 +166,7 @@ public class LeaderboardHandler {
 	}
 
 	/**
-	 * Sends the leaderboard to a {@linkplain CommandSender}.
+	 * Send the leaderboard to a {@linkplain CommandSender}.
 	 * 
 	 * @param sender Sender to send it to.
 	 * @param type Type of leaderboard to send.
@@ -186,12 +190,22 @@ public class LeaderboardHandler {
 		}
 	}
 
+	/**
+	 * Send the given message to a {@linkplain CommandSender}.
+	 * @param sender Sender to send message to.
+	 * @param type Type of leaderboard to send
+	 */
 	public void sendMessages(final CommandSender sender, final TimeType type) {
 		for (final String msg : plugin.getInternalPropertiesConfig().getCachedLeaderboard(type)) {
 			AutorankTools.sendColoredMessage(sender, msg);
 		}
 	}
 
+	/**
+	 * Check whether we should update a leaderboard.
+	 * @param type Type of leaderboard check
+	 * @return true if we should update the leaderboard
+	 */
 	private boolean shouldUpdateLeaderboard(TimeType type) {
 		if (System.currentTimeMillis()
 				- plugin.getInternalPropertiesConfig().getLeaderboardLastUpdateTime() > (60000 * validTime)) {
@@ -203,6 +217,9 @@ public class LeaderboardHandler {
 		}
 	}
 
+	/**
+	 * Update all leaderboards
+	 */
 	public void updateAllLeaderboards() {
 
 		plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
@@ -219,7 +236,7 @@ public class LeaderboardHandler {
 	}
 
 	/**
-	 * Forcefully update a leaderboard.
+	 * Forcefully update a leaderboard (ignoring cached versions).
 	 * 
 	 * @param type Type of leaderboard to update.
 	 */

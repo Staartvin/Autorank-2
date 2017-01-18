@@ -91,7 +91,7 @@ public class CheckCommand extends AutorankCommand {
 		List<RequirementsHolder> holders = activePath.getRequirements();
 
 		if (holders == null || holders.size() == 0) {
-			layout = layout.replace("&reqs", Lang.NO_FURTHER_RANKUP_FOUND.getConfigValue());
+			layout = layout.replace("&reqs", Lang.NO_FURTHER_PATH_FOUND.getConfigValue());
 		} else {
 			layout = layout.replace("&reqs", "");
 			showReqs = true;
@@ -200,14 +200,14 @@ public class CheckCommand extends AutorankCommand {
 			}
 		}
 
-		final String reqMessage = Lang.MEETS_ALL_REQUIREMENTS_WITHOUT_RANK_UP.getConfigValue();
+		final String reqMessage = Lang.MEETS_ALL_REQUIREMENTS.getConfigValue(displayName);
 
 		String reqMessage2 = "";
 
 		if (plugin.getPlayerDataConfig().hasCompletedPath(uuid, activePath.getInternalName())) {
 			reqMessage2 = " " + Lang.ALREADY_COMPLETED_PATH.getConfigValue();
 		} else {
-			reqMessage2 = Lang.RANKED_UP_NOW.getConfigValue();
+			reqMessage2 = Lang.COMPLETED_PATH_NOW.getConfigValue();
 		}
 
 		// Player meets all requirements
