@@ -427,7 +427,11 @@ public enum Lang {
 	/**
 	 * &cYou are a robot, '{0}'
 	 */
-	YOU_ARE_A_ROBOT("you-are-a-robot", "&cYou are a robot, {0}"),;
+	YOU_ARE_A_ROBOT("you-are-a-robot", "&cYou are a robot, {0}"),
+	/**
+	 * Be in group {0}.
+	 */
+	GROUP_REQUIREMENT("group-requirement", "Be in group {0}."),;
 
 	private static FileConfiguration LANG;
 

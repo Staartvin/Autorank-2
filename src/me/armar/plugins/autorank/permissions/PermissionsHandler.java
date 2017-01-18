@@ -29,12 +29,21 @@ public interface PermissionsHandler {
 	 */
 	public String[] getGroups();
 
+	/**
+	 * Get the name of the permissions plugin.
+	 * @return
+	 */
 	public String getName();
 
+	/**
+	 * Get the permission groups of a player.
+	 * @param player Player to use
+	 * @return a list of permission groups names
+	 */
 	public String[] getPlayerGroups(Player player);
 
 	/**
-	 * Gets the groups of the player in a world
+	 * Get the groups of the player in a world.
 	 * 
 	 * @param player Player to get the groups from
 	 * @param world World to get the world from
@@ -42,6 +51,14 @@ public interface PermissionsHandler {
 	 */
 	public String[] getWorldGroups(Player player, String world);
 
-	public boolean replaceGroup(Player player, String world, String groupFrom, String groupTo);
+	/**
+	 * Remove a group from a player and then add one to the player.
+	 * @param player Player to use
+	 * @param world World to use, can be null
+	 * @param deletedGroup Group to remove
+	 * @param addedGroup Group to add
+	 * @return true if it worked, false otherwise.
+	 */
+	public boolean replaceGroup(Player player, String world, String deletedGroup, String addedGroup);
 
 }

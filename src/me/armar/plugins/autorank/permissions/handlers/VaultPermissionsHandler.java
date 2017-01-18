@@ -111,13 +111,13 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 	@Override
 	public String[] getPlayerGroups(final Player player) {
 		if (VaultHandler.permission == null)
-			return new String[10];
+			return new String[1];
 
 		String[] groups = null;
 
 		final Autorank plugin = (Autorank) Bukkit.getPluginManager().getPlugin("Autorank");
 
-		// Let players choose.
+		// Let admin choose.
 		if (plugin.getConfigHandler().onlyUsePrimaryGroupVault()) {
 			groups = new String[] { VaultHandler.permission.getPrimaryGroup(player) };
 		} else {

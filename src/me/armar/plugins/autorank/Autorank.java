@@ -40,6 +40,7 @@ import me.armar.plugins.autorank.pathbuilder.requirement.GriefPreventionBonusBlo
 import me.armar.plugins.autorank.pathbuilder.requirement.GriefPreventionClaimedBlocksRequirement;
 import me.armar.plugins.autorank.pathbuilder.requirement.GriefPreventionClaimsCountRequirement;
 import me.armar.plugins.autorank.pathbuilder.requirement.GriefPreventionRemainingBlocksRequirement;
+import me.armar.plugins.autorank.pathbuilder.requirement.GroupRequirement;
 import me.armar.plugins.autorank.pathbuilder.requirement.HasItemRequirement;
 import me.armar.plugins.autorank.pathbuilder.requirement.InBiomeRequirement;
 import me.armar.plugins.autorank.pathbuilder.requirement.ItemsCraftedRequirement;
@@ -386,6 +387,7 @@ public class Autorank extends JavaPlugin {
 		req.registerRequirement("has achievement", AchievementRequirement.class);
 		req.registerRequirement("rpgme skill level", RPGMeSkillLevelRequirement.class);
 		req.registerRequirement("rpgme combat level", RPGMeCombatLevelRequirement.class);
+		req.registerRequirement("in group", GroupRequirement.class);
 
 		// Register 'main' results
 		res.registerResult("command", CommandResult.class);
