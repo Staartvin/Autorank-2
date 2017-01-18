@@ -14,10 +14,8 @@ import me.armar.plugins.autorank.Autorank;
  * This class is used to debug stuff when Autorank is running. <br>
  * Whenever a player uses the /ar debug command, it will create a new file with
  * all sorts of information. <br>
- * This information can be sent to the author so that he can easily see what's
+ * This information can be sent to the author of Autorank so that he can easily see what's
  * wrong.
- * <p>
- * Date created: 21:00:29 15 mrt. 2014
  * 
  * @author Staartvin
  * 
@@ -33,7 +31,7 @@ public class Debugger {
 	}
 
 	/**
-	 * Creates a debug file which is based on the current status of Autorank.
+	 * Create a debug file which is based on the current status of Autorank.
 	 * <br>
 	 * The file will be created in the folder 'debugger' and will have the name
 	 * 'debug-yyyyMMddHHmmss'.

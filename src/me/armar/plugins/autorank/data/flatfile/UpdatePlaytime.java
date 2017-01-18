@@ -11,7 +11,7 @@ import me.armar.plugins.autorank.playtimes.PlaytimeManager;
 
 /*
  * UpdatePlaytime does an update on all online players
- * every 5 minutes (set lower atm for debugging).
+ * every 5 minutes
  * 
  */
 public class UpdatePlaytime implements Runnable {
@@ -29,6 +29,9 @@ public class UpdatePlaytime implements Runnable {
 		updateMinutesPlayed();
 	}
 
+	/**
+	 * Called every x minutes
+	 */
 	private void updateMinutesPlayed() {
 		plugin.debugMessage("Checking players for automatic ranking");
 
@@ -50,6 +53,10 @@ public class UpdatePlaytime implements Runnable {
 		}
 	}
 
+	/**
+	 * Check whether a user is now allowed to complete the path
+	 * @param player Player to check
+	 */
 	private void updateMinutesPlayed(final Player player) {
 		// Changed this so it is readable ;)
 		// OP's should also get time added.

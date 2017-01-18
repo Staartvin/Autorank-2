@@ -18,14 +18,11 @@ import me.staartvin.statz.hooks.handlers.UltimateCoreHandler;
 /**
  * This class is used for loading all the dependencies Autorank has. <br>
  * Not all dependencies are required, some are optional.
- * <p>
- * Date created: 18:18:43 2 mrt. 2014
  * 
  * @author Staartvin
  * 
  */
 public class DependencyManager {
-	// Test
 
 	/**
 	 * Enum containing all dependencies Autorank has.<br>
@@ -33,8 +30,6 @@ public class DependencyManager {
 	 * the dependencies.<br>
 	 * Autorank is also included because this enum is used for methods that
 	 * require the own plugin.
-	 * <p>
-	 * Date created: 16:48:08 6 mrt. 2014
 	 * 
 	 * @author Staartvin
 	 * 
@@ -61,7 +56,7 @@ public class DependencyManager {
 	}
 
 	/**
-	 * Gets a specific AutorankDependency.
+	 * Get a specific AutorankDependency.
 	 * 
 	 * @param dep Dependency to get.
 	 * @return the {@linkplain DependencyHandler} that is associated with the
@@ -76,6 +71,11 @@ public class DependencyManager {
 		}
 	}
 
+	/**
+	 * Get a Statz dependency handler
+	 * @param dep Dependency to get
+	 * @return a Statz dependency or null if Statz is not installed or not properly enabled.
+	 */
 	public me.staartvin.statz.hooks.DependencyHandler getDependencyHandler(Dependency dep) {
 		StatzAPIHandler statz = (StatzAPIHandler) plugin.getDependencyManager().getDependency(AutorankDependency.STATZ);
 
@@ -86,10 +86,16 @@ public class DependencyManager {
 		return statz.getDependencyHandler(dep);
 	}
 
+	/**
+	 * Get the installed Stats plugin that Autorank uses.
+	 */
 	public StatsPlugin getStatsPlugin() {
 		return statsPluginManager.getStatsPlugin();
 	}
 
+	/**
+	 * Get the Statz plugin class to use as a connection between other dependencies of Statz.
+	 */
 	public StatzAPIHandler getStatzConnector() {
 		StatzAPIHandler statz = (StatzAPIHandler) plugin.getDependencyManager().getDependency(AutorankDependency.STATZ);
 
@@ -101,12 +107,12 @@ public class DependencyManager {
 	}
 
 	/**
-	 * Gets whether the given player is AFK.
+	 * Check whether the given player is AFK.
 	 * <br>
 	 * Obeys the AFK setting in the Settings.yml.
 	 * 
 	 * @param player Player to check.
-	 * @return true if the player is supspected of being AFK, false otherwise.
+	 * @return true if the player is suspected of being AFK, false otherwise.
 	 */
 	public boolean isAFK(final Player player) {
 		if (!plugin.getConfigHandler().useAFKIntegration() || !this.getDependency(AutorankDependency.STATZ).isAvailable()) {
@@ -132,7 +138,7 @@ public class DependencyManager {
 	}
 
 	/**
-	 * Loads all dependencies used for Autorank. <br>
+	 * Load all dependencies used for Autorank. <br>
 	 * Autorank will check for dependencies and shows the output on the console.
 	 * 
 	 * @throws Exception This can be a multitude of exceptions
