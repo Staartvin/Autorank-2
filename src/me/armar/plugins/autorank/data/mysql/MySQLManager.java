@@ -132,7 +132,6 @@ public class MySQLManager {
 	public String getDatabaseName() {
 		return database;
 	}
-	
 
 	/**
 	 * Add minutes to the global time of a player.
@@ -160,7 +159,7 @@ public class MySQLManager {
 		}
 
 	}
-	
+
 	/**
 	 * Get the fresh global time of the database. This will trigger a remote lookup, so this method is blocking.
 	 * @param uuid UUID of the player
@@ -171,7 +170,6 @@ public class MySQLManager {
 			return 0;
 		return plugin.getMySQLManager().getFreshDatabaseTime(uuid);
 	}
-	
 
 	/**
 	 * Get the total playtime across all servers (multiple servers write to 1
@@ -313,7 +311,7 @@ public class MySQLManager {
 	public boolean isMySQLEnabled() {
 		return mysql != null;
 	}
-	
+
 	/**
 	 * Check whether the cached value of a global time of a player is out of date or not.
 	 * If it is, Autorank will grab a fresh time.
@@ -405,7 +403,7 @@ public class MySQLManager {
 		// Update cache records
 		this.lastChecked.put(uuid, System.currentTimeMillis());
 		this.lastReceivedTime.put(uuid, time);
-		
+
 		return true;
 	}
 

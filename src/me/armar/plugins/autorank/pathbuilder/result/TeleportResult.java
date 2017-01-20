@@ -26,7 +26,7 @@ public class TeleportResult extends Result {
 
 		return Lang.TELEPORT_RESULT.getConfigValue(locationString);
 	}
-	
+
 	@Override
 	public boolean setOptions(final String[] options) {
 		// x;y;z;world;yaw;pitch

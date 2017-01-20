@@ -193,7 +193,6 @@ public class RequirementsHolder {
 				return true;
 			}
 
-			
 			if (this.isPrerequisite) {
 				// If this requirement doesn't auto complete and hasn't already
 				// been completed, return false;
@@ -207,7 +206,7 @@ public class RequirementsHolder {
 					return false;
 				}
 			}
-			
+
 			if (this.isPrerequisite) {
 				// Player has completed it already but this requirement is NOT derankable
 				// If it is derankable, we don't want this method to return true when it is already completed.
@@ -221,9 +220,6 @@ public class RequirementsHolder {
 					return true;
 				}
 			}
-			
-
-			
 
 			if (!r.meetsRequirement(player)) {
 				continue;
@@ -257,7 +253,7 @@ public class RequirementsHolder {
 
 		return result;
 	}
-	
+
 	public void setRequirements(final List<Requirement> requirements) {
 		this.requirements = requirements;
 	}

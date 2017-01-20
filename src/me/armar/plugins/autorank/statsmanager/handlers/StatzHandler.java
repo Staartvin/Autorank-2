@@ -34,69 +34,69 @@ public class StatzHandler extends StatsPlugin {
 		double value = 0;
 
 		switch (statType) {
-		case VOTES:
-		case PLAYERS_KILLED:
-		case DAMAGE_TAKEN:
-		case TOTAL_BLOCKS_PLACED:
-		case TOTAL_BLOCKS_BROKEN:
-		case TIME_PLAYED:
-		case FISH_CAUGHT:
-		case ITEMS_CRAFTED:
-		case TIMES_SHEARED:
-			value = statzApi.getTotalOf(uuid, statType, worldName);
-			break;
-		case MOBS_KILLED:
-			if (!arguments.containsKey("mobType")) {
-				value = statzApi.getSpecificData(uuid, statType);
-			} else {
-				value = statzApi.getSpecificData(uuid, statType,
-						new RowRequirement("mob", arguments.get("mobType").toString()));
-			}
+			case VOTES:
+			case PLAYERS_KILLED:
+			case DAMAGE_TAKEN:
+			case TOTAL_BLOCKS_PLACED:
+			case TOTAL_BLOCKS_BROKEN:
+			case TIME_PLAYED:
+			case FISH_CAUGHT:
+			case ITEMS_CRAFTED:
+			case TIMES_SHEARED:
+				value = statzApi.getTotalOf(uuid, statType, worldName);
+				break;
+			case MOBS_KILLED:
+				if (!arguments.containsKey("mobType")) {
+					value = statzApi.getSpecificData(uuid, statType);
+				} else {
+					value = statzApi.getSpecificData(uuid, statType,
+							new RowRequirement("mob", arguments.get("mobType").toString()));
+				}
 
-			break;
-		case BLOCKS_PLACED:
-		case BLOCKS_BROKEN:
-			if (!arguments.containsKey("dataValue")) {
-				value = statzApi.getSpecificData(uuid, statType,
-						new RowRequirement("typeid", arguments.get("typeID").toString()));
-			} else {
-				value = statzApi.getSpecificData(uuid, statType,
-						new RowRequirement("typeid", arguments.get("typeID").toString()),
-						new RowRequirement("datavalue", arguments.get("dataValue").toString()));
-			}
+				break;
+			case BLOCKS_PLACED:
+			case BLOCKS_BROKEN:
+				if (!arguments.containsKey("dataValue")) {
+					value = statzApi.getSpecificData(uuid, statType,
+							new RowRequirement("typeid", arguments.get("typeID").toString()));
+				} else {
+					value = statzApi.getSpecificData(uuid, statType,
+							new RowRequirement("typeid", arguments.get("typeID").toString()),
+							new RowRequirement("datavalue", arguments.get("dataValue").toString()));
+				}
 
-			break;
-		case BLOCKS_MOVED:
-			String moveType = "";
+				break;
+			case BLOCKS_MOVED:
+				String moveType = "";
 
-			int moveTypeInt = (Integer) arguments.get("moveType");
+				int moveTypeInt = (Integer) arguments.get("moveType");
 
-			if (moveTypeInt == 1) {
-				moveType = "BOAT";
-			} else if (moveTypeInt == 2) {
-				moveType = "MINECART";
-			} else if (moveTypeInt == 3) {
-				moveType = "PIG";
-			} else if (moveTypeInt == 4) {
-				moveType = "PIG IN MINECART";
-			} else if (moveTypeInt == 5) {
-				moveType = "HORSE";
-			} else {
-				moveType = "WALK";
-			}
+				if (moveTypeInt == 1) {
+					moveType = "BOAT";
+				} else if (moveTypeInt == 2) {
+					moveType = "MINECART";
+				} else if (moveTypeInt == 3) {
+					moveType = "PIG";
+				} else if (moveTypeInt == 4) {
+					moveType = "PIG IN MINECART";
+				} else if (moveTypeInt == 5) {
+					moveType = "HORSE";
+				} else {
+					moveType = "WALK";
+				}
 
-			value = statzApi.getSpecificData(uuid, statType, new RowRequirement("moveType", moveType));
-			break;
-		case FOOD_EATEN:
-			if (!arguments.containsKey("foodType")) {
-				value = statzApi.getSpecificData(uuid, statType);
-			} else {
-				value = statzApi.getSpecificData(uuid, statType,
-						new RowRequirement("foodEaten", arguments.get("foodType").toString()));
-			}
-			break;
-		default:
-			break;
+				value = statzApi.getSpecificData(uuid, statType, new RowRequirement("moveType", moveType));
+				break;
+			case FOOD_EATEN:
+				if (!arguments.containsKey("foodType")) {
+					value = statzApi.getSpecificData(uuid, statType);
+				} else {
+					value = statzApi.getSpecificData(uuid, statType,
+							new RowRequirement("foodEaten", arguments.get("foodType").toString()));
+				}
+				break;
+			default:
+				break;
 		}
 
 		return (int) value;

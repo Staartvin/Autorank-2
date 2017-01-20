@@ -26,7 +26,7 @@ public class MessageResult extends Result {
 		// TODO Auto-generated method stub
 		return Lang.MESSAGE_RESULT.getConfigValue(msg);
 	}
-	
+
 	@Override
 	public boolean setOptions(final String[] options) {
 		if (options.length > 0)

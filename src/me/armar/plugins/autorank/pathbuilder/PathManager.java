@@ -51,7 +51,7 @@ public class PathManager {
 			int count = 1;
 
 			messages.add("Path: " + pathName);
-			
+
 			messages.add("Display name: " + path.getDisplayName());
 
 			messages.add("Prerequisites: ");
@@ -179,7 +179,7 @@ public class PathManager {
 
 		return null;
 	}
-	
+
 	/**
 	 * 
 	 * Get the path that corresponds to the given chosenPath string.

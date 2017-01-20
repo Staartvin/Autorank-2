@@ -49,8 +49,8 @@ public class ArchiveCommand extends AutorankCommand {
 			return true;
 		}
 
-		sender.sendMessage(ChatColor.GREEN + "Removed " + ChatColor.YELLOW + plugin.getFlatFileManager().archive(rate) + ""
-				+ ChatColor.GREEN + " records below " + ChatColor.YELLOW
+		sender.sendMessage(ChatColor.GREEN + "Removed " + ChatColor.YELLOW + plugin.getFlatFileManager().archive(rate)
+				+ "" + ChatColor.GREEN + " records below " + ChatColor.YELLOW
 				+ AutorankTools.timeToString(rate, Time.MINUTES) + ChatColor.GREEN + ".");
 		return true;
 	}

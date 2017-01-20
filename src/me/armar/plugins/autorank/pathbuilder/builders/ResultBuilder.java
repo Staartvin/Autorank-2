@@ -37,5 +37,5 @@ public class ResultBuilder {
 		// Add type to the list of AutorankTools so it can use the correct name.
 		AutorankTools.registerResult(type);
 	}
-	
+
 }

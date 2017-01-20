@@ -21,7 +21,7 @@ public class PlaytimeManager {
 	// There are all tracked in minutes.
 
 	public static int INTERVAL_MINUTES = 5;
-	
+
 	private final Autorank plugin;
 
 	// What plugin should Autorank use to check time?
@@ -97,8 +97,5 @@ public class PlaytimeManager {
 
 		return playTime;
 	}
-
-
-
 
 }

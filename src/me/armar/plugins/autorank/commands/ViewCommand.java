@@ -103,26 +103,27 @@ public class ViewCommand extends AutorankCommand {
 				viewType = null;
 			} else {
 				pathName = AutorankTools.getStringFromArgs(args, 2);
-				
+
 				viewType = args[1];
 			}
-			
+
 			Path targetPath = plugin.getPathManager().matchPathbyDisplayName(pathName, false);
 
 			if (targetPath == null) {
 				sender.sendMessage(Lang.NO_PATH_FOUND_WITH_THAT_NAME.getConfigValue());
 				return true;
 			}
-			
+
 			if (viewType == null) {
-				sender.sendMessage(Lang.INVALID_FORMAT.getConfigValue("/ar view reqs/prereqs/res " + targetPath.getDisplayName()));
+				sender.sendMessage(
+						Lang.INVALID_FORMAT.getConfigValue("/ar view reqs/prereqs/res " + targetPath.getDisplayName()));
 				return true;
 			}
 
 			if (viewType.contains("prereq")) {
 
 				List<RequirementsHolder> holders = targetPath.getPrerequisites();
-				
+
 				// Set messages depending on console or player
 				List<String> messages = (isPlayer
 						? plugin.getPlayerChecker().formatRequirementsToList(holders,

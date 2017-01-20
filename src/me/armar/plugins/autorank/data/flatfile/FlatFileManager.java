@@ -10,6 +10,7 @@ import java.util.UUID;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.config.SimpleYamlConfiguration;
+import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.playtimes.PlaytimeManager;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
@@ -267,7 +268,6 @@ public class FlatFileManager {
 		return playerNames;
 	}
 
-	
 	/**
 	 * Get the local play time of a player on this server as stored by Autorank.
 	 * 
@@ -315,7 +315,7 @@ public class FlatFileManager {
 					new SimpleYamlConfiguration(plugin, dataTypePaths.get(TimeType.TOTAL_TIME), "Total data"));
 		}
 	}
-	
+
 	/**
 	 * Get a list of all the player UUIDs that are stored in a data file
 	 * @param type Type of time.

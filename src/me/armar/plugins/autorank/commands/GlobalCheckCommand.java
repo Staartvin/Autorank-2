@@ -123,11 +123,10 @@ public class GlobalCheckCommand extends AutorankCommand {
 			plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
 				@Override
 				public void run() {
-					AutorankTools
-							.sendColoredMessage(sender,
-									"You have played for " + AutorankTools
-											.timeToString(plugin.getMySQLManager().getGlobalTime(uuid), Time.MINUTES)
-											+ " across all servers.");
+					AutorankTools.sendColoredMessage(sender,
+							"You have played for " + AutorankTools
+									.timeToString(plugin.getMySQLManager().getGlobalTime(uuid), Time.MINUTES)
+									+ " across all servers.");
 				}
 			});
 

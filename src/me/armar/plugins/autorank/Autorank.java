@@ -153,9 +153,9 @@ public class Autorank extends JavaPlugin {
 		// but when a player /reloads, the server creates an instance of the
 		// plugin which causes duplicate tasks to run.
 		getServer().getScheduler().cancelTasks(this);
-		
+
 		// ------------- Save files and databases -------------
-		
+
 		this.getFlatFileManager().saveFiles();
 
 		getUUIDStorage().saveAllFiles();
@@ -165,7 +165,7 @@ public class Autorank extends JavaPlugin {
 
 		// Save playerdata.yml
 		this.getPlayerDataConfig().saveConfig();
-		
+
 		// ------------- Say bye-bye -------------
 
 		getLogger().info(String.format("Autorank %s has been disabled!", getDescription().getVersion()));
@@ -201,7 +201,7 @@ public class Autorank extends JavaPlugin {
 
 		// Create MySQL Manager
 		setMySQLManager(new MySQLManager(this));
-		
+
 		// Create FlatFile Manager
 		setFlatFileManager(new FlatFileManager(this));
 
@@ -213,7 +213,7 @@ public class Autorank extends JavaPlugin {
 
 		// Create Addon Manager
 		setAddonManager(new AddOnManager(this));
-		
+
 		// Create Path Manager
 		setPathManager(new PathManager(this));
 
@@ -257,9 +257,9 @@ public class Autorank extends JavaPlugin {
 
 		// Setup language file
 		languageHandler.createNewFile();
-		
+
 		// ------------- Initialize requirements and results -------------
-		this.initializeReqsAndRes();	
+		this.initializeReqsAndRes();
 
 		// Start warning task if a warning has been found
 		if (getWarningManager().getHighestWarning() != null) {
@@ -284,7 +284,7 @@ public class Autorank extends JavaPlugin {
 					// After dependencies, load paths
 					// Initialize paths
 					getPathManager().initialiseFromConfigs();
-					
+
 				} catch (final Throwable t) {
 
 					// When an error occured!
@@ -293,12 +293,12 @@ public class Autorank extends JavaPlugin {
 				}
 			}
 		}, 1L);
-		
+
 		// ------------- Register commands -------------
 
 		// Register command
 		getCommand("autorank").setExecutor(getCommandsManager());
-		
+
 		// ------------- Log messages -------------
 
 		// Debug message telling what plugin is used for timing.
@@ -307,14 +307,14 @@ public class Autorank extends JavaPlugin {
 		debugMessage("Autorank debug is turned on!");
 
 		// ------------- Check version -------------
-		
+
 		// Extra warning for dev users
 		if (isDevVersion()) {
 			this.getLogger().warning("You're running a DEV version, be sure to backup your Autorank folder!");
 			this.getLogger().warning(
 					"DEV versions are not guaranteed to be stable and generally shouldn't be used on big production servers with lots of players.");
 		}
-		
+
 		// ------------- Do miscalleaneous tasks -------------
 
 		// Start automatic backup
@@ -331,7 +331,7 @@ public class Autorank extends JavaPlugin {
 
 		// Spawn thread to check if MySQL database times are up to date
 		this.getMySQLManager().refreshGlobalTime();
-		
+
 		// ------------- Say Welcome! -------------
 		getLogger().info(String.format("Autorank %s has been enabled!", getDescription().getVersion()));
 	}

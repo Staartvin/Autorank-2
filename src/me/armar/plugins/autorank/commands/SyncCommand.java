@@ -78,7 +78,7 @@ public class SyncCommand extends AutorankCommand {
 				public void run() {
 					// Update all mysql records
 					for (final UUID uuid : plugin.getFlatFileManager().getUUIDKeys(TimeType.TOTAL_TIME)) {
-						final int localTime = plugin.getFlatFileManager().getLocalTime(TimeType.TOTAL_TIME,uuid);
+						final int localTime = plugin.getFlatFileManager().getLocalTime(TimeType.TOTAL_TIME, uuid);
 
 						if (localTime <= 0)
 							continue;

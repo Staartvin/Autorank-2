@@ -104,7 +104,7 @@ public class InternalPropertiesConfig {
 															// time? In UNIX
 															// time.
 		config.addDefault("has converted uuids", false); // Did it already
-														// convert uuids?
+															// convert uuids?
 
 		config.addDefault("tracked month", 1); // This is used to keep track of what month we are checking the data for. If this is changed, the montly_data.yml gets reset.
 		config.addDefault("tracked week", 1); // This is used to keep track of what week we are checking the data for. If this is changed, the weekly_data.yml gets reset.

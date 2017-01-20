@@ -45,7 +45,7 @@ public class SpawnFireworkResult extends Result {
 
 		return Lang.SPAWN_FIREWORK_RESULT.getConfigValue(targetLocation);
 	}
-	
+
 	@Override
 	public boolean setOptions(final String[] options) {
 		// target;power;type;R;G;B

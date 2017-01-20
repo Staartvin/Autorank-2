@@ -24,7 +24,7 @@ public class Path {
 	// The display name is the name that will be shown to the player.
 	// The internal name is used to find the properties of the path in paths.yml
 	private String displayName = "", internalName = "";
-	
+
 	private final Autorank plugin;
 	// A requirements holder is a holder for one or more requirements that can be met simultaneously. 
 	private List<RequirementsHolder> prerequisites = new ArrayList<>();
@@ -80,10 +80,10 @@ public class Path {
 					}
 				}
 			}
-			
+
 			// After getting results, chosen path is reset.
 			plugin.getPlayerDataConfig().setChosenPath(uuid, null);
-			
+
 			// Reset progress
 			plugin.getPlayerDataConfig().setCompletedRequirements(uuid, null);
 

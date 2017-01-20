@@ -78,7 +78,7 @@ public class BackupManager {
 
 					for (TimeType type : TimeType.values()) {
 						String path = FlatFileManager.dataTypePaths.get(type);
-						
+
 						plugin.getBackupManager().backupFile(path, plugin.getDataFolder().getAbsolutePath()
 								+ File.separator + "backups" + File.separator + path.replace("/data/", ""));
 					}

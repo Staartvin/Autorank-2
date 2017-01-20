@@ -130,18 +130,18 @@ public class SettingsConfig {
 	 */
 	public String getMySQLCredentials(final MySQLCredentials option) {
 		switch (option) {
-		case HOSTNAME:
-			return this.getConfig().getString("sql.hostname");
-		case USERNAME:
-			return this.getConfig().getString("sql.username");
-		case PASSWORD:
-			return this.getConfig().getString("sql.password");
-		case DATABASE:
-			return this.getConfig().getString("sql.database");
-		case TABLE:
-			return this.getConfig().getString("sql.table");
-		default:
-			return null;
+			case HOSTNAME:
+				return this.getConfig().getString("sql.hostname");
+			case USERNAME:
+				return this.getConfig().getString("sql.username");
+			case PASSWORD:
+				return this.getConfig().getString("sql.password");
+			case DATABASE:
+				return this.getConfig().getString("sql.database");
+			case TABLE:
+				return this.getConfig().getString("sql.table");
+			default:
+				return null;
 		}
 	}
 

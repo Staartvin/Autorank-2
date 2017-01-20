@@ -19,11 +19,11 @@ import me.armar.plugins.autorank.Autorank;
 public class PlayerDataConfig {
 
 	private final Autorank plugin;
-	
+
 	private SimpleYamlConfiguration config;
 
 	private String fileName = "PlayerData.yml";
-	
+
 	private boolean convertingData = false;
 
 	public PlayerDataConfig(final Autorank instance) {
@@ -104,7 +104,7 @@ public class PlayerDataConfig {
 	public void setCompletedRequirements(final UUID uuid, final List<Integer> requirements) {
 		config.set(uuid.toString() + ".completed requirements", requirements);
 	}
-	
+
 	/**
 	 * Get a list of completed requirements of a player.
 	 * <br>This list is reset when a player chooses a new path or completes a path.
@@ -114,7 +114,7 @@ public class PlayerDataConfig {
 	public List<Integer> getCompletedRequirements(final UUID uuid) {
 		return config.getIntegerList(uuid.toString() + ".completed requirements");
 	}
-	
+
 	/**
 	 * Check whether a player completed a specific requirement.
 	 * @param reqID ID of requirement
@@ -126,7 +126,7 @@ public class PlayerDataConfig {
 
 		return completedRequirement.contains(reqID);
 	}
-	
+
 	/**
 	 * Add a prerequisite that is completed by a player.
 	 * @param uuid UUID of the player
@@ -151,7 +151,7 @@ public class PlayerDataConfig {
 	public void setCompletedPrerequisites(final UUID uuid, final List<Integer> prerequisites) {
 		config.set(uuid.toString() + ".completed prerequisites", prerequisites);
 	}
-	
+
 	/**
 	 * Get a list of completed prerequisites of a player.
 	 * <br>This list is reset when a player chooses a new path or completes a path.
@@ -161,7 +161,7 @@ public class PlayerDataConfig {
 	public List<Integer> getCompletedPrerequisites(final UUID uuid) {
 		return config.getIntegerList(uuid.toString() + ".completed prerequisites");
 	}
-	
+
 	/**
 	 * Check whether a player completed a specific prerequisite.
 	 * @param preReqID ID of prerequisite
@@ -181,7 +181,7 @@ public class PlayerDataConfig {
 	 */
 	public void addCompletedPath(final UUID uuid, final String pathName) {
 		final List<String> completed = getCompletedPaths(uuid);
-		
+
 		if (completed.contains(pathName)) {
 			return;
 		}
@@ -239,7 +239,6 @@ public class PlayerDataConfig {
 		});
 	}
 
-
 	/**
 	 * Get the path a player has chosen.
 	 * @param uuid UUID of the player
@@ -274,7 +273,6 @@ public class PlayerDataConfig {
 
 		return getCompletedPaths(uuid).contains(pathName);
 	}
-
 
 	/**
 	 * Check whether a player is exempted from appearing on any leaderboard.

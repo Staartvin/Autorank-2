@@ -21,7 +21,7 @@ public class GroupRequirement extends Requirement {
 
 	@Override
 	public String getProgress(final Player player) {
-		
+
 		String[] groups = this.getAutorank().getPermPlugHandler().getPermissionPlugin().getPlayerGroups(player);
 
 		for (String groupString : groups) {
@@ -34,12 +34,13 @@ public class GroupRequirement extends Requirement {
 
 	@Override
 	public boolean meetsRequirement(final Player player) {
-		for (String groupString : this.getAutorank().getPermPlugHandler().getPermissionPlugin().getPlayerGroups(player)) {
+		for (String groupString : this.getAutorank().getPermPlugHandler().getPermissionPlugin()
+				.getPlayerGroups(player)) {
 			if (groupString.equalsIgnoreCase(group)) {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
 

@@ -194,14 +194,12 @@ public class PathBuilder {
 				final RequirementsHolder reqHolder = new RequirementsHolder(plugin);
 
 				// Option strings seperated
-				final List<String[]> optionsList = plugin.getPathsConfig().getRequirementOptions(pathName,
-						reqName);
+				final List<String[]> optionsList = plugin.getPathsConfig().getRequirementOptions(pathName, reqName);
 
 				// Find all options of this requirement
 				for (final String[] options : optionsList) {
 					final Requirement newRequirement = createRequirement(correctName, options, optional, realResults,
-							plugin.getPathsConfig().useAutoCompletion(pathName, reqName), reqId, reqName,
-							pathName);
+							plugin.getPathsConfig().useAutoCompletion(pathName, reqName), reqId, reqName, pathName);
 
 					if (newRequirement == null)
 						continue;
@@ -251,13 +249,12 @@ public class PathBuilder {
 
 				// Create a holder for the path
 				final RequirementsHolder prereqHolder = new RequirementsHolder(plugin);
-				
+
 				// Make sure to tell it that this is storing prerequisites
 				prereqHolder.setPrerequisite(true);
 
 				// Option strings seperated
-				final List<String[]> optionsList = plugin.getPathsConfig().getPrerequisiteOptions(pathName,
-						prereqName);
+				final List<String[]> optionsList = plugin.getPathsConfig().getPrerequisiteOptions(pathName, prereqName);
 
 				// Find all options of this requirement
 				for (final String[] options : optionsList) {
@@ -277,7 +274,7 @@ public class PathBuilder {
 
 			// Now add display name to this path.
 			path.setDisplayName(plugin.getPathsConfig().getDisplayName(pathName));
-			
+
 			// Set internal name
 			path.setInternalName(pathName);
 

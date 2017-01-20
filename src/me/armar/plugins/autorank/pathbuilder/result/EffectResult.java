@@ -23,7 +23,7 @@ public class EffectResult extends Result {
 		// TODO Auto-generated method stub
 		return Lang.EFFECT_RESULT.getConfigValue(effect.getName());
 	}
-	
+
 	@Override
 	public boolean setOptions(final String[] options) {
 		if (options.length > 0) {

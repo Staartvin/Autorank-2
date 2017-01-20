@@ -84,20 +84,20 @@ class BlocksMovedWrapper {
 
 	private String getMovementString(final int moveType) {
 		switch (moveType) {
-		case 0:
-			return "by foot";
-		case 1:
-			return "by boat";
-		case 2:
-			return "by cart";
-		case 3:
-			return "by pig";
-		case 4:
-			return "by piggy-cart";
-		case 5:
-			return "by horse";
-		default:
-			return "by foot";
+			case 0:
+				return "by foot";
+			case 1:
+				return "by boat";
+			case 2:
+				return "by cart";
+			case 3:
+				return "by pig";
+			case 4:
+				return "by piggy-cart";
+			case 5:
+				return "by horse";
+			default:
+				return "by foot";
 		}
 	}
 
