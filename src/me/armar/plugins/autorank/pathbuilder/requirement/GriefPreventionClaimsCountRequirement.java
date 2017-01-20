@@ -8,42 +8,42 @@ import me.staartvin.statz.hooks.handlers.GriefPreventionHandler;
 
 public class GriefPreventionClaimsCountRequirement extends Requirement {
 
-	int claimsCount = -1;
-	private GriefPreventionHandler handler = null;
+    int claimsCount = -1;
+    private GriefPreventionHandler handler = null;
 
-	@Override
-	public String getDescription() {
-		return Lang.GRIEF_PREVENTION_CLAIMS_COUNT_REQUIREMENT.getConfigValue(claimsCount);
-	}
+    @Override
+    public String getDescription() {
+        return Lang.GRIEF_PREVENTION_CLAIMS_COUNT_REQUIREMENT.getConfigValue(claimsCount);
+    }
 
-	@Override
-	public String getProgress(final Player player) {
-		final int level = handler.getNumberOfClaims(player.getUniqueId());
+    @Override
+    public String getProgress(final Player player) {
+        final int level = handler.getNumberOfClaims(player.getUniqueId());
 
-		return level + "/" + claimsCount;
-	}
+        return level + "/" + claimsCount;
+    }
 
-	@Override
-	public boolean meetsRequirement(final Player player) {
+    @Override
+    public boolean meetsRequirement(final Player player) {
 
-		if (!handler.isAvailable())
-			return false;
+        if (!handler.isAvailable())
+            return false;
 
-		final int level = handler.getNumberOfClaims(player.getUniqueId());
+        final int level = handler.getNumberOfClaims(player.getUniqueId());
 
-		return level >= claimsCount;
-	}
+        return level >= claimsCount;
+    }
 
-	@Override
-	public boolean setOptions(final String[] options) {
+    @Override
+    public boolean setOptions(final String[] options) {
 
-		handler = (GriefPreventionHandler) this.getDependencyManager()
-				.getDependencyHandler(Dependency.GRIEF_PREVENTION);
+        handler = (GriefPreventionHandler) this.getDependencyManager()
+                .getDependencyHandler(Dependency.GRIEF_PREVENTION);
 
-		if (options.length > 0) {
-			claimsCount = Integer.parseInt(options[0]);
-		}
+        if (options.length > 0) {
+            claimsCount = Integer.parseInt(options[0]);
+        }
 
-		return claimsCount != -1 && handler != null;
-	}
+        return claimsCount != -1 && handler != null;
+    }
 }

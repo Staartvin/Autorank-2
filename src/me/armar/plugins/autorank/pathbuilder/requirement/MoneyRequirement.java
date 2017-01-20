@@ -7,55 +7,55 @@ import me.armar.plugins.autorank.language.Lang;
 
 public class MoneyRequirement extends Requirement {
 
-	double minMoney = -1;
+    double minMoney = -1;
 
-	@Override
-	public String getDescription() {
+    @Override
+    public String getDescription() {
 
-		String lang = Lang.MONEY_REQUIREMENT.getConfigValue(minMoney + " " + VaultHandler.economy.currencyNamePlural());
+        String lang = Lang.MONEY_REQUIREMENT.getConfigValue(minMoney + " " + VaultHandler.economy.currencyNamePlural());
 
-		// Check if this requirement is world-specific
-		if (this.isWorldSpecific()) {
-			lang = lang.concat(" (in world '" + this.getWorld() + "')");
-		}
+        // Check if this requirement is world-specific
+        if (this.isWorldSpecific()) {
+            lang = lang.concat(" (in world '" + this.getWorld() + "')");
+        }
 
-		return lang;
-	}
+        return lang;
+    }
 
-	@Override
-	public String getProgress(final Player player) {
+    @Override
+    public String getProgress(final Player player) {
 
-		final double money = VaultHandler.economy.getBalance(player.getPlayer());
+        final double money = VaultHandler.economy.getBalance(player.getPlayer());
 
-		return money + "/" + minMoney + " " + VaultHandler.economy.currencyNamePlural();
-	}
+        return money + "/" + minMoney + " " + VaultHandler.economy.currencyNamePlural();
+    }
 
-	@Override
-	public boolean meetsRequirement(final Player player) {
+    @Override
+    public boolean meetsRequirement(final Player player) {
 
-		// Check if this requirement is world-specific
-		if (this.isWorldSpecific()) {
-			// Is player in the same world as specified
-			if (!this.getWorld().equals(player.getWorld().getName()))
-				return false;
-		}
+        // Check if this requirement is world-specific
+        if (this.isWorldSpecific()) {
+            // Is player in the same world as specified
+            if (!this.getWorld().equals(player.getWorld().getName()))
+                return false;
+        }
 
-		// UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
-		if (VaultHandler.economy == null)
-			return false;
+        // UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
+        if (VaultHandler.economy == null)
+            return false;
 
-		return VaultHandler.economy.has(player.getPlayer(), minMoney);
-	}
+        return VaultHandler.economy.has(player.getPlayer(), minMoney);
+    }
 
-	@Override
-	public boolean setOptions(final String[] options) {
+    @Override
+    public boolean setOptions(final String[] options) {
 
-		try {
-			minMoney = Double.parseDouble(options[0]);
-		} catch (final Exception e) {
-			return false;
-		}
+        try {
+            minMoney = Double.parseDouble(options[0]);
+        } catch (final Exception e) {
+            return false;
+        }
 
-		return minMoney != -1;
-	}
+        return minMoney != -1;
+    }
 }

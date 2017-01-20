@@ -6,11 +6,9 @@ import java.util.UUID;
 import java.util.concurrent.Callable;
 
 /**
- * This will get the database time.
+ * This will get the database time. <br>
  * <br>
- * <br>
- * We have to wait for the thread to finish before we can get the results.
- * <br>
+ * We have to wait for the thread to finish before we can get the results. <br>
  * Every database lookup will have to have its own thread.
  * 
  * @author Staartvin
@@ -18,46 +16,48 @@ import java.util.concurrent.Callable;
  */
 public class GrabDatabaseTimeTask implements Callable<Integer> {
 
-	private final SQLDataStorage mysql;
-	private final String table;
-	private final UUID uuid;
+    private final SQLDataStorage mysql;
+    private final String table;
+    private final UUID uuid;
 
-	public GrabDatabaseTimeTask(final SQLDataStorage mysql, final UUID uuid, final String table) {
-		this.mysql = mysql;
-		this.uuid = uuid;
-		this.table = table;
-	}
+    public GrabDatabaseTimeTask(final SQLDataStorage mysql, final UUID uuid, final String table) {
+        this.mysql = mysql;
+        this.uuid = uuid;
+        this.table = table;
+    }
 
-	/* (non-Javadoc)
-	 * @see java.util.concurrent.Callable#call()
-	 */
-	@Override
-	public Integer call() throws Exception {
-		if (mysql == null)
-			return -1;
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.util.concurrent.Callable#call()
+     */
+    @Override
+    public Integer call() throws Exception {
+        if (mysql == null)
+            return -1;
 
-		int time = -1;
+        int time = -1;
 
-		final String statement = "SELECT * FROM " + table + " WHERE uuid='" + uuid.toString() + "'";
-		final ResultSet rs = mysql.executeQuery(statement);
+        final String statement = "SELECT * FROM " + table + " WHERE uuid='" + uuid.toString() + "'";
+        final ResultSet rs = mysql.executeQuery(statement);
 
-		if (rs == null)
-			return time;
+        if (rs == null)
+            return time;
 
-		try {
-			if (rs.next()) {
-				time = rs.getInt(2);
-			} else {
-				return time;
-			}
+        try {
+            if (rs.next()) {
+                time = rs.getInt(2);
+            } else {
+                return time;
+            }
 
-		} catch (final SQLException e) {
-			System.out.println("SQLException: " + e.getMessage());
-			System.out.println("SQLState: " + e.getSQLState());
-			System.out.println("VendorError: " + e.getErrorCode());
-		}
+        } catch (final SQLException e) {
+            System.out.println("SQLException: " + e.getMessage());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("VendorError: " + e.getErrorCode());
+        }
 
-		return time;
-	}
+        return time;
+    }
 
 }

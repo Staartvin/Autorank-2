@@ -8,43 +8,43 @@ import me.staartvin.statz.hooks.handlers.RPGmeHandler;
 
 public class RPGMeCombatLevelRequirement extends Requirement {
 
-	private RPGmeHandler handler = null;
-	private int skillLevel = -1;
+    private RPGmeHandler handler = null;
+    private int skillLevel = -1;
 
-	@Override
-	public String getDescription() {
+    @Override
+    public String getDescription() {
 
-		return Lang.RPGME_COMBAT_LEVEL_REQUIREMENT.getConfigValue(skillLevel);
-	}
+        return Lang.RPGME_COMBAT_LEVEL_REQUIREMENT.getConfigValue(skillLevel);
+    }
 
-	@Override
-	public String getProgress(final Player player) {
+    @Override
+    public String getProgress(final Player player) {
 
-		int level = 0;
+        int level = 0;
 
-		level = handler.getCombatLevel(player);
+        level = handler.getCombatLevel(player);
 
-		return level + "/" + skillLevel;
-	}
+        return level + "/" + skillLevel;
+    }
 
-	@Override
-	public boolean meetsRequirement(final Player player) {
+    @Override
+    public boolean meetsRequirement(final Player player) {
 
-		if (!handler.isAvailable())
-			return false;
+        if (!handler.isAvailable())
+            return false;
 
-		return handler.getCombatLevel(player) >= skillLevel;
-	}
+        return handler.getCombatLevel(player) >= skillLevel;
+    }
 
-	@Override
-	public boolean setOptions(final String[] options) {
+    @Override
+    public boolean setOptions(final String[] options) {
 
-		handler = (RPGmeHandler) this.getDependencyManager().getDependencyHandler(Dependency.RPGME);
+        handler = (RPGmeHandler) this.getDependencyManager().getDependencyHandler(Dependency.RPGME);
 
-		if (options.length > 0) {
-			skillLevel = Integer.parseInt(options[0]);
-		}
+        if (options.length > 0) {
+            skillLevel = Integer.parseInt(options[0]);
+        }
 
-		return skillLevel != -1 && handler != null && handler.isAvailable();
-	}
+        return skillLevel != -1 && handler != null && handler.isAvailable();
+    }
 }

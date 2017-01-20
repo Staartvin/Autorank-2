@@ -8,46 +8,46 @@ import me.armar.plugins.autorank.util.AutorankTools;
 
 public class FishCaughtRequirement extends Requirement {
 
-	int fishCaught = -1;
+    int fishCaught = -1;
 
-	@Override
-	public String getDescription() {
+    @Override
+    public String getDescription() {
 
-		String lang = Lang.FISH_CAUGHT_REQUIREMENT.getConfigValue(fishCaught + "");
+        String lang = Lang.FISH_CAUGHT_REQUIREMENT.getConfigValue(fishCaught + "");
 
-		// Check if this requirement is world-specific
-		if (this.isWorldSpecific()) {
-			lang = lang.concat(" (in world '" + this.getWorld() + "')");
-		}
+        // Check if this requirement is world-specific
+        if (this.isWorldSpecific()) {
+            lang = lang.concat(" (in world '" + this.getWorld() + "')");
+        }
 
-		return lang;
-	}
+        return lang;
+    }
 
-	@Override
-	public String getProgress(final Player player) {
-		final int progressBar = this.getStatsPlugin().getNormalStat(StatsHandler.statTypes.FISH_CAUGHT,
-				player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld()));
+    @Override
+    public String getProgress(final Player player) {
+        final int progressBar = this.getStatsPlugin().getNormalStat(StatsHandler.statTypes.FISH_CAUGHT,
+                player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld()));
 
-		return progressBar + "/" + fishCaught;
-	}
+        return progressBar + "/" + fishCaught;
+    }
 
-	@Override
-	public boolean meetsRequirement(final Player player) {
+    @Override
+    public boolean meetsRequirement(final Player player) {
 
-		if (!getStatsPlugin().isEnabled())
-			return false;
+        if (!getStatsPlugin().isEnabled())
+            return false;
 
-		final int fish = this.getStatsPlugin().getNormalStat(StatsHandler.statTypes.FISH_CAUGHT, player.getUniqueId(),
-				AutorankTools.makeStatsInfo("world", this.getWorld()));
+        final int fish = this.getStatsPlugin().getNormalStat(StatsHandler.statTypes.FISH_CAUGHT, player.getUniqueId(),
+                AutorankTools.makeStatsInfo("world", this.getWorld()));
 
-		return fish >= fishCaught;
-	}
+        return fish >= fishCaught;
+    }
 
-	@Override
-	public boolean setOptions(final String[] options) {
+    @Override
+    public boolean setOptions(final String[] options) {
 
-		fishCaught = Integer.parseInt(options[0]);
+        fishCaught = Integer.parseInt(options[0]);
 
-		return fishCaught != -1;
-	}
+        return fishCaught != -1;
+    }
 }

@@ -11,40 +11,42 @@ import me.armar.plugins.autorank.util.AutorankTools;
 
 public class CommandResult extends Result {
 
-	private List<String> commands = null;
-	private Server server = null;
+    private List<String> commands = null;
+    private Server server = null;
 
-	@Override
-	public boolean applyResult(final Player player) {
-		if (server != null) {
-			this.getAutorank().getServer().getScheduler().runTask(this.getAutorank(), new Runnable() {
-				public void run() {
-					for (final String command : commands) {
-						final String cmd = command.replace("&p", player.getName());
-						server.dispatchCommand(server.getConsoleSender(), cmd);
-					}
-				}
-			});
-		}
-		return server != null;
-	}
+    @Override
+    public boolean applyResult(final Player player) {
+        if (server != null) {
+            this.getAutorank().getServer().getScheduler().runTask(this.getAutorank(), new Runnable() {
+                public void run() {
+                    for (final String command : commands) {
+                        final String cmd = command.replace("&p", player.getName());
+                        server.dispatchCommand(server.getConsoleSender(), cmd);
+                    }
+                }
+            });
+        }
+        return server != null;
+    }
 
-	/* (non-Javadoc)
-	 * @see me.armar.plugins.autorank.pathbuilder.result.Result#getDescription()
-	 */
-	@Override
-	public String getDescription() {
-		return Lang.COMMAND_RESULT.getConfigValue(AutorankTools.createStringFromList(commands));
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see me.armar.plugins.autorank.pathbuilder.result.Result#getDescription()
+     */
+    @Override
+    public String getDescription() {
+        return Lang.COMMAND_RESULT.getConfigValue(AutorankTools.createStringFromList(commands));
+    }
 
-	@Override
-	public boolean setOptions(final String[] commands) {
-		this.server = this.getAutorank().getServer();
-		final List<String> replace = new ArrayList<String>();
-		for (final String command : commands) {
-			replace.add(command.trim());
-		}
-		this.commands = replace;
-		return true;
-	}
+    @Override
+    public boolean setOptions(final String[] commands) {
+        this.server = this.getAutorank().getServer();
+        final List<String> replace = new ArrayList<String>();
+        for (final String command : commands) {
+            replace.add(command.trim());
+        }
+        this.commands = replace;
+        return true;
+    }
 }

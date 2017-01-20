@@ -7,14 +7,13 @@ import me.armar.plugins.autorank.Autorank;
 
 /**
  * This class handles all warning message that are displayed when something is
- * wrong with Autorank.
- * Instead of disabling Autorank, it should display warnings when an admin
- * joins.
+ * wrong with Autorank. Instead of disabling Autorank, it should display
+ * warnings when an admin joins.
  * 
  * <p>
  * Warnings will be stored in a list. Every warning will have its own priority.
- * Whenever an player joins that has the permission
- * '<i>autorank.warning.notice</i>', the warning manager will grab the warning
+ * Whenever an player joins that has the permission '
+ * <i>autorank.warning.notice</i>', the warning manager will grab the warning
  * with the highest priority and show it to the player. This way the admin knows
  * something is up and he has to fix it.
  * 
@@ -45,68 +44,71 @@ import me.armar.plugins.autorank.Autorank;
  */
 public class WarningManager {
 
-	private final Autorank plugin;
+    private final Autorank plugin;
 
-	private final HashMap<String, Integer> warnings = new HashMap<String, Integer>();
+    private final HashMap<String, Integer> warnings = new HashMap<String, Integer>();
 
-	public WarningManager(final Autorank plugin) {
-		this.plugin = plugin;
-	}
+    public WarningManager(final Autorank plugin) {
+        this.plugin = plugin;
+    }
 
-	private String findHighestPriorityWarning() {
-		String highestWarning = null;
-		int highestPriority = 0;
+    private String findHighestPriorityWarning() {
+        String highestWarning = null;
+        int highestPriority = 0;
 
-		for (final Entry<String, Integer> entry : warnings.entrySet()) {
+        for (final Entry<String, Integer> entry : warnings.entrySet()) {
 
-			if (entry.getValue() > highestPriority) {
-				highestPriority = entry.getValue();
-				highestWarning = entry.getKey();
-			}
-		}
+            if (entry.getValue() > highestPriority) {
+                highestPriority = entry.getValue();
+                highestWarning = entry.getKey();
+            }
+        }
 
-		return highestWarning;
-	}
+        return highestWarning;
+    }
 
-	/**
-	 * Returns warning with the highest priority level.
-	 * 
-	 * @return highest priority warning message; returns null if no warning was
-	 *         found
-	 */
-	public String getHighestWarning() {
+    /**
+     * Returns warning with the highest priority level.
+     * 
+     * @return highest priority warning message; returns null if no warning was
+     *         found
+     */
+    public String getHighestWarning() {
 
-		final String highestWarning = findHighestPriorityWarning();
+        final String highestWarning = findHighestPriorityWarning();
 
-		if (highestWarning == null) {
-			return null;
-		}
+        if (highestWarning == null) {
+            return null;
+        }
 
-		// Return the highest one
-		return highestWarning;
-	}
+        // Return the highest one
+        return highestWarning;
+    }
 
-	/**
-	 * Register a new warning.
-	 * Priority level will be capped if this number is too high or too low.
-	 * 
-	 * @param message Warning message description
-	 * @param priority Priority level (1 - 10).
-	 */
-	public void registerWarning(final String message, int priority) {
-		// Set priority limits
-		if (priority > 10) {
-			priority = 10;
-		} else if (priority < 1) {
-			priority = 1;
-		}
+    /**
+     * Register a new warning. Priority level will be capped if this number is
+     * too high or too low.
+     * 
+     * @param message
+     *            Warning message description
+     * @param priority
+     *            Priority level (1 - 10).
+     */
+    public void registerWarning(final String message, int priority) {
+        // Set priority limits
+        if (priority > 10) {
+            priority = 10;
+        } else if (priority < 1) {
+            priority = 1;
+        }
 
-		warnings.put(message, priority);
-	}
+        warnings.put(message, priority);
+    }
 
-	public void startWarningTask() {
-		// Create a new task that runs every 30 seconds (will show a warning every 30 seconds)
-		plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new WarningNoticeTask(plugin), 0,
-				30L * 20L);
-	}
+    public void startWarningTask() {
+        // Create a new task that runs every 30 seconds (will show a warning
+        // every 30 seconds)
+        plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new WarningNoticeTask(plugin), 0,
+                30L * 20L);
+    }
 }

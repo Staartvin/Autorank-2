@@ -21,185 +21,185 @@ import me.armar.plugins.autorank.util.AutorankTools;
  */
 public class ViewCommand extends AutorankCommand {
 
-	private final Autorank plugin;
+    private final Autorank plugin;
 
-	public ViewCommand(final Autorank instance) {
-		this.setUsage("/ar view <path name>");
-		this.setDesc("Gives a preview of a certain ranking path");
-		this.setPermission("autorank.view");
+    public ViewCommand(final Autorank instance) {
+        this.setUsage("/ar view <path name>");
+        this.setDesc("Gives a preview of a certain ranking path");
+        this.setPermission("autorank.view");
 
-		plugin = instance;
-	}
+        plugin = instance;
+    }
 
-	@Override
-	public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
+    @Override
+    public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
-		// This command will give a preview of a certain path of ranking.
-		if (!plugin.getCommandsManager().hasPermission("autorank.view", sender)) {
-			return true;
-		}
+        // This command will give a preview of a certain path of ranking.
+        if (!plugin.getCommandsManager().hasPermission("autorank.view", sender)) {
+            return true;
+        }
 
-		if (args.length < 2) {
-			sender.sendMessage(Lang.INVALID_FORMAT.getConfigValue("/ar view <path name> or /ar view list"));
-			return true;
-		}
+        if (args.length < 2) {
+            sender.sendMessage(Lang.INVALID_FORMAT.getConfigValue("/ar view <path name> or /ar view list"));
+            return true;
+        }
 
-		String pathName;
+        String pathName;
 
-		boolean isPlayer = false;
+        boolean isPlayer = false;
 
-		// Check if sender is player or console
-		if (sender instanceof Player) {
-			isPlayer = true;
-		}
+        // Check if sender is player or console
+        if (sender instanceof Player) {
+            isPlayer = true;
+        }
 
-		// /ar view list (or a name of a path)
-		if (args.length == 2) {
+        // /ar view list (or a name of a path)
+        if (args.length == 2) {
 
-			pathName = AutorankTools.getStringFromArgs(args, 1);
+            pathName = AutorankTools.getStringFromArgs(args, 1);
 
-			// Get a list of possible paths that a player can take?
-			if (pathName.equals("list")) {
+            // Get a list of possible paths that a player can take?
+            if (pathName.equals("list")) {
 
-				final List<Path> paths = plugin.getPathManager().getPaths();
+                final List<Path> paths = plugin.getPathManager().getPaths();
 
-				if (paths.isEmpty()) {
-					sender.sendMessage("There are no paths that you can choose.");
-					return true;
-				}
+                if (paths.isEmpty()) {
+                    sender.sendMessage("There are no paths that you can choose.");
+                    return true;
+                }
 
-				sender.sendMessage(ChatColor.GREEN + "You can choose these paths: ");
+                sender.sendMessage(ChatColor.GREEN + "You can choose these paths: ");
 
-				final String pathsString = AutorankTools.createStringFromList(paths);
-				sender.sendMessage(ChatColor.WHITE + pathsString);
-				return true;
-			} else {
-				// Third argument is probably a name of a path
+                final String pathsString = AutorankTools.createStringFromList(paths);
+                sender.sendMessage(ChatColor.WHITE + pathsString);
+                return true;
+            } else {
+                // Third argument is probably a name of a path
 
-				// Show details of path
+                // Show details of path
 
-				Path targetPath = plugin.getPathManager().matchPathbyDisplayName(pathName, false);
+                Path targetPath = plugin.getPathManager().matchPathbyDisplayName(pathName, false);
 
-				if (targetPath == null) {
-					sender.sendMessage(Lang.NO_PATH_FOUND_WITH_THAT_NAME.getConfigValue());
-					return true;
-				}
+                if (targetPath == null) {
+                    sender.sendMessage(Lang.NO_PATH_FOUND_WITH_THAT_NAME.getConfigValue());
+                    return true;
+                }
 
-				sender.sendMessage(ChatColor.GREEN
-						+ "You can preview requirements (reqs), prerequisites (prereqs) or results (res) of this path.");
-				sender.sendMessage(ChatColor.GOLD + "To view these, perform " + ChatColor.AQUA
-						+ "/ar view reqs/prereqs/res " + targetPath.getDisplayName());
+                sender.sendMessage(ChatColor.GREEN
+                        + "You can preview requirements (reqs), prerequisites (prereqs) or results (res) of this path.");
+                sender.sendMessage(ChatColor.GOLD + "To view these, perform " + ChatColor.AQUA
+                        + "/ar view reqs/prereqs/res " + targetPath.getDisplayName());
 
-				return true;
+                return true;
 
-			}
+            }
 
-		} else if (args.length > 2) {
-			// /ar view (req/prereq/result) (name of path)
-			String viewType = args[1];
+        } else if (args.length > 2) {
+            // /ar view (req/prereq/result) (name of path)
+            String viewType = args[1];
 
-			if (!viewType.contains("prereq") && !viewType.contains("req") && !viewType.contains("res")) {
-				pathName = AutorankTools.getStringFromArgs(args, 1);
-				viewType = null;
-			} else {
-				pathName = AutorankTools.getStringFromArgs(args, 2);
+            if (!viewType.contains("prereq") && !viewType.contains("req") && !viewType.contains("res")) {
+                pathName = AutorankTools.getStringFromArgs(args, 1);
+                viewType = null;
+            } else {
+                pathName = AutorankTools.getStringFromArgs(args, 2);
 
-				viewType = args[1];
-			}
+                viewType = args[1];
+            }
 
-			Path targetPath = plugin.getPathManager().matchPathbyDisplayName(pathName, false);
+            Path targetPath = plugin.getPathManager().matchPathbyDisplayName(pathName, false);
 
-			if (targetPath == null) {
-				sender.sendMessage(Lang.NO_PATH_FOUND_WITH_THAT_NAME.getConfigValue());
-				return true;
-			}
+            if (targetPath == null) {
+                sender.sendMessage(Lang.NO_PATH_FOUND_WITH_THAT_NAME.getConfigValue());
+                return true;
+            }
 
-			if (viewType == null) {
-				sender.sendMessage(
-						Lang.INVALID_FORMAT.getConfigValue("/ar view reqs/prereqs/res " + targetPath.getDisplayName()));
-				return true;
-			}
+            if (viewType == null) {
+                sender.sendMessage(
+                        Lang.INVALID_FORMAT.getConfigValue("/ar view reqs/prereqs/res " + targetPath.getDisplayName()));
+                return true;
+            }
 
-			if (viewType.contains("prereq")) {
+            if (viewType.contains("prereq")) {
 
-				List<RequirementsHolder> holders = targetPath.getPrerequisites();
+                List<RequirementsHolder> holders = targetPath.getPrerequisites();
 
-				// Set messages depending on console or player
-				List<String> messages = (isPlayer
-						? plugin.getPlayerChecker().formatRequirementsToList(holders,
-								plugin.getPlayerChecker().getMetRequirementsHolders(holders, (Player) sender))
-						: plugin.getPlayerChecker().formatRequirementsToList(holders, new ArrayList<Integer>()));
+                // Set messages depending on console or player
+                List<String> messages = (isPlayer
+                        ? plugin.getPlayerChecker().formatRequirementsToList(holders,
+                                plugin.getPlayerChecker().getMetRequirementsHolders(holders, (Player) sender))
+                        : plugin.getPlayerChecker().formatRequirementsToList(holders, new ArrayList<Integer>()));
 
-				sender.sendMessage(ChatColor.GREEN + "Prerequisites of path '" + ChatColor.GRAY
-						+ targetPath.getDisplayName() + ChatColor.GREEN + "':");
+                sender.sendMessage(ChatColor.GREEN + "Prerequisites of path '" + ChatColor.GRAY
+                        + targetPath.getDisplayName() + ChatColor.GREEN + "':");
 
-				for (final String message : messages) {
-					AutorankTools.sendColoredMessage(sender, message);
-				}
+                for (final String message : messages) {
+                    AutorankTools.sendColoredMessage(sender, message);
+                }
 
-				return true;
+                return true;
 
-			} else if (viewType.contains("res")) {
+            } else if (viewType.contains("res")) {
 
-				List<Result> results = targetPath.getResults();
+                List<Result> results = targetPath.getResults();
 
-				// Set messages depending on console or player
-				List<String> messages = plugin.getPlayerChecker().formatResultsToList(results);
+                // Set messages depending on console or player
+                List<String> messages = plugin.getPlayerChecker().formatResultsToList(results);
 
-				sender.sendMessage(ChatColor.GREEN + "Results of path '" + ChatColor.GRAY + targetPath.getDisplayName()
-						+ ChatColor.GREEN + "':");
+                sender.sendMessage(ChatColor.GREEN + "Results of path '" + ChatColor.GRAY + targetPath.getDisplayName()
+                        + ChatColor.GREEN + "':");
 
-				for (final String message : messages) {
-					AutorankTools.sendColoredMessage(sender, message);
-				}
+                for (final String message : messages) {
+                    AutorankTools.sendColoredMessage(sender, message);
+                }
 
-				return true;
-			} else {
-				List<RequirementsHolder> holders = targetPath.getRequirements();
+                return true;
+            } else {
+                List<RequirementsHolder> holders = targetPath.getRequirements();
 
-				// Set messages depending on console or player
-				List<String> messages = (isPlayer
-						? plugin.getPlayerChecker().formatRequirementsToList(holders,
-								plugin.getPlayerChecker().getMetRequirementsHolders(holders, (Player) sender))
-						: plugin.getPlayerChecker().formatRequirementsToList(holders, new ArrayList<Integer>()));
+                // Set messages depending on console or player
+                List<String> messages = (isPlayer
+                        ? plugin.getPlayerChecker().formatRequirementsToList(holders,
+                                plugin.getPlayerChecker().getMetRequirementsHolders(holders, (Player) sender))
+                        : plugin.getPlayerChecker().formatRequirementsToList(holders, new ArrayList<Integer>()));
 
-				sender.sendMessage(ChatColor.GREEN + "Requirements of path '" + ChatColor.GRAY
-						+ targetPath.getDisplayName() + ChatColor.GREEN + "':");
+                sender.sendMessage(ChatColor.GREEN + "Requirements of path '" + ChatColor.GRAY
+                        + targetPath.getDisplayName() + ChatColor.GREEN + "':");
 
-				for (final String message : messages) {
-					AutorankTools.sendColoredMessage(sender, message);
-				}
+                for (final String message : messages) {
+                    AutorankTools.sendColoredMessage(sender, message);
+                }
 
-				return true;
-			}
+                return true;
+            }
 
-		}
-		return true;
+        }
+        return true;
 
-	}
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * me.armar.plugins.autorank.commands.manager.AutorankCommand#onTabComplete(
-	 * org.bukkit.command.CommandSender, org.bukkit.command.Command,
-	 * java.lang.String, java.lang.String[])
-	 */
-	@Override
-	public List<String> onTabComplete(final CommandSender sender, final Command cmd, final String commandLabel,
-			final String[] args) {
-		// TODO Auto-generated method stub
-		final List<String> possibilities = new ArrayList<String>();
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * me.armar.plugins.autorank.commands.manager.AutorankCommand#onTabComplete(
+     * org.bukkit.command.CommandSender, org.bukkit.command.Command,
+     * java.lang.String, java.lang.String[])
+     */
+    @Override
+    public List<String> onTabComplete(final CommandSender sender, final Command cmd, final String commandLabel,
+            final String[] args) {
+        // TODO Auto-generated method stub
+        final List<String> possibilities = new ArrayList<String>();
 
-		// List shows a list of changegroups to view
-		possibilities.add("list");
+        // List shows a list of changegroups to view
+        possibilities.add("list");
 
-		for (final Path path : plugin.getPathManager().getPaths()) {
-			possibilities.add(path.getDisplayName());
-		}
+        for (final Path path : plugin.getPathManager().getPaths()) {
+            possibilities.add(path.getDisplayName());
+        }
 
-		return possibilities;
-	}
+        return possibilities;
+    }
 
 }

@@ -7,52 +7,52 @@ import me.armar.plugins.autorank.util.AutorankTools;
 
 public class GamemodeRequirement extends Requirement {
 
-	int gameMode = -1;
+    int gameMode = -1;
 
-	@Override
-	public String getDescription() {
+    @Override
+    public String getDescription() {
 
-		String lang = Lang.GAMEMODE_REQUIREMENT.getConfigValue(gameMode + "");
+        String lang = Lang.GAMEMODE_REQUIREMENT.getConfigValue(gameMode + "");
 
-		// Check if this requirement is world-specific
-		if (this.isWorldSpecific()) {
-			lang = lang.concat(" (in world '" + this.getWorld() + "')");
-		}
+        // Check if this requirement is world-specific
+        if (this.isWorldSpecific()) {
+            lang = lang.concat(" (in world '" + this.getWorld() + "')");
+        }
 
-		return lang;
-	}
+        return lang;
+    }
 
-	@Override
-	public String getProgress(final Player player) {
+    @Override
+    public String getProgress(final Player player) {
 
-		@SuppressWarnings("deprecation")
-		final int gamemode = player.getGameMode().getValue();
+        @SuppressWarnings("deprecation")
+        final int gamemode = player.getGameMode().getValue();
 
-		return gamemode + "/" + gameMode;
-	}
+        return gamemode + "/" + gameMode;
+    }
 
-	@Override
-	public boolean meetsRequirement(final Player player) {
+    @Override
+    public boolean meetsRequirement(final Player player) {
 
-		// Check if this requirement is world-specific
-		if (this.isWorldSpecific()) {
-			// Is player in the same world as specified
-			if (!this.getWorld().equals(player.getWorld().getName()))
-				return false;
-		}
+        // Check if this requirement is world-specific
+        if (this.isWorldSpecific()) {
+            // Is player in the same world as specified
+            if (!this.getWorld().equals(player.getWorld().getName()))
+                return false;
+        }
 
-		@SuppressWarnings("deprecation")
-		final int gamemode = player.getGameMode().getValue();
+        @SuppressWarnings("deprecation")
+        final int gamemode = player.getGameMode().getValue();
 
-		return gamemode == gameMode;
-	}
+        return gamemode == gameMode;
+    }
 
-	@Override
-	public boolean setOptions(final String[] options) {
+    @Override
+    public boolean setOptions(final String[] options) {
 
-		if (options.length > 0)
-			gameMode = AutorankTools.stringtoInt(options[0]);
+        if (options.length > 0)
+            gameMode = AutorankTools.stringtoInt(options[0]);
 
-		return gameMode != -1;
-	}
+        return gameMode != -1;
+    }
 }

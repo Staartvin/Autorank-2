@@ -8,62 +8,62 @@ import me.staartvin.statz.hooks.handlers.JobsHandler;
 
 public class JobsExperienceRequirement extends Requirement {
 
-	int experience = -1;
-	String jobName;
-	private JobsHandler jobsHandler;
+    int experience = -1;
+    String jobName;
+    private JobsHandler jobsHandler;
 
-	@Override
-	public String getDescription() {
+    @Override
+    public String getDescription() {
 
-		String lang = Lang.JOBS_EXPERIENCE_REQUIREMENT.getConfigValue(experience, jobName);
+        String lang = Lang.JOBS_EXPERIENCE_REQUIREMENT.getConfigValue(experience, jobName);
 
-		// Check if this requirement is world-specific
-		if (this.isWorldSpecific()) {
-			lang = lang.concat(" (in world '" + this.getWorld() + "')");
-		}
+        // Check if this requirement is world-specific
+        if (this.isWorldSpecific()) {
+            lang = lang.concat(" (in world '" + this.getWorld() + "')");
+        }
 
-		return lang;
-	}
+        return lang;
+    }
 
-	@Override
-	public String getProgress(final Player player) {
+    @Override
+    public String getProgress(final Player player) {
 
-		double points = -1;
+        double points = -1;
 
-		if (jobsHandler == null || !jobsHandler.isAvailable()) {
-			points = -1;
-		} else {
-			points = jobsHandler.getCurrentXP(player, jobName);
-		}
+        if (jobsHandler == null || !jobsHandler.isAvailable()) {
+            points = -1;
+        } else {
+            points = jobsHandler.getCurrentXP(player, jobName);
+        }
 
-		return points + "/" + experience;
-	}
+        return points + "/" + experience;
+    }
 
-	@Override
-	public boolean meetsRequirement(final Player player) {
+    @Override
+    public boolean meetsRequirement(final Player player) {
 
-		double points = -1;
+        double points = -1;
 
-		if (jobsHandler == null || !jobsHandler.isAvailable()) {
-			points = -1;
-		} else {
-			points = jobsHandler.getCurrentXP(player, jobName);
-		}
+        if (jobsHandler == null || !jobsHandler.isAvailable()) {
+            points = -1;
+        } else {
+            points = jobsHandler.getCurrentXP(player, jobName);
+        }
 
-		return points >= experience;
-	}
+        return points >= experience;
+    }
 
-	@Override
-	public boolean setOptions(final String[] options) {
+    @Override
+    public boolean setOptions(final String[] options) {
 
-		jobsHandler = (JobsHandler) this.getAutorank().getDependencyManager().getDependencyHandler(Dependency.JOBS);
+        jobsHandler = (JobsHandler) this.getAutorank().getDependencyManager().getDependencyHandler(Dependency.JOBS);
 
-		experience = Integer.parseInt(options[0]);
+        experience = Integer.parseInt(options[0]);
 
-		if (options.length > 1) {
-			jobName = options[1];
-		}
+        if (options.length > 1) {
+            jobName = options[1];
+        }
 
-		return experience != -1 && jobName != null && jobsHandler != null;
-	}
+        return experience != -1 && jobName != null && jobsHandler != null;
+    }
 }

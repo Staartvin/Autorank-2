@@ -7,11 +7,9 @@ import java.util.UUID;
 import java.util.concurrent.Callable;
 
 /**
- * This will get all database times.
+ * This will get all database times. <br>
  * <br>
- * <br>
- * We have to wait for the thread to finish before we can get the results.
- * <br>
+ * We have to wait for the thread to finish before we can get the results. <br>
  * Every database lookup will have to have its own thread.
  * 
  * @author Staartvin
@@ -19,40 +17,42 @@ import java.util.concurrent.Callable;
  */
 public class GrabAllTimesTask implements Callable<HashMap<UUID, Integer>> {
 
-	private final SQLDataStorage mysql;
-	private final String table;
-	private HashMap<UUID, Integer> times = new HashMap<>();
+    private final SQLDataStorage mysql;
+    private final String table;
+    private HashMap<UUID, Integer> times = new HashMap<>();
 
-	public GrabAllTimesTask(final SQLDataStorage mysql, final String table) {
-		this.mysql = mysql;
-		this.table = table;
-	}
+    public GrabAllTimesTask(final SQLDataStorage mysql, final String table) {
+        this.mysql = mysql;
+        this.table = table;
+    }
 
-	/* (non-Javadoc)
-	 * @see java.util.concurrent.Callable#call()
-	 */
-	@Override
-	public HashMap<UUID, Integer> call() throws Exception {
-		if (mysql == null)
-			return times;
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.util.concurrent.Callable#call()
+     */
+    @Override
+    public HashMap<UUID, Integer> call() throws Exception {
+        if (mysql == null)
+            return times;
 
-		final String statement = "SELECT * FROM " + table;
-		final ResultSet rs = mysql.executeQuery(statement);
+        final String statement = "SELECT * FROM " + table;
+        final ResultSet rs = mysql.executeQuery(statement);
 
-		if (rs == null)
-			return times;
+        if (rs == null)
+            return times;
 
-		try {
-			while (rs.next()) {
-				times.put(UUID.fromString(rs.getString(1)), rs.getInt(2));
-			}
-		} catch (final SQLException e) {
-			System.out.println("SQLException: " + e.getMessage());
-			System.out.println("SQLState: " + e.getSQLState());
-			System.out.println("VendorError: " + e.getErrorCode());
-		}
+        try {
+            while (rs.next()) {
+                times.put(UUID.fromString(rs.getString(1)), rs.getInt(2));
+            }
+        } catch (final SQLException e) {
+            System.out.println("SQLException: " + e.getMessage());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("VendorError: " + e.getErrorCode());
+        }
 
-		return times;
-	}
+        return times;
+    }
 
 }

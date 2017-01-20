@@ -10,50 +10,50 @@ import me.staartvin.statz.hooks.handlers.ASkyBlockHandler;
 
 public class ASkyBlockLevelRequirement extends Requirement {
 
-	private ASkyBlockHandler handler;
-	private int islandLevel = -1;
+    private ASkyBlockHandler handler;
+    private int islandLevel = -1;
 
-	@Override
-	public String getDescription() {
+    @Override
+    public String getDescription() {
 
-		String lang = Lang.ASKYBLOCK_LEVEL_REQUIREMENT.getConfigValue(islandLevel + "");
+        String lang = Lang.ASKYBLOCK_LEVEL_REQUIREMENT.getConfigValue(islandLevel + "");
 
-		// Check if this requirement is world-specific
-		if (this.isWorldSpecific()) {
-			lang = lang.concat(" (in world '" + this.getWorld() + "')");
-		}
+        // Check if this requirement is world-specific
+        if (this.isWorldSpecific()) {
+            lang = lang.concat(" (in world '" + this.getWorld() + "')");
+        }
 
-		return lang;
-	}
+        return lang;
+    }
 
-	@Override
-	public String getProgress(final Player player) {
+    @Override
+    public String getProgress(final Player player) {
 
-		final UUID uuid = this.getAutorank().getUUIDStorage().getStoredUUID(player.getName());
+        final UUID uuid = this.getAutorank().getUUIDStorage().getStoredUUID(player.getName());
 
-		final int islandLevel = handler.getIslandLevel(uuid);
+        final int islandLevel = handler.getIslandLevel(uuid);
 
-		return islandLevel + "/" + this.islandLevel;
-	}
+        return islandLevel + "/" + this.islandLevel;
+    }
 
-	@Override
-	public boolean meetsRequirement(final Player player) {
+    @Override
+    public boolean meetsRequirement(final Player player) {
 
-		final UUID uuid = this.getAutorank().getUUIDStorage().getStoredUUID(player.getName());
+        final UUID uuid = this.getAutorank().getUUIDStorage().getStoredUUID(player.getName());
 
-		final int islandLevel = handler.getIslandLevel(uuid);
+        final int islandLevel = handler.getIslandLevel(uuid);
 
-		return islandLevel >= this.islandLevel;
-	}
+        return islandLevel >= this.islandLevel;
+    }
 
-	@Override
-	public boolean setOptions(final String[] options) {
+    @Override
+    public boolean setOptions(final String[] options) {
 
-		handler = (ASkyBlockHandler) this.getAutorank().getDependencyManager()
-				.getDependencyHandler(Dependency.ASKYBLOCK);
+        handler = (ASkyBlockHandler) this.getAutorank().getDependencyManager()
+                .getDependencyHandler(Dependency.ASKYBLOCK);
 
-		islandLevel = Integer.parseInt(options[0]);
+        islandLevel = Integer.parseInt(options[0]);
 
-		return islandLevel != -1 && handler != null;
-	}
+        return islandLevel != -1 && handler != null;
+    }
 }

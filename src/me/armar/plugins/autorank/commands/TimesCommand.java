@@ -19,90 +19,90 @@ import me.armar.plugins.autorank.util.AutorankTools.Time;
  */
 public class TimesCommand extends AutorankCommand {
 
-	private final Autorank plugin;
+    private final Autorank plugin;
 
-	public TimesCommand(final Autorank instance) {
-		this.setUsage("/ar times <player>");
-		this.setDesc("Show the amount of time you played.");
-		this.setPermission("autorank.times");
+    public TimesCommand(final Autorank instance) {
+        this.setUsage("/ar times <player>");
+        this.setDesc("Show the amount of time you played.");
+        this.setPermission("autorank.times");
 
-		plugin = instance;
-	}
+        plugin = instance;
+    }
 
-	@Override
-	public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
+    @Override
+    public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
-		// No player specified
-		if (args.length == 1) {
+        // No player specified
+        if (args.length == 1) {
 
-		}
+        }
 
-		String targetName = "";
+        String targetName = "";
 
-		// A player specified a target
-		if (args.length > 1) {
+        // A player specified a target
+        if (args.length > 1) {
 
-			if (!plugin.getCommandsManager().hasPermission("autorank.times.others", sender)) {
-				return true;
-			}
+            if (!plugin.getCommandsManager().hasPermission("autorank.times.others", sender)) {
+                return true;
+            }
 
-			targetName = args[1];
+            targetName = args[1];
 
-		} else if (sender instanceof Player) {
-			if (!plugin.getCommandsManager().hasPermission("autorank.times", sender)) {
-				return true;
-			}
+        } else if (sender instanceof Player) {
+            if (!plugin.getCommandsManager().hasPermission("autorank.times", sender)) {
+                return true;
+            }
 
-			targetName = sender.getName();
+            targetName = sender.getName();
 
-		} else {
-			AutorankTools.sendColoredMessage(sender, Lang.CANNOT_CHECK_CONSOLE.getConfigValue());
-			return true;
-		}
+        } else {
+            AutorankTools.sendColoredMessage(sender, Lang.CANNOT_CHECK_CONSOLE.getConfigValue());
+            return true;
+        }
 
-		final UUID uuid = plugin.getUUIDStorage().getStoredUUID(targetName);
+        final UUID uuid = plugin.getUUIDStorage().getStoredUUID(targetName);
 
-		if (uuid == null) {
-			sender.sendMessage(Lang.UNKNOWN_PLAYER.getConfigValue(targetName));
-			return true;
-		}
+        if (uuid == null) {
+            sender.sendMessage(Lang.UNKNOWN_PLAYER.getConfigValue(targetName));
+            return true;
+        }
 
-		// Now show data for target.
-		targetName = plugin.getUUIDStorage().getRealName(uuid);
+        // Now show data for target.
+        targetName = plugin.getUUIDStorage().getRealName(uuid);
 
-		if (targetName == null) {
-			// This player has no real name stored -> use cached name
-			targetName = plugin.getUUIDStorage().getCachedPlayerName(uuid);
-		}
+        if (targetName == null) {
+            // This player has no real name stored -> use cached name
+            targetName = plugin.getUUIDStorage().getCachedPlayerName(uuid);
+        }
 
-		final int daily = plugin.getFlatFileManager().getLocalTime(TimeType.DAILY_TIME, uuid);
-		final int weekly = plugin.getFlatFileManager().getLocalTime(TimeType.WEEKLY_TIME, uuid);
-		final int monthly = plugin.getFlatFileManager().getLocalTime(TimeType.MONTHLY_TIME, uuid);
-		final int total = plugin.getFlatFileManager().getLocalTime(TimeType.TOTAL_TIME, uuid);
+        final int daily = plugin.getFlatFileManager().getLocalTime(TimeType.DAILY_TIME, uuid);
+        final int weekly = plugin.getFlatFileManager().getLocalTime(TimeType.WEEKLY_TIME, uuid);
+        final int monthly = plugin.getFlatFileManager().getLocalTime(TimeType.MONTHLY_TIME, uuid);
+        final int total = plugin.getFlatFileManager().getLocalTime(TimeType.TOTAL_TIME, uuid);
 
-		sender.sendMessage(Lang.AR_TIMES_HEADER.getConfigValue(targetName));
-		sender.sendMessage(Lang.AR_TIMES_PLAYER_PLAYED.getConfigValue(targetName));
-		sender.sendMessage(Lang.AR_TIMES_TODAY.getConfigValue(AutorankTools.timeToString(daily, Time.MINUTES)));
-		sender.sendMessage(Lang.AR_TIMES_THIS_WEEK.getConfigValue(AutorankTools.timeToString(weekly, Time.MINUTES)));
-		sender.sendMessage(Lang.AR_TIMES_THIS_MONTH.getConfigValue(AutorankTools.timeToString(monthly, Time.MINUTES)));
-		sender.sendMessage(Lang.AR_TIMES_TOTAL.getConfigValue(AutorankTools.timeToString(total, Time.MINUTES)));
+        sender.sendMessage(Lang.AR_TIMES_HEADER.getConfigValue(targetName));
+        sender.sendMessage(Lang.AR_TIMES_PLAYER_PLAYED.getConfigValue(targetName));
+        sender.sendMessage(Lang.AR_TIMES_TODAY.getConfigValue(AutorankTools.timeToString(daily, Time.MINUTES)));
+        sender.sendMessage(Lang.AR_TIMES_THIS_WEEK.getConfigValue(AutorankTools.timeToString(weekly, Time.MINUTES)));
+        sender.sendMessage(Lang.AR_TIMES_THIS_MONTH.getConfigValue(AutorankTools.timeToString(monthly, Time.MINUTES)));
+        sender.sendMessage(Lang.AR_TIMES_TOTAL.getConfigValue(AutorankTools.timeToString(total, Time.MINUTES)));
 
-		return true;
-	}
+        return true;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * me.armar.plugins.autorank.commands.manager.AutorankCommand#onTabComplete(
-	 * org.bukkit.command.CommandSender, org.bukkit.command.Command,
-	 * java.lang.String, java.lang.String[])
-	 */
-	@Override
-	public List<String> onTabComplete(final CommandSender sender, final Command cmd, final String commandLabel,
-			final String[] args) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * me.armar.plugins.autorank.commands.manager.AutorankCommand#onTabComplete(
+     * org.bukkit.command.CommandSender, org.bukkit.command.Command,
+     * java.lang.String, java.lang.String[])
+     */
+    @Override
+    public List<String> onTabComplete(final CommandSender sender, final Command cmd, final String commandLabel,
+            final String[] args) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
 }

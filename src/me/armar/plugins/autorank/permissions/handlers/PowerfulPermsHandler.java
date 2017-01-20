@@ -15,123 +15,136 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.permissions.PermissionsHandler;
 
 /**
- * @author Staartvin
- *         This is a special permission handler that handles all work from
- *         PowerfulPerms
+ * @author Staartvin This is a special permission handler that handles all work
+ *         from PowerfulPerms
  */
 public class PowerfulPermsHandler implements PermissionsHandler {
 
-	private final Autorank plugin;
-	private PowerfulPermsPlugin powerfulPerms;
+    private final Autorank plugin;
+    private PowerfulPermsPlugin powerfulPerms;
 
-	public PowerfulPermsHandler(final Autorank plugin) {
-		this.plugin = plugin;
-		setup();
-	}
+    public PowerfulPermsHandler(final Autorank plugin) {
+        this.plugin = plugin;
+        setup();
+    }
 
-	/**
-	 * Add a player to group
-	 * 
-	 * @param player Player to add
-	 * @param world On a specific world
-	 * @param group Group to add the player to
-	 * @return true if done, false if failed
-	 */
-	public boolean addGroup(final Player player, final String world, final String group) {
-		// No known way to set via API, hence we do it the ugly route (via commands).
-		plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(),
-				"pp user " + player.getName() + " setrank " + group);
-		return true;
-		// There is no way to check if the command was successful.
-	}
+    /**
+     * Add a player to group
+     * 
+     * @param player
+     *            Player to add
+     * @param world
+     *            On a specific world
+     * @param group
+     *            Group to add the player to
+     * @return true if done, false if failed
+     */
+    public boolean addGroup(final Player player, final String world, final String group) {
+        // No known way to set via API, hence we do it the ugly route (via
+        // commands).
+        plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(),
+                "pp user " + player.getName() + " setrank " + group);
+        return true;
+        // There is no way to check if the command was successful.
+    }
 
-	@Override
-	public boolean demotePlayer(final Player player, final String world, final String groupFrom, final String groupTo) {
-		return (addGroup(player, world, groupTo)/* && removeGroup(player, world,
-												groupFrom)*/);
-	}
+    @Override
+    public boolean demotePlayer(final Player player, final String world, final String groupFrom, final String groupTo) {
+        return (addGroup(player, world,
+                groupTo)/*
+                         * && removeGroup(player, world, groupFrom)
+                         */);
+    }
 
-	/**
-	 * Get all known groups
-	 * 
-	 * @return an array of strings containing all setup groups of the
-	 *         permissions plugin.
-	 */
-	@Override
-	public String[] getGroups() {
-		final PermissionManager permManager = powerfulPerms.getPermissionManager();
-		final Map<Integer, com.github.cheesesoftware.PowerfulPermsAPI.Group> groups = permManager.getGroups();
-		final String[] newGroups = new String[groups.size()];
+    /**
+     * Get all known groups
+     * 
+     * @return an array of strings containing all setup groups of the
+     *         permissions plugin.
+     */
+    @Override
+    public String[] getGroups() {
+        final PermissionManager permManager = powerfulPerms.getPermissionManager();
+        final Map<Integer, com.github.cheesesoftware.PowerfulPermsAPI.Group> groups = permManager.getGroups();
+        final String[] newGroups = new String[groups.size()];
 
-		int count = 0;
+        int count = 0;
 
-		for (final Entry<Integer, com.github.cheesesoftware.PowerfulPermsAPI.Group> entry : groups.entrySet()) {
-			newGroups[count] = entry.getValue().getName();
-			count++;
-		}
+        for (final Entry<Integer, com.github.cheesesoftware.PowerfulPermsAPI.Group> entry : groups.entrySet()) {
+            newGroups[count] = entry.getValue().getName();
+            count++;
+        }
 
-		return newGroups;
-	}
+        return newGroups;
+    }
 
-	/* (non-Javadoc)
-	 * @see me.armar.plugins.autorank.permissions.PermissionsHandler#getName()
-	 */
-	@Override
-	public String getName() {
-		// TODO Auto-generated method stub
-		return "PowerfulPerms";
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see me.armar.plugins.autorank.permissions.PermissionsHandler#getName()
+     */
+    @Override
+    public String getName() {
+        // TODO Auto-generated method stub
+        return "PowerfulPerms";
+    }
 
-	@Override
-	public String[] getPlayerGroups(final Player player) {
-		final PermissionManager permManager = powerfulPerms.getPermissionManager();
-		final List<com.github.cheesesoftware.PowerfulPermsAPI.Group> groups = permManager
-				.getPermissionPlayer(player.getUniqueId()).getGroups();
-		final String[] newGroups = new String[groups.size()];
+    @Override
+    public String[] getPlayerGroups(final Player player) {
+        final PermissionManager permManager = powerfulPerms.getPermissionManager();
+        final List<com.github.cheesesoftware.PowerfulPermsAPI.Group> groups = permManager
+                .getPermissionPlayer(player.getUniqueId()).getGroups();
+        final String[] newGroups = new String[groups.size()];
 
-		for (int i = 0; i < groups.size(); i++) {
-			newGroups[i] = groups.get(i).getName();
-		}
+        for (int i = 0; i < groups.size(); i++) {
+            newGroups[i] = groups.get(i).getName();
+        }
 
-		return newGroups;
-	}
+        return newGroups;
+    }
 
-	@Override
-	public String[] getWorldGroups(final Player player, final String world) {
-		return this.getPlayerGroups(player); // No known world conversion.
-	}
+    @Override
+    public String[] getWorldGroups(final Player player, final String world) {
+        return this.getPlayerGroups(player); // No known world conversion.
+    }
 
-	/**
-	 * Remove a player from a group
-	 * 
-	 * @param player Player to remove
-	 * @param world On a specific world
-	 * @param group Group to remove the player from
-	 * @return true if done, false if failed
-	 */
-	public boolean removeGroup(final Player player, final String world, final String group) {
-		// No known way to set via API, hence we do it the ugly route (via commands).`
-		// Does not seem to work properly.
-		plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(),
-				"pp user " + player.getName() + " removegroup " + group);
-		return true;
-		// There is no way to check if the command was successful.
-	}
+    /**
+     * Remove a player from a group
+     * 
+     * @param player
+     *            Player to remove
+     * @param world
+     *            On a specific world
+     * @param group
+     *            Group to remove the player from
+     * @return true if done, false if failed
+     */
+    public boolean removeGroup(final Player player, final String world, final String group) {
+        // No known way to set via API, hence we do it the ugly route (via
+        // commands).`
+        // Does not seem to work properly.
+        plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(),
+                "pp user " + player.getName() + " removegroup " + group);
+        return true;
+        // There is no way to check if the command was successful.
+    }
 
-	@Override
-	public boolean replaceGroup(final Player player, final String world, final String oldGroup, final String newGroup) {
-		return (addGroup(player, world, newGroup) /*&& removeGroup(player, world,
-													oldGroup)*/);
-	}
+    @Override
+    public boolean replaceGroup(final Player player, final String world, final String oldGroup, final String newGroup) {
+        return (addGroup(player, world,
+                newGroup) /*
+                           * && removeGroup(player, world, oldGroup)
+                           */);
+    }
 
-	private boolean setup() {
-		final PluginManager pluginManager = plugin.getServer().getPluginManager();
-		final Plugin permPlugin = pluginManager.getPlugin("PowerfulPerms");
+    private boolean setup() {
+        final PluginManager pluginManager = plugin.getServer().getPluginManager();
+        final Plugin permPlugin = pluginManager.getPlugin("PowerfulPerms");
 
-		if (permPlugin != null && permPlugin.isEnabled()) {
-			powerfulPerms = (PowerfulPermsPlugin) permPlugin;
-		}
+        if (permPlugin != null && permPlugin.isEnabled()) {
+            powerfulPerms = (PowerfulPermsPlugin) permPlugin;
+        }
 
-		return powerfulPerms != null;
-	}
+        return powerfulPerms != null;
+    }
 }

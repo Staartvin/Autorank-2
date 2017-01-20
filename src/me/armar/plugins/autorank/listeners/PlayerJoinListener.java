@@ -18,91 +18,93 @@ import me.armar.plugins.autorank.Autorank;
  */
 public class PlayerJoinListener implements Listener {
 
-	private final Autorank plugin;
+    private final Autorank plugin;
 
-	public PlayerJoinListener(final Autorank instance) {
-		plugin = instance;
-	}
+    public PlayerJoinListener(final Autorank instance) {
+        plugin = instance;
+    }
 
-	@EventHandler(priority = EventPriority.HIGH)
-	public void onPlayerJoin(final PlayerJoinEvent event) {
-		final Player player = event.getPlayer();
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onPlayerJoin(final PlayerJoinEvent event) {
+        final Player player = event.getPlayer();
 
-		// Add cached player
-		//UUIDManager.addCachedPlayer(player);
+        // Add cached player
+        // UUIDManager.addCachedPlayer(player);
 
-		// Refresh uuid of the player if it is outdated
-		if (plugin.getUUIDStorage().isOutdated(player.getName())) {
-			plugin.getUUIDStorage().storeUUID(player.getName(), player.getUniqueId(), player.getName());
-		}
+        // Refresh uuid of the player if it is outdated
+        if (plugin.getUUIDStorage().isOutdated(player.getName())) {
+            plugin.getUUIDStorage().storeUUID(player.getName(), player.getUniqueId(), player.getName());
+        }
 
-		// Cannot check player at this moment. -> try at next automatic task
-		if (plugin.getPlayerChecker() == null) {
-			plugin.getLogger()
-					.severe("Autorank lost its player checker, this is bad! Please report this to the developers!");
-			return;
-		}
+        // Cannot check player at this moment. -> try at next automatic task
+        if (plugin.getPlayerChecker() == null) {
+            plugin.getLogger()
+                    .severe("Autorank lost its player checker, this is bad! Please report this to the developers!");
+            return;
+        }
 
-		//plugin.debugMessage("PlayerChecker: " + plugin.getPlayerChecker());
+        // plugin.debugMessage("PlayerChecker: " + plugin.getPlayerChecker());
 
-		// Do leaderboard exemption check
-		plugin.getPlayerChecker().doLeaderboardExemptCheck(player);
+        // Do leaderboard exemption check
+        plugin.getPlayerChecker().doLeaderboardExemptCheck(player);
 
-		plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
-			public void run() {
-				// Perform check for player on login
-				plugin.getPlayerChecker().checkPlayer(player);
-			}
-		});
+        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+            public void run() {
+                // Perform check for player on login
+                plugin.getPlayerChecker().checkPlayer(player);
+            }
+        });
 
-		// Player isn't allowed to see messages.
-		if (player.hasPermission("autorank.noticeonupdate")) {
+        // Player isn't allowed to see messages.
+        if (player.hasPermission("autorank.noticeonupdate")) {
 
-			// Run check async so server doesn't lag.
-			plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+            // Run check async so server doesn't lag.
+            plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
 
-				@Override
-				public void run() {
-					// TODO Auto-generated method stub
-					if (plugin.getUpdateHandler().isUpdateAvailable()) {
+                @Override
+                public void run() {
+                    // TODO Auto-generated method stub
+                    if (plugin.getUpdateHandler().isUpdateAvailable()) {
 
-						// Schedule it later so it will appear at the bottom
-						plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
+                        // Schedule it later so it will appear at the bottom
+                        plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
 
-							@Override
-							public void run() {
-								// TODO Auto-generated method stub
-								player.sendMessage(
-										ChatColor.GREEN + plugin.getUpdateHandler().getUpdater().getLatestName()
-												+ ChatColor.GOLD + " is now available for download!");
-								player.sendMessage(ChatColor.GREEN + "Available at: " + ChatColor.GOLD
-										+ plugin.getUpdateHandler().getUpdater().getLatestFileLink());
-								//player.sendMessage(ChatColor.GOLD + "Type " + ChatColor.GREEN + "'/ar update'" + ChatColor.GOLD + " to update Autorank.");
-							}
+                            @Override
+                            public void run() {
+                                // TODO Auto-generated method stub
+                                player.sendMessage(
+                                        ChatColor.GREEN + plugin.getUpdateHandler().getUpdater().getLatestName()
+                                                + ChatColor.GOLD + " is now available for download!");
+                                player.sendMessage(ChatColor.GREEN + "Available at: " + ChatColor.GOLD
+                                        + plugin.getUpdateHandler().getUpdater().getLatestFileLink());
+                                // player.sendMessage(ChatColor.GOLD + "Type " +
+                                // ChatColor.GREEN + "'/ar update'" +
+                                // ChatColor.GOLD + " to update Autorank.");
+                            }
 
-						}, 10L);
-					}
-				}
-			});
+                        }, 10L);
+                    }
+                }
+            });
 
-		}
+        }
 
-		// If player has notice on warning permission
-		if (player.hasPermission("autorank.warning.notice")) {
+        // If player has notice on warning permission
+        if (player.hasPermission("autorank.warning.notice")) {
 
-			if (plugin.getWarningManager().getHighestWarning() != null) {
+            if (plugin.getWarningManager().getHighestWarning() != null) {
 
-				// Schedule it later so it will appear at the bottom
-				plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
+                // Schedule it later so it will appear at the bottom
+                plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
 
-					@Override
-					public void run() {
-						player.sendMessage(ChatColor.BLUE + "<AUTORANK> " + ChatColor.RED + "Warning: "
-								+ ChatColor.GREEN + plugin.getWarningManager().getHighestWarning());
-					}
+                    @Override
+                    public void run() {
+                        player.sendMessage(ChatColor.BLUE + "<AUTORANK> " + ChatColor.RED + "Warning: "
+                                + ChatColor.GREEN + plugin.getWarningManager().getHighestWarning());
+                    }
 
-				}, 10L);
-			}
-		}
-	}
+                }, 10L);
+            }
+        }
+    }
 }

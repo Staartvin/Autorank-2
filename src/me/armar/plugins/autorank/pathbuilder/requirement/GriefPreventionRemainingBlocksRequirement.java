@@ -8,42 +8,42 @@ import me.staartvin.statz.hooks.handlers.GriefPreventionHandler;
 
 public class GriefPreventionRemainingBlocksRequirement extends Requirement {
 
-	private GriefPreventionHandler handler = null;
-	int remainingBlocks = -1;
+    private GriefPreventionHandler handler = null;
+    int remainingBlocks = -1;
 
-	@Override
-	public String getDescription() {
-		return Lang.GRIEF_PREVENTION_REMAINING_BLOCKS_REQUIREMENT.getConfigValue(remainingBlocks);
-	}
+    @Override
+    public String getDescription() {
+        return Lang.GRIEF_PREVENTION_REMAINING_BLOCKS_REQUIREMENT.getConfigValue(remainingBlocks);
+    }
 
-	@Override
-	public String getProgress(final Player player) {
-		final int level = handler.getNumberOfRemainingBlocks(player.getUniqueId());
+    @Override
+    public String getProgress(final Player player) {
+        final int level = handler.getNumberOfRemainingBlocks(player.getUniqueId());
 
-		return level + "/" + remainingBlocks;
-	}
+        return level + "/" + remainingBlocks;
+    }
 
-	@Override
-	public boolean meetsRequirement(final Player player) {
+    @Override
+    public boolean meetsRequirement(final Player player) {
 
-		if (!handler.isAvailable())
-			return false;
+        if (!handler.isAvailable())
+            return false;
 
-		final int level = handler.getNumberOfRemainingBlocks(player.getUniqueId());
+        final int level = handler.getNumberOfRemainingBlocks(player.getUniqueId());
 
-		return level >= remainingBlocks;
-	}
+        return level >= remainingBlocks;
+    }
 
-	@Override
-	public boolean setOptions(final String[] options) {
+    @Override
+    public boolean setOptions(final String[] options) {
 
-		handler = (GriefPreventionHandler) this.getDependencyManager()
-				.getDependencyHandler(Dependency.GRIEF_PREVENTION);
+        handler = (GriefPreventionHandler) this.getDependencyManager()
+                .getDependencyHandler(Dependency.GRIEF_PREVENTION);
 
-		if (options.length > 0) {
-			remainingBlocks = Integer.parseInt(options[0]);
-		}
+        if (options.length > 0) {
+            remainingBlocks = Integer.parseInt(options[0]);
+        }
 
-		return remainingBlocks != -1 && handler != null;
-	}
+        return remainingBlocks != -1 && handler != null;
+    }
 }

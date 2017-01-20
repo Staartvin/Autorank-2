@@ -6,49 +6,49 @@ import me.armar.plugins.autorank.language.Lang;
 
 public class PermissionRequirement extends Requirement {
 
-	String permission = null;
+    String permission = null;
 
-	@Override
-	public String getDescription() {
+    @Override
+    public String getDescription() {
 
-		String lang = Lang.PERMISSION_REQUIREMENT.getConfigValue(permission);
+        String lang = Lang.PERMISSION_REQUIREMENT.getConfigValue(permission);
 
-		// Check if this requirement is world-specific
-		if (this.isWorldSpecific()) {
-			lang = lang.concat(" (in world '" + this.getWorld() + "')");
-		}
+        // Check if this requirement is world-specific
+        if (this.isWorldSpecific()) {
+            lang = lang.concat(" (in world '" + this.getWorld() + "')");
+        }
 
-		return lang;
-	}
+        return lang;
+    }
 
-	@Override
-	public String getProgress(final Player player) {
-		final String progress = "unknown";
-		return progress;
-	}
+    @Override
+    public String getProgress(final Player player) {
+        final String progress = "unknown";
+        return progress;
+    }
 
-	@Override
-	public boolean meetsRequirement(final Player player) {
+    @Override
+    public boolean meetsRequirement(final Player player) {
 
-		// Check if this requirement is world-specific
-		if (this.isWorldSpecific()) {
-			// Is player in the same world as specified
-			if (!this.getWorld().equals(player.getWorld().getName()))
-				return false;
-		}
+        // Check if this requirement is world-specific
+        if (this.isWorldSpecific()) {
+            // Is player in the same world as specified
+            if (!this.getWorld().equals(player.getWorld().getName()))
+                return false;
+        }
 
-		return player.hasPermission(permission);
-	}
+        return player.hasPermission(permission);
+    }
 
-	@Override
-	public boolean setOptions(final String[] options) {
+    @Override
+    public boolean setOptions(final String[] options) {
 
-		try {
-			permission = options[0];
-		} catch (final Exception e) {
-			return false;
-		}
+        try {
+            permission = options[0];
+        } catch (final Exception e) {
+            return false;
+        }
 
-		return permission != null;
-	}
+        return permission != null;
+    }
 }

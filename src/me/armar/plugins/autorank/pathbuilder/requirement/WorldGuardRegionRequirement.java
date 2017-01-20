@@ -7,59 +7,58 @@ import me.staartvin.statz.hooks.Dependency;
 import me.staartvin.statz.hooks.handlers.WorldGuardHandler;
 
 /**
- * This requirement checks for WorldGuard region
- * Date created: 13:49:33
- * 15 jan. 2014
+ * This requirement checks for WorldGuard region Date created: 13:49:33 15 jan.
+ * 2014
  * 
  * @author Staartvin
  * 
  */
 public class WorldGuardRegionRequirement extends Requirement {
 
-	private WorldGuardHandler handler;
-	String regionName = null;
+    private WorldGuardHandler handler;
+    String regionName = null;
 
-	@Override
-	public String getDescription() {
+    @Override
+    public String getDescription() {
 
-		String lang = Lang.WORLD_GUARD_REGION_REQUIREMENT.getConfigValue(regionName);
+        String lang = Lang.WORLD_GUARD_REGION_REQUIREMENT.getConfigValue(regionName);
 
-		// Check if this requirement is world-specific
-		if (this.isWorldSpecific()) {
-			lang = lang.concat(" (in world '" + this.getWorld() + "')");
-		}
+        // Check if this requirement is world-specific
+        if (this.isWorldSpecific()) {
+            lang = lang.concat(" (in world '" + this.getWorld() + "')");
+        }
 
-		return lang;
-	}
+        return lang;
+    }
 
-	@Override
-	public String getProgress(final Player player) {
-		final String progress = "Cannot show progress";
-		return progress;
-	}
+    @Override
+    public String getProgress(final Player player) {
+        final String progress = "Cannot show progress";
+        return progress;
+    }
 
-	@Override
-	public boolean meetsRequirement(final Player player) {
+    @Override
+    public boolean meetsRequirement(final Player player) {
 
-		// Check if this requirement is world-specific
-		if (this.isWorldSpecific()) {
-			// Is player in the same world as specified
-			if (!this.getWorld().equals(player.getWorld().getName()))
-				return false;
-		}
+        // Check if this requirement is world-specific
+        if (this.isWorldSpecific()) {
+            // Is player in the same world as specified
+            if (!this.getWorld().equals(player.getWorld().getName()))
+                return false;
+        }
 
-		return handler.isInRegion(player, regionName);
-	}
+        return handler.isInRegion(player, regionName);
+    }
 
-	@Override
-	public boolean setOptions(final String[] options) {
-		handler = (WorldGuardHandler) this.getAutorank().getDependencyManager()
-				.getDependencyHandler(Dependency.WORLDGUARD);
+    @Override
+    public boolean setOptions(final String[] options) {
+        handler = (WorldGuardHandler) this.getAutorank().getDependencyManager()
+                .getDependencyHandler(Dependency.WORLDGUARD);
 
-		if (options.length > 0) {
-			regionName = options[0].trim();
-		}
+        if (options.length > 0) {
+            regionName = options[0].trim();
+        }
 
-		return regionName != null && handler != null;
-	}
+        return regionName != null && handler != null;
+    }
 }

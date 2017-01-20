@@ -15,37 +15,42 @@ import me.armar.plugins.autorank.util.AutorankTools;
  */
 public class ImportCommand extends AutorankCommand {
 
-	private final Autorank plugin;
+    private final Autorank plugin;
 
-	public ImportCommand(final Autorank instance) {
-		this.setUsage("/ar import");
-		this.setDesc("Import old data.");
-		this.setPermission("autorank.import");
+    public ImportCommand(final Autorank instance) {
+        this.setUsage("/ar import");
+        this.setDesc("Import old data.");
+        this.setPermission("autorank.import");
 
-		plugin = instance;
-	}
+        plugin = instance;
+    }
 
-	@Override
-	public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
+    @Override
+    public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
-		if (!plugin.getCommandsManager().hasPermission("autorank.import", sender)) {
-			return true;
-		}
+        if (!plugin.getCommandsManager().hasPermission("autorank.import", sender)) {
+            return true;
+        }
 
-		AutorankTools.sendColoredMessage(sender, Lang.DATA_IMPORTED.getConfigValue());
-		plugin.getFlatFileManager().importData();
+        AutorankTools.sendColoredMessage(sender, Lang.DATA_IMPORTED.getConfigValue());
+        plugin.getFlatFileManager().importData();
 
-		return true;
-	}
+        return true;
+    }
 
-	/* (non-Javadoc)
-	 * @see me.armar.plugins.autorank.commands.manager.AutorankCommand#onTabComplete(org.bukkit.command.CommandSender, org.bukkit.command.Command, java.lang.String, java.lang.String[])
-	 */
-	@Override
-	public List<String> onTabComplete(final CommandSender sender, final Command cmd, final String commandLabel,
-			final String[] args) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * me.armar.plugins.autorank.commands.manager.AutorankCommand#onTabComplete(
+     * org.bukkit.command.CommandSender, org.bukkit.command.Command,
+     * java.lang.String, java.lang.String[])
+     */
+    @Override
+    public List<String> onTabComplete(final CommandSender sender, final Command cmd, final String commandLabel,
+            final String[] args) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
 }

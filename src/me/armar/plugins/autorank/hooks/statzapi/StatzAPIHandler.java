@@ -22,161 +22,169 @@ import me.staartvin.statz.hooks.Dependency;
  */
 public class StatzAPIHandler implements DependencyHandler {
 
-	private final Autorank plugin;
-	private Statz statz;
+    private final Autorank plugin;
+    private Statz statz;
 
-	public StatzAPIHandler(final Autorank instance) {
-		plugin = instance;
-	}
+    public StatzAPIHandler(final Autorank instance) {
+        plugin = instance;
+    }
 
-	/* (non-Javadoc)
-	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#get()
-	 */
-	@Override
-	public Plugin get() {
-		Plugin plugin = this.plugin.getServer().getPluginManager().getPlugin("Statz");
+    /*
+     * (non-Javadoc)
+     * 
+     * @see me.armar.plugins.autorank.hooks.DependencyHandler#get()
+     */
+    @Override
+    public Plugin get() {
+        Plugin plugin = this.plugin.getServer().getPluginManager().getPlugin("Statz");
 
-		try {
-			// WorldGuard may not be loaded
-			if (plugin == null || !(plugin instanceof Statz)) {
-				return null; // Maybe you want throw an exception instead
-			}
+        try {
+            // WorldGuard may not be loaded
+            if (plugin == null || !(plugin instanceof Statz)) {
+                return null; // Maybe you want throw an exception instead
+            }
 
-		} catch (final NoClassDefFoundError exception) {
-			this.plugin.getLogger()
-					.info("Could not find Statz because it's probably disabled! Does Statz properly enable?");
-			return null;
-		}
+        } catch (final NoClassDefFoundError exception) {
+            this.plugin.getLogger()
+                    .info("Could not find Statz because it's probably disabled! Does Statz properly enable?");
+            return null;
+        }
 
-		return plugin;
-	}
+        return plugin;
+    }
 
-	public me.staartvin.statz.hooks.DependencyHandler getDependencyHandler(Dependency dep) {
-		if (!this.isAvailable())
-			return null;
+    public me.staartvin.statz.hooks.DependencyHandler getDependencyHandler(Dependency dep) {
+        if (!this.isAvailable())
+            return null;
 
-		return statz.getStatzAPI().getDependencyHandler(dep);
-	}
+        return statz.getStatzAPI().getDependencyHandler(dep);
+    }
 
-	public double getSpecificData(UUID uuid, StatsPlugin.statTypes statType, RowRequirement... conditions) {
-		if (!this.isAvailable())
-			return -1;
+    public double getSpecificData(UUID uuid, StatsPlugin.statTypes statType, RowRequirement... conditions) {
+        if (!this.isAvailable())
+            return -1;
 
-		Object value;
+        Object value;
 
-		switch (statType) {
-			case VOTES:
-				value = statz.getStatzAPI().getSpecificData(PlayerStat.VOTES, uuid, conditions);
-				break;
-			case DAMAGE_TAKEN:
-				value = statz.getStatzAPI().getSpecificData(PlayerStat.DAMAGE_TAKEN, uuid, conditions);
-				break;
-			case MOBS_KILLED:
-				value = statz.getStatzAPI().getSpecificData(PlayerStat.KILLS_MOBS, uuid, conditions);
-				break;
-			case PLAYERS_KILLED:
-				value = statz.getStatzAPI().getSpecificData(PlayerStat.KILLS_PLAYERS, uuid, conditions);
-				break;
-			case BLOCKS_MOVED:
-				value = statz.getStatzAPI().getSpecificData(PlayerStat.DISTANCE_TRAVELLED, uuid, conditions);
-				break;
-			case BLOCKS_PLACED:
-				value = statz.getStatzAPI().getSpecificData(PlayerStat.BLOCKS_PLACED, uuid, conditions);
-				break;
-			case BLOCKS_BROKEN:
-				value = statz.getStatzAPI().getSpecificData(PlayerStat.BLOCKS_BROKEN, uuid, conditions);
-				break;
-			case TIME_PLAYED:
-				value = statz.getStatzAPI().getSpecificData(PlayerStat.TIME_PLAYED, uuid, conditions);
-				break;
-			case ITEMS_CRAFTED:
-				value = statz.getStatzAPI().getSpecificData(PlayerStat.ITEMS_CRAFTED, uuid, conditions);
-				break;
-			case FISH_CAUGHT:
-				value = statz.getStatzAPI().getSpecificData(PlayerStat.ITEMS_CAUGHT, uuid, conditions);
-				break;
-			case TIMES_SHEARED:
-				value = statz.getStatzAPI().getSpecificData(PlayerStat.TIMES_SHORN, uuid, conditions);
-				break;
-			case TOTAL_BLOCKS_BROKEN:
-				value = statz.getStatzAPI().getSpecificData(PlayerStat.BLOCKS_BROKEN, uuid, conditions);
-				break;
-			case TOTAL_BLOCKS_PLACED:
-				value = statz.getStatzAPI().getSpecificData(PlayerStat.BLOCKS_PLACED, uuid, conditions);
-				break;
-			case FOOD_EATEN:
-				value = statz.getStatzAPI().getSpecificData(PlayerStat.FOOD_EATEN, uuid, conditions);
-				break;
-			default:
-				// Unknown statType
-				value = 0;
-				break;
-		}
+        switch (statType) {
+            case VOTES:
+                value = statz.getStatzAPI().getSpecificData(PlayerStat.VOTES, uuid, conditions);
+                break;
+            case DAMAGE_TAKEN:
+                value = statz.getStatzAPI().getSpecificData(PlayerStat.DAMAGE_TAKEN, uuid, conditions);
+                break;
+            case MOBS_KILLED:
+                value = statz.getStatzAPI().getSpecificData(PlayerStat.KILLS_MOBS, uuid, conditions);
+                break;
+            case PLAYERS_KILLED:
+                value = statz.getStatzAPI().getSpecificData(PlayerStat.KILLS_PLAYERS, uuid, conditions);
+                break;
+            case BLOCKS_MOVED:
+                value = statz.getStatzAPI().getSpecificData(PlayerStat.DISTANCE_TRAVELLED, uuid, conditions);
+                break;
+            case BLOCKS_PLACED:
+                value = statz.getStatzAPI().getSpecificData(PlayerStat.BLOCKS_PLACED, uuid, conditions);
+                break;
+            case BLOCKS_BROKEN:
+                value = statz.getStatzAPI().getSpecificData(PlayerStat.BLOCKS_BROKEN, uuid, conditions);
+                break;
+            case TIME_PLAYED:
+                value = statz.getStatzAPI().getSpecificData(PlayerStat.TIME_PLAYED, uuid, conditions);
+                break;
+            case ITEMS_CRAFTED:
+                value = statz.getStatzAPI().getSpecificData(PlayerStat.ITEMS_CRAFTED, uuid, conditions);
+                break;
+            case FISH_CAUGHT:
+                value = statz.getStatzAPI().getSpecificData(PlayerStat.ITEMS_CAUGHT, uuid, conditions);
+                break;
+            case TIMES_SHEARED:
+                value = statz.getStatzAPI().getSpecificData(PlayerStat.TIMES_SHORN, uuid, conditions);
+                break;
+            case TOTAL_BLOCKS_BROKEN:
+                value = statz.getStatzAPI().getSpecificData(PlayerStat.BLOCKS_BROKEN, uuid, conditions);
+                break;
+            case TOTAL_BLOCKS_PLACED:
+                value = statz.getStatzAPI().getSpecificData(PlayerStat.BLOCKS_PLACED, uuid, conditions);
+                break;
+            case FOOD_EATEN:
+                value = statz.getStatzAPI().getSpecificData(PlayerStat.FOOD_EATEN, uuid, conditions);
+                break;
+            default:
+                // Unknown statType
+                value = 0;
+                break;
+        }
 
-		if (value == null)
-			return 0;
+        if (value == null)
+            return 0;
 
-		return (double) value;
-	}
+        return (double) value;
+    }
 
-	public double getTotalOf(UUID uuid, StatsPlugin.statTypes statType, String worldName) {
-		if (!this.isAvailable())
-			return -1;
+    public double getTotalOf(UUID uuid, StatsPlugin.statTypes statType, String worldName) {
+        if (!this.isAvailable())
+            return -1;
 
-		double value;
+        double value;
 
-		if (worldName == null) {
-			value = getSpecificData(uuid, statType);
-		} else {
-			value = getSpecificData(uuid, statType, new RowRequirement("world", worldName));
-		}
+        if (worldName == null) {
+            value = getSpecificData(uuid, statType);
+        } else {
+            value = getSpecificData(uuid, statType, new RowRequirement("world", worldName));
+        }
 
-		return value;
-	}
+        return value;
+    }
 
-	/* (non-Javadoc)
-	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#isAvailable()
-	 */
-	@Override
-	public boolean isAvailable() {
-		return statz != null;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see me.armar.plugins.autorank.hooks.DependencyHandler#isAvailable()
+     */
+    @Override
+    public boolean isAvailable() {
+        return statz != null;
+    }
 
-	/* (non-Javadoc)
-	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#isInstalled()
-	 */
-	@Override
-	public boolean isInstalled() {
-		final Plugin plugin = get();
+    /*
+     * (non-Javadoc)
+     * 
+     * @see me.armar.plugins.autorank.hooks.DependencyHandler#isInstalled()
+     */
+    @Override
+    public boolean isInstalled() {
+        final Plugin plugin = get();
 
-		return plugin != null && plugin.isEnabled();
-	}
+        return plugin != null && plugin.isEnabled();
+    }
 
-	/* (non-Javadoc)
-	 * @see me.armar.plugins.autorank.hooks.DependencyHandler#setup()
-	 */
-	@Override
-	public boolean setup(final boolean verbose) {
-		if (!isInstalled()) {
-			if (verbose) {
-				plugin.getLogger().info("Statz has not been found!");
-			}
-			return false;
-		} else {
-			statz = (Statz) get();
+    /*
+     * (non-Javadoc)
+     * 
+     * @see me.armar.plugins.autorank.hooks.DependencyHandler#setup()
+     */
+    @Override
+    public boolean setup(final boolean verbose) {
+        if (!isInstalled()) {
+            if (verbose) {
+                plugin.getLogger().info("Statz has not been found!");
+            }
+            return false;
+        } else {
+            statz = (Statz) get();
 
-			if (statz != null) {
-				if (verbose) {
-					plugin.getLogger().info("Statz has been found and can be used!");
-				}
-				return true;
-			} else {
-				if (verbose) {
-					plugin.getLogger().info("Statz has been found but cannot be used!");
-				}
-				return false;
-			}
-		}
-	}
+            if (statz != null) {
+                if (verbose) {
+                    plugin.getLogger().info("Statz has been found and can be used!");
+                }
+                return true;
+            } else {
+                if (verbose) {
+                    plugin.getLogger().info("Statz has been found but cannot be used!");
+                }
+                return false;
+            }
+        }
+    }
 
 }

@@ -9,108 +9,108 @@ import me.armar.plugins.autorank.language.Lang;
 
 public class LocationRequirement extends Requirement {
 
-	// x;y;z;world;radius
-	// private final List<String> locations = new ArrayList<String>();
+    // x;y;z;world;radius
+    // private final List<String> locations = new ArrayList<String>();
 
-	private int radius = -1;
-	private String world;
-	private int xLocation = 0, yLocation = 0, zLocation = 0;
+    private int radius = -1;
+    private String world;
+    private int xLocation = 0, yLocation = 0, zLocation = 0;
 
-	@Override
-	public String getDescription() {
-		return Lang.LOCATION_REQUIREMENT
-				.getConfigValue(xLocation + ", " + yLocation + ", " + zLocation + " in " + world);
-	}
+    @Override
+    public String getDescription() {
+        return Lang.LOCATION_REQUIREMENT
+                .getConfigValue(xLocation + ", " + yLocation + ", " + zLocation + " in " + world);
+    }
 
-	@Override
-	public String getProgress(final Player player) {
-		// Distance between two points:
-		// d = sqrt((x2 - x1)^2 + (y2 - y1)^2 + (z2 - z1)^2)
-		// See for info:
-		// http://www.calculatorsoup.com/calculators/geometry-solids/distance-two-points.php
+    @Override
+    public String getProgress(final Player player) {
+        // Distance between two points:
+        // d = sqrt((x2 - x1)^2 + (y2 - y1)^2 + (z2 - z1)^2)
+        // See for info:
+        // http://www.calculatorsoup.com/calculators/geometry-solids/distance-two-points.php
 
-		final Location playerLoc = player.getLocation();
+        final Location playerLoc = player.getLocation();
 
-		// Player coords
-		int pX, pY, pZ;
+        // Player coords
+        int pX, pY, pZ;
 
-		pX = playerLoc.getBlockX();
-		pY = playerLoc.getBlockY();
-		pZ = playerLoc.getBlockZ();
+        pX = playerLoc.getBlockX();
+        pY = playerLoc.getBlockY();
+        pZ = playerLoc.getBlockZ();
 
-		String plurOrSing = "meter";
+        String plurOrSing = "meter";
 
-		final int distance = (int) Math
-				.sqrt(Math.pow(pX - xLocation, 2) + Math.pow(pY - yLocation, 2) + Math.pow(pZ - zLocation, 2));
+        final int distance = (int) Math
+                .sqrt(Math.pow(pX - xLocation, 2) + Math.pow(pY - yLocation, 2) + Math.pow(pZ - zLocation, 2));
 
-		if (distance > 1) {
-			plurOrSing = "meters";
-		} else {
-			plurOrSing = "meter";
-		}
+        if (distance > 1) {
+            plurOrSing = "meters";
+        } else {
+            plurOrSing = "meter";
+        }
 
-		return distance + " " + plurOrSing + " away";
-	}
+        return distance + " " + plurOrSing + " away";
+    }
 
-	@Override
-	public boolean meetsRequirement(final Player player) {
-		final Location pLocation = player.getLocation();
+    @Override
+    public boolean meetsRequirement(final Player player) {
+        final Location pLocation = player.getLocation();
 
-		// Positive and negative values
-		int xRadiusP, yRadiusP, zRadiusP, xRadiusN, yRadiusN, zRadiusN;
+        // Positive and negative values
+        int xRadiusP, yRadiusP, zRadiusP, xRadiusN, yRadiusN, zRadiusN;
 
-		xRadiusN = xLocation - radius;
-		yRadiusN = yLocation - radius;
-		zRadiusN = zLocation - radius;
+        xRadiusN = xLocation - radius;
+        yRadiusN = yLocation - radius;
+        zRadiusN = zLocation - radius;
 
-		xRadiusP = xLocation + radius;
-		yRadiusP = yLocation + radius;
-		zRadiusP = zLocation + radius;
+        xRadiusP = xLocation + radius;
+        yRadiusP = yLocation + radius;
+        zRadiusP = zLocation + radius;
 
-		final World realWorld = Bukkit.getWorld(world);
+        final World realWorld = Bukkit.getWorld(world);
 
-		if (realWorld == null)
-			return false;
+        if (realWorld == null)
+            return false;
 
-		// Player is not in the correct world
-		if (!realWorld.getName().equals(pLocation.getWorld().getName()))
-			return false;
+        // Player is not in the correct world
+        if (!realWorld.getName().equals(pLocation.getWorld().getName()))
+            return false;
 
-		// Check if a player is within the radius
-		if (pLocation.getBlockX() >= xRadiusN && pLocation.getBlockX() <= xRadiusP) {
-			if (pLocation.getBlockY() >= yRadiusN && pLocation.getBlockY() <= yRadiusP) {
-				if (pLocation.getBlockZ() >= zRadiusN && pLocation.getBlockZ() <= zRadiusP) {
-					return true;
-				}
-			}
-		}
+        // Check if a player is within the radius
+        if (pLocation.getBlockX() >= xRadiusN && pLocation.getBlockX() <= xRadiusP) {
+            if (pLocation.getBlockY() >= yRadiusN && pLocation.getBlockY() <= yRadiusP) {
+                if (pLocation.getBlockZ() >= zRadiusN && pLocation.getBlockZ() <= zRadiusP) {
+                    return true;
+                }
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	@Override
-	public boolean setOptions(final String[] options) {
+    @Override
+    public boolean setOptions(final String[] options) {
 
-		// Location = x;y;z;world;radius
-		if (options.length != 5) {
-			return false;
-		}
+        // Location = x;y;z;world;radius
+        if (options.length != 5) {
+            return false;
+        }
 
-		// Save x,y,z
-		xLocation = Integer.parseInt(options[0]);
-		yLocation = Integer.parseInt(options[1]);
-		zLocation = Integer.parseInt(options[2]);
+        // Save x,y,z
+        xLocation = Integer.parseInt(options[0]);
+        yLocation = Integer.parseInt(options[1]);
+        zLocation = Integer.parseInt(options[2]);
 
-		// Save world
-		world = options[3].trim();
+        // Save world
+        world = options[3].trim();
 
-		// Save radius
-		radius = Integer.parseInt(options[4]);
+        // Save radius
+        radius = Integer.parseInt(options[4]);
 
-		if (radius < 0) {
-			radius = 0;
-		}
+        if (radius < 0) {
+            radius = 0;
+        }
 
-		return this.radius != -1;
-	}
+        return this.radius != -1;
+    }
 }

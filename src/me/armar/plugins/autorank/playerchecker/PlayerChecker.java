@@ -26,208 +26,208 @@ import me.armar.plugins.autorank.util.AutorankTools;
  */
 public class PlayerChecker {
 
-	private final Autorank plugin;
+    private final Autorank plugin;
 
-	public PlayerChecker(final Autorank plugin) {
-		this.plugin = plugin;
-	}
+    public PlayerChecker(final Autorank plugin) {
+        this.plugin = plugin;
+    }
 
-	public boolean checkPlayer(final Player player) {
+    public boolean checkPlayer(final Player player) {
 
-		// Do not rank a player when he is excluded
-		if (AutorankTools.isExcluded(player))
-			return false;
+        // Do not rank a player when he is excluded
+        if (AutorankTools.isExcluded(player))
+            return false;
 
-		// Get chosen path 
-		Path chosenPath = plugin.getPathManager().getCurrentPath(player.getUniqueId());
+        // Get chosen path
+        Path chosenPath = plugin.getPathManager().getCurrentPath(player.getUniqueId());
 
-		if (chosenPath == null)
-			return false;
+        if (chosenPath == null)
+            return false;
 
-		return chosenPath.applyChange(player);
-	}
+        return chosenPath.applyChange(player);
+    }
 
-	public void doLeaderboardExemptCheck(final Player player) {
-		plugin.getPlayerDataConfig().hasLeaderboardExemption(player.getUniqueId(),
-				player.hasPermission("autorank.leaderboard.exempt"));
-	}
+    public void doLeaderboardExemptCheck(final Player player) {
+        plugin.getPlayerDataConfig().hasLeaderboardExemption(player.getUniqueId(),
+                player.hasPermission("autorank.leaderboard.exempt"));
+    }
 
-	public List<String> formatRequirementsToList(final List<RequirementsHolder> holders,
-			final List<Integer> metRequirements) {
-		// Converts requirements into a list of readable requirements
+    public List<String> formatRequirementsToList(final List<RequirementsHolder> holders,
+            final List<Integer> metRequirements) {
+        // Converts requirements into a list of readable requirements
 
-		final List<String> messages = new ArrayList<String>();
+        final List<String> messages = new ArrayList<String>();
 
-		messages.add(ChatColor.GRAY + " ------------ ");
+        messages.add(ChatColor.GRAY + " ------------ ");
 
-		for (int i = 0; i < holders.size(); i++) {
-			final RequirementsHolder holder = holders.get(i);
-			final int reqID = holder.getReqID();
+        for (int i = 0; i < holders.size(); i++) {
+            final RequirementsHolder holder = holders.get(i);
+            final int reqID = holder.getReqID();
 
-			if (holder != null) {
-				final StringBuilder message = new StringBuilder("     " + ChatColor.GOLD + (i + 1) + ". ");
-				if (metRequirements.contains(reqID)) {
-					message.append(ChatColor.RED + holder.getDescription() + ChatColor.BLUE + " ("
-							+ Lang.DONE_MARKER.getConfigValue() + ")");
-				} else {
-					message.append(ChatColor.RED + holder.getDescription());
-				}
+            if (holder != null) {
+                final StringBuilder message = new StringBuilder("     " + ChatColor.GOLD + (i + 1) + ". ");
+                if (metRequirements.contains(reqID)) {
+                    message.append(ChatColor.RED + holder.getDescription() + ChatColor.BLUE + " ("
+                            + Lang.DONE_MARKER.getConfigValue() + ")");
+                } else {
+                    message.append(ChatColor.RED + holder.getDescription());
+                }
 
-				if (holder.isOptional()) {
-					message.append(ChatColor.AQUA + " (" + Lang.OPTIONAL_MARKER.getConfigValue() + ")");
-				}
+                if (holder.isOptional()) {
+                    message.append(ChatColor.AQUA + " (" + Lang.OPTIONAL_MARKER.getConfigValue() + ")");
+                }
 
-				messages.add(message.toString());
+                messages.add(message.toString());
 
-			}
-		}
+            }
+        }
 
-		return messages;
+        return messages;
 
-	}
+    }
 
-	public List<String> formatResultsToList(List<Result> results) {
-		// Converts requirements into a list of readable requirements
+    public List<String> formatResultsToList(List<Result> results) {
+        // Converts requirements into a list of readable requirements
 
-		final List<String> messages = new ArrayList<String>();
+        final List<String> messages = new ArrayList<String>();
 
-		messages.add(ChatColor.GRAY + " ------------ ");
+        messages.add(ChatColor.GRAY + " ------------ ");
 
-		for (int i = 0; i < results.size(); i++) {
-			final Result result = results.get(i);
+        for (int i = 0; i < results.size(); i++) {
+            final Result result = results.get(i);
 
-			if (result != null) {
-				final StringBuilder message = new StringBuilder("     " + ChatColor.GOLD + (i + 1) + ". ");
+            if (result != null) {
+                final StringBuilder message = new StringBuilder("     " + ChatColor.GOLD + (i + 1) + ". ");
 
-				message.append(ChatColor.RED + result.getDescription());
+                message.append(ChatColor.RED + result.getDescription());
 
-				messages.add(message.toString());
+                messages.add(message.toString());
 
-			}
-		}
+            }
+        }
 
-		return messages;
+        return messages;
 
-	}
+    }
 
-	public List<RequirementsHolder> getAllRequirementsHolders(final Player player) {
-		// Get chosen path 
-		Path chosenPath = plugin.getPathManager().getCurrentPath(player.getUniqueId());
+    public List<RequirementsHolder> getAllRequirementsHolders(final Player player) {
+        // Get chosen path
+        Path chosenPath = plugin.getPathManager().getCurrentPath(player.getUniqueId());
 
-		if (chosenPath != null) {
-			return chosenPath.getRequirements();
-		} else {
-			return new ArrayList<RequirementsHolder>();
-		}
-	}
+        if (chosenPath != null) {
+            return chosenPath.getRequirements();
+        } else {
+            return new ArrayList<RequirementsHolder>();
+        }
+    }
 
-	public List<RequirementsHolder> getFailedRequirementsHolders(final Player player) {
+    public List<RequirementsHolder> getFailedRequirementsHolders(final Player player) {
 
-		// Get chosen path 
-		Path chosenPath = plugin.getPathManager().getCurrentPath(player.getUniqueId());
+        // Get chosen path
+        Path chosenPath = plugin.getPathManager().getCurrentPath(player.getUniqueId());
 
-		if (chosenPath != null) {
-			return chosenPath.getFailedRequirementsHolders(player);
-		} else {
-			return new ArrayList<RequirementsHolder>();
-		}
-	}
+        if (chosenPath != null) {
+            return chosenPath.getFailedRequirementsHolders(player);
+        } else {
+            return new ArrayList<RequirementsHolder>();
+        }
+    }
 
-	public List<Integer> getMetRequirementsHolders(final List<RequirementsHolder> holders, final Player player) {
-		final List<Integer> metRequirements = new ArrayList<Integer>();
+    public List<Integer> getMetRequirementsHolders(final List<RequirementsHolder> holders, final Player player) {
+        final List<Integer> metRequirements = new ArrayList<Integer>();
 
-		boolean onlyOptional = true;
+        boolean onlyOptional = true;
 
-		// Check if we only have optional requirements
-		for (final RequirementsHolder holder : holders) {
-			if (!holder.isOptional())
-				onlyOptional = false;
-		}
+        // Check if we only have optional requirements
+        for (final RequirementsHolder holder : holders) {
+            if (!holder.isOptional())
+                onlyOptional = false;
+        }
 
-		if (onlyOptional) {
-			final List<Integer> optionalRequirements = new ArrayList<Integer>();
+        if (onlyOptional) {
+            final List<Integer> optionalRequirements = new ArrayList<Integer>();
 
-			for (final RequirementsHolder holder : holders) {
-				optionalRequirements.add(holder.getReqID());
-			}
+            for (final RequirementsHolder holder : holders) {
+                optionalRequirements.add(holder.getReqID());
+            }
 
-			return optionalRequirements;
-		}
+            return optionalRequirements;
+        }
 
-		for (final RequirementsHolder holder : holders) {
-			final int reqID = holder.getReqID();
+        for (final RequirementsHolder holder : holders) {
+            final int reqID = holder.getReqID();
 
-			// Use auto completion
-			if (holder.useAutoCompletion()) {
-				// Do auto complete
-				if (holder.meetsRequirement(player, player.getUniqueId())) {
-					// Player meets the requirement -> give him results
+            // Use auto completion
+            if (holder.useAutoCompletion()) {
+                // Do auto complete
+                if (holder.meetsRequirement(player, player.getUniqueId())) {
+                    // Player meets the requirement -> give him results
 
-					// Doesn't need to check whether this requirement was
-					// already done
-					if (!plugin.getConfigHandler().usePartialCompletion())
-						continue;
+                    // Doesn't need to check whether this requirement was
+                    // already done
+                    if (!plugin.getConfigHandler().usePartialCompletion())
+                        continue;
 
-					metRequirements.add(reqID);
-					continue;
-				} else {
+                    metRequirements.add(reqID);
+                    continue;
+                } else {
 
-					// Only check if player has done this when partial
-					// completion is used
-					if (plugin.getConfigHandler().usePartialCompletion()) {
-						// Player does not meet requirements, but has done this
-						// already
-						if (plugin.getPlayerDataConfig().hasCompletedRequirement(reqID, player.getUniqueId())) {
-							metRequirements.add(reqID);
-							continue;
-						}
-					}
+                    // Only check if player has done this when partial
+                    // completion is used
+                    if (plugin.getConfigHandler().usePartialCompletion()) {
+                        // Player does not meet requirements, but has done this
+                        // already
+                        if (plugin.getPlayerDataConfig().hasCompletedRequirement(reqID, player.getUniqueId())) {
+                            metRequirements.add(reqID);
+                            continue;
+                        }
+                    }
 
-					// If requirement is optional, we do not check.
-					if (holder.isOptional()) {
-						continue;
-					}
+                    // If requirement is optional, we do not check.
+                    if (holder.isOptional()) {
+                        continue;
+                    }
 
-					// Player does not meet requirements -> do nothing
-					continue;
-				}
-			} else {
+                    // Player does not meet requirements -> do nothing
+                    continue;
+                }
+            } else {
 
-				if (!plugin.getConfigHandler().usePartialCompletion()) {
+                if (!plugin.getConfigHandler().usePartialCompletion()) {
 
-					// Doesn't auto complete and doesn't meet requirement, then
-					// continue searching
-					if (!holder.meetsRequirement(player, player.getUniqueId())) {
+                    // Doesn't auto complete and doesn't meet requirement, then
+                    // continue searching
+                    if (!holder.meetsRequirement(player, player.getUniqueId())) {
 
-						// If requirement is optional, we do not check.
-						if (holder.isOptional()) {
-							continue;
-						}
+                        // If requirement is optional, we do not check.
+                        if (holder.isOptional()) {
+                            continue;
+                        }
 
-						continue;
-					} else {
-						// Player does meet requirement, continue searching
-						continue;
-					}
+                        continue;
+                    } else {
+                        // Player does meet requirement, continue searching
+                        continue;
+                    }
 
-				}
+                }
 
-				// Do not auto complete
-				if (plugin.getPlayerDataConfig().hasCompletedRequirement(reqID, player.getUniqueId())) {
-					// Player has completed requirement already
-					metRequirements.add(reqID);
-					continue;
-				} else {
+                // Do not auto complete
+                if (plugin.getPlayerDataConfig().hasCompletedRequirement(reqID, player.getUniqueId())) {
+                    // Player has completed requirement already
+                    metRequirements.add(reqID);
+                    continue;
+                } else {
 
-					// If requirement is optional, we do not check.
-					if (holder.isOptional()) {
-						continue;
-					}
+                    // If requirement is optional, we do not check.
+                    if (holder.isOptional()) {
+                        continue;
+                    }
 
-					continue;
-				}
-			}
-		}
-		return metRequirements;
-	}
+                    continue;
+                }
+            }
+        }
+        return metRequirements;
+    }
 }

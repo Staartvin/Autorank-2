@@ -16,65 +16,71 @@ import me.armar.plugins.autorank.pathbuilder.holders.RequirementsHolder;
  */
 public class RequirementCompleteEvent extends Event implements Cancellable {
 
-	private static final HandlerList handlers = new HandlerList();
+    private static final HandlerList handlers = new HandlerList();
 
-	public static HandlerList getHandlerList() {
-		return handlers;
-	}
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
 
-	private boolean isCancelled;
-	private final Player player;
+    private boolean isCancelled;
+    private final Player player;
 
-	private final RequirementsHolder reqHolder;
+    private final RequirementsHolder reqHolder;
 
-	/**
-	 * Create a new RequirementCompleteEvent.
-	 * This event represents a requirement that is completed by a player.
-	 * 
-	 * @param player Player that completed the requirement
-	 * @param reqHolder {@linkplain RequirementsHolder} that was completed
-	 */
-	public RequirementCompleteEvent(final Player player, final RequirementsHolder reqHolder) {
-		this.player = player;
-		this.reqHolder = reqHolder;
-	}
+    /**
+     * Create a new RequirementCompleteEvent. This event represents a
+     * requirement that is completed by a player.
+     * 
+     * @param player
+     *            Player that completed the requirement
+     * @param reqHolder
+     *            {@linkplain RequirementsHolder} that was completed
+     */
+    public RequirementCompleteEvent(final Player player, final RequirementsHolder reqHolder) {
+        this.player = player;
+        this.reqHolder = reqHolder;
+    }
 
-	@Override
-	public HandlerList getHandlers() {
-		return handlers;
-	}
+    @Override
+    public HandlerList getHandlers() {
+        return handlers;
+    }
 
-	/**
-	 * Gets the player involved in this event.
-	 * 
-	 * @return player object
-	 */
-	public Player getPlayer() {
-		return player;
-	}
+    /**
+     * Gets the player involved in this event.
+     * 
+     * @return player object
+     */
+    public Player getPlayer() {
+        return player;
+    }
 
-	/**
-	 * Get the {@linkplain RequirementsHolder} that has been completed.
-	 * 
-	 * @return {@linkplain RequirementsHolder} that has been completed.
-	 */
-	public RequirementsHolder getRequirement() {
-		return reqHolder;
-	}
+    /**
+     * Get the {@linkplain RequirementsHolder} that has been completed.
+     * 
+     * @return {@linkplain RequirementsHolder} that has been completed.
+     */
+    public RequirementsHolder getRequirement() {
+        return reqHolder;
+    }
 
-	/* (non-Javadoc)
-	 * @see org.bukkit.event.Cancellable#isCancelled()
-	 */
-	@Override
-	public boolean isCancelled() {
-		return isCancelled;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.bukkit.event.Cancellable#isCancelled()
+     */
+    @Override
+    public boolean isCancelled() {
+        return isCancelled;
+    }
 
-	/* (non-Javadoc)
-	 * @see org.bukkit.event.Cancellable#setCancelled(boolean)
-	 */
-	@Override
-	public void setCancelled(final boolean cancel) {
-		isCancelled = cancel;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.bukkit.event.Cancellable#setCancelled(boolean)
+     */
+    @Override
+    public void setCancelled(final boolean cancel) {
+        isCancelled = cancel;
+    }
 }

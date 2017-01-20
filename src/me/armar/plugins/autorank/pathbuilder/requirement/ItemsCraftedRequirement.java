@@ -8,46 +8,46 @@ import me.armar.plugins.autorank.util.AutorankTools;
 
 public class ItemsCraftedRequirement extends Requirement {
 
-	int itemsCrafted = -1;
+    int itemsCrafted = -1;
 
-	@Override
-	public String getDescription() {
+    @Override
+    public String getDescription() {
 
-		String lang = Lang.ITEMS_CRAFTED_REQUIREMENT.getConfigValue(itemsCrafted + "");
+        String lang = Lang.ITEMS_CRAFTED_REQUIREMENT.getConfigValue(itemsCrafted + "");
 
-		// Check if this requirement is world-specific
-		if (this.isWorldSpecific()) {
-			lang = lang.concat(" (in world '" + this.getWorld() + "')");
-		}
+        // Check if this requirement is world-specific
+        if (this.isWorldSpecific()) {
+            lang = lang.concat(" (in world '" + this.getWorld() + "')");
+        }
 
-		return lang;
-	}
+        return lang;
+    }
 
-	@Override
-	public String getProgress(final Player player) {
-		final int progressBar = this.getStatsPlugin().getNormalStat(StatsHandler.statTypes.ITEMS_CRAFTED,
-				player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld()));
+    @Override
+    public String getProgress(final Player player) {
+        final int progressBar = this.getStatsPlugin().getNormalStat(StatsHandler.statTypes.ITEMS_CRAFTED,
+                player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld()));
 
-		return progressBar + "/" + itemsCrafted;
-	}
+        return progressBar + "/" + itemsCrafted;
+    }
 
-	@Override
-	public boolean meetsRequirement(final Player player) {
+    @Override
+    public boolean meetsRequirement(final Player player) {
 
-		if (!getStatsPlugin().isEnabled())
-			return false;
+        if (!getStatsPlugin().isEnabled())
+            return false;
 
-		final int realItemsCrafted = this.getStatsPlugin().getNormalStat(StatsHandler.statTypes.ITEMS_CRAFTED,
-				player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld()));
+        final int realItemsCrafted = this.getStatsPlugin().getNormalStat(StatsHandler.statTypes.ITEMS_CRAFTED,
+                player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld()));
 
-		return realItemsCrafted >= itemsCrafted;
-	}
+        return realItemsCrafted >= itemsCrafted;
+    }
 
-	@Override
-	public boolean setOptions(final String[] options) {
+    @Override
+    public boolean setOptions(final String[] options) {
 
-		itemsCrafted = Integer.parseInt(options[0]);
+        itemsCrafted = Integer.parseInt(options[0]);
 
-		return itemsCrafted != -1;
-	}
+        return itemsCrafted != -1;
+    }
 }

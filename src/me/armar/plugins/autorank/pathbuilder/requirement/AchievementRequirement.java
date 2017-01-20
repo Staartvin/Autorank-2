@@ -8,83 +8,83 @@ import me.armar.plugins.autorank.util.AutorankTools;
 
 public class AchievementRequirement extends Requirement {
 
-	Achievement achievement = null;
-	int achievementCount = -1;
+    Achievement achievement = null;
+    int achievementCount = -1;
 
-	@Override
-	public String getDescription() {
+    @Override
+    public String getDescription() {
 
-		String lang;
+        String lang;
 
-		if (achievementCount != -1) {
-			lang = Lang.ACHIEVEMENT_MULTIPLE_REQUIREMENT.getConfigValue(achievementCount);
-		} else {
-			lang = Lang.ACHIEVEMENT_SINGLE_REQUIREMENT.getConfigValue(achievement.toString());
-		}
+        if (achievementCount != -1) {
+            lang = Lang.ACHIEVEMENT_MULTIPLE_REQUIREMENT.getConfigValue(achievementCount);
+        } else {
+            lang = Lang.ACHIEVEMENT_SINGLE_REQUIREMENT.getConfigValue(achievement.toString());
+        }
 
-		// Check if this requirement is world-specific
-		if (this.isWorldSpecific()) {
-			lang = lang.concat(" (in world '" + this.getWorld() + "')");
-		}
+        // Check if this requirement is world-specific
+        if (this.isWorldSpecific()) {
+            lang = lang.concat(" (in world '" + this.getWorld() + "')");
+        }
 
-		return lang;
-	}
+        return lang;
+    }
 
-	@Override
-	public String getProgress(final Player player) {
+    @Override
+    public String getProgress(final Player player) {
 
-		if (achievementCount != -1) {
+        if (achievementCount != -1) {
 
-			int count = 0;
+            int count = 0;
 
-			for (Achievement ach : Achievement.values()) {
-				if (player.hasAchievement(ach)) {
-					count++;
-				}
-			}
+            for (Achievement ach : Achievement.values()) {
+                if (player.hasAchievement(ach)) {
+                    count++;
+                }
+            }
 
-			return count + "/" + achievementCount;
-		} else {
-			return "Cannot show progress";
-		}
-	}
+            return count + "/" + achievementCount;
+        } else {
+            return "Cannot show progress";
+        }
+    }
 
-	@Override
-	public boolean meetsRequirement(final Player player) {
+    @Override
+    public boolean meetsRequirement(final Player player) {
 
-		// Check if this requirement is world-specific
-		if (this.isWorldSpecific()) {
-			// Is player in the same world as specified
-			if (!this.getWorld().equals(player.getWorld().getName()))
-				return false;
-		}
+        // Check if this requirement is world-specific
+        if (this.isWorldSpecific()) {
+            // Is player in the same world as specified
+            if (!this.getWorld().equals(player.getWorld().getName()))
+                return false;
+        }
 
-		if (achievementCount != -1) {
+        if (achievementCount != -1) {
 
-			int count = 0;
+            int count = 0;
 
-			for (Achievement ach : Achievement.values()) {
-				if (player.hasAchievement(ach)) {
-					count++;
-				}
-			}
+            for (Achievement ach : Achievement.values()) {
+                if (player.hasAchievement(ach)) {
+                    count++;
+                }
+            }
 
-			return count >= achievementCount;
-		} else {
-			return player.hasAchievement(achievement);
-		}
-	}
+            return count >= achievementCount;
+        } else {
+            return player.hasAchievement(achievement);
+        }
+    }
 
-	@Override
-	public boolean setOptions(final String[] options) {
-		try {
-			achievementCount = AutorankTools.stringtoInt(options[0]);
-			// Check to see if it is a number
-		} catch (NumberFormatException e) {
-			// It is not a number, so it must be a name
-			achievement = Achievement.valueOf(options[0].toUpperCase().replace(" ", "_"));
-		}
+    @Override
+    public boolean setOptions(final String[] options) {
+        try {
+            achievementCount = AutorankTools.stringtoInt(options[0]);
+            // Check to see if it is a number
+        } catch (NumberFormatException e) {
+            // It is not a number, so it must be a name
+            achievement = Achievement.valueOf(options[0].toUpperCase().replace(" ", "_"));
+        }
 
-		return achievementCount != -1 || achievement != null;
-	}
+        return achievementCount != -1 || achievement != null;
+    }
 }

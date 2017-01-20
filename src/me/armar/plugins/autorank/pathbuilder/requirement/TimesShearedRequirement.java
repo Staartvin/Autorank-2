@@ -8,47 +8,47 @@ import me.armar.plugins.autorank.util.AutorankTools;
 
 public class TimesShearedRequirement extends Requirement {
 
-	int timesShorn = -1;
+    int timesShorn = -1;
 
-	@Override
-	public String getDescription() {
-		String lang = Lang.TIMES_SHEARED_REQUIREMENT.getConfigValue(timesShorn + "");
+    @Override
+    public String getDescription() {
+        String lang = Lang.TIMES_SHEARED_REQUIREMENT.getConfigValue(timesShorn + "");
 
-		// Check if this requirement is world-specific
-		if (this.isWorldSpecific()) {
-			lang = lang.concat(" (in world '" + this.getWorld() + "')");
-		}
+        // Check if this requirement is world-specific
+        if (this.isWorldSpecific()) {
+            lang = lang.concat(" (in world '" + this.getWorld() + "')");
+        }
 
-		return lang;
-	}
+        return lang;
+    }
 
-	@Override
-	public String getProgress(final Player player) {
-		final int progressBar = this.getStatsPlugin().getNormalStat(StatsHandler.statTypes.TIMES_SHEARED,
-				player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld()));
+    @Override
+    public String getProgress(final Player player) {
+        final int progressBar = this.getStatsPlugin().getNormalStat(StatsHandler.statTypes.TIMES_SHEARED,
+                player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld()));
 
-		// progress = progress.concat(progressBar + "/" + timesSheared);
-		return progressBar + "/" + timesShorn;
-	}
+        // progress = progress.concat(progressBar + "/" + timesSheared);
+        return progressBar + "/" + timesShorn;
+    }
 
-	@Override
-	public boolean meetsRequirement(final Player player) {
-		if (!getStatsPlugin().isEnabled())
-			return false;
+    @Override
+    public boolean meetsRequirement(final Player player) {
+        if (!getStatsPlugin().isEnabled())
+            return false;
 
-		return this.getStatsPlugin().getNormalStat(StatsHandler.statTypes.TIMES_SHEARED, player.getUniqueId(),
-				AutorankTools.makeStatsInfo("world", this.getWorld())) >= timesShorn;
-	}
+        return this.getStatsPlugin().getNormalStat(StatsHandler.statTypes.TIMES_SHEARED, player.getUniqueId(),
+                AutorankTools.makeStatsInfo("world", this.getWorld())) >= timesShorn;
+    }
 
-	@Override
-	public boolean setOptions(final String[] options) {
+    @Override
+    public boolean setOptions(final String[] options) {
 
-		try {
-			timesShorn = Integer.parseInt(options[0]);
-		} catch (final Exception e) {
-			return false;
-		}
+        try {
+            timesShorn = Integer.parseInt(options[0]);
+        } catch (final Exception e) {
+            return false;
+        }
 
-		return timesShorn != -1;
-	}
+        return timesShorn != -1;
+    }
 }

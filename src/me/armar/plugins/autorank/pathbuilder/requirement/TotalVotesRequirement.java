@@ -8,48 +8,48 @@ import me.armar.plugins.autorank.util.AutorankTools;
 
 public class TotalVotesRequirement extends Requirement {
 
-	int totalVotes = -1;
+    int totalVotes = -1;
 
-	@Override
-	public String getDescription() {
+    @Override
+    public String getDescription() {
 
-		String lang = Lang.VOTE_REQUIREMENT.getConfigValue(totalVotes + "");
+        String lang = Lang.VOTE_REQUIREMENT.getConfigValue(totalVotes + "");
 
-		// Check if this requirement is world-specific
-		if (this.isWorldSpecific()) {
-			lang = lang.concat(" (in world '" + this.getWorld() + "')");
-		}
+        // Check if this requirement is world-specific
+        if (this.isWorldSpecific()) {
+            lang = lang.concat(" (in world '" + this.getWorld() + "')");
+        }
 
-		return lang;
-	}
+        return lang;
+    }
 
-	@Override
-	public String getProgress(final Player player) {
-		final int votes = getStatsPlugin().getNormalStat(StatsHandler.statTypes.VOTES, player.getUniqueId(),
-				AutorankTools.makeStatsInfo("world", this.getWorld()));
+    @Override
+    public String getProgress(final Player player) {
+        final int votes = getStatsPlugin().getNormalStat(StatsHandler.statTypes.VOTES, player.getUniqueId(),
+                AutorankTools.makeStatsInfo("world", this.getWorld()));
 
-		return votes + "/" + totalVotes;
-	}
+        return votes + "/" + totalVotes;
+    }
 
-	@Override
-	public boolean meetsRequirement(final Player player) {
-		if (!getStatsPlugin().isEnabled())
-			return false;
+    @Override
+    public boolean meetsRequirement(final Player player) {
+        if (!getStatsPlugin().isEnabled())
+            return false;
 
-		final int votes = getStatsPlugin().getNormalStat(StatsHandler.statTypes.VOTES, player.getUniqueId(),
-				AutorankTools.makeStatsInfo("world", this.getWorld()));
+        final int votes = getStatsPlugin().getNormalStat(StatsHandler.statTypes.VOTES, player.getUniqueId(),
+                AutorankTools.makeStatsInfo("world", this.getWorld()));
 
-		return votes >= totalVotes;
-	}
+        return votes >= totalVotes;
+    }
 
-	@Override
-	public boolean setOptions(final String[] options) {
-		try {
-			totalVotes = Integer.parseInt(options[0]);
-		} catch (final Exception e) {
-			return false;
-		}
+    @Override
+    public boolean setOptions(final String[] options) {
+        try {
+            totalVotes = Integer.parseInt(options[0]);
+        } catch (final Exception e) {
+            return false;
+        }
 
-		return totalVotes != -1;
-	}
+        return totalVotes != -1;
+    }
 }

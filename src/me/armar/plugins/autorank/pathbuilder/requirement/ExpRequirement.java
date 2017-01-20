@@ -7,48 +7,48 @@ import me.armar.plugins.autorank.util.AutorankTools;
 
 public class ExpRequirement extends Requirement {
 
-	int minExp = -1;
+    int minExp = -1;
 
-	@Override
-	public String getDescription() {
+    @Override
+    public String getDescription() {
 
-		String lang = Lang.EXP_REQUIREMENT.getConfigValue(minExp + "");
+        String lang = Lang.EXP_REQUIREMENT.getConfigValue(minExp + "");
 
-		// Check if this requirement is world-specific
-		if (this.isWorldSpecific()) {
-			lang = lang.concat(" (in world '" + this.getWorld() + "')");
-		}
+        // Check if this requirement is world-specific
+        if (this.isWorldSpecific()) {
+            lang = lang.concat(" (in world '" + this.getWorld() + "')");
+        }
 
-		return lang;
-	}
+        return lang;
+    }
 
-	@Override
-	public String getProgress(final Player player) {
-		final int expLevel = player.getLevel();
+    @Override
+    public String getProgress(final Player player) {
+        final int expLevel = player.getLevel();
 
-		return expLevel + "/" + minExp;
-	}
+        return expLevel + "/" + minExp;
+    }
 
-	@Override
-	public boolean meetsRequirement(final Player player) {
+    @Override
+    public boolean meetsRequirement(final Player player) {
 
-		// Check if this requirement is world-specific
-		if (this.isWorldSpecific()) {
-			// Is player in the same world as specified
-			if (!this.getWorld().equals(player.getWorld().getName()))
-				return false;
-		}
+        // Check if this requirement is world-specific
+        if (this.isWorldSpecific()) {
+            // Is player in the same world as specified
+            if (!this.getWorld().equals(player.getWorld().getName()))
+                return false;
+        }
 
-		final int expLevel = player.getLevel();
+        final int expLevel = player.getLevel();
 
-		return expLevel >= minExp;
-	}
+        return expLevel >= minExp;
+    }
 
-	@Override
-	public boolean setOptions(final String[] options) {
+    @Override
+    public boolean setOptions(final String[] options) {
 
-		minExp = AutorankTools.stringtoInt(options[0]);
+        minExp = AutorankTools.stringtoInt(options[0]);
 
-		return minExp != -1;
-	}
+        return minExp != -1;
+    }
 }

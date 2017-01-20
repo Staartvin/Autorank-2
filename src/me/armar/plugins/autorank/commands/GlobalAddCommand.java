@@ -18,93 +18,98 @@ import net.md_5.bungee.api.ChatColor;
  */
 public class GlobalAddCommand extends AutorankCommand {
 
-	private final Autorank plugin;
+    private final Autorank plugin;
 
-	public GlobalAddCommand(final Autorank instance) {
-		this.setUsage("/ar gadd [player] [value]");
-		this.setDesc("Add [value] to [player]'s global time");
-		this.setPermission("autorank.gadd");
+    public GlobalAddCommand(final Autorank instance) {
+        this.setUsage("/ar gadd [player] [value]");
+        this.setDesc("Add [value] to [player]'s global time");
+        this.setPermission("autorank.gadd");
 
-		plugin = instance;
-	}
+        plugin = instance;
+    }
 
-	@Override
-	public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
+    @Override
+    public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
-		if (!plugin.getCommandsManager().hasPermission("autorank.gadd", sender)) {
-			return true;
-		}
+        if (!plugin.getCommandsManager().hasPermission("autorank.gadd", sender)) {
+            return true;
+        }
 
-		if (args.length < 3) {
-			sender.sendMessage(Lang.INVALID_FORMAT.getConfigValue("/ar gadd <player> <value>"));
-			return true;
-		}
+        if (args.length < 3) {
+            sender.sendMessage(Lang.INVALID_FORMAT.getConfigValue("/ar gadd <player> <value>"));
+            return true;
+        }
 
-		if (!plugin.getMySQLManager().isMySQLEnabled()) {
-			sender.sendMessage(ChatColor.RED + Lang.MYSQL_IS_NOT_ENABLED.getConfigValue());
-			return true;
-		}
+        if (!plugin.getMySQLManager().isMySQLEnabled()) {
+            sender.sendMessage(ChatColor.RED + Lang.MYSQL_IS_NOT_ENABLED.getConfigValue());
+            return true;
+        }
 
-		final UUID uuid = plugin.getUUIDStorage().getStoredUUID(args[1]);
+        final UUID uuid = plugin.getUUIDStorage().getStoredUUID(args[1]);
 
-		if (uuid == null) {
-			sender.sendMessage(Lang.UNKNOWN_PLAYER.getConfigValue(args[1]));
-			return true;
-		}
+        if (uuid == null) {
+            sender.sendMessage(Lang.UNKNOWN_PLAYER.getConfigValue(args[1]));
+            return true;
+        }
 
-		if (plugin.getUUIDStorage().hasRealName(uuid)) {
-			args[1] = plugin.getUUIDStorage().getRealName(uuid);
-		}
+        if (plugin.getUUIDStorage().hasRealName(uuid)) {
+            args[1] = plugin.getUUIDStorage().getRealName(uuid);
+        }
 
-		plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
 
-			@Override
-			public void run() {
-				int value = -1;
+            @Override
+            public void run() {
+                int value = -1;
 
-				if (args.length > 2) {
+                if (args.length > 2) {
 
-					final StringBuilder builder = new StringBuilder();
+                    final StringBuilder builder = new StringBuilder();
 
-					for (int i = 2; i < args.length; i++) {
-						builder.append(args[i]);
-					}
+                    for (int i = 2; i < args.length; i++) {
+                        builder.append(args[i]);
+                    }
 
-					if (!builder.toString().contains("m") && !builder.toString().contains("h")
-							&& !builder.toString().contains("d")) {
-						value = AutorankTools.stringtoInt(builder.toString().trim());
-						value += plugin.getMySQLManager().getFreshGlobalTime(uuid);
-					} else {
-						value = AutorankTools.stringToTime(builder.toString(), Time.MINUTES);
-						value += plugin.getMySQLManager().getFreshGlobalTime(uuid);
-					}
-				}
+                    if (!builder.toString().contains("m") && !builder.toString().contains("h")
+                            && !builder.toString().contains("d")) {
+                        value = AutorankTools.stringtoInt(builder.toString().trim());
+                        value += plugin.getMySQLManager().getFreshGlobalTime(uuid);
+                    } else {
+                        value = AutorankTools.stringToTime(builder.toString(), Time.MINUTES);
+                        value += plugin.getMySQLManager().getFreshGlobalTime(uuid);
+                    }
+                }
 
-				if (value >= 0) {
-					if (!plugin.getMySQLManager().setGlobalTime(uuid, value)) {
-						sender.sendMessage(Lang.MYSQL_IS_NOT_ENABLED.getConfigValue());
-						return;
-					}
-					AutorankTools.sendColoredMessage(sender, Lang.PLAYTIME_CHANGED.getConfigValue(args[1], value + ""));
-				} else {
-					AutorankTools.sendColoredMessage(sender,
-							Lang.INVALID_FORMAT.getConfigValue("/ar gadd [player] [value]"));
-				}
-			}
+                if (value >= 0) {
+                    if (!plugin.getMySQLManager().setGlobalTime(uuid, value)) {
+                        sender.sendMessage(Lang.MYSQL_IS_NOT_ENABLED.getConfigValue());
+                        return;
+                    }
+                    AutorankTools.sendColoredMessage(sender, Lang.PLAYTIME_CHANGED.getConfigValue(args[1], value + ""));
+                } else {
+                    AutorankTools.sendColoredMessage(sender,
+                            Lang.INVALID_FORMAT.getConfigValue("/ar gadd [player] [value]"));
+                }
+            }
 
-		});
+        });
 
-		return true;
-	}
+        return true;
+    }
 
-	/* (non-Javadoc)
-	 * @see me.armar.plugins.autorank.commands.manager.AutorankCommand#onTabComplete(org.bukkit.command.CommandSender, org.bukkit.command.Command, java.lang.String, java.lang.String[])
-	 */
-	@Override
-	public List<String> onTabComplete(final CommandSender sender, final Command cmd, final String commandLabel,
-			final String[] args) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * me.armar.plugins.autorank.commands.manager.AutorankCommand#onTabComplete(
+     * org.bukkit.command.CommandSender, org.bukkit.command.Command,
+     * java.lang.String, java.lang.String[])
+     */
+    @Override
+    public List<String> onTabComplete(final CommandSender sender, final Command cmd, final String commandLabel,
+            final String[] args) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
 }

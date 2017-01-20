@@ -8,44 +8,44 @@ import me.staartvin.statz.hooks.handlers.EssentialsHandler;
 
 public class EssentialsGeoIPRequirement extends Requirement {
 
-	private EssentialsHandler essHandler = null;
-	String location = null;
+    private EssentialsHandler essHandler = null;
+    String location = null;
 
-	@Override
-	public String getDescription() {
-		return Lang.ESSENTIALS_GEOIP_LOCATION_REQUIREMENT.getConfigValue(location);
-	}
+    @Override
+    public String getDescription() {
+        return Lang.ESSENTIALS_GEOIP_LOCATION_REQUIREMENT.getConfigValue(location);
+    }
 
-	@Override
-	public String getProgress(final Player player) {
+    @Override
+    public String getProgress(final Player player) {
 
-		final String realLocation = essHandler.getGeoIPLocation(player);
+        final String realLocation = essHandler.getGeoIPLocation(player);
 
-		return realLocation + "/" + location;
-	}
+        return realLocation + "/" + location;
+    }
 
-	@Override
-	public boolean meetsRequirement(final Player player) {
-		final String realLocation = essHandler.getGeoIPLocation(player);
+    @Override
+    public boolean meetsRequirement(final Player player) {
+        final String realLocation = essHandler.getGeoIPLocation(player);
 
-		if (realLocation == null)
-			return false;
+        if (realLocation == null)
+            return false;
 
-		return location != null && location.equalsIgnoreCase(realLocation);
-	}
+        return location != null && location.equalsIgnoreCase(realLocation);
+    }
 
-	@Override
-	public boolean setOptions(final String[] options) {
+    @Override
+    public boolean setOptions(final String[] options) {
 
-		essHandler = (EssentialsHandler) this.getDependencyManager().getDependencyHandler(Dependency.ESSENTIALS);
+        essHandler = (EssentialsHandler) this.getDependencyManager().getDependencyHandler(Dependency.ESSENTIALS);
 
-		if (options.length != 1) {
-			return false;
-		}
+        if (options.length != 1) {
+            return false;
+        }
 
-		location = options[0];
+        location = options[0];
 
-		return location != null;
+        return location != null;
 
-	}
+    }
 }

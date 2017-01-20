@@ -20,194 +20,200 @@ import me.armar.plugins.autorank.pathbuilder.result.Result;
  */
 public class PathManager {
 
-	private PathBuilder builder;
-	// A list of paths any player is able to take
-	private List<Path> paths = new ArrayList<Path>();
+    private PathBuilder builder;
+    // A list of paths any player is able to take
+    private List<Path> paths = new ArrayList<Path>();
 
-	private final Autorank plugin;
+    private final Autorank plugin;
 
-	public PathManager(final Autorank plugin) {
-		this.plugin = plugin;
-		setBuilder(new PathBuilder(plugin));
-	}
+    public PathManager(final Autorank plugin) {
+        this.plugin = plugin;
+        setBuilder(new PathBuilder(plugin));
+    }
 
-	/**
-	 * Return a list of messages that represents debug information of the paths.
-	 * 
-	 * @return a list of strings.
-	 */
-	public List<String> debugPaths() {
+    /**
+     * Return a list of messages that represents debug information of the paths.
+     * 
+     * @return a list of strings.
+     */
+    public List<String> debugPaths() {
 
-		final List<String> messages = new ArrayList<String>();
+        final List<String> messages = new ArrayList<String>();
 
-		messages.add(" ------------------- Path debug info ------------------- ");
+        messages.add(" ------------------- Path debug info ------------------- ");
 
-		for (Path path : paths) {
-			String pathName = path.getInternalName();
-			List<RequirementsHolder> requirements = path.getRequirements();
-			List<RequirementsHolder> prerequisites = path.getPrerequisites();
-			List<Result> results = path.getResults();
+        for (Path path : paths) {
+            String pathName = path.getInternalName();
+            List<RequirementsHolder> requirements = path.getRequirements();
+            List<RequirementsHolder> prerequisites = path.getPrerequisites();
+            List<Result> results = path.getResults();
 
-			int count = 1;
+            int count = 1;
 
-			messages.add("Path: " + pathName);
+            messages.add("Path: " + pathName);
 
-			messages.add("Display name: " + path.getDisplayName());
+            messages.add("Display name: " + path.getDisplayName());
 
-			messages.add("Prerequisites: ");
+            messages.add("Prerequisites: ");
 
-			for (RequirementsHolder prereq : prerequisites) {
-				messages.add("    " + count + ". " + prereq.getDescription());
-				count++;
-			}
+            for (RequirementsHolder prereq : prerequisites) {
+                messages.add("    " + count + ". " + prereq.getDescription());
+                count++;
+            }
 
-			// Reset count again
-			count = 1;
+            // Reset count again
+            count = 1;
 
-			messages.add("Requirements: ");
+            messages.add("Requirements: ");
 
-			for (RequirementsHolder req : requirements) {
-				messages.add("    " + count + ". " + req.getDescription());
-				count++;
-			}
+            for (RequirementsHolder req : requirements) {
+                messages.add("    " + count + ". " + req.getDescription());
+                count++;
+            }
 
-			// Reset count again
-			count = 1;
+            // Reset count again
+            count = 1;
 
-			messages.add("Results: ");
+            messages.add("Results: ");
 
-			for (Result res : results) {
-				messages.add("    " + count + ". " + res.getDescription());
-				count++;
-			}
+            for (Result res : results) {
+                messages.add("    " + count + ". " + res.getDescription());
+                count++;
+            }
 
-			messages.add("----------------------------");
+            messages.add("----------------------------");
 
-		}
+        }
 
-		return messages;
-	}
+        return messages;
+    }
 
-	public PathBuilder getBuilder() {
-		return builder;
-	}
+    public PathBuilder getBuilder() {
+        return builder;
+    }
 
-	/**
-	 * Get the path that the player is currently on.
-	 * 
-	 * @param uuid UUID of the player
-	 * @return path of the player, or null if not found.
-	 */
-	public Path getCurrentPath(UUID uuid) {
-		String chosenPath = plugin.getPlayerDataConfig().getChosenPath(uuid);
+    /**
+     * Get the path that the player is currently on.
+     * 
+     * @param uuid
+     *            UUID of the player
+     * @return path of the player, or null if not found.
+     */
+    public Path getCurrentPath(UUID uuid) {
+        String chosenPath = plugin.getPlayerDataConfig().getChosenPath(uuid);
 
-		// Unknown path, so return null
-		if (chosenPath.equalsIgnoreCase("unknown")) {
-			return null;
-		}
+        // Unknown path, so return null
+        if (chosenPath.equalsIgnoreCase("unknown")) {
+            return null;
+        }
 
-		return this.matchPathbyInternalName(chosenPath, true);
-	}
+        return this.matchPathbyInternalName(chosenPath, true);
+    }
 
-	/**
-	 * Get a list of all paths that are defined in the paths.yml file.
-	 * 
-	 * @return a list of {@link Path} objects.
-	 */
-	public List<Path> getPaths() {
-		return paths;
-	}
+    /**
+     * Get a list of all paths that are defined in the paths.yml file.
+     * 
+     * @return a list of {@link Path} objects.
+     */
+    public List<Path> getPaths() {
+        return paths;
+    }
 
-	/**
-	 * Get possible paths a player can take. A player can choose a path if he
-	 * meets the prerequisites.
-	 * 
-	 * @param player Player
-	 * @return List of paths that a player can choose.
-	 */
-	public List<Path> getPossiblePaths(Player player) {
-		List<Path> possibilities = new ArrayList<>();
+    /**
+     * Get possible paths a player can take. A player can choose a path if he
+     * meets the prerequisites.
+     * 
+     * @param player
+     *            Player
+     * @return List of paths that a player can choose.
+     */
+    public List<Path> getPossiblePaths(Player player) {
+        List<Path> possibilities = new ArrayList<>();
 
-		for (Path path : this.getPaths()) {
-			// Add path to possibilities, if player meets all prerequisites
-			if (path.meetsPrerequisites(player)) {
-				possibilities.add(path);
-			}
-		}
+        for (Path path : this.getPaths()) {
+            // Add path to possibilities, if player meets all prerequisites
+            if (path.meetsPrerequisites(player)) {
+                possibilities.add(path);
+            }
+        }
 
-		return possibilities;
-	}
+        return possibilities;
+    }
 
-	/**
-	 * Initialise paths from paths.yml file.
-	 */
-	public void initialiseFromConfigs() {
+    /**
+     * Initialise paths from paths.yml file.
+     */
+    public void initialiseFromConfigs() {
 
-		// Clear before starting
-		paths.clear();
+        // Clear before starting
+        paths.clear();
 
-		paths = builder.initialisePaths();
+        paths = builder.initialisePaths();
 
-		for (final String message : debugPaths()) {
-			plugin.debugMessage(message);
-		}
+        for (final String message : debugPaths()) {
+            plugin.debugMessage(message);
+        }
 
-	}
+    }
 
-	/**
-	 * 
-	 * Get the path that corresponds to the given chosenPath string.
-	 * 
-	 * @param chosenPath The display name of the path
-	 * @param isCaseSensitive true if we only match paths that have the exact
-	 *            wording, taking into account case sensitivity.
-	 * @return matching path or null if none found.
-	 */
-	public Path matchPathbyDisplayName(String chosenPath, boolean isCaseSensitive) {
-		for (final Path path : this.getPaths()) {
+    /**
+     * 
+     * Get the path that corresponds to the given chosenPath string.
+     * 
+     * @param chosenPath
+     *            The display name of the path
+     * @param isCaseSensitive
+     *            true if we only match paths that have the exact wording,
+     *            taking into account case sensitivity.
+     * @return matching path or null if none found.
+     */
+    public Path matchPathbyDisplayName(String chosenPath, boolean isCaseSensitive) {
+        for (final Path path : this.getPaths()) {
 
-			if (isCaseSensitive) {
-				if (path.getDisplayName().equals(chosenPath)) {
-					return path;
-				}
-			} else {
-				if (path.getDisplayName().equalsIgnoreCase(chosenPath)) {
-					return path;
-				}
-			}
-		}
+            if (isCaseSensitive) {
+                if (path.getDisplayName().equals(chosenPath)) {
+                    return path;
+                }
+            } else {
+                if (path.getDisplayName().equalsIgnoreCase(chosenPath)) {
+                    return path;
+                }
+            }
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	/**
-	 * 
-	 * Get the path that corresponds to the given chosenPath string.
-	 * 
-	 * @param chosenPath The internal name of the path
-	 * @param isCaseSensitive true if we only match paths that have the exact
-	 *            wording, taking into account case sensitivity.
-	 * @return matching path or null if none found.
-	 */
-	public Path matchPathbyInternalName(String chosenPath, boolean isCaseSensitive) {
-		for (final Path path : this.getPaths()) {
+    /**
+     * 
+     * Get the path that corresponds to the given chosenPath string.
+     * 
+     * @param chosenPath
+     *            The internal name of the path
+     * @param isCaseSensitive
+     *            true if we only match paths that have the exact wording,
+     *            taking into account case sensitivity.
+     * @return matching path or null if none found.
+     */
+    public Path matchPathbyInternalName(String chosenPath, boolean isCaseSensitive) {
+        for (final Path path : this.getPaths()) {
 
-			if (isCaseSensitive) {
-				if (path.getInternalName().equals(chosenPath)) {
-					return path;
-				}
-			} else {
-				if (path.getInternalName().equalsIgnoreCase(chosenPath)) {
-					return path;
-				}
-			}
-		}
+            if (isCaseSensitive) {
+                if (path.getInternalName().equals(chosenPath)) {
+                    return path;
+                }
+            } else {
+                if (path.getInternalName().equalsIgnoreCase(chosenPath)) {
+                    return path;
+                }
+            }
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	public void setBuilder(final PathBuilder builder) {
-		this.builder = builder;
-	}
+    public void setBuilder(final PathBuilder builder) {
+        this.builder = builder;
+    }
 
 }

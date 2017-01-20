@@ -22,117 +22,117 @@ import me.staartvin.statz.hooks.handlers.StatsAPIHandler;
  */
 public class StatsPluginManager {
 
-	private final Autorank plugin;
+    private final Autorank plugin;
 
-	private StatsPlugin statsPlugin;
+    private StatsPlugin statsPlugin;
 
-	public StatsPluginManager(final Autorank instance) {
-		plugin = instance;
-	}
+    public StatsPluginManager(final Autorank instance) {
+        plugin = instance;
+    }
 
-	public boolean findStatistics() {
-		final Plugin x = plugin.getServer().getPluginManager().getPlugin("Statistics");
-		// Main == Stats main class
-		if (x != null && x instanceof JavaPlugin) {
-			return true;
-		}
+    public boolean findStatistics() {
+        final Plugin x = plugin.getServer().getPluginManager().getPlugin("Statistics");
+        // Main == Stats main class
+        if (x != null && x instanceof JavaPlugin) {
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	public boolean findStats() {
-		final Plugin x = plugin.getServer().getPluginManager().getPlugin("Stats");
-		// Main == Stats main class
-		if (x != null && x instanceof JavaPlugin) {
-			return true;
-		}
+    public boolean findStats() {
+        final Plugin x = plugin.getServer().getPluginManager().getPlugin("Stats");
+        // Main == Stats main class
+        if (x != null && x instanceof JavaPlugin) {
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	public boolean findStatz() {
-		final Plugin x = plugin.getServer().getPluginManager().getPlugin("Statz");
-		// Main == Stats main class
-		if (x != null && x instanceof JavaPlugin) {
-			return true;
-		}
+    public boolean findStatz() {
+        final Plugin x = plugin.getServer().getPluginManager().getPlugin("Statz");
+        // Main == Stats main class
+        if (x != null && x instanceof JavaPlugin) {
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	/**
-	 * Get the current stats plugin running on this server
-	 * 
-	 * @return returns the JavaPlugin that is responsible for stats. Null if
-	 *         there is none.
-	 */
-	public StatsPlugin getStatsPlugin() {
-		return statsPlugin;
-	}
+    /**
+     * Get the current stats plugin running on this server
+     * 
+     * @return returns the JavaPlugin that is responsible for stats. Null if
+     *         there is none.
+     */
+    public StatsPlugin getStatsPlugin() {
+        return statsPlugin;
+    }
 
-	public void searchStatsPlugin() {
-		if (findStats()) {
+    public void searchStatsPlugin() {
+        if (findStats()) {
 
-			plugin.getLogger().info("Found Stats plugin: Stats (by Lolmewn)");
+            plugin.getLogger().info("Found Stats plugin: Stats (by Lolmewn)");
 
-			statsPlugin = new StatsHandler(plugin,
-					(StatsAPIHandler) plugin.getDependencyManager().getDependencyHandler(Dependency.STATS));
+            statsPlugin = new StatsHandler(plugin,
+                    (StatsAPIHandler) plugin.getDependencyManager().getDependencyHandler(Dependency.STATS));
 
-			if (statsPlugin == null) {
-				plugin.getLogger().info("Couldn't hook into Stats! StatsHandler was unable to hook.");
-				return;
-			}
+            if (statsPlugin == null) {
+                plugin.getLogger().info("Couldn't hook into Stats! StatsHandler was unable to hook.");
+                return;
+            }
 
-			if (!statsPlugin.isEnabled()) {
-				plugin.getLogger().info(
-						"Couldn't hook into Stats! Make sure the version is correct and Stats properly connects to your MySQL database.");
-				return;
-			}
+            if (!statsPlugin.isEnabled()) {
+                plugin.getLogger().info(
+                        "Couldn't hook into Stats! Make sure the version is correct and Stats properly connects to your MySQL database.");
+                return;
+            }
 
-			plugin.getLogger().info("Hooked into Stats (by Lolmewn)");
-		} else if (findStatistics()) {
+            plugin.getLogger().info("Hooked into Stats (by Lolmewn)");
+        } else if (findStatistics()) {
 
-			plugin.getLogger().info("Found Stats plugin: Statistics (by bitWolfy)");
+            plugin.getLogger().info("Found Stats plugin: Statistics (by bitWolfy)");
 
-			statsPlugin = new StatisticsHandler(plugin,
-					(StatisticsAPIHandler) plugin.getDependencyManager().getDependencyHandler(Dependency.STATISTICS));
+            statsPlugin = new StatisticsHandler(plugin,
+                    (StatisticsAPIHandler) plugin.getDependencyManager().getDependencyHandler(Dependency.STATISTICS));
 
-			if (statsPlugin == null) {
-				plugin.getLogger().info("Couldn't hook into Statistics! StatisticsHandler was unable to hook.");
-				return;
-			}
+            if (statsPlugin == null) {
+                plugin.getLogger().info("Couldn't hook into Statistics! StatisticsHandler was unable to hook.");
+                return;
+            }
 
-			if (!statsPlugin.isEnabled()) {
-				plugin.getLogger().info(
-						"Couldn't hook into Statistics! Make sure the version is correct and Statistics properly connects to your MySQL database.");
-				return;
-			}
+            if (!statsPlugin.isEnabled()) {
+                plugin.getLogger().info(
+                        "Couldn't hook into Statistics! Make sure the version is correct and Statistics properly connects to your MySQL database.");
+                return;
+            }
 
-			plugin.getLogger().info("Hooked into Statistics (by bitWolfy)");
-		} else if (findStatz()) {
+            plugin.getLogger().info("Hooked into Statistics (by bitWolfy)");
+        } else if (findStatz()) {
 
-			plugin.getLogger().info("Found Statz plugin: Statz (by Staartvin)");
+            plugin.getLogger().info("Found Statz plugin: Statz (by Staartvin)");
 
-			statsPlugin = new StatzHandler(plugin,
-					(StatzAPIHandler) plugin.getDependencyManager().getDependency(AutorankDependency.STATZ));
+            statsPlugin = new StatzHandler(plugin,
+                    (StatzAPIHandler) plugin.getDependencyManager().getDependency(AutorankDependency.STATZ));
 
-			if (statsPlugin == null) {
-				plugin.getLogger().info("Couldn't hook into Statz! StatzHandler was unable to hook.");
-				return;
-			}
+            if (statsPlugin == null) {
+                plugin.getLogger().info("Couldn't hook into Statz! StatzHandler was unable to hook.");
+                return;
+            }
 
-			if (!statsPlugin.isEnabled()) {
-				plugin.getLogger().info("Couldn't hook into Statz! Make sure the version is correct!");
-				return;
-			}
+            if (!statsPlugin.isEnabled()) {
+                plugin.getLogger().info("Couldn't hook into Statz! Make sure the version is correct!");
+                return;
+            }
 
-			plugin.getLogger().info("Hooked into Statz (by Staartvin)");
-		} else {
-			// Use dummy handler if no stats plugin was found
-			statsPlugin = new DummyHandler();
+            plugin.getLogger().info("Hooked into Statz (by Staartvin)");
+        } else {
+            // Use dummy handler if no stats plugin was found
+            statsPlugin = new DummyHandler();
 
-			plugin.getLogger().info("No stats plugin found! Most requirements cannot be used!");
+            plugin.getLogger().info("No stats plugin found! Most requirements cannot be used!");
 
-		}
-	}
+        }
+    }
 }

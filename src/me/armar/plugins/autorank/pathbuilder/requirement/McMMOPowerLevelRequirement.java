@@ -8,42 +8,42 @@ import me.staartvin.statz.hooks.handlers.McMMOHandler;
 
 public class McMMOPowerLevelRequirement extends Requirement {
 
-	private McMMOHandler handler = null;
-	int powerLevel = -1;
+    private McMMOHandler handler = null;
+    int powerLevel = -1;
 
-	@Override
-	public String getDescription() {
-		return Lang.MCMMO_POWER_LEVEL_REQUIREMENT.getConfigValue(powerLevel + "");
-	}
+    @Override
+    public String getDescription() {
+        return Lang.MCMMO_POWER_LEVEL_REQUIREMENT.getConfigValue(powerLevel + "");
+    }
 
-	@Override
-	public String getProgress(final Player player) {
-		final int level = handler.getPowerLevel(player);
+    @Override
+    public String getProgress(final Player player) {
+        final int level = handler.getPowerLevel(player);
 
-		return level + "/" + powerLevel;
-	}
+        return level + "/" + powerLevel;
+    }
 
-	@Override
-	public boolean meetsRequirement(final Player player) {
+    @Override
+    public boolean meetsRequirement(final Player player) {
 
-		if (!handler.isAvailable())
-			return false;
+        if (!handler.isAvailable())
+            return false;
 
-		final int level = handler.getPowerLevel(player);
+        final int level = handler.getPowerLevel(player);
 
-		return level >= powerLevel;
-	}
+        return level >= powerLevel;
+    }
 
-	@Override
-	public boolean setOptions(final String[] options) {
+    @Override
+    public boolean setOptions(final String[] options) {
 
-		handler = (McMMOHandler) this.getDependencyManager().getDependencyHandler(Dependency.MCMMO);
+        handler = (McMMOHandler) this.getDependencyManager().getDependencyHandler(Dependency.MCMMO);
 
-		if (options.length > 0) {
-			powerLevel = Integer.parseInt(options[0]);
+        if (options.length > 0) {
+            powerLevel = Integer.parseInt(options[0]);
 
-		}
+        }
 
-		return powerLevel != -1 && handler != null;
-	}
+        return powerLevel != -1 && handler != null;
+    }
 }

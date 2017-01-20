@@ -9,112 +9,112 @@ import me.armar.plugins.autorank.util.AutorankTools;
 
 public class FoodEatenRequirement extends Requirement {
 
-	// [0] amount, [1] foodType
-	FoodWrapper foodEaten = null;
+    // [0] amount, [1] foodType
+    FoodWrapper foodEaten = null;
 
-	@Override
-	public String getDescription() {
+    @Override
+    public String getDescription() {
 
-		String desc = "";
+        String desc = "";
 
-		final int amount = foodEaten.getAmount();
-		final String foodType = foodEaten.getFoodName();
+        final int amount = foodEaten.getAmount();
+        final String foodType = foodEaten.getFoodName();
 
-		if (foodType == null || foodType.trim().equals("")) {
-			desc = Lang.FOOD_EATEN_REQUIREMENT.getConfigValue(amount + " food");
-		} else {
-			desc = Lang.FOOD_EATEN_REQUIREMENT
-					.getConfigValue(amount + " " + foodType.toLowerCase().replace("_", " ") + "(s)");
-		}
+        if (foodType == null || foodType.trim().equals("")) {
+            desc = Lang.FOOD_EATEN_REQUIREMENT.getConfigValue(amount + " food");
+        } else {
+            desc = Lang.FOOD_EATEN_REQUIREMENT
+                    .getConfigValue(amount + " " + foodType.toLowerCase().replace("_", " ") + "(s)");
+        }
 
-		// Check if this requirement is world-specific
-		if (this.isWorldSpecific()) {
-			desc = desc.concat(" (in world '" + this.getWorld() + "')");
-		}
+        // Check if this requirement is world-specific
+        if (this.isWorldSpecific()) {
+            desc = desc.concat(" (in world '" + this.getWorld() + "')");
+        }
 
-		return desc;
-	}
+        return desc;
+    }
 
-	@Override
-	public String getProgress(final Player player) {
+    @Override
+    public String getProgress(final Player player) {
 
-		String progress = "";
+        String progress = "";
 
-		final int amount = foodEaten.getAmount();
-		String foodType = foodEaten.getFoodName();
+        final int amount = foodEaten.getAmount();
+        String foodType = foodEaten.getFoodName();
 
-		final int totalFoodEaten = getStatsPlugin().getNormalStat(StatsHandler.statTypes.FOOD_EATEN,
-				player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld(), "foodType", foodType));
+        final int totalFoodEaten = getStatsPlugin().getNormalStat(StatsHandler.statTypes.FOOD_EATEN,
+                player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld(), "foodType", foodType));
 
-		if (foodType == null) {
-			foodType = "food";
-		} else {
-			foodType = foodType.toLowerCase();
-		}
+        if (foodType == null) {
+            foodType = "food";
+        } else {
+            foodType = foodType.toLowerCase();
+        }
 
-		progress = progress.concat(totalFoodEaten + "/" + amount + " " + foodType.replace("_", " ") + "(s)");
+        progress = progress.concat(totalFoodEaten + "/" + amount + " " + foodType.replace("_", " ") + "(s)");
 
-		return progress;
-	}
+        return progress;
+    }
 
-	@Override
-	public boolean meetsRequirement(final Player player) {
+    @Override
+    public boolean meetsRequirement(final Player player) {
 
-		if (!this.getStatsPlugin().isEnabled())
-			return false;
+        if (!this.getStatsPlugin().isEnabled())
+            return false;
 
-		final int amount = foodEaten.getAmount();
-		final String foodType = foodEaten.getFoodName();
+        final int amount = foodEaten.getAmount();
+        final String foodType = foodEaten.getFoodName();
 
-		final int totalFoodEaten = getStatsPlugin().getNormalStat(StatsHandler.statTypes.FOOD_EATEN,
-				player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld(), "foodType", foodType));
+        final int totalFoodEaten = getStatsPlugin().getNormalStat(StatsHandler.statTypes.FOOD_EATEN,
+                player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld(), "foodType", foodType));
 
-		return totalFoodEaten >= amount;
-	}
+        return totalFoodEaten >= amount;
+    }
 
-	@Override
-	public boolean setOptions(final String[] options) {
+    @Override
+    public boolean setOptions(final String[] options) {
 
-		final int total = Integer.parseInt(options[0]);
-		String foodType = "";
+        final int total = Integer.parseInt(options[0]);
+        String foodType = "";
 
-		if (options.length > 1) {
-			foodType = options[1].trim();
-		}
+        if (options.length > 1) {
+            foodType = options[1].trim();
+        }
 
-		foodEaten = new FoodWrapper(foodType, total);
+        foodEaten = new FoodWrapper(foodType, total);
 
-		return foodEaten != null;
-	}
+        return foodEaten != null;
+    }
 }
 
 class FoodWrapper {
 
-	private int amount;
-	private ItemStack foodItem;
+    private int amount;
+    private ItemStack foodItem;
 
-	public FoodWrapper(final String foodName, final int amount) {
-		this.setAmount(amount);
-		this.setFoodItem(AutorankTools.getFoodItemFromName(foodName));
-	}
+    public FoodWrapper(final String foodName, final int amount) {
+        this.setAmount(amount);
+        this.setFoodItem(AutorankTools.getFoodItemFromName(foodName));
+    }
 
-	public int getAmount() {
-		return amount;
-	}
+    public int getAmount() {
+        return amount;
+    }
 
-	public ItemStack getFoodItem() {
-		return foodItem;
-	}
+    public ItemStack getFoodItem() {
+        return foodItem;
+    }
 
-	public String getFoodName() {
-		return AutorankTools.getFoodName(foodItem);
-	}
+    public String getFoodName() {
+        return AutorankTools.getFoodName(foodItem);
+    }
 
-	public void setAmount(final int amount) {
-		this.amount = amount;
-	}
+    public void setAmount(final int amount) {
+        this.amount = amount;
+    }
 
-	public void setFoodItem(final ItemStack foodItem) {
-		this.foodItem = foodItem;
-	}
+    public void setFoodItem(final ItemStack foodItem) {
+        this.foodItem = foodItem;
+    }
 }

@@ -14,45 +14,50 @@ import org.bukkit.event.HandlerList;
  * 
  */
 public class CheckCommandEvent extends Event implements Cancellable {
-	private static final HandlerList handlers = new HandlerList();
+    private static final HandlerList handlers = new HandlerList();
 
-	public static HandlerList getHandlerList() {
-		return handlers;
-	}
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
 
-	private boolean isCancelled;
+    private boolean isCancelled;
 
-	private final Player player;
+    private final Player player;
 
-	/**
-	 * @param player Player that performs the command
-	 */
-	public CheckCommandEvent(final Player player) {
-		this.player = player;
-	}
+    /**
+     * @param player
+     *            Player that performs the command
+     */
+    public CheckCommandEvent(final Player player) {
+        this.player = player;
+    }
 
-	@Override
-	public HandlerList getHandlers() {
-		return handlers;
-	}
+    @Override
+    public HandlerList getHandlers() {
+        return handlers;
+    }
 
-	public Player getPlayer() {
-		return player;
-	}
+    public Player getPlayer() {
+        return player;
+    }
 
-	/* (non-Javadoc)
-	 * @see org.bukkit.event.Cancellable#isCancelled()
-	 */
-	@Override
-	public boolean isCancelled() {
-		return isCancelled;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.bukkit.event.Cancellable#isCancelled()
+     */
+    @Override
+    public boolean isCancelled() {
+        return isCancelled;
+    }
 
-	/* (non-Javadoc)
-	 * @see org.bukkit.event.Cancellable#setCancelled(boolean)
-	 */
-	@Override
-	public void setCancelled(final boolean cancel) {
-		isCancelled = cancel;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.bukkit.event.Cancellable#setCancelled(boolean)
+     */
+    @Override
+    public void setCancelled(final boolean cancel) {
+        isCancelled = cancel;
+    }
 }
