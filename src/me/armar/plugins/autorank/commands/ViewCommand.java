@@ -1,7 +1,9 @@
 package me.armar.plugins.autorank.commands;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -62,6 +64,26 @@ public class ViewCommand extends AutorankCommand {
             if (pathName.equals("list")) {
 
                 final List<Path> paths = plugin.getPathManager().getPaths();
+
+                if (isPlayer) {
+                    UUID uuid = ((Player) sender).getUniqueId();
+
+                    // Remove paths that have already been completed by the
+                    // user.
+                    for (Iterator<Path> iterator = paths.iterator(); iterator.hasNext();) {
+                        Path path = iterator.next();
+
+                        // If this path can be done over and over again, we obviously don't want to remove it.
+                        if (plugin.getPathsConfig().allowInfinitePathing(path.getInternalName())) {
+                            continue;
+                        }
+
+                        // Remove it if player already completed the path
+                        if (plugin.getPlayerDataConfig().hasCompletedPath(uuid, path.getInternalName())) {
+                            iterator.remove();
+                        }
+                    }
+                }
 
                 if (paths.isEmpty()) {
                     sender.sendMessage("There are no paths that you can choose.");
