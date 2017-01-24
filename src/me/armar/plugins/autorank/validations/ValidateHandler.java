@@ -9,8 +9,6 @@ public class ValidateHandler {
 
     public ValidateHandler(final Autorank instance) {
         this.autorank = instance;
-        // permGroupValidate = new PermissionGroupValidation(instance);
-        // statsValidate = new StatsRequirementValidation(instance);
     }
 
     public boolean validateConfigGroups(final SimpleYamlConfiguration config) {
