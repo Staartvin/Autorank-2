@@ -180,7 +180,7 @@ public class RequirementsHolder {
     // Using OR logic.
     // If any of the requirements is true, you can return true since were using
     // OR logic.
-    public boolean meetsRequirement(final Player player, final UUID uuid) {
+    public boolean meetsRequirement(final Player player, final UUID uuid, boolean forceCommand) {
 
         boolean result = false;
 
@@ -203,7 +203,11 @@ public class RequirementsHolder {
                 // If this requirement doesn't auto complete and hasn't already
                 // been completed, return false;
                 if (!r.useAutoCompletion() && !plugin.getPlayerDataConfig().hasCompletedRequirement(reqID, uuid)) {
-                    return false;
+                    // If not forcing via /ar complete command, we return false.
+                   if (!forceCommand) {
+                       return false;
+                   }
+                    
                 }
             }
 

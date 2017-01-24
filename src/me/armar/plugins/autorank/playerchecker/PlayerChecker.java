@@ -160,7 +160,7 @@ public class PlayerChecker {
             // Use auto completion
             if (holder.useAutoCompletion()) {
                 // Do auto complete
-                if (holder.meetsRequirement(player, player.getUniqueId())) {
+                if (holder.meetsRequirement(player, player.getUniqueId(), false)) {
                     // Player meets the requirement -> give him results
 
                     // Doesn't need to check whether this requirement was
@@ -197,7 +197,7 @@ public class PlayerChecker {
 
                     // Doesn't auto complete and doesn't meet requirement, then
                     // continue searching
-                    if (!holder.meetsRequirement(player, player.getUniqueId())) {
+                    if (!holder.meetsRequirement(player, player.getUniqueId(), false)) {
 
                         // If requirement is optional, we do not check.
                         if (holder.isOptional()) {

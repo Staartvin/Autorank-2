@@ -30,10 +30,7 @@ public class MoneyResult extends Result {
     @Override
     public boolean setOptions(final String[] options) {
 
-        System.out.println("OPTIONS: " + options);
-
         if (options.length > 0) {
-            System.out.println("OPTIONS 0: " + options[0]);
             money = Long.parseLong(options[0]);
         }
         

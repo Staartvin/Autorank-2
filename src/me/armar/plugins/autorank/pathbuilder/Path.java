@@ -106,7 +106,7 @@ public class Path {
 
         for (final RequirementsHolder holder : this.getRequirements()) {
             if (holder != null)
-                if (holder.meetsRequirement(player, player.getUniqueId())) {
+                if (holder.meetsRequirement(player, player.getUniqueId(), false)) {
                     holders.add(holder);
                 }
         }
@@ -149,7 +149,7 @@ public class Path {
             // We don't do partial completion so we only need to check if a
             // player passes all requirements holders.
             if (!plugin.getConfigHandler().usePartialCompletion()) {
-                if (!holder.meetsRequirement(player, uuid)) {
+                if (!holder.meetsRequirement(player, uuid, false)) {
                     return false;
                 } else {
                     continue;
@@ -158,7 +158,7 @@ public class Path {
 
             // Holder does not meet requirements, so not all requirements are
             // met!
-            if (!holder.meetsRequirement(player, uuid)) {
+            if (!holder.meetsRequirement(player, uuid, false)) {
                 return false;
             }
 
@@ -173,7 +173,7 @@ public class Path {
         List<RequirementsHolder> preRequisites = this.getPrerequisites();
 
         for (RequirementsHolder preRequisite : preRequisites) {
-            if (!preRequisite.meetsRequirement(player, player.getUniqueId())) {
+            if (!preRequisite.meetsRequirement(player, player.getUniqueId(), false)) {
                 // If one of the prerequisites does not hold, a player does not
                 // meet all the prerequisites.
                 return false;
