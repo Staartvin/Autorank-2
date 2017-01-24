@@ -68,6 +68,7 @@ import me.armar.plugins.autorank.pathbuilder.requirement.WorldRequirement;
 import me.armar.plugins.autorank.pathbuilder.result.CommandResult;
 import me.armar.plugins.autorank.pathbuilder.result.EffectResult;
 import me.armar.plugins.autorank.pathbuilder.result.MessageResult;
+import me.armar.plugins.autorank.pathbuilder.result.MoneyResult;
 import me.armar.plugins.autorank.pathbuilder.result.RankChangeResult;
 import me.armar.plugins.autorank.pathbuilder.result.Result;
 import me.armar.plugins.autorank.pathbuilder.result.SpawnFireworkResult;
@@ -285,16 +286,17 @@ public class Autorank extends JavaPlugin {
                     // Load dependencies
                     dependencyManager.loadDependencies();
 
-                    // After dependencies, load paths
-                    // Initialize paths
-                    getPathManager().initialiseFromConfigs();
-
                 } catch (final Throwable t) {
 
                     // When an error occured!
 
-                    getLogger().severe("Could not hook into a AutorankDependency: \nCause: " + t.getCause());
+                    getLogger().severe("Could not hook into a AutorankDependency: \nCause: " + t.getMessage());
                 }
+                
+
+                // After dependencies, load paths
+                // Initialize paths
+                getPathManager().initialiseFromConfigs();
             }
         }, 1L);
 
@@ -400,6 +402,7 @@ public class Autorank extends JavaPlugin {
         res.registerResult("rank change", RankChangeResult.class);
         res.registerResult("tp", TeleportResult.class);
         res.registerResult("firework", SpawnFireworkResult.class);
+        res.registerResult("money", MoneyResult.class);
     }
 
     /**

@@ -430,7 +430,11 @@ public enum Lang {
     /**
      * Be in group {0}.
      */
-    GROUP_REQUIREMENT("group-requirement", "Be in group {0}."),;
+    GROUP_REQUIREMENT("group-requirement", "Be in group {0}."),
+    /**
+     * Reward you with {0}.
+     */
+    MONEY_RESULT("money-result", "Reward you with {0}."),;
 
     private static FileConfiguration LANG;
 

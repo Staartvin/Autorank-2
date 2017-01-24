@@ -86,6 +86,7 @@ ranks:
 #       (also possible:) has achievement: BREED_COW (A player has to have a specific achievement. For a list of achievements, see https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Achievement.html)
 #       rpgme skill level: 20;mining (Player has to have at least level 20 in mining in RPGme) (requires RPGme)
 #       rpgme combat level: 100 (Player has to have at least combat level 100 in RPGme) (requires RPGme)
+#       in group: TrumpSupporters (Players needs to be in the rank/group 'TrumpSupporters')
 #
 #   results:
 #       rank change: new-rank
@@ -96,3 +97,4 @@ ranks:
 #       effect: STEP_SOUND;8 (first argument is the effect name, second is the effect data. For a list of possible effects go to https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Effect.html)
 #       tp: x;y;z;world;yaw;pitch (tp: 0;0;0;world_nether;1.0;2.0)
 #       firework: target;power;type;R;G;B (Spawn a firework with on a player or spawn, with specified power, type and RGB colour) (target can be 'player' or 'spawn', power is an integer, type is a type (see https://hub.spigotmc.org/javadocs/spigot/org/bukkit/FireworkEffect.Type.html), R;G;B is a RGB colour code (see http://www.rapidtables.com/web/color/RGB_Color.htm))
+#       money: 1000 (Reward a player with a 1000 money.) (Requires Vault!)
