@@ -10,7 +10,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import com.google.common.collect.Lists;
 
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.pathbuilder.result.Result;
 
 /**
  * This class is used to talk to the Paths.yml file. It allows creation,
