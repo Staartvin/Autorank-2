@@ -182,6 +182,23 @@ public class Path {
 
         return true;
     }
+    
+    /**
+     * Perform the results upon choosing this path.
+     * @param player Player to perform them for.
+     * @return true if all results were performed succesfully, false otherwise.
+     */
+    public boolean performResultsUponChoosing(Player player) {
+        boolean success = true;
+        
+        for (Result r: this.getResultsUponChoosing()) {
+            if (r.applyResult(player)) {
+                success = false;
+            }
+        }
+        
+        return success;
+    }
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;

@@ -96,6 +96,9 @@ public class ChooseCommand extends AutorankCommand {
         // Give player confirmation message.
         sender.sendMessage(Lang.CHOSEN_PATH.getConfigValue(targetPath.getDisplayName()));
         sender.sendMessage(Lang.PROGRESS_RESET.getConfigValue());
+        
+        // Perform results of path (if specified)
+        targetPath.performResultsUponChoosing(player);
 
         return true;
     }
