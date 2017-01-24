@@ -33,6 +33,8 @@ public class Path {
     private List<RequirementsHolder> requirements = new ArrayList<RequirementsHolder>();
 
     private List<Result> results = new ArrayList<Result>();
+    
+    private List<Result> resultsUponChoosing = new ArrayList<Result>();
 
     public Path(final Autorank plugin) {
         this.plugin = plugin;
@@ -204,5 +206,13 @@ public class Path {
 
     public void setInternalName(String internalName) {
         this.internalName = internalName;
+    }
+
+    public List<Result> getResultsUponChoosing() {
+        return resultsUponChoosing;
+    }
+
+    public void setResultsUponChoosing(List<Result> resultsUponChoosing) {
+        this.resultsUponChoosing = resultsUponChoosing;
     }
 }

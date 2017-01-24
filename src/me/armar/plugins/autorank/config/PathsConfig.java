@@ -10,6 +10,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import com.google.common.collect.Lists;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.pathbuilder.result.Result;
 
 /**
  * This class is used to talk to the Paths.yml file. It allows creation,
@@ -492,5 +493,30 @@ public class PathsConfig {
                 return this.getConfig().getBoolean(pathName + ".requirements." + reqName + ".options.auto complete");
             }
         }
+    }
+    
+    /**
+     * Get the results that should be performed when a user chooses a given path.
+     * @param pathName Name of the path
+     * @return a list of result names that should be used performed
+     */
+    public ArrayList<String> getResultsUponChoosing(String pathName) {
+        Set<String> results = new HashSet<String>();
+
+        results = (getConfig().getConfigurationSection(pathName + ".upon choosing") != null)
+                ? getConfig().getConfigurationSection(pathName + ".upon choosing").getKeys(false)
+                : new HashSet<String>();
+
+        return Lists.newArrayList(results);
+    }
+    
+    /**
+     * Get the result value of the given result.
+     * @param pathName Name of the path
+     * @param resName Name of the result
+     * @return the string value of this result or null if it doesn't exist.
+     */
+    public String getResultValueUponChoosing(final String pathName, final String resName) {
+        return getConfig().getString(pathName + ".upon choosing." + resName);
     }
 }

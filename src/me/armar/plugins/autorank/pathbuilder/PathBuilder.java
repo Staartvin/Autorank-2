@@ -155,7 +155,7 @@ public class PathBuilder {
 
                 // Implement optional option logic
                 final boolean optional = plugin.getPathsConfig().isOptionalRequirement(pathName, reqName);
-                // Result for requirement
+                // Result for requirements
                 final List<String> results = plugin.getPathsConfig().getResultsOfRequirement(pathName, reqName);
 
                 // Create a new result List that will get all result when this
@@ -271,6 +271,22 @@ public class PathBuilder {
                 // Now add holder to prerequisites list of path
                 path.addPrerequisite(prereqHolder);
             }
+
+            // Result for this path (upon choosing)
+            final List<String> results = plugin.getPathsConfig().getResultsUponChoosing(pathName);
+
+            // Create a new result List that will get all result when this
+            // path is chosen
+            final List<Result> realResults = new ArrayList<Result>();
+
+            // Get results of requirement
+            for (final String resultString : results) {
+                realResults.add(createResult(resultString,
+                        plugin.getPathsConfig().getResultValueUponChoosing(pathName, resultString)));
+            }
+            
+            // Now set the result upon choosing for this path
+            path.setResultsUponChoosing(realResults);
 
             // Now add display name to this path.
             path.setDisplayName(plugin.getPathsConfig().getDisplayName(pathName));
