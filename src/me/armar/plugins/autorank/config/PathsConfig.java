@@ -304,7 +304,13 @@ public class PathsConfig {
      * @return the value string or null if it doesn't exist.
      */
     public String getResultOfPath(String pathName, String resultName) {
-        return getConfig().getString(pathName + ".results." + resultName);
+        // Correct config
+        String result;
+        result = (this.getConfig().get(pathName + ".results." + resultName + ".value") != null)
+                ? this.getConfig().get(pathName + ".results." + resultName + ".value").toString()
+                : this.getConfig().getString(pathName + ".results." + resultName).toString();
+
+        return result;
     }
 
     /**
@@ -320,7 +326,12 @@ public class PathsConfig {
      * @return the value string or null if it doesn't exist.
      */
     public String getResultOfRequirement(final String pathName, final String reqName, final String resName) {
-        return getConfig().getString(pathName + ".requirements." + reqName + ".results." + resName);
+        String result;
+        result = (this.getConfig().get(pathName + ".requirements." + reqName + ".results." + resName + ".value") != null)
+                ? this.getConfig().get(pathName + ".requirements." + reqName + ".results." + resName + ".value").toString()
+                : this.getConfig().getString(pathName + ".requirements." + reqName + ".results." + resName).toString();
+
+        return result;
     }
 
     /**
@@ -516,6 +527,12 @@ public class PathsConfig {
      * @return the string value of this result or null if it doesn't exist.
      */
     public String getResultValueUponChoosing(final String pathName, final String resName) {
-        return getConfig().getString(pathName + ".upon choosing." + resName);
+     // Correct config
+        String result;
+        result = (this.getConfig().get(pathName + ".upon choosing." + resName + ".value") != null)
+                ? this.getConfig().get(pathName + ".upon choosing." + resName + ".value").toString()
+                : this.getConfig().getString(pathName + ".upon choosing." + resName).toString();
+
+        return result;
     }
 }

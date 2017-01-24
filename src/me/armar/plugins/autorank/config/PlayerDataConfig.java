@@ -338,6 +338,53 @@ public class PlayerDataConfig {
     public void hasLeaderboardExemption(final UUID uuid, final boolean value) {
         config.set(uuid.toString() + ".exempt leaderboard", value);
     }
+    
+    /**
+     * Add a path to the started path list.
+     * @param uuid UUID of the player
+     * @param pathName Name of the path
+     */
+    public void addStartedPath(UUID uuid, String pathName) {
+        // Don't add a path if it's already in there.
+        if (this.getStartedPaths(uuid).contains(pathName)) return;
+        
+        List<String> startedPaths = this.getStartedPaths(uuid);
+        
+        startedPaths.add(pathName);
+        
+        this.setStartedPaths(uuid, startedPaths);
+    }
+    
+    /**
+     * Get a list of paths that the given player started but did not complete yet.
+     * When a path is in this list it does necessarily mean that this path is still his active path.
+     * Players can choose a new path at any point in time they like.
+     * 
+     * @param uuid UUID of the player
+     * @return a list of path names that the player started
+     */
+    public List<String> getStartedPaths(UUID uuid) {
+        return config.getStringList(uuid + ".started paths");
+    }
+    
+    /**
+     * Set the paths that the given player started.
+     * @param uuid UUID of the player
+     * @param pathNames The paths the player started
+     */
+    public void setStartedPaths(UUID uuid, List<String> pathNames) {      
+        config.set(uuid + ".started paths", pathNames);
+    }
+    
+    /**
+     * Check whether a path has been started by a player.
+     * @param uuid UUID of the player
+     * @param pathName Name of the path
+     * @return true if the player has started this path, false otherwise (if this path was completed or never started)
+     */
+    public boolean hasStartedPath(UUID uuid, String pathName) {
+        return this.getStartedPaths(uuid).contains(pathName);
+    }
 
     /**
      * Set the path that a player has chosen.
