@@ -1,5 +1,6 @@
 package me.armar.plugins.autorank.leaderboard;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -67,8 +68,8 @@ public class LeaderboardHandler {
     // private String[] messages;
     private final Autorank plugin;
 
-    private final double validTime = 30; // LeaderboardHandler is valid for 30
-                                         // minutes.
+    private final double validTime = 60 * 24; // LeaderboardHandler is valid for 24 hours
+                                         // hours.
 
     public LeaderboardHandler(final Autorank plugin) {
         this.plugin = plugin;
@@ -123,6 +124,10 @@ public class LeaderboardHandler {
 
         // String firstWorld = plugin.getServer().getWorlds().get(0).getName();
 
+        int size = uuids.size();
+        
+        int lastSentPercentage = 0;
+        
         // Fill unsorted lists
         for (int i = 0; i < uuids.size(); i++) {
 
@@ -142,6 +147,15 @@ public class LeaderboardHandler {
             // If UUID is null, we can't do anything with it.
             if (uuids.get(i) == null) {
                 continue;
+            }
+
+            DecimalFormat df = new DecimalFormat("#.#");
+            double percentage = ((i * 1.0) / size) * 100;
+            int floored = (int) Math.floor(percentage);
+            
+            if (lastSentPercentage != floored) {
+                lastSentPercentage = floored;
+                plugin.debugMessage("Autorank leaderboard update is at " + df.format(percentage)+ "%.");
             }
 
             // Use cache on .getTimeOfPlayer() so that we don't refresh all
