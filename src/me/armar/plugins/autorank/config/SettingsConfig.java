@@ -279,5 +279,13 @@ public class SettingsConfig {
         else
             return AutorankDependency.AUTORANK;
     }
+    
+    /**
+     * Check whether Autorank should automatically remove old data from its database.
+     * @return true if it should, false otherwise.
+     */
+    public boolean shouldRemoveOldEntries() {
+        return this.getConfig().getBoolean("automatically archive old data", true);
+    }
 
 }

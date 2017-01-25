@@ -8,9 +8,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 
+import org.bukkit.OfflinePlayer;
+
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.config.SimpleYamlConfiguration;
-import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.playtimes.PlaytimeManager;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
@@ -245,20 +246,54 @@ public class FlatFileManager {
         // Keep a counter of archived items
         int counter = 0;
 
+        final SimpleYamlConfiguration data = this.getDataFile(TimeType.TOTAL_TIME);
+
         for (final UUID uuid : getUUIDKeys(TimeType.TOTAL_TIME)) {
             final int time = this.getLocalTime(TimeType.TOTAL_TIME, uuid);
 
             // Found a record to be archived
             if (time < minimum) {
                 counter++;
-
-                final SimpleYamlConfiguration data = this.getDataFile(TimeType.TOTAL_TIME);
                 // Remove record
                 data.set(uuid.toString(), null);
             }
         }
 
         saveFiles();
+        return counter;
+    }
+
+    /**
+     * Remove entries from Autorank's database when the user has not been online for more than 30 days.
+     * @return number of entries that were deleted.
+     */
+    public int removeOldEntries() {
+        int counter = 0;
+        // Remove data from users that haven't been online for a while
+
+        final SimpleYamlConfiguration data = this.getDataFile(TimeType.TOTAL_TIME);
+
+        long currentTime = System.currentTimeMillis();
+
+        for (final UUID uuid : getUUIDKeys(TimeType.TOTAL_TIME)) {
+            OfflinePlayer offPlayer = plugin.getServer().getOfflinePlayer(uuid);
+            
+            if (offPlayer.getName() == null) {
+                // Remove record
+                data.set(uuid.toString(), null);
+                counter++;
+                continue;
+            }
+
+            long lastPlayed = offPlayer.getLastPlayed();
+
+            if (lastPlayed <= 0 || (currentTime - lastPlayed) / 86400000 >= 30) {
+                // Remove record
+                data.set(uuid.toString(), null);
+                counter++;
+            }
+        }
+
         return counter;
     }
 

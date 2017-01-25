@@ -292,13 +292,25 @@ public class Autorank extends JavaPlugin {
 
                     getLogger().severe("Could not hook into a AutorankDependency: \nCause: " + t.getMessage());
                 }
-                
 
                 // After dependencies, load paths
                 // Initialize paths
                 getPathManager().initialiseFromConfigs();
             }
         }, 1L);
+
+        // Remove old data of players
+        getServer().getScheduler().runTaskTimerAsynchronously(this, new Runnable() {
+            @Override
+            public void run() {
+                if (!getSettingsConfig().shouldRemoveOldEntries()) return;
+                
+                // Remove old entries
+                int removed = getFlatFileManager().removeOldEntries();
+
+                getLogger().info("Removed " + removed + " old data entries from database!");
+            }
+        }, 0, (long) 20*60*60*24);
 
         // ------------- Register commands -------------
 
