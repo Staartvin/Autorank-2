@@ -9,6 +9,7 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
 import me.armar.plugins.autorank.language.Lang;
+import net.md_5.bungee.api.ChatColor;
 
 /**
  * The command delegator for the '/ar leaderboard' command.
@@ -79,10 +80,24 @@ public class LeaderboardCommand extends AutorankCommand {
             sender.sendMessage(Lang.INVALID_LEADERBOARD_TYPE.getConfigValue());
             return true;
         }
+        
+        final TimeType type2 = type;
 
         if (force) {
             // Forcely update leaderboard first.
-            plugin.getLeaderboardManager().updateLeaderboard(type);
+            sender.sendMessage(ChatColor.GREEN + "Updating the leaderboard. This could take a while!");
+            sender.sendMessage(ChatColor.GOLD + "I'll let you know when the leaderboard is updated.");
+            
+            plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+                public void run() {
+                    // Update leaderboard.
+                    plugin.getLeaderboardManager().updateLeaderboard(type2);
+                    
+                    sender.sendMessage(ChatColor.YELLOW + "Leaderboard updated!");
+                }
+            });
+            
+            return true;
         }
 
         if (!broadcast) {
