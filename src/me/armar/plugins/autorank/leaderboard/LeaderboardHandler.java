@@ -131,23 +131,17 @@ public class LeaderboardHandler {
         // Fill unsorted lists
         for (int i = 0; i < uuids.size(); i++) {
 
-            // If player is exempted
-            if (plugin.getPlayerDataConfig().hasLeaderboardExemption(uuids.get(i))) {
-                continue;
-            }
-
-            // Get the cached value of this uuid
-            final String playerName = plugin.getUUIDStorage().getCachedPlayerName(uuids.get(i));
-
-            if (playerName == null) {
-                plugin.debugMessage("Could not get cached player name of uuid '" + uuids.get(i) + "'!");
-                continue;
-            }
+            UUID uuid = uuids.get(i);
 
             // If UUID is null, we can't do anything with it.
-            if (uuids.get(i) == null) {
+            if (uuid == null) {
                 continue;
             }
+            
+            // If player is exempted
+            if (plugin.getPlayerDataConfig().hasLeaderboardExemption(uuid)) {
+                continue;
+            }   
 
             DecimalFormat df = new DecimalFormat("#.#");
             double percentage = ((i * 1.0) / size) * 100;
@@ -163,14 +157,21 @@ public class LeaderboardHandler {
             if (type == TimeType.TOTAL_TIME) {
 
                 if (plugin.getConfigHandler().useGlobalTimeInLeaderboard()) {
-                    times.put(uuids.get(i), plugin.getMySQLManager().getGlobalTime(uuids.get(i)));
+                    times.put(uuid, plugin.getMySQLManager().getGlobalTime(uuid));
                 } else {
-                    times.put(uuids.get(i), (plugin.getPlaytimes().getTimeOfPlayer(playerName, true) / 60));
+                    // Get the cached value of this uuid
+                    final String playerName = plugin.getUUIDStorage().getCachedPlayerName(uuid);
+                    
+                    if (playerName == null) {
+                        plugin.debugMessage("Could not get cached player name of uuid '" + uuid + "'!");
+                        continue;
+                    }
+                    
+                    times.put(uuid, (plugin.getPlaytimes().getTimeOfPlayer(playerName, true) / 60));
                 }
             } else {
-                times.put(uuids.get(i), plugin.getFlatFileManager().getLocalTime(type, uuids.get(i)));
-            }
-
+                times.put(uuid, plugin.getFlatFileManager().getLocalTime(type, uuid));
+            }  
         }
 
         // Sort all values
