@@ -30,7 +30,7 @@ public class GlobalAddCommand extends AutorankCommand {
 
     @Override
     public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
-
+        
         if (!plugin.getCommandsManager().hasPermission("autorank.gadd", sender)) {
             return true;
         }
@@ -61,7 +61,7 @@ public class GlobalAddCommand extends AutorankCommand {
             @Override
             public void run() {
                 int value = -1;
-
+                
                 if (args.length > 2) {
 
                     final StringBuilder builder = new StringBuilder();
@@ -69,14 +69,20 @@ public class GlobalAddCommand extends AutorankCommand {
                     for (int i = 2; i < args.length; i++) {
                         builder.append(args[i]);
                     }
+                    
+                    int changeValue = 0;
 
                     if (!builder.toString().contains("m") && !builder.toString().contains("h")
                             && !builder.toString().contains("d")) {
-                        value = AutorankTools.stringtoInt(builder.toString().trim());
-                        value += plugin.getMySQLManager().getFreshGlobalTime(uuid);
+                        changeValue = AutorankTools.stringtoInt(builder.toString().trim());
                     } else {
-                        value = AutorankTools.stringToTime(builder.toString(), Time.MINUTES);
-                        value += plugin.getMySQLManager().getFreshGlobalTime(uuid);
+                        changeValue = AutorankTools.stringToTime(builder.toString(), Time.MINUTES);   
+                    }
+                    
+                    if (changeValue < 0) {
+                        value = -1;
+                    } else {
+                        value += plugin.getMySQLManager().getFreshGlobalTime(uuid) + changeValue;
                     }
                 }
 

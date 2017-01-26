@@ -565,9 +565,13 @@ public class AutorankTools {
     public static double stringtoDouble(final String string) throws NumberFormatException {
         double res = 0;
 
-        if (string != null)
-
-            res = Double.parseDouble(string);
+        if (string != null) {
+            try {
+                res = Double.parseDouble(string);
+            } catch (NumberFormatException e) {
+                return -1;
+            }
+        }
 
         return res;
     }
@@ -575,8 +579,13 @@ public class AutorankTools {
     public static int stringtoInt(final String string) throws NumberFormatException {
         int res = 0;
 
-        if (string != null)
-            res = Integer.parseInt(string);
+        if (string != null) {
+            try {
+                res = Integer.parseInt(string);
+            } catch (NumberFormatException e) {
+                return -1;
+            }
+        }
 
         return res;
     }
@@ -607,6 +616,11 @@ public class AutorankTools {
         // No day or hours or minute was given, so default to minutes.
         if (days == null && hours == null & minutes == null) {
             minutes = string;
+        }
+
+        if (stringtoDouble(minutes) < 0) {
+            // Something is wrong, return -1
+            return -1;
         }
 
         res += stringtoDouble(minutes);

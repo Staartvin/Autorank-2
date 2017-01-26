@@ -60,14 +60,20 @@ public class RemoveCommand extends AutorankCommand {
             for (int i = 2; i < args.length; i++) {
                 builder.append(args[i]);
             }
+            
+            int changeValue = 0;
 
             if (!builder.toString().contains("m") && !builder.toString().contains("h")
                     && !builder.toString().contains("d")) {
-                value = -AutorankTools.stringtoInt(builder.toString().trim());
-                value += plugin.getFlatFileManager().getLocalTime(TimeType.TOTAL_TIME, uuid);
+                changeValue = AutorankTools.stringtoInt(builder.toString().trim());
             } else {
-                value = -AutorankTools.stringToTime(builder.toString(), Time.MINUTES);
-                value += plugin.getFlatFileManager().getLocalTime(TimeType.TOTAL_TIME, uuid);
+                changeValue = AutorankTools.stringToTime(builder.toString(), Time.MINUTES);   
+            }
+            
+            if (changeValue < 0) {
+                value = -1;
+            } else {
+                value += plugin.getFlatFileManager().getLocalTime(TimeType.TOTAL_TIME, uuid) - changeValue;
             }
         }
 
