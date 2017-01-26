@@ -12,6 +12,7 @@ import me.armar.plugins.autorank.config.InternalPropertiesConfig;
 import me.armar.plugins.autorank.config.PathsConfig;
 import me.armar.plugins.autorank.config.PlayerDataConfig;
 import me.armar.plugins.autorank.config.SettingsConfig;
+import me.armar.plugins.autorank.converter.DataConverter;
 import me.armar.plugins.autorank.data.flatfile.FlatFileManager;
 import me.armar.plugins.autorank.data.mysql.MySQLManager;
 import me.armar.plugins.autorank.debugger.Debugger;
@@ -120,6 +121,7 @@ public class Autorank extends JavaPlugin {
     // Miscalleaneous
     private PlayerChecker playerChecker;
     private PlaytimeManager playtimes;
+    private DataConverter dataConverter;
 
     // Data connection
     private MySQLManager mysqlManager;
@@ -257,6 +259,9 @@ public class Autorank extends JavaPlugin {
 
         // Load uuids - ready for new ones
         getUUIDStorage().createNewFiles();
+        
+        // Load data converter
+        setDataConverter(new DataConverter(this));
 
         // ------------- Create files & folders -------------
 
@@ -305,6 +310,8 @@ public class Autorank extends JavaPlugin {
             public void run() {
                 if (!getSettingsConfig().shouldRemoveOldEntries()) return;
                 
+                if (!getInternalPropertiesConfig().isConvertedToNewFormat()) return;
+                
                 // Remove old entries
                 int removed = getFlatFileManager().removeOldEntries();
 
@@ -352,6 +359,18 @@ public class Autorank extends JavaPlugin {
 
         // ------------- Say Welcome! -------------
         getLogger().info(String.format("Autorank %s has been enabled!", getDescription().getVersion()));
+        
+        
+        getServer().getScheduler().runTaskLaterAsynchronously(this, new Runnable() {
+            @Override
+            public void run() {
+                
+                // Convert to new format (Autorank 4.0) if needed
+                if (!getInternalPropertiesConfig().isConvertedToNewFormat()) {
+                    getDataConverter().convertData();
+                }
+            }
+        }, 20 * 5);
     }
 
     // ---------- CONVENIENCE METHODS ---------- \\
@@ -694,5 +713,13 @@ public class Autorank extends JavaPlugin {
 
     public void setFlatFileManager(FlatFileManager flatFileManager) {
         this.flatFileManager = flatFileManager;
+    }
+
+    public DataConverter getDataConverter() {
+        return dataConverter;
+    }
+
+    public void setDataConverter(DataConverter dataConverter) {
+        this.dataConverter = dataConverter;
     }
 }

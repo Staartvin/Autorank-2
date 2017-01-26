@@ -190,4 +190,22 @@ public class InternalPropertiesConfig {
 
         config.saveFile();
     }
+    
+    /**
+     * Check whether Autorank is using a 4.0+ format.
+     * @return true if it is, false otherwise.
+     */
+    public boolean isConvertedToNewFormat() {
+        return config.getBoolean("is converted to new format", false);
+    }
+    
+    /**
+     * Set whether Autorank is using the 4.0+ format.
+     * @param value either true or false
+     */
+    public void setConvertedToNewFormat(boolean value) {
+        config.set("is converted to new format", value);
+        
+        config.saveFile();
+    }
 }
