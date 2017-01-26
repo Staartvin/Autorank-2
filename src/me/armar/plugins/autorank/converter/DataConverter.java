@@ -77,6 +77,8 @@ public class DataConverter {
         // Reload file
         plugin.getFlatFileManager().getDataFile(TimeType.TOTAL_TIME).reloadFile();
         plugin.getFlatFileManager().getDataFile(TimeType.WEEKLY_TIME).reloadFile();
+        plugin.getFlatFileManager().getDataFile(TimeType.MONTHLY_TIME).reloadFile();
+        plugin.getFlatFileManager().getDataFile(TimeType.DAILY_TIME).reloadFile();
         
         return true;
     }

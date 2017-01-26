@@ -1,6 +1,6 @@
 # Paths file - This file will contain all paths that a player is allowed to take. Previously known as 'AdvancedConfig.yml'.
 # This file contains (by default) a Test group that shows the basic syntax of this file. 
-# For more information, go to <LINK HERE>.
+# For more information, go to https://github.com/Armarr/Autorank-2/wiki/How-to-configure-the-Paths.yml-file%3F.
 Test:
   prerequisites:
     world: world_nether
