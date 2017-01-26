@@ -47,7 +47,7 @@ check command layout: "&p has played for &time and is on path ''&path''. Require
 # Changes the layout of the /ar check command.
 # &p : Player name
 # &time : time in hours, minutes and seconds
-# &groups : Groups the player is in. Most of the time this is only one group.
+# &path : Path the player has chosen.
 # &reqs : a list of all requirements
 
 sql:
