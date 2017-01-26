@@ -270,6 +270,8 @@ public class FlatFileManager {
     public int removeOldEntries() {
         int counter = 0;
         // Remove data from users that haven't been online for a while
+        
+        int daysThreshold = 60;
 
         final SimpleYamlConfiguration data = this.getDataFile(TimeType.TOTAL_TIME);
 
@@ -287,7 +289,7 @@ public class FlatFileManager {
 
             long lastPlayed = offPlayer.getLastPlayed();
 
-            if (lastPlayed <= 0 || (currentTime - lastPlayed) / 86400000 >= 30) {
+            if (lastPlayed <= 0 || (currentTime - lastPlayed) / 86400000 >= daysThreshold) {
                 // Remove record
                 data.set(uuid.toString(), null);
                 counter++;
