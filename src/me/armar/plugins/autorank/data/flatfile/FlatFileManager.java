@@ -13,7 +13,6 @@ import org.bukkit.OfflinePlayer;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.config.SimpleYamlConfiguration;
 import me.armar.plugins.autorank.language.Lang;
-import me.armar.plugins.autorank.playtimes.PlaytimeManager;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
 /**
@@ -81,9 +80,6 @@ public class FlatFileManager {
                 saveFiles();
             }
         }, 20L, 1200L);
-
-        plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new UpdatePlaytime(this, plugin),
-                PlaytimeManager.INTERVAL_MINUTES * 20 * 60, PlaytimeManager.INTERVAL_MINUTES * 20 * 60);
     }
 
     /**

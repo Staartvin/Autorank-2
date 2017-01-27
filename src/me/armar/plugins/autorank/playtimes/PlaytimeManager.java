@@ -3,6 +3,7 @@ package me.armar.plugins.autorank.playtimes;
 import java.util.UUID;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.data.flatfile.UpdatePlaytime;
 import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
 import me.armar.plugins.autorank.hooks.DependencyManager.AutorankDependency;
 import me.armar.plugins.autorank.hooks.statzapi.StatzAPIHandler;
@@ -33,6 +34,9 @@ public class PlaytimeManager {
         INTERVAL_MINUTES = plugin.getConfigHandler().getIntervalTime();
 
         plugin.getLogger().info("Interval check every " + INTERVAL_MINUTES + " minutes.");
+        
+        plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new UpdatePlaytime(plugin.getFlatFileManager(), plugin),
+                PlaytimeManager.INTERVAL_MINUTES * 20 * 60, PlaytimeManager.INTERVAL_MINUTES * 20 * 60);
 
         timePlugin = plugin.getConfigHandler().useTimeOf();
     }

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.Autorank;
@@ -204,10 +205,10 @@ public class RequirementsHolder {
                 // been completed, return false;
                 if (!r.useAutoCompletion() && !plugin.getPlayerDataConfig().hasCompletedRequirement(reqID, uuid)) {
                     // If not forcing via /ar complete command, we return false.
-                   if (!forceCommand) {
-                       return false;
-                   }
-                    
+                    if (!forceCommand) {
+                        return false;
+                    }
+
                 }
             }
 
@@ -244,6 +245,12 @@ public class RequirementsHolder {
                     // reqID);
                 } else {
                     plugin.getPlayerDataConfig().addCompletedRequirement(uuid, reqID);
+                }
+
+                if (!this.isPrerequisite()) {
+                    // Let player know he completed a requirement
+                    player.sendMessage(ChatColor.DARK_GREEN + "You completed requirement " + ChatColor.GOLD + (r.getReqId() + 1) + ChatColor.DARK_GREEN + ": "
+                            + ChatColor.DARK_AQUA + r.getDescription());
                 }
 
                 boolean noErrors = true;

@@ -131,8 +131,8 @@ public class Path {
 
     public boolean meetRequirements(final Player player) {
 
-        final UUID uuid = plugin.getUUIDStorage().getStoredUUID(player.getName());
-
+        UUID uuid = player.getUniqueId();
+        
         // Get chosen path of player
         Path currentPath = plugin.getPathManager().getCurrentPath(uuid);
 

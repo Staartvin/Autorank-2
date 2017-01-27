@@ -463,38 +463,6 @@ public class PathsConfig {
      */
     public void loadConfig() {
 
-        /*
-         * getConfig().options() .header(
-         * "Paths file - This file will contain all paths that a player is allowed to take. Previously known as 'AdvancedConfig.yml'."
-         * +
-         * "\nThis file contains (by default) a Test group that shows the basic syntax of this file. "
-         * + "\nFor more information, go to <LINK HERE>.");
-         * 
-         * // Add default values here
-         * 
-         * String pathName = "Test";
-         * 
-         * // Prerequisites before a player can choose this path
-         * //getConfig().addDefault(pathName + ".prerequisites.rank", "Test");
-         * getConfig().addDefault(pathName + ".prerequisites.world",
-         * "world_nether"); getConfig().addDefault(pathName +
-         * ".prerequisites.money", 1000);
-         * 
-         * // Requirements a player must meet to complete this path
-         * getConfig().addDefault(pathName + ".requirements.money", 10000);
-         * getConfig().addDefault(pathName + ".requirements.blocks broken", 50);
-         * 
-         * // Results that will be fired when a player completes this path
-         * getConfig().addDefault(pathName + ".results.rank change",
-         * "TestGroup2"); getConfig().addDefault(pathName + ".results.command",
-         * "broadcast &p has just completed path 'Default'!");
-         * getConfig().addDefault(pathName + ".results.command2",
-         * "give &p 1 100"); getConfig().addDefault(pathName +
-         * ".results.message",
-         * "Congratulations, you completed the 'Default' path!");
-         * 
-         * getConfig().options().copyDefaults(true); saveConfig();
-         */
     }
 
     /**

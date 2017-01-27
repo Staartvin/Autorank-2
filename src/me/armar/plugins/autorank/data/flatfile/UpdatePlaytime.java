@@ -49,7 +49,7 @@ public class UpdatePlaytime implements Runnable {
                 plugin.debugMessage("Could not update play time of " + player.getName() + " as (s)he is not online!");
                 continue;
             }
-
+            
             updateMinutesPlayed(player);
         }
     }
@@ -68,7 +68,7 @@ public class UpdatePlaytime implements Runnable {
         // Check for leaderboard exempt permission -> updates value of
         // leaderboard exemption
         plugin.getPlayerChecker().doLeaderboardExemptCheck(player);
-
+        
         if (player.hasPermission("autorank.rsefrxsgtse") || !player.hasPermission("autorank.timeexclude")) {
 
             final DependencyManager depManager = plugin.getDependencyManager();
@@ -89,7 +89,7 @@ public class UpdatePlaytime implements Runnable {
             if (plugin.getMySQLManager().isMySQLEnabled()) {
                 plugin.getMySQLManager().addGlobalTime(uuid, PlaytimeManager.INTERVAL_MINUTES);
             }
-
+            
             // Only check a player if it is not disabled in the Settings.yml
             if (!plugin.getConfigHandler().isAutomaticPathDisabled()) {
                 // Check if player meets requirements
