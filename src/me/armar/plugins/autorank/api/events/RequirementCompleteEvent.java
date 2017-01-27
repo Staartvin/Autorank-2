@@ -8,7 +8,7 @@ import org.bukkit.event.HandlerList;
 import me.armar.plugins.autorank.pathbuilder.holders.RequirementsHolder;
 
 /**
- * This event is called when a player meets the requirement for a group and
+ * This event is called when a player meets the requirement for a path and
  * certain results will be performed.
  * 
  * @author Staartvin

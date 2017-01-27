@@ -1,5 +1,6 @@
 package me.armar.plugins.autorank.api;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -8,6 +9,7 @@ import org.bukkit.entity.Player;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.addons.AddOnManager;
 import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
+import me.armar.plugins.autorank.pathbuilder.Path;
 import me.armar.plugins.autorank.pathbuilder.holders.RequirementsHolder;
 import me.armar.plugins.autorank.pathbuilder.requirement.Requirement;
 import me.armar.plugins.autorank.pathbuilder.result.Result;
@@ -152,5 +154,61 @@ public class API {
         plugin.getLogger().info("Loaded custom result: " + uniqueName);
 
         plugin.registerResult(uniqueName, clazz);
+    }
+
+    /**
+     * Get the active path of a player. Returns null if player has no path.
+     * 
+     * @param uuid
+     *            UUID of the player
+     * @return {@link Path} object or null if player has no active path.
+     */
+    public Path getActivePath(UUID uuid) {
+        return plugin.getPathManager().getCurrentPath(uuid);
+    }
+
+    /**
+     * Get the paths that a player completed.
+     * 
+     * @param uuid
+     *            UUID of the player
+     * @return a list of {@link Path} objects that corresponds to the paths that
+     *         have been completed.
+     */
+    public List<Path> getCompletedPaths(UUID uuid) {
+        List<String> completedPathsString = plugin.getPlayerDataConfig().getCompletedPaths(uuid);
+
+        List<Path> completedPaths = new ArrayList<>();
+
+        for (String pathString : completedPathsString) {
+            Path path = plugin.getPathManager().matchPathbyInternalName(pathString, false);
+
+            if (path != null) {
+                completedPaths.add(path);
+            }
+        }
+
+        return completedPaths;
+    }
+
+    /**
+     * Get the paths that a player has started but not yet completed.
+     * @param uuid UUID of the player
+     * @return a list of {@link Path} objects
+     */
+    public List<Path> getStartedPaths(UUID uuid) {
+        List<String> startedPathsString = plugin.getPlayerDataConfig().getStartedPaths(uuid);
+
+        List<Path> startedPaths = new ArrayList<>();
+
+        for (String pathString : startedPathsString) {
+            Path path = plugin.getPathManager().matchPathbyInternalName(pathString, false);
+
+            if (path != null) {
+                startedPaths.add(path);
+            }
+        }
+
+        return startedPaths;
     }
 }

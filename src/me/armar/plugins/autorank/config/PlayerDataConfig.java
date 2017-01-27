@@ -288,7 +288,7 @@ public class PlayerDataConfig {
      *            UUID of the player
      * @return a list of path names that the given player completed.
      */
-    private List<String> getCompletedPaths(final UUID uuid) {
+    public List<String> getCompletedPaths(final UUID uuid) {
         final List<String> completed = config.getStringList(uuid.toString() + ".completed paths");
 
         return completed;
@@ -351,6 +351,22 @@ public class PlayerDataConfig {
         List<String> startedPaths = this.getStartedPaths(uuid);
         
         startedPaths.add(pathName);
+        
+        this.setStartedPaths(uuid, startedPaths);
+    }
+    
+    /**
+     * Remove a path from the started path list.
+     * @param uuid UUID of the player
+     * @param pathName Name of the path
+     */
+    public void removeStartedPath(UUID uuid, String pathName) {
+        // Don't remove a path if it's not in there.
+        if (!this.getStartedPaths(uuid).contains(pathName)) return;
+        
+        List<String> startedPaths = this.getStartedPaths(uuid);
+        
+        startedPaths.remove(pathName);
         
         this.setStartedPaths(uuid, startedPaths);
     }

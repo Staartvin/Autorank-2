@@ -75,6 +75,9 @@ public class Path {
 
             // Add progress of completed requirements
             plugin.getPlayerDataConfig().addCompletedPath(uuid, currentPath.getInternalName());
+            
+            // Remove path from started paths if it's completed.
+            plugin.getPlayerDataConfig().removeStartedPath(uuid, currentPath.getInternalName());
 
             for (final Result r : this.getResults()) {
                 if (r != null) {
