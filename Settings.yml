@@ -63,9 +63,6 @@ sql:
 auto-updater:
     check-for-new-versions: true
 #   When check-for-new-versions is true, Autorank will tell you when a new version is available.
-    
-    auto-download: false
-#   When auto-download is true, Autorank will automatically download the most recent version    
 
 advanced dependency output: false
 # If this is true, Autorank will tell you in the console what dependencies were found and which ones weren't found.
