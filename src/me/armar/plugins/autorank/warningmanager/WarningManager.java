@@ -111,4 +111,8 @@ public class WarningManager {
         plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new WarningNoticeTask(plugin), 0,
                 30L * 20L);
     }
+    
+    public HashMap<String, Integer> getWarnings() {
+        return warnings;
+    }
 }
