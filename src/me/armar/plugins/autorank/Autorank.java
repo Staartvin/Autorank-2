@@ -315,11 +315,11 @@ public class Autorank extends JavaPlugin {
                 HashMap<String, Integer> warnings = getWarningManager().getWarnings();
                 
                 if (warnings.size() > 0) {
-                    getLogger().info("Autorank has some warnings for you: ");
+                    getLogger().warning("Autorank has some warnings for you: ");
                 }
                 
                 for (Entry<String, Integer> entry : warnings.entrySet()) {
-                    getLogger().info("(Priority " + entry.getValue() + ") '" + entry.getKey() + "'");
+                    getLogger().warning("(Priority " + entry.getValue() + ") '" + entry.getKey() + "'");
                 }
                
             }
