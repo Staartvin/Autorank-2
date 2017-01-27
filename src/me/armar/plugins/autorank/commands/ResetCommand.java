@@ -51,7 +51,7 @@ public class ResetCommand extends AutorankCommand {
 
         final String realName = plugin.getUUIDStorage().getRealName(uuid);
 
-        if (!action.equalsIgnoreCase("progress") && !action.equalsIgnoreCase("reset")) {
+        if (!action.equalsIgnoreCase("progress") && !action.equalsIgnoreCase("chosenpath")) {
             sender.sendMessage(ChatColor.RED + "Invalid action. You can only use: progress or chosenpath");
             return true;
         }
