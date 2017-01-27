@@ -1,5 +1,8 @@
 package me.armar.plugins.autorank;
 
+import java.util.HashMap;
+import java.util.Map.Entry;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -301,6 +304,24 @@ public class Autorank extends JavaPlugin {
                 // After dependencies, load paths
                 // Initialize paths
                 getPathManager().initialiseFromConfigs();
+                
+                // Validate paths                
+                if (!getValidateHandler().startValidation()) {
+                    getServer().getConsoleSender().sendMessage("[Autorank] " + ChatColor.RED + "Detected errors in your Paths.yml file. Log in to your server to see the problems!");
+                }
+                
+                // Show warnings (if there are any)
+                
+                HashMap<String, Integer> warnings = getWarningManager().getWarnings();
+                
+                if (warnings.size() > 0) {
+                    getLogger().info("Autorank has some warnings for you: ");
+                }
+                
+                for (Entry<String, Integer> entry : warnings.entrySet()) {
+                    getLogger().info("(Priority " + entry.getValue() + ") '" + entry.getKey() + "'");
+                }
+               
             }
         }, 1L);
 
@@ -360,7 +381,7 @@ public class Autorank extends JavaPlugin {
         // ------------- Say Welcome! -------------
         getLogger().info(String.format("Autorank %s has been enabled!", getDescription().getVersion()));
         
-        
+        // Run converter to Autorank 4.0
         getServer().getScheduler().runTaskLaterAsynchronously(this, new Runnable() {
             @Override
             public void run() {

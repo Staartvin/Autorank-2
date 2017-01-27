@@ -224,6 +224,38 @@ public class PathsConfig {
 
         return -1;
     }
+    
+    /**
+     * Get the name of a requirement that corresponds to the given requirement id.
+     * @param pathName Name of the path.
+     * @param reqId Id of the requirement
+     * @return Name of the requirement that matches this id, or null if it doesn't exist.
+     */
+    public String getRequirementName(String pathName, int reqId) {
+        List<String> reqs = this.getRequirements(pathName);
+        
+        if (reqId < 0 || reqId >= reqs.size()) {
+            return null;
+        }
+        
+        return reqs.get(reqId);
+    }
+    
+    /**
+     * Get the name of a prerequisite that corresponds to the given prerequisite id.
+     * @param pathName Name of the path.
+     * @param prereqId Id of the prerequisite
+     * @return Name of the prerequisite that matches this id, or null if it doesn't exist.
+     */
+    public String getPrerequisiteName(String pathName, int prereqId) {
+        List<String> preReqs = this.getPrerequisites(pathName);
+        
+        if (prereqId < 0 || prereqId >= preReqs.size()) {
+            return null;
+        }
+        
+        return preReqs.get(prereqId);
+    }
 
     /**
      * Get the value strings for the specified requirement. Most of the times,
