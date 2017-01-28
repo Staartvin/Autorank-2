@@ -195,7 +195,7 @@ public class Path {
         boolean success = true;
         
         for (Result r: this.getResultsUponChoosing()) {
-            if (r.applyResult(player)) {
+            if (!r.applyResult(player)) {
                 success = false;
             }
         }

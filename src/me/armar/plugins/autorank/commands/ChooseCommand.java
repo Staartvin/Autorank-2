@@ -97,14 +97,17 @@ public class ChooseCommand extends AutorankCommand {
         sender.sendMessage(Lang.CHOSEN_PATH.getConfigValue(targetPath.getDisplayName()));
         sender.sendMessage(Lang.PROGRESS_RESET.getConfigValue());
         
-        // Add path to started path list
-        plugin.getPlayerDataConfig().addStartedPath(player.getUniqueId(), targetPath.getInternalName());
-        
-        // Check if a player did not already start this path before. If he did not, perform the results for choosing that path.
-        if (!plugin.getPlayerDataConfig().hasStartedPath(player.getUniqueId(), targetPath.getInternalName())) {
+        // Check if a player did not already start this path before (or complete it).
+        // If he did not, perform the results for choosing that path.
+        if (plugin.getPlayerDataConfig().hasStartedPath(player.getUniqueId(), targetPath.getInternalName()) || plugin.getPlayerDataConfig().getCompletedPaths(player.getUniqueId()).contains(targetPath.getInternalName())) {
+            // Do not show anything - player already completed this path
+        } else {
             // Perform results of path (if specified)
             targetPath.performResultsUponChoosing(player);
-        }      
+            
+            // Add path to started path list
+            plugin.getPlayerDataConfig().addStartedPath(player.getUniqueId(), targetPath.getInternalName());
+        }
 
         return true;
     }

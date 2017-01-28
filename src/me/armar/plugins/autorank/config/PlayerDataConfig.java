@@ -398,7 +398,7 @@ public class PlayerDataConfig {
      * @param pathName Name of the path
      * @return true if the player has started this path, false otherwise (if this path was completed or never started)
      */
-    public boolean hasStartedPath(UUID uuid, String pathName) {
+    public boolean hasStartedPath(UUID uuid, String pathName) {       
         return this.getStartedPaths(uuid).contains(pathName);
     }
 
