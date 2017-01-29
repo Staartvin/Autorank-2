@@ -1,14 +1,17 @@
 package me.armar.plugins.autorank.pathbuilder;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.pathbuilder.holders.RequirementsHolder;
 import me.armar.plugins.autorank.pathbuilder.result.Result;
+import me.armar.plugins.autorank.util.AutorankTools;
 
 /**
  * Handles all things that have to do with paths checking
@@ -210,6 +213,159 @@ public class PathManager {
         }
 
         return null;
+    }
+
+    /**
+     * Assign a path to a player. It will reset their progress and run any
+     * results that should be performed.
+     * 
+     * @param player
+     *            Player to assign path to
+     * @param pathName
+     *            Name of the path
+     */
+    public void assignPath(Player player, String pathName) {
+        // Set chosen path to target path
+        plugin.getPlayerDataConfig().setChosenPath(player.getUniqueId(), pathName);
+
+        // Reset progress
+        plugin.getPlayerDataConfig().setCompletedRequirements(player.getUniqueId(), new ArrayList<Integer>());
+
+        Path targetPath = plugin.getPathManager().matchPathbyInternalName(pathName, false);
+
+        // Check if a player did not already start this path before (or complete
+        // it).
+        // If he did not, perform the results for choosing that path.
+        if (plugin.getPlayerDataConfig().hasStartedPath(player.getUniqueId(), pathName)
+                || plugin.getPlayerDataConfig().getCompletedPaths(player.getUniqueId()).contains(pathName)) {
+            // Do not show anything - player already completed this path
+        } else {
+            // Perform results of path (if specified)
+            targetPath.performResultsUponChoosing(player);
+
+            // Add path to started path list
+            plugin.getPlayerDataConfig().addStartedPath(player.getUniqueId(), pathName);
+        }
+    }
+
+    /**
+     * Try to automatically assign a path to a player.
+     * 
+     * @param player
+     *            Player to assign a path to
+     * @return Path that has been automatically assigned to the player or null
+     *         if none was assigned.
+     */
+    public Path autoAssignPath(Player player) {
+
+        // Player has already chosen a path, so we don't assign a new path
+        if (plugin.getPathManager().getCurrentPath(player.getUniqueId()) != null) {
+            return null;
+        }
+
+        // Get all paths that the player currently is able to choose.
+        List<Path> possiblePaths = plugin.getPathManager().getPossiblePaths(player);
+
+        // There is no path to choose.
+        if (possiblePaths.size() < 1) {
+            return null;
+        }
+
+        // Remove paths that should not be automatically chosen by Autorank
+        for (Iterator<Path> iterator = possiblePaths.iterator(); iterator.hasNext();) {
+            Path path = iterator.next();
+
+            // Remove path if Autorank should not auto choose it
+            if (!plugin.getPathsConfig().shouldAutoChoosePath(path.getInternalName())) {
+                iterator.remove();
+                continue;
+            }
+        }
+
+        // A list of all priorities (without duplicates)
+        List<Integer> priorities = new ArrayList<>();
+
+        // Add all priorities to a list
+        for (Path possiblePath : possiblePaths) {
+
+            int priority = plugin.getPathsConfig().getPriorityOfPath(possiblePath.getInternalName());
+
+            // Do not put in duplicates
+            if (priorities.contains(priority)) {
+                continue;
+            }
+
+            priorities.add(priority);
+        }
+
+        // Keep count to use for nth biggest element
+        int count = 0;
+
+        while (true) {
+            // Get the nth highest path
+            Integer tempHighest = AutorankTools.largestK(priorities.toArray(new Integer[priorities.size()]), count);
+
+            // No highest found (array is empty)
+            if (tempHighest == null) {
+                return null;
+            }
+
+            int highestPriority = (int) tempHighest;
+
+            // Get paths that have the highest priority
+            List<Path> highestPriorityPaths = new ArrayList<>();
+
+            for (Path path : possiblePaths) {
+                if (plugin.getPathsConfig().getPriorityOfPath(path.getInternalName()) == highestPriority) {
+                    highestPriorityPaths.add(path);
+                }
+            }
+
+            // Get a list of paths that have been completed already
+            List<String> completedPaths = plugin.getPlayerDataConfig().getCompletedPaths(player.getUniqueId());
+
+            // Loop through each path to see if there are any non-completed
+            // paths
+            for (Path path : highestPriorityPaths) {
+
+                // Path has already been completed
+                if (completedPaths.contains(path.getInternalName())) {
+                    continue;
+                }
+
+                // Assign path to the player
+                plugin.getPathManager().assignPath(player, path.getInternalName());
+
+                // Send message to player
+                player.sendMessage(ChatColor.DARK_GREEN + "You have automatically been assigned the path '"
+                        + ChatColor.GOLD + path.getDisplayName() + ChatColor.DARK_GREEN + "'.");
+
+                // Return the path that has been assigned to the player
+                return path;
+            }
+
+            // All paths were already completed, so now look at those paths that
+            // a player is allowed to repeat
+
+            // Since all paths have been completed, just look at the first path
+            // that is allowed to be repeated.
+            for (Path path : highestPriorityPaths) {
+                if (plugin.getPathsConfig().allowInfinitePathing(path.getInternalName())) {
+                    
+                    // Assign path to player
+                    this.assignPath(player, path.getInternalName());
+
+                    // Send message to player
+                    player.sendMessage(ChatColor.DARK_GREEN + "You have automatically been assigned the path '"
+                            + ChatColor.GOLD + path.getDisplayName() + ChatColor.DARK_GREEN + "'.");
+
+                    return path;
+                }
+            }
+
+            // We did not find a path, so continue to next biggest elements
+            count++;
+        }
     }
 
     public void setBuilder(final PathBuilder builder) {

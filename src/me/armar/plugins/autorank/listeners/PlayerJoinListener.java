@@ -50,6 +50,10 @@ public class PlayerJoinListener implements Listener {
 
         plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
             public void run() {
+                
+                // Try to auto assign path to a player
+                plugin.getPathManager().autoAssignPath(player);
+                
                 // Perform check for player on login
                 plugin.getPlayerChecker().checkPlayer(player);
             }

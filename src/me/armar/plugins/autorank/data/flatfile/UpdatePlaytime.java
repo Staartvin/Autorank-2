@@ -90,6 +90,9 @@ public class UpdatePlaytime implements Runnable {
                 plugin.getMySQLManager().addGlobalTime(uuid, PlaytimeManager.INTERVAL_MINUTES);
             }
             
+            // Auto assign path (if possible)
+            plugin.getPathManager().autoAssignPath(player);
+            
             // Only check a player if it is not disabled in the Settings.yml
             if (!plugin.getConfigHandler().isAutomaticPathDisabled()) {
                 // Check if player meets requirements
@@ -97,5 +100,4 @@ public class UpdatePlaytime implements Runnable {
             }
         }
     }
-
 }

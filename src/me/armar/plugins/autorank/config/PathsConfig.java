@@ -535,4 +535,23 @@ public class PathsConfig {
 
         return result;
     }
+    
+    /**
+     * Check whether Autorank should automatically assign the given path to a player when he meets the prerequisites.
+     * @param pathName Name of the path
+     * @return true if Autorank should assign the given path to the player, false otherwise.
+     */
+    public boolean shouldAutoChoosePath(String pathName) {
+        return this.getConfig().getBoolean(pathName + ".options.auto choose", false);
+    }
+    
+    /**
+     * Get the priority of a given path. The priority of a path is used to determine which path Autorank 
+     * should automatically assign to a player. The priority is a positive integer (unbounded). By default, all paths have a priority of 1.
+     * @param pathName Name of the path
+     * @return a positive integer representing the priority of the path. By default the priority is 1.
+     */
+    public int getPriorityOfPath(String pathName) {
+        return this.getConfig().getInt(pathName + ".options.priority", 1);
+    }
 }

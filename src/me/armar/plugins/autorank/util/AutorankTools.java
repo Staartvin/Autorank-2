@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.PriorityQueue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -741,4 +742,32 @@ public class AutorankTools {
 
         return b.toString();
     }
+    
+    /**
+     * Get the kth largest number in an array.
+     * @param array Array to search through
+     * @param k nth largest number (zero-based, so biggest value means k=0)
+     * @return the kth biggest value of the array.
+     */
+    public static Integer largestK(Integer array[], int k) {
+        PriorityQueue<Integer> queue = new PriorityQueue<Integer>(k+1);
+        int i = 0;
+        while (i<=k) {
+            try {
+                queue.add(array[i]);
+            } catch (ArrayIndexOutOfBoundsException e) {
+                // Return null if invalid k
+                return null;
+            }
+          i++;
+        }
+        for (; i<array.length; i++) {
+          Integer value = queue.peek();
+          if (array[i] > value) {
+            queue.poll();
+            queue.add(array[i]);
+          }
+        }
+        return queue.peek();
+      }
 }
