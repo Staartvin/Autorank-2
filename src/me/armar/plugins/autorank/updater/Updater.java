@@ -583,20 +583,21 @@ public class Updater {
             title = title.replace("Beta", "").replace("beta", "").replace("Alpha", "").replace("alpha", "")
                     .replace("dev", "").replace("DEV", "").trim();
 
-            if (title.split(" v").length == 2) {
-                final String remoteVersion = title.split(" v")[1].split(" ")[0].trim(); // Get
-                                                                                        // the
-                                                                                        // newest
-                                                                                        // file's
-                                                                                        // version
-                                                                                        // number
+            // There is no vVersion value
+            if (title.trim().indexOf("v") > 0) {
+                int index = title.indexOf("v");
 
-                if (this.hasTag(version) || version.equalsIgnoreCase(remoteVersion)) {
+                final String remoteVersion = title.substring(index + 1).trim();
+
+                // Get the newest file's version number
+
+                if (this.hasTag(version) || version.trim().equalsIgnoreCase(remoteVersion)) {
                     // We already have the latest version, or this build is
                     // tagged for no-update
                     this.result = Updater.UpdateResult.NO_UPDATE;
                     return false;
                 }
+
             } else {
                 // The file's name did not contain the string 'vVersion'
                 final String authorInfo = this.plugin.getDescription().getAuthors().size() == 0 ? ""
@@ -607,6 +608,12 @@ public class Updater {
                 this.plugin.getLogger().warning("Please notify the author of this error.");
                 this.result = Updater.UpdateResult.FAIL_NOVERSION;
                 return false;
+            }
+
+            if (title.split(" v").length == 2) {
+
+            } else {
+
             }
         }
         return true;
