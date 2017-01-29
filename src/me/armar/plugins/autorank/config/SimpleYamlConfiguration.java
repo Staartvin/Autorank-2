@@ -70,15 +70,15 @@ public class SimpleYamlConfiguration extends YamlConfiguration {
     /**
      * Load the YAML file.
      */
-    public void loadFile() {
+    public void loadFile() throws FileNotFoundException, IOException, InvalidConfigurationException {
         try {
             this.load(file);
         } catch (final FileNotFoundException e) {
-            e.printStackTrace();
+            throw e;
         } catch (final IOException e) {
-            e.printStackTrace();
+            throw e;
         } catch (final InvalidConfigurationException e) {
-            e.printStackTrace();
+            throw e;
         }
     }
 
@@ -86,7 +86,16 @@ public class SimpleYamlConfiguration extends YamlConfiguration {
      * Reload the YAML file.
      */
     public void reloadFile() {
-        loadFile();
+        try {
+            loadFile();
+        } catch (FileNotFoundException e) {
+           // Catch exception, do nothing. 
+        } catch (IOException e) {
+            // Catch exception, do nothing. 
+        } catch (InvalidConfigurationException e) {
+            // Catch exception, do nothing. 
+        }
+        
         saveFile();
     }
 
