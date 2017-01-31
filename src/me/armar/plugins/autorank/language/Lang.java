@@ -434,7 +434,15 @@ public enum Lang {
     /**
      * Reward you with {0}.
      */
-    MONEY_RESULT("money-result", "Reward you with {0}."),;
+    MONEY_RESULT("money-result", "Reward you with {0}."),
+    /**
+     * &2You have automatically been assigned the path '&6{0}&2'.
+     */
+    AUTOMATICALLY_ASSIGNED_PATH("automatically-assigned-path", "&2You have automatically been assigned the path '&6{0}&2'."),
+    /**
+     * &2You completed requirement &6{0}&2: &3{1}
+     */
+    COMPLETED_REQUIREMENT("completed-requirement", "&2You completed requirement &6{0}&2: &3{1}"),;
 
     private static FileConfiguration LANG;
 

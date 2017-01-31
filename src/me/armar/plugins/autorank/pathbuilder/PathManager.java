@@ -5,10 +5,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.pathbuilder.holders.RequirementsHolder;
 import me.armar.plugins.autorank.pathbuilder.result.Result;
 import me.armar.plugins.autorank.util.AutorankTools;
@@ -337,8 +337,7 @@ public class PathManager {
                 plugin.getPathManager().assignPath(player, path.getInternalName());
 
                 // Send message to player
-                player.sendMessage(ChatColor.DARK_GREEN + "You have automatically been assigned the path '"
-                        + ChatColor.GOLD + path.getDisplayName() + ChatColor.DARK_GREEN + "'.");
+                player.sendMessage(Lang.AUTOMATICALLY_ASSIGNED_PATH.getConfigValue(path.getDisplayName()));
 
                 // Return the path that has been assigned to the player
                 return path;
@@ -356,8 +355,7 @@ public class PathManager {
                     this.assignPath(player, path.getInternalName());
 
                     // Send message to player
-                    player.sendMessage(ChatColor.DARK_GREEN + "You have automatically been assigned the path '"
-                            + ChatColor.GOLD + path.getDisplayName() + ChatColor.DARK_GREEN + "'.");
+                    player.sendMessage(Lang.AUTOMATICALLY_ASSIGNED_PATH.getConfigValue(path.getDisplayName()));
 
                     return path;
                 }

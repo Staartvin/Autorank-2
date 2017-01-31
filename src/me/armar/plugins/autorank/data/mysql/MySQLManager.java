@@ -10,13 +10,13 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.config.SettingsConfig;
 import me.armar.plugins.autorank.config.SettingsConfig.MySQLCredentials;
 import me.armar.plugins.autorank.playtimes.PlaytimeManager;
-import net.md_5.bungee.api.ChatColor;
 
 /**
  * This class keeps all incoming and outgoing connections under control. It

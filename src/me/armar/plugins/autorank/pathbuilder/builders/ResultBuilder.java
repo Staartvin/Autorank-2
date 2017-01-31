@@ -4,10 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 
 import me.armar.plugins.autorank.pathbuilder.result.Result;
 import me.armar.plugins.autorank.util.AutorankTools;
-import net.md_5.bungee.api.ChatColor;
 
 public class ResultBuilder {
 

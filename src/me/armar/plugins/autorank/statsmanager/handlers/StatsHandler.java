@@ -98,14 +98,6 @@ public class StatsHandler extends StatsPlugin {
             return false;
         }
 
-        /*
-         * if (!statsApi.compatibleStatsVersion(plugin.getServer()
-         * .getPluginManager().getPlugin("Stats").getDescription()
-         * .getVersion())) { plugin.debugMessage(ChatColor.RED +
-         * "This version of Stats (by Lolmewn) is not supported by Autorank!");
-         * return false; }
-         */
-
         return true;
     }
 

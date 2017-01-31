@@ -5,11 +5,11 @@ import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.api.events.RequirementCompleteEvent;
+import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.pathbuilder.requirement.Requirement;
 import me.armar.plugins.autorank.pathbuilder.result.Result;
 
@@ -249,8 +249,7 @@ public class RequirementsHolder {
 
                 if (!this.isPrerequisite()) {
                     // Let player know he completed a requirement
-                    player.sendMessage(ChatColor.DARK_GREEN + "You completed requirement " + ChatColor.GOLD + (r.getReqId() + 1) + ChatColor.DARK_GREEN + ": "
-                            + ChatColor.DARK_AQUA + r.getDescription());
+                    player.sendMessage(Lang.COMPLETED_REQUIREMENT.getConfigValue(r.getReqId() + 1, r.getDescription()));
                 }
 
                 boolean noErrors = true;
