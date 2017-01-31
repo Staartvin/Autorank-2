@@ -17,12 +17,13 @@ public class RankChangeResult extends Result {
 
     @Override
     public boolean applyResult(final Player player) {
+        
+        
         String oldrank = null;
-        if (from == null) {
-            return false;
-        } else {
+        if (from != null) {
             oldrank = from;
         }
+        
         if (world != null) {
             this.getAutorank().getLogger()
                     .info("Promote " + player.getName() + " on world " + world + " from " + oldrank + " to " + to);
@@ -50,7 +51,7 @@ public class RankChangeResult extends Result {
 
         // Reset chosen path as the player is moved to another group
         getAutorank().getPlayerDataConfig().setChosenPath(uuid, null);
-
+        
         return this.getAutorank().getPermPlugHandler().getPermissionPlugin().replaceGroup(player, world, oldrank, to);
     }
 
