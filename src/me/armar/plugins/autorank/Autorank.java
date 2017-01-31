@@ -98,8 +98,6 @@ import me.armar.plugins.autorank.warningmanager.WarningManager;
  * 
  */
 public class Autorank extends JavaPlugin {
-
-    // Test branch
     
     public static Autorank getAutorank() {
         return (Autorank) Bukkit.getPluginManager().getPlugin("Autorank");
