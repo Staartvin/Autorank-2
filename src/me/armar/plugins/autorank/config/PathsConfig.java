@@ -561,6 +561,6 @@ public class PathsConfig {
      * @return true if Autorank should only show the given path if the player meets the path's prerequisites, false otherwise.
      */
     public boolean showBasedOnPrerequisites(String pathName) {
-        return this.getConfig().getBoolean(pathName + ".show based on prerequisites", false);
+        return this.getConfig().getBoolean(pathName + ".options.show based on prerequisites", false);
     }
 }
