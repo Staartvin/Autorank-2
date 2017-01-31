@@ -451,7 +451,7 @@ public class Autorank extends JavaPlugin {
         res.registerResult("command", CommandResult.class);
         res.registerResult("effect", EffectResult.class);
         res.registerResult("message", MessageResult.class);
-        res.registerResult("rank change", RankChangeResult.class);
+        //res.registerResult("rank change", RankChangeResult.class); -- Temporarily disabled until fixed
         res.registerResult("tp", TeleportResult.class);
         res.registerResult("firework", SpawnFireworkResult.class);
         res.registerResult("money", MoneyResult.class);
