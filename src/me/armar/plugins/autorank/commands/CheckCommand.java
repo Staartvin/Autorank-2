@@ -1,6 +1,7 @@
 package me.armar.plugins.autorank.commands;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -53,6 +54,32 @@ public class CheckCommand extends AutorankCommand {
 
         if (activePath == null) {
             // Player should first choose a path.
+
+            final List<Path> paths = plugin.getPathManager().getPaths();
+
+            // Remove paths that have already been completed by the
+            // user.
+            for (Iterator<Path> iterator = paths.iterator(); iterator.hasNext();) {
+                Path path = iterator.next();
+
+                // If this path can be done over and over again, we obviously
+                // don't want to remove it.
+                if (plugin.getPathsConfig().allowInfinitePathing(path.getInternalName())) {
+                    continue;
+                }
+
+                // Remove it if player already completed the path
+                if (plugin.getPlayerDataConfig().hasCompletedPath(uuid, path.getInternalName())) {
+                    iterator.remove();
+                }
+            }
+
+            if (paths.isEmpty()) {
+                sender.sendMessage(Lang.NO_PATH_LEFT_TO_CHOOSE.getConfigValue(sender.getName(), AutorankTools
+                        .timeToString(plugin.getPlaytimes().getTimeOfPlayer(player.getName(), true), Time.SECONDS)));
+
+                return;
+            }
 
             sender.sendMessage(ChatColor.BLACK + "-------------------------------------");
             sender.sendMessage(ChatColor.BLUE + "There are multiple ranking paths, please choose one with "
