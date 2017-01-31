@@ -554,4 +554,13 @@ public class PathsConfig {
     public int getPriorityOfPath(String pathName) {
         return this.getConfig().getInt(pathName + ".options.priority", 1);
     }
+    
+    /**
+     * Check whether Autorank should show the given path in the list of possible paths based on whether a player meets the prerequisites of the path.
+     * @param pathName Name of the path
+     * @return true if Autorank should only show the given path if the player meets the path's prerequisites, false otherwise.
+     */
+    public boolean showBasedOnPrerequisites(String pathName) {
+        return this.getConfig().getBoolean(pathName + ".show based on prerequisites", false);
+    }
 }
