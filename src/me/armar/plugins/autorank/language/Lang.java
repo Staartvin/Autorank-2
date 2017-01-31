@@ -442,7 +442,11 @@ public enum Lang {
     /**
      * &2You completed requirement &6{0}&2: &3{1}
      */
-    COMPLETED_REQUIREMENT("completed-requirement", "&2You completed requirement &6{0}&2: &3{1}"),;
+    COMPLETED_REQUIREMENT("completed-requirement", "&2You completed requirement &6{0}&2: &3{1}"),
+    /**
+     * &2{0} has played for {1} and currently has no path. There are no paths left to choose.
+     */
+    NO_PATH_LEFT_TO_CHOOSE("no-path-left-to-choose", "&2{0} has played for {1} and currently has no path. There are no paths left to choose."),;
 
     private static FileConfiguration LANG;
 

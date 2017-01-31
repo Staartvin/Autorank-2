@@ -119,7 +119,7 @@ public class PathManager {
      * @return a list of {@link Path} objects.
      */
     public List<Path> getPaths() {
-        return paths;
+        return new ArrayList<Path>(paths);
     }
 
     /**
