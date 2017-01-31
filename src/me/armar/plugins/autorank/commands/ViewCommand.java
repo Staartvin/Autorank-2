@@ -86,7 +86,7 @@ public class ViewCommand extends AutorankCommand {
                 }
 
                 if (paths.isEmpty()) {
-                    sender.sendMessage("There are no paths that you can choose.");
+                    sender.sendMessage(Lang.NO_PATHS_TO_CHOOSE.getConfigValue());
                     return true;
                 }
 

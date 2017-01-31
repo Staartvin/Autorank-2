@@ -75,8 +75,7 @@ public class ChooseCommand extends AutorankCommand {
 
         if (plugin.getPlayerDataConfig().hasCompletedPath(player.getUniqueId(), targetPath.getInternalName())
                 && !plugin.getPathsConfig().allowInfinitePathing(targetPath.getInternalName())) {
-            sender.sendMessage(
-                    ChatColor.RED + "You already completed this path before. You are not allowed to retake it!");
+            sender.sendMessage(Lang.PATH_NOT_ALLOWED_TO_RETAKE.getConfigValue());
             return true;
         }
 
