@@ -73,7 +73,6 @@ import me.armar.plugins.autorank.pathbuilder.result.CommandResult;
 import me.armar.plugins.autorank.pathbuilder.result.EffectResult;
 import me.armar.plugins.autorank.pathbuilder.result.MessageResult;
 import me.armar.plugins.autorank.pathbuilder.result.MoneyResult;
-import me.armar.plugins.autorank.pathbuilder.result.RankChangeResult;
 import me.armar.plugins.autorank.pathbuilder.result.Result;
 import me.armar.plugins.autorank.pathbuilder.result.SpawnFireworkResult;
 import me.armar.plugins.autorank.pathbuilder.result.TeleportResult;
