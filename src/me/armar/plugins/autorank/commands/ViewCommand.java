@@ -73,7 +73,8 @@ public class ViewCommand extends AutorankCommand {
                     for (Iterator<Path> iterator = paths.iterator(); iterator.hasNext();) {
                         Path path = iterator.next();
 
-                        // If this path can be done over and over again, we obviously don't want to remove it.
+                        // If this path can be done over and over again, we
+                        // obviously don't want to remove it.
                         if (plugin.getPathsConfig().allowInfinitePathing(path.getInternalName())) {
                             continue;
                         }
@@ -82,11 +83,20 @@ public class ViewCommand extends AutorankCommand {
                         if (plugin.getPlayerDataConfig().hasCompletedPath(uuid, path.getInternalName())) {
                             iterator.remove();
                         }
+
+                        // Remove path from list if this path can only be shown
+                        // when a player meets the path's prerequisites (and the
+                        // player does not match the prerequisites).
+                        if (plugin.getPathsConfig().showBasedOnPrerequisites(path.getInternalName())
+                                && !plugin.getPathManager().matchPathbyInternalName(path.getInternalName(), false)
+                                        .meetsPrerequisites((Player) sender)) {
+                            iterator.remove();
+                        }
                     }
                 }
 
                 if (paths.isEmpty()) {
-                    sender.sendMessage("There are no paths that you can choose.");
+                    sender.sendMessage(Lang.NO_PATHS_TO_CHOOSE.getConfigValue());
                     return true;
                 }
 

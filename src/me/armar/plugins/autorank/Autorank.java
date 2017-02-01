@@ -73,7 +73,6 @@ import me.armar.plugins.autorank.pathbuilder.result.CommandResult;
 import me.armar.plugins.autorank.pathbuilder.result.EffectResult;
 import me.armar.plugins.autorank.pathbuilder.result.MessageResult;
 import me.armar.plugins.autorank.pathbuilder.result.MoneyResult;
-import me.armar.plugins.autorank.pathbuilder.result.RankChangeResult;
 import me.armar.plugins.autorank.pathbuilder.result.Result;
 import me.armar.plugins.autorank.pathbuilder.result.SpawnFireworkResult;
 import me.armar.plugins.autorank.pathbuilder.result.TeleportResult;
@@ -98,8 +97,6 @@ import me.armar.plugins.autorank.warningmanager.WarningManager;
  * 
  */
 public class Autorank extends JavaPlugin {
-
-    // Test branch
     
     public static Autorank getAutorank() {
         return (Autorank) Bukkit.getPluginManager().getPlugin("Autorank");
@@ -453,7 +450,7 @@ public class Autorank extends JavaPlugin {
         res.registerResult("command", CommandResult.class);
         res.registerResult("effect", EffectResult.class);
         res.registerResult("message", MessageResult.class);
-        res.registerResult("rank change", RankChangeResult.class);
+        //res.registerResult("rank change", RankChangeResult.class); -- Temporarily disabled until fixed
         res.registerResult("tp", TeleportResult.class);
         res.registerResult("firework", SpawnFireworkResult.class);
         res.registerResult("money", MoneyResult.class);

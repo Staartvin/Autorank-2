@@ -3,8 +3,8 @@ package me.armar.plugins.autorank.playtimes;
 import java.util.UUID;
 
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.data.flatfile.UpdatePlaytime;
 import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
+import me.armar.plugins.autorank.data.flatfile.UpdatePlaytime;
 import me.armar.plugins.autorank.hooks.DependencyManager.AutorankDependency;
 import me.armar.plugins.autorank.hooks.statzapi.StatzAPIHandler;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
