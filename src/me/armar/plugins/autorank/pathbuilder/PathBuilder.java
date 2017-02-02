@@ -136,8 +136,14 @@ public class PathBuilder {
                 final String correctResult = AutorankTools.getCorrectResName(resultName);
 
                 if (correctResult == null) {
-                    throw new IllegalArgumentException(
-                            "Result '" + resultName + "' of group '" + pathName + "' is unknown!");
+                    plugin.getWarningManager().registerWarning(
+                            String.format("You are using a '%s' result in path '%s', but that result doesn't exist!", resultName,
+                                    pathName),
+                            10);
+                    return null;
+                    // throw new IllegalArgumentException(
+                    // "Result '" + resultName + "' of group '" + pathName + "'
+                    // is unknown!");
                 }
 
                 final Result result = createResult(correctResult,
@@ -186,8 +192,11 @@ public class PathBuilder {
                 final String correctName = AutorankTools.getCorrectReqName(reqName);
 
                 if (correctName == null) {
-                    throw new IllegalArgumentException(
-                            "Requirement '" + reqName + "' of path '" + pathName + "' is unknown!");
+                    plugin.getWarningManager()
+                            .registerWarning(String.format(
+                                    "You are using a '%s' requirement in path '%s', but that requirement doesn't exist!", reqName,
+                                    pathName), 10);
+                    return null;
                 }
 
                 // Create a holder for the path
@@ -243,8 +252,11 @@ public class PathBuilder {
                 final String correctName = AutorankTools.getCorrectReqName(prereqName);
 
                 if (correctName == null) {
-                    throw new IllegalArgumentException(
-                            "Prerequisite '" + prereqName + "' of path '" + pathName + "' is unknown!");
+                    plugin.getWarningManager()
+                            .registerWarning(String.format(
+                                    "You are using a '%s' prerequisite in path '%s', but that prerequisite doesn't exist!", prereqName,
+                                    pathName), 10);
+                    return null;
                 }
 
                 // Create a holder for the path
@@ -284,7 +296,7 @@ public class PathBuilder {
                 realResults.add(createResult(resultString,
                         plugin.getPathsConfig().getResultValueUponChoosing(pathName, resultString)));
             }
-            
+
             // Now set the result upon choosing for this path
             path.setResultsUponChoosing(realResults);
 

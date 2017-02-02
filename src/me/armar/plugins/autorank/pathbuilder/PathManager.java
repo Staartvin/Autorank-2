@@ -150,8 +150,15 @@ public class PathManager {
 
         // Clear before starting
         paths.clear();
-
-        paths = builder.initialisePaths();
+        
+        List<Path> temp = builder.initialisePaths();
+        
+        if (temp == null) {
+            plugin.getLogger().warning("The paths file was not configured correctly! Log in to your server to get more info!");
+            return;
+        } else {
+            paths = temp;
+        }    
 
         for (final String message : debugPaths()) {
             plugin.debugMessage(message);

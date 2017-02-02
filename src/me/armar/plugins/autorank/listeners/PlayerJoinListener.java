@@ -103,8 +103,7 @@ public class PlayerJoinListener implements Listener {
 
                     @Override
                     public void run() {
-                        player.sendMessage(ChatColor.BLUE + "<AUTORANK> " + ChatColor.RED + "Warning: "
-                                + ChatColor.GREEN + plugin.getWarningManager().getHighestWarning());
+                         plugin.getWarningManager().sendWarnings(player);
                     }
 
                 }, 10L);

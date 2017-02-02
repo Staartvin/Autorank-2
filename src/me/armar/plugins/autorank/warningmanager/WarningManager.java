@@ -3,6 +3,9 @@ package me.armar.plugins.autorank.warningmanager;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
+
 import me.armar.plugins.autorank.Autorank;
 
 /**
@@ -109,10 +112,28 @@ public class WarningManager {
         // Create a new task that runs every 30 seconds (will show a warning
         // every 30 seconds)
         plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new WarningNoticeTask(plugin), 0,
-                30L * 20L);
+                30 * 20);
     }
     
     public HashMap<String, Integer> getWarnings() {
         return warnings;
+    }
+    
+    public void sendWarnings(Player player) {
+        for (Entry<String, Integer> warning: this.getWarnings().entrySet()) {
+            
+            String priorityString = "Low";
+            
+            int warningValue = warning.getValue();
+            
+            if (warningValue > 3 && warningValue < 7) {
+                priorityString = "Medium";
+            } else if (warningValue > 6) {
+                priorityString = "High";
+            }
+            
+            player.sendMessage(String.format(ChatColor.DARK_AQUA + "<Autorank warning> " + ChatColor.RED + "(%s priority): " + ChatColor.GREEN + "%s " , priorityString, warning.getKey()));
+            
+        }
     }
 }

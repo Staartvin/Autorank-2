@@ -274,9 +274,7 @@ public class Autorank extends JavaPlugin {
         this.initializeReqsAndRes();
 
         // Start warning task if a warning has been found
-        if (getWarningManager().getHighestWarning() != null) {
-            getWarningManager().startWarningTask();
-        }
+        getWarningManager().startWarningTask();
 
         // ------------- Register listeners -------------
 
