@@ -1,6 +1,5 @@
 package me.armar.plugins.autorank.commands;
 
-import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.ChatColor;
@@ -141,20 +140,4 @@ public class GlobalCheckCommand extends AutorankCommand {
         }
         return true;
     }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * me.armar.plugins.autorank.commands.manager.AutorankCommand#onTabComplete(
-     * org.bukkit.command.CommandSender, org.bukkit.command.Command,
-     * java.lang.String, java.lang.String[])
-     */
-    @Override
-    public List<String> onTabComplete(final CommandSender sender, final Command cmd, final String commandLabel,
-            final String[] args) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
 }

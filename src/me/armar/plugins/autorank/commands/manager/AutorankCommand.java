@@ -14,14 +14,10 @@ import org.bukkit.command.TabExecutor;
  */
 public abstract class AutorankCommand implements TabExecutor {
 
-    private String desc = "", usage = "", permission = "";
-
     /**
      * Get the description that is used for this command, can be null or empty.
      */
-    public String getDescription() {
-        return desc;
-    }
+    public abstract String getDescription();
 
     /**
      * Get the permission that is used to check if a player has permission to
@@ -29,17 +25,13 @@ public abstract class AutorankCommand implements TabExecutor {
      * necessarily fits the command. Sometimes, multiple permissions are needed
      * to check if a player has access to this command.
      */
-    public String getPermission() {
-        return permission;
-    }
+    public abstract String getPermission();
 
     /**
      * Get the way this command is supposed to be used. For example, /ar times
      * &lt;player&gt; &lt;type&gt;
      */
-    public String getUsage() {
-        return usage;
-    }
+    public abstract String getUsage();
 
     /*
      * (non-Javadoc)
@@ -60,35 +52,7 @@ public abstract class AutorankCommand implements TabExecutor {
      * java.lang.String[])
      */
     @Override
-    public abstract List<String> onTabComplete(CommandSender sender, Command cmd, String commandLabel, String[] args);
-
-    /**
-     * Set the description of this command.
-     * 
-     * @param desc
-     *            Description of command
-     */
-    public void setDesc(final String desc) {
-        this.desc = desc;
-    }
-
-    /**
-     * Set the permission of this command.
-     * 
-     * @param perm
-     *            Permission of command
-     */
-    public void setPermission(final String perm) {
-        this.permission = perm;
-    }
-
-    /**
-     * Set the usage of this command.
-     * 
-     * @param usage
-     *            Usage of command
-     */
-    public void setUsage(final String usage) {
-        this.usage = usage;
+    public List<String> onTabComplete(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+        return null;
     }
 }

@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import org.bukkit.command.Command;
@@ -66,7 +67,7 @@ public class CommandsManager implements TabExecutor {
     private final Autorank plugin;
 
     // Use linked hashmap so that input order is kept
-    private final LinkedHashMap<List<String>, AutorankCommand> registeredCommands = new LinkedHashMap<List<String>, AutorankCommand>();
+    private final Map<List<String>, AutorankCommand> registeredCommands = new LinkedHashMap<List<String>, AutorankCommand>();
 
     /**
      * All command aliases are set up in here.
@@ -107,7 +108,7 @@ public class CommandsManager implements TabExecutor {
      * 
      * @return a hashmap of commands
      */
-    public HashMap<List<String>, AutorankCommand> getRegisteredCommands() {
+    public Map<List<String>, AutorankCommand> getRegisteredCommands() {
         return registeredCommands;
     }
 

@@ -1,7 +1,5 @@
 package me.armar.plugins.autorank.commands;
 
-import java.util.List;
-
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -20,10 +18,6 @@ public class ArchiveCommand extends AutorankCommand {
     private final Autorank plugin;
 
     public ArchiveCommand(final Autorank instance) {
-        this.setUsage("/ar archive <minimum>");
-        this.setDesc("Archive data with a minimum");
-        this.setPermission("autorank.archive");
-
         plugin = instance;
     }
 
@@ -55,19 +49,21 @@ public class ArchiveCommand extends AutorankCommand {
         return true;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * me.armar.plugins.autorank.commands.manager.AutorankCommand#onTabComplete(
-     * org.bukkit.command.CommandSender, org.bukkit.command.Command,
-     * java.lang.String, java.lang.String[])
-     */
     @Override
-    public List<String> onTabComplete(final CommandSender sender, final Command cmd, final String commandLabel,
-            final String[] args) {
+    public String getDescription() {
         // TODO Auto-generated method stub
-        return null;
+        return "Archive data with a minimum";
     }
 
+    @Override
+    public String getPermission() {
+        // TODO Auto-generated method stub
+        return "autorank.archive";
+    }
+
+    @Override
+    public String getUsage() {
+        // TODO Auto-generated method stub
+        return "/ar archive <minimum>";
+    }
 }
