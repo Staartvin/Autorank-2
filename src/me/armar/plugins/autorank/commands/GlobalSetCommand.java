@@ -90,7 +90,7 @@ public class GlobalSetCommand extends AutorankCommand {
             }
 
             AutorankTools.sendColoredMessage(sender, Lang.PLAYTIME_CHANGED.getConfigValue(args[1],
-                    value + " " + Lang.MINUTE_PLURAL.getConfigValue() + "."));
+                    value + " " + Lang.MINUTE_PLURAL.getConfigValue()));
         } else {
             AutorankTools.sendColoredMessage(sender, Lang.INVALID_FORMAT.getConfigValue("/ar gset <player> <value>"));
         }

@@ -49,13 +49,13 @@ public class GlobalCheckCommand extends AutorankCommand {
 
                 final UUID uuid = plugin.getUUIDStorage().getStoredUUID(args[1]);
 
+                if (uuid == null) {
+                    sender.sendMessage(Lang.PLAYER_IS_INVALID.getConfigValue(args[1]));
+                    return true;
+                }
+                
                 if (plugin.getUUIDStorage().hasRealName(uuid)) {
                     args[1] = plugin.getUUIDStorage().getRealName(uuid);
-                }
-
-                if (uuid == null) {
-                    sender.sendMessage(Lang.PLAYER_NOT_ONLINE.getConfigValue(args[1]));
-                    return true;
                 }
 
                 plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
@@ -84,6 +84,11 @@ public class GlobalCheckCommand extends AutorankCommand {
                 }
 
                 final UUID uuid = plugin.getUUIDStorage().getStoredUUID(args[1]);
+                
+                if (uuid == null) {
+                    sender.sendMessage(Lang.PLAYER_IS_INVALID.getConfigValue(args[1]));
+                    return true;
+                }
 
                 plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
 
@@ -116,6 +121,7 @@ public class GlobalCheckCommand extends AutorankCommand {
                 sender.sendMessage(ChatColor.RED + Lang.PLAYER_IS_EXCLUDED.getConfigValue(sender.getName()));
                 return true;
             }
+            
             final Player player = (Player) sender;
 
             final UUID uuid = plugin.getUUIDStorage().getStoredUUID(player.getName());

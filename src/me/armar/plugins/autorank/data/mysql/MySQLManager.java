@@ -109,18 +109,18 @@ public class MySQLManager {
      * 
      * @param uuid
      *            UUID of the player
-     * @return cached global time or -1 if nothing was cached.
+     * @return cached global time or 0 if nothing was cached.
      */
     public Integer getCachedGlobalTime(final UUID uuid) {
         if (!lastReceivedTime.containsKey(uuid)) {
-            return -1;
+            return 0;
         }
 
         final int cached = lastReceivedTime.get(uuid);
 
         // Weird cached
         if (cached <= 0) {
-            return -1;
+            return 0;
         }
 
         return cached;
@@ -220,7 +220,7 @@ public class MySQLManager {
 
         // Mysql is not enabled
         if (!isMySQLEnabled())
-            return -1;
+            return 0;
 
         // Check if connection is still alive
         if (mysql.isClosed()) {
@@ -236,7 +236,7 @@ public class MySQLManager {
 
         // Grab value (will block thread, but there is no other way)
         // That's why you need to run this async.
-        int value = -1;
+        int value = 0;
 
         plugin.debugMessage("Obtaining global time of '" + uuid.toString() + "'");
 
@@ -278,7 +278,7 @@ public class MySQLManager {
 
         // Mysql is not enabled
         if (!isMySQLEnabled())
-            return -1;
+            return 0;
 
         // Check if connection is still alive
         if (mysql.isClosed()) {
@@ -295,7 +295,7 @@ public class MySQLManager {
 
         // Grab value (will block thread, but there is no other way)
         // That's why you need to run this async.
-        int value = -1;
+        int value = 0;
 
         try {
             plugin.debugMessage("Fresh Gcheck performed "
@@ -455,14 +455,14 @@ public class MySQLManager {
      */
     public void sqlSetup() {
 
-        final SettingsConfig configHandler = plugin.getConfigHandler();
+        final SettingsConfig configHandler = plugin.getSettingsConfig();
         /*
          * final ConfigurationSection s = config.getConfigurationSection("sql");
          * 
          * if (s == null) { plugin.getLogger().warning(
          * "MySQL options are missing in the advancedconfig.yml!"); return; }
          */
-
+        
         if (configHandler.useMySQL()) {
 
             hostname = configHandler.getMySQLCredentials(MySQLCredentials.HOSTNAME);

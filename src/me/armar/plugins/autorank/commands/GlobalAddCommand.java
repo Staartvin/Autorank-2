@@ -60,7 +60,7 @@ public class GlobalAddCommand extends AutorankCommand {
 
             @Override
             public void run() {
-                int value = -1;
+                int value = 0;
                 
                 if (args.length > 2) {
 
@@ -82,6 +82,8 @@ public class GlobalAddCommand extends AutorankCommand {
                     if (changeValue < 0) {
                         value = -1;
                     } else {
+                        System.out.println("DATA: " + plugin.getMySQLManager().getFreshGlobalTime(uuid));
+                        System.out.println("CHANGE VALUE: " + changeValue);
                         value += plugin.getMySQLManager().getFreshGlobalTime(uuid) + changeValue;
                     }
                 }

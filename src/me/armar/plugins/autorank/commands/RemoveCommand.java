@@ -51,7 +51,7 @@ public class RemoveCommand extends AutorankCommand {
             args[1] = plugin.getUUIDStorage().getRealName(uuid);
         }
 
-        int value = -1;
+        int value = 0;
 
         if (args.length > 2) {
 

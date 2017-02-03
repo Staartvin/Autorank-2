@@ -47,7 +47,7 @@ public class AddCommand extends AutorankCommand {
             return true;
         }
 
-        int value = -1;
+        int value = 0;
 
         if (args.length > 2) {
 
