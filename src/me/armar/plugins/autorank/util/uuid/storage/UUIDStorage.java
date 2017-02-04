@@ -14,6 +14,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.util.AutorankTools;
 
 /**
  * This class represents a multitude of files where are looked up uuids are
@@ -52,7 +53,7 @@ public class UUIDStorage {
             public void run() {
                 saveAllFiles();
             }
-        }, 1200, 2400);
+        }, AutorankTools.TICKS_PER_MINUTE, AutorankTools.TICKS_PER_MINUTE * 2);
     }
 
     public void createNewFiles() {

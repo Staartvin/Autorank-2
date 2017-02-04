@@ -83,6 +83,7 @@ import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.armar.plugins.autorank.statsmanager.handlers.FallbackHandler;
 import me.armar.plugins.autorank.updater.UpdateHandler;
 import me.armar.plugins.autorank.updater.Updater;
+import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.uuid.storage.UUIDStorage;
 import me.armar.plugins.autorank.validations.ValidateHandler;
 import me.armar.plugins.autorank.warningmanager.WarningManager;
@@ -335,7 +336,7 @@ public class Autorank extends JavaPlugin {
 
                 getLogger().info("Removed " + removed + " old data entries from database!");
             }
-        }, 0, (long) 20*60*60*24);
+        }, 0, (long) AutorankTools.TICKS_PER_MINUTE*60*24);
 
         // ------------- Register commands -------------
 
@@ -388,7 +389,7 @@ public class Autorank extends JavaPlugin {
                     getDataConverter().convertData();
                 }
             }
-        }, 20 * 5);
+        }, AutorankTools.TICKS_PER_SECOND * 5);
     }
 
     // ---------- CONVENIENCE METHODS ---------- \\

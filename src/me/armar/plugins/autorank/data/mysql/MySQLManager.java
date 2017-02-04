@@ -17,6 +17,7 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.config.SettingsConfig;
 import me.armar.plugins.autorank.config.SettingsConfig.MySQLCredentials;
 import me.armar.plugins.autorank.playtimes.PlaytimeManager;
+import me.armar.plugins.autorank.util.AutorankTools;
 
 /**
  * This class keeps all incoming and outgoing connections under control. It
@@ -342,7 +343,7 @@ public class MySQLManager {
                 }
             }
 
-        }, 20, 20 * 60 * PlaytimeManager.INTERVAL_MINUTES);
+        }, AutorankTools.TICKS_PER_SECOND, AutorankTools.TICKS_PER_MINUTE * PlaytimeManager.INTERVAL_MINUTES);
 
     }
 

@@ -7,6 +7,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.util.AutorankTools;
 
 /**
  * This class handles all warning message that are displayed when something is
@@ -112,7 +113,7 @@ public class WarningManager {
         // Create a new task that runs every 30 seconds (will show a warning
         // every 30 seconds)
         plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new WarningNoticeTask(plugin), 0,
-                30 * 20);
+                30 * AutorankTools.TICKS_PER_SECOND);
     }
     
     public HashMap<String, Integer> getWarnings() {

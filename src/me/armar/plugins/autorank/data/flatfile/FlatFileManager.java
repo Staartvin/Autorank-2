@@ -13,6 +13,7 @@ import org.bukkit.OfflinePlayer;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.config.SimpleYamlConfiguration;
 import me.armar.plugins.autorank.language.Lang;
+import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
 /**
@@ -79,7 +80,7 @@ public class FlatFileManager {
             public void run() {
                 saveFiles();
             }
-        }, 20L, 1200L);
+        }, AutorankTools.TICKS_PER_SECOND, AutorankTools.TICKS_PER_MINUTE);
     }
 
     /**

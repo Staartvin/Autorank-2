@@ -10,6 +10,7 @@ import me.armar.plugins.autorank.hooks.statzapi.StatzAPIHandler;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin.statTypes;
 import me.armar.plugins.autorank.statsmanager.handlers.StatsHandler;
+import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
 import me.staartvin.statz.hooks.Dependency;
 import me.staartvin.statz.hooks.handlers.OnTimeHandler;
@@ -36,7 +37,7 @@ public class PlaytimeManager {
         plugin.getLogger().info("Interval check every " + INTERVAL_MINUTES + " minutes.");
         
         plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new UpdatePlaytime(plugin.getFlatFileManager(), plugin),
-                PlaytimeManager.INTERVAL_MINUTES * 20 * 60, PlaytimeManager.INTERVAL_MINUTES * 20 * 60);
+                PlaytimeManager.INTERVAL_MINUTES * AutorankTools.TICKS_PER_MINUTE, PlaytimeManager.INTERVAL_MINUTES * AutorankTools.TICKS_PER_MINUTE);
 
         timePlugin = plugin.getConfigHandler().useTimeOf();
     }

@@ -28,6 +28,8 @@ public class AutorankTools {
     public static enum Time {
         DAYS, HOURS, MINUTES, SECONDS
     }
+    
+    public static int TICKS_PER_SECOND = 20, TICKS_PER_MINUTE = TICKS_PER_SECOND * 60;
 
     private static List<String> reqTypes = new ArrayList<String>();
     private static List<String> resTypes = new ArrayList<String>();

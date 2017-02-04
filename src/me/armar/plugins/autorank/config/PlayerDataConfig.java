@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.util.AutorankTools;
 
 /**
  * PlayerDataConfig stores all the properties of players. Autorank needs to
@@ -37,7 +38,7 @@ public class PlayerDataConfig {
             public void run() {
                 saveConfig();
             }
-        }, 1200, 2400);
+        }, AutorankTools.TICKS_PER_MINUTE, AutorankTools.TICKS_PER_MINUTE * 2);
     }
 
     /**

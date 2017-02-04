@@ -103,7 +103,7 @@ public class UUIDRefresher implements Runnable {
             final int countFloored = (int) Math.floor(count);
 
             // First 10 minutes + 20 minutes for each extra loop
-            timeSpent = 600 + (countFloored - 1) * 1200;
+            timeSpent = 600 + (countFloored - 1) * AutorankTools.TICKS_PER_MINUTE;
 
             final double dif = count - countFloored;
 
