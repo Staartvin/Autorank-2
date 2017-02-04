@@ -9,12 +9,12 @@ import me.armar.plugins.autorank.language.Lang;
 
 public class LocationRequirement extends Requirement {
 
-    // x;y;z;world;radius
-    // private final List<String> locations = new ArrayList<String>();
-
     private int radius = -1;
     private String world;
     private int xLocation = 0, yLocation = 0, zLocation = 0;
+    
+    // Store positive and negative values to create a boundary box.
+    int xRadiusP, yRadiusP, zRadiusP, xRadiusN, yRadiusN, zRadiusN;
 
     @Override
     public String getDescription() {
@@ -55,17 +55,6 @@ public class LocationRequirement extends Requirement {
     @Override
     public boolean meetsRequirement(final Player player) {
         final Location pLocation = player.getLocation();
-
-        // Positive and negative values
-        int xRadiusP, yRadiusP, zRadiusP, xRadiusN, yRadiusN, zRadiusN;
-
-        xRadiusN = xLocation - radius;
-        yRadiusN = yLocation - radius;
-        zRadiusN = zLocation - radius;
-
-        xRadiusP = xLocation + radius;
-        yRadiusP = yLocation + radius;
-        zRadiusP = zLocation + radius;
 
         final World realWorld = Bukkit.getWorld(world);
 
@@ -110,6 +99,15 @@ public class LocationRequirement extends Requirement {
         if (radius < 0) {
             radius = 0;
         }
+        
+        xRadiusN = xLocation - radius;
+        yRadiusN = yLocation - radius;
+        zRadiusN = zLocation - radius;
+
+        xRadiusP = xLocation + radius;
+        yRadiusP = yLocation + radius;
+        zRadiusP = zLocation + radius;
+
 
         return this.radius != -1;
     }
