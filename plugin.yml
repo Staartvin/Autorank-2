@@ -26,11 +26,8 @@ permissions:
     autorank.timeexclude:
         description: Excludes groups or users from the playtime updates.
         default: false
-    autorank.set.self:
-        description: Allows changing own playtime.
-        default: op
-    autorank.set.other:
-        description: Allows changing others playtime.
+    autorank.set:
+        description: Allows changing playtime of any player
         default: op
     autorank.add:
         description: Allows adding to playtimes.
@@ -65,7 +62,7 @@ permissions:
     autorank.forcecheck:
         description: Allows a player to forcecheck another player
         default: op
-    autorank.warning.notice:
+    autorank.noticeonwarning:
         description: Allows a player to see warnings when problems occur with Autorank.
         default: op
     autorank.convert.playerdata:
@@ -77,7 +74,7 @@ permissions:
     autorank.help:
         description: Allows a player to view a list of commands
         default: true
-    autorank.leaderboard.exempt:
+    autorank.leaderboard.exclude:
         description: Exempts a player from the leaderboard.
         default: false
     autorank.leaderboard.broadcast:
@@ -89,11 +86,8 @@ permissions:
     autorank.track:
         description: Allows a player to view their requirement progress.
         default: true
-    autorank.gset.self:
-        description: Allows changing own global playtime.
-        default: op
-    autorank.gset.other:
-        description: Allows changing others global playtime.
+    autorank.gset:
+        description: Allows changing global playtime of players.
         default: op
     autorank.hooks:
         description: Allows viewing the available hooks for Autorank
@@ -110,7 +104,7 @@ permissions:
     autorank.choose:
         description: Allows choosing ranking paths
         default: true
-    autorank.times:
+    autorank.times.self:
         description: Allows checking your own time statistics.
         default: true
     autorank.times.others:

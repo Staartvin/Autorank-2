@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import me.armar.plugins.autorank.language.Lang;
+import me.armar.plugins.autorank.permissions.AutorankPermission;
 
 /*
  * AutorankTools is a bunch of static methods, I put sendColoredMessage
@@ -431,7 +432,7 @@ public class AutorankTools {
             return true;
         }
 
-        if (player.hasPermission("autorank.exclude")) {
+        if (player.hasPermission(AutorankPermission.EXCLUDE_FROM_PATHING.getPermissionString())) {
             return true;
         }
 

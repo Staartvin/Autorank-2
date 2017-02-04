@@ -3,6 +3,7 @@ package me.armar.plugins.autorank.warningmanager;
 import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.permissions.AutorankPermission;
 
 public class WarningNoticeTask implements Runnable {
 
@@ -25,7 +26,7 @@ public class WarningNoticeTask implements Runnable {
         for (final Player p : plugin.getServer().getOnlinePlayers()) {
 
             // If player has notice on warning permission
-            if (p.hasPermission("autorank.warning.notice") || p.isOp()) {
+            if (p.hasPermission(AutorankPermission.NOTICE_ON_WARNINGS.getPermissionString()) || p.isOp()) {
 
                plugin.getWarningManager().sendWarnings(p);
             }

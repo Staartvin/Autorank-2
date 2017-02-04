@@ -8,6 +8,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.permissions.AutorankPermission;
 
 /**
  * This listener will listen to players joining and send them a message when an
@@ -60,7 +61,7 @@ public class PlayerJoinListener implements Listener {
         });
 
         // Player isn't allowed to see messages.
-        if (player.hasPermission("autorank.noticeonupdate")) {
+        if (player.hasPermission(AutorankPermission.NOTICE_ON_UPDATE_AVAILABLE.getPermissionString())) {
 
             // Run check async so server doesn't lag.
             plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
@@ -94,7 +95,7 @@ public class PlayerJoinListener implements Listener {
         }
 
         // If player has notice on warning permission
-        if (player.hasPermission("autorank.warning.notice")) {
+        if (player.hasPermission(AutorankPermission.NOTICE_ON_WARNINGS.getPermissionString())) {
 
             if (plugin.getWarningManager().getHighestWarning() != null) {
 

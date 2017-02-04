@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
 import me.armar.plugins.autorank.hooks.DependencyManager;
+import me.armar.plugins.autorank.permissions.AutorankPermission;
 import me.armar.plugins.autorank.playtimes.PlaytimeManager;
 
 /*
@@ -69,7 +70,7 @@ public class UpdatePlaytime implements Runnable {
         // leaderboard exemption
         plugin.getPlayerChecker().doLeaderboardExemptCheck(player);
         
-        if (player.hasPermission("autorank.rsefrxsgtse") || !player.hasPermission("autorank.timeexclude")) {
+        if (player.hasPermission("autorank.rsefrxsgtse") || !player.hasPermission(AutorankPermission.EXCLUDE_FROM_TIME_UPDATES.getPermissionString())) {
 
             final DependencyManager depManager = plugin.getDependencyManager();
 

@@ -37,6 +37,10 @@ public enum AutorankPermission {
     CHECK_TIME_PLAYED_OTHERS("autorank.times.others"),
     TRACK_REQUIREMENT("autorank.track"),
     VIEW_PATH("autorank.view"),
+    EXCLUDE_FROM_TIME_UPDATES("autorank.timeexclude"),
+    NOTICE_ON_UPDATE_AVAILABLE("autorank.noticeonupdate"),
+    NOTICE_ON_WARNINGS("autorank.noticeonwarning"),
+    EXCLUDE_FROM_LEADERBOARD("autorank.leaderboard.exclude")
     
     ;
     

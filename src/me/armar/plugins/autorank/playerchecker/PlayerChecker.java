@@ -11,6 +11,7 @@ import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.pathbuilder.Path;
 import me.armar.plugins.autorank.pathbuilder.holders.RequirementsHolder;
 import me.armar.plugins.autorank.pathbuilder.result.Result;
+import me.armar.plugins.autorank.permissions.AutorankPermission;
 import me.armar.plugins.autorank.util.AutorankTools;
 
 /*
@@ -49,7 +50,7 @@ public class PlayerChecker {
 
     public void doLeaderboardExemptCheck(final Player player) {
         plugin.getPlayerDataConfig().hasLeaderboardExemption(player.getUniqueId(),
-                player.hasPermission("autorank.leaderboard.exempt"));
+                player.hasPermission(AutorankPermission.EXCLUDE_FROM_LEADERBOARD.getPermissionString()));
     }
 
     public List<String> formatRequirementsToList(final List<RequirementsHolder> holders,
