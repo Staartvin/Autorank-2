@@ -6,7 +6,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.DependencyManager.AutorankDependency;
 import me.armar.plugins.autorank.hooks.statzapi.StatzAPIHandler;
-import me.armar.plugins.autorank.statsmanager.handlers.DummyHandler;
+import me.armar.plugins.autorank.statsmanager.handlers.FallbackHandler;
 import me.armar.plugins.autorank.statsmanager.handlers.StatisticsHandler;
 import me.armar.plugins.autorank.statsmanager.handlers.StatsHandler;
 import me.armar.plugins.autorank.statsmanager.handlers.StatzHandler;
@@ -129,7 +129,7 @@ public class StatsPluginManager {
             plugin.getLogger().info("Hooked into Statz (by Staartvin)");
         } else {
             // Use dummy handler if no stats plugin was found
-            statsPlugin = new DummyHandler();
+            statsPlugin = new FallbackHandler();
 
             plugin.getLogger().info("No stats plugin found! Most requirements cannot be used!");
 

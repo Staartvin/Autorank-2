@@ -80,7 +80,7 @@ import me.armar.plugins.autorank.permissions.PermissionsPluginManager;
 import me.armar.plugins.autorank.playerchecker.PlayerChecker;
 import me.armar.plugins.autorank.playtimes.PlaytimeManager;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
-import me.armar.plugins.autorank.statsmanager.handlers.DummyHandler;
+import me.armar.plugins.autorank.statsmanager.handlers.FallbackHandler;
 import me.armar.plugins.autorank.updater.UpdateHandler;
 import me.armar.plugins.autorank.updater.Updater;
 import me.armar.plugins.autorank.util.uuid.storage.UUIDStorage;
@@ -494,7 +494,7 @@ public class Autorank extends JavaPlugin {
      * Get the current {@linkplain StatsPlugin} that is hooked.
      * 
      * @return current {@linkplain StatsPlugin} that is hooked or
-     *         {@linkplain DummyHandler} if no stats plugin is found.
+     *         {@linkplain FallbackHandler} if no stats plugin is found.
      */
     public StatsPlugin getHookedStatsPlugin() {
         return getDependencyManager().getStatsPlugin();
