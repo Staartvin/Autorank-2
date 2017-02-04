@@ -15,42 +15,36 @@ import me.armar.plugins.autorank.statsmanager.StatsPlugin;
  * Whenever you want to create a new requirement, you'll have to extend this
  * class. Every requirement needs the following:
  * 
- * <p>
- * - Option to check if the requirement is optional.
- * <p>
- * - Results that will be performed when the requirement is completed. These
- * results have to be one of the results registered in Autorank.
- * <p>
- * - Option to check if the requirement will auto complete.
+ * A requirement can be seen as a task a player has to complete. A path consists of multiple requirements that should all be met to complete the path.
  * 
  * @author Staartvin
  * 
  */
 public abstract class Requirement {
 
-    private Autorank autorank;
+    private Autorank plugin;
     private boolean optional = false, autoComplete = false;
     private int reqId;
     private List<Result> results = new ArrayList<Result>();
     private String world = null;
 
     public final Autorank getAutorank() {
-        return autorank;
+        return plugin;
     }
 
     /**
-     * Gets the AutorankDependency manager of Autorank that is used to connect
-     * to other plugins. <br>
-     * Can be used to get other information off of other plugins.
+     * Get the Dependencymanager of Autorank that is used to connect to other
+     * plugins. <br>
+     * Can be used to get information from other plugins.
      * 
      * @return DependencyManager class
      */
     public final DependencyManager getDependencyManager() {
-        return autorank.getDependencyManager();
+        return plugin.getDependencyManager();
     }
 
     /**
-     * Gets the description of the requirement Make sure this is always a
+     * Get the description of the requirement. Make sure this is always a
      * translatable message.
      * 
      * @return string containing description (in locale language)
@@ -58,7 +52,7 @@ public abstract class Requirement {
     public abstract String getDescription();
 
     /**
-     * Gets the current progress of a player on a certain requirement.
+     * Get the current progress of a player on a certain requirement.
      * 
      * @param player
      *            Player to check for
@@ -77,7 +71,7 @@ public abstract class Requirement {
     }
 
     /**
-     * Gets the results when this requirement is finished
+     * Get the results when this requirement is finished
      * 
      * @return A list of results that has to be done.
      */
@@ -91,7 +85,7 @@ public abstract class Requirement {
      * @return stats plugin that Autorank uses for stat data
      */
     public StatsPlugin getStatsPlugin() {
-        return autorank.getHookedStatsPlugin();
+        return plugin.getHookedStatsPlugin();
     }
 
     /**
@@ -113,11 +107,11 @@ public abstract class Requirement {
      * @return true if completed, false otherwise.
      */
     public final boolean isCompleted(final int reqID, final UUID uuid) {
-        return autorank.getPlayerDataConfig().hasCompletedRequirement(reqID, uuid);
+        return plugin.getPlayerDataConfig().hasCompletedRequirement(reqID, uuid);
     }
 
     /**
-     * Is this an optional requirement? (Not a main requirement)
+     * Check whether this requirement is optional.
      * 
      * @return true when optional; false otherwise.
      */
@@ -126,7 +120,7 @@ public abstract class Requirement {
     }
 
     /**
-     * Is this requirement world-specific?
+     * Check whether this requirement is world specific.
      * 
      * @return true if it is, false otherwise.
      */
@@ -135,11 +129,8 @@ public abstract class Requirement {
     }
 
     /**
-     * Does it meet the requirements? This method gets called when someone does
-     * /ar check or /ar complete. It should always contain the following line:
-     * 
-     * <p>
-     * if (isCompleted(getReqId(), player.getName())) { return true; }
+     * Check whether a player meets this requirement. If a requirement is
+     * optional, a player will always meet the requirement.
      * 
      * @param player
      *            Player to check for
@@ -158,7 +149,7 @@ public abstract class Requirement {
     }
 
     public final void setAutorank(final Autorank autorank) {
-        this.autorank = autorank;
+        this.plugin = autorank;
     }
 
     /**
@@ -172,17 +163,17 @@ public abstract class Requirement {
     }
 
     /**
-     * Setup requirement specific objects.
+     * Set up a requirement. You should initiliaze the requirement with an empty constructor.
+     * Secondly, the {@link #setOptions(String[])} method must be called to supply the requirement with data.
+     * Lastly, you can use {@link #meetsRequirement(Player)} to check whether a player meets the requirement.
      * 
-     * This method is called when Autorank sets up its config. <br>
-     * The requirement id, auto completion and optional values are assigned
-     * automatically.
+     * The options parameter is an array that will contain the string as passed through the Paths.yml
      * 
      * @param options
      *            Each element is an element supplied by the config.
      * @return true if everything was setup correctly; false otherwise
      */
-    public abstract boolean setOptions(String[] options) throws NoClassDefFoundError;
+    public abstract boolean setOptions(String[] options);
 
     /**
      * Set the requirement id of this requirement
@@ -221,7 +212,7 @@ public abstract class Requirement {
     }
 
     /**
-     * Use auto completion for this?
+     * Check whether this requirement will automatically complete.
      * 
      * @return true when auto complete; false otherwise
      */
