@@ -9,6 +9,7 @@ import org.bukkit.command.CommandSender;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
+import me.armar.plugins.autorank.permissions.AutorankPermission;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
 
@@ -58,14 +59,9 @@ public class GlobalSetCommand extends AutorankCommand {
 
         if (value >= 0) {
 
-            if (args[1].equalsIgnoreCase(sender.getName())) {
-                if (!plugin.getCommandsManager().hasPermission("autorank.gset.self", sender)) {
-                    return true;
-                }
-            } else {
-                if (!plugin.getCommandsManager().hasPermission("autorank.gset.other", sender)) {
-                    return true;
-                }
+            if (!plugin.getCommandsManager().hasPermission(AutorankPermission.SET_GLOBAL_TIME.getPermissionString(),
+                    sender)) {
+                return true;
             }
 
             final UUID uuid = plugin.getUUIDStorage().getStoredUUID(args[1]);
@@ -84,8 +80,8 @@ public class GlobalSetCommand extends AutorankCommand {
                 return true;
             }
 
-            AutorankTools.sendColoredMessage(sender, Lang.PLAYTIME_CHANGED.getConfigValue(args[1],
-                    value + " " + Lang.MINUTE_PLURAL.getConfigValue()));
+            AutorankTools.sendColoredMessage(sender,
+                    Lang.PLAYTIME_CHANGED.getConfigValue(args[1], value + " " + Lang.MINUTE_PLURAL.getConfigValue()));
         } else {
             AutorankTools.sendColoredMessage(sender, Lang.INVALID_FORMAT.getConfigValue("/ar gset <player> <value>"));
         }
@@ -100,7 +96,7 @@ public class GlobalSetCommand extends AutorankCommand {
 
     @Override
     public String getPermission() {
-        return "autorank.gset.other";
+        return AutorankPermission.SET_GLOBAL_TIME.getPermissionString();
     }
 
     @Override

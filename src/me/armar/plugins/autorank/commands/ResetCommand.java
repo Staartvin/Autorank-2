@@ -9,6 +9,7 @@ import org.bukkit.command.CommandSender;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
+import me.armar.plugins.autorank.permissions.AutorankPermission;
 
 /**
  * The command delegator for the '/ar reset' command.
@@ -24,7 +25,7 @@ public class ResetCommand extends AutorankCommand {
     @Override
     public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
-        if (!plugin.getCommandsManager().hasPermission("autorank.reset", sender)) {
+        if (!plugin.getCommandsManager().hasPermission(AutorankPermission.RESET_DATA.getPermissionString(), sender)) {
             return true;
         }
 
@@ -69,7 +70,7 @@ public class ResetCommand extends AutorankCommand {
 
     @Override
     public String getPermission() {
-        return "autorank.reset";
+        return AutorankPermission.RESET_DATA.getPermissionString();
     }
 
     @Override

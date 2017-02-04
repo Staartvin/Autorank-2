@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
+import me.armar.plugins.autorank.permissions.AutorankPermission;
 import me.armar.plugins.autorank.util.AutorankTools;
 
 /**
@@ -24,7 +25,7 @@ public class ForceCheckCommand extends AutorankCommand {
     @Override
     public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
-        if (!plugin.getCommandsManager().hasPermission("autorank.forcecheck", sender))
+        if (!plugin.getCommandsManager().hasPermission( AutorankPermission.FORCE_CHECK.getPermissionString(), sender))
             return true;
 
         if (args.length != 2) {
@@ -61,7 +62,7 @@ public class ForceCheckCommand extends AutorankCommand {
 
     @Override
     public String getPermission() {
-        return "autorank.forcecheck";
+        return AutorankPermission.FORCE_CHECK.getPermissionString();
     }
 
     @Override

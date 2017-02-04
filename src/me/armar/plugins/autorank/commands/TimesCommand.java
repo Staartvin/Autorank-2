@@ -10,6 +10,7 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
 import me.armar.plugins.autorank.language.Lang;
+import me.armar.plugins.autorank.permissions.AutorankPermission;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
 
@@ -37,14 +38,14 @@ public class TimesCommand extends AutorankCommand {
         // A player specified a target
         if (args.length > 1) {
 
-            if (!plugin.getCommandsManager().hasPermission("autorank.times.others", sender)) {
+            if (!plugin.getCommandsManager().hasPermission(AutorankPermission.CHECK_TIME_PLAYED_OTHERS.getPermissionString(), sender)) {
                 return true;
             }
 
             targetName = args[1];
 
         } else if (sender instanceof Player) {
-            if (!plugin.getCommandsManager().hasPermission("autorank.times", sender)) {
+            if (!plugin.getCommandsManager().hasPermission(AutorankPermission.CHECK_TIME_PLAYED_SELF.getPermissionString(), sender)) {
                 return true;
             }
 
@@ -92,7 +93,7 @@ public class TimesCommand extends AutorankCommand {
 
     @Override
     public String getPermission() {
-        return "autorank.times";
+        return AutorankPermission.CHECK_TIME_PLAYED_SELF.getPermissionString();
     }
 
     @Override

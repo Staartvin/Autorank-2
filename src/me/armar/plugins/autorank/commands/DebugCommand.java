@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
+import me.armar.plugins.autorank.permissions.AutorankPermission;
 
 /**
  * The command delegator for the '/ar debug' command.
@@ -23,7 +24,7 @@ public class DebugCommand extends AutorankCommand {
 
         // This will create a 'debug.txt' file containing a lot of information
         // about the plugin
-        if (!plugin.getCommandsManager().hasPermission("autorank.debug", sender)) {
+        if (!plugin.getCommandsManager().hasPermission(AutorankPermission.DEBUG_FILE.getPermissionString(), sender)) {
             return true;
         }
 
@@ -46,7 +47,7 @@ public class DebugCommand extends AutorankCommand {
 
     @Override
     public String getPermission() {
-        return "autorank.debug";
+        return AutorankPermission.DEBUG_FILE.getPermissionString();
     }
 
     @Override

@@ -12,6 +12,7 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.pathbuilder.holders.RequirementsHolder;
+import me.armar.plugins.autorank.permissions.AutorankPermission;
 
 /**
  * The command delegator for the '/ar track' command.
@@ -45,7 +46,7 @@ public class TrackCommand extends AutorankCommand {
          * ); return true; }
          */
 
-        if (!plugin.getCommandsManager().hasPermission("autorank.track", sender))
+        if (!plugin.getCommandsManager().hasPermission(AutorankPermission.TRACK_REQUIREMENT.getPermissionString(), sender))
             return true;
 
         final Player player = (Player) sender;
@@ -119,7 +120,7 @@ public class TrackCommand extends AutorankCommand {
 
     @Override
     public String getPermission() {
-        return "autorank.track";
+        return AutorankPermission.TRACK_REQUIREMENT.getPermissionString();
     }
 
     @Override

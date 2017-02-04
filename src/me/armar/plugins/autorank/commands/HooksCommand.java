@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.hooks.DependencyManager.AutorankDependency;
+import me.armar.plugins.autorank.permissions.AutorankPermission;
 import me.staartvin.statz.hooks.Dependency;
 import net.md_5.bungee.api.ChatColor;
 
@@ -57,7 +58,7 @@ public class HooksCommand extends AutorankCommand {
 
     @Override
     public String getPermission() {
-        return "autorank.hooks";
+        return AutorankPermission.SHOW_HOOKS.getPermissionString();
     }
 
     @Override

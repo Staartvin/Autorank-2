@@ -7,6 +7,7 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
 import me.armar.plugins.autorank.language.Lang;
+import me.armar.plugins.autorank.permissions.AutorankPermission;
 import net.md_5.bungee.api.ChatColor;
 
 /**
@@ -23,7 +24,7 @@ public class LeaderboardCommand extends AutorankCommand {
     @Override
     public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
-        if (!plugin.getCommandsManager().hasPermission("autorank.leaderboard", sender)) {
+        if (!plugin.getCommandsManager().hasPermission(AutorankPermission.VIEW_LEADERBOARD.getPermissionString(), sender)) {
             return true;
         }
 
@@ -35,7 +36,7 @@ public class LeaderboardCommand extends AutorankCommand {
             if (arg.equalsIgnoreCase("force")) {
 
                 // Check for permission
-                if (!sender.hasPermission("autorank.leaderboard.force")) {
+                if (!sender.hasPermission(AutorankPermission.FORCE_UPDATE_LEADERBOARD.getPermissionString())) {
                     sender.sendMessage(Lang.NO_PERMISSION.getConfigValue("autorank.leaderboard.force"));
                     return true;
                 }
@@ -44,7 +45,7 @@ public class LeaderboardCommand extends AutorankCommand {
             } else if (arg.equalsIgnoreCase("broadcast")) {
 
                 // Check for permission
-                if (!sender.hasPermission("autorank.leaderboard.broadcast")) {
+                if (!sender.hasPermission(AutorankPermission.BROADCAST_LEADERBOARD.getPermissionString())) {
                     sender.sendMessage(Lang.NO_PERMISSION.getConfigValue("autorank.leaderboard.broadcast"));
                     return true;
                 }
@@ -110,7 +111,7 @@ public class LeaderboardCommand extends AutorankCommand {
 
     @Override
     public String getPermission() {
-        return "autorank.leaderboard";
+        return AutorankPermission.VIEW_LEADERBOARD.getPermissionString();
     }
 
     @Override

@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
+import me.armar.plugins.autorank.permissions.AutorankPermission;
 import me.armar.plugins.autorank.util.AutorankTools;
 
 /**
@@ -22,7 +23,7 @@ public class ReloadCommand extends AutorankCommand {
     @Override
     public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
-        if (!plugin.getCommandsManager().hasPermission("autorank.reload", sender)) {
+        if (!plugin.getCommandsManager().hasPermission(AutorankPermission.RELOAD_AUTORANK.getPermissionString(), sender)) {
             return true;
         }
 
@@ -46,7 +47,7 @@ public class ReloadCommand extends AutorankCommand {
 
     @Override
     public String getPermission() {
-        return "autorank.reload";
+        return AutorankPermission.RELOAD_AUTORANK.getPermissionString();
     }
 
     @Override

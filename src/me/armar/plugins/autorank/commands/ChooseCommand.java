@@ -12,6 +12,7 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.pathbuilder.Path;
+import me.armar.plugins.autorank.permissions.AutorankPermission;
 import me.armar.plugins.autorank.util.AutorankTools;
 
 /**
@@ -29,7 +30,7 @@ public class ChooseCommand extends AutorankCommand {
     public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
         // This command will give a preview of a certain path of ranking.
-        if (!plugin.getCommandsManager().hasPermission("autorank.choose", sender)) {
+        if (!plugin.getCommandsManager().hasPermission(AutorankPermission.CHOOSE_PATH.getPermissionString(), sender)) {
             return true;
         }
 
@@ -125,7 +126,7 @@ public class ChooseCommand extends AutorankCommand {
 
     @Override
     public String getPermission() {
-        return "autorank.choose";
+        return AutorankPermission.CHOOSE_PATH.getPermissionString();
     }
 
     @Override

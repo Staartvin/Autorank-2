@@ -8,6 +8,7 @@ import org.bukkit.command.CommandSender;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
+import me.armar.plugins.autorank.permissions.AutorankPermission;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
 import net.md_5.bungee.api.ChatColor;
@@ -26,7 +27,7 @@ public class GlobalAddCommand extends AutorankCommand {
     @Override
     public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
         
-        if (!plugin.getCommandsManager().hasPermission("autorank.gadd", sender)) {
+        if (!plugin.getCommandsManager().hasPermission(AutorankPermission.ADD_GLOBAL_TIME.getPermissionString(), sender)) {
             return true;
         }
 
@@ -107,7 +108,7 @@ public class GlobalAddCommand extends AutorankCommand {
 
     @Override
     public String getPermission() {
-        return "autorank.gadd";
+        return AutorankPermission.ADD_GLOBAL_TIME.getPermissionString();
     }
 
     @Override

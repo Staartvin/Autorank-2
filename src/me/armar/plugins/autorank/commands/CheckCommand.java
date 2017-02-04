@@ -17,6 +17,7 @@ import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.pathbuilder.Path;
 import me.armar.plugins.autorank.pathbuilder.holders.RequirementsHolder;
+import me.armar.plugins.autorank.permissions.AutorankPermission;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
 
@@ -258,7 +259,7 @@ public class CheckCommand extends AutorankCommand {
         // This is a local check. It will not show you the database numbers
         if (args.length > 1) {
 
-            if (!plugin.getCommandsManager().hasPermission("autorank.checkothers", sender)) {
+            if (!plugin.getCommandsManager().hasPermission(AutorankPermission.CHECK_OTHERS.getPermissionString(), sender)) {
                 return true;
             }
 
@@ -288,7 +289,7 @@ public class CheckCommand extends AutorankCommand {
                 check(sender, player);
             }
         } else if (sender instanceof Player) {
-            if (!plugin.getCommandsManager().hasPermission("autorank.check", sender)) {
+            if (!plugin.getCommandsManager().hasPermission(AutorankPermission.CHECK_SELF.getPermissionString(), sender)) {
                 return true;
             }
 
@@ -314,7 +315,7 @@ public class CheckCommand extends AutorankCommand {
     @Override
     public String getPermission() {
         // TODO Auto-generated method stub
-        return "autorank.check";
+        return AutorankPermission.CHECK_SELF.getPermissionString();
     }
 
     @Override

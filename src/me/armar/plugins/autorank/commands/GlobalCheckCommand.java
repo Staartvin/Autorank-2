@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
+import me.armar.plugins.autorank.permissions.AutorankPermission;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
 
@@ -35,7 +36,7 @@ public class GlobalCheckCommand extends AutorankCommand {
 
         if (args.length > 1) {
 
-            if (!plugin.getCommandsManager().hasPermission("autorank.checkothers", sender)) {
+            if (!plugin.getCommandsManager().hasPermission(AutorankPermission.CHECK_OTHERS.getPermissionString(), sender)) {
                 return true;
             }
 
@@ -73,7 +74,7 @@ public class GlobalCheckCommand extends AutorankCommand {
                 return true;
 
             } else {
-                if (player.hasPermission("autorank.exclude")) {
+                if (player.hasPermission(AutorankPermission.EXCLUDE_FROM_PATHING.getPermissionString())) {
                     sender.sendMessage(ChatColor.RED + Lang.PLAYER_IS_EXCLUDED.getConfigValue(player.getName()));
                     return true;
                 }
@@ -108,7 +109,7 @@ public class GlobalCheckCommand extends AutorankCommand {
                 // check(sender, player);
             }
         } else if (sender instanceof Player) {
-            if (!plugin.getCommandsManager().hasPermission("autorank.check", sender)) {
+            if (!plugin.getCommandsManager().hasPermission(AutorankPermission.CHECK_GLOBAL.getPermissionString(), sender)) {
                 return true;
             }
 
@@ -144,7 +145,7 @@ public class GlobalCheckCommand extends AutorankCommand {
 
     @Override
     public String getPermission() {
-        return "autorank.gcheck";
+        return AutorankPermission.CHECK_GLOBAL.getPermissionString();
     }
 
     @Override

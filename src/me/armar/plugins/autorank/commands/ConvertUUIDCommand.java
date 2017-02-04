@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
+import me.armar.plugins.autorank.permissions.AutorankPermission;
 
 /**
  * The command delegator for the '/ar convert' command.
@@ -30,7 +31,7 @@ public class ConvertUUIDCommand extends AutorankCommand {
 
         if (targetFile.equalsIgnoreCase("playerdata")) {
 
-            if (!plugin.getCommandsManager().hasPermission("autorank.convert.playerdata", sender)) {
+            if (!plugin.getCommandsManager().hasPermission(AutorankPermission.CONVERT_PLAYER_DATA.getPermissionString(), sender)) {
                 return true;
             }
 
@@ -40,12 +41,9 @@ public class ConvertUUIDCommand extends AutorankCommand {
             sender.sendMessage(ChatColor.RED + "Converting playerdata.yml to use new UUID format.");
         } else if (targetFile.equalsIgnoreCase("data") || targetFile.equalsIgnoreCase("times")) {
 
-            if (!plugin.getCommandsManager().hasPermission("autorank.convert.data", sender)) {
+            if (!plugin.getCommandsManager().hasPermission(AutorankPermission.CONVERT_TIME_DATA.getPermissionString(), sender)) {
                 return true;
             }
-
-            // Convert data.yml
-            // plugin.getPlaytimes().convertToUUIDStorage();
 
             sender.sendMessage(ChatColor.RED + "This operation is not supported anymore!");
         } else {
@@ -62,7 +60,7 @@ public class ConvertUUIDCommand extends AutorankCommand {
 
     @Override
     public String getPermission() {
-        return "autorank.convert.data";
+        return AutorankPermission.CONVERT_TIME_DATA.getPermissionString();
     }
 
     @Override

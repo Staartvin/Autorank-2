@@ -10,6 +10,7 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
 import me.armar.plugins.autorank.language.Lang;
+import me.armar.plugins.autorank.permissions.AutorankPermission;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
 
@@ -59,14 +60,8 @@ public class SetCommand extends AutorankCommand {
 
         if (value >= 0) {
 
-            if (args[1].equalsIgnoreCase(sender.getName())) {
-                if (!plugin.getCommandsManager().hasPermission("autorank.set.self", sender)) {
-                    return true;
-                }
-            } else {
-                if (!plugin.getCommandsManager().hasPermission("autorank.set.other", sender)) {
-                    return true;
-                }
+            if (!plugin.getCommandsManager().hasPermission(AutorankPermission.SET_LOCAL_TIME.getPermissionString(), sender)) {
+                return true;
             }
 
             final UUID uuid = plugin.getUUIDStorage().getStoredUUID(args[1]);
@@ -97,7 +92,7 @@ public class SetCommand extends AutorankCommand {
 
     @Override
     public String getPermission() {
-        return "autorank.set.other";
+        return AutorankPermission.SET_LOCAL_TIME.getPermissionString();
     }
 
     @Override

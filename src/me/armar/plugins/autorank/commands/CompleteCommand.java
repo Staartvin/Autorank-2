@@ -12,6 +12,7 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.pathbuilder.holders.RequirementsHolder;
+import me.armar.plugins.autorank.permissions.AutorankPermission;
 
 /**
  * The command delegator for the '/ar complete' command.
@@ -43,7 +44,7 @@ public class CompleteCommand extends AutorankCommand {
             return true;
         }
 
-        if (!plugin.getCommandsManager().hasPermission("autorank.complete", sender))
+        if (!plugin.getCommandsManager().hasPermission(AutorankPermission.COMPLETE_REQUIREMENT.getPermissionString(), sender))
             return true;
 
         final Player player = (Player) sender;
@@ -121,7 +122,7 @@ public class CompleteCommand extends AutorankCommand {
 
     @Override
     public String getPermission() {
-        return "autorank.complete";
+        return AutorankPermission.COMPLETE_REQUIREMENT.getPermissionString();
     }
 
     @Override

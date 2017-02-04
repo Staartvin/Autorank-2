@@ -10,6 +10,7 @@ import org.bukkit.command.CommandSender;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
+import me.armar.plugins.autorank.permissions.AutorankPermission;
 
 /**
  * The command delegator for the '/ar help' command.
@@ -111,7 +112,7 @@ public class HelpCommand extends AutorankCommand {
 
     @Override
     public String getPermission() {
-        return "autorank.help";
+        return AutorankPermission.HELP_PAGES.getPermissionString();
     }
 
     @Override

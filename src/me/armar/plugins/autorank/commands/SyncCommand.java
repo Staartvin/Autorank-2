@@ -11,6 +11,7 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
 import me.armar.plugins.autorank.language.Lang;
+import me.armar.plugins.autorank.permissions.AutorankPermission;
 
 /**
  * The command delegator for the '/ar sync' command.
@@ -26,11 +27,11 @@ public class SyncCommand extends AutorankCommand {
     @Override
     public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
-        if (!plugin.getCommandsManager().hasPermission("autorank.sync", sender))
+        if (!plugin.getCommandsManager().hasPermission(AutorankPermission.SYNC_MYSQL_TABLE.getPermissionString(), sender))
             return true;
 
         if (args.length > 1 && args[1].equalsIgnoreCase("stats")) {
-            sender.hasPermission(ChatColor.RED + "You probably meant /ar syncstats or /ar sync!");
+            sender.sendMessage(ChatColor.RED + "You probably meant /ar syncstats or /ar sync!");
             return true;
         }
 
@@ -98,7 +99,7 @@ public class SyncCommand extends AutorankCommand {
 
     @Override
     public String getPermission() {
-        return "autorank.sync";
+        return AutorankPermission.SYNC_MYSQL_TABLE.getPermissionString();
     }
 
     @Override

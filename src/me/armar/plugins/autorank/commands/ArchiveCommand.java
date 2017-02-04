@@ -7,6 +7,7 @@ import org.bukkit.command.CommandSender;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
+import me.armar.plugins.autorank.permissions.AutorankPermission;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
 
@@ -24,7 +25,7 @@ public class ArchiveCommand extends AutorankCommand {
     @Override
     public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
-        if (!plugin.getCommandsManager().hasPermission("autorank.archive", sender)) {
+        if (!plugin.getCommandsManager().hasPermission(AutorankPermission.ARCHIVE_PLAYERS.getPermissionString(), sender)) {
             return true;
         }
 
@@ -58,7 +59,7 @@ public class ArchiveCommand extends AutorankCommand {
     @Override
     public String getPermission() {
         // TODO Auto-generated method stub
-        return "autorank.archive";
+        return AutorankPermission.ARCHIVE_PLAYERS.getPermissionString();
     }
 
     @Override
