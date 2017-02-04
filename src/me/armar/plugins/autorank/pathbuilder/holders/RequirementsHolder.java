@@ -25,7 +25,7 @@ import me.armar.plugins.autorank.pathbuilder.result.Result;
  * <br>
  * <br>
  * This class holds multiple requirements, but only represents one 'line' in the
- * advanced config.
+ * paths file.
  * 
  * @author Staartvin
  *
@@ -43,10 +43,20 @@ public class RequirementsHolder {
         this.plugin = plugin;
     }
 
+    /**
+     * Add requirement to this requirementsholder.
+     * @param req Requirement to add
+     */
     public void addRequirement(final Requirement req) {
         requirements.add(req);
     }
 
+    /**
+     * Get the description of the requirements.
+     * If this requirementsholder contains multiple requirements, the string will made up of the following:
+     * <Requirement 1 description> OR <Requirement 2 description> OR etc.
+     * @return a string representing the description (or combined description) of the requirements.
+     */
     public String getDescription() {
         final StringBuilder builder = new StringBuilder("");
 
@@ -70,9 +80,16 @@ public class RequirementsHolder {
                 // First index
                 builder.append(desc + " or ");
             } else {
-
+                // Other indices
+                
+                // Find the part of this description that is the same as the first description
+                // For example, let's say we have 2 requirements: kill 2 cows or kill 10 creepers.
+                // As a description, we don't want to have 'Kill 2 cows or kill 10 creepers', as the 'kill' is redundant. 
+                // Hence, we remove the 'redundant' part of the description by searching for the index where the two descriptions differ
                 final int difIndex = this.getDifferenceIndex(original, desc);
 
+                // Remove the redundant part of the description string.
+                // Result is 'Kill 20 cows or 20 creepers'
                 desc = desc.substring(difIndex);
 
                 if (i == (size - 1)) {
@@ -106,6 +123,11 @@ public class RequirementsHolder {
         return -1;
     }
 
+    /**
+     * Get the progress for a player for this requirementsholder. For more info, see {@link #getDescription()}.
+     * @param player Player to check
+     * @return progress string in the format as {@link #getDescription()}.
+     */
     public String getProgress(final Player player) {
         final StringBuilder builder = new StringBuilder("");
 
@@ -146,6 +168,12 @@ public class RequirementsHolder {
         return builder.toString();
     }
 
+    /**
+     * Get the requirement id of this requirementsholder. Since all the requiremens that are part of this requirementsholder are essentialy specified as the same
+     * requirement in the Paths file, we may assume that all requirement ids are the same.
+     * 
+     * @return the requirement id of any of the requirements of this requirementsholder.
+     */
     public int getReqID() {
         // All req ids are the same.
         for (final Requirement r : this.getRequirements()) {
@@ -281,6 +309,10 @@ public class RequirementsHolder {
         return false;
     }
 
+    /**
+     * Run the results of this requirementsholder (if there are any).
+     * @param player Player to run it for.
+     */
     public void runResults(final Player player) {
 
         // Fire event so it can be cancelled
@@ -299,6 +331,10 @@ public class RequirementsHolder {
         }
     }
 
+    /**
+     * Check whether this requirementsholder is used as a prerequisite.
+     * @return
+     */
     public boolean isPrerequisite() {
         return isPrerequisite;
     }
