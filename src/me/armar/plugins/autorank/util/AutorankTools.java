@@ -432,7 +432,7 @@ public class AutorankTools {
             return true;
         }
 
-        if (player.hasPermission(AutorankPermission.EXCLUDE_FROM_PATHING.getPermissionString())) {
+        if (AutorankPermission.EXCLUDE_FROM_PATHING.allows(player)) {
             return true;
         }
 

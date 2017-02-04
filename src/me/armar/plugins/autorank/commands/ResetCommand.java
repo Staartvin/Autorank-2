@@ -25,7 +25,7 @@ public class ResetCommand extends AutorankCommand {
     @Override
     public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
-        if (!plugin.getCommandsManager().hasPermission(AutorankPermission.RESET_DATA.getPermissionString(), sender)) {
+        if (!plugin.getCommandsManager().hasPermission(AutorankPermission.RESET_DATA, sender)) {
             return true;
         }
 
@@ -69,8 +69,8 @@ public class ResetCommand extends AutorankCommand {
     }
 
     @Override
-    public String getPermission() {
-        return AutorankPermission.RESET_DATA.getPermissionString();
+    public AutorankPermission getPermission() {
+        return AutorankPermission.RESET_DATA;
     }
 
     @Override

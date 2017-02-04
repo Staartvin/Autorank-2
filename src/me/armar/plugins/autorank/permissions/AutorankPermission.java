@@ -1,5 +1,7 @@
 package me.armar.plugins.autorank.permissions;
 
+import org.bukkit.command.CommandSender;
+
 /**
  * This class represents a permission node that is used by Autorank to check whether a player is able to perform an action.
  * @author Staartvin
@@ -56,6 +58,15 @@ public enum AutorankPermission {
      */
     public String getPermissionString() {
         return this.permissionString;
+    }
+
+    /**
+     * Check whether the given command sender has this permission.
+     * @param sender the command sender to check
+     * @return true if has permission, false otherwise
+     */
+    public boolean allows(CommandSender sender) {
+        return sender.hasPermission(permissionString);
     }
     
     @Override

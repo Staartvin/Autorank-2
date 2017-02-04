@@ -30,7 +30,7 @@ public class ChooseCommand extends AutorankCommand {
     public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
         // This command will give a preview of a certain path of ranking.
-        if (!plugin.getCommandsManager().hasPermission(AutorankPermission.CHOOSE_PATH.getPermissionString(), sender)) {
+        if (!plugin.getCommandsManager().hasPermission(AutorankPermission.CHOOSE_PATH, sender)) {
             return true;
         }
 
@@ -124,8 +124,8 @@ public class ChooseCommand extends AutorankCommand {
     }
 
     @Override
-    public String getPermission() {
-        return AutorankPermission.CHOOSE_PATH.getPermissionString();
+    public AutorankPermission getPermission() {
+        return AutorankPermission.CHOOSE_PATH;
     }
 
     @Override

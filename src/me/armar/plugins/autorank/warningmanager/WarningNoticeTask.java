@@ -26,7 +26,7 @@ public class WarningNoticeTask implements Runnable {
         for (final Player p : plugin.getServer().getOnlinePlayers()) {
 
             // If player has notice on warning permission
-            if (p.hasPermission(AutorankPermission.NOTICE_ON_WARNINGS.getPermissionString()) || p.isOp()) {
+            if (AutorankPermission.NOTICE_ON_WARNINGS.allows(p) || p.isOp()) {
 
                plugin.getWarningManager().sendWarnings(p);
             }

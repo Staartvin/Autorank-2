@@ -2,6 +2,7 @@ package me.armar.plugins.autorank.commands.manager;
 
 import java.util.List;
 
+import me.armar.plugins.autorank.permissions.AutorankPermission;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -25,7 +26,7 @@ public abstract class AutorankCommand implements TabExecutor {
      * necessarily fits the command. Sometimes, multiple permissions are needed
      * to check if a player has access to this command.
      */
-    public abstract String getPermission();
+    public abstract AutorankPermission getPermission();
 
     /**
      * Get the way this command is supposed to be used. For example, /ar times

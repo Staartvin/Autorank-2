@@ -59,7 +59,7 @@ public class HelpCommand extends AutorankCommand {
                 for (final AutorankCommand cmd : commands) {
                     // Check if player has permission to do this, before
                     // presenting this command
-                    if (sender.hasPermission(cmd.getPermission())) {
+                    if (cmd.getPermission().allows(sender)) {
                         newList.add(cmd);
                     }
                 }
@@ -111,8 +111,8 @@ public class HelpCommand extends AutorankCommand {
     }
 
     @Override
-    public String getPermission() {
-        return AutorankPermission.HELP_PAGES.getPermissionString();
+    public AutorankPermission getPermission() {
+        return AutorankPermission.HELP_PAGES;
     }
 
     @Override

@@ -40,6 +40,7 @@ import me.armar.plugins.autorank.commands.TimesCommand;
 import me.armar.plugins.autorank.commands.TrackCommand;
 import me.armar.plugins.autorank.commands.ViewCommand;
 import me.armar.plugins.autorank.language.Lang;
+import me.armar.plugins.autorank.permissions.AutorankPermission;
 import me.armar.plugins.autorank.util.AutorankTools;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -122,9 +123,9 @@ public class CommandsManager implements TabExecutor {
      *            Sender to check
      * @return true if this sender has the given permission, false otherwise.
      */
-    public boolean hasPermission(final String permission, final CommandSender sender) {
-        if (!sender.hasPermission(permission)) {
-            sender.sendMessage(ChatColor.RED + Lang.NO_PERMISSION.getConfigValue(permission));
+    public boolean hasPermission(final AutorankPermission permission, final CommandSender sender) {
+        if (!permission.allows(sender)) {
+            sender.sendMessage(ChatColor.RED + Lang.NO_PERMISSION.getConfigValue(permission.getPermissionString()));
             return false;
         }
         return true;

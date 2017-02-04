@@ -72,7 +72,7 @@ public class UpdatePlaytime implements Runnable {
         plugin.getPlayerChecker().doLeaderboardExemptCheck(player);
 
         if (AutorankTools.isExcludedFromRanking(player)
-                || player.hasPermission(AutorankPermission.EXCLUDE_FROM_TIME_UPDATES.getPermissionString())) {
+                || AutorankPermission.EXCLUDE_FROM_TIME_UPDATES.allows(player)) {
             return;
         }
 
