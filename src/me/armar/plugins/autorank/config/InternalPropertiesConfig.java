@@ -92,7 +92,7 @@ public class InternalPropertiesConfig {
      *            Value of the conversion
      */
     public void hasTransferredUUIDs(final boolean value) {
-        config.set("has converted uuids", true);
+        config.set("has converted uuids", value);
 
         config.saveFile();
     }
