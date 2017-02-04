@@ -37,7 +37,8 @@ import me.armar.plugins.autorank.util.AutorankTools;
  */
 public class LeaderboardHandler {
 
-    private static Map<UUID, Integer> sortByComparator(final Map<UUID, Integer> unsortMap, final boolean order) {
+    private static Map<UUID, Integer> sortByComparator(final Map<UUID, Integer> unsortMap,
+            final boolean sortAscending) {
 
         final List<Entry<UUID, Integer>> list = new LinkedList<Entry<UUID, Integer>>(unsortMap.entrySet());
 
@@ -45,7 +46,7 @@ public class LeaderboardHandler {
         Collections.sort(list, new Comparator<Entry<UUID, Integer>>() {
             @Override
             public int compare(final Entry<UUID, Integer> o1, final Entry<UUID, Integer> o2) {
-                if (order) {
+                if (sortAscending) {
                     return o1.getValue().compareTo(o2.getValue());
                 } else {
                     return o2.getValue().compareTo(o1.getValue());
@@ -67,8 +68,11 @@ public class LeaderboardHandler {
     private int leaderboardLength = 10;
     private final Autorank plugin;
 
-    private final double validTime = 60 * 24; // LeaderboardHandler is valid for 24 hours
-                                         // hours.
+    private static final double LEADERBOARD_TIME_VALID = 60 * 24;
+    // LeaderboardHandler
+    // is valid
+    // for 24
+    // hours.
 
     public LeaderboardHandler(final Autorank plugin) {
         this.plugin = plugin;
@@ -122,9 +126,9 @@ public class LeaderboardHandler {
         final HashMap<UUID, Integer> times = new HashMap<UUID, Integer>();
 
         int size = uuids.size();
-        
+
         int lastSentPercentage = 0;
-        
+
         // Fill unsorted lists
         for (int i = 0; i < uuids.size(); i++) {
 
@@ -134,19 +138,19 @@ public class LeaderboardHandler {
             if (uuid == null) {
                 continue;
             }
-            
+
             // If player is exempted
             if (plugin.getPlayerDataConfig().hasLeaderboardExemption(uuid)) {
                 continue;
-            }   
+            }
 
             DecimalFormat df = new DecimalFormat("#.#");
             double percentage = ((i * 1.0) / size) * 100;
             int floored = (int) Math.floor(percentage);
-            
+
             if (lastSentPercentage != floored) {
                 lastSentPercentage = floored;
-                plugin.debugMessage("Autorank leaderboard update is at " + df.format(percentage)+ "%.");
+                plugin.debugMessage("Autorank leaderboard update is at " + df.format(percentage) + "%.");
             }
 
             // Use cache on .getTimeOfPlayer() so that we don't refresh all
@@ -158,17 +162,17 @@ public class LeaderboardHandler {
                 } else {
                     // Get the cached value of this uuid
                     final String playerName = plugin.getUUIDStorage().getCachedPlayerName(uuid);
-                    
+
                     if (playerName == null) {
                         plugin.debugMessage("Could not get cached player name of uuid '" + uuid + "'!");
                         continue;
                     }
-                    
+
                     times.put(uuid, (plugin.getPlaytimes().getTimeOfPlayer(playerName, true) / 60));
                 }
             } else {
                 times.put(uuid, plugin.getFlatFileManager().getLocalTime(type, uuid));
-            }  
+            }
         }
 
         // Sort all values
@@ -227,7 +231,7 @@ public class LeaderboardHandler {
      */
     private boolean shouldUpdateLeaderboard(TimeType type) {
         if (System.currentTimeMillis()
-                - plugin.getInternalPropertiesConfig().getLeaderboardLastUpdateTime() > (60000 * validTime)) {
+                - plugin.getInternalPropertiesConfig().getLeaderboardLastUpdateTime() > (60000 * LEADERBOARD_TIME_VALID)) {
             return true;
         } else if (plugin.getInternalPropertiesConfig().getCachedLeaderboard(type).size() <= 2) {
             return true;
@@ -303,7 +307,7 @@ public class LeaderboardHandler {
 
             Integer time = entry.getValue().intValue();
 
-            String message = layout.replaceAll("&p", name);
+            String message = layout.replace("&p", name);
 
             // divided by 1440
             final int days = (time / 1440);
@@ -314,14 +318,14 @@ public class LeaderboardHandler {
             // (time - days - hours)
             final int minutes = time - (days * 1440) - (hours * 60);
 
-            message = message.replaceAll("&r", Integer.toString(i + 1));
-            message = message.replaceAll("&tm", Integer.toString(time));
-            message = message.replaceAll("&th", Integer.toString(time / 60));
-            message = message.replaceAll("&d", Integer.toString(days));
+            message = message.replace("&r", Integer.toString(i + 1));
+            message = message.replace("&tm", Integer.toString(time));
+            message = message.replace("&th", Integer.toString(time / 60));
+            message = message.replace("&d", Integer.toString(days));
             time = time - ((time / 1440) * 1440);
-            message = message.replaceAll("&h", Integer.toString(hours));
+            message = message.replace("&h", Integer.toString(hours));
             time = time - ((time / 60) * 60);
-            message = message.replaceAll("&m", Integer.toString(minutes));
+            message = message.replace("&m", Integer.toString(minutes));
             message = ChatColor.translateAlternateColorCodes('&', message);
 
             // Correctly show plural or singular format.
