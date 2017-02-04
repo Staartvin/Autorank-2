@@ -317,9 +317,9 @@ public class PathsConfig {
      * @return the value string which can be null if none is specified.
      */
     public String getRequirementValue(final String pathName, final String reqName) {
-        // Correct config
-        String result;
-        result = (this.getConfig().get(pathName + ".requirements." + reqName + ".value") != null)
+        // Check if there is a value for PathName.requirements.RequirementName.Value
+        // If not, use PathName.requirements.RequirementName (without the Value).
+        String result = (this.getConfig().get(pathName + ".requirements." + reqName + ".value") != null)
                 ? this.getConfig().get(pathName + ".requirements." + reqName + ".value").toString()
                 : this.getConfig().getString(pathName + ".requirements." + reqName).toString();
 
@@ -358,8 +358,9 @@ public class PathsConfig {
      * @return the value string or null if it doesn't exist.
      */
     public String getResultOfRequirement(final String pathName, final String reqName, final String resName) {
-        String result;
-        result = (this.getConfig().get(pathName + ".requirements." + reqName + ".results." + resName + ".value") != null)
+        // Check if there is a value for PathName.requirements.RequirementName.results.ResultName.Value
+        // If not, use PathName.requirements.RequirementName.results.ResultName (without the Value).
+        String result = (this.getConfig().get(pathName + ".requirements." + reqName + ".results." + resName + ".value") != null)
                 ? this.getConfig().get(pathName + ".requirements." + reqName + ".results." + resName + ".value").toString()
                 : this.getConfig().getString(pathName + ".requirements." + reqName + ".results." + resName).toString();
 
