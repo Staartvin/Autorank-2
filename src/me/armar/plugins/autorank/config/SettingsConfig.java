@@ -155,7 +155,7 @@ public class SettingsConfig {
             case TABLE:
                 return this.getConfig().getString("sql.table");
             default:
-                return null;
+                throw new IllegalArgumentException(option + " is not a valid MySQL credential option");
         }
     }
 
