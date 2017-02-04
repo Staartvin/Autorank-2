@@ -20,10 +20,6 @@ public class SyncCommand extends AutorankCommand {
     private final Autorank plugin;
 
     public SyncCommand(final Autorank instance) {
-        this.setUsage("/ar sync");
-        this.setDesc("Sync MySQL database with server (Use only once per server).");
-        this.setPermission("autorank.sync");
-
         plugin = instance;
     }
 
@@ -93,5 +89,20 @@ public class SyncCommand extends AutorankCommand {
         }
 
         return true;
+    }
+
+    @Override
+    public String getDescription() {
+        return "Sync MySQL database with server (Use only once per server).";
+    }
+
+    @Override
+    public String getPermission() {
+        return "autorank.sync";
+    }
+
+    @Override
+    public String getUsage() {
+        return "/ar sync";
     }
 }

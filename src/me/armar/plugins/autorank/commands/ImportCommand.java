@@ -16,10 +16,6 @@ public class ImportCommand extends AutorankCommand {
     private final Autorank plugin;
 
     public ImportCommand(final Autorank instance) {
-        this.setUsage("/ar import");
-        this.setDesc("Import old data.");
-        this.setPermission("autorank.import");
-
         plugin = instance;
     }
 
@@ -34,5 +30,20 @@ public class ImportCommand extends AutorankCommand {
         plugin.getFlatFileManager().importData();
 
         return true;
+    }
+
+    @Override
+    public String getDescription() {
+        return "Import old data.";
+    }
+
+    @Override
+    public String getPermission() {
+        return "autorank.import";
+    }
+
+    @Override
+    public String getUsage() {
+        return "/ar import";
     }
 }

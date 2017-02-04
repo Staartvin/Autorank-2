@@ -21,10 +21,6 @@ public class TrackCommand extends AutorankCommand {
     private final Autorank plugin;
 
     public TrackCommand(final Autorank instance) {
-        this.setUsage("/ar track #");
-        this.setDesc("Track the progress of a requirement.");
-        this.setPermission("autorank.track");
-
         plugin = instance;
     }
 
@@ -114,5 +110,20 @@ public class TrackCommand extends AutorankCommand {
          */
 
         return true;
+    }
+
+    @Override
+    public String getDescription() {
+        return "Track the progress of a requirement.";
+    }
+
+    @Override
+    public String getPermission() {
+        return "autorank.track";
+    }
+
+    @Override
+    public String getUsage() {
+        return "/ar track #";
     }
 }

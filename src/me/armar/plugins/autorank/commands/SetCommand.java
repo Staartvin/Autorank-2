@@ -21,10 +21,6 @@ public class SetCommand extends AutorankCommand {
     private final Autorank plugin;
 
     public SetCommand(final Autorank instance) {
-        this.setUsage("/ar set [player] [value]");
-        this.setDesc("Set [player]'s time to [value].");
-        this.setPermission("autorank.set.other");
-
         plugin = instance;
     }
 
@@ -92,5 +88,20 @@ public class SetCommand extends AutorankCommand {
         }
 
         return true;
+    }
+
+    @Override
+    public String getDescription() {
+        return "Set [player]'s time to [value].";
+    }
+
+    @Override
+    public String getPermission() {
+        return "autorank.set.other";
+    }
+
+    @Override
+    public String getUsage() {
+        return "/ar set [player] [value]";
     }
 }

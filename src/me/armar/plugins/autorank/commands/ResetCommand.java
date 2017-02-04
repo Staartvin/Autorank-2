@@ -18,10 +18,6 @@ public class ResetCommand extends AutorankCommand {
     private final Autorank plugin;
 
     public ResetCommand(final Autorank instance) {
-        this.setUsage("/ar reset <player> <action>");
-        this.setDesc("Reset certain data of a player");
-        this.setPermission("autorank.reset");
-
         plugin = instance;
     }
 
@@ -64,5 +60,20 @@ public class ResetCommand extends AutorankCommand {
         }
 
         return true;
+    }
+
+    @Override
+    public String getDescription() {
+        return "Reset certain data of a player";
+    }
+
+    @Override
+    public String getPermission() {
+        return "autorank.reset";
+    }
+
+    @Override
+    public String getUsage() {
+        return "/ar reset <player> <action>";
     }
 }

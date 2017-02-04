@@ -20,10 +20,6 @@ public class RemoveCommand extends AutorankCommand {
     private final Autorank plugin;
 
     public RemoveCommand(final Autorank instance) {
-        this.setUsage("/ar remove [player] [value]");
-        this.setDesc("Remove [value] from [player]'s time.");
-        this.setPermission("autorank.remove");
-
         plugin = instance;
     }
 
@@ -59,16 +55,16 @@ public class RemoveCommand extends AutorankCommand {
             for (int i = 2; i < args.length; i++) {
                 builder.append(args[i]);
             }
-            
+
             int changeValue = 0;
 
             if (!builder.toString().contains("m") && !builder.toString().contains("h")
                     && !builder.toString().contains("d")) {
                 changeValue = AutorankTools.stringtoInt(builder.toString().trim());
             } else {
-                changeValue = AutorankTools.stringToTime(builder.toString(), Time.MINUTES);   
+                changeValue = AutorankTools.stringToTime(builder.toString(), Time.MINUTES);
             }
-            
+
             if (changeValue < 0) {
                 value = -1;
             } else {
@@ -84,5 +80,20 @@ public class RemoveCommand extends AutorankCommand {
         }
 
         return true;
+    }
+
+    @Override
+    public String getDescription() {
+        return "Remove [value] from [player]'s time.";
+    }
+
+    @Override
+    public String getPermission() {
+        return "autorank.remove";
+    }
+
+    @Override
+    public String getUsage() {
+        return "/ar remove [player] [value]";
     }
 }

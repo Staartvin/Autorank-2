@@ -16,10 +16,6 @@ public class ReloadCommand extends AutorankCommand {
     private final Autorank plugin;
 
     public ReloadCommand(final Autorank instance) {
-        this.setUsage("/ar reload");
-        this.setDesc("Reload Autorank.");
-        this.setPermission("autorank.reload");
-
         plugin = instance;
     }
 
@@ -41,5 +37,20 @@ public class ReloadCommand extends AutorankCommand {
         AutorankTools.sendColoredMessage(sender, Lang.AUTORANK_RELOADED.getConfigValue());
 
         return true;
+    }
+
+    @Override
+    public String getDescription() {
+        return "Reload Autorank.";
+    }
+
+    @Override
+    public String getPermission() {
+        return "autorank.reload";
+    }
+
+    @Override
+    public String getUsage() {
+        return "/ar reload";
     }
 }

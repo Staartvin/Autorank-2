@@ -21,11 +21,7 @@ public class TimesCommand extends AutorankCommand {
     private final Autorank plugin;
 
     public TimesCommand(final Autorank instance) {
-        this.setUsage("/ar times <player>");
-        this.setDesc("Show the amount of time you played.");
-        this.setPermission("autorank.times");
-
-        plugin = instance;
+           plugin = instance;
     }
 
     @Override
@@ -87,5 +83,20 @@ public class TimesCommand extends AutorankCommand {
         sender.sendMessage(Lang.AR_TIMES_TOTAL.getConfigValue(AutorankTools.timeToString(total, Time.MINUTES)));
 
         return true;
+    }
+
+    @Override
+    public String getDescription() {
+        return "Show the amount of time you played.";
+    }
+
+    @Override
+    public String getPermission() {
+        return "autorank.times";
+    }
+
+    @Override
+    public String getUsage() {
+        return "/ar times <player>";
     }
 }

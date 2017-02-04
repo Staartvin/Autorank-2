@@ -21,10 +21,6 @@ public class SyncStatsCommand extends AutorankCommand {
     private final Autorank plugin;
 
     public SyncStatsCommand(final Autorank instance) {
-        this.setUsage("/ar syncstats");
-        this.setDesc("Sync Autorank's time to Stats' time.");
-        this.setPermission("autorank.syncstats");
-
         plugin = instance;
     }
 
@@ -67,5 +63,20 @@ public class SyncStatsCommand extends AutorankCommand {
             sender.sendMessage(ChatColor.GREEN + "Time has succesfully been updated for all entries.");
         }
         return true;
+    }
+
+    @Override
+    public String getDescription() {
+        return "Sync Autorank's time to Stats' time.";
+    }
+
+    @Override
+    public String getPermission() {
+        return "autorank.syncstats";
+    }
+
+    @Override
+    public String getUsage() {
+        return "/ar syncstats";
     }
 }

@@ -21,11 +21,7 @@ public class CompleteCommand extends AutorankCommand {
     private final Autorank plugin;
 
     public CompleteCommand(final Autorank instance) {
-        this.setUsage("/ar complete #");
-        this.setDesc("Complete a requirement at this moment");
-        this.setPermission("autorank.complete");
-
-        plugin = instance;
+         plugin = instance;
     }
 
     @Override
@@ -116,5 +112,20 @@ public class CompleteCommand extends AutorankCommand {
         }
 
         return true;
+    }
+
+    @Override
+    public String getDescription() {
+        return "Complete a requirement at this moment";
+    }
+
+    @Override
+    public String getPermission() {
+        return "autorank.complete";
+    }
+
+    @Override
+    public String getUsage() {
+        return "/ar complete #";
     }
 }

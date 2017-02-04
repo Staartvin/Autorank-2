@@ -28,10 +28,6 @@ public class CheckCommand extends AutorankCommand {
     private final Autorank plugin;
 
     public CheckCommand(final Autorank instance) {
-        this.setUsage("/ar check [player]");
-        this.setDesc("Check [player]'s status");
-        this.setPermission("autorank.check");
-
         plugin = instance;
     }
 
@@ -306,5 +302,24 @@ public class CheckCommand extends AutorankCommand {
             AutorankTools.sendColoredMessage(sender, Lang.CANNOT_CHECK_CONSOLE.getConfigValue());
         }
         return true;
+    }
+
+    
+    @Override
+    public String getDescription() {
+        // TODO Auto-generated method stub
+        return "Check [player]'s status";
+    }
+
+    @Override
+    public String getPermission() {
+        // TODO Auto-generated method stub
+        return "autorank.check";
+    }
+
+    @Override
+    public String getUsage() {
+        // TODO Auto-generated method stub
+        return "/ar check [player]";
     }
 }

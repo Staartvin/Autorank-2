@@ -15,10 +15,6 @@ public class ConvertUUIDCommand extends AutorankCommand {
     private final Autorank plugin;
 
     public ConvertUUIDCommand(final Autorank instance) {
-        this.setUsage("/ar convert <file>");
-        this.setDesc("Convert a file to UUID format.");
-        this.setPermission("autorank.convert.data");
-
         plugin = instance;
     }
 
@@ -57,5 +53,20 @@ public class ConvertUUIDCommand extends AutorankCommand {
         }
 
         return true;
+    }
+
+    @Override
+    public String getDescription() {
+        return "Convert a file to UUID format.";
+    }
+
+    @Override
+    public String getPermission() {
+        return "autorank.convert.data";
+    }
+
+    @Override
+    public String getUsage() {
+        return "/ar convert <file>";
     }
 }

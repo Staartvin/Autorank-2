@@ -21,10 +21,6 @@ public class GlobalCheckCommand extends AutorankCommand {
     private final Autorank plugin;
 
     public GlobalCheckCommand(final Autorank instance) {
-        this.setUsage("/ar gcheck [player]");
-        this.setDesc("Check [player]'s global playtime.");
-        this.setPermission("autorank.gcheck");
-
         plugin = instance;
     }
 
@@ -139,5 +135,20 @@ public class GlobalCheckCommand extends AutorankCommand {
             AutorankTools.sendColoredMessage(sender, Lang.CANNOT_CHECK_CONSOLE.getConfigValue());
         }
         return true;
+    }
+
+    @Override
+    public String getDescription() {
+        return "Check [player]'s global playtime.";
+    }
+
+    @Override
+    public String getPermission() {
+        return "autorank.gcheck";
+    }
+
+    @Override
+    public String getUsage() {
+        return "/ar gcheck [player]";
     }
 }

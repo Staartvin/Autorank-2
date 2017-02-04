@@ -26,10 +26,6 @@ public class ViewCommand extends AutorankCommand {
     private final Autorank plugin;
 
     public ViewCommand(final Autorank instance) {
-        this.setUsage("/ar view <path name>");
-        this.setDesc("Gives a preview of a certain ranking path");
-        this.setPermission("autorank.view");
-
         plugin = instance;
     }
 
@@ -232,6 +228,21 @@ public class ViewCommand extends AutorankCommand {
         }
 
         return possibilities;
+    }
+
+    @Override
+    public String getDescription() {
+        return "Gives a preview of a certain ranking path";
+    }
+
+    @Override
+    public String getPermission() {
+        return "autorank.view";
+    }
+
+    @Override
+    public String getUsage() {
+        return "/ar view <path name>";
     }
 
 }

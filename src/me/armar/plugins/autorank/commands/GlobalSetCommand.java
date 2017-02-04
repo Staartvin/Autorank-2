@@ -20,10 +20,6 @@ public class GlobalSetCommand extends AutorankCommand {
     private final Autorank plugin;
 
     public GlobalSetCommand(final Autorank instance) {
-        this.setUsage("/ar gset [player] [value]");
-        this.setDesc("Set [player]'s global time to [value].");
-        this.setPermission("autorank.gset.other");
-
         plugin = instance;
     }
 
@@ -95,5 +91,20 @@ public class GlobalSetCommand extends AutorankCommand {
         }
 
         return true;
+    }
+
+    @Override
+    public String getDescription() {
+        return "Set [player]'s global time to [value].";
+    }
+
+    @Override
+    public String getPermission() {
+        return "autorank.gset.other";
+    }
+
+    @Override
+    public String getUsage() {
+        return "/ar gset [player] [value]";
     }
 }

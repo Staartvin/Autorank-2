@@ -19,10 +19,6 @@ public class HelpCommand extends AutorankCommand {
     private final Autorank plugin;
 
     public HelpCommand(final Autorank instance) {
-        this.setUsage("/ar help <page>");
-        this.setDesc("Show a list of commands.");
-        this.setPermission("autorank.help");
-
         plugin = instance;
     }
 
@@ -106,5 +102,20 @@ public class HelpCommand extends AutorankCommand {
         }
 
         sender.sendMessage(ChatColor.BLUE + "Page " + page + " of " + maxPages);
+    }
+
+    @Override
+    public String getDescription() {
+        return "Show a list of commands.";
+    }
+
+    @Override
+    public String getPermission() {
+        return "autorank.help";
+    }
+
+    @Override
+    public String getUsage() {
+        return "/ar help <page>";
     }
 }

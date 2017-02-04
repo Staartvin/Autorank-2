@@ -22,10 +22,6 @@ public class ChooseCommand extends AutorankCommand {
     private final Autorank plugin;
 
     public ChooseCommand(final Autorank instance) {
-        this.setUsage("/ar choose <path name>");
-        this.setDesc("Choose a certain ranking path");
-        this.setPermission("autorank.choose");
-
         plugin = instance;
     }
 
@@ -120,6 +116,21 @@ public class ChooseCommand extends AutorankCommand {
         }
 
         return possibilities;
+    }
+
+    @Override
+    public String getDescription() {
+        return "Choose a certain ranking path";
+    }
+
+    @Override
+    public String getPermission() {
+        return "autorank.choose";
+    }
+
+    @Override
+    public String getUsage() {
+        return "/ar choose <path name>";
     }
 
 }

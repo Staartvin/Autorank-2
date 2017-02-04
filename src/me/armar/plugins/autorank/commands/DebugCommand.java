@@ -15,10 +15,6 @@ public class DebugCommand extends AutorankCommand {
     private final Autorank plugin;
 
     public DebugCommand(final Autorank instance) {
-        this.setUsage("/ar debug");
-        this.setDesc("Shows debug information.");
-        this.setPermission("autorank.debug");
-
         plugin = instance;
     }
 
@@ -41,5 +37,20 @@ public class DebugCommand extends AutorankCommand {
         });
 
         return true;
+    }
+
+    @Override
+    public String getDescription() {
+        return "Shows debug information.";
+    }
+
+    @Override
+    public String getPermission() {
+        return "autorank.debug";
+    }
+
+    @Override
+    public String getUsage() {
+        return "/ar debug";
     }
 }

@@ -17,10 +17,6 @@ public class HooksCommand extends AutorankCommand {
     private final Autorank plugin;
 
     public HooksCommand(final Autorank instance) {
-        this.setUsage("/ar hooks");
-        this.setDesc("Shows a list of hookable plugins for Autorank");
-        this.setPermission("autorank.hooks");
-
         plugin = instance;
     }
 
@@ -52,5 +48,20 @@ public class HooksCommand extends AutorankCommand {
         }
 
         return true;
+    }
+
+    @Override
+    public String getDescription() {
+        return "Shows a list of hookable plugins for Autorank";
+    }
+
+    @Override
+    public String getPermission() {
+        return "autorank.hooks";
+    }
+
+    @Override
+    public String getUsage() {
+        return "/ar hooks";
     }
 }

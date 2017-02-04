@@ -18,11 +18,7 @@ public class ForceCheckCommand extends AutorankCommand {
     private final Autorank plugin;
 
     public ForceCheckCommand(final Autorank instance) {
-        this.setUsage("/ar forcecheck <player>");
-        this.setDesc("Do a manual silent check.");
-        this.setPermission("autorank.forcecheck");
-
-        plugin = instance;
+         plugin = instance;
     }
 
     @Override
@@ -56,5 +52,20 @@ public class ForceCheckCommand extends AutorankCommand {
         sender.sendMessage(ChatColor.GREEN + targetPlayer.getName() + " checked!");
 
         return true;
+    }
+
+    @Override
+    public String getDescription() {
+        return "Do a manual silent check.";
+    }
+
+    @Override
+    public String getPermission() {
+        return "autorank.forcecheck";
+    }
+
+    @Override
+    public String getUsage() {
+        return "/ar forcecheck <player>";
     }
 }

@@ -20,10 +20,6 @@ public class GlobalAddCommand extends AutorankCommand {
     private final Autorank plugin;
 
     public GlobalAddCommand(final Autorank instance) {
-        this.setUsage("/ar gadd [player] [value]");
-        this.setDesc("Add [value] to [player]'s global time");
-        this.setPermission("autorank.gadd");
-
         plugin = instance;
     }
 
@@ -102,5 +98,20 @@ public class GlobalAddCommand extends AutorankCommand {
         });
 
         return true;
+    }
+
+    @Override
+    public String getDescription() {
+        return "Add [value] to [player]'s global time";
+    }
+
+    @Override
+    public String getPermission() {
+        return "autorank.gadd";
+    }
+
+    @Override
+    public String getUsage() {
+        return "/ar gadd [player] [value]";
     }
 }

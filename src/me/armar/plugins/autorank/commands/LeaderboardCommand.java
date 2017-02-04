@@ -17,10 +17,6 @@ public class LeaderboardCommand extends AutorankCommand {
     private final Autorank plugin;
 
     public LeaderboardCommand(final Autorank instance) {
-        this.setUsage("/ar leaderboard <type>");
-        this.setDesc("Show the leaderboard.");
-        this.setPermission("autorank.leaderboard");
-
         plugin = instance;
     }
 
@@ -105,5 +101,20 @@ public class LeaderboardCommand extends AutorankCommand {
         }
 
         return true;
+    }
+
+    @Override
+    public String getDescription() {
+        return "Show the leaderboard.";
+    }
+
+    @Override
+    public String getPermission() {
+        return "autorank.leaderboard";
+    }
+
+    @Override
+    public String getUsage() {
+        return "/ar leaderboard <type>";
     }
 }
