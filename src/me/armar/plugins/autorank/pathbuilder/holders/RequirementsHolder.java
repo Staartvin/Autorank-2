@@ -88,6 +88,11 @@ public class RequirementsHolder {
                 // Hence, we remove the 'redundant' part of the description by searching for the index where the two descriptions differ
                 final int difIndex = this.getDifferenceIndex(original, desc);
 
+                // Did not find the same index
+                if (difIndex < 0) {
+                    continue;
+                }
+                
                 // Remove the redundant part of the description string.
                 // Result is 'Kill 20 cows or 20 creepers'
                 desc = desc.substring(difIndex);
