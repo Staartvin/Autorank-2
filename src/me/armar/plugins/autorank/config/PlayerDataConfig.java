@@ -323,7 +323,6 @@ public class PlayerDataConfig {
      *         leaderboard. False otherwise.
      */
     public boolean hasLeaderboardExemption(final UUID uuid) {
-        // Validate.notNull(uuid, "UUID of a player is null!");
         return config.getBoolean(uuid.toString() + ".exempt leaderboard", false);
     }
 

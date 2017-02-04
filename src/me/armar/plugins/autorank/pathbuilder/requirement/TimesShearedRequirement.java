@@ -27,7 +27,6 @@ public class TimesShearedRequirement extends Requirement {
         final int progressBar = this.getStatsPlugin().getNormalStat(StatsHandler.statTypes.TIMES_SHEARED,
                 player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld()));
 
-        // progress = progress.concat(progressBar + "/" + timesSheared);
         return progressBar + "/" + timesShorn;
     }
 

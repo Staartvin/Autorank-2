@@ -8,14 +8,7 @@ import me.armar.plugins.autorank.util.AutorankTools;
 
 public class HasItemRequirement extends Requirement {
 
-    // id;amount;data;name
     ItemWrapper neededItem = null;
-
-    // List<String> neededItems = new ArrayList<String>();
-
-    // private String displayName = null;
-    // ItemStack item = null;
-    // private boolean showShortValue = false;
 
     @Override
     public String getDescription() {
@@ -114,7 +107,6 @@ public class HasItemRequirement extends Requirement {
             useDisplayName = (options[4].equalsIgnoreCase("true") ? true : false);
         }
 
-        // item = new ItemStack(id, 1, (short) 0, data);
         final ItemStack item = new ItemStack(id, amount, data);
 
         neededItem = new ItemWrapper(item, displayName, showShortValue, useDisplayName);

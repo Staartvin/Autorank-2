@@ -60,7 +60,6 @@ public class BackupManager {
         } catch (final IOException e) {
             plugin.getServer().getConsoleSender().sendMessage(
                     "[Autorank] " + ChatColor.RED + "Could not find " + sourceFileName + ", so didn't backup.");
-            // e.printStackTrace();
         }
 
     }

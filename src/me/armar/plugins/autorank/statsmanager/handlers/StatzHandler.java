@@ -24,7 +24,6 @@ public class StatzHandler extends StatsPlugin {
     public int getNormalStat(statTypes statType, final UUID uuid, final HashMap<String, Object> arguments) {
         // First argument is the world (or null)
 
-        // final String playerName = (String) arguments[0];
         String worldName = null;
 
         if (arguments.containsKey("world")) {

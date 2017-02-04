@@ -8,8 +8,7 @@ import me.armar.plugins.autorank.statsmanager.handlers.StatsHandler;
 import me.armar.plugins.autorank.util.AutorankTools;
 
 public class FoodEatenRequirement extends Requirement {
-
-    // [0] amount, [1] foodType
+    
     FoodWrapper foodEaten = null;
 
     @Override

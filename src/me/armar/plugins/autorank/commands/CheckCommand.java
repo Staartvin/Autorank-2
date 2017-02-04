@@ -40,7 +40,6 @@ public class CheckCommand extends AutorankCommand {
         // Call the event
         Bukkit.getServer().getPluginManager().callEvent(event);
 
-        // final UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
         final UUID uuid = plugin.getUUIDStorage().getStoredUUID(player.getName());
 
         // Check if event is cancelled.
@@ -259,7 +258,8 @@ public class CheckCommand extends AutorankCommand {
         // This is a local check. It will not show you the database numbers
         if (args.length > 1) {
 
-            if (!plugin.getCommandsManager().hasPermission(AutorankPermission.CHECK_OTHERS.getPermissionString(), sender)) {
+            if (!plugin.getCommandsManager().hasPermission(AutorankPermission.CHECK_OTHERS.getPermissionString(),
+                    sender)) {
                 return true;
             }
 
@@ -289,7 +289,8 @@ public class CheckCommand extends AutorankCommand {
                 check(sender, player);
             }
         } else if (sender instanceof Player) {
-            if (!plugin.getCommandsManager().hasPermission(AutorankPermission.CHECK_SELF.getPermissionString(), sender)) {
+            if (!plugin.getCommandsManager().hasPermission(AutorankPermission.CHECK_SELF.getPermissionString(),
+                    sender)) {
                 return true;
             }
 
@@ -305,7 +306,6 @@ public class CheckCommand extends AutorankCommand {
         return true;
     }
 
-    
     @Override
     public String getDescription() {
         return "Check [player]'s status";

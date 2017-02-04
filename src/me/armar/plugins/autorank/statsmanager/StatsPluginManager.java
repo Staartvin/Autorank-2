@@ -32,7 +32,6 @@ public class StatsPluginManager {
 
     public boolean findStatistics() {
         final Plugin x = plugin.getServer().getPluginManager().getPlugin("Statistics");
-        // Main == Stats main class
         if (x != null && x instanceof JavaPlugin) {
             return true;
         }
@@ -42,7 +41,6 @@ public class StatsPluginManager {
 
     public boolean findStats() {
         final Plugin x = plugin.getServer().getPluginManager().getPlugin("Stats");
-        // Main == Stats main class
         if (x != null && x instanceof JavaPlugin) {
             return true;
         }
@@ -52,7 +50,6 @@ public class StatsPluginManager {
 
     public boolean findStatz() {
         final Plugin x = plugin.getServer().getPluginManager().getPlugin("Statz");
-        // Main == Stats main class
         if (x != null && x instanceof JavaPlugin) {
             return true;
         }

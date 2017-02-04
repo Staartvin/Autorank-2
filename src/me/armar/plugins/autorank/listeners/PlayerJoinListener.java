@@ -30,7 +30,6 @@ public class PlayerJoinListener implements Listener {
         final Player player = event.getPlayer();
 
         // Add cached player
-        // UUIDManager.addCachedPlayer(player);
 
         // Refresh uuid of the player if it is outdated
         if (plugin.getUUIDStorage().isOutdated(player.getName())) {
@@ -43,9 +42,7 @@ public class PlayerJoinListener implements Listener {
                     .severe("Autorank lost its player checker, this is bad! Please report this to the developers!");
             return;
         }
-
-        // plugin.debugMessage("PlayerChecker: " + plugin.getPlayerChecker());
-
+        
         // Do leaderboard exemption check
         plugin.getPlayerChecker().doLeaderboardExemptCheck(player);
 

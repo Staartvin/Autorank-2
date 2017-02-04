@@ -43,7 +43,6 @@ public class RankChangeResult extends Result {
         if (event.isCancelled())
             return false;
 
-        // final UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
         final UUID uuid = player.getUniqueId();
 
         // When rank is changed: reset progress and update last known group

@@ -9,8 +9,6 @@ import me.staartvin.statz.hooks.handlers.RPGmeHandler;
 public class RPGMeSkillLevelRequirement extends Requirement {
 
     private RPGmeHandler handler = null;
-    // [0] skillName, [1] skillLevel
-    // private final List<String> skillsCombined = new ArrayList<String>();
     private int skillLevel = -1;
     private String skillName = "all";
 

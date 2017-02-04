@@ -141,7 +141,6 @@ public class BlocksPlacedRequirement extends Requirement {
             useDisplayName = (options[4].equalsIgnoreCase("true") ? true : false);
         }
 
-        // item = new ItemStack(id, 1, (short) 0, data);
         final ItemStack item = new ItemStack(id, amount, data);
 
         wrapper = new BlocksPlacedWrapper(item, displayName, showShortValue, useDisplayName);

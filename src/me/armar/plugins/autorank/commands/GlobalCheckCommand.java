@@ -103,10 +103,6 @@ public class GlobalCheckCommand extends AutorankCommand {
                     }
 
                 });
-
-                // Do no check. Players can't be checked on global times (at the
-                // moment)
-                // check(sender, player);
             }
         } else if (sender instanceof Player) {
             if (!plugin.getCommandsManager().hasPermission(AutorankPermission.CHECK_GLOBAL.getPermissionString(), sender)) {

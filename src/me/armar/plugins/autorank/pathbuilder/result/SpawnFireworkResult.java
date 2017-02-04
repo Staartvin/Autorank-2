@@ -48,7 +48,6 @@ public class SpawnFireworkResult extends Result {
 
     @Override
     public boolean setOptions(final String[] options) {
-        // target;power;type;R;G;B
 
         if (options.length < 6)
             return false;
@@ -56,9 +55,9 @@ public class SpawnFireworkResult extends Result {
         target = options[0];
         power = Integer.parseInt(options[1]);
         type = Type.valueOf(options[2].toUpperCase().replace(" ", "_"));
+        // Colour is RGB code
         colour = Color.fromRGB(Integer.parseInt(options[3]), Integer.parseInt(options[4]),
                 Integer.parseInt(options[5]));
-        // Colour is RGB code
 
         return target != null;
     }

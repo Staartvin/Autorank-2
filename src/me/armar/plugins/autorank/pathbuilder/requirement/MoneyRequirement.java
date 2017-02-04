@@ -40,7 +40,6 @@ public class MoneyRequirement extends Requirement {
                 return false;
         }
 
-        // UUID uuid = UUIDManager.getUUIDFromPlayer(player.getName());
         if (VaultHandler.economy == null)
             return false;
 

@@ -241,8 +241,7 @@ public class RequirementsHolder {
                 // Player has not completed this requirement -> perform
                 // results
                 if (this.isPrerequisite) {
-                    // plugin.getPlayerDataConfig().addCompletedPrerequisite(uuid,
-                    // reqID);
+                    // Do nothing for now, must be implemented in some future
                 } else {
                     plugin.getPlayerDataConfig().addCompletedRequirement(uuid, reqID);
                 }

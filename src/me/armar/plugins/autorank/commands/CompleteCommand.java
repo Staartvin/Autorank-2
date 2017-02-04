@@ -63,10 +63,6 @@ public class CompleteCommand extends AutorankCommand {
         }
 
         final UUID uuid = plugin.getUUIDStorage().getStoredUUID(player.getName());
-
-        // final List<Requirement> requirements = plugin.getPlayerChecker()
-        // .getAllRequirements(player);
-
         final List<RequirementsHolder> holders = plugin.getPlayerChecker().getAllRequirementsHolders(player);
 
         if (holders.size() == 0) {

@@ -65,7 +65,6 @@ public class LeaderboardHandler {
 
     private String layout = "&6&r | &b&p - &7&d %day%, &h %hour% and &m %minute%.";
     private int leaderboardLength = 10;
-    // private String[] messages;
     private final Autorank plugin;
 
     private final double validTime = 60 * 24; // LeaderboardHandler is valid for 24 hours
@@ -121,8 +120,6 @@ public class LeaderboardHandler {
         final List<UUID> uuids = plugin.getFlatFileManager().getUUIDKeys(type);
 
         final HashMap<UUID, Integer> times = new HashMap<UUID, Integer>();
-
-        // String firstWorld = plugin.getServer().getWorlds().get(0).getName();
 
         int size = uuids.size();
         
@@ -357,8 +354,6 @@ public class LeaderboardHandler {
 
         // Update latest update-time
         plugin.getInternalPropertiesConfig().setLeaderboardLastUpdateTime(System.currentTimeMillis());
-
-        // messages = stringList.toArray(new String[stringList.size()]);
     }
 
 }
