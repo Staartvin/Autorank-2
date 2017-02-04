@@ -41,7 +41,7 @@ public class ForceCheckCommand extends AutorankCommand {
             return true;
         }
 
-        if (AutorankTools.isExcluded(targetPlayer)) {
+        if (AutorankTools.isExcludedFromRanking(targetPlayer)) {
             sender.sendMessage(Lang.PLAYER_IS_EXCLUDED.getConfigValue(targetPlayer.getName()));
             return true;
         }

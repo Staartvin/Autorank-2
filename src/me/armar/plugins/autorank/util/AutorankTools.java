@@ -421,7 +421,7 @@ public class AutorankTools {
      *            Player to check for
      * @return whether a player is excluded from ranking or not.
      */
-    public static boolean isExcluded(final Player player) {
+    public static boolean isExcludedFromRanking(final Player player) {
         if (player.hasPermission("autorank.askdjaslkdj")) {
             // Op's have all permissions, but if he is a OP, he isn't excluded
             if (player.isOp()) {

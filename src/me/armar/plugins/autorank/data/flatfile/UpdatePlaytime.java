@@ -9,6 +9,7 @@ import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
 import me.armar.plugins.autorank.hooks.DependencyManager;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
 import me.armar.plugins.autorank.playtimes.PlaytimeManager;
+import me.armar.plugins.autorank.util.AutorankTools;
 
 /*
  * UpdatePlaytime does an update on all online players
@@ -50,7 +51,7 @@ public class UpdatePlaytime implements Runnable {
                 plugin.debugMessage("Could not update play time of " + player.getName() + " as (s)he is not online!");
                 continue;
             }
-            
+
             updateMinutesPlayed(player);
         }
     }
@@ -69,36 +70,39 @@ public class UpdatePlaytime implements Runnable {
         // Check for leaderboard exempt permission -> updates value of
         // leaderboard exemption
         plugin.getPlayerChecker().doLeaderboardExemptCheck(player);
-        
-        if (player.hasPermission("autorank.rsefrxsgtse") || !player.hasPermission(AutorankPermission.EXCLUDE_FROM_TIME_UPDATES.getPermissionString())) {
 
-            final DependencyManager depManager = plugin.getDependencyManager();
-
-            // Check to see if player is afk
-            if (depManager.isAFK(player)) {
-                return;
-            }
-
-            final UUID uuid = plugin.getUUIDStorage().getStoredUUID(player.getName());
-
-            // Modify local time
-            for (final TimeType type : TimeType.values()) {
-                flatFileManager.addLocalTime(uuid, PlaytimeManager.INTERVAL_MINUTES, type);
-            }
-
-            // Modify global time
-            if (plugin.getMySQLManager().isMySQLEnabled()) {
-                plugin.getMySQLManager().addGlobalTime(uuid, PlaytimeManager.INTERVAL_MINUTES);
-            }
-            
-            // Auto assign path (if possible)
-            plugin.getPathManager().autoAssignPath(player);
-            
-            // Only check a player if it is not disabled in the Settings.yml
-            if (!plugin.getConfigHandler().isAutomaticPathDisabled()) {
-                // Check if player meets requirements
-                plugin.getPlayerChecker().checkPlayer(player);
-            }
+        if (AutorankTools.isExcludedFromRanking(player)
+                || player.hasPermission(AutorankPermission.EXCLUDE_FROM_TIME_UPDATES.getPermissionString())) {
+            return;
         }
+
+        final DependencyManager depManager = plugin.getDependencyManager();
+
+        // Check to see if player is afk
+        if (depManager.isAFK(player)) {
+            return;
+        }
+
+        final UUID uuid = plugin.getUUIDStorage().getStoredUUID(player.getName());
+
+        // Modify local time
+        for (final TimeType type : TimeType.values()) {
+            flatFileManager.addLocalTime(uuid, PlaytimeManager.INTERVAL_MINUTES, type);
+        }
+
+        // Modify global time
+        if (plugin.getMySQLManager().isMySQLEnabled()) {
+            plugin.getMySQLManager().addGlobalTime(uuid, PlaytimeManager.INTERVAL_MINUTES);
+        }
+
+        // Auto assign path (if possible)
+        plugin.getPathManager().autoAssignPath(player);
+
+        // Only check a player if it is not disabled in the Settings.yml
+        if (!plugin.getConfigHandler().isAutomaticPathDisabled()) {
+            // Check if player meets requirements
+            plugin.getPlayerChecker().checkPlayer(player);
+        }
+
     }
 }

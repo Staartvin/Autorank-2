@@ -36,7 +36,7 @@ public class PlayerChecker {
     public boolean checkPlayer(final Player player) {
 
         // Do not rank a player when he is excluded
-        if (AutorankTools.isExcluded(player))
+        if (AutorankTools.isExcludedFromRanking(player))
             return false;
 
         // Get chosen path

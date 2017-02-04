@@ -282,7 +282,7 @@ public class CheckCommand extends AutorankCommand {
                 AutorankTools.sendColoredMessage(sender,
                         Lang.HAS_PLAYED_FOR.getConfigValue(args[1], AutorankTools.timeToString(time, Time.SECONDS)));
             } else {
-                if (AutorankTools.isExcluded(player)) {
+                if (AutorankTools.isExcludedFromRanking(player)) {
                     sender.sendMessage(ChatColor.RED + Lang.PLAYER_IS_EXCLUDED.getConfigValue(player.getName()));
                     return true;
                 }
@@ -293,7 +293,7 @@ public class CheckCommand extends AutorankCommand {
                 return true;
             }
 
-            if (AutorankTools.isExcluded((Player) sender)) {
+            if (AutorankTools.isExcludedFromRanking((Player) sender)) {
                 sender.sendMessage(ChatColor.RED + Lang.PLAYER_IS_EXCLUDED.getConfigValue(sender.getName()));
                 return true;
             }
