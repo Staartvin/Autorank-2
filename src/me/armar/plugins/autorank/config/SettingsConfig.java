@@ -49,7 +49,7 @@ public class SettingsConfig {
      */
     public FileConfiguration getConfig() {
         if (config != null) {
-            return (FileConfiguration) config;
+            return config;
         }
 
         return null;
