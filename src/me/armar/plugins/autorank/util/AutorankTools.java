@@ -771,4 +771,35 @@ public class AutorankTools {
         }
         return queue.peek();
       }
+    
+    /**
+     * Get the time (in minutes) of a given string. The string should be given as an array of strings (array of words).
+     * You can specify an offset from where the given array should be read (zero-based).
+     * @param args Array of strings to
+     * @param offset Offset to start from reading the array
+     * @return the time value (in minutes) or -1 if the given string was invalid.
+     */
+    public static int readTimeInput(String[] args, int offset) {
+        int value = -1;
+        
+        final StringBuilder builder = new StringBuilder();
+
+        for (int i = offset; i < args.length; i++) {
+            builder.append(args[i]);
+        }
+
+        if (!builder.toString().contains("m") && !builder.toString().contains("h")
+                && !builder.toString().contains("d")) {
+            value = AutorankTools.stringtoInt(builder.toString().trim());
+        } else {
+
+            if (builder.toString().contains("s")) {
+                return -1;
+            }
+
+            value = AutorankTools.stringToTime(builder.toString(), Time.MINUTES);
+        }
+        
+        return value;
+    }
 }

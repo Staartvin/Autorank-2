@@ -2,7 +2,6 @@ package me.armar.plugins.autorank.commands;
 
 import java.util.UUID;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
@@ -11,7 +10,6 @@ import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
 import me.armar.plugins.autorank.util.AutorankTools;
-import me.armar.plugins.autorank.util.AutorankTools.Time;
 
 /**
  * The command delegator for the '/ar gset' command.
@@ -35,26 +33,7 @@ public class GlobalSetCommand extends AutorankCommand {
         }
 
         if (args.length > 2) {
-
-            final StringBuilder builder = new StringBuilder();
-
-            for (int i = 2; i < args.length; i++) {
-                builder.append(args[i]);
-            }
-
-            if (!builder.toString().contains("m") && !builder.toString().contains("h")
-                    && !builder.toString().contains("d") && !builder.toString().contains("s")) {
-                value = AutorankTools.stringtoInt(builder.toString().trim());
-            } else {
-
-                if (builder.toString().contains("s")) {
-                    sender.sendMessage(
-                            ChatColor.RED + Lang.INVALID_FORMAT.getConfigValue("(h)ours, (m)inutes or (d)ays"));
-                    return true;
-                }
-
-                value = AutorankTools.stringToTime(builder.toString(), Time.MINUTES);
-            }
+            value = AutorankTools.readTimeInput(args, 2);
         }
 
         if (value >= 0) {

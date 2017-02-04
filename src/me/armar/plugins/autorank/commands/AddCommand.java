@@ -11,7 +11,6 @@ import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
 import me.armar.plugins.autorank.util.AutorankTools;
-import me.armar.plugins.autorank.util.AutorankTools.Time;
 
 /**
  * The command delegator for the '/ar add' command.
@@ -46,27 +45,7 @@ public class AddCommand extends AutorankCommand {
         int value = 0;
 
         if (args.length > 2) {
-
-            final StringBuilder builder = new StringBuilder();
-
-            for (int i = 2; i < args.length; i++) {
-                builder.append(args[i]);
-            }
-            
-            int changeValue = 0;
-
-            if (!builder.toString().contains("m") && !builder.toString().contains("h")
-                    && !builder.toString().contains("d")) {
-                changeValue = AutorankTools.stringtoInt(builder.toString().trim());
-            } else {
-                changeValue = AutorankTools.stringToTime(builder.toString(), Time.MINUTES);   
-            }
-            
-            if (changeValue < 0) {
-                value = -1;
-            } else {
-                value += plugin.getFlatFileManager().getLocalTime(TimeType.TOTAL_TIME, uuid) + changeValue;
-            }
+            value = AutorankTools.readTimeInput(args, 2);
         }
 
         if (value >= 0) {
@@ -75,7 +54,7 @@ public class AddCommand extends AutorankCommand {
                 args[1] = plugin.getUUIDStorage().getRealName(uuid);
             }
 
-            plugin.getFlatFileManager().setLocalTime(TimeType.TOTAL_TIME, value, uuid);
+            plugin.getFlatFileManager().setLocalTime(TimeType.TOTAL_TIME, plugin.getFlatFileManager().getLocalTime(TimeType.TOTAL_TIME, uuid) + value, uuid);
             AutorankTools.sendColoredMessage(sender, Lang.PLAYTIME_CHANGED.getConfigValue(args[1], value + ""));
         } else {
             AutorankTools.sendColoredMessage(sender, Lang.INVALID_FORMAT.getConfigValue("/ar add [player] [value]"));

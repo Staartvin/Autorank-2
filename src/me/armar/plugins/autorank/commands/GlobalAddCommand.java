@@ -10,7 +10,6 @@ import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
 import me.armar.plugins.autorank.util.AutorankTools;
-import me.armar.plugins.autorank.util.AutorankTools.Time;
 import net.md_5.bungee.api.ChatColor;
 
 /**
@@ -59,33 +58,11 @@ public class GlobalAddCommand extends AutorankCommand {
                 int value = 0;
                 
                 if (args.length > 2) {
-
-                    final StringBuilder builder = new StringBuilder();
-
-                    for (int i = 2; i < args.length; i++) {
-                        builder.append(args[i]);
-                    }
-                    
-                    int changeValue = 0;
-
-                    if (!builder.toString().contains("m") && !builder.toString().contains("h")
-                            && !builder.toString().contains("d")) {
-                        changeValue = AutorankTools.stringtoInt(builder.toString().trim());
-                    } else {
-                        changeValue = AutorankTools.stringToTime(builder.toString(), Time.MINUTES);   
-                    }
-                    
-                    if (changeValue < 0) {
-                        value = -1;
-                    } else {
-                        System.out.println("DATA: " + plugin.getMySQLManager().getFreshGlobalTime(uuid));
-                        System.out.println("CHANGE VALUE: " + changeValue);
-                        value += plugin.getMySQLManager().getFreshGlobalTime(uuid) + changeValue;
-                    }
+                    value = AutorankTools.readTimeInput(args, 2);
                 }
 
                 if (value >= 0) {
-                    if (!plugin.getMySQLManager().setGlobalTime(uuid, value)) {
+                    if (!plugin.getMySQLManager().setGlobalTime(uuid, plugin.getMySQLManager().getFreshGlobalTime(uuid) + value)) {
                         sender.sendMessage(Lang.MYSQL_IS_NOT_ENABLED.getConfigValue());
                         return;
                     }
