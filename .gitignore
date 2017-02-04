@@ -4,6 +4,8 @@
 /.classpath
 /.project
 /.settings
+/.project
+/bin
 
 # netbeans
 /nbproject
