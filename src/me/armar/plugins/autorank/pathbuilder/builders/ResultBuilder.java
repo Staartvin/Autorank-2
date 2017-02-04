@@ -20,7 +20,6 @@ public class ResultBuilder {
             try {
                 res = c.newInstance();
             } catch (final Exception e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         } else {

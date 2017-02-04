@@ -23,7 +23,6 @@ public class MessageResult extends Result {
 
     @Override
     public String getDescription() {
-        // TODO Auto-generated method stub
         return Lang.MESSAGE_RESULT.getConfigValue(msg);
     }
 

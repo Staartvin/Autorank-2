@@ -285,8 +285,7 @@ public class RequirementsHolder {
     public void runResults(final Player player) {
 
         // Fire event so it can be cancelled
-        // Create the event here/
-        // TODO Implement logic for events with RequirementHolder
+        // Create the event here
         final RequirementCompleteEvent event = new RequirementCompleteEvent(player, this);
         // Call the event
         Bukkit.getServer().getPluginManager().callEvent(event);

@@ -374,7 +374,6 @@ public class MySQLManager {
 
             @Override
             public void run() {
-                // TODO Auto-generated method stub
                 mysql.execute(statement);
             }
         });

@@ -159,7 +159,6 @@ public class SQLDataStorage {
         try {
             return conn.isClosed();
         } catch (final SQLException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             return true;
         }

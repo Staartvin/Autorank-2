@@ -218,7 +218,6 @@ public class ViewCommand extends AutorankCommand {
     @Override
     public List<String> onTabComplete(final CommandSender sender, final Command cmd, final String commandLabel,
             final String[] args) {
-        // TODO Auto-generated method stub
         final List<String> possibilities = new ArrayList<String>();
 
         // List shows a list of changegroups to view

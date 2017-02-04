@@ -51,7 +51,6 @@ public class JavaScriptRequirement extends Requirement {
                 return false;
             }
         } catch (final ScriptException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             return false;
         }

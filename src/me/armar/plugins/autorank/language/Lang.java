@@ -15,7 +15,6 @@ import org.bukkit.configuration.file.FileConfiguration;
  * 
  */
 
-// TODO: Remove unnecessary lang options
 public enum Lang {
     /**
      * Obtain at least {0} achievements

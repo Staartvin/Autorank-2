@@ -76,9 +76,6 @@ public class StatsHandler extends StatsPlugin {
             // Handle time played
             value = statsApi.getNormalStat(uuid, "Shears", worldName);
         } else if (statType.equals(statTypes.FOOD_EATEN)) {
-            // Handle food eaten
-            // value = statsApi.getFoodEaten(uuid, worldName,
-            // arguments.get("foodType").toString());
             // TODO: Not supported by Stats. Fix so only checks amount and not
             // what kind of food.
         }

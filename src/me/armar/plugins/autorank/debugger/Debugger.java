@@ -45,7 +45,6 @@ public class Debugger {
             txt.getParentFile().mkdirs();
             txt.createNewFile();
         } catch (final IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             return dateFormatSave;
         }
@@ -55,7 +54,6 @@ public class Debugger {
         try {
             out = new BufferedWriter(new FileWriter(txt));
         } catch (final IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             return dateFormatSave;
         }
@@ -140,12 +138,10 @@ public class Debugger {
             out.newLine();
 
         } catch (final IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             try {
                 out.close();
             } catch (final IOException e1) {
-                // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
             return dateFormatSave;
@@ -156,7 +152,6 @@ public class Debugger {
             out.close();
             return dateFormatSave;
         } catch (final IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             return dateFormatSave;
         }

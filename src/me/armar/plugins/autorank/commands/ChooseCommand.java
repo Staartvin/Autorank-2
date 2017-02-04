@@ -104,7 +104,6 @@ public class ChooseCommand extends AutorankCommand {
     @Override
     public List<String> onTabComplete(final CommandSender sender, final Command cmd, final String commandLabel,
             final String[] args) {
-        // TODO Auto-generated method stub
 
         final Player player = (Player) sender;
 

@@ -16,13 +16,11 @@ public class DummyHandler extends StatsPlugin {
 
     @Override
     public int getNormalStat(statTypes statType, final UUID uuid, HashMap<String, Object> arguments) {
-        // TODO Auto-generated method stub
         return 0;
     }
 
     @Override
     public boolean isEnabled() {
-        // TODO Auto-generated method stub
         return false;
     }
 

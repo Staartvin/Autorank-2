@@ -71,7 +71,6 @@ public class GroupManagerHandler implements PermissionsHandler {
      */
     @Override
     public String getName() {
-        // TODO Auto-generated method stub
         return "GroupManager";
     }
 

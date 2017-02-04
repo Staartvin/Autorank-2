@@ -70,13 +70,11 @@ public class AddCommand extends AutorankCommand {
 
     @Override
     public String getPermission() {
-        // TODO Auto-generated method stub
         return AutorankPermission.ADD_LOCAL_TIME.getPermissionString();
     }
 
     @Override
     public String getUsage() {
-        // TODO Auto-generated method stub
         return "/ar add [player] [value]";
     }
 }

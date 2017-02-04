@@ -308,19 +308,16 @@ public class CheckCommand extends AutorankCommand {
     
     @Override
     public String getDescription() {
-        // TODO Auto-generated method stub
         return "Check [player]'s status";
     }
 
     @Override
     public String getPermission() {
-        // TODO Auto-generated method stub
         return AutorankPermission.CHECK_SELF.getPermissionString();
     }
 
     @Override
     public String getUsage() {
-        // TODO Auto-generated method stub
         return "/ar check [player]";
     }
 }

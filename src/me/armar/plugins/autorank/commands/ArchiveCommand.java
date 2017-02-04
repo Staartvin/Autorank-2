@@ -52,19 +52,16 @@ public class ArchiveCommand extends AutorankCommand {
 
     @Override
     public String getDescription() {
-        // TODO Auto-generated method stub
         return "Archive data with a minimum";
     }
 
     @Override
     public String getPermission() {
-        // TODO Auto-generated method stub
         return AutorankPermission.ARCHIVE_PLAYERS.getPermissionString();
     }
 
     @Override
     public String getUsage() {
-        // TODO Auto-generated method stub
         return "/ar archive <minimum>";
     }
 }

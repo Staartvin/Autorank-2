@@ -20,7 +20,6 @@ public class EffectResult extends Result {
 
     @Override
     public String getDescription() {
-        // TODO Auto-generated method stub
         return Lang.EFFECT_RESULT.getConfigValue(effect.getName());
     }
 

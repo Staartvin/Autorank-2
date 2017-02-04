@@ -104,7 +104,6 @@ public class VaultPermissionsHandler implements PermissionsHandler {
      */
     @Override
     public String getName() {
-        // TODO Auto-generated method stub
         return VaultHandler.permission.getName();
     }
 
