@@ -56,7 +56,6 @@ public class MySQLManager {
         try {
             executor.awaitTermination(10, TimeUnit.MINUTES);
         } catch (InterruptedException e) {
-            e.printStackTrace();
             plugin.getLogger().warning("Failed to await termination of thread pool. Interrupted.");
         }
 
@@ -218,46 +217,7 @@ public class MySQLManager {
             return cachedTime;
         }
 
-        // Mysql is not enabled
-        if (!isMySQLEnabled())
-            return 0;
-
-        // Check if connection is still alive
-        if (mysql.isClosed()) {
-            mysql.connect();
-        }
-
-        // Retrieve database time
-        // Initialise new callable class
-        final Callable<Integer> callable = new GrabDatabaseTimeTask(mysql, uuid, table);
-
-        // Sumbit callable
-        final Future<Integer> futureValue = executor.submit(callable);
-
-        // Grab value (will block thread, but there is no other way)
-        // That's why you need to run this async.
-        int value = 0;
-
-        plugin.debugMessage("Obtaining global time of '" + uuid.toString() + "'");
-
-        try {
-            plugin.debugMessage("Gcheck performed "
-                    + (Thread.currentThread().getName().contains("Server thread") ? "not ASYNC" : "ASYNC") + " ("
-                    + Thread.currentThread().getName() + ")");
-            value = futureValue.get();
-        } catch (final InterruptedException e) {
-            e.printStackTrace();
-        } catch (final ExecutionException e) {
-            e.printStackTrace();
-        }
-
-        // Store last received time and last received value
-        lastChecked.put(uuid, System.currentTimeMillis());
-        lastReceivedTime.put(uuid, value);
-
-        plugin.debugMessage("Obtained fresh global time of '" + uuid.toString() + "' with value " + value);
-
-        return value;
+        return this.getFreshDatabaseTime(uuid);
     }
 
     /**
