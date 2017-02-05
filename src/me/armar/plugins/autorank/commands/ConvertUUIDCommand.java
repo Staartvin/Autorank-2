@@ -31,7 +31,7 @@ public class ConvertUUIDCommand extends AutorankCommand {
 
         if (targetFile.equalsIgnoreCase("playerdata")) {
 
-            if (!plugin.getCommandsManager().hasPermission(AutorankPermission.CONVERT_PLAYER_DATA.getPermissionString(), sender)) {
+            if (!plugin.getCommandsManager().hasPermission(AutorankPermission.CONVERT_PLAYER_DATA, sender)) {
                 return true;
             }
 
@@ -41,7 +41,7 @@ public class ConvertUUIDCommand extends AutorankCommand {
             sender.sendMessage(ChatColor.RED + "Converting playerdata.yml to use new UUID format.");
         } else if (targetFile.equalsIgnoreCase("data") || targetFile.equalsIgnoreCase("times")) {
 
-            if (!plugin.getCommandsManager().hasPermission(AutorankPermission.CONVERT_TIME_DATA.getPermissionString(), sender)) {
+            if (!plugin.getCommandsManager().hasPermission(AutorankPermission.CONVERT_TIME_DATA, sender)) {
                 return true;
             }
 
@@ -59,8 +59,8 @@ public class ConvertUUIDCommand extends AutorankCommand {
     }
 
     @Override
-    public String getPermission() {
-        return AutorankPermission.CONVERT_TIME_DATA.getPermissionString();
+    public AutorankPermission getPermission() {
+        return AutorankPermission.CONVERT_TIME_DATA;
     }
 
     @Override

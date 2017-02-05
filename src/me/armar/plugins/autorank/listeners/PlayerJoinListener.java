@@ -58,7 +58,7 @@ public class PlayerJoinListener implements Listener {
         });
 
         // Player isn't allowed to see messages.
-        if (player.hasPermission(AutorankPermission.NOTICE_ON_UPDATE_AVAILABLE.getPermissionString())) {
+        if (AutorankPermission.NOTICE_ON_UPDATE_AVAILABLE.allows(player)) {
 
             // Run check async so server doesn't lag.
             plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
@@ -87,7 +87,7 @@ public class PlayerJoinListener implements Listener {
         }
 
         // If player has notice on warning permission
-        if (player.hasPermission(AutorankPermission.NOTICE_ON_WARNINGS.getPermissionString())) {
+        if (AutorankPermission.NOTICE_ON_WARNINGS.allows(player)) {
 
             if (plugin.getWarningManager().getHighestWarning() != null) {
 

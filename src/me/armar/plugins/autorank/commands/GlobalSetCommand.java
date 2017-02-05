@@ -38,8 +38,7 @@ public class GlobalSetCommand extends AutorankCommand {
 
         if (value >= 0) {
 
-            if (!plugin.getCommandsManager().hasPermission(AutorankPermission.SET_GLOBAL_TIME.getPermissionString(),
-                    sender)) {
+            if (!plugin.getCommandsManager().hasPermission(AutorankPermission.SET_GLOBAL_TIME, sender)) {
                 return true;
             }
 
@@ -74,8 +73,8 @@ public class GlobalSetCommand extends AutorankCommand {
     }
 
     @Override
-    public String getPermission() {
-        return AutorankPermission.SET_GLOBAL_TIME.getPermissionString();
+    public AutorankPermission getPermission() {
+        return AutorankPermission.SET_GLOBAL_TIME;
     }
 
     @Override

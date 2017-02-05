@@ -34,7 +34,7 @@ public class ViewCommand extends AutorankCommand {
     public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
         // This command will give a preview of a certain path of ranking.
-        if (!plugin.getCommandsManager().hasPermission(AutorankPermission.VIEW_PATH.getPermissionString(), sender)) {
+        if (!plugin.getCommandsManager().hasPermission(AutorankPermission.VIEW_PATH, sender)) {
             return true;
         }
 
@@ -236,8 +236,8 @@ public class ViewCommand extends AutorankCommand {
     }
 
     @Override
-    public String getPermission() {
-        return AutorankPermission.VIEW_PATH.getPermissionString();
+    public AutorankPermission getPermission() {
+        return AutorankPermission.VIEW_PATH;
     }
 
     @Override

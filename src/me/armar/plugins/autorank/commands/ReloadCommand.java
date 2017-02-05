@@ -23,7 +23,7 @@ public class ReloadCommand extends AutorankCommand {
     @Override
     public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
-        if (!plugin.getCommandsManager().hasPermission(AutorankPermission.RELOAD_AUTORANK.getPermissionString(), sender)) {
+        if (!plugin.getCommandsManager().hasPermission(AutorankPermission.RELOAD_AUTORANK, sender)) {
             return true;
         }
 
@@ -46,8 +46,8 @@ public class ReloadCommand extends AutorankCommand {
     }
 
     @Override
-    public String getPermission() {
-        return AutorankPermission.RELOAD_AUTORANK.getPermissionString();
+    public AutorankPermission getPermission() {
+        return AutorankPermission.RELOAD_AUTORANK;
     }
 
     @Override
