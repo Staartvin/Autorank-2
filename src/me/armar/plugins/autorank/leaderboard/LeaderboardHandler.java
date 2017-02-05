@@ -330,10 +330,14 @@ public class LeaderboardHandler {
     public void updateLeaderboard(final TimeType type) {
         plugin.debugMessage(ChatColor.BLUE + "Updating leaderboard '" + type.toString() + "'!");
 
+        // Store messages to make leaderboard
         final List<String> stringList = new ArrayList<String>();
 
+        // Only store the users that should appear on the leaderboard, along with their time.
         Map<String, Integer> finalLeaderboard = new LinkedHashMap<>();
 
+        // If we are using Autorank as timekeeper, we can ask all UUIDs in the uuids file and sort the playtime
+        // After we sorted the playtime, we collect the playernames of the top x (leaderboard length variable).
         if (plugin.getSettingsConfig().useTimeOf().equals(AutorankDependency.AUTORANK)) {
             final Map<UUID, Integer> sortedPlaytimes = getSortedPlaytimesByUUID(type);
 
@@ -365,6 +369,11 @@ public class LeaderboardHandler {
                 finalLeaderboard.put(name, entry.getValue());
             }
         } else {
+            // We do not use Autorank, but some other third party plugin, so we need to get all playernames.
+            // Instead of retrieving all UUIDs and THEN convert them to playernames (which is massively slow),
+            // We ask all playernames from the uuid folder and we never have to convert to UUIDs.
+            // Performance was tested and it went from 30 minutes to 1 second for a dataset of 60.000 players.
+            
             final Map<String, Integer> sortedPlaytimes = getSortedPlaytimesByNames(type);
 
             Iterator<Entry<String, Integer>> itr = sortedPlaytimes.entrySet().iterator();
