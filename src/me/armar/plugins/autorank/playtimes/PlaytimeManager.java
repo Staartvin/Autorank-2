@@ -102,5 +102,13 @@ public class PlaytimeManager {
 
         return playTime;
     }
+    
+    /**
+     * Get the time plugin that is used to retrieve time of a player
+     * @return a {@linkplain AutorankDependency} representing the time plugin
+     */
+    public AutorankDependency getUsedTimePlugin() {
+        return timePlugin;
+    }
 
 }

@@ -18,6 +18,7 @@ import org.bukkit.command.CommandSender;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
+import me.armar.plugins.autorank.hooks.DependencyManager.AutorankDependency;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
 
@@ -37,42 +38,31 @@ import me.armar.plugins.autorank.util.AutorankTools;
  */
 public class LeaderboardHandler {
 
-    private static Map<UUID, Integer> sortByComparator(final Map<UUID, Integer> unsortMap,
-            final boolean sortAscending) {
-
-        final List<Entry<UUID, Integer>> list = new LinkedList<Entry<UUID, Integer>>(unsortMap.entrySet());
-
-        // Sorting the list based on values
-        Collections.sort(list, new Comparator<Entry<UUID, Integer>>() {
+    public static <K, V extends Comparable<? super V>> Map<K, V> sortByValue(Map<K, V> map) {
+        List<Map.Entry<K, V>> list = new LinkedList<>(map.entrySet());
+        Collections.sort(list, new Comparator<Map.Entry<K, V>>() {
             @Override
-            public int compare(final Entry<UUID, Integer> o1, final Entry<UUID, Integer> o2) {
-                if (sortAscending) {
-                    return o1.getValue().compareTo(o2.getValue());
-                } else {
-                    return o2.getValue().compareTo(o1.getValue());
-
-                }
+            public int compare(Map.Entry<K, V> o1, Map.Entry<K, V> o2) {
+                return (o2.getValue()).compareTo(o1.getValue());
             }
         });
 
-        // Maintaining insertion order with the help of LinkedList
-        final Map<UUID, Integer> sortedMap = new LinkedHashMap<UUID, Integer>();
-        for (final Entry<UUID, Integer> entry : list) {
-            sortedMap.put(entry.getKey(), entry.getValue());
+        Map<K, V> result = new LinkedHashMap<>();
+        for (Map.Entry<K, V> entry : list) {
+            result.put(entry.getKey(), entry.getValue());
         }
-
-        return sortedMap;
+        return result;
     }
 
     private String layout = "&6&r | &b&p - &7&d %day%, &h %hour% and &m %minute%.";
     private int leaderboardLength = 10;
     private final Autorank plugin;
 
-    private static final double LEADERBOARD_TIME_VALID = 60 * 24;
+    private static final double LEADERBOARD_TIME_VALID = 30;
     // LeaderboardHandler
     // is valid
-    // for 24
-    // hours.
+    // for 30
+    // minutes.
 
     public LeaderboardHandler(final Autorank plugin) {
         this.plugin = plugin;
@@ -119,7 +109,7 @@ public class LeaderboardHandler {
      *            TimeType to get the sort for.
      * @return a sorted map.
      */
-    private Map<UUID, Integer> getSortedPlaytimes(final TimeType type) {
+    private Map<UUID, Integer> getSortedPlaytimesByUUID(final TimeType type) {
 
         final List<UUID> uuids = plugin.getFlatFileManager().getUUIDKeys(type);
 
@@ -148,7 +138,7 @@ public class LeaderboardHandler {
             double percentage = ((i * 1.0) / size) * 100;
             int floored = (int) Math.floor(percentage);
 
-            if (lastSentPercentage != floored) {
+            if (lastSentPercentage != floored && floored % 10 == 0) {
                 lastSentPercentage = floored;
                 plugin.debugMessage("Autorank leaderboard update is at " + df.format(percentage) + "%.");
             }
@@ -160,15 +150,21 @@ public class LeaderboardHandler {
                 if (plugin.getConfigHandler().useGlobalTimeInLeaderboard()) {
                     times.put(uuid, plugin.getMySQLManager().getGlobalTime(uuid));
                 } else {
-                    // Get the cached value of this uuid
-                    final String playerName = plugin.getUUIDStorage().getCachedPlayerName(uuid);
 
-                    if (playerName == null) {
-                        plugin.debugMessage("Could not get cached player name of uuid '" + uuid + "'!");
-                        continue;
+                    // If we are using Autorank, we do not need the player name.
+                    if (plugin.getPlaytimes().getUsedTimePlugin().equals(AutorankDependency.AUTORANK)) {
+                        times.put(uuid, plugin.getFlatFileManager().getLocalTime(type, uuid));
+                    } else {
+                        // Get the cached value of this uuid
+                        final String playerName = plugin.getUUIDStorage().getCachedPlayerName(uuid);
+
+                        if (playerName == null) {
+                            plugin.debugMessage("Could not get cached player name of uuid '" + uuid + "'!");
+                            continue;
+                        }
+
+                        times.put(uuid, (plugin.getPlaytimes().getTimeOfPlayer(playerName, true) / 60));
                     }
-
-                    times.put(uuid, (plugin.getPlaytimes().getTimeOfPlayer(playerName, true) / 60));
                 }
             } else {
                 times.put(uuid, plugin.getFlatFileManager().getLocalTime(type, uuid));
@@ -176,7 +172,74 @@ public class LeaderboardHandler {
         }
 
         // Sort all values
-        final Map<UUID, Integer> sortedMap = sortByComparator(times, false);
+        final Map<UUID, Integer> sortedMap = LeaderboardHandler.sortByValue(times);
+
+        return sortedMap;
+    }
+
+    private Map<String, Integer> getSortedPlaytimesByNames(final TimeType type) {
+
+        final List<String> playerNames = plugin.getUUIDStorage().getStoredPlayerNames();
+
+        final Map<String, Integer> times = new HashMap<String, Integer>();
+
+        int size = playerNames.size();
+
+        int lastSentPercentage = 0;
+
+        // Fill unsorted lists
+        for (int i = 0; i < playerNames.size(); i++) {
+
+            String playerName = playerNames.get(i);
+
+            if (playerName == null) {
+                continue;
+            }
+
+            UUID uuid = plugin.getUUIDStorage().getStoredUUID(playerName);
+
+            if (uuid == null) {
+                continue;
+            }
+
+            // If player is exempted
+            if (plugin.getPlayerDataConfig().hasLeaderboardExemption(uuid)) {
+                continue;
+            }
+
+            DecimalFormat df = new DecimalFormat("#.#");
+            double percentage = ((i * 1.0) / size) * 100;
+            int floored = (int) Math.floor(percentage);
+
+            if (lastSentPercentage != floored) {
+                lastSentPercentage = floored;
+                plugin.debugMessage("Autorank leaderboard update is at " + df.format(percentage) + "%.");
+            }
+
+            // Use cache on .getTimeOfPlayer() so that we don't refresh all
+            // uuids in existence.
+            if (type == TimeType.TOTAL_TIME) {
+
+                if (plugin.getConfigHandler().useGlobalTimeInLeaderboard()) {
+                    times.put(playerName, plugin.getMySQLManager().getGlobalTime(uuid));
+                } else {
+
+                    // If we are using Autorank, we do not need the player name.
+                    if (plugin.getPlaytimes().getUsedTimePlugin().equals(AutorankDependency.AUTORANK)) {
+                        times.put(playerName, plugin.getFlatFileManager().getLocalTime(type, uuid));
+                    } else {
+                        times.put(playerName, (plugin.getPlaytimes().getTimeOfPlayer(playerName, true) / 60));
+                    }
+                }
+            } else {
+                times.put(playerName, plugin.getFlatFileManager().getLocalTime(type, uuid));
+            }
+        }
+
+        // Sort all values
+        // final Map<String, Integer> sortedMap = sortByComparatorString(times,
+        // false);
+        final Map<String, Integer> sortedMap = LeaderboardHandler.sortByValue(times);
 
         return sortedMap;
     }
@@ -230,8 +293,8 @@ public class LeaderboardHandler {
      * @return true if we should update the leaderboard
      */
     private boolean shouldUpdateLeaderboard(TimeType type) {
-        if (System.currentTimeMillis()
-                - plugin.getInternalPropertiesConfig().getLeaderboardLastUpdateTime() > (60000 * LEADERBOARD_TIME_VALID)) {
+        if (System.currentTimeMillis() - plugin.getInternalPropertiesConfig().getLeaderboardLastUpdateTime() > (60000
+                * LEADERBOARD_TIME_VALID)) {
             return true;
         } else if (plugin.getInternalPropertiesConfig().getCachedLeaderboard(type).size() <= 2) {
             return true;
@@ -267,12 +330,54 @@ public class LeaderboardHandler {
     public void updateLeaderboard(final TimeType type) {
         plugin.debugMessage(ChatColor.BLUE + "Updating leaderboard '" + type.toString() + "'!");
 
-        final Map<UUID, Integer> sortedPlaytimes = getSortedPlaytimes(type);
-        final Iterator<Entry<UUID, Integer>> itr = sortedPlaytimes.entrySet().iterator();
-
-        plugin.debugMessage("Size leaderboard: " + sortedPlaytimes.size());
-
         final List<String> stringList = new ArrayList<String>();
+
+        Map<String, Integer> finalLeaderboard = new LinkedHashMap<>();
+
+        if (plugin.getSettingsConfig().useTimeOf().equals(AutorankDependency.AUTORANK)) {
+            final Map<UUID, Integer> sortedPlaytimes = getSortedPlaytimesByUUID(type);
+
+            Iterator<Entry<UUID, Integer>> itr = sortedPlaytimes.entrySet().iterator();
+
+            plugin.debugMessage("Size leaderboard: " + sortedPlaytimes.size());
+
+            for (int i = 0; i < leaderboardLength && itr.hasNext(); i++) {
+                final Entry<UUID, Integer> entry = itr.next();
+
+                final UUID uuid = entry.getKey();
+
+                // Grab playername from here so it doesn't load all player names
+                // ever.
+                // Get the cached value of this uuid to improve performance
+                String name = plugin.getUUIDStorage().getRealName(uuid);
+
+                // UUIDManager.getPlayerFromUUID(uuid);
+
+                // There was no real name found, use cached player name
+                if (name == null) {
+                    name = plugin.getUUIDStorage().getCachedPlayerName(uuid);
+                }
+
+                // No cached name found, don't use this name.
+                if (name == null)
+                    continue;
+
+                finalLeaderboard.put(name, entry.getValue());
+            }
+        } else {
+            final Map<String, Integer> sortedPlaytimes = getSortedPlaytimesByNames(type);
+
+            Iterator<Entry<String, Integer>> itr = sortedPlaytimes.entrySet().iterator();
+
+            plugin.debugMessage("Size leaderboard: " + sortedPlaytimes.size());
+
+            for (int i = 0; i < leaderboardLength && itr.hasNext(); i++) {
+
+                final Entry<String, Integer> entry = itr.next();
+
+                finalLeaderboard.put(entry.getKey(), entry.getValue());
+            }
+        }
 
         if (type == TimeType.TOTAL_TIME) {
             stringList.add(Lang.LEADERBOARD_HEADER_ALL_TIME.getConfigValue());
@@ -284,30 +389,17 @@ public class LeaderboardHandler {
             stringList.add(Lang.LEADERBOARD_HEADER_MONTHLY.getConfigValue());
         }
 
-        for (int i = 0; i < leaderboardLength && itr.hasNext(); i++) {
-            final Entry<UUID, Integer> entry = itr.next();
+        int count = 0;
 
-            final UUID uuid = entry.getKey();
+        Iterator<Entry<String, Integer>> iterator = finalLeaderboard.entrySet().iterator();
 
-            // Grab playername from here so it doesn't load all player names
-            // ever.
-            // Get the cached value of this uuid to improve performance
-            String name = plugin.getUUIDStorage().getRealName(uuid);
+        for (int i = 0; i < leaderboardLength && iterator.hasNext(); i++) {
 
-            // UUIDManager.getPlayerFromUUID(uuid);
-
-            // There was no real name found, use cached player name
-            if (name == null) {
-                name = plugin.getUUIDStorage().getCachedPlayerName(uuid);
-            }
-
-            // No cached name found, don't use this name.
-            if (name == null)
-                continue;
+            final Entry<String, Integer> entry = iterator.next();
 
             Integer time = entry.getValue().intValue();
 
-            String message = layout.replace("&p", name);
+            String message = layout.replace("&p", entry.getKey());
 
             // divided by 1440
             final int days = (time / 1440);
@@ -318,7 +410,7 @@ public class LeaderboardHandler {
             // (time - days - hours)
             final int minutes = time - (days * 1440) - (hours * 60);
 
-            message = message.replace("&r", Integer.toString(i + 1));
+            message = message.replace("&r", Integer.toString(count + 1));
             message = message.replace("&tm", Integer.toString(time));
             message = message.replace("&th", Integer.toString(time / 60));
             message = message.replace("&d", Integer.toString(days));
@@ -349,6 +441,7 @@ public class LeaderboardHandler {
 
             stringList.add(message);
 
+            count++;
         }
 
         stringList.add(Lang.LEADERBOARD_FOOTER.getConfigValue());

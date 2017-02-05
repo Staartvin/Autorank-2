@@ -2,9 +2,11 @@ package me.armar.plugins.autorank.util.uuid.storage;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -353,6 +355,23 @@ public class UUIDStorage {
 
         // Changed all names, now update boolean in internal properties.
         plugin.getInternalPropertiesConfig().hasTransferredUUIDs(true);
+    }
+    
+    public List<String> getStoredPlayerNames() {
+        // Return all playernames that are stored in the UUID folders
+        
+        List<String> playerNames = new ArrayList<>();
+        
+        for (Entry<String, FileConfiguration> entry: this.configs.entrySet()) {
+            FileConfiguration config = entry.getValue();
+            
+            for (String playerName : config.getKeys(false)) {
+                playerNames.add(playerName);
+            }
+        }
+        
+        return playerNames;
+        
     }
 
 }

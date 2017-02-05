@@ -89,6 +89,8 @@ public class LeaderboardCommand extends AutorankCommand {
                     plugin.getLeaderboardManager().updateLeaderboard(type2);
                     
                     sender.sendMessage(ChatColor.YELLOW + "Leaderboard updated!");
+                    
+                    plugin.getLeaderboardManager().sendLeaderboard(sender, type2);
                 }
             });
             

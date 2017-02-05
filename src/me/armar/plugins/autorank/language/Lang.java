@@ -226,21 +226,21 @@ public enum Lang {
      */
     LEADERBOARD_FOOTER("leaderboard-footer", "&a------------------------------------"),
     /**
-     * &a-------- LeaderboardHandler (All time) --------
+     * &a-------- Leaderboard (All time) --------
      */
-    LEADERBOARD_HEADER_ALL_TIME("leaderboard-header-all-time", "&a-------- LeaderboardHandler (All time) --------"),
+    LEADERBOARD_HEADER_ALL_TIME("leaderboard-header-all-time", "&a-------- Leaderboard (All time) --------"),
     /**
-     * &a-------- LeaderboardHandler (Daily time) --------
+     * &a-------- Leaderboard (Daily time) --------
      */
-    LEADERBOARD_HEADER_DAILY("leaderboard-header-daily", "&a-------- LeaderboardHandler (Daily time) --------"),
+    LEADERBOARD_HEADER_DAILY("leaderboard-header-daily", "&a-------- Leaderboard (Daily time) --------"),
     /**
-     * &a-------- LeaderboardHandler (Monthly time) --------
+     * &a-------- Leaderboard (Monthly time) --------
      */
-    LEADERBOARD_HEADER_MONTHLY("leaderboard-header-monthly", "&a-------- LeaderboardHandler (Monthly time) --------"),
+    LEADERBOARD_HEADER_MONTHLY("leaderboard-header-monthly", "&a-------- Leaderboard (Monthly time) --------"),
     /**
-     * &a-------- LeaderboardHandler (Weekly time) --------
+     * &a-------- Leaderboard (Weekly time) --------
      */
-    LEADERBOARD_HEADER_WEEKLY("leaderboard-header-weekly", "&a-------- LeaderboardHandler (Weekly time) --------"),
+    LEADERBOARD_HEADER_WEEKLY("leaderboard-header-weekly", "&a-------- Leaderboard (Weekly time) --------"),
     /**
      * Be at {0}.
      */
