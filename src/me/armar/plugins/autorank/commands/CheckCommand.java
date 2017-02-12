@@ -49,6 +49,12 @@ public class CheckCommand extends AutorankCommand {
         Path activePath = plugin.getPathManager().getCurrentPath(uuid);
 
         if (activePath == null) {
+            // Try assign a path to a player first.
+            activePath = plugin.getPathManager().autoAssignPath(player);
+        }
+
+        // No path assigned to the player.
+        if (activePath == null) {
             // Player should first choose a path.
 
             final List<Path> paths = plugin.getPathManager().getPaths();

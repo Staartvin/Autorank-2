@@ -92,6 +92,9 @@ public class Path {
 
             // Reset progress
             plugin.getPlayerDataConfig().setCompletedRequirements(uuid, null);
+            
+            // Try to assign a new path to a player
+            plugin.getPathManager().autoAssignPath(player);
 
         } else {
             result = false;
