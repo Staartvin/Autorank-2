@@ -36,7 +36,7 @@ public class GlobalCheckCommand extends AutorankCommand {
 
         if (args.length > 1) {
 
-            if (!plugin.getCommandsManager().hasPermission(AutorankPermission.CHECK_OTHERS.getPermissionString(), sender)) {
+            if (!plugin.getCommandsManager().hasPermission(AutorankPermission.CHECK_OTHERS, sender)) {
                 return true;
             }
 
@@ -74,7 +74,7 @@ public class GlobalCheckCommand extends AutorankCommand {
                 return true;
 
             } else {
-                if (player.hasPermission(AutorankPermission.EXCLUDE_FROM_PATHING.getPermissionString())) {
+                if (player.hasPermission(AutorankPermission.EXCLUDE_FROM_PATHING)) {
                     sender.sendMessage(ChatColor.RED + Lang.PLAYER_IS_EXCLUDED.getConfigValue(player.getName()));
                     return true;
                 }
@@ -105,7 +105,7 @@ public class GlobalCheckCommand extends AutorankCommand {
                 });
             }
         } else if (sender instanceof Player) {
-            if (!plugin.getCommandsManager().hasPermission(AutorankPermission.CHECK_GLOBAL.getPermissionString(), sender)) {
+            if (!plugin.getCommandsManager().hasPermission(AutorankPermission.CHECK_GLOBAL, sender)) {
                 return true;
             }
 
@@ -141,7 +141,7 @@ public class GlobalCheckCommand extends AutorankCommand {
 
     @Override
     public String getPermission() {
-        return AutorankPermission.CHECK_GLOBAL.getPermissionString();
+        return AutorankPermission.CHECK_GLOBAL;
     }
 
     @Override

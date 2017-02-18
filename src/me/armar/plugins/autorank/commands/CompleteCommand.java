@@ -44,7 +44,7 @@ public class CompleteCommand extends AutorankCommand {
             return true;
         }
 
-        if (!plugin.getCommandsManager().hasPermission(AutorankPermission.COMPLETE_REQUIREMENT.getPermissionString(), sender))
+        if (!plugin.getCommandsManager().hasPermission(AutorankPermission.COMPLETE_REQUIREMENT, sender))
             return true;
 
         final Player player = (Player) sender;
@@ -118,7 +118,7 @@ public class CompleteCommand extends AutorankCommand {
 
     @Override
     public String getPermission() {
-        return AutorankPermission.COMPLETE_REQUIREMENT.getPermissionString();
+        return AutorankPermission.COMPLETE_REQUIREMENT;
     }
 
     @Override

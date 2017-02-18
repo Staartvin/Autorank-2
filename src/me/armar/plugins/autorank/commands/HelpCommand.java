@@ -112,7 +112,7 @@ public class HelpCommand extends AutorankCommand {
 
     @Override
     public String getPermission() {
-        return AutorankPermission.HELP_PAGES.getPermissionString();
+        return AutorankPermission.HELP_PAGES;
     }
 
     @Override

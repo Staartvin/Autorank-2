@@ -23,7 +23,7 @@ public class ImportCommand extends AutorankCommand {
     @Override
     public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
-        if (!plugin.getCommandsManager().hasPermission(AutorankPermission.IMPORT_DATA.getPermissionString(), sender)) {
+        if (!plugin.getCommandsManager().hasPermission(AutorankPermission.IMPORT_DATA, sender)) {
             return true;
         }
 
@@ -40,7 +40,7 @@ public class ImportCommand extends AutorankCommand {
 
     @Override
     public String getPermission() {
-        return AutorankPermission.IMPORT_DATA.getPermissionString();
+        return AutorankPermission.IMPORT_DATA;
     }
 
     @Override

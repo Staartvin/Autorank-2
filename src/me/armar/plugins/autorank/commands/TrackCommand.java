@@ -46,7 +46,7 @@ public class TrackCommand extends AutorankCommand {
          * ); return true; }
          */
 
-        if (!plugin.getCommandsManager().hasPermission(AutorankPermission.TRACK_REQUIREMENT.getPermissionString(), sender))
+        if (!plugin.getCommandsManager().hasPermission(AutorankPermission.TRACK_REQUIREMENT, sender))
             return true;
 
         final Player player = (Player) sender;
@@ -120,7 +120,7 @@ public class TrackCommand extends AutorankCommand {
 
     @Override
     public String getPermission() {
-        return AutorankPermission.TRACK_REQUIREMENT.getPermissionString();
+        return AutorankPermission.TRACK_REQUIREMENT;
     }
 
     @Override

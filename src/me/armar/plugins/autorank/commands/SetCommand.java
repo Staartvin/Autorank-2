@@ -39,7 +39,7 @@ public class SetCommand extends AutorankCommand {
 
         if (value >= 0) {
 
-            if (!plugin.getCommandsManager().hasPermission(AutorankPermission.SET_LOCAL_TIME.getPermissionString(), sender)) {
+            if (!plugin.getCommandsManager().hasPermission(AutorankPermission.SET_LOCAL_TIME, sender)) {
                 return true;
             }
 
@@ -71,7 +71,7 @@ public class SetCommand extends AutorankCommand {
 
     @Override
     public String getPermission() {
-        return AutorankPermission.SET_LOCAL_TIME.getPermissionString();
+        return AutorankPermission.SET_LOCAL_TIME;
     }
 
     @Override
