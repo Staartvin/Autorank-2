@@ -50,7 +50,7 @@ public class PlayerChecker {
 
     public void doLeaderboardExemptCheck(final Player player) {
         plugin.getPlayerDataConfig().hasLeaderboardExemption(player.getUniqueId(),
-                player.hasPermission(AutorankPermission.EXCLUDE_FROM_LEADERBOARD.getPermissionString()));
+                player.hasPermission(AutorankPermission.EXCLUDE_FROM_LEADERBOARD));
     }
 
     public List<String> formatRequirementsToList(final List<RequirementsHolder> holders,

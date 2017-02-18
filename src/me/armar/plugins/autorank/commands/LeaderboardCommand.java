@@ -24,7 +24,7 @@ public class LeaderboardCommand extends AutorankCommand {
     @Override
     public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
-        if (!plugin.getCommandsManager().hasPermission(AutorankPermission.VIEW_LEADERBOARD.getPermissionString(), sender)) {
+        if (!plugin.getCommandsManager().hasPermission(AutorankPermission.VIEW_LEADERBOARD, sender)) {
             return true;
         }
 
@@ -36,7 +36,7 @@ public class LeaderboardCommand extends AutorankCommand {
             if (arg.equalsIgnoreCase("force")) {
 
                 // Check for permission
-                if (!sender.hasPermission(AutorankPermission.FORCE_UPDATE_LEADERBOARD.getPermissionString())) {
+                if (!sender.hasPermission(AutorankPermission.FORCE_UPDATE_LEADERBOARD)) {
                     sender.sendMessage(Lang.NO_PERMISSION.getConfigValue("autorank.leaderboard.force"));
                     return true;
                 }
@@ -45,7 +45,7 @@ public class LeaderboardCommand extends AutorankCommand {
             } else if (arg.equalsIgnoreCase("broadcast")) {
 
                 // Check for permission
-                if (!sender.hasPermission(AutorankPermission.BROADCAST_LEADERBOARD.getPermissionString())) {
+                if (!sender.hasPermission(AutorankPermission.BROADCAST_LEADERBOARD)) {
                     sender.sendMessage(Lang.NO_PERMISSION.getConfigValue("autorank.leaderboard.broadcast"));
                     return true;
                 }
@@ -113,7 +113,7 @@ public class LeaderboardCommand extends AutorankCommand {
 
     @Override
     public String getPermission() {
-        return AutorankPermission.VIEW_LEADERBOARD.getPermissionString();
+        return AutorankPermission.VIEW_LEADERBOARD;
     }
 
     @Override

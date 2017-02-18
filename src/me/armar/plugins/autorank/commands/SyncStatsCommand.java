@@ -28,7 +28,7 @@ public class SyncStatsCommand extends AutorankCommand {
     @Override
     public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
-        if (!plugin.getCommandsManager().hasPermission(AutorankPermission.SYNC_STATS_DATA.getPermissionString(), sender))
+        if (!plugin.getCommandsManager().hasPermission(AutorankPermission.SYNC_STATS_DATA, sender))
             return true;
 
         if (!plugin.getHookedStatsPlugin().isEnabled()) {
@@ -73,7 +73,7 @@ public class SyncStatsCommand extends AutorankCommand {
 
     @Override
     public String getPermission() {
-        return AutorankPermission.SYNC_STATS_DATA.getPermissionString();
+        return AutorankPermission.SYNC_STATS_DATA;
     }
 
     @Override

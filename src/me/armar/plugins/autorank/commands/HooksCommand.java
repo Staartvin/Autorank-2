@@ -58,7 +58,7 @@ public class HooksCommand extends AutorankCommand {
 
     @Override
     public String getPermission() {
-        return AutorankPermission.SHOW_HOOKS.getPermissionString();
+        return AutorankPermission.SHOW_HOOKS;
     }
 
     @Override
