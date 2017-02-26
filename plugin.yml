@@ -109,4 +109,11 @@ permissions:
         default: true
     autorank.times.others:
         description: Allows checking time statistics of other players.
-        default: op            
+        default: op
+    autorank.convert.simpleconfig:
+        description: Allows a player to convert data from SimpleConfig to Paths
+        default: op
+    autorank.convert.advancedconfig:
+        description: Allows a player to convert data from AdvancedConfig to Paths
+        default: op
+    

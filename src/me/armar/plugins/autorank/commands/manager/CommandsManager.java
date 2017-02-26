@@ -20,7 +20,7 @@ import me.armar.plugins.autorank.commands.ArchiveCommand;
 import me.armar.plugins.autorank.commands.CheckCommand;
 import me.armar.plugins.autorank.commands.ChooseCommand;
 import me.armar.plugins.autorank.commands.CompleteCommand;
-import me.armar.plugins.autorank.commands.ConvertUUIDCommand;
+import me.armar.plugins.autorank.commands.ConvertCommand;
 import me.armar.plugins.autorank.commands.DebugCommand;
 import me.armar.plugins.autorank.commands.ForceCheckCommand;
 import me.armar.plugins.autorank.commands.GlobalAddCommand;
@@ -90,7 +90,7 @@ public class CommandsManager implements TabExecutor {
         registeredCommands.put(Arrays.asList("archive", "arch"), new ArchiveCommand(plugin));
         registeredCommands.put(Arrays.asList("gcheck", "globalcheck"), new GlobalCheckCommand(plugin));
         registeredCommands.put(Arrays.asList("fcheck", "forcecheck"), new ForceCheckCommand(plugin));
-        registeredCommands.put(Arrays.asList("convert"), new ConvertUUIDCommand(plugin));
+        registeredCommands.put(Arrays.asList("convert"), new ConvertCommand(plugin));
         registeredCommands.put(Arrays.asList("track"), new TrackCommand(plugin));
         registeredCommands.put(Arrays.asList("gset", "globalset"), new GlobalSetCommand(plugin));
         registeredCommands.put(Arrays.asList("hooks", "hook"), new HooksCommand(plugin));

@@ -9,9 +9,9 @@ Test:
     money: 10000
     blocks broken: 50
   results:
-    rank change: TestGroup2
     command: broadcast &p has just completed path 'Default'!
     command2: give &p 1 100
+    command3: 'pex user &p group set Default'
     message: Congratulations, you completed the 'Default' path!
   options:
     display name: Test path

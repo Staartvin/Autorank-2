@@ -11,6 +11,7 @@ import org.bukkit.inventory.meta.FireworkMeta;
 
 import me.armar.plugins.autorank.language.Lang;
 
+
 public class SpawnFireworkResult extends Result {
 
     private Color colour = Color.ORANGE;

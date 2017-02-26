@@ -14,6 +14,8 @@ public final class AutorankPermission {
     public static final String COMPLETE_REQUIREMENT = "autorank.complete";
     public static final String CONVERT_TIME_DATA = "autorank.convert.data";
     public static final String CONVERT_PLAYER_DATA = "autorank.convert.playerdata";
+    public static final String CONVERT_SIMPLE_CONFIG = "autorank.convert.simpleconfig";
+    public static final String CONVERT_ADVANCED_CONFIG = "autorank.convert.advancedconfig";
     public static final String DEBUG_FILE = "autorank.debug";
     public static final String FORCE_CHECK = "autorank.forcecheck";
     public static final String ADD_GLOBAL_TIME = "autorank.gadd";

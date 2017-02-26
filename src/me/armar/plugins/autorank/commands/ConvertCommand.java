@@ -11,11 +11,11 @@ import me.armar.plugins.autorank.permissions.AutorankPermission;
 /**
  * The command delegator for the '/ar convert' command.
  */
-public class ConvertUUIDCommand extends AutorankCommand {
+public class ConvertCommand extends AutorankCommand {
 
     private final Autorank plugin;
 
-    public ConvertUUIDCommand(final Autorank instance) {
+    public ConvertCommand(final Autorank instance) {
         plugin = instance;
     }
 
@@ -46,8 +46,32 @@ public class ConvertUUIDCommand extends AutorankCommand {
             }
 
             sender.sendMessage(ChatColor.RED + "This operation is not supported anymore!");
+        } else if (targetFile.equalsIgnoreCase("simpleconfig")) {
+
+            if (!plugin.getCommandsManager().hasPermission(AutorankPermission.CONVERT_SIMPLE_CONFIG, sender)) {
+                return true;
+            }
+
+            // Convert SimpleConfig.
+            if (plugin.getDataConverter().convertSimpleConfigToPaths()) {
+                sender.sendMessage(ChatColor.GREEN + "SimpleConfig was converted to Paths.yml and stored as 'Paths_from_SimpleConfig.yml'!");
+            } else {
+                sender.sendMessage(ChatColor.RED + "Something went wrong when converting the SimpleConfig.yml. Are you sure the file is there?");
+            }
+        } else if (targetFile.equalsIgnoreCase("advancedconfig")) {
+
+            if (!plugin.getCommandsManager().hasPermission(AutorankPermission.CONVERT_ADVANCED_CONFIG, sender)) {
+                return true;
+            }
+
+            // Convert AdvancedConfig.
+            if (plugin.getDataConverter().convertAdvancedConfigToPaths()) {
+                sender.sendMessage(ChatColor.GREEN + "AdvancedConfig was converted to Paths.yml and stored as 'Paths_from_AdvancedConfig.yml'!");
+            } else {
+                sender.sendMessage(ChatColor.RED + "Something went wrong when converting the AdvancedConfig.yml. Are you sure the file is there?");
+            }
         } else {
-            sender.sendMessage(ChatColor.RED + "Unknown file. Can convert either 'data' or 'playerdata'.");
+            sender.sendMessage(ChatColor.RED + "Unknown file. Can convert either 'simpleconfig', 'advancedconfig' or 'playerdata'.");
         }
 
         return true;
