@@ -9,8 +9,6 @@ import java.util.Map.Entry;
 
 import org.bukkit.configuration.ConfigurationSection;
 
-import com.mysql.jdbc.StringUtils;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.config.SimpleYamlConfiguration;
 import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
