@@ -13,6 +13,10 @@ public class FishCaughtRequirement extends Requirement {
     @Override
     public String getDescription() {
 
+        if (this.hasCustomDescription()) {
+            return this.getCustomDescription();
+        }
+        
         String lang = Lang.FISH_CAUGHT_REQUIREMENT.getConfigValue(fishCaught + "");
 
         // Check if this requirement is world-specific

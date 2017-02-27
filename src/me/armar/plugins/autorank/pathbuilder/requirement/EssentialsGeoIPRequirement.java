@@ -13,6 +13,11 @@ public class EssentialsGeoIPRequirement extends Requirement {
 
     @Override
     public String getDescription() {
+        
+        if (this.hasCustomDescription()) {
+            return this.getCustomDescription();
+        }
+        
         return Lang.ESSENTIALS_GEOIP_LOCATION_REQUIREMENT.getConfigValue(location);
     }
 

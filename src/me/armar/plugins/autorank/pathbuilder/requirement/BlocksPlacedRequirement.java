@@ -14,6 +14,11 @@ public class BlocksPlacedRequirement extends Requirement {
 
     @Override
     public String getDescription() {
+        
+        if (this.hasCustomDescription()) {
+            return this.getCustomDescription();
+        }
+        
         final ItemStack item = wrapper.getItem();
 
         final StringBuilder arg = new StringBuilder(item.getAmount() + " ");

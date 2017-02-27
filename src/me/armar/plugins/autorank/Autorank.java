@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import me.armar.plugins.autorank.activity.ActivityTracker;
 import me.armar.plugins.autorank.addons.AddOnManager;
 import me.armar.plugins.autorank.api.API;
 import me.armar.plugins.autorank.backup.BackupManager;
@@ -125,6 +126,7 @@ public class Autorank extends JavaPlugin {
     private PlayerChecker playerChecker;
     private PlaytimeManager playtimes;
     private DataConverter dataConverter;
+    private ActivityTracker activityTracker;
 
     // Data connection
     private MySQLManager mysqlManager;
@@ -243,6 +245,9 @@ public class Autorank extends JavaPlugin {
 
         // Create leaderboard class
         setLeaderboardManager(new LeaderboardHandler(this));
+        
+        // Start up ActivityTracker
+        //setActivityTracker(new ActivityTracker(this));
 
         // ------------- Initialize storage -------------
 
@@ -270,6 +275,9 @@ public class Autorank extends JavaPlugin {
 
         // Setup language file
         languageHandler.createNewFile();
+        
+        // Load Activity tracker file
+        //this.getActivityTracker().loadWorkingFile();
 
         // ------------- Initialize requirements and results -------------
         this.initializeReqsAndRes();
@@ -740,5 +748,13 @@ public class Autorank extends JavaPlugin {
 
     public void setDataConverter(DataConverter dataConverter) {
         this.dataConverter = dataConverter;
+    }
+
+    public ActivityTracker getActivityTracker() {
+        return activityTracker;
+    }
+
+    public void setActivityTracker(ActivityTracker activityTracker) {
+        this.activityTracker = activityTracker;
     }
 }

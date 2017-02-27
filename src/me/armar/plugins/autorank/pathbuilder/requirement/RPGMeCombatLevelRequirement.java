@@ -13,6 +13,10 @@ public class RPGMeCombatLevelRequirement extends Requirement {
 
     @Override
     public String getDescription() {
+        
+        if (this.hasCustomDescription()) {
+            return this.getCustomDescription();
+        }
 
         return Lang.RPGME_COMBAT_LEVEL_REQUIREMENT.getConfigValue(skillLevel);
     }

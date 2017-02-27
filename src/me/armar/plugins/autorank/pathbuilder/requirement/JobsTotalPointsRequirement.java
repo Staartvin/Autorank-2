@@ -13,6 +13,10 @@ public class JobsTotalPointsRequirement extends Requirement {
 
     @Override
     public String getDescription() {
+        
+        if (this.hasCustomDescription()) {
+            return this.getCustomDescription();
+        }
 
         String lang = Lang.JOBS_TOTAL_POINTS_REQUIREMENT.getConfigValue(totalPoints);
 

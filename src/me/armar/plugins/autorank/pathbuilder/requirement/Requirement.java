@@ -27,6 +27,7 @@ public abstract class Requirement {
     private int reqId;
     private List<Result> results = new ArrayList<Result>();
     private String world = null;
+    private String customDescription;
 
     public final Autorank getAutorank() {
         return plugin;
@@ -218,5 +219,17 @@ public abstract class Requirement {
      */
     public boolean useAutoCompletion() {
         return autoComplete;
+    }
+
+    public String getCustomDescription() {
+        return customDescription;
+    }
+
+    public void setCustomDescription(String customDescription) {
+        this.customDescription = customDescription;
+    }
+    
+    public boolean hasCustomDescription() {
+        return this.getCustomDescription() != null;
     }
 }

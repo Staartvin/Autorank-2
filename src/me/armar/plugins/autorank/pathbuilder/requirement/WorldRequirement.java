@@ -10,6 +10,11 @@ public class WorldRequirement extends Requirement {
 
     @Override
     public String getDescription() {
+        
+        if (this.hasCustomDescription()) {
+            return this.getCustomDescription();
+        }
+        
         return Lang.WORLD_REQUIREMENT.getConfigValue(worldName);
     }
 

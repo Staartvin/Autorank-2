@@ -11,6 +11,10 @@ public class MoneyRequirement extends Requirement {
 
     @Override
     public String getDescription() {
+        
+        if (this.hasCustomDescription()) {
+            return this.getCustomDescription();
+        }
 
         String lang = Lang.MONEY_REQUIREMENT.getConfigValue(minMoney + " " + VaultHandler.economy.currencyNamePlural());
 

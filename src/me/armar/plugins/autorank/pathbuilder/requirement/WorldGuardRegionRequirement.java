@@ -20,6 +20,10 @@ public class WorldGuardRegionRequirement extends Requirement {
 
     @Override
     public String getDescription() {
+        
+        if (this.hasCustomDescription()) {
+            return this.getCustomDescription();
+        }
 
         String lang = Lang.WORLD_GUARD_REGION_REQUIREMENT.getConfigValue(regionName);
 

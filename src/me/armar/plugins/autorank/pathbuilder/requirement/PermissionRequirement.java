@@ -10,6 +10,10 @@ public class PermissionRequirement extends Requirement {
 
     @Override
     public String getDescription() {
+        
+        if (this.hasCustomDescription()) {
+            return this.getCustomDescription();
+        }
 
         String lang = Lang.PERMISSION_REQUIREMENT.getConfigValue(permission);
 

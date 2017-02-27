@@ -12,6 +12,10 @@ public class ExpRequirement extends Requirement {
     @Override
     public String getDescription() {
 
+        if (this.hasCustomDescription()) {
+            return this.getCustomDescription();
+        }
+        
         String lang = Lang.EXP_REQUIREMENT.getConfigValue(minExp + "");
 
         // Check if this requirement is world-specific

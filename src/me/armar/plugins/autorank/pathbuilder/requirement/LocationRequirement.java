@@ -18,6 +18,11 @@ public class LocationRequirement extends Requirement {
 
     @Override
     public String getDescription() {
+        
+        if (this.hasCustomDescription()) {
+            return this.getCustomDescription();
+        }
+        
         return Lang.LOCATION_REQUIREMENT
                 .getConfigValue(xLocation + ", " + yLocation + ", " + zLocation + " in " + world);
     }

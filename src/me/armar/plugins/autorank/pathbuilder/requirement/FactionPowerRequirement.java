@@ -16,6 +16,10 @@ public class FactionPowerRequirement extends Requirement {
     @Override
     public String getDescription() {
 
+        if (this.hasCustomDescription()) {
+            return this.getCustomDescription();
+        }
+        
         String lang = Lang.FACTIONS_POWER_REQUIREMENT.getConfigValue(factionPower + "");
 
         // Check if this requirement is world-specific

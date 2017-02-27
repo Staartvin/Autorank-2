@@ -14,6 +14,10 @@ public class JobsLevelRequirement extends Requirement {
 
     @Override
     public String getDescription() {
+        
+        if (this.hasCustomDescription()) {
+            return this.getCustomDescription();
+        }
 
         String lang = Lang.JOBS_LEVEL_REQUIREMENT.getConfigValue(level, jobName);
 

@@ -12,6 +12,10 @@ public class TotalVotesRequirement extends Requirement {
 
     @Override
     public String getDescription() {
+        
+        if (this.hasCustomDescription()) {
+            return this.getCustomDescription();
+        }
 
         String lang = Lang.VOTE_REQUIREMENT.getConfigValue(totalVotes + "");
 

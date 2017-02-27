@@ -12,6 +12,10 @@ public class HasItemRequirement extends Requirement {
 
     @Override
     public String getDescription() {
+        
+        if (this.hasCustomDescription()) {
+            return this.getCustomDescription();
+        }
 
         final ItemStack item = neededItem.getItem();
 

@@ -14,6 +14,10 @@ public class RPGMeSkillLevelRequirement extends Requirement {
 
     @Override
     public String getDescription() {
+        
+        if (this.hasCustomDescription()) {
+            return this.getCustomDescription();
+        }
 
         if (skillName.equals("all") || skillName.equals("none")) {
             return Lang.RPGME_SKILL_LEVEL_REQUIREMENT.getConfigValue(skillLevel + "", "all skills");

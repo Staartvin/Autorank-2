@@ -16,6 +16,11 @@ public class GroupRequirement extends Requirement {
 
     @Override
     public String getDescription() {
+        
+        if (this.hasCustomDescription()) {
+            return this.getCustomDescription();
+        }
+        
         return Lang.GROUP_REQUIREMENT.getConfigValue(group);
     }
 

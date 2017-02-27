@@ -13,6 +13,10 @@ public class BlocksMovedRequirement extends Requirement {
     @Override
     public String getDescription() {
 
+        if (this.hasCustomDescription()) {
+            return this.getCustomDescription();
+        }
+        
         String desc = Lang.BLOCKS_MOVED_REQUIREMENT.getConfigValue(wrapper.getBlocksMoved() + "",
                 wrapper.getMovementType());
 

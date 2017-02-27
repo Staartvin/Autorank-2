@@ -16,6 +16,10 @@ public class ASkyBlockLevelRequirement extends Requirement {
     @Override
     public String getDescription() {
 
+        if (this.hasCustomDescription()) {
+            return this.getCustomDescription();
+        }
+        
         String lang = Lang.ASKYBLOCK_LEVEL_REQUIREMENT.getConfigValue(islandLevel + "");
 
         // Check if this requirement is world-specific

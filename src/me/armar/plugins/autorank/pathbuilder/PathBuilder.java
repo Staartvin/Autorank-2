@@ -69,7 +69,7 @@ public class PathBuilder {
 
     private Requirement createRequirement(final String type, final String[] options, final boolean optional,
             final List<Result> results, final boolean autoComplete, final int reqId, String originalName,
-            String originalGroup) {
+            String originalGroup, String customDesc) {
         final Requirement res = requirementBuilder.create(type);
 
         if (res != null) {
@@ -93,6 +93,10 @@ public class PathBuilder {
             } catch (final Exception e) {
                 plugin.getLogger().severe(errorMessage);
                 plugin.getWarningManager().registerWarning(errorMessage, 10);
+            }
+            
+            if (customDesc != null) {
+                res.setCustomDescription(customDesc);
             }
 
             res.setOptional(optional);
@@ -204,11 +208,13 @@ public class PathBuilder {
 
                 // Option strings seperated
                 final List<String[]> optionsList = plugin.getPathsConfig().getRequirementOptions(pathName, reqName);
+                
+                String customDescription = plugin.getPathsConfig().getReqDescription(pathName, reqName);
 
                 // Find all options of this requirement
                 for (final String[] options : optionsList) {
                     final Requirement newRequirement = createRequirement(correctName, options, optional, realResults,
-                            plugin.getPathsConfig().useAutoCompletion(pathName, reqName), reqId, reqName, pathName);
+                            plugin.getPathsConfig().useAutoCompletion(pathName, reqName), reqId, reqName, pathName, customDescription);
 
                     if (newRequirement == null)
                         continue;

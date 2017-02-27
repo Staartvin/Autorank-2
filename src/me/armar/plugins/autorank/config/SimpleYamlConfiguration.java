@@ -38,7 +38,7 @@ public class SimpleYamlConfiguration extends YamlConfiguration {
          */
         final String folderPath = plugin.getDataFolder().getAbsolutePath() + File.separator;
         file = new File(folderPath + fileName);
-
+        
         if (!file.exists()) {
             if (plugin.getResource(fileName) != null) {
                 plugin.saveResource(fileName, false);

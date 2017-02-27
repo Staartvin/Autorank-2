@@ -325,6 +325,18 @@ public class PathsConfig {
 
         return result;
     }
+    
+    /**
+     * Get the description of a requirement (if it was defined).
+     * @param pathName Name of the path
+     * @param reqName Name of the requirement
+     * @return the description of the requirement, or null if not found.
+     */
+    public String getReqDescription(String pathName, String reqName) {
+        String description = this.getConfig().getString(pathName + ".requirements." + reqName + ".options.description", null);
+        
+        return description;
+    }
 
     /**
      * Get the result string for a specific result of a path.

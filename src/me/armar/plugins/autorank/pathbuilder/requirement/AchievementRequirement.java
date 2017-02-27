@@ -14,6 +14,10 @@ public class AchievementRequirement extends Requirement {
     @Override
     public String getDescription() {
 
+        if (this.hasCustomDescription()) {
+            return this.getCustomDescription();
+        }
+        
         String lang;
 
         if (achievementCount != -1) {

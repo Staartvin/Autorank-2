@@ -12,6 +12,11 @@ public class TimesShearedRequirement extends Requirement {
 
     @Override
     public String getDescription() {
+        
+        if (this.hasCustomDescription()) {
+            return this.getCustomDescription();
+        }
+        
         String lang = Lang.TIMES_SHEARED_REQUIREMENT.getConfigValue(timesShorn + "");
 
         // Check if this requirement is world-specific

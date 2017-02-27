@@ -12,6 +12,10 @@ public class GamemodeRequirement extends Requirement {
     @Override
     public String getDescription() {
 
+        if (this.hasCustomDescription()) {
+            return this.getCustomDescription();
+        }
+        
         String lang = Lang.GAMEMODE_REQUIREMENT.getConfigValue(gameMode + "");
 
         // Check if this requirement is world-specific

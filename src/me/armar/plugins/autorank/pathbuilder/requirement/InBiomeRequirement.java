@@ -11,6 +11,11 @@ public class InBiomeRequirement extends Requirement {
 
     @Override
     public String getDescription() {
+        
+        if (this.hasCustomDescription()) {
+            return this.getCustomDescription();
+        }
+        
         String lang = Lang.IN_BIOME_REQUIREMENT.getConfigValue(biome);
 
         // Check if this requirement is world-specific

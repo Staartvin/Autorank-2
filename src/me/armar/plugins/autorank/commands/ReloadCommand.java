@@ -1,5 +1,6 @@
 package me.armar.plugins.autorank.commands;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
@@ -36,6 +37,7 @@ public class ReloadCommand extends AutorankCommand {
         plugin.getPathManager().initialiseFromConfigs();
 
         AutorankTools.sendColoredMessage(sender, Lang.AUTORANK_RELOADED.getConfigValue());
+        AutorankTools.sendColoredMessage(sender, ChatColor.RED + "Please do not use this command after you've changed any files. Restart your server instead!");
 
         return true;
     }

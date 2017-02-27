@@ -14,6 +14,10 @@ public class FoodEatenRequirement extends Requirement {
     @Override
     public String getDescription() {
 
+        if (this.hasCustomDescription()) {
+            return this.getCustomDescription();
+        }
+        
         String desc = "";
 
         final int amount = foodEaten.getAmount();
