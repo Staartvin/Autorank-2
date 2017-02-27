@@ -5,9 +5,11 @@ import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.armar.plugins.autorank.activity.ActivityTracker;
+import me.armar.plugins.autorank.activity.ActivityTracker.ActionType;
 import me.armar.plugins.autorank.addons.AddOnManager;
 import me.armar.plugins.autorank.api.API;
 import me.armar.plugins.autorank.backup.BackupManager;
@@ -24,6 +26,7 @@ import me.armar.plugins.autorank.hooks.DependencyManager;
 import me.armar.plugins.autorank.language.LanguageHandler;
 import me.armar.plugins.autorank.leaderboard.LeaderboardHandler;
 import me.armar.plugins.autorank.listeners.PlayerJoinListener;
+import me.armar.plugins.autorank.listeners.PlayerQuitListener;
 import me.armar.plugins.autorank.pathbuilder.PathManager;
 import me.armar.plugins.autorank.pathbuilder.builders.RequirementBuilder;
 import me.armar.plugins.autorank.pathbuilder.builders.ResultBuilder;
@@ -99,7 +102,7 @@ import me.armar.plugins.autorank.warningmanager.WarningManager;
  * 
  */
 public class Autorank extends JavaPlugin {
-    
+
     public static Autorank getAutorank() {
         return (Autorank) Bukkit.getPluginManager().getPlugin("Autorank");
     }
@@ -108,7 +111,7 @@ public class Autorank extends JavaPlugin {
     //
     //
     //
-    
+
     // Managers
     private PathManager pathManager;
     private AddOnManager addonManager;
@@ -175,6 +178,11 @@ public class Autorank extends JavaPlugin {
 
         // Save playerdata.yml
         this.getPlayerDataConfig().saveConfig();
+
+        // ------------- Make sure to log everyone out of the server
+        for (Player p : this.getServer().getOnlinePlayers()) {
+            this.getActivityTracker().addAction(p.getUniqueId(), ActionType.LOGGED_OUT);
+        }
 
         // ------------- Say bye-bye -------------
 
@@ -245,9 +253,9 @@ public class Autorank extends JavaPlugin {
 
         // Create leaderboard class
         setLeaderboardManager(new LeaderboardHandler(this));
-        
+
         // Start up ActivityTracker
-        //setActivityTracker(new ActivityTracker(this));
+        setActivityTracker(new ActivityTracker(this));
 
         // ------------- Initialize storage -------------
 
@@ -267,7 +275,7 @@ public class Autorank extends JavaPlugin {
 
         // Load uuids - ready for new ones
         getUUIDStorage().createNewFiles();
-        
+
         // Load data converter
         setDataConverter(new DataConverter(this));
 
@@ -275,9 +283,9 @@ public class Autorank extends JavaPlugin {
 
         // Setup language file
         languageHandler.createNewFile();
-        
+
         // Load Activity tracker file
-        //this.getActivityTracker().loadWorkingFile();
+        this.getActivityTracker().loadWorkingFile();
 
         // ------------- Initialize requirements and results -------------
         this.initializeReqsAndRes();
@@ -289,6 +297,7 @@ public class Autorank extends JavaPlugin {
 
         // Register listeners
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerQuitListener(this), this);
 
         // ------------- Schedule tasks -------------
 
@@ -310,24 +319,25 @@ public class Autorank extends JavaPlugin {
                 // After dependencies, load paths
                 // Initialize paths
                 getPathManager().initialiseFromConfigs();
-                
-                // Validate paths                
+
+                // Validate paths
                 if (!getValidateHandler().startValidation()) {
-                    getServer().getConsoleSender().sendMessage("[Autorank] " + ChatColor.RED + "Detected errors in your Paths.yml file. Log in to your server to see the problems!");
+                    getServer().getConsoleSender().sendMessage("[Autorank] " + ChatColor.RED
+                            + "Detected errors in your Paths.yml file. Log in to your server to see the problems!");
                 }
-                
+
                 // Show warnings (if there are any)
-                
+
                 HashMap<String, Integer> warnings = getWarningManager().getWarnings();
-                
+
                 if (warnings.size() > 0) {
                     getLogger().warning("Autorank has some warnings for you: ");
                 }
-                
+
                 for (Entry<String, Integer> entry : warnings.entrySet()) {
                     getLogger().warning("(Priority " + entry.getValue() + ") '" + entry.getKey() + "'");
                 }
-               
+
             }
         }, 1L);
 
@@ -335,16 +345,18 @@ public class Autorank extends JavaPlugin {
         getServer().getScheduler().runTaskTimerAsynchronously(this, new Runnable() {
             @Override
             public void run() {
-                if (!getSettingsConfig().shouldRemoveOldEntries()) return;
-                
-                if (!getInternalPropertiesConfig().isConvertedToNewFormat()) return;
-                
+                if (!getSettingsConfig().shouldRemoveOldEntries())
+                    return;
+
+                if (!getInternalPropertiesConfig().isConvertedToNewFormat())
+                    return;
+
                 // Remove old entries
                 int removed = getFlatFileManager().removeOldEntries();
 
                 getLogger().info("Removed " + removed + " old data entries from database!");
             }
-        }, 0, (long) AutorankTools.TICKS_PER_MINUTE*60*24);
+        }, 0, (long) AutorankTools.TICKS_PER_MINUTE * 60 * 24);
 
         // ------------- Register commands -------------
 
@@ -386,12 +398,12 @@ public class Autorank extends JavaPlugin {
 
         // ------------- Say Welcome! -------------
         getLogger().info(String.format("Autorank %s has been enabled!", getDescription().getVersion()));
-        
+
         // Run converter to Autorank 4.0
         getServer().getScheduler().runTaskLaterAsynchronously(this, new Runnable() {
             @Override
             public void run() {
-                
+
                 // Convert to new format (Autorank 4.0) if needed
                 if (!getInternalPropertiesConfig().isConvertedToNewFormat()) {
                     getDataConverter().convertData();
@@ -457,7 +469,8 @@ public class Autorank extends JavaPlugin {
         res.registerResult("command", CommandResult.class);
         res.registerResult("effect", EffectResult.class);
         res.registerResult("message", MessageResult.class);
-        //res.registerResult("rank change", RankChangeResult.class); -- Temporarily disabled until fixed
+        // res.registerResult("rank change", RankChangeResult.class); --
+        // Temporarily disabled until fixed
         res.registerResult("tp", TeleportResult.class);
         res.registerResult("firework", SpawnFireworkResult.class);
         res.registerResult("money", MoneyResult.class);

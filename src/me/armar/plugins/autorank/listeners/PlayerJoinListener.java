@@ -8,6 +8,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.activity.ActivityTracker.ActionType;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
 
 /**
@@ -29,7 +30,9 @@ public class PlayerJoinListener implements Listener {
     public void onPlayerJoin(final PlayerJoinEvent event) {
         final Player player = event.getPlayer();
 
-        // Add cached player
+
+        // Store log-in activity
+        plugin.getActivityTracker().addAction(player.getUniqueId(), ActionType.LOGGED_IN);
 
         // Refresh uuid of the player if it is outdated
         if (plugin.getUUIDStorage().isOutdated(player.getName())) {
