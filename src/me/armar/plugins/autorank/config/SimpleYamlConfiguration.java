@@ -102,7 +102,7 @@ public class SimpleYamlConfiguration extends YamlConfiguration {
     /**
      * Save the YAML file.
      */
-    public void saveFile() {
+    public synchronized void saveFile() {
         try {
             this.save(file);
         } catch (final ConcurrentModificationException e) {

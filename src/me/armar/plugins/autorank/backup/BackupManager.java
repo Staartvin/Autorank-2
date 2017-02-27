@@ -10,6 +10,7 @@ import com.google.common.io.Files;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.data.flatfile.FlatFileManager;
 import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
+import me.armar.plugins.autorank.util.AutorankTools;
 
 /**
  * This class is used to backup several data files of Autorank.
@@ -105,7 +106,7 @@ public class BackupManager {
                 // Save config
                 backupDataManager.saveConfig();
             }
-        }, 0, 1728000);
+        }, AutorankTools.TICKS_PER_SECOND * 5, 1728000);
     }
 
 }

@@ -12,7 +12,6 @@ import org.bukkit.OfflinePlayer;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.config.SimpleYamlConfiguration;
-import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
@@ -143,13 +142,6 @@ public class FlatFileManager {
                 plugin.getInternalPropertiesConfig().setTrackedTimeType(type, value);
                 // We reset leaderboard time so it refreshes again.
                 plugin.getInternalPropertiesConfig().setLeaderboardLastUpdateTime(0);
-
-                // Update leaderboard of reset time
-                plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
-                    public void run() {
-                        plugin.getLeaderboardManager().updateLeaderboard(type);
-                    }
-                });
             }
         }
     }

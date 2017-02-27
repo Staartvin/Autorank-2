@@ -150,7 +150,7 @@ public class InternalPropertiesConfig {
      * @param cachedLeaderboard
      *            A list of strings
      */
-    public void setCachedLeaderboard(final TimeType type, final List<String> cachedLeaderboard) {
+    public void setCachedLeaderboard(final TimeType type, final List<String> cachedLeaderboard) {    
         config.set("leaderboards." + type.toString().toLowerCase() + ".cached leaderboard", cachedLeaderboard);
 
         config.saveFile();

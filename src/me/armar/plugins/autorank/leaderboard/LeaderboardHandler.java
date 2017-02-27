@@ -454,7 +454,7 @@ public class LeaderboardHandler {
         }
 
         stringList.add(Lang.LEADERBOARD_FOOTER.getConfigValue());
-
+        
         // Cache this leaderboard
         plugin.getInternalPropertiesConfig().setCachedLeaderboard(type, stringList);
 
