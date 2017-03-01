@@ -227,7 +227,20 @@ public class CommandsManager implements TabExecutor {
             for (final Entry<List<String>, AutorankCommand> entry : registeredCommands.entrySet()) {
                 final List<String> list = entry.getKey();
 
-                commands.add(list.get(0));
+                String command = list.get(0);                
+                String lastArg = "";
+                
+                if (args.length > 0) {
+                    lastArg = args[args.length - 1];
+                }
+                
+                lastArg = lastArg.toLowerCase();
+                
+                if (command.startsWith(lastArg)) {
+                    commands.add(list.get(0));                    
+                }
+                
+                
             }
 
             return commands;

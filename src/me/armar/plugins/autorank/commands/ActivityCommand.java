@@ -32,6 +32,7 @@ public class ActivityCommand extends AutorankCommand {
 
         // How far do we want to look back (in minutes).
         int historyTime = -1;
+        boolean specifiedTime = false;
 
         if (args.length == 1) {
             sender.sendMessage(Lang.INVALID_FORMAT.getConfigValue(this.getUsage()));
@@ -51,6 +52,8 @@ public class ActivityCommand extends AutorankCommand {
                 sender.sendMessage(ChatColor.RED + "Your history format is not correct. Use a format like 2d 4h 5m.");
                 return true;
             }
+            
+            specifiedTime = true;
         }
 
         // Now determine target name
@@ -88,9 +91,15 @@ public class ActivityCommand extends AutorankCommand {
         long activity = plugin.getActivityTracker().getActivityInHistory(uuid,
                 new History(historyTime, TimeUnit.MINUTES));
 
+        String historyTimeString = AutorankTools.timeToString(historyTime, Time.MINUTES);
+        
+        if (!specifiedTime) {
+            sender.sendMessage(ChatColor.DARK_RED + "You did not specify a time, so I defaulted you to " + ChatColor.AQUA + historyTimeString + ChatColor.DARK_RED + " instead.");
+        }
+        
         sender.sendMessage(ChatColor.GOLD + targetName + " has played for " + ChatColor.GREEN
                 + AutorankTools.timeToString((int) activity, Time.SECONDS) + ChatColor.GOLD + " in the last "
-                + ChatColor.AQUA + AutorankTools.timeToString(historyTime, Time.MINUTES));
+                + ChatColor.AQUA + historyTimeString);
 
         return true;
     }
