@@ -14,7 +14,7 @@ public class SaveActivityFile implements Runnable{
     @Override
     public void run() {
         
-        Autorank.getAutorank().getLogger().info("Saving " + file.getInternalFile().getName());;
+        Autorank.getAutorank().debugMessage("Saving " + file.getInternalFile().getName());;
         
         file.saveFile();
         
