@@ -2,7 +2,7 @@ package me.armar.plugins.autorank.commands.manager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -67,7 +67,7 @@ public class CommandsManager implements TabExecutor {
     private final Autorank plugin;
 
     // Use linked hashmap so that input order is kept
-    private final Map<List<String>, AutorankCommand> registeredCommands = new LinkedHashMap<List<String>, AutorankCommand>();
+    private final Map<List<String>, AutorankCommand> registeredCommands = new HashMap<List<String>, AutorankCommand>();
 
     /**
      * All command aliases are set up in here.
@@ -88,6 +88,7 @@ public class CommandsManager implements TabExecutor {
         registeredCommands.put(Arrays.asList("import"), new ImportCommand(plugin));
         registeredCommands.put(Arrays.asList("complete"), new CompleteCommand(plugin));
         registeredCommands.put(Arrays.asList("check"), new CheckCommand(plugin));
+        registeredCommands.put(Arrays.asList("activity"), new ActivityCommand(plugin));
         registeredCommands.put(Arrays.asList("archive", "arch"), new ArchiveCommand(plugin));
         registeredCommands.put(Arrays.asList("gcheck", "globalcheck"), new GlobalCheckCommand(plugin));
         registeredCommands.put(Arrays.asList("fcheck", "forcecheck"), new ForceCheckCommand(plugin));
@@ -100,7 +101,6 @@ public class CommandsManager implements TabExecutor {
         registeredCommands.put(Arrays.asList("choose"), new ChooseCommand(plugin));
         registeredCommands.put(Arrays.asList("times", "time"), new TimesCommand(plugin));
         registeredCommands.put(Arrays.asList("reset"), new ResetCommand(plugin));
-        registeredCommands.put(Arrays.asList("activity"), new ActivityCommand(plugin));
     }
 
     /**

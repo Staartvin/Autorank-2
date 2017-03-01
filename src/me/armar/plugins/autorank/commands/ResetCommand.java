@@ -28,10 +28,20 @@ public class ResetCommand extends AutorankCommand {
         if (!plugin.getCommandsManager().hasPermission(AutorankPermission.RESET_DATA, sender)) {
             return true;
         }
-
-        if (args.length != 3) {
-
-            sender.sendMessage(Lang.INVALID_FORMAT.getConfigValue("/ar reset <player> <action>"));
+        
+        
+        if (args.length == 1) {
+            
+            sender.sendMessage(ChatColor.RED + "No user was specified.");
+            sender.sendMessage(Lang.INVALID_FORMAT.getConfigValue(this.getUsage()));
+            
+            return true;
+            
+        } else if (args.length == 2) {
+            
+            sender.sendMessage(ChatColor.RED + "No type was specified.");
+            sender.sendMessage(ChatColor.RED + "You can use: progress, chosenpath or completepaths");
+            
             return true;
         }
 
@@ -47,17 +57,20 @@ public class ResetCommand extends AutorankCommand {
 
         final String realName = plugin.getUUIDStorage().getRealName(uuid);
 
-        if (!action.equalsIgnoreCase("progress") && !action.equalsIgnoreCase("chosenpath")) {
-            sender.sendMessage(ChatColor.RED + "Invalid action. You can only use: progress or chosenpath");
+        if (!action.equalsIgnoreCase("progress") && !action.equalsIgnoreCase("chosenpath") && !action.equalsIgnoreCase("completepaths")) {
+            sender.sendMessage(ChatColor.RED + "Invalid type. You can only use: progress, chosenpath or completepaths");
             return true;
         }
 
         if (action.equalsIgnoreCase("progress")) {
             plugin.getPlayerDataConfig().setCompletedRequirements(uuid, null);
-            sender.sendMessage(ChatColor.GREEN + "Reset progress of " + ChatColor.YELLOW + realName);
+            sender.sendMessage(ChatColor.GREEN + "Progress of " + ChatColor.YELLOW + realName + ChatColor.GREEN + " has been reset.");
         } else if (action.equalsIgnoreCase("chosenpath")) {
             plugin.getPlayerDataConfig().setChosenPath(uuid, null);
-            sender.sendMessage(ChatColor.GREEN + "Reset chosen path of " + ChatColor.YELLOW + realName);
+            sender.sendMessage(ChatColor.GREEN + "Chosen path of " + ChatColor.YELLOW + realName + ChatColor.GREEN + " has been reset.");
+        } else if (action.equalsIgnoreCase("completepaths")) {
+            plugin.getPlayerDataConfig().setCompletedPaths(uuid, null);
+            sender.sendMessage(ChatColor.GREEN + "Completed paths of " + ChatColor.YELLOW + realName + ChatColor.GREEN + " have been reset.");
         }
 
         return true;
@@ -75,6 +88,6 @@ public class ResetCommand extends AutorankCommand {
 
     @Override
     public String getUsage() {
-        return "/ar reset <player> <action>";
+        return "/ar reset <player> <type>";
     }
 }
