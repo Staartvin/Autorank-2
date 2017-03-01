@@ -52,7 +52,7 @@
 					</excludes>
 				</configuration>
 			</plugin>
-			
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
@@ -110,12 +110,8 @@
 			<version>3.0.2-SNAPSHOT</version> <scope>provided</scope> <type>jar</type> 
 			</dependency> -->
 
-		<!-- <dependency>
-			<groupId>org.mcstats.bukkit</groupId>
-			<artifactId>metrics</artifactId>
-			<version>R7</version>
-			<type>jar</type>
-		</dependency> -->
+		<!-- <dependency> <groupId>org.mcstats.bukkit</groupId> <artifactId>metrics</artifactId> 
+			<version>R7</version> <type>jar</type> </dependency> -->
 
 
 		<dependency>
@@ -176,6 +172,13 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version> <!-- Or whatever JUnit you're using. -->
+		</dependency>
+
 	</dependencies>
 	<ciManagement>
 		<system>Jenkins</system>
