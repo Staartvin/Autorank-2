@@ -1,10 +1,15 @@
 package me.armar.plugins.autorank.util;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.PriorityQueue;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -802,5 +807,58 @@ public class AutorankTools {
         }
         
         return value;
+    }
+    
+
+    /**
+     * Convert a string to a Date object with a format.
+     * @param dateString String to convert
+     * @param format Format to try to convert the string with.
+     * @return a date object, or null if it could not convert the string.
+     */
+    public static Date getDateFromString(String dateString, DateFormat format) {
+        try {
+            return format.parse(dateString);
+        } catch (ParseException e) {
+            return null;
+        }
+       
+    }
+
+    /** 
+     * Calculate the difference between d2 and d1. 
+     * @param d1 Date 1
+     * @param d2 Date 2
+     * @param unit Unit to convert the result to.
+     * @return difference in time in given time unit.
+     */
+    public static long calculateDifference(Date d1, Date d2, TimeUnit unit) {
+        if (d1 == null || d2 == null)
+            return 0;
+        
+        long diffInMillies = d2.getTime() - d1.getTime();
+        return unit.convert(diffInMillies, TimeUnit.MILLISECONDS);
+    }
+    
+    /**
+     * Check whether two dates are on the same day.
+     * If either of them is null, this will return false.
+     * @param d1 Date 1
+     * @param d2 Date 2
+     * @return true if the dates are both on the same day.
+     */
+    public static boolean isSameDay(Date d1, Date d2) {
+        
+        if (d1 == null || d2 == null) {
+            return false;
+        }
+        
+        Calendar c1 = Calendar.getInstance();
+        Calendar c2 = Calendar.getInstance();
+
+        c1.setTime(d1);
+        c2.setTime(d2);
+
+        return c1.get(Calendar.DAY_OF_MONTH) == c2.get(Calendar.DAY_OF_MONTH);
     }
 }

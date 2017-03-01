@@ -183,6 +183,9 @@ public class Autorank extends JavaPlugin {
         for (Player p : this.getServer().getOnlinePlayers()) {
             this.getActivityTracker().addAction(p.getUniqueId(), ActionType.LOGGED_OUT);
         }
+        
+        // Save activity file
+        this.getActivityTracker().getWorkingFile().saveFile();
 
         // ------------- Say bye-bye -------------
 

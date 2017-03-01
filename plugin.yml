@@ -116,4 +116,10 @@ permissions:
     autorank.convert.advancedconfig:
         description: Allows a player to convert data from AdvancedConfig to Paths
         default: op
+    autorank.activity.view.self:
+        description: Allows a player to view their own activity in history.
+        default: op
+    autorank.activity.view.others:
+        description: Allows a player to view other players' activity in history.
+        default: op
     

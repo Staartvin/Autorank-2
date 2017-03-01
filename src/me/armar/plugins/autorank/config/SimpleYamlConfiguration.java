@@ -42,7 +42,11 @@ public class SimpleYamlConfiguration extends YamlConfiguration {
         if (!file.exists()) {
             if (plugin.getResource(fileName) != null) {
                 plugin.saveResource(fileName, false);
-                plugin.getLogger().info("New " + name + " file copied from jar");
+                
+                if (name != null) {
+                    plugin.getLogger().info("New " + name + " file copied from jar"); 
+                }
+                
                 try {
                     this.load(file);
                 } catch (final Exception e) {
@@ -52,7 +56,10 @@ public class SimpleYamlConfiguration extends YamlConfiguration {
         } else {
             try {
                 this.load(file);
-                plugin.getLogger().info(name + " file loaded");
+                
+                if (name != null) {
+                    plugin.getLogger().info(name + " file loaded");
+                }
             } catch (final Exception e) {
                 e.printStackTrace();
             }

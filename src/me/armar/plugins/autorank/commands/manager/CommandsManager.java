@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 import com.google.common.collect.Lists;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.commands.ActivityCommand;
 import me.armar.plugins.autorank.commands.AddCommand;
 import me.armar.plugins.autorank.commands.ArchiveCommand;
 import me.armar.plugins.autorank.commands.CheckCommand;
@@ -99,6 +100,7 @@ public class CommandsManager implements TabExecutor {
         registeredCommands.put(Arrays.asList("choose"), new ChooseCommand(plugin));
         registeredCommands.put(Arrays.asList("times", "time"), new TimesCommand(plugin));
         registeredCommands.put(Arrays.asList("reset"), new ResetCommand(plugin));
+        registeredCommands.put(Arrays.asList("activity"), new ActivityCommand(plugin));
     }
 
     /**
