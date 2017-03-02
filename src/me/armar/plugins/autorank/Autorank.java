@@ -173,8 +173,10 @@ public class Autorank extends JavaPlugin {
 
         getUUIDStorage().saveAllFiles();
 
-        // Close database connection
-        this.getMySQLManager().disconnectDatabase();
+        if (this.getMySQLManager().isMySQLEnabled()) {
+            // Close database connection
+            this.getMySQLManager().disconnectDatabase();
+        }
 
         // Save playerdata.yml
         this.getPlayerDataConfig().saveConfig();
