@@ -52,9 +52,6 @@ public class ActivityTracker {
 
         plugin.getServer().getScheduler().runTaskTimer(plugin, new SaveActivityFile(workingFile), 0,
                 AutorankTools.TICKS_PER_MINUTE * 1);
-
-        this.getActivityInHistory(UUID.fromString("c5f39a1d-3786-46a7-8953-d4efabf8880d"),
-                new History(10, TimeUnit.HOURS));
     }
 
     /**
