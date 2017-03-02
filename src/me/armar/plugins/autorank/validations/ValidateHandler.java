@@ -19,52 +19,62 @@ public class ValidateHandler {
 
     public boolean startValidation() {
 
-        boolean correctSetup = false;
+        boolean correctSetup = true;
+
+        if (!this.validatePermGroups()) {
+            correctSetup = false;
+        }
         
-        correctSetup = this.validatePermGroups();
+        if (!this.validateSettingsFile()) {
+            correctSetup = false;
+        }
 
         return correctSetup;
     }
-    
+
     public boolean validatePermGroups() {
 
         List<Path> paths = plugin.getPathManager().getPaths();
-        
+
         List<String> permGroups = new ArrayList<>();
         String[] vaultGroups = plugin.getPermPlugHandler().getPermissionPlugin().getGroups();
-        
-        for (Path path: paths) {
+
+        for (Path path : paths) {
             List<RequirementsHolder> holders = new ArrayList<>();
-            
+
             holders.addAll(path.getPrerequisites());
             holders.addAll(path.getRequirements());
-            
+
             // Check if there are any group requirements/prerequisites
             for (RequirementsHolder reqHolder : holders) {
-                for (Requirement req: reqHolder.getRequirements()) {
+                for (Requirement req : reqHolder.getRequirements()) {
                     if (req instanceof GroupRequirement) {
-                        
+
                         String requirementName = null;
-                        
+
                         if (reqHolder.isPrerequisite()) {
-                            requirementName = plugin.getPathsConfig().getPrerequisiteName(path.getInternalName(), req.getReqId());
+                            requirementName = plugin.getPathsConfig().getPrerequisiteName(path.getInternalName(),
+                                    req.getReqId());
                         } else {
-                            requirementName = plugin.getPathsConfig().getRequirementName(path.getInternalName(), req.getReqId());
-                        }      
+                            requirementName = plugin.getPathsConfig().getRequirementName(path.getInternalName(),
+                                    req.getReqId());
+                        }
 
                         if (requirementName == null) {
                             continue;
                         }
-                        
+
                         List<String[]> options = null;
-                        
+
                         if (reqHolder.isPrerequisite()) {
-                            options = plugin.getPathsConfig().getPrerequisiteOptions(path.getInternalName(), requirementName);
+                            options = plugin.getPathsConfig().getPrerequisiteOptions(path.getInternalName(),
+                                    requirementName);
                         } else {
-                            options = plugin.getPathsConfig().getRequirementOptions(path.getInternalName(), requirementName);
-                        } 
-                        
-                        for (String[] option: options) {
+                            options = plugin.getPathsConfig().getRequirementOptions(path.getInternalName(),
+                                    requirementName);
+                        }
+
+                        for (String[] option : options) {
                             if (option.length > 0) {
                                 permGroups.add(option[0]);
                             }
@@ -73,24 +83,40 @@ public class ValidateHandler {
                 }
             }
         }
-        
-        for (String group: permGroups) {            
+
+        for (String group : permGroups) {
             boolean found = false;
-            
+
             for (String vaultGroup : vaultGroups) {
                 if (group.equalsIgnoreCase(vaultGroup)) {
                     found = true;
                     break;
                 }
             }
-            
+
             if (!found) {
-                plugin.getWarningManager().registerWarning("You used the '" + group + "' group, but it was not recognized in your permission plugin!", 10);
+                plugin.getWarningManager().registerWarning(
+                        "You used the '" + group + "' group, but it was not recognized in your permission plugin!", 10);
                 return false;
             }
         }
-        
-        
+
+        return true;
+    }
+
+    public boolean validateSettingsFile() {
+
+        if (plugin.getSettingsConfig().useAFKIntegration()) {
+
+            if (plugin.getDependencyManager().getStatzConnector() == null) {
+                plugin.getWarningManager().registerWarning(
+                        "AFK integration is set to true, but you do not have Statz installed! AFK integration will not work.",
+                        5);
+                return false;
+            }
+
+        }
+
         return true;
     }
 }

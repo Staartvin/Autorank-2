@@ -100,6 +100,8 @@ public class DependencyManager {
     /**
      * Get the Statz plugin class to use as a connection between other
      * dependencies of Statz.
+     * 
+     * @return StatzAPIHandler the Statz handler if it is connected, or null if it is not connected.
      */
     public StatzAPIHandler getStatzConnector() {
         StatzAPIHandler statz = (StatzAPIHandler) plugin.getDependencyManager().getDependency(AutorankDependency.STATZ);

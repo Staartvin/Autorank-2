@@ -323,10 +323,10 @@ public class Autorank extends JavaPlugin {
                 // Initialize paths
                 getPathManager().initialiseFromConfigs();
 
-                // Validate paths
+                // Do validation of files.
                 if (!getValidateHandler().startValidation()) {
                     getServer().getConsoleSender().sendMessage("[Autorank] " + ChatColor.RED
-                            + "Detected errors in your Paths.yml file. Log in to your server to see the problems!");
+                            + "Detected errors in set up. Log in to your server to see the problems!");
                 }
 
                 // Show warnings (if there are any)
