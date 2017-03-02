@@ -1,5 +1,6 @@
 package me.armar.plugins.autorank.commands;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
@@ -8,7 +9,6 @@ import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.hooks.DependencyManager.AutorankDependency;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
 import me.staartvin.statz.hooks.Dependency;
-import net.md_5.bungee.api.ChatColor;
 
 /**
  * The command delegator for the '/ar hooks' command.
@@ -29,7 +29,7 @@ public class HooksCommand extends AutorankCommand {
             return true;
         }
 
-        sender.sendMessage(ChatColor.GOLD + "Autorank Hooks:");
+        sender.sendMessage(ChatColor.YELLOW + "Autorank is currently hooked into:");
 
         for (final Dependency dep : Dependency.values()) {
             // There is no AutorankDependency handler for Autorank
@@ -37,12 +37,10 @@ public class HooksCommand extends AutorankCommand {
             final me.staartvin.statz.hooks.DependencyHandler handler = plugin.getDependencyManager()
                     .getDependencyHandler(dep);
 
-            final StringBuilder message = new StringBuilder(ChatColor.GRAY + dep.toString() + ": " + ChatColor.RESET);
+            final StringBuilder message = new StringBuilder(ChatColor.GRAY + "- " + ChatColor.GREEN + dep.getInternalString());
 
-            if (handler.isAvailable()) {
-                message.append(ChatColor.GREEN + "AVAILABLE");
-            } else {
-                message.append(ChatColor.RED + "NOT AVAILABLE");
+            if (!handler.isAvailable()) {
+                continue;
             }
 
             sender.sendMessage(message.toString());
