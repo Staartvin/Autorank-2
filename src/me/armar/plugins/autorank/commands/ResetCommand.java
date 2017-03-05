@@ -40,7 +40,7 @@ public class ResetCommand extends AutorankCommand {
         } else if (args.length == 2) {
             
             sender.sendMessage(ChatColor.RED + "No type was specified.");
-            sender.sendMessage(ChatColor.RED + "You can use: progress, chosenpath or completepaths");
+            sender.sendMessage(ChatColor.RED + "You can use: progress, chosenpath or completedpaths");
             
             return true;
         }
@@ -57,8 +57,8 @@ public class ResetCommand extends AutorankCommand {
 
         final String realName = plugin.getUUIDStorage().getRealName(uuid);
 
-        if (!action.equalsIgnoreCase("progress") && !action.equalsIgnoreCase("chosenpath") && !action.equalsIgnoreCase("completepaths")) {
-            sender.sendMessage(ChatColor.RED + "Invalid type. You can only use: progress, chosenpath or completepaths");
+        if (!action.equalsIgnoreCase("progress") && !action.equalsIgnoreCase("chosenpath") && !action.equalsIgnoreCase("completedpaths")) {
+            sender.sendMessage(ChatColor.RED + "Invalid type. You can only use: progress, chosenpath or completedpaths");
             return true;
         }
 
