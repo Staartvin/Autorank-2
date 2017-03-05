@@ -68,7 +68,7 @@ public class ResetCommand extends AutorankCommand {
         } else if (action.equalsIgnoreCase("chosenpath")) {
             plugin.getPlayerDataConfig().setChosenPath(uuid, null);
             sender.sendMessage(ChatColor.GREEN + "Chosen path of " + ChatColor.YELLOW + realName + ChatColor.GREEN + " has been reset.");
-        } else if (action.equalsIgnoreCase("completepaths")) {
+        } else if (action.equalsIgnoreCase("completedpaths")) {
             plugin.getPlayerDataConfig().setCompletedPaths(uuid, null);
             sender.sendMessage(ChatColor.GREEN + "Completed paths of " + ChatColor.YELLOW + realName + ChatColor.GREEN + " have been reset.");
         }
