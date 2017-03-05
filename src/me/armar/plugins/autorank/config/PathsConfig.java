@@ -555,7 +555,7 @@ public class PathsConfig {
      * @return true if Autorank should assign the given path to the player, false otherwise.
      */
     public boolean shouldAutoChoosePath(String pathName) {
-        return this.getConfig().getBoolean(pathName + ".options.auto choose", false);
+        return this.getConfig().getBoolean(pathName + ".options.auto choose", true);
     }
     
     /**
