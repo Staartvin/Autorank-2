@@ -25,6 +25,14 @@ public enum Lang {
      */
     ACHIEVEMENT_SINGLE_REQUIREMENT("achievement-single-requirement", "Obtain Achievement '{0}'"),
     /**
+     * Obtain at least {0} achievements with AdvancedAchievements
+     */
+    ADVANCED_ACHIEVEMENTS_MULTIPLE_REQUIREMENT("advanced-achievements-multiple-requirement", "Obtain at least {0} achievements with AdvancedAchievements"),
+    /**
+     * Obtain achievement '{0}' with AdvancedAchievements
+     */
+    ADVANCED_ACHIEVEMENTS_SINGLE_REQUIREMENT("advanced-achievements-single-requirement", "Obtain achievement '{0}' with AdvancedAchievements"),
+    /**
      * Have at least an (acid) island level of {0}.
      */
     ACID_ISLAND_LEVEL_REQUIREMENT("acid-island-level-requirement", "Have at least an (acid) island level of {0}."),
@@ -410,6 +418,10 @@ public enum Lang {
      * &cPlayer {0} is unknown and couldn't be identified.
      */
     UNKNOWN_PLAYER("unknown-player", "&cPlayer {0} is unknown and couldn't be identified."),
+    /**
+     * Have at least an (skyblock) island level of {0}.
+     */
+    USKYBLOCK_LEVEL_REQUIREMENT("uskyblock-level-requirement", "Have at least an (skyblock) island level of {0}."),
     /**
      * Vote at least {0} times.
      */

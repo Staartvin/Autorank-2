@@ -588,11 +588,7 @@ public class AutorankTools {
         int res = 0;
 
         if (string != null) {
-            try {
-                res = Integer.parseInt(string);
-            } catch (NumberFormatException e) {
-                return -1;
-            }
+            res = Integer.parseInt(string);
         }
 
         return res;

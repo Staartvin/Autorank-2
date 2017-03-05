@@ -33,6 +33,7 @@ import me.armar.plugins.autorank.pathbuilder.builders.ResultBuilder;
 import me.armar.plugins.autorank.pathbuilder.requirement.ASkyBlockLevelRequirement;
 import me.armar.plugins.autorank.pathbuilder.requirement.AchievementRequirement;
 import me.armar.plugins.autorank.pathbuilder.requirement.AcidIslandLevelRequirement;
+import me.armar.plugins.autorank.pathbuilder.requirement.AdvancedAchievementRequirement;
 import me.armar.plugins.autorank.pathbuilder.requirement.BlocksBrokenRequirement;
 import me.armar.plugins.autorank.pathbuilder.requirement.BlocksMovedRequirement;
 import me.armar.plugins.autorank.pathbuilder.requirement.BlocksPlacedRequirement;
@@ -71,6 +72,7 @@ import me.armar.plugins.autorank.pathbuilder.requirement.TimeRequirement;
 import me.armar.plugins.autorank.pathbuilder.requirement.TimesShearedRequirement;
 import me.armar.plugins.autorank.pathbuilder.requirement.TotalTimeRequirement;
 import me.armar.plugins.autorank.pathbuilder.requirement.TotalVotesRequirement;
+import me.armar.plugins.autorank.pathbuilder.requirement.USkyBlockLevelRequirement;
 import me.armar.plugins.autorank.pathbuilder.requirement.WorldGuardRegionRequirement;
 import me.armar.plugins.autorank.pathbuilder.requirement.WorldRequirement;
 import me.armar.plugins.autorank.pathbuilder.result.CommandResult;
@@ -469,6 +471,8 @@ public class Autorank extends JavaPlugin {
         req.registerRequirement("rpgme skill level", RPGMeSkillLevelRequirement.class);
         req.registerRequirement("rpgme combat level", RPGMeCombatLevelRequirement.class);
         req.registerRequirement("in group", GroupRequirement.class);
+        req.registerRequirement("has advanced achievement", AdvancedAchievementRequirement.class);
+        req.registerRequirement("uskyblock level", USkyBlockLevelRequirement.class);
 
         // Register 'main' results
         res.registerResult("command", CommandResult.class);
