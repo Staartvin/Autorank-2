@@ -8,7 +8,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import me.armar.plugins.autorank.Autorank;
 
 /**
- * This will class is used for managing third party addons developers can build.
+ * This class is used for managing third party addons developers can build.
  * 
  * @author Staartvin
  * 
