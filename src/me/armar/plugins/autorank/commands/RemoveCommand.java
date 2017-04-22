@@ -61,7 +61,7 @@ public class RemoveCommand extends AutorankCommand {
 
             if (!builder.toString().contains("m") && !builder.toString().contains("h")
                     && !builder.toString().contains("d")) {
-                changeValue = AutorankTools.stringtoInt(builder.toString().trim());
+                changeValue = (int) AutorankTools.stringToDouble(builder.toString().trim());
             } else {
                 changeValue = AutorankTools.stringToTime(builder.toString(), Time.MINUTES);
             }

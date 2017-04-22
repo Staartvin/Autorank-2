@@ -51,7 +51,7 @@ public class GamemodeRequirement extends Requirement {
     public boolean setOptions(final String[] options) {
 
         if (options.length > 0)
-            gameMode = AutorankTools.stringtoInt(options[0]);
+            gameMode = (int) AutorankTools.stringToDouble(options[0]);
 
         return gameMode != -1;
     }

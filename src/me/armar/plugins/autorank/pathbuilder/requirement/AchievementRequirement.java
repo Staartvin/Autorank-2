@@ -78,7 +78,7 @@ public class AchievementRequirement extends Requirement {
     @Override
     public boolean setOptions(final String[] options) {
         try {
-            achievementCount = AutorankTools.stringtoInt(options[0]);
+            achievementCount = (int) AutorankTools.stringToDouble(options[0]);
             // Check to see if it is a number
         } catch (NumberFormatException e) {
             // It is not a number, so it must be a name

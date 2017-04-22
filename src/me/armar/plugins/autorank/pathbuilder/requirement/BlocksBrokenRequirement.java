@@ -128,11 +128,11 @@ public class BlocksBrokenRequirement extends Requirement {
             amount = Integer.parseInt(options[0].trim());
         }
         if (options.length > 1) {
-            id = AutorankTools.stringtoInt(options[0]);
+            id = (int) AutorankTools.stringToDouble(options[0]);
             amount = Integer.parseInt(options[1].trim());
         }
         if (options.length > 2) {
-            data = (short) AutorankTools.stringtoInt(options[2]);
+            data = (short) AutorankTools.stringToDouble(options[2]);
             // Short value can make a difference, thus we show it.
             showShortValue = true;
         }

@@ -98,9 +98,11 @@ import me.armar.plugins.autorank.warningmanager.WarningManager;
  * 
  */
 public class Autorank extends JavaPlugin {
-    
-    public static Autorank getAutorank() {
-        return (Autorank) Bukkit.getPluginManager().getPlugin("Autorank");
+
+    private static Autorank autorank;
+
+    public static Autorank getInstance() {
+        return autorank;
     }
 
     // ---------- INITIALIZING VARIABLES ---------- \\
@@ -186,6 +188,10 @@ public class Autorank extends JavaPlugin {
      */
     @Override
     public void onEnable() {
+
+        // ------------- Init static variables -------------
+        autorank = this;
+
 
         // ------------- Create files & folders -------------
 
@@ -398,61 +404,58 @@ public class Autorank extends JavaPlugin {
     //
 
     private void initializeReqsAndRes() {
-        final RequirementBuilder req = this.getPathManager().getBuilder().getRequirementBuilder();
-        final ResultBuilder res = this.getPathManager().getBuilder().getResultBuilder();
-
         // Register 'main' requirements
-        req.registerRequirement("exp", ExpRequirement.class);
-        req.registerRequirement("money", MoneyRequirement.class);
-        req.registerRequirement("gamemode", GamemodeRequirement.class);
-        req.registerRequirement("has item", HasItemRequirement.class);
-        req.registerRequirement("blocks broken", BlocksBrokenRequirement.class);
-        req.registerRequirement("blocks placed", BlocksPlacedRequirement.class);
-        req.registerRequirement("blocks moved", BlocksMovedRequirement.class);
-        req.registerRequirement("votes", TotalVotesRequirement.class);
-        req.registerRequirement("damage taken", DamageTakenRequirement.class);
-        req.registerRequirement("mobs killed", MobKillsRequirement.class);
-        req.registerRequirement("location", LocationRequirement.class);
-        req.registerRequirement("faction power", FactionPowerRequirement.class);
-        req.registerRequirement("players killed", PlayerKillsRequirement.class);
-        req.registerRequirement("global time", GlobalTimeRequirement.class);
-        req.registerRequirement("total time", TotalTimeRequirement.class);
-        req.registerRequirement("world", WorldRequirement.class);
-        req.registerRequirement("worldguard region", WorldGuardRegionRequirement.class);
-        req.registerRequirement("mcmmo skill level", McMMOSkillLevelRequirement.class);
-        req.registerRequirement("mcmmo power level", McMMOPowerLevelRequirement.class);
-        req.registerRequirement("permission", PermissionRequirement.class);
-        req.registerRequirement("fish caught", FishCaughtRequirement.class);
-        req.registerRequirement("items crafted", ItemsCraftedRequirement.class);
-        req.registerRequirement("time", TimeRequirement.class);
-        req.registerRequirement("times sheared", TimesShearedRequirement.class);
-        req.registerRequirement("essentials geoip location", EssentialsGeoIPRequirement.class);
-        req.registerRequirement("in biome", InBiomeRequirement.class);
-        req.registerRequirement("food eaten", FoodEatenRequirement.class);
-        req.registerRequirement("acidisland level", AcidIslandLevelRequirement.class);
-        req.registerRequirement("askyblock level", ASkyBlockLevelRequirement.class);
-        req.registerRequirement("javascript", JavaScriptRequirement.class);
-        req.registerRequirement("jobs current points", JobsCurrentPointsRequirement.class);
-        req.registerRequirement("jobs total points", JobsTotalPointsRequirement.class);
-        req.registerRequirement("jobs level", JobsLevelRequirement.class);
-        req.registerRequirement("jobs experience", JobsExperienceRequirement.class);
-        req.registerRequirement("grief prevention claims", GriefPreventionClaimsCountRequirement.class);
-        req.registerRequirement("grief prevention claimed blocks", GriefPreventionClaimedBlocksRequirement.class);
-        req.registerRequirement("grief prevention remaining blocks", GriefPreventionRemainingBlocksRequirement.class);
-        req.registerRequirement("grief prevention bonus blocks", GriefPreventionBonusBlocksRequirement.class);
-        req.registerRequirement("has achievement", AchievementRequirement.class);
-        req.registerRequirement("rpgme skill level", RPGMeSkillLevelRequirement.class);
-        req.registerRequirement("rpgme combat level", RPGMeCombatLevelRequirement.class);
-        req.registerRequirement("in group", GroupRequirement.class);
+        RequirementBuilder.registerRequirement("exp", ExpRequirement.class);
+        RequirementBuilder.registerRequirement("money", MoneyRequirement.class);
+        RequirementBuilder.registerRequirement("gamemode", GamemodeRequirement.class);
+        RequirementBuilder.registerRequirement("has item", HasItemRequirement.class);
+        RequirementBuilder.registerRequirement("blocks broken", BlocksBrokenRequirement.class);
+        RequirementBuilder.registerRequirement("blocks placed", BlocksPlacedRequirement.class);
+        RequirementBuilder.registerRequirement("blocks moved", BlocksMovedRequirement.class);
+        RequirementBuilder.registerRequirement("votes", TotalVotesRequirement.class);
+        RequirementBuilder.registerRequirement("damage taken", DamageTakenRequirement.class);
+        RequirementBuilder.registerRequirement("mobs killed", MobKillsRequirement.class);
+        RequirementBuilder.registerRequirement("location", LocationRequirement.class);
+        RequirementBuilder.registerRequirement("faction power", FactionPowerRequirement.class);
+        RequirementBuilder.registerRequirement("players killed", PlayerKillsRequirement.class);
+        RequirementBuilder.registerRequirement("global time", GlobalTimeRequirement.class);
+        RequirementBuilder.registerRequirement("total time", TotalTimeRequirement.class);
+        RequirementBuilder.registerRequirement("world", WorldRequirement.class);
+        RequirementBuilder.registerRequirement("worldguard region", WorldGuardRegionRequirement.class);
+        RequirementBuilder.registerRequirement("mcmmo skill level", McMMOSkillLevelRequirement.class);
+        RequirementBuilder.registerRequirement("mcmmo power level", McMMOPowerLevelRequirement.class);
+        RequirementBuilder.registerRequirement("permission", PermissionRequirement.class);
+        RequirementBuilder.registerRequirement("fish caught", FishCaughtRequirement.class);
+        RequirementBuilder.registerRequirement("items crafted", ItemsCraftedRequirement.class);
+        RequirementBuilder.registerRequirement("time", TimeRequirement.class);
+        RequirementBuilder.registerRequirement("times sheared", TimesShearedRequirement.class);
+        RequirementBuilder.registerRequirement("essentials geoip location", EssentialsGeoIPRequirement.class);
+        RequirementBuilder.registerRequirement("in biome", InBiomeRequirement.class);
+        RequirementBuilder.registerRequirement("food eaten", FoodEatenRequirement.class);
+        RequirementBuilder.registerRequirement("acidisland level", AcidIslandLevelRequirement.class);
+        RequirementBuilder.registerRequirement("askyblock level", ASkyBlockLevelRequirement.class);
+        RequirementBuilder.registerRequirement("javascript", JavaScriptRequirement.class);
+        RequirementBuilder.registerRequirement("jobs current points", JobsCurrentPointsRequirement.class);
+        RequirementBuilder.registerRequirement("jobs total points", JobsTotalPointsRequirement.class);
+        RequirementBuilder.registerRequirement("jobs level", JobsLevelRequirement.class);
+        RequirementBuilder.registerRequirement("jobs experience", JobsExperienceRequirement.class);
+        RequirementBuilder.registerRequirement("grief prevention claims", GriefPreventionClaimsCountRequirement.class);
+        RequirementBuilder.registerRequirement("grief prevention claimed blocks", GriefPreventionClaimedBlocksRequirement.class);
+        RequirementBuilder.registerRequirement("grief prevention remaining blocks", GriefPreventionRemainingBlocksRequirement.class);
+        RequirementBuilder.registerRequirement("grief prevention bonus blocks", GriefPreventionBonusBlocksRequirement.class);
+        RequirementBuilder.registerRequirement("has achievement", AchievementRequirement.class);
+        RequirementBuilder.registerRequirement("rpgme skill level", RPGMeSkillLevelRequirement.class);
+        RequirementBuilder.registerRequirement("rpgme combat level", RPGMeCombatLevelRequirement.class);
+        RequirementBuilder.registerRequirement("in group", GroupRequirement.class);
 
         // Register 'main' results
-        res.registerResult("command", CommandResult.class);
-        res.registerResult("effect", EffectResult.class);
-        res.registerResult("message", MessageResult.class);
+        ResultBuilder.registerResult("command", CommandResult.class);
+        ResultBuilder.registerResult("effect", EffectResult.class);
+        ResultBuilder.registerResult("message", MessageResult.class);
         //res.registerResult("rank change", RankChangeResult.class); -- Temporarily disabled until fixed
-        res.registerResult("tp", TeleportResult.class);
-        res.registerResult("firework", SpawnFireworkResult.class);
-        res.registerResult("money", MoneyResult.class);
+        ResultBuilder.registerResult("tp", TeleportResult.class);
+        ResultBuilder.registerResult("firework", SpawnFireworkResult.class);
+        ResultBuilder.registerResult("money", MoneyResult.class);
     }
 
     /**
