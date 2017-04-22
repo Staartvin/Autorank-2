@@ -154,12 +154,13 @@ public class PathManager {
         List<Path> temp = builder.initialisePaths();
         
         if (temp == null) {
-            plugin.getLogger().warning("The paths file was not configured correctly! Log in to your server to get more info!");
+            plugin.getLogger().warning("The paths file was not configured correctly! See your log file for more info.");
             return;
         } else {
             paths = temp;
         }    
 
+        // Output paths in the console if debug is turned on.
         for (final String message : debugPaths()) {
             plugin.debugMessage(message);
         }

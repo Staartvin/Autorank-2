@@ -15,9 +15,8 @@ import me.armar.plugins.autorank.util.AutorankTools;
  * This class builds all the paths from the paths.yml. <br>
  * <p>
  * Date created: 14:20:20 5 aug. 2015
- * 
+ *
  * @author Staartvin
- * 
  */
 public class PathBuilder {
 
@@ -33,7 +32,7 @@ public class PathBuilder {
     }
 
     private Requirement createPrerequisite(final String type, final String[] options, final boolean optional,
-            final int reqId, String originalName, String originalGroup) {
+                                           final int reqId, String originalName, String originalGroup) {
         final Requirement res = requirementBuilder.create(type);
 
         if (res != null) {
@@ -68,8 +67,8 @@ public class PathBuilder {
     }
 
     private Requirement createRequirement(final String type, final String[] options, final boolean optional,
-            final List<Result> results, final boolean autoComplete, final int reqId, String originalName,
-            String originalGroup) {
+                                          final List<Result> results, final boolean autoComplete, final int reqId, String originalName,
+                                          String originalGroup) {
         final Requirement res = requirementBuilder.create(type);
 
         if (res != null) {
@@ -103,15 +102,17 @@ public class PathBuilder {
         return res;
     }
 
-    private Result createResult(final String type, final String valueString) {
-        final Result res = resultBuilder.create(type);
+    private Result createResult(String pathName, String resultType, String stringValue) {
+        ResultBuilder builder = new ResultBuilder().createEmpty(pathName, resultType).populateResult(stringValue);
 
-        if (res != null) {
-            res.setAutorank(plugin);
-            res.setOptions(valueString.split(";"));
+        if (!builder.isResultValid()) {
+            return null;
         }
 
-        return res;
+        // Get result of ResultBuilder.
+        final Result result = builder.finish();
+
+        return result;
     }
 
     public RequirementBuilder getRequirementBuilder() {
@@ -122,6 +123,11 @@ public class PathBuilder {
         return resultBuilder;
     }
 
+    /**
+     * Return a list of paths that have been defined in the Paths.yml file.
+     *
+     * @return a list of paths or an empty list.
+     */
     public List<Path> initialisePaths() {
         List<String> pathNames = plugin.getPathsConfig().getPaths();
 
@@ -133,24 +139,12 @@ public class PathBuilder {
 
             // First initialize results
             for (String resultName : plugin.getPathsConfig().getResults(pathName)) {
-                final String correctResult = AutorankTools.getCorrectResName(resultName);
 
-                if (correctResult == null) {
-                    plugin.getWarningManager().registerWarning(
-                            String.format("You are using a '%s' result in path '%s', but that result doesn't exist!", resultName,
-                                    pathName),
-                            10);
-                    return null;
-                    // throw new IllegalArgumentException(
-                    // "Result '" + resultName + "' of group '" + pathName + "'
-                    // is unknown!");
-                }
+                Result result = createResult(pathName, resultName, plugin.getPathsConfig().getResultOfPath(pathName, resultName));
 
-                final Result result = createResult(correctResult,
-                        plugin.getPathsConfig().getResultOfPath(pathName, resultName));
-
-                if (result == null)
+                if (result == null) {
                     continue;
+                }
 
                 // Add result to path
                 path.addResult(result);
@@ -169,9 +163,16 @@ public class PathBuilder {
                 final List<Result> realResults = new ArrayList<Result>();
 
                 // Get results of requirement
-                for (final String resultString : results) {
-                    realResults.add(createResult(resultString,
-                            plugin.getPathsConfig().getResultOfRequirement(pathName, reqName, resultString)));
+                for (final String resultType : results) {
+
+                    Result result = createResult(pathName, resultType,
+                            plugin.getPathsConfig().getResultOfRequirement(pathName, reqName, resultType));
+
+                    if (result == null) {
+                        continue;
+                    }
+
+                    realResults.add(result);
                 }
 
                 // Get requirement ID
@@ -292,9 +293,16 @@ public class PathBuilder {
             final List<Result> realResults = new ArrayList<Result>();
 
             // Get results of requirement
-            for (final String resultString : results) {
-                realResults.add(createResult(resultString,
-                        plugin.getPathsConfig().getResultValueUponChoosing(pathName, resultString)));
+            for (final String resultType : results) {
+
+                Result result = createResult(pathName, resultType,
+                        plugin.getPathsConfig().getResultValueUponChoosing(pathName, resultType));
+
+                if (result == null) {
+                    continue;
+                }
+
+                realResults.add(result);
             }
 
             // Now set the result upon choosing for this path

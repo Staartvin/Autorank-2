@@ -11,7 +11,7 @@ import me.armar.plugins.autorank.util.AutorankTools;
 
 public class RequirementBuilder {
 
-    private final Map<String, Class<? extends Requirement>> reqs = new HashMap<String, Class<? extends Requirement>>();
+    private static final Map<String, Class<? extends Requirement>> reqs = new HashMap<String, Class<? extends Requirement>>();
 
     public Requirement create(final String type) {
         Requirement res = null;
@@ -30,13 +30,12 @@ public class RequirementBuilder {
         return res;
     }
 
-    public void registerRequirement(final String type, final Class<? extends Requirement> requirement) {
+    public static void registerRequirement(final String type, final Class<? extends Requirement> requirement) {
         // Add type to the list
         reqs.put(type, requirement);
 
         // Add type to the list of AutorankTools so it can use the correct name.
         AutorankTools.registerRequirement(type);
-
     }
 
 }
