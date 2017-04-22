@@ -47,9 +47,9 @@ public class ValidateHandler {
                         String requirementName = null;
                         
                         if (reqHolder.isPrerequisite()) {
-                            requirementName = plugin.getPathsConfig().getPrerequisiteName(path.getInternalName(), req.getReqId());
+                            requirementName = plugin.getPathsConfig().getPrerequisiteName(path.getInternalName(), req.getId());
                         } else {
-                            requirementName = plugin.getPathsConfig().getRequirementName(path.getInternalName(), req.getReqId());
+                            requirementName = plugin.getPathsConfig().getRequirementName(path.getInternalName(), req.getId());
                         }      
 
                         if (requirementName == null) {

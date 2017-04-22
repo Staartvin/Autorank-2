@@ -66,7 +66,7 @@ public abstract class Requirement {
      * 
      * @return id
      */
-    public int getReqId() {
+    public int getId() {
         return reqId;
     }
 
@@ -181,7 +181,7 @@ public abstract class Requirement {
      * @param reqId
      *            id to set it to
      */
-    public void setReqId(final int reqId) {
+    public void setId(final int reqId) {
         this.reqId = reqId;
     }
 

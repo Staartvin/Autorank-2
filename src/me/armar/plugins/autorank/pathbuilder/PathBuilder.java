@@ -60,60 +60,13 @@ public class PathBuilder {
 
             res.setOptional(optional);
             res.setAutoComplete(true); // Prerequisite will always auto complete
-            res.setReqId(reqId); // Set requirement ID
+            res.setId(reqId); // Set requirement ID
             res.setResults(new ArrayList<Result>()); // Empty results
         }
         return res;
     }
 
-    private Requirement createRequirement(final String type, final String[] options, final boolean optional,
-                                          final List<Result> results, final boolean autoComplete, final int reqId, String originalName,
-                                          String originalGroup) {
-        final Requirement res = requirementBuilder.create(type);
 
-        if (res != null) {
-            res.setAutorank(plugin);
-
-            final String errorMessage = "Could not set up requirement '" + originalName + "' of " + originalGroup
-                    + "! It's invalid: check the wiki for documentation.";
-
-            try {
-                if (!res.setOptions(options)) {
-                    plugin.getLogger().severe(errorMessage);
-                    plugin.getWarningManager().registerWarning(errorMessage, 10);
-                }
-            } catch (NoClassDefFoundError e) {
-                plugin.getLogger().severe("You are using requirement " + originalName + " in " + originalGroup
-                        + " but you don't have Statz installed! Make sure to install Statz for this to work.");
-                plugin.getWarningManager().registerWarning(
-                        "You are using requirement " + originalName + " in " + originalGroup
-                                + " but you don't have Statz installed! Make sure to install Statz for this to work.",
-                        10);
-            } catch (final Exception e) {
-                plugin.getLogger().severe(errorMessage);
-                plugin.getWarningManager().registerWarning(errorMessage, 10);
-            }
-
-            res.setOptional(optional);
-            res.setAutoComplete(autoComplete);
-            res.setReqId(reqId);
-            res.setResults(results);
-        }
-        return res;
-    }
-
-    private Result createResult(String pathName, String resultType, String stringValue) {
-        ResultBuilder builder = new ResultBuilder().createEmpty(pathName, resultType).populateResult(stringValue);
-
-        if (!builder.isResultValid()) {
-            return null;
-        }
-
-        // Get result of ResultBuilder.
-        final Result result = builder.finish();
-
-        return result;
-    }
 
     public RequirementBuilder getRequirementBuilder() {
         return requirementBuilder;
@@ -140,7 +93,7 @@ public class PathBuilder {
             // First initialize results
             for (String resultName : plugin.getPathsConfig().getResults(pathName)) {
 
-                Result result = createResult(pathName, resultName, plugin.getPathsConfig().getResultOfPath(pathName, resultName));
+                Result result = ResultBuilder.createResult(pathName, resultName, plugin.getPathsConfig().getResultOfPath(pathName, resultName));
 
                 if (result == null) {
                     continue;
@@ -153,76 +106,22 @@ public class PathBuilder {
             // Now initialize requirements
             for (final String reqName : plugin.getPathsConfig().getRequirements(pathName)) {
 
-                // Implement optional option logic
-                final boolean optional = plugin.getPathsConfig().isOptionalRequirement(pathName, reqName);
-                // Result for requirements
-                final List<String> results = plugin.getPathsConfig().getResultsOfRequirement(pathName, reqName);
-
-                // Create a new result List that will get all result when this
-                // requirement is met.
-                final List<Result> realResults = new ArrayList<Result>();
-
-                // Get results of requirement
-                for (final String resultType : results) {
-
-                    Result result = createResult(pathName, resultType,
-                            plugin.getPathsConfig().getResultOfRequirement(pathName, reqName, resultType));
-
-                    if (result == null) {
-                        continue;
-                    }
-
-                    realResults.add(result);
-                }
-
-                // Get requirement ID
-                final int reqId = plugin.getPathsConfig().getReqId(pathName, reqName);
-
-                // Do sanity check
-                if (reqId < 0) {
-                    try {
-                        throw new Exception("REQ ID COULDN'T BE FOUND! REPORT TO AUTHOR!" + " PATH: " + path
-                                + ", REQUIREMENT: " + reqName);
-                    } catch (final Exception e) {
-                        plugin.getLogger().severe(e.getCause().getMessage());
-                        return null;
-                    }
-                }
-
-                // Get correct name of requirement
-                final String correctName = AutorankTools.getCorrectReqName(reqName);
-
-                if (correctName == null) {
-                    plugin.getWarningManager()
-                            .registerWarning(String.format(
-                                    "You are using a '%s' requirement in path '%s', but that requirement doesn't exist!", reqName,
-                                    pathName), 10);
-                    return null;
-                }
-
                 // Create a holder for the path
                 final RequirementsHolder reqHolder = new RequirementsHolder(plugin);
 
-                // Option strings seperated
+                // Option strings separated
                 final List<String[]> optionsList = plugin.getPathsConfig().getRequirementOptions(pathName, reqName);
 
                 // Find all options of this requirement
                 for (final String[] options : optionsList) {
-                    final Requirement newRequirement = createRequirement(correctName, options, optional, realResults,
-                            plugin.getPathsConfig().useAutoCompletion(pathName, reqName), reqId, reqName, pathName);
+                    final Requirement requirement = RequirementBuilder.createRequirement(pathName, reqName, options);
 
-                    if (newRequirement == null)
+                    if (requirement == null) {
                         continue;
-
-                    // Make requirement world-specific if a world was specified
-                    // in
-                    // the config.
-                    if (plugin.getPathsConfig().isRequirementWorldSpecific(pathName, reqName)) {
-                        newRequirement.setWorld(plugin.getPathsConfig().getWorldOfRequirement(pathName, reqName));
                     }
 
                     // Add requirement to holder
-                    reqHolder.addRequirement(newRequirement);
+                    reqHolder.addRequirement(requirement);
                 }
 
                 // Now add holder to requirement list of path
@@ -295,7 +194,7 @@ public class PathBuilder {
             // Get results of requirement
             for (final String resultType : results) {
 
-                Result result = createResult(pathName, resultType,
+                Result result = ResultBuilder.createResult(pathName, resultType,
                         plugin.getPathsConfig().getResultValueUponChoosing(pathName, resultType));
 
                 if (result == null) {

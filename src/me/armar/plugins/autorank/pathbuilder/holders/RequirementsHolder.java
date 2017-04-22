@@ -182,7 +182,7 @@ public class RequirementsHolder {
     public int getReqID() {
         // All req ids are the same.
         for (final Requirement r : this.getRequirements()) {
-            return r.getReqId();
+            return r.getId();
         }
 
         return -1;
@@ -220,7 +220,7 @@ public class RequirementsHolder {
 
         for (final Requirement r : this.getRequirements()) {
 
-            final int reqID = r.getReqId();
+            final int reqID = r.getId();
 
             // When optional, always true
             if (r.isOptional()) {
@@ -281,7 +281,7 @@ public class RequirementsHolder {
 
                 if (!this.isPrerequisite()) {
                     // Let player know he completed a requirement
-                    player.sendMessage(Lang.COMPLETED_REQUIREMENT.getConfigValue(r.getReqId() + 1, r.getDescription()));
+                    player.sendMessage(Lang.COMPLETED_REQUIREMENT.getConfigValue(r.getId() + 1, r.getDescription()));
                 }
 
                 boolean noErrors = true;
