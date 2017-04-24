@@ -26,6 +26,9 @@ public class RequirementBuilder {
     // Extra metadata for the associated requirement.
     private String pathName, requirementType;
 
+    // Whether this requirement is a prerequisite.
+    private boolean isPreRequisite = false;
+
     final String errorMessage = "Could not set up requirement '" + requirementType + "' of " + pathName
             + "! It's invalid: check the wiki for documentation.";
 
@@ -36,10 +39,11 @@ public class RequirementBuilder {
      * @param requirementType Type of the requirement.
      * @return this builder.
      */
-    public RequirementBuilder createEmpty(String pathName, String requirementType) {
+    public RequirementBuilder createEmpty(String pathName, String requirementType, boolean isPreRequisite) {
 
         this.pathName = pathName;
         this.requirementType = requirementType;
+        this.isPreRequisite = isPreRequisite;
 
         requirementType = AutorankTools.getCorrectReqName(requirementType);
 
@@ -91,13 +95,13 @@ public class RequirementBuilder {
         }
 
         // Set whether requirement is optional or not.
-        requirement.setOptional(Autorank.getInstance().getPathsConfig().isOptionalRequirement(pathName, requirementType));
+        requirement.setOptional(Autorank.getInstance().getPathsConfig().isOptionalRequirement(pathName, requirementType, isPreRequisite));
 
         List<Result> resultList = new ArrayList<>();
 
-        for (String resultType : Autorank.getInstance().getPathsConfig().getResultsOfRequirement(pathName, requirementType)) {
+        for (String resultType : Autorank.getInstance().getPathsConfig().getResultsOfRequirement(pathName, requirementType, isPreRequisite)) {
             Result result = ResultBuilder.createResult(pathName, resultType,
-                    Autorank.getInstance().getPathsConfig().getResultOfRequirement(pathName, requirementType, resultType));
+                    Autorank.getInstance().getPathsConfig().getResultOfRequirement(pathName, requirementType, resultType, isPreRequisite));
 
             if (result == null) {
                 continue;
@@ -110,9 +114,9 @@ public class RequirementBuilder {
         requirement.setResults(resultList);
 
         // Set whether this requirement should auto complete.
-        requirement.setAutoComplete(Autorank.getInstance().getPathsConfig().useAutoCompletion(pathName, requirementType));
+        requirement.setAutoComplete(Autorank.getInstance().getPathsConfig().useAutoCompletion(pathName, requirementType, isPreRequisite));
 
-        int requirementId = Autorank.getInstance().getPathsConfig().getReqId(pathName, requirementType);
+        int requirementId = Autorank.getInstance().getPathsConfig().getReqId(pathName, requirementType, isPreRequisite);
 
         // Do sanity check
         if (requirementId < 0) {
@@ -125,7 +129,7 @@ public class RequirementBuilder {
         requirement.setId(requirementId);
 
         // Set whether this requirement is world-specific.
-        requirement.setWorld(Autorank.getInstance().getPathsConfig().getWorldOfRequirement(pathName, requirementType));
+        requirement.setWorld(Autorank.getInstance().getPathsConfig().getWorldOfRequirement(pathName, requirementType, isPreRequisite));
 
         // Result is non-null and populated with data, so valid.
         isValid = true;
@@ -179,8 +183,8 @@ public class RequirementBuilder {
      * @param options The requirements options array.
      * @return a newly created Requirement with the given data, or null if invalid data was given.
      */
-    public static Requirement createRequirement(String pathName, String requirementType, String[] options) {
-        RequirementBuilder builder = new RequirementBuilder().createEmpty(pathName, requirementType).populateRequirement(options);
+    public static Requirement createRequirement(String pathName, String requirementType, String[] options, boolean isPreRequisite) {
+        RequirementBuilder builder = new RequirementBuilder().createEmpty(pathName, requirementType, isPreRequisite).populateRequirement(options);
 
         // Check if requirement is valid before building it.
         if (!builder.isValid()) {

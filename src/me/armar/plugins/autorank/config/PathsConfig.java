@@ -110,99 +110,6 @@ public class PathsConfig {
     }
 
     /**
-     * Get the ID of a prerequisite for a certain path
-     * 
-     * @param pathName
-     *            Name of the path
-     * @param prereqName
-     *            Name of the prerequisite
-     * @return the id of the prerequisite or -1.
-     */
-    public int getPrereqId(final String pathName, final String prereqName) {
-        final Object[] reqs = getPrerequisites(pathName).toArray();
-
-        for (int i = 0; i < reqs.length; i++) {
-            final String prereqString = (String) reqs[i];
-
-            if (prereqName.equalsIgnoreCase(prereqString)) {
-                return i;
-            }
-        }
-
-        return -1;
-    }
-
-    /**
-     * Get the value strings for the specified prerequisite. Most of the times,
-     * this will be just a single value string. <br>
-     * These value strings are used to initialise the paths.
-     * 
-     * @param pathName
-     *            Name of the path
-     * @param prereqName
-     *            Name of the prerequisite
-     * @return a list of value strings or an empty list.
-     */
-    public List<String[]> getPrerequisiteOptions(final String pathName, final String prereqName) {
-        // Grab options from string
-        final String org = this.getPrerequisiteValue(pathName, prereqName);
-
-        final List<String[]> list = new ArrayList<String[]>();
-
-        final String[] split = org.split(",");
-
-        for (final String sp : split) {
-            final StringBuilder builder = new StringBuilder(sp);
-
-            if (builder.charAt(0) == '(') {
-                builder.deleteCharAt(0);
-            }
-
-            if (builder.charAt(builder.length() - 1) == ')') {
-                builder.deleteCharAt(builder.length() - 1);
-            }
-
-            final String[] splitArray = builder.toString().trim().split(";");
-            list.add(splitArray);
-        }
-
-        return list;
-    }
-
-    /**
-     * Get a list of prerequisites for a specific path.
-     * 
-     * @param pathName
-     *            Name of path
-     * @return a list of all the names of the prerequisites.
-     */
-    public List<String> getPrerequisites(String pathName) {
-        return new ArrayList<String>(getConfig().getConfigurationSection(pathName + ".prerequisites").getKeys(false));
-    }
-
-    /**
-     * Get the value string that is associated with the given prerequisite for a
-     * given path. <br>
-     * This is used with {@link #getPrerequisiteOptions(String, String)}.
-     * 
-     * @param pathName
-     *            Name of the path.
-     * @param prereqName
-     *            Name of the prerequisite.
-     * @return the value string which can be null if none is specified.
-     */
-    public String getPrerequisiteValue(final String pathName, final String prereqName) {
-
-        // Correct config
-        String result;
-        result = (this.getConfig().get(pathName + ".prerequisites." + prereqName + ".value") != null)
-                ? this.getConfig().get(pathName + ".prerequisites." + prereqName + ".value").toString()
-                : this.getConfig().getString(pathName + ".prerequisites." + prereqName).toString();
-
-        return result;
-    }
-
-    /**
      * Get the ID of a requirement for a certain path
      * 
      * @param pathName
@@ -211,8 +118,8 @@ public class PathsConfig {
      *            Name of the requirement
      * @return requirement id or -1 if none was found.
      */
-    public int getReqId(final String pathName, final String reqName) {
-        final Object[] reqs = getRequirements(pathName).toArray();
+    public int getReqId(final String pathName, final String reqName, boolean isPreRequisite) {
+        final Object[] reqs = getRequirements(pathName, isPreRequisite).toArray();
 
         for (int i = 0; i < reqs.length; i++) {
             final String reqString = (String) reqs[i];
@@ -231,30 +138,14 @@ public class PathsConfig {
      * @param reqId Id of the requirement
      * @return Name of the requirement that matches this id, or null if it doesn't exist.
      */
-    public String getRequirementName(String pathName, int reqId) {
-        List<String> reqs = this.getRequirements(pathName);
+    public String getRequirementName(String pathName, int reqId, boolean isPreRequisite) {
+        List<String> reqs = this.getRequirements(pathName, isPreRequisite);
         
         if (reqId < 0 || reqId >= reqs.size()) {
             return null;
         }
         
         return reqs.get(reqId);
-    }
-    
-    /**
-     * Get the name of a prerequisite that corresponds to the given prerequisite id.
-     * @param pathName Name of the path.
-     * @param prereqId Id of the prerequisite
-     * @return Name of the prerequisite that matches this id, or null if it doesn't exist.
-     */
-    public String getPrerequisiteName(String pathName, int prereqId) {
-        List<String> preReqs = this.getPrerequisites(pathName);
-        
-        if (prereqId < 0 || prereqId >= preReqs.size()) {
-            return null;
-        }
-        
-        return preReqs.get(prereqId);
     }
 
     /**
@@ -268,9 +159,9 @@ public class PathsConfig {
      *            Name of the requirement
      * @return a list of value strings or an empty list.
      */
-    public List<String[]> getRequirementOptions(final String pathName, final String reqName) {
+    public List<String[]> getRequirementOptions(final String pathName, final String reqName, boolean isPreRequisite) {
         // Grab options from string
-        final String org = this.getRequirementValue(pathName, reqName);
+        final String org = this.getRequirementValue(pathName, reqName, isPreRequisite);
 
         final List<String[]> list = new ArrayList<String[]>();
 
@@ -301,14 +192,16 @@ public class PathsConfig {
      *            Name of path
      * @return a list of all the names of the requirements.
      */
-    public List<String> getRequirements(String pathName) {
-        return new ArrayList<String>(getConfig().getConfigurationSection(pathName + ".requirements").getKeys(false));
+    public List<String> getRequirements(String pathName, boolean isPreRequisite) {
+        String keyType = (isPreRequisite ? "prerequisites" : "requirements");
+
+        return new ArrayList<String>(getConfig().getConfigurationSection(pathName + "." + keyType).getKeys(false));
     }
 
     /**
      * Get the value string that is associated with the given requirement for a
      * given path. <br>
-     * This is used with {@link #getRequirementOptions(String, String)}.
+     * This is used with {@link #getRequirementOptions(String, String, boolean)}}.
      * 
      * @param pathName
      *            Name of the path.
@@ -316,12 +209,15 @@ public class PathsConfig {
      *            Name of the requirement.
      * @return the value string which can be null if none is specified.
      */
-    public String getRequirementValue(final String pathName, final String reqName) {
+    public String getRequirementValue(final String pathName, final String reqName, boolean isPreRequisite) {
+
+        String keyType = (isPreRequisite ? "prerequisites" : "requirements");
+
         // Check if there is a value for PathName.requirements.RequirementName.Value
         // If not, use PathName.requirements.RequirementName (without the Value).
-        String result = (this.getConfig().get(pathName + ".requirements." + reqName + ".value") != null)
-                ? this.getConfig().get(pathName + ".requirements." + reqName + ".value").toString()
-                : this.getConfig().getString(pathName + ".requirements." + reqName).toString();
+        String result = (this.getConfig().get(pathName + "." + keyType + "." + reqName + ".value") != null)
+                ? this.getConfig().get(pathName + "." + keyType + "." + reqName + ".value").toString()
+                : this.getConfig().getString(pathName + "." + keyType + "." + reqName).toString();
 
         return result;
     }
@@ -357,12 +253,15 @@ public class PathsConfig {
      *            Name of the result
      * @return the value string or null if it doesn't exist.
      */
-    public String getResultOfRequirement(final String pathName, final String reqName, final String resName) {
+    public String getResultOfRequirement(final String pathName, final String reqName, final String resName, boolean isPreRequisite) {
+
+        String keyType = (isPreRequisite ? "prerequisites" : "requirements");
+
         // Check if there is a value for PathName.requirements.RequirementName.results.ResultName.Value
         // If not, use PathName.requirements.RequirementName.results.ResultName (without the Value).
-        String result = (this.getConfig().get(pathName + ".requirements." + reqName + ".results." + resName + ".value") != null)
-                ? this.getConfig().get(pathName + ".requirements." + reqName + ".results." + resName + ".value").toString()
-                : this.getConfig().getString(pathName + ".requirements." + reqName + ".results." + resName).toString();
+        String result = (this.getConfig().get(pathName + "." + keyType + "." + reqName + ".results." + resName + ".value") != null)
+                ? this.getConfig().get(pathName + "." + keyType + "." + reqName + ".results." + resName + ".value").toString()
+                : this.getConfig().getString(pathName + "." + keyType + "." + reqName + ".results." + resName).toString();
 
         return result;
     }
@@ -387,11 +286,13 @@ public class PathsConfig {
      *            Name of requirement
      * @return a list of names that correspond with results or an empty list.
      */
-    public List<String> getResultsOfRequirement(final String pathName, final String reqName) {
+    public List<String> getResultsOfRequirement(final String pathName, final String reqName, boolean isPreRequisite) {
         Set<String> results = new HashSet<String>();
 
-        results = (getConfig().getConfigurationSection(pathName + ".requirements." + reqName + ".results") != null)
-                ? getConfig().getConfigurationSection(pathName + ".requirements." + reqName + ".results").getKeys(false)
+        String keyType = (isPreRequisite ? "prerequisites" : "requirements");
+
+        results = (getConfig().getConfigurationSection(pathName + "." + keyType + "." + reqName + ".results") != null)
+                ? getConfig().getConfigurationSection(pathName + "." + keyType + "." + reqName + ".results").getKeys(false)
                 : new HashSet<String>();
 
         return Lists.newArrayList(results);
@@ -408,24 +309,10 @@ public class PathsConfig {
      * @return the value string of the 'world' option, or null if it doesn't
      *         exist.
      */
-    public String getWorldOfRequirement(String pathName, String reqName) {
-        return this.getConfig().getString(pathName + ".requirements." + reqName + ".options.world", null);
-    }
+    public String getWorldOfRequirement(String pathName, String reqName, boolean isPreRequisite) {
+        String keyType = (isPreRequisite ? "prerequisites" : "requirements");
 
-    /**
-     * Get whether a prerequisite is optional for a certain path
-     * 
-     * @param pathName
-     *            Name of path
-     * @param prereqName
-     *            Name of prerequisite
-     * @return true if optional; false otherwise
-     */
-    public boolean isOptionalPrerequisite(final String pathName, final String prereqName) {
-        final boolean optional = getConfig().getBoolean(pathName + ".prerequisites." + prereqName + ".options.optional",
-                false);
-
-        return optional;
+        return this.getConfig().getString(pathName + "." + keyType + "." + reqName + ".options.world", null);
     }
 
     /**
@@ -437,8 +324,10 @@ public class PathsConfig {
      *            Name of requirement
      * @return true if optional; false otherwise
      */
-    public boolean isOptionalRequirement(final String pathName, final String reqName) {
-        final boolean optional = getConfig().getBoolean(pathName + ".requirements." + reqName + ".options.optional",
+    public boolean isOptionalRequirement(final String pathName, final String reqName, boolean isPreRequisite) {
+        String keyType = (isPreRequisite ? "prerequisites" : "requirements");
+
+        final boolean optional = getConfig().getBoolean(pathName + "." + keyType + "." + reqName + ".options.optional",
                 false);
 
         return optional;
@@ -446,7 +335,7 @@ public class PathsConfig {
 
     /**
      * Get whether a requirement is world specific. For more info, see
-     * {@link #getWorldOfRequirement(String, String)}.
+     * {@link #getWorldOfRequirement(String, String, boolean)}.
      * 
      * @param pathName
      *            Name of path
@@ -455,8 +344,8 @@ public class PathsConfig {
      * @return true if the given requirement has a 'world' option. False
      *         otherwise.
      */
-    public boolean isRequirementWorldSpecific(String pathName, String reqName) {
-        return this.getWorldOfRequirement(pathName, reqName) != null;
+    public boolean isRequirementWorldSpecific(String pathName, String reqName, boolean isPreRequisite) {
+        return this.getWorldOfRequirement(pathName, reqName, isPreRequisite) != null;
     }
 
     /**
@@ -479,20 +368,22 @@ public class PathsConfig {
      *            Name of requirement
      * @return true if auto completion is turned on, false otherwise.
      */
-    public boolean useAutoCompletion(final String pathName, final String reqName) {
-        final boolean optional = isOptionalRequirement(pathName, reqName);
+    public boolean useAutoCompletion(final String pathName, final String reqName, boolean isPreRequisite) {
+        final boolean optional = isOptionalRequirement(pathName, reqName, isPreRequisite);
+
+        String keyType = (isPreRequisite ? "prerequisites" : "requirements");
 
         if (optional) {
             // Not defined (Optional + not defined = false)
-            if (this.getConfig().get(pathName + ".requirements." + reqName + ".options.auto complete") == null) {
+            if (this.getConfig().get(pathName + "." + keyType + "." + reqName + ".options.auto complete") == null) {
                 return false;
             } else {
                 // Defined (Optional + defined = defined)
-                return this.getConfig().getBoolean(pathName + ".requirements." + reqName + ".options.auto complete");
+                return this.getConfig().getBoolean(pathName + "." + keyType + "." + reqName + ".options.auto complete");
             }
         } else {
             // Not defined (Not optional + not defined = true)
-            if (this.getConfig().get(pathName + ".requirements." + reqName + ".options.auto complete") == null) {
+            if (this.getConfig().get(pathName + "." + keyType + "." + reqName + ".options.auto complete") == null) {
 
                 // If partial completion is false, we do not auto complete
                 /*
@@ -501,7 +392,7 @@ public class PathsConfig {
                 return true;
             } else {
                 // Defined (Not optional + defined = defined)
-                return this.getConfig().getBoolean(pathName + ".requirements." + reqName + ".options.auto complete");
+                return this.getConfig().getBoolean(pathName + "." + keyType + "." + reqName + ".options.auto complete");
             }
         }
     }
@@ -543,7 +434,7 @@ public class PathsConfig {
      * @return true if Autorank should assign the given path to the player, false otherwise.
      */
     public boolean shouldAutoChoosePath(String pathName) {
-        return this.getConfig().getBoolean(pathName + ".options.auto choose", false);
+        return this.getConfig().getBoolean(pathName + ".options.auto choose", true);
     }
     
     /**

@@ -104,13 +104,13 @@ public class PathBuilder {
             }
 
             // Now initialize requirements
-            for (final String reqName : plugin.getPathsConfig().getRequirements(pathName)) {
+            for (final String reqName : plugin.getPathsConfig().getRequirements(pathName, false)) {
 
                 // Create a holder for the path
                 final RequirementsHolder reqHolder = new RequirementsHolder(plugin);
 
                 // Option strings separated
-                final List<String[]> optionsList = plugin.getPathsConfig().getRequirementOptions(pathName, reqName);
+                final List<String[]> optionsList = plugin.getPathsConfig().getRequirementOptions(pathName, reqName, false);
 
                 // Find all options of this requirement
                 for (final String[] options : optionsList) {
