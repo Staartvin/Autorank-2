@@ -31,43 +31,6 @@ public class PathBuilder {
         setRequirementBuilder(new RequirementBuilder());
     }
 
-    private Requirement createPrerequisite(final String type, final String[] options, final boolean optional,
-                                           final int reqId, String originalName, String originalGroup) {
-        final Requirement res = requirementBuilder.create(type);
-
-        if (res != null) {
-            res.setAutorank(plugin);
-
-            final String errorMessage = "Could not set up prerequisite '" + originalName + "' of " + originalGroup
-                    + "! It's invalid: check the wiki for documentation.";
-
-            try {
-                if (!res.setOptions(options)) {
-                    plugin.getLogger().severe(errorMessage);
-                    plugin.getWarningManager().registerWarning(errorMessage, 10);
-                }
-            } catch (NoClassDefFoundError e) {
-                plugin.getLogger().severe("You are using prerequisite " + originalName + " in " + originalGroup
-                        + " but you don't have Statz installed! Make sure to install Statz for this to work.");
-                plugin.getWarningManager().registerWarning(
-                        "You are using prerequisite " + originalName + " in " + originalGroup
-                                + " but you don't have Statz installed! Make sure to install Statz for this to work.",
-                        10);
-            } catch (final Exception e) {
-                plugin.getLogger().severe(errorMessage);
-                plugin.getWarningManager().registerWarning(errorMessage, 10);
-            }
-
-            res.setOptional(optional);
-            res.setAutoComplete(true); // Prerequisite will always auto complete
-            res.setId(reqId); // Set requirement ID
-            res.setResults(new ArrayList<Result>()); // Empty results
-        }
-        return res;
-    }
-
-
-
     public RequirementBuilder getRequirementBuilder() {
         return requirementBuilder;
     }
@@ -114,7 +77,7 @@ public class PathBuilder {
 
                 // Find all options of this requirement
                 for (final String[] options : optionsList) {
-                    final Requirement requirement = RequirementBuilder.createRequirement(pathName, reqName, options);
+                    final Requirement requirement = RequirementBuilder.createRequirement(pathName, reqName, options, false);
 
                     if (requirement == null) {
                         continue;
@@ -129,59 +92,29 @@ public class PathBuilder {
             }
 
             // Lastly, initialize pre-requisites
-            for (String prereqName : plugin.getPathsConfig().getPrerequisites(pathName)) {
-
-                // Implement optional option logic
-                final boolean optional = plugin.getPathsConfig().isOptionalPrerequisite(pathName, prereqName);
-
-                // Get requirement ID
-                final int prereqId = plugin.getPathsConfig().getPrereqId(pathName, prereqName);
-
-                // Do sanity check
-                if (prereqId < 0) {
-                    try {
-                        throw new Exception("PREREQ ID COULDN'T BE FOUND! REPORT TO AUTHOR!" + " PATH: " + path
-                                + ", PREREQUISITES: " + prereqName);
-                    } catch (final Exception e) {
-                        plugin.getLogger().severe(e.getCause().getMessage());
-                        return null;
-                    }
-                }
-
-                // Get correct name of requirement
-                final String correctName = AutorankTools.getCorrectReqName(prereqName);
-
-                if (correctName == null) {
-                    plugin.getWarningManager()
-                            .registerWarning(String.format(
-                                    "You are using a '%s' prerequisite in path '%s', but that prerequisite doesn't exist!", prereqName,
-                                    pathName), 10);
-                    return null;
-                }
+            for (String preReqName : plugin.getPathsConfig().getRequirements(pathName, true)) {
 
                 // Create a holder for the path
-                final RequirementsHolder prereqHolder = new RequirementsHolder(plugin);
+                final RequirementsHolder reqHolder = new RequirementsHolder(plugin);
 
-                // Make sure to tell it that this is storing prerequisites
-                prereqHolder.setPrerequisite(true);
+                // Option strings separated
+                final List<String[]> optionsList = plugin.getPathsConfig().getRequirementOptions(pathName, preReqName, true);
 
-                // Option strings seperated
-                final List<String[]> optionsList = plugin.getPathsConfig().getPrerequisiteOptions(pathName, prereqName);
-
-                // Find all options of this requirement
+                // Find all options of this prerequisites
                 for (final String[] options : optionsList) {
-                    final Requirement newPrequisite = createPrerequisite(correctName, options, optional, prereqId,
-                            prereqName, pathName);
+                    final Requirement requirement = RequirementBuilder.createRequirement(pathName, preReqName, options, true);
 
-                    if (newPrequisite == null)
+                    if (requirement == null) {
                         continue;
+                    }
 
-                    // Add requirement to holder
-                    prereqHolder.addRequirement(newPrequisite);
+                    // Add prerequisite to holder
+                    reqHolder.addRequirement(requirement);
                 }
 
                 // Now add holder to prerequisites list of path
-                path.addPrerequisite(prereqHolder);
+                path.addRequirement(reqHolder);
+
             }
 
             // Result for this path (upon choosing)
