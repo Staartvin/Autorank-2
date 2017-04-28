@@ -604,18 +604,34 @@ public class AutorankTools {
         String minutes = matcher.group(6);
 
         // No day or hours or minute was given, so default to minutes.
-        if (days == null && hours == null & minutes == null) {
+        if (days == null && hours == null && minutes == null) {
             minutes = string;
         }
 
-        if (stringToDouble(minutes) < 0) {
-            // Something is wrong, return -1
+        int intDays = (int) stringToDouble(days);
+        int intHours = (int) stringToDouble(hours);
+        int intMinutes = (int) stringToDouble(minutes);
+
+        if (intDays + intHours + intMinutes < 0) {
+            // The total value is below 0, so there is clearly something wrong.
             return -1;
         }
 
-        res += stringToDouble(minutes);
-        res += stringToDouble(hours) * 60;
-        res += stringToDouble(days) * 60 * 24;
+        if (intDays < 0) {
+            intDays = 0;
+        }
+
+        if (intHours < 0) {
+            intHours = 0;
+        }
+
+        if (intMinutes < 0) {
+            intMinutes = 0;
+        }
+
+        res += intMinutes;
+        res += intHours * 60;
+        res += intDays * 60 * 24;
 
         // Res time is in minutes
 

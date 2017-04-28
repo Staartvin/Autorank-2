@@ -29,8 +29,9 @@ public class RequirementBuilder {
     // Whether this requirement is a prerequisite.
     private boolean isPreRequisite = false;
 
-    final String errorMessage = "Could not set up requirement '" + requirementType + "' of " + pathName
-            + "! It's invalid: check the wiki for documentation.";
+    final String invalidRequirementMessage = "Could not set up requirement '%s' of %s! It's invalid: check the wiki for documentation.";
+
+    final String dependencyNotFoundMessage = "Requirement '%s' relies on a third-party plugin being installed, but that plugin is not installed!";
 
     /**
      * Create an empty Requirement.
@@ -45,12 +46,14 @@ public class RequirementBuilder {
         this.requirementType = requirementType;
         this.isPreRequisite = isPreRequisite;
 
+        String originalReqType = requirementType;
+
         requirementType = AutorankTools.getCorrectReqName(requirementType);
 
         if (requirementType == null) {
             Autorank.getInstance().getWarningManager()
                     .registerWarning(String.format(
-                            "You are using a '%s' requirement in path '%s', but that requirement doesn't exist!", requirementType,
+                            "You are using a '%s' requirement in path '%s', but that requirement doesn't exist!", originalReqType,
                             pathName), 10);
             return this;
         }
@@ -64,7 +67,7 @@ public class RequirementBuilder {
             }
         else {
             Bukkit.getServer().getConsoleSender().sendMessage(
-                    "[Autorank] " + ChatColor.RED + "Requirement '" + requirementType + "' is not a valid requirement type!");
+                    "[Autorank] " + ChatColor.RED + "Requirement '" + originalReqType + "' is not a valid requirement type!");
             return null;
         }
         return this;
@@ -88,11 +91,18 @@ public class RequirementBuilder {
             return this;
         }
 
-        // Initiliaze the result with options.
-        if (!requirement.setOptions(options)) {
-            Autorank.getInstance().getLogger().severe(errorMessage);
-            Autorank.getInstance().getWarningManager().registerWarning(errorMessage, 10);
+        try {
+            // Initiliaze the result with options.
+            if (!requirement.setOptions(options)) {
+                Autorank.getInstance().getLogger().severe(String.format(invalidRequirementMessage, requirementType, pathName));
+                Autorank.getInstance().getWarningManager().registerWarning(String.format(invalidRequirementMessage, requirementType, pathName), 10);
+            }
+        } catch (NoClassDefFoundError e) {
+            Autorank.getInstance().getLogger().severe(String.format(dependencyNotFoundMessage, requirementType));
+            Autorank.getInstance().getWarningManager().registerWarning(String.format(dependencyNotFoundMessage, requirementType), 10);
+            return this;
         }
+
 
         // Set whether requirement is optional or not.
         requirement.setOptional(Autorank.getInstance().getPathsConfig().isOptionalRequirement(pathName, requirementType, isPreRequisite));

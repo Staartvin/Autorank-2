@@ -35,13 +35,16 @@ public class ResultBuilder {
     public ResultBuilder createEmpty(String pathName, String resultType) {
 
         this.pathName = pathName;
+
+        String originalResType = resultType;
+
         resultType = AutorankTools.getCorrectResName(resultType);
 
         this.resultName = resultType;
 
         if (resultType == null) {
             Autorank.getInstance().getWarningManager().registerWarning(
-                    String.format("You are using a '%s' result in path '%s', but that result doesn't exist!", resultType,
+                    String.format("You are using a '%s' result in path '%s', but that result doesn't exist!", originalResType,
                             pathName),
                     10);
             return this;
@@ -56,7 +59,7 @@ public class ResultBuilder {
             }
         } else {
             Bukkit.getServer().getConsoleSender()
-                    .sendMessage("[Autorank] " + ChatColor.RED + "Result '" + resultType + "' is not a valid result type!");
+                    .sendMessage("[Autorank] " + ChatColor.RED + "Result '" + originalResType + "' is not a valid result type!");
         }
         return this;
     }

@@ -1,5 +1,6 @@
 package me.armar.plugins.autorank.pathbuilder.requirement;
 
+import com.sun.org.apache.xpath.internal.SourceTree;
 import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.language.Lang;
@@ -42,6 +43,7 @@ public class TimeRequirement extends Requirement {
 
     @Override
     public boolean setOptions(final String[] options) {
+
         if (options.length > 0) {
             timeNeeded = AutorankTools.stringToTime(options[0], Time.MINUTES);
         }

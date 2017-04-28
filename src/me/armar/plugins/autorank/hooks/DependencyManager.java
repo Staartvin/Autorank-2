@@ -80,7 +80,7 @@ public class DependencyManager {
      * @return a Statz dependency or null if Statz is not installed or not
      *         properly enabled.
      */
-    public me.staartvin.statz.hooks.DependencyHandler getDependencyHandler(Dependency dep) {
+    public me.staartvin.statz.hooks.DependencyHandler getDependencyHandler(Dependency dep) throws NoClassDefFoundError {
         StatzAPIHandler statz = (StatzAPIHandler) plugin.getDependencyManager().getDependency(AutorankDependency.STATZ);
 
         if (statz == null || !statz.isAvailable()) {
