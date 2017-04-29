@@ -2,6 +2,8 @@ package me.armar.plugins.autorank.permissions;
 
 import org.bukkit.entity.Player;
 
+import java.util.Collection;
+
 /*
  * PermissionsHandler takes care of the communications with the permissions
  * plugin.
@@ -31,7 +33,7 @@ public interface PermissionsHandler {
      * @return an array of all groups defined in the config(s) of the permission
      *         plugin.
      */
-    public String[] getGroups();
+    public Collection<String> getGroups();
 
     /**
      * Get the name of the permissions plugin.
@@ -47,7 +49,7 @@ public interface PermissionsHandler {
      *            Player to use
      * @return a list of permission groups names
      */
-    public String[] getPlayerGroups(Player player);
+    public Collection<String> getPlayerGroups(Player player);
 
     /**
      * Get the groups of the player in a world.
@@ -58,7 +60,7 @@ public interface PermissionsHandler {
      *            World to get the world from
      * @return an array containing all groups that the player is in.
      */
-    public String[] getWorldGroups(Player player, String world);
+    public Collection<String> getWorldGroups(Player player, String world);
 
     /**
      * Remove a group from a player and then add one to the player.

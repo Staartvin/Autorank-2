@@ -8,6 +8,11 @@ import me.armar.plugins.autorank.hooks.DependencyManager.AutorankDependency;
 import me.armar.plugins.autorank.hooks.vaultapi.VaultHandler;
 import me.armar.plugins.autorank.permissions.PermissionsHandler;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * @author Staartvin & DeathStampler (see replaceGroup())
  *         <p>
@@ -29,13 +34,10 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 
     /**
      * Add a player to group
-     * 
-     * @param player
-     *            Player to add
-     * @param world
-     *            On a specific world
-     * @param group
-     *            Group to add the player to
+     *
+     * @param player Player to add
+     * @param world  On a specific world
+     * @param group  Group to add the player to
      * @return true if done, false if failed
      */
     public boolean addGroup(final Player player, final String world, final String group) {
@@ -54,14 +56,14 @@ public class VaultPermissionsHandler implements PermissionsHandler {
         }
 
         // Let get the player groups before we change them.
-        final String[] groupsBeforeAdd = getPlayerGroups(player);
+        final Collection<String> groupsBeforeAdd = getPlayerGroups(player);
 
         // Output array for debug
         for (final String group : groupsBeforeAdd) {
             plugin.debugMessage("Group of " + player.getName() + " before removing: " + group);
         }
 
-        String[] groupsAfterAdd = null;
+        Collection<String> groupsAfterAdd = null;
 
         final boolean worked1 = removeGroup(player, world, groupFrom);
 
@@ -84,17 +86,23 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 
     /**
      * Get all known groups
-     * 
+     *
      * @return an array of strings containing all setup groups of the
-     *         permissions plugin.
+     * permissions plugin.
      */
     @Override
-    public String[] getGroups() {
+    public Collection<String> getGroups() {
+        List<String> groups = new ArrayList<>();
+
         if (VaultHandler.permission == null) {
-            return new String[10];
+            return Collections.unmodifiableCollection(groups);
         }
 
-        return VaultHandler.permission.getGroups();
+        for (String groupName : VaultHandler.permission.getGroups()) {
+            groups.add(groupName);
+        }
+
+        return Collections.unmodifiableCollection(groups);
     }
 
     /*
@@ -108,43 +116,49 @@ public class VaultPermissionsHandler implements PermissionsHandler {
     }
 
     @Override
-    public String[] getPlayerGroups(final Player player) {
-        if (VaultHandler.permission == null)
-            return new String[1];
+    public Collection<String> getPlayerGroups(final Player player) {
+        List<String> groups = new ArrayList<>();
 
-        String[] groups = null;
+        if (VaultHandler.permission == null) {
+            return Collections.unmodifiableCollection(groups);
+        }
 
         final Autorank plugin = (Autorank) Bukkit.getPluginManager().getPlugin("Autorank");
 
         // Let admin choose.
         if (plugin.getConfigHandler().onlyUsePrimaryGroupVault()) {
-            groups = new String[] { VaultHandler.permission.getPrimaryGroup(player) };
+            groups.add(VaultHandler.permission.getPrimaryGroup(player));
         } else {
-            groups = VaultHandler.permission.getPlayerGroups(player);
+            for (String groupName : VaultHandler.permission.getPlayerGroups(player)) {
+                groups.add(groupName);
+            }
         }
 
-        return groups;
+        return Collections.unmodifiableCollection(groups);
     }
 
     @SuppressWarnings("deprecation")
     @Override
-    public String[] getWorldGroups(final Player player, final String world) {
+    public Collection<String> getWorldGroups(final Player player, final String world) {
+        List<String> groups = new ArrayList<>();
+
         if (VaultHandler.permission == null) {
-            return new String[10];
+            return Collections.unmodifiableCollection(groups);
         }
 
-        return VaultHandler.permission.getPlayerGroups(world, player.getName());
+        for (String groupName : VaultHandler.permission.getPlayerGroups(world, player.getName())) {
+            groups.add(groupName);
+        }
+
+        return Collections.unmodifiableCollection(groups);
     }
 
     /**
      * Remove a player from a group
-     * 
-     * @param player
-     *            Player to remove
-     * @param world
-     *            On a specific world
-     * @param group
-     *            Group to remove the player from
+     *
+     * @param player Player to remove
+     * @param world  On a specific world
+     * @param group  Group to remove the player from
      * @return true if done, false if failed
      */
     public boolean removeGroup(final Player player, final String world, final String group) {
@@ -163,14 +177,14 @@ public class VaultPermissionsHandler implements PermissionsHandler {
         }
 
         // Let get the player groups before we change them.
-        final String[] groupsBeforeAdd = getPlayerGroups(player);
+        final Collection<String> groupsBeforeAdd = getPlayerGroups(player);
 
         // Output array for debug
         for (final String group : groupsBeforeAdd) {
             plugin.debugMessage("Group of " + player.getName() + " before adding: " + group);
         }
 
-        String[] groupsAfterAdd = null;
+        Collection<String> groupsAfterAdd = null;
 
         final boolean worked1 = addGroup(player, world, newGroup);
 
@@ -195,7 +209,7 @@ public class VaultPermissionsHandler implements PermissionsHandler {
             // Thanks to @DeathStampler for this code and info.
             if (VaultHandler.permission.getName().toLowerCase().contains("permissionsex")) {
                 // Normally the player should have one more group at this point.
-                if (groupsAfterAdd.length >= (groupsBeforeAdd.length + 1)) {
+                if (groupsAfterAdd.size() >= (groupsBeforeAdd.size() + 1)) {
                     // We have one more groups than before. Great. Let's remove
                     // oldGroup.
                     worked2 = removeGroup(player, world, oldGroup);
@@ -205,7 +219,7 @@ public class VaultPermissionsHandler implements PermissionsHandler {
                     // PermissionsEX player had more than one default group set.
                     // Those are now gone
                     // and we are left with just the newGroup.
-                } else if (groupsAfterAdd.length == 1) {
+                } else if (groupsAfterAdd.size() == 1) {
                     // We have just one group. Let's add any that are missing.
                     for (final String group : groupsBeforeAdd) {
                         // Let's not re-add the oldGroup

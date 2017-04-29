@@ -1,9 +1,9 @@
 package me.armar.plugins.autorank.permissions.handlers;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
+import com.github.cheesesoftware.PowerfulPermsAPI.Group;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
@@ -63,19 +63,17 @@ public class PowerfulPermsHandler implements PermissionsHandler {
      *         permissions plugin.
      */
     @Override
-    public String[] getGroups() {
+    public Collection<String> getGroups() {
         final PermissionManager permManager = powerfulPerms.getPermissionManager();
         final Map<Integer, com.github.cheesesoftware.PowerfulPermsAPI.Group> groups = permManager.getGroups();
-        final String[] newGroups = new String[groups.size()];
 
-        int count = 0;
+        List<String> groupNames = new ArrayList<>();
 
         for (final Entry<Integer, com.github.cheesesoftware.PowerfulPermsAPI.Group> entry : groups.entrySet()) {
-            newGroups[count] = entry.getValue().getName();
-            count++;
+            groupNames.add(entry.getValue().getName());
         }
 
-        return newGroups;
+        return Collections.unmodifiableCollection(groupNames);
     }
 
     /*
@@ -89,21 +87,22 @@ public class PowerfulPermsHandler implements PermissionsHandler {
     }
 
     @Override
-    public String[] getPlayerGroups(final Player player) {
+    public Collection<String> getPlayerGroups(final Player player) {
         final PermissionManager permManager = powerfulPerms.getPermissionManager();
         final List<com.github.cheesesoftware.PowerfulPermsAPI.Group> groups = permManager
                 .getPermissionPlayer(player.getUniqueId()).getGroups();
-        final String[] newGroups = new String[groups.size()];
 
-        for (int i = 0; i < groups.size(); i++) {
-            newGroups[i] = groups.get(i).getName();
+        List<String> groupNames = new ArrayList<>();
+
+        for (Group group : groups) {
+            groupNames.add(group.getName());
         }
 
-        return newGroups;
+        return Collections.unmodifiableCollection(groupNames);
     }
 
     @Override
-    public String[] getWorldGroups(final Player player, final String world) {
+    public Collection<String> getWorldGroups(final Player player, final String world) {
         return this.getPlayerGroups(player); // No known world conversion.
     }
 

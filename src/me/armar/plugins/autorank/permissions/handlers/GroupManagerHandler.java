@@ -1,9 +1,6 @@
 package me.armar.plugins.autorank.permissions.handlers;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 import org.anjocaido.groupmanager.GroupManager;
 import org.anjocaido.groupmanager.data.Group;
@@ -44,7 +41,7 @@ public class GroupManagerHandler implements PermissionsHandler {
     }
 
     @Override
-    public String[] getGroups() {
+    public Collection<String> getGroups() {
         final List<String> groups = new ArrayList<String>();
 
         for (final World world : plugin.getServer().getWorlds()) {
@@ -55,13 +52,8 @@ public class GroupManagerHandler implements PermissionsHandler {
                 groups.add(group.getName());
             }
         }
-        final String[] groupArray = new String[groups.size()];
 
-        // Repopulate the empty array.
-        for (int i = 0; i < groups.size(); i++) {
-            groupArray[i] = groups.get(i);
-        }
-        return groupArray;
+        return Collections.unmodifiableCollection(groups);
     }
 
     /*
@@ -75,15 +67,14 @@ public class GroupManagerHandler implements PermissionsHandler {
     }
 
     @Override
-    public String[] getPlayerGroups(final Player player) {
+    public Collection<String> getPlayerGroups(final Player player) {
         final AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldPermissions(player);
         if (handler == null) {
             return null;
         }
         final List<String> groups = Arrays.asList(handler.getPrimaryGroup(player.getName()));
-        final String[] array = (String[]) groups.toArray();
 
-        return array;
+        return Collections.unmodifiableCollection(groups);
     }
 
     public String getPrefix(final Player player) {
@@ -103,8 +94,14 @@ public class GroupManagerHandler implements PermissionsHandler {
     }
 
     @Override
-    public String[] getWorldGroups(final Player player, final String world) {
-        return groupManager.getWorldsHolder().getWorldPermissions(world).getGroups(player.getName());
+    public Collection<String> getWorldGroups(final Player player, final String world) {
+        List<String> groups = new ArrayList<>();
+
+        for (String groupName : groupManager.getWorldsHolder().getWorldPermissions(world).getGroups(player.getName())) {
+            groups.add(groupName);
+        }
+
+        return Collections.unmodifiableCollection(groups);
     }
 
     public boolean hasPermission(final Player player, final String node) {

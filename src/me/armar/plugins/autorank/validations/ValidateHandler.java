@@ -1,6 +1,7 @@
 package me.armar.plugins.autorank.validations;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import me.armar.plugins.autorank.Autorank;
@@ -31,7 +32,7 @@ public class ValidateHandler {
         List<Path> paths = plugin.getPathManager().getPaths();
 
         List<String> permGroups = new ArrayList<>();
-        String[] vaultGroups = plugin.getPermPlugHandler().getPermissionPlugin().getGroups();
+        Collection<String> vaultGroups = plugin.getPermPlugHandler().getPermissionPlugin().getGroups();
 
         for (Path path : paths) {
             List<RequirementsHolder> holders = new ArrayList<>();

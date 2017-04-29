@@ -1,5 +1,8 @@
 package me.armar.plugins.autorank.permissions.handlers;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.bukkit.entity.Player;
@@ -59,15 +62,15 @@ public class PermissionsBukkitHandler implements PermissionsHandler {
      *         permissions plugin.
      */
     @Override
-    public String[] getGroups() {
+    public Collection<String> getGroups() {
         final List<Group> groups = permissionsBukkit.getAllGroups();
-        final String[] newGroups = new String[groups.size()];
+        List<String> groupNames = new ArrayList<>();
 
-        for (int i = 0; i < groups.size(); i++) {
-            newGroups[i] = groups.get(i).getName();
+        for (Group group : groups) {
+            groupNames.add(group.getName());
         }
 
-        return newGroups;
+        return Collections.unmodifiableCollection(groupNames);
     }
 
     /*
@@ -81,29 +84,29 @@ public class PermissionsBukkitHandler implements PermissionsHandler {
     }
 
     @Override
-    public String[] getPlayerGroups(final Player player) {
+    public Collection<String> getPlayerGroups(final Player player) {
         @SuppressWarnings("deprecation")
         final List<Group> groups = permissionsBukkit.getGroups(player.getName());
-        final String[] newGroups = new String[groups.size()];
+        List<String> groupNames = new ArrayList<>();
 
-        for (int i = 0; i < groups.size(); i++) {
-            newGroups[i] = groups.get(i).getName();
+        for (Group group : groups) {
+            groupNames.add(group.getName());
         }
 
-        return newGroups;
+        return Collections.unmodifiableCollection(groupNames);
     }
 
     @Override
-    public String[] getWorldGroups(final Player player, final String world) {
+    public Collection<String> getWorldGroups(final Player player, final String world) {
         @SuppressWarnings("deprecation")
         final List<Group> groups = permissionsBukkit.getGroups(player.getName());
-        final String[] arrayGroups = new String[groups.size()];
+        List<String> groupNames = new ArrayList<>();
 
-        for (int i = 0; i < groups.size(); i++) {
-            arrayGroups[i] = groups.get(i).getName();
+        for (Group group : groups) {
+            groupNames.add(group.getName());
         }
 
-        return arrayGroups;
+        return Collections.unmodifiableCollection(groupNames);
     }
 
     /**

@@ -4,6 +4,8 @@ import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.language.Lang;
 
+import java.util.Collection;
+
 /**
  * This requirement checks whether a player is in a group
  * 
@@ -22,7 +24,7 @@ public class GroupRequirement extends Requirement {
     @Override
     public String getProgress(final Player player) {
 
-        String[] groups = this.getAutorank().getPermPlugHandler().getPermissionPlugin().getPlayerGroups(player);
+        Collection<String> groups = this.getAutorank().getPermPlugHandler().getPermissionPlugin().getPlayerGroups(player);
 
         for (String groupString : groups) {
             if (groupString.equalsIgnoreCase(group)) {
