@@ -14,13 +14,13 @@ import java.util.concurrent.Callable;
  * @author Staartvin
  * 
  */
-public class GrabDatabaseTimeTask implements Callable<Integer> {
+public class GrabPlayerTimeTask implements Callable<Integer> {
 
     private final SQLDataStorage mysql;
     private final String table;
     private final UUID uuid;
 
-    public GrabDatabaseTimeTask(final SQLDataStorage mysql, final UUID uuid, final String table) {
+    public GrabPlayerTimeTask(final SQLDataStorage mysql, final UUID uuid, final String table) {
         this.mysql = mysql;
         this.uuid = uuid;
         this.table = table;

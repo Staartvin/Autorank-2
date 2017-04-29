@@ -249,7 +249,7 @@ public class MySQLManager {
         // Retrieve database time
 
         // Initialise new callable class
-        final Callable<Integer> callable = new GrabDatabaseTimeTask(mysql, uuid, table);
+        final Callable<Integer> callable = new GrabPlayerTimeTask(mysql, uuid, table);
 
         // Sumbit callable
         final Future<Integer> futureValue = executor.submit(callable);
