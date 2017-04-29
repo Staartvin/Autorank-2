@@ -519,7 +519,7 @@ public class Autorank extends JavaPlugin {
      *      registerRequirement()}
      */
     public void registerRequirement(final String name, final Class<? extends Requirement> requirement) {
-        this.getPathManager().getBuilder().getRequirementBuilder().registerRequirement(name, requirement);
+        RequirementBuilder.registerRequirement(name, requirement);
     }
 
     /**
@@ -527,7 +527,7 @@ public class Autorank extends JavaPlugin {
      *      registerResult()}
      */
     public void registerResult(final String name, final Class<? extends Result> result) {
-        this.getPathManager().getBuilder().getResultBuilder().registerResult(name, result);
+        ResultBuilder.registerResult(name, result);
     }
 
     /**

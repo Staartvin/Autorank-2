@@ -22,21 +22,8 @@ public class PathBuilder {
 
     private final Autorank plugin;
 
-    private RequirementBuilder requirementBuilder;
-    private ResultBuilder resultBuilder;
-
     public PathBuilder(final Autorank plugin) {
         this.plugin = plugin;
-        setResultBuilder(new ResultBuilder());
-        setRequirementBuilder(new RequirementBuilder());
-    }
-
-    public RequirementBuilder getRequirementBuilder() {
-        return requirementBuilder;
-    }
-
-    public ResultBuilder getResultBuilder() {
-        return resultBuilder;
     }
 
     /**
@@ -45,11 +32,9 @@ public class PathBuilder {
      * @return a list of paths or an empty list.
      */
     public List<Path> initialisePaths() {
-        List<String> pathNames = plugin.getPathsConfig().getPaths();
+        List<Path> paths = new ArrayList<>();
 
-        List<Path> paths = new ArrayList<Path>();
-
-        for (String pathName : pathNames) {
+        for (String pathName : plugin.getPathsConfig().getPaths()) {
             // Add a path object to this pathName
             Path path = new Path(plugin);
 
@@ -129,7 +114,7 @@ public class PathBuilder {
 
             // Create a new result List that will get all result when this
             // path is chosen
-            final List<Result> realResults = new ArrayList<Result>();
+            final List<Result> realResults = new ArrayList<>();
 
             // Get results of requirement
             for (final String resultType : results) {
@@ -159,13 +144,4 @@ public class PathBuilder {
 
         return paths;
     }
-
-    public void setRequirementBuilder(final RequirementBuilder requirementBuilder) {
-        this.requirementBuilder = requirementBuilder;
-    }
-
-    public void setResultBuilder(final ResultBuilder resultBuilder) {
-        this.resultBuilder = resultBuilder;
-    }
-
 }
