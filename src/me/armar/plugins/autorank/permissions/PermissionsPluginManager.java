@@ -20,11 +20,10 @@ import me.armar.plugins.autorank.permissions.handlers.VaultPermissionsHandler;
  * PermissionsPluginManager manages what permission handler should be given. It
  * just does basic checks of availability and calculates what permissions plugin
  * suits best.
- * 
+ * <p>
  * It can choose from GroupManager, PermissionsBukkit, PowerfulPerms and Vault.
- * 
+ *
  * @author Staartvin
- * 
  */
 public class PermissionsPluginManager {
 
@@ -35,28 +34,9 @@ public class PermissionsPluginManager {
         this.plugin = plugin;
     }
 
-    private boolean isGroupManagerAvailable() {
-        final Plugin x = Bukkit.getServer().getPluginManager().getPlugin("GroupManager");
-        if (x != null) {
-            return true;
-        }
-        return false;
-    }
-
-    private boolean isPermissionsBukkitAvailable() {
-        final Plugin x = Bukkit.getServer().getPluginManager().getPlugin("PermissionsBukkit");
-        if (x != null) {
-            return true;
-        }
-        return false;
-    }
-
-    private boolean isPowerfulPermsAvailable() {
-        final Plugin x = Bukkit.getServer().getPluginManager().getPlugin("PowerfulPerms");
-        if (x != null) {
-            return true;
-        }
-        return false;
+    private boolean isPluginAvailable(String pluginName) {
+        final Plugin x = Bukkit.getServer().getPluginManager().getPlugin(pluginName);
+        return x != null;
     }
 
     public PermissionsHandler getPermissionPlugin() {
@@ -64,13 +44,13 @@ public class PermissionsPluginManager {
     }
 
     public void searchPermPlugin() {
-        if (isGroupManagerAvailable()) {
+        if (isPluginAvailable("GroupManager")) {
             // use Groupmanager
             permissionPlugin = new GroupManagerHandler(plugin);
-        } else if (isPermissionsBukkitAvailable()) {
+        } else if (isPluginAvailable("PermissionsBukkit")) {
             // Use PermissionsBukkit
             permissionPlugin = new PermissionsBukkitHandler(plugin);
-        } else if (isPowerfulPermsAvailable()) {
+        } else if (isPluginAvailable("PowerfulPerms")) {
             // Use PermissionsBukkit
             permissionPlugin = new PowerfulPermsHandler(plugin);
         } else {
