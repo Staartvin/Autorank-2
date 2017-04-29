@@ -32,12 +32,18 @@ import me.armar.plugins.autorank.util.AutorankTools;
  * over the entire server.
  * <p>
  * Date created: 21:03:23 15 mrt. 2014
- * 
+ *
  * @author Staartvin
- * 
  */
 public class LeaderboardHandler {
 
+    /**
+     * Sort a map by its values.
+     * @param map Map to sort.
+     * @param <K> KeyType
+     * @param <V> ValueType
+     * @return a sorted map.
+     */
     public static <K, V extends Comparable<? super V>> Map<K, V> sortByValue(Map<K, V> map) {
         List<Map.Entry<K, V>> list = new LinkedList<>(map.entrySet());
         Collections.sort(list, new Comparator<Map.Entry<K, V>>() {
@@ -73,9 +79,8 @@ public class LeaderboardHandler {
 
     /**
      * Broadcast a leaderboard to all online players.
-     * 
-     * @param type
-     *            Type of leaderboard
+     *
+     * @param type Type of leaderboard
      */
     public void broadcastLeaderboard(final TimeType type) {
         if (shouldUpdateLeaderboard(type)) {
@@ -104,12 +109,11 @@ public class LeaderboardHandler {
      * Get a hashmap, the key is the UUID of a player and the value is time that
      * player has played. <br>
      * This map is sorted on player time.
-     * 
-     * @param type
-     *            TimeType to get the sort for.
+     *
+     * @param type TimeType to get the sort for.
      * @return a sorted map.
      */
-    private Map<UUID, Integer> getSortedPlaytimesByUUID(final TimeType type) {
+    private Map<UUID, Integer> getSortedTimesByUUID(final TimeType type) {
 
         final List<UUID> uuids = plugin.getFlatFileManager().getUUIDKeys(type);
 
@@ -177,7 +181,7 @@ public class LeaderboardHandler {
         return sortedMap;
     }
 
-    private Map<String, Integer> getSortedPlaytimesByNames(final TimeType type) {
+    private Map<String, Integer> getSortedTimesByNames(final TimeType type) {
 
         final List<String> playerNames = plugin.getUUIDStorage().getStoredPlayerNames();
 
@@ -246,11 +250,9 @@ public class LeaderboardHandler {
 
     /**
      * Send the leaderboard to a {@linkplain CommandSender}.
-     * 
-     * @param sender
-     *            Sender to send it to.
-     * @param type
-     *            Type of leaderboard to send.
+     *
+     * @param sender Sender to send it to.
+     * @param type   Type of leaderboard to send.
      */
     public void sendLeaderboard(final CommandSender sender, final TimeType type) {
         if (shouldUpdateLeaderboard(type)) {
@@ -273,11 +275,9 @@ public class LeaderboardHandler {
 
     /**
      * Send the given message to a {@linkplain CommandSender}.
-     * 
-     * @param sender
-     *            Sender to send message to.
-     * @param type
-     *            Type of leaderboard to send
+     *
+     * @param sender Sender to send message to.
+     * @param type   Type of leaderboard to send
      */
     public void sendMessages(final CommandSender sender, final TimeType type) {
         for (final String msg : plugin.getInternalPropertiesConfig().getCachedLeaderboard(type)) {
@@ -287,9 +287,8 @@ public class LeaderboardHandler {
 
     /**
      * Check whether we should update a leaderboard.
-     * 
-     * @param type
-     *            Type of leaderboard check
+     *
+     * @param type Type of leaderboard check
      * @return true if we should update the leaderboard
      */
     private boolean shouldUpdateLeaderboard(TimeType type) {
@@ -323,9 +322,8 @@ public class LeaderboardHandler {
 
     /**
      * Forcefully update a leaderboard (ignoring cached versions).
-     * 
-     * @param type
-     *            Type of leaderboard to update.
+     *
+     * @param type Type of leaderboard to update.
      */
     public void updateLeaderboard(final TimeType type) {
         plugin.debugMessage(ChatColor.BLUE + "Updating leaderboard '" + type.toString() + "'!");
@@ -339,7 +337,7 @@ public class LeaderboardHandler {
         // If we are using Autorank as timekeeper, we can ask all UUIDs in the uuids file and sort the playtime
         // After we sorted the playtime, we collect the playernames of the top x (leaderboard length variable).
         if (plugin.getSettingsConfig().useTimeOf().equals(AutorankDependency.AUTORANK)) {
-            final Map<UUID, Integer> sortedPlaytimes = getSortedPlaytimesByUUID(type);
+            final Map<UUID, Integer> sortedPlaytimes = getSortedTimesByUUID(type);
 
             Iterator<Entry<UUID, Integer>> itr = sortedPlaytimes.entrySet().iterator();
 
@@ -373,8 +371,8 @@ public class LeaderboardHandler {
             // Instead of retrieving all UUIDs and THEN convert them to playernames (which is massively slow),
             // We ask all playernames from the uuid folder and we never have to convert to UUIDs.
             // Performance was tested and it went from 30 minutes to 1 second for a dataset of 60.000 players.
-            
-            final Map<String, Integer> sortedPlaytimes = getSortedPlaytimesByNames(type);
+
+            final Map<String, Integer> sortedPlaytimes = getSortedTimesByNames(type);
 
             Iterator<Entry<String, Integer>> itr = sortedPlaytimes.entrySet().iterator();
 

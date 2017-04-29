@@ -124,14 +124,16 @@ public class PlayerChecker {
 
     public List<RequirementsHolder> getFailedRequirementsHolders(final Player player) {
 
+        List<RequirementsHolder> holders = new ArrayList<>();
+
         // Get chosen path
         Path chosenPath = plugin.getPathManager().getCurrentPath(player.getUniqueId());
 
         if (chosenPath != null) {
-            return chosenPath.getFailedRequirements(player);
-        } else {
-            return new ArrayList<RequirementsHolder>();
+            holders.addAll(chosenPath.getFailedRequirements(player));
         }
+
+        return holders;
     }
 
     public List<Integer> getMetRequirementsHolders(final List<RequirementsHolder> holders, final Player player) {

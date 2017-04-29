@@ -32,13 +32,6 @@ import me.armar.plugins.autorank.util.AutorankTools;
  * failures.
  * 
  * <p>
- * The warning message is stored as a string including the priority level. The
- * {@link #warnings} list stores the strings in no particular order. The full
- * string can be: "<i>AdvancedConfig.yml contains incorrect groups!>10</i>". The
- * '>' identifier splits the real warning message and the priority. If this
- * identifier is not found, the priority will be set to 1.
- * 
- * <p>
  * <b>NOTE:</b> <br>
  * Warnings cannot be unregistered. The only way to remove the warnings is to
  * fix them so they don't ever get registered.

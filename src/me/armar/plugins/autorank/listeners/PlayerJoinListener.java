@@ -29,23 +29,16 @@ public class PlayerJoinListener implements Listener {
     public void onPlayerJoin(final PlayerJoinEvent event) {
         final Player player = event.getPlayer();
 
-        // Add cached player
-
         // Refresh uuid of the player if it is outdated
         if (plugin.getUUIDStorage().isOutdated(player.getName())) {
             plugin.getUUIDStorage().storeUUID(player.getName(), player.getUniqueId(), player.getName());
         }
-
-        // Cannot check player at this moment. -> try at next automatic task
-        if (plugin.getPlayerChecker() == null) {
-            plugin.getLogger()
-                    .severe("Autorank lost its player checker, this is bad! Please report this to the developers!");
-            return;
-        }
         
-        // Do leaderboard exemption check
+        // Save whether this player is exempted from the leaderboard.
         plugin.getPlayerChecker().doLeaderboardExemptCheck(player);
 
+
+        // Try to automatically assign a path to a player.
         plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
             public void run() {
                 
@@ -57,7 +50,7 @@ public class PlayerJoinListener implements Listener {
             }
         });
 
-        // Player isn't allowed to see messages.
+        // Only display 'update available' message to users with correct permissions.
         if (player.hasPermission(AutorankPermission.NOTICE_ON_UPDATE_AVAILABLE)) {
 
             // Run check async so server doesn't lag.
@@ -86,11 +79,10 @@ public class PlayerJoinListener implements Listener {
 
         }
 
-        // If player has notice on warning permission
+        // Only show warnings to users with correct permission.
         if (player.hasPermission(AutorankPermission.NOTICE_ON_WARNINGS)) {
 
             if (plugin.getWarningManager().getHighestWarning() != null) {
-
                 // Schedule it later so it will appear at the bottom
                 plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
 
