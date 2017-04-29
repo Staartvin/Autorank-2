@@ -15,9 +15,8 @@ import me.armar.plugins.autorank.pathbuilder.result.Result;
  * results.
  * <p>
  * Date created: 14:23:30 5 aug. 2015
- * 
+ *
  * @author Staartvin
- * 
  */
 public class Path {
 
@@ -26,29 +25,69 @@ public class Path {
     private String displayName = "", internalName = "";
 
     private final Autorank plugin;
+
     // A requirements holder is a holder for one or more requirements that can
     // be met simultaneously.
     private List<RequirementsHolder> prerequisites = new ArrayList<>();
 
     private List<RequirementsHolder> requirements = new ArrayList<RequirementsHolder>();
 
+    // Results that are performed when all requirements are met.
     private List<Result> results = new ArrayList<Result>();
-    
+
+    // Results that are performed when the path is assigned to the player.
     private List<Result> resultsUponChoosing = new ArrayList<Result>();
 
     public Path(final Autorank plugin) {
         this.plugin = plugin;
     }
 
-    public void addPrerequisite(final RequirementsHolder prerequisite) {
+    /**
+     * Add a prerequisite to the path.
+     *
+     * @param prerequisite Prerequisite to add.
+     * @throws IllegalArgumentException if !prerequisite.isPrerequisite()
+     * @throws NullPointerException     if prerequisite == null
+     */
+    public void addPrerequisite(final RequirementsHolder prerequisite) throws IllegalArgumentException, NullPointerException {
+
+        if (prerequisite == null) {
+            throw new NullPointerException("RequirementsHolder is null");
+        }
+
+        if (!prerequisite.isPrerequisite()) {
+            throw new IllegalArgumentException("RequirementsHolder is not a prerequisite.");
+        }
+
         this.prerequisites.add(prerequisite);
     }
 
-    public void addRequirement(final RequirementsHolder requirement) {
+    /**
+     * Add a requirement to the path.
+     *
+     * @param requirement Requirement to add.
+     * @throws NullPointerException if requirement == null
+     */
+    public void addRequirement(final RequirementsHolder requirement) throws NullPointerException {
+        if (requirement == null) {
+            throw new NullPointerException("RequirementsHolder is null");
+        }
+
         requirements.add(requirement);
     }
 
-    public void addResult(Result result) {
+    /**
+     * Add a result to the path.
+     *
+     * @param result Result to add.
+     * @throws NullPointerException if result == null
+     */
+    public void addResult(Result result) throws NullPointerException {
+
+        if (result == null) {
+            throw new NullPointerException("Result is null");
+        }
+
         this.results.add(result);
     }
 
@@ -75,7 +114,7 @@ public class Path {
 
             // Add progress of completed requirements
             plugin.getPlayerDataConfig().addCompletedPath(uuid, currentPath.getInternalName());
-            
+
             // Remove path from started paths if it's completed.
             plugin.getPlayerDataConfig().removeStartedPath(uuid, currentPath.getInternalName());
 
@@ -92,7 +131,7 @@ public class Path {
 
             // Reset progress
             plugin.getPlayerDataConfig().setCompletedRequirements(uuid, null);
-            
+
             // Try to assign a new path to a player
             plugin.getPathManager().autoAssignPath(player);
 
@@ -103,18 +142,47 @@ public class Path {
         return result;
     }
 
+    /**
+     * Get the display name of the path. If no display name was specified, this will return the name of the path in the
+     * paths.yml file.
+     *
+     * @return display name
+     */
     public String getDisplayName() {
         return displayName;
     }
 
-    public List<RequirementsHolder> getFailedRequirementsHolders(final Player player) {
+    /**
+     * Get the requirements that a player did not yet complete.
+     *
+     * @param player Player to check for.
+     * @return a list of RequirementHolders that the player has failed.
+     */
+    public List<RequirementsHolder> getFailedRequirements(final Player player) {
         final List<RequirementsHolder> holders = new ArrayList<RequirementsHolder>();
 
         for (final RequirementsHolder holder : this.getRequirements()) {
-            if (holder != null)
-                if (holder.meetsRequirement(player, player.getUniqueId(), false)) {
-                    holders.add(holder);
-                }
+            if (!holder.meetsRequirement(player, false)) {
+                holders.add(holder);
+            }
+        }
+
+        return holders;
+    }
+
+    /**
+     * Get the requirements that a player has already completed.
+     *
+     * @param player Player to check for.
+     * @return a list of RequirementHolders that the player passed.
+     */
+    public List<RequirementsHolder> getMetRequirements(final Player player) {
+        List<RequirementsHolder> holders = new ArrayList<>();
+
+        for (RequirementsHolder holder : this.getRequirements()) {
+            if (holder.meetsRequirement(player, false)) {
+                holders.add(holder);
+            }
         }
 
         return holders;
@@ -135,7 +203,7 @@ public class Path {
     public boolean meetRequirements(final Player player) {
 
         UUID uuid = player.getUniqueId();
-        
+
         // Get chosen path of player
         Path currentPath = plugin.getPathManager().getCurrentPath(uuid);
 
@@ -155,7 +223,7 @@ public class Path {
             // We don't do partial completion so we only need to check if a
             // player passes all requirements holders.
             if (!plugin.getConfigHandler().usePartialCompletion()) {
-                if (!holder.meetsRequirement(player, uuid, false)) {
+                if (!holder.meetsRequirement(player, false)) {
                     return false;
                 } else {
                     continue;
@@ -164,7 +232,7 @@ public class Path {
 
             // Holder does not meet requirements, so not all requirements are
             // met!
-            if (!holder.meetsRequirement(player, uuid, false)) {
+            if (!holder.meetsRequirement(player, false)) {
                 return false;
             }
 
@@ -179,7 +247,7 @@ public class Path {
         List<RequirementsHolder> preRequisites = this.getPrerequisites();
 
         for (RequirementsHolder preRequisite : preRequisites) {
-            if (!preRequisite.meetsRequirement(player, player.getUniqueId(), false)) {
+            if (!preRequisite.meetsRequirement(player, false)) {
                 // If one of the prerequisites does not hold, a player does not
                 // meet all the prerequisites.
                 return false;
@@ -188,21 +256,22 @@ public class Path {
 
         return true;
     }
-    
+
     /**
      * Perform the results upon choosing this path.
+     *
      * @param player Player to perform them for.
      * @return true if all results were performed succesfully, false otherwise.
      */
     public boolean performResultsUponChoosing(Player player) {
         boolean success = true;
-        
-        for (Result r: this.getResultsUponChoosing()) {
+
+        for (Result r : this.getResultsUponChoosing()) {
             if (!r.applyResult(player)) {
                 success = false;
             }
         }
-        
+
         return success;
     }
 

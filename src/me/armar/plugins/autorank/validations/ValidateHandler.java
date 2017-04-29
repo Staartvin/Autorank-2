@@ -57,7 +57,6 @@ public class ValidateHandler {
 
                         for (String[] option : options) {
                             if (option.length > 0) {
-                                System.out.println(requirementName + " - ADDED TO GROUPS: " + option[0]);
                                 permGroups.add(option[0]);
                             }
                         }

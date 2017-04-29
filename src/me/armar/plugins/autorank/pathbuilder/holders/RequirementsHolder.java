@@ -210,13 +210,19 @@ public class RequirementsHolder {
         return false;
     }
 
+    /**
+     * Check whether a player has completed any of the requirements in this RequirementsHolder.
+     * @param player Player to check.
+     * @param forceCommand whether this command is forced.
+     * @return true if the player meets any of the requirements.
+     */
     // Check if the player meets any of the requirements
     // Using OR logic.
     // If any of the requirements is true, you can return true since were using
     // OR logic.
-    public boolean meetsRequirement(final Player player, final UUID uuid, boolean forceCommand) {
+    public boolean meetsRequirement(final Player player, boolean forceCommand) {
 
-        boolean result = false;
+        UUID uuid = player.getUniqueId();
 
         for (final Requirement r : this.getRequirements()) {
 
@@ -227,40 +233,28 @@ public class RequirementsHolder {
                 return true;
             }
 
-            if (this.isPrerequisite) {
+            if (this.isPrerequisite()) {
                 // If this requirement doesn't auto complete and hasn't already
-                // been completed, return false;
-                if (!r.useAutoCompletion() && !plugin.getPlayerDataConfig().hasCompletedPrerequisite(reqID, uuid)) {
-                    return false;
+                // been completed, continue to next requirement.
+                if (!r.useAutoCompletion() && !r.isCompleted(uuid)) {
+                    continue;
                 }
             } else {
                 // If this requirement doesn't auto complete and hasn't already
-                // been completed, return false;
-                if (!r.useAutoCompletion() && !plugin.getPlayerDataConfig().hasCompletedRequirement(reqID, uuid)) {
+                // been completed, continue to next requirement.
+                if (!r.useAutoCompletion() && !r.isCompleted(uuid)) {
                     // If not forcing via /ar complete command, we return false.
                     if (!forceCommand) {
                         return false;
                     }
 
+                    continue;
                 }
             }
 
-            if (this.isPrerequisite) {
-                // Player has completed it already but this requirement is NOT
-                // derankable
-                // If it is derankable, we don't want this method to return true
-                // when it is already completed.
-                if (plugin.getPlayerDataConfig().hasCompletedPrerequisite(reqID, uuid)) {
-                    return true;
-                }
-            } else {
-                // Player has completed it already but this requirement is NOT
-                // derankable
-                // If it is derankable, we don't want this method to return true
-                // when it is already completed.
-                if (plugin.getPlayerDataConfig().hasCompletedRequirement(reqID, uuid)) {
-                    return true;
-                }
+            // Player has completed it already, so we return true.
+            if (r.isCompleted(uuid)) {
+                return true;
             }
 
             if (!r.meetsRequirement(player)) {
@@ -269,7 +263,6 @@ public class RequirementsHolder {
                 // Player meets requirement, thus perform results of
                 // requirement
                 // Perform results of a requirement as well
-                final List<Result> results = r.getResults();
 
                 // Player has not completed this requirement -> perform
                 // results
@@ -284,21 +277,12 @@ public class RequirementsHolder {
                     player.sendMessage(Lang.COMPLETED_REQUIREMENT.getConfigValue(r.getId() + 1, r.getDescription()));
                 }
 
-                boolean noErrors = true;
-                for (final Result realResult : results) {
-
-                    if (!realResult.applyResult(player)) {
-                        noErrors = false;
-                    }
-                }
-
-                result = noErrors;
-                break; // We performed results for a requirement, so we should
-                       // stop now.
+                this.runResults(player);
+                return true;
             }
         }
 
-        return result;
+        return false;
     }
 
     public void setRequirements(final List<Requirement> requirements) {

@@ -53,13 +53,8 @@ public class PathBuilder {
             // Add a path object to this pathName
             Path path = new Path(plugin);
 
-            System.out.println("-------------------");
-            System.out.println("INIT OF PATH: " + pathName);
-
             // First initialize results
             for (String resultName : plugin.getPathsConfig().getResults(pathName)) {
-                System.out.println("RESULT: " + resultName);
-
                 Result result = ResultBuilder.createResult(pathName, resultName, plugin.getPathsConfig().getResultOfPath(pathName, resultName));
 
                 if (result == null) {
@@ -72,7 +67,6 @@ public class PathBuilder {
 
             // Now initialize requirements
             for (final String reqName : plugin.getPathsConfig().getRequirements(pathName, false)) {
-                System.out.println("REQUIREMENT: " + reqName);
 
                 // Create a holder for the path
                 final RequirementsHolder reqHolder = new RequirementsHolder(plugin);
@@ -102,8 +96,6 @@ public class PathBuilder {
 
             // Lastly, initialize pre-requisites
             for (String preReqName : plugin.getPathsConfig().getRequirements(pathName, true)) {
-
-                System.out.println("PREREQUIREMENT: " + preReqName);
 
                 // Create a holder for the path
                 final RequirementsHolder reqHolder = new RequirementsHolder(plugin);
@@ -160,8 +152,6 @@ public class PathBuilder {
 
             // Set internal name
             path.setInternalName(pathName);
-
-            System.out.println("Add path " + pathName + " paths.list!");
 
             // Add path to list of paths
             paths.add(path);

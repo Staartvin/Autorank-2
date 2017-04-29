@@ -97,16 +97,19 @@ public abstract class Requirement {
     }
 
     /**
-     * Check if the requirement is completed already.
-     * 
-     * @param reqID
-     *            Requirement id.
+     * Check if this requirement is completed already.
+     *
      * @param uuid
      *            Player to check for
      * @return true if completed, false otherwise.
      */
-    public final boolean isCompleted(final int reqID, final UUID uuid) {
-        return getAutorank().getPlayerDataConfig().hasCompletedRequirement(reqID, uuid);
+    public final boolean isCompleted(final UUID uuid) {
+
+        if (this.isPreRequisite()) {
+            return getAutorank().getPlayerDataConfig().hasCompletedPrerequisite(this.getId(), uuid);
+        } else {
+            return getAutorank().getPlayerDataConfig().hasCompletedRequirement(this.getId(), uuid);
+        }
     }
 
     /**

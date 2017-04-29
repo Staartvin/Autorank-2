@@ -152,7 +152,7 @@ public class CheckCommand extends AutorankCommand {
             if (holder.useAutoCompletion()) {
                 // Do auto complete
 
-                if (holder.meetsRequirement(player, uuid, false)) {
+                if (holder.meetsRequirement(player, false)) {
                     // Player meets the requirement -> give him results
 
                     // Doesn't need to check whether this requirement was
@@ -195,7 +195,7 @@ public class CheckCommand extends AutorankCommand {
 
                     // Doesn't auto complete and doesn't meet requirement, then
                     // continue searching
-                    if (!holder.meetsRequirement(player, uuid, false)) {
+                    if (!holder.meetsRequirement(player, false)) {
 
                         // If requirement is optional, we do not check.
                         if (holder.isOptional()) {

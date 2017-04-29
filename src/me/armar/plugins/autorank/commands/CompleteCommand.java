@@ -88,7 +88,7 @@ public class CompleteCommand extends AutorankCommand {
                 return true;
             }
 
-            if (holder.meetsRequirement(player, uuid, true)) {
+            if (holder.meetsRequirement(player, true)) {
                 // Player meets requirement
                 player.sendMessage(
                         ChatColor.GREEN + Lang.SUCCESSFULLY_COMPLETED_REQUIREMENT.getConfigValue(completionID + ""));
