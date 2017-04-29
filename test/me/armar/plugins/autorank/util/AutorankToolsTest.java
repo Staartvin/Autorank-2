@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -14,27 +15,14 @@ import static org.junit.Assert.assertThat;
  */
 public class AutorankToolsTest {
 
-    private Map<String, Integer> timeToSeconds = buildTimeToExpectedSecondsMap();
+    private static int SECONDS_IN_MINUTE = 60;
+    private static int MINUTES_IN_HOUR = 60;
+    private static int HOURS_IN_DAY = 24;
 
-    @Test
-    public void shouldConvertTimeToSeconds() {
-        checkTimeEntries(Time.SECONDS, 1);
-    }
+    private static int SECONDS_IN_HOUR = SECONDS_IN_MINUTE * MINUTES_IN_HOUR;
+    private static int SECONDS_IN_DAY = SECONDS_IN_HOUR * 24;
 
-    @Test
-    public void shouldConvertTimeToMinutes() {
-        checkTimeEntries(Time.MINUTES, 60);
-    }
-
-    @Test
-    public void shouldConvertTimeToHours() {
-        checkTimeEntries(Time.HOURS, 3600);
-    }
-
-    @Test
-    public void shouldConvertTimeToDays() {
-        checkTimeEntries(Time.DAYS, 24 * 3600);
-    }
+    private static int MINUTES_IN_DAY = MINUTES_IN_HOUR * 24;
 
     @Test
     public void shouldHandleInvalidTimeString() {
@@ -57,28 +45,55 @@ public class AutorankToolsTest {
         assertThat(result, equalTo(3)); // 180 minutes
     }
 
-    private void checkTimeEntries(Time time, int secondsInTimeUnit) {
-        for (Map.Entry<String, Integer> testCase : timeToSeconds.entrySet()) {
-            // given / when
-            int result = AutorankTools.stringToTime(testCase.getKey(), time);
+    @Test
+    public void checkValidConversionMinutes() {
+        checkConversion("2d", Time.MINUTES, 2 * MINUTES_IN_DAY);
+        checkConversion("4d", Time.MINUTES, 4 * MINUTES_IN_DAY);
+        checkConversion("100d", Time.MINUTES, 100 * MINUTES_IN_DAY);
 
-            // then
-            int expectedValue = testCase.getValue() / secondsInTimeUnit;
-            assertThat("Text '" + testCase.getKey() + "' should evaluate to " + expectedValue + " " + time,
-                result, equalTo(expectedValue));
-        }
+        checkConversion("2d4h", Time.MINUTES, 2 * MINUTES_IN_DAY + 4 * MINUTES_IN_HOUR);
+        checkConversion("2d25h", Time.MINUTES, 2 * MINUTES_IN_DAY + 25 * MINUTES_IN_HOUR);
+        checkConversion("56d6h", Time.MINUTES, 56 * MINUTES_IN_DAY + 6 * MINUTES_IN_HOUR);
+
+        checkConversion("152d2h10m", Time.MINUTES, 152 * MINUTES_IN_DAY + 2 * MINUTES_IN_HOUR + 10);
+        checkConversion("0d2h10m", Time.MINUTES, 0 * MINUTES_IN_DAY + 2 * MINUTES_IN_HOUR + 10);
+        checkConversion("2d26h80m", Time.MINUTES, 2 * MINUTES_IN_DAY + 26 * MINUTES_IN_HOUR + 80);
     }
 
-    private static Map<String, Integer> buildTimeToExpectedSecondsMap() {
-        Map<String, Integer> timeToSeconds = new LinkedHashMap<>();
-        timeToSeconds.put("1d", 24 * 3600);
-        timeToSeconds.put("4h", 4 * 3600);
-        timeToSeconds.put("20m", 20 * 60);
-        timeToSeconds.put("2d10h45m", 2 * 24 * 3600 + 10 * 3600 + 45 * 60);
-        timeToSeconds.put("3d8m", 3 * 24 * 3600 + 8 * 60);
-        timeToSeconds.put("11h0m", 11 * 3600);
-        timeToSeconds.put("0d0h60m", 3600);
-        return timeToSeconds;
+    @Test
+    public void checkValidConversionHours() {
+        checkConversion("2d", Time.HOURS, 2 * HOURS_IN_DAY);
+        checkConversion("4d", Time.HOURS, 4 * HOURS_IN_DAY);
+        checkConversion("100d", Time.HOURS, 100 * HOURS_IN_DAY);
+
+        checkConversion("2d4h", Time.HOURS, 2 * HOURS_IN_DAY + 4);
+        checkConversion("2d25h", Time.HOURS, 2 * HOURS_IN_DAY + 25);
+        checkConversion("56d6h", Time.HOURS, 56 * HOURS_IN_DAY + 6);
+
+        checkConversion("152d2h10m", Time.HOURS, 152 * HOURS_IN_DAY + 2);
+        checkConversion("0d2h10m", Time.HOURS, 0 * HOURS_IN_DAY + 2);
+        checkConversion("2d26h80m", Time.HOURS, 2 * HOURS_IN_DAY + 26 + 1);
     }
 
+    @Test
+    public void checkValidConversionDays() {
+        checkConversion("2d", Time.DAYS, 2);
+        checkConversion("4d", Time.DAYS, 4);
+        checkConversion("100d", Time.DAYS, 100);
+
+        checkConversion("2d4h", Time.DAYS, 2);
+        checkConversion("2d25h", Time.DAYS, 2 + 1);
+        checkConversion("56d6h", Time.DAYS, 56);
+
+        checkConversion("152d2h10m", Time.DAYS, 152);
+        checkConversion("0d2h10m", Time.DAYS, 0);
+        checkConversion("2d26h80m", Time.DAYS, 2 + 1);
+    }
+
+    private void checkConversion(String input, Time outputType, int expectedValue) {
+
+     int result = AutorankTools.stringToTime(input, outputType);
+
+     assertEquals("Incorrect conversion, should be " + expectedValue + " was " + result, expectedValue, result);
+    }
 }
