@@ -512,10 +512,6 @@ public class AutorankTools {
         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', ChatColor.GREEN + msg));
     }
 
-    public static void sendColoredMessage(final Player player, final String msg) {
-        player.sendMessage(ChatColor.translateAlternateColorCodes('&', ChatColor.GREEN + msg));
-    }
-
     /**
      * Create a string that shows all elements of the given list <br>
      * The end divider is the last word used for the second last element. <br>
