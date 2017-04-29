@@ -9,13 +9,6 @@ import me.armar.plugins.autorank.permissions.handlers.PermissionsBukkitHandler;
 import me.armar.plugins.autorank.permissions.handlers.PowerfulPermsHandler;
 import me.armar.plugins.autorank.permissions.handlers.VaultPermissionsHandler;
 
-/*
- * PermissionsPluginManager sort the tasks of removing/adding a player to a group depending
- * on the permissions plugin.
- * For now it supports Vault and explicit GroupManager.
- * 
- */
-
 /**
  * PermissionsPluginManager manages what permission handler should be given. It
  * just does basic checks of availability and calculates what permissions plugin
