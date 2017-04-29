@@ -1,5 +1,6 @@
 package me.armar.plugins.autorank.permissions;
 
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
 import me.armar.plugins.autorank.Autorank;
@@ -34,24 +35,24 @@ public class PermissionsPluginManager {
         this.plugin = plugin;
     }
 
-    protected boolean findGroupManager(final Autorank plugin) {
-        final Plugin x = plugin.getServer().getPluginManager().getPlugin("GroupManager");
+    private boolean isGroupManagerAvailable() {
+        final Plugin x = Bukkit.getServer().getPluginManager().getPlugin("GroupManager");
         if (x != null) {
             return true;
         }
         return false;
     }
 
-    protected boolean findPermissionsBukkit(final Autorank plugin) {
-        final Plugin x = plugin.getServer().getPluginManager().getPlugin("PermissionsBukkit");
+    private boolean isPermissionsBukkitAvailable() {
+        final Plugin x = Bukkit.getServer().getPluginManager().getPlugin("PermissionsBukkit");
         if (x != null) {
             return true;
         }
         return false;
     }
 
-    protected boolean findPowerfulPerms(final Autorank plugin) {
-        final Plugin x = plugin.getServer().getPluginManager().getPlugin("PowerfulPerms");
+    private boolean isPowerfulPermsAvailable() {
+        final Plugin x = Bukkit.getServer().getPluginManager().getPlugin("PowerfulPerms");
         if (x != null) {
             return true;
         }
@@ -63,13 +64,13 @@ public class PermissionsPluginManager {
     }
 
     public void searchPermPlugin() {
-        if (findGroupManager(plugin)) {
+        if (isGroupManagerAvailable()) {
             // use Groupmanager
             permissionPlugin = new GroupManagerHandler(plugin);
-        } else if (findPermissionsBukkit(plugin)) {
+        } else if (isPermissionsBukkitAvailable()) {
             // Use PermissionsBukkit
             permissionPlugin = new PermissionsBukkitHandler(plugin);
-        } else if (findPowerfulPerms(plugin)) {
+        } else if (isPowerfulPermsAvailable()) {
             // Use PermissionsBukkit
             permissionPlugin = new PowerfulPermsHandler(plugin);
         } else {
