@@ -13,9 +13,8 @@ import org.bukkit.plugin.java.JavaPlugin;
  * This represents any YAML file that Autorank uses. <br>
  * It is used for the data.yml, playerdata.yml and daily/monthly/weekly data
  * files.
- * 
- * @author Staartvin
  *
+ * @author Staartvin
  */
 public class SimpleYamlConfiguration extends YamlConfiguration {
 
@@ -23,13 +22,10 @@ public class SimpleYamlConfiguration extends YamlConfiguration {
 
     /**
      * Create a new YAML file.
-     * 
-     * @param plugin
-     *            Plugin to create it for.
-     * @param fileName
-     *            Path of the file.
-     * @param name
-     *            Name of the file that is used to show in the console.
+     *
+     * @param plugin   Plugin to create it for.
+     * @param fileName Path of the file.
+     * @param name     Name of the file that is used to show in the console.
      */
     public SimpleYamlConfiguration(final JavaPlugin plugin, final String fileName, final String name) {
         /*
@@ -70,15 +66,15 @@ public class SimpleYamlConfiguration extends YamlConfiguration {
     /**
      * Load the YAML file.
      */
-    public void loadFile() throws FileNotFoundException, IOException, InvalidConfigurationException {
+    public void loadFile() {
         try {
             this.load(file);
         } catch (final FileNotFoundException e) {
-            throw e;
+
         } catch (final IOException e) {
-            throw e;
+
         } catch (final InvalidConfigurationException e) {
-            throw e;
+
         }
     }
 
@@ -86,16 +82,7 @@ public class SimpleYamlConfiguration extends YamlConfiguration {
      * Reload the YAML file.
      */
     public void reloadFile() {
-        try {
-            loadFile();
-        } catch (FileNotFoundException e) {
-           // Catch exception, do nothing. 
-        } catch (IOException e) {
-            // Catch exception, do nothing. 
-        } catch (InvalidConfigurationException e) {
-            // Catch exception, do nothing. 
-        }
-        
+        loadFile();
         saveFile();
     }
 
