@@ -92,6 +92,10 @@ public class PathBuilder {
                     reqHolder.addRequirement(requirement);
                 }
 
+                if (reqHolder.getRequirements().isEmpty()) {
+                    continue;
+                }
+
                 // Now add holder to requirement list of path
                 path.addRequirement(reqHolder);
             }
@@ -117,6 +121,10 @@ public class PathBuilder {
 
                     // Add prerequisite to holder
                     reqHolder.addRequirement(requirement);
+                }
+
+                if (reqHolder.getRequirements().isEmpty()) {
+                    continue;
                 }
 
                 // Now add holder to prerequisites list of path
