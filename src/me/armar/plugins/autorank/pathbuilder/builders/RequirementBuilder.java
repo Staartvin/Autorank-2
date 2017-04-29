@@ -104,6 +104,9 @@ public class RequirementBuilder {
         // Set whether requirement is optional or not.
         requirement.setOptional(Autorank.getInstance().getPathsConfig().isOptionalRequirement(pathName, requirementType, isPreRequisite));
 
+        // Set whether this requirement is a prerequisite
+        requirement.setPreRequisite(isPreRequisite);
+
         List<Result> resultList = new ArrayList<>();
 
         for (String resultType : Autorank.getInstance().getPathsConfig().getResultsOfRequirement(pathName, requirementType, isPreRequisite)) {

@@ -343,8 +343,4 @@ public class RequirementsHolder {
     public boolean isPrerequisite() {
         return isPrerequisite;
     }
-
-    public void setPrerequisite(boolean isPrerequisite) {
-        this.isPrerequisite = isPrerequisite;
-    }
 }

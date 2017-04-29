@@ -22,7 +22,7 @@ import me.armar.plugins.autorank.statsmanager.StatsPlugin;
  */
 public abstract class Requirement {
 
-    private boolean optional = false, autoComplete = false;
+    private boolean optional = false, autoComplete = false, isPreRequisite = false;
     private int reqId;
     private List<Result> results = new ArrayList<Result>();
     private String world = null;
@@ -213,5 +213,21 @@ public abstract class Requirement {
      */
     public boolean useAutoCompletion() {
         return autoComplete;
+    }
+
+    /**
+     * Check whether this requirement is a prerequisite.
+     * @return true if it is a prerequisite, false otherwise.
+     */
+    public boolean isPreRequisite() {
+        return isPreRequisite;
+    }
+
+    /**
+     * Set whether this requirement is a prerequisite requirement.
+     * @param preRequisite value to set it to.
+     */
+    public void setPreRequisite(boolean preRequisite) {
+        isPreRequisite = preRequisite;
     }
 }
