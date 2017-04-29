@@ -1,9 +1,9 @@
 package me.armar.plugins.autorank.pathbuilder.requirement;
 
+import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.language.Lang;
-import me.armar.plugins.autorank.statsmanager.handlers.StatsHandler;
 import me.armar.plugins.autorank.util.AutorankTools;
 
 public class BlocksMovedRequirement extends Requirement {
@@ -27,7 +27,7 @@ public class BlocksMovedRequirement extends Requirement {
     @Override
     public String getProgress(final Player player) {
 
-        final int progressBar = getStatsPlugin().getNormalStat(StatsHandler.statTypes.BLOCKS_MOVED,
+        final int progressBar = getStatsPlugin().getNormalStat(StatsPlugin.StatType.BLOCKS_MOVED,
                 player.getUniqueId(),
                 AutorankTools.makeStatsInfo("world", this.getWorld(), "moveType", wrapper.getRawMovementType()));
 
@@ -41,7 +41,7 @@ public class BlocksMovedRequirement extends Requirement {
             return false;
         }
 
-        final int count = getStatsPlugin().getNormalStat(StatsHandler.statTypes.BLOCKS_MOVED, player.getUniqueId(),
+        final int count = getStatsPlugin().getNormalStat(StatsPlugin.StatType.BLOCKS_MOVED, player.getUniqueId(),
                 AutorankTools.makeStatsInfo("world", this.getWorld(), "moveType", wrapper.getRawMovementType()));
 
         return count >= wrapper.getBlocksMoved();

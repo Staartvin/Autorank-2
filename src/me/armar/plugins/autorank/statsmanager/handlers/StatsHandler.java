@@ -20,7 +20,7 @@ public class StatsHandler extends StatsPlugin {
     }
 
     @Override
-    public int getNormalStat(statTypes statType, final UUID uuid, final HashMap<String, Object> arguments) {
+    public int getNormalStat(StatType statType, final UUID uuid, final HashMap<String, Object> arguments) {
         // First argument is the world (or null)
 
         String worldName = null;
@@ -33,49 +33,49 @@ public class StatsHandler extends StatsPlugin {
 
         int value = -1;
 
-        if (statType.equals(statTypes.VOTES)) {
+        if (statType.equals(StatType.VOTES)) {
             // Handle voting
             value = statsApi.getNormalStat(uuid, "Votes", worldName);
-        } else if (statType.equals(statTypes.PLAYERS_KILLED)) {
+        } else if (statType.equals(StatType.PLAYERS_KILLED)) {
             // Handle players killed
             value = statsApi.getTotalMobsKilled(uuid, "player", worldName);
-        } else if (statType.equals(statTypes.MOBS_KILLED)) {
+        } else if (statType.equals(StatType.MOBS_KILLED)) {
             // Handle mobs killed
             // arg[2] == mobType
             value = statsApi.getTotalMobsKilled(uuid, arguments.get("mobType").toString(), worldName);
-        } else if (statType.equals(statTypes.DAMAGE_TAKEN)) {
+        } else if (statType.equals(StatType.DAMAGE_TAKEN)) {
             // Handle damage taken
             value = statsApi.getNormalStat(uuid, "Damage taken", worldName);
-        } else if (statType.equals(statTypes.BLOCKS_PLACED)) {
+        } else if (statType.equals(StatType.BLOCKS_PLACED)) {
             // Handle blocks placed
             value = statsApi.getBlocksStat(uuid, Integer.parseInt(arguments.get("typeID").toString()),
                     Integer.parseInt(arguments.get("dataValue").toString()), worldName, "Blocks placed");
-        } else if (statType.equals(statTypes.BLOCKS_BROKEN)) {
+        } else if (statType.equals(StatType.BLOCKS_BROKEN)) {
             // Handle blocks broken
             value = statsApi.getBlocksStat(uuid, Integer.parseInt(arguments.get("typeID").toString()),
                     Integer.parseInt(arguments.get("dataValue").toString()), worldName, "Blocks broken");
-        } else if (statType.equals(statTypes.TOTAL_BLOCKS_PLACED)) {
+        } else if (statType.equals(StatType.TOTAL_BLOCKS_PLACED)) {
             // Handle total blocks placed
             value = statsApi.getTotalBlocksPlaced(uuid, worldName);
-        } else if (statType.equals(statTypes.TOTAL_BLOCKS_BROKEN)) {
+        } else if (statType.equals(StatType.TOTAL_BLOCKS_BROKEN)) {
             // Handle total blocks placed
             value = statsApi.getTotalBlocksBroken(uuid, worldName);
-        } else if (statType.equals(statTypes.TIME_PLAYED)) {
+        } else if (statType.equals(StatType.TIME_PLAYED)) {
             // Handle time played
             value = statsApi.getTotalPlayTime(uuid, worldName);
-        } else if (statType.equals(statTypes.BLOCKS_MOVED)) {
+        } else if (statType.equals(StatType.BLOCKS_MOVED)) {
             // Handle time played
             value = statsApi.getTotalBlocksMoved(uuid, (Integer) arguments.get("moveType"), worldName);
-        } else if (statType.equals(statTypes.FISH_CAUGHT)) {
+        } else if (statType.equals(StatType.FISH_CAUGHT)) {
             // Handle time played
             value = statsApi.getNormalStat(uuid, "Fish caught", worldName);
-        } else if (statType.equals(statTypes.ITEMS_CRAFTED)) {
+        } else if (statType.equals(StatType.ITEMS_CRAFTED)) {
             // Handle time played
             value = statsApi.getNormalStat(uuid, "Items crafted", worldName);
-        } else if (statType.equals(statTypes.TIMES_SHEARED)) {
+        } else if (statType.equals(StatType.TIMES_SHEARED)) {
             // Handle time played
             value = statsApi.getNormalStat(uuid, "Shears", worldName);
-        } else if (statType.equals(statTypes.FOOD_EATEN)) {
+        } else if (statType.equals(StatType.FOOD_EATEN)) {
             // TODO: Not supported by Stats. Fix so only checks amount and not
             // what kind of food.
         }

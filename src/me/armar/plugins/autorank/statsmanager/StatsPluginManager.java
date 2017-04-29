@@ -1,5 +1,6 @@
 package me.armar.plugins.autorank.statsmanager;
 
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -30,31 +31,9 @@ public class StatsPluginManager {
         plugin = instance;
     }
 
-    public boolean findStatistics() {
-        final Plugin x = plugin.getServer().getPluginManager().getPlugin("Statistics");
-        if (x != null && x instanceof JavaPlugin) {
-            return true;
-        }
-
-        return false;
-    }
-
-    public boolean findStats() {
-        final Plugin x = plugin.getServer().getPluginManager().getPlugin("Stats");
-        if (x != null && x instanceof JavaPlugin) {
-            return true;
-        }
-
-        return false;
-    }
-
-    public boolean findStatz() {
-        final Plugin x = plugin.getServer().getPluginManager().getPlugin("Statz");
-        if (x != null && x instanceof JavaPlugin) {
-            return true;
-        }
-
-        return false;
+    private boolean isPluginAvailable(String pluginName) {
+        final Plugin x = Bukkit.getServer().getPluginManager().getPlugin(pluginName);
+        return x != null;
     }
 
     /**
@@ -68,7 +47,7 @@ public class StatsPluginManager {
     }
 
     public void searchStatsPlugin() {
-        if (findStats()) {
+        if (isPluginAvailable("Stats")) {
 
             plugin.getLogger().info("Found Stats plugin: Stats (by Lolmewn)");
 
@@ -87,7 +66,7 @@ public class StatsPluginManager {
             }
 
             plugin.getLogger().info("Hooked into Stats (by Lolmewn)");
-        } else if (findStatistics()) {
+        } else if (isPluginAvailable("Statistics")) {
 
             plugin.getLogger().info("Found Stats plugin: Statistics (by bitWolfy)");
 
@@ -106,7 +85,7 @@ public class StatsPluginManager {
             }
 
             plugin.getLogger().info("Hooked into Statistics (by bitWolfy)");
-        } else if (findStatz()) {
+        } else if (isPluginAvailable("Statz")) {
 
             plugin.getLogger().info("Found Statz plugin: Statz (by Staartvin)");
 

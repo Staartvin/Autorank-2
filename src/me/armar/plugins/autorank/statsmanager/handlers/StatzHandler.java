@@ -21,7 +21,7 @@ public class StatzHandler extends StatsPlugin {
     }
 
     @Override
-    public int getNormalStat(statTypes statType, final UUID uuid, final HashMap<String, Object> arguments) {
+    public int getNormalStat(StatType statType, final UUID uuid, final HashMap<String, Object> arguments) {
         // First argument is the world (or null)
 
         String worldName = null;

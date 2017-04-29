@@ -60,7 +60,7 @@ public class StatzAPIHandler implements DependencyHandler {
         return statz.getStatzAPI().getDependencyHandler(dep);
     }
 
-    public double getSpecificData(UUID uuid, StatsPlugin.statTypes statType, RowRequirement... conditions) {
+    public double getSpecificData(UUID uuid, StatsPlugin.StatType statType, RowRequirement... conditions) {
         if (!this.isAvailable())
             return -1;
 
@@ -121,7 +121,7 @@ public class StatzAPIHandler implements DependencyHandler {
         return (double) value;
     }
 
-    public double getTotalOf(UUID uuid, StatsPlugin.statTypes statType, String worldName) {
+    public double getTotalOf(UUID uuid, StatsPlugin.StatType statType, String worldName) {
         if (!this.isAvailable())
             return -1;
 

@@ -1,11 +1,11 @@
 package me.armar.plugins.autorank.pathbuilder.requirement;
 
+import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import me.armar.plugins.autorank.language.Lang;
-import me.armar.plugins.autorank.statsmanager.handlers.StatsHandler;
 import me.armar.plugins.autorank.util.AutorankTools;
 
 public class BlocksPlacedRequirement extends Requirement {
@@ -50,22 +50,22 @@ public class BlocksPlacedRequirement extends Requirement {
         int progressBar = 0;
 
         if (wrapper.getItem().getTypeId() <= 0 && !wrapper.showShortValue()) {
-            progressBar = getStatsPlugin().getNormalStat(StatsHandler.statTypes.TOTAL_BLOCKS_PLACED,
+            progressBar = getStatsPlugin().getNormalStat(StatsPlugin.StatType.TOTAL_BLOCKS_PLACED,
                     player.getUniqueId(), AutorankTools.makeStatsInfo());
         } else {
             if (wrapper.showShortValue()) {
                 // Use datavalue
-                progressBar = getStatsPlugin().getNormalStat(StatsHandler.statTypes.BLOCKS_PLACED, player.getUniqueId(),
+                progressBar = getStatsPlugin().getNormalStat(StatsPlugin.StatType.BLOCKS_PLACED, player.getUniqueId(),
                         AutorankTools.makeStatsInfo("world", this.getWorld(), "typeID", wrapper.getItem().getTypeId(),
                                 "dataValue", wrapper.getItem().getDurability()));
             } else {
                 if (wrapper.getItem().getType() == Material.AIR) {
                     // Id was not given so only check amount
-                    progressBar = getStatsPlugin().getNormalStat(StatsHandler.statTypes.BLOCKS_PLACED,
+                    progressBar = getStatsPlugin().getNormalStat(StatsPlugin.StatType.BLOCKS_PLACED,
                             player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld()));
                 } else {
                     // ID was given, but no data value
-                    progressBar = getStatsPlugin().getNormalStat(StatsHandler.statTypes.BLOCKS_PLACED,
+                    progressBar = getStatsPlugin().getNormalStat(StatsPlugin.StatType.BLOCKS_PLACED,
                             player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld(), "typeID",
                                     wrapper.getItem().getTypeId()));
                 }
@@ -84,22 +84,22 @@ public class BlocksPlacedRequirement extends Requirement {
         int progress = 0;
 
         if (wrapper.getItem().getTypeId() <= 0 && !wrapper.showShortValue()) {
-            progress = getStatsPlugin().getNormalStat(StatsHandler.statTypes.TOTAL_BLOCKS_PLACED, player.getUniqueId(),
+            progress = getStatsPlugin().getNormalStat(StatsPlugin.StatType.TOTAL_BLOCKS_PLACED, player.getUniqueId(),
                     AutorankTools.makeStatsInfo("world", this.getWorld()));
         } else {
             if (wrapper.showShortValue()) {
                 // Use datavalue
-                progress = getStatsPlugin().getNormalStat(StatsHandler.statTypes.BLOCKS_PLACED, player.getUniqueId(),
+                progress = getStatsPlugin().getNormalStat(StatsPlugin.StatType.BLOCKS_PLACED, player.getUniqueId(),
                         AutorankTools.makeStatsInfo("world", this.getWorld(), "typeID", wrapper.getItem().getTypeId(),
                                 "dataValue", wrapper.getItem().getDurability()));
             } else {
                 if (wrapper.getItem().getType() == Material.AIR) {
                     // Id was not given so only check amount
-                    progress = getStatsPlugin().getNormalStat(StatsHandler.statTypes.BLOCKS_PLACED,
+                    progress = getStatsPlugin().getNormalStat(StatsPlugin.StatType.BLOCKS_PLACED,
                             player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld()));
                 } else {
                     // ID was given, but no data value
-                    progress = getStatsPlugin().getNormalStat(StatsHandler.statTypes.BLOCKS_PLACED,
+                    progress = getStatsPlugin().getNormalStat(StatsPlugin.StatType.BLOCKS_PLACED,
                             player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld(), "typeID",
                                     wrapper.getItem().getTypeId()));
                 }

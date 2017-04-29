@@ -8,7 +8,7 @@ import me.armar.plugins.autorank.data.flatfile.UpdatePlaytime;
 import me.armar.plugins.autorank.hooks.DependencyManager.AutorankDependency;
 import me.armar.plugins.autorank.hooks.statzapi.StatzAPIHandler;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
-import me.armar.plugins.autorank.statsmanager.StatsPlugin.statTypes;
+import me.armar.plugins.autorank.statsmanager.StatsPlugin.StatType;
 import me.armar.plugins.autorank.statsmanager.handlers.StatsHandler;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
@@ -89,7 +89,7 @@ public class PlaytimeManager {
             playTime = playTime * 60;
         } else if (timePlugin.equals(AutorankDependency.STATZ)) {
             playTime = (int) ((StatzAPIHandler) plugin.getDependencyManager().getDependency(AutorankDependency.STATZ))
-                    .getTotalOf(uuid, statTypes.TIME_PLAYED, null);
+                    .getTotalOf(uuid, StatType.TIME_PLAYED, null);
             playTime = playTime * 60;
         } else {
 

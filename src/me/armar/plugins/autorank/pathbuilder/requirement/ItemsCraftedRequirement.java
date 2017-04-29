@@ -1,9 +1,9 @@
 package me.armar.plugins.autorank.pathbuilder.requirement;
 
+import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.language.Lang;
-import me.armar.plugins.autorank.statsmanager.handlers.StatsHandler;
 import me.armar.plugins.autorank.util.AutorankTools;
 
 public class ItemsCraftedRequirement extends Requirement {
@@ -25,7 +25,7 @@ public class ItemsCraftedRequirement extends Requirement {
 
     @Override
     public String getProgress(final Player player) {
-        final int progressBar = this.getStatsPlugin().getNormalStat(StatsHandler.statTypes.ITEMS_CRAFTED,
+        final int progressBar = this.getStatsPlugin().getNormalStat(StatsPlugin.StatType.ITEMS_CRAFTED,
                 player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld()));
 
         return progressBar + "/" + itemsCrafted;
@@ -37,7 +37,7 @@ public class ItemsCraftedRequirement extends Requirement {
         if (!getStatsPlugin().isEnabled())
             return false;
 
-        final int realItemsCrafted = this.getStatsPlugin().getNormalStat(StatsHandler.statTypes.ITEMS_CRAFTED,
+        final int realItemsCrafted = this.getStatsPlugin().getNormalStat(StatsPlugin.StatType.ITEMS_CRAFTED,
                 player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld()));
 
         return realItemsCrafted >= itemsCrafted;

@@ -20,7 +20,7 @@ public class StatisticsHandler extends StatsPlugin {
     }
 
     @Override
-    public int getNormalStat(statTypes statType, final UUID uuid, final HashMap<String, Object> arguments) {
+    public int getNormalStat(StatType statType, final UUID uuid, final HashMap<String, Object> arguments) {
         // First argument is always the name, second arg is always the world
         return -1;
     }

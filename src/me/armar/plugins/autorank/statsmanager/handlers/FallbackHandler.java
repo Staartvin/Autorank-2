@@ -15,7 +15,7 @@ import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 public class FallbackHandler extends StatsPlugin {
 
     @Override
-    public int getNormalStat(statTypes statType, final UUID uuid, HashMap<String, Object> arguments) {
+    public int getNormalStat(StatType statType, final UUID uuid, HashMap<String, Object> arguments) {
         return 0;
     }
 

@@ -1,9 +1,9 @@
 package me.armar.plugins.autorank.pathbuilder.requirement;
 
+import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.language.Lang;
-import me.armar.plugins.autorank.statsmanager.handlers.StatsHandler;
 import me.armar.plugins.autorank.util.AutorankTools;
 
 public class FishCaughtRequirement extends Requirement {
@@ -25,7 +25,7 @@ public class FishCaughtRequirement extends Requirement {
 
     @Override
     public String getProgress(final Player player) {
-        final int progressBar = this.getStatsPlugin().getNormalStat(StatsHandler.statTypes.FISH_CAUGHT,
+        final int progressBar = this.getStatsPlugin().getNormalStat(StatsPlugin.StatType.FISH_CAUGHT,
                 player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld()));
 
         return progressBar + "/" + fishCaught;
@@ -37,7 +37,7 @@ public class FishCaughtRequirement extends Requirement {
         if (!getStatsPlugin().isEnabled())
             return false;
 
-        final int fish = this.getStatsPlugin().getNormalStat(StatsHandler.statTypes.FISH_CAUGHT, player.getUniqueId(),
+        final int fish = this.getStatsPlugin().getNormalStat(StatsPlugin.StatType.FISH_CAUGHT, player.getUniqueId(),
                 AutorankTools.makeStatsInfo("world", this.getWorld()));
 
         return fish >= fishCaught;

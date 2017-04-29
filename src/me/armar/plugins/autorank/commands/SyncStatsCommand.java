@@ -44,7 +44,7 @@ public class SyncStatsCommand extends AutorankCommand {
             final OfflinePlayer p = plugin.getServer().getOfflinePlayer(uuid);
 
             // Time is stored in seconds
-            final int statsPlayTime = plugin.getHookedStatsPlugin().getNormalStat(StatsPlugin.statTypes.TIME_PLAYED,
+            final int statsPlayTime = plugin.getHookedStatsPlugin().getNormalStat(StatsPlugin.StatType.TIME_PLAYED,
                     p.getUniqueId(), AutorankTools.makeStatsInfo());
 
             if (statsPlayTime <= 0) {

@@ -1,10 +1,10 @@
 package me.armar.plugins.autorank.pathbuilder.requirement;
 
+import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import me.armar.plugins.autorank.language.Lang;
-import me.armar.plugins.autorank.statsmanager.handlers.StatsHandler;
 import me.armar.plugins.autorank.util.AutorankTools;
 
 public class FoodEatenRequirement extends Requirement {
@@ -42,7 +42,7 @@ public class FoodEatenRequirement extends Requirement {
         final int amount = foodEaten.getAmount();
         String foodType = foodEaten.getFoodName();
 
-        final int totalFoodEaten = getStatsPlugin().getNormalStat(StatsHandler.statTypes.FOOD_EATEN,
+        final int totalFoodEaten = getStatsPlugin().getNormalStat(StatsPlugin.StatType.FOOD_EATEN,
                 player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld(), "foodType", foodType));
 
         if (foodType == null) {
@@ -65,7 +65,7 @@ public class FoodEatenRequirement extends Requirement {
         final int amount = foodEaten.getAmount();
         final String foodType = foodEaten.getFoodName();
 
-        final int totalFoodEaten = getStatsPlugin().getNormalStat(StatsHandler.statTypes.FOOD_EATEN,
+        final int totalFoodEaten = getStatsPlugin().getNormalStat(StatsPlugin.StatType.FOOD_EATEN,
                 player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld(), "foodType", foodType));
 
         return totalFoodEaten >= amount;
