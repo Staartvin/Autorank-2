@@ -311,7 +311,7 @@ public class PathManager {
 
         while (true) {
             // Get the nth highest path
-            Integer tempHighest = AutorankTools.largestK(priorities.toArray(new Integer[priorities.size()]), count);
+            Integer tempHighest = AutorankTools.largestK(priorities, count);
 
             // No highest found (array is empty)
             if (tempHighest == null) {

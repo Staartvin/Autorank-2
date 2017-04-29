@@ -1,10 +1,6 @@
 package me.armar.plugins.autorank.util;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.PriorityQueue;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,8 +27,8 @@ public class AutorankTools {
 
     public static int TICKS_PER_SECOND = 20, TICKS_PER_MINUTE = TICKS_PER_SECOND * 60;
 
-    private static List<String> reqTypes = new ArrayList<String>();
-    private static List<String> resTypes = new ArrayList<String>();
+    private static Set<String> reqTypes = new HashSet<>();
+    private static Set<String> resTypes = new HashSet<>();
 
     public static boolean containsAtLeast(final Player player, final ItemStack item, final int amount,
                                           String displayName) {
@@ -143,7 +139,7 @@ public class AutorankTools {
      * @param oldName Name of the requirement to search for.
      * @return correct requirement name or old name if none was found.
      */
-    public static String getCorrectReqName(String oldName) {
+    public static String findMatchingRequirementName(String oldName) {
 
         // Remove all numbers from string
         oldName = oldName.replaceAll("[^a-zA-Z\\s]", "").trim();
@@ -155,7 +151,6 @@ public class AutorankTools {
             // Contains word
 
             if (type.length() == oldName.length()) {
-
                 return type;
             }
 
@@ -176,7 +171,7 @@ public class AutorankTools {
      * @param oldName Name of the result to search for.
      * @return correct result name or old name if none was found.
      */
-    public static String getCorrectResName(String oldName) {
+    public static String findMatchingResultName(String oldName) {
 
         // Remove all numbers from string
         oldName = oldName.replaceAll("[^a-zA-Z\\s]", "").trim();
@@ -494,27 +489,23 @@ public class AutorankTools {
     /**
      * Register requirement name so it can be used to get the correct name. If a
      * requirement is not passed through this method, it will not show up in
-     * {@link #getCorrectReqName(String)}.
+     * {@link #findMatchingRequirementName(String)}.
      *
      * @param type Requirement name
      */
     public static void registerRequirement(final String type) {
-        if (!reqTypes.contains(type)) {
-            reqTypes.add(type);
-        }
+        reqTypes.add(type);
     }
 
     /**
      * Register result name so it can be used to get the correct name. If a
      * result is not passed through this method, it will not show up in
-     * {@link #getCorrectResName(String)}.
+     * {@link #findMatchingResultName(String)}.
      *
      * @param type Result name
      */
     public static void registerResult(final String type) {
-        if (!resTypes.contains(type)) {
-            resTypes.add(type);
-        }
+        resTypes.add(type);
     }
 
     public static void sendColoredMessage(final CommandSender sender, final String msg) {
@@ -753,23 +744,23 @@ public class AutorankTools {
      * @param k     nth largest number (zero-based, so biggest value means k=0)
      * @return the kth biggest value of the array.
      */
-    public static Integer largestK(Integer array[], int k) {
+    public static Integer largestK(List<Integer> array, int k) {
         PriorityQueue<Integer> queue = new PriorityQueue<Integer>(k + 1);
         int i = 0;
         while (i <= k) {
             try {
-                queue.add(array[i]);
+                queue.add(array.get(i));
             } catch (ArrayIndexOutOfBoundsException e) {
                 // Return null if invalid k
                 return null;
             }
             i++;
         }
-        for (; i < array.length; i++) {
+        for (; i < array.size(); i++) {
             Integer value = queue.peek();
-            if (array[i] > value) {
+            if (array.get(i) > value) {
                 queue.poll();
-                queue.add(array[i]);
+                queue.add(array.get(i));
             }
         }
         return queue.peek();

@@ -38,7 +38,7 @@ public class ResultBuilder {
 
         String originalResType = resultType;
 
-        resultType = AutorankTools.getCorrectResName(resultType);
+        resultType = AutorankTools.findMatchingResultName(resultType);
 
         this.resultName = resultType;
 

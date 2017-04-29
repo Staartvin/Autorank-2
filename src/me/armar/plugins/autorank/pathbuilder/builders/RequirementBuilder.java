@@ -48,7 +48,7 @@ public class RequirementBuilder {
 
         String originalReqType = requirementType;
 
-        requirementType = AutorankTools.getCorrectReqName(requirementType);
+        requirementType = AutorankTools.findMatchingRequirementName(requirementType);
 
         if (requirementType == null) {
             Autorank.getInstance().getWarningManager()
