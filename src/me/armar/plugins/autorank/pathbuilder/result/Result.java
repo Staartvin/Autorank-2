@@ -4,9 +4,11 @@ import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.Autorank;
 
+/**
+ * This class represents a type of result that can be performed when a path is completed or a requirement is met.
+ *
+ */
 public abstract class Result {
-
-    private Autorank plugin;
 
     /**
      * Apply this result to a player
@@ -16,7 +18,7 @@ public abstract class Result {
     public abstract boolean applyResult(Player player);
 
     public final Autorank getAutorank() {
-        return plugin;
+        return Autorank.getInstance();
     }
 
     /**
@@ -24,10 +26,6 @@ public abstract class Result {
      * @return
      */
     public abstract String getDescription();
-
-    public final void setAutorank(final Autorank autorank) {
-        this.plugin = autorank;
-    }
 
     /**
      * Initialize the options of this result. For more info, see {@link me.armar.plugins.autorank.pathbuilder.requirement.Requirement#setOptions(String[] options)}.

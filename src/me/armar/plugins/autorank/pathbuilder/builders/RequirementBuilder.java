@@ -84,9 +84,6 @@ public class RequirementBuilder {
             return this;
         }
 
-        // Set Autorank instance.
-        requirement.setAutorank(Autorank.getInstance());
-
         if (options == null) {
             return this;
         }

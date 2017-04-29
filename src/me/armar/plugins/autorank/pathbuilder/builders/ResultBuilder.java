@@ -74,9 +74,6 @@ public class ResultBuilder {
             return this;
         }
 
-        // Set Autorank instance.
-        result.setAutorank(Autorank.getInstance());
-
         if (stringValue == null) {
             return this;
         }
