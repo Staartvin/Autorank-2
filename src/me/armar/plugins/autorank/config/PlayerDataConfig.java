@@ -188,7 +188,7 @@ public class PlayerDataConfig {
     /**
      * Check whether a player completed a specific prerequisite.
      * 
-     * @param preReqID
+     * @param preReqId
      *            ID of prerequisite
      * @param uuid
      *            UUID of the player
