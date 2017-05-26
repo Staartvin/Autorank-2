@@ -37,8 +37,25 @@ import me.armar.plugins.autorank.util.AutorankTools;
  */
 public class LeaderboardHandler {
 
+    private static final double LEADERBOARD_TIME_VALID = 30;
+    private final Autorank plugin;
+    private String layout = "&6&r | &b&p - &7&d %day%, &h %hour% and &m %minute%.";
+    private int leaderboardLength = 10;
+
+    public LeaderboardHandler(final Autorank plugin) {
+        this.plugin = plugin;
+
+        leaderboardLength = plugin.getConfigHandler().getLeaderboardLength();
+        layout = plugin.getConfigHandler().getLeaderboardLayout();
+    }
+    // LeaderboardHandler
+    // is valid
+    // for 30
+    // minutes.
+
     /**
      * Sort a map by its values.
+     *
      * @param map Map to sort.
      * @param <K> KeyType
      * @param <V> ValueType
@@ -58,23 +75,6 @@ public class LeaderboardHandler {
             result.put(entry.getKey(), entry.getValue());
         }
         return result;
-    }
-
-    private String layout = "&6&r | &b&p - &7&d %day%, &h %hour% and &m %minute%.";
-    private int leaderboardLength = 10;
-    private final Autorank plugin;
-
-    private static final double LEADERBOARD_TIME_VALID = 30;
-    // LeaderboardHandler
-    // is valid
-    // for 30
-    // minutes.
-
-    public LeaderboardHandler(final Autorank plugin) {
-        this.plugin = plugin;
-
-        leaderboardLength = plugin.getConfigHandler().getLeaderboardLength();
-        layout = plugin.getConfigHandler().getLeaderboardLayout();
     }
 
     /**
@@ -332,6 +332,85 @@ public class LeaderboardHandler {
         final List<String> stringList = new ArrayList<String>();
 
         // Only store the users that should appear on the leaderboard, along with their time.
+        Map<String, Integer> finalLeaderboard = getAccurateLeaderboard(type);
+
+        if (type == TimeType.TOTAL_TIME) {
+            stringList.add(Lang.LEADERBOARD_HEADER_ALL_TIME.getConfigValue());
+        } else if (type == TimeType.DAILY_TIME) {
+            stringList.add(Lang.LEADERBOARD_HEADER_DAILY.getConfigValue());
+        } else if (type == TimeType.WEEKLY_TIME) {
+            stringList.add(Lang.LEADERBOARD_HEADER_WEEKLY.getConfigValue());
+        } else if (type == TimeType.MONTHLY_TIME) {
+            stringList.add(Lang.LEADERBOARD_HEADER_MONTHLY.getConfigValue());
+        }
+
+        Iterator<Entry<String, Integer>> iterator = finalLeaderboard.entrySet().iterator();
+
+        for (int i = 0; i < leaderboardLength && iterator.hasNext(); i++) {
+
+            final Entry<String, Integer> entry = iterator.next();
+
+            Integer time = entry.getValue().intValue();
+
+            String message = layout.replace("&p", entry.getKey());
+
+            // divided by 1440
+            final int days = (time / 1440);
+
+            // (time - days) / 60
+            final int hours = (time - (days * 1440)) / 60;
+
+            // (time - days - hours)
+            final int minutes = time - (days * 1440) - (hours * 60);
+
+            message = message.replace("&r", Integer.toString(i + 1));
+            message = message.replace("&tm", Integer.toString(time));
+            message = message.replace("&th", Integer.toString(time / 60));
+            message = message.replace("&d", Integer.toString(days));
+            time = time - ((time / 1440) * 1440);
+            message = message.replace("&h", Integer.toString(hours));
+            time = time - ((time / 60) * 60);
+
+            message = message.replace("&m", Integer.toString(minutes));
+            message = ChatColor.translateAlternateColorCodes('&', message);
+
+            // Correctly show plural or singular format.
+            if (days > 1 || days == 0) {
+                message = message.replace("%day%", Lang.DAY_PLURAL.getConfigValue());
+            } else {
+                message = message.replace("%day%", Lang.DAY_SINGULAR.getConfigValue());
+            }
+
+            if (hours > 1 || hours == 0) {
+                message = message.replace("%hour%", Lang.HOUR_PLURAL.getConfigValue());
+            } else {
+                message = message.replace("%hour%", Lang.HOUR_SINGULAR.getConfigValue());
+            }
+
+            if (minutes > 1 || minutes == 0) {
+                message = message.replace("%minute%", Lang.MINUTE_PLURAL.getConfigValue());
+            } else {
+                message = message.replace("%minute%", Lang.MINUTE_SINGULAR.getConfigValue());
+            }
+
+            stringList.add(message);
+        }
+
+        stringList.add(Lang.LEADERBOARD_FOOTER.getConfigValue());
+
+        // Cache this leaderboard
+        plugin.getInternalPropertiesConfig().setCachedLeaderboard(type, stringList);
+
+        // Update latest update-time
+        plugin.getInternalPropertiesConfig().setLeaderboardLastUpdateTime(System.currentTimeMillis());
+    }
+
+    /**
+     * Get a sorted list of all recorded players and their times.
+     * @param type Type of time to get
+     * @return a list of sorted player times.
+     */
+    private Map<String, Integer> getAccurateLeaderboard(TimeType type) {
         Map<String, Integer> finalLeaderboard = new LinkedHashMap<>();
 
         // If we are using Autorank as timekeeper, we can ask all UUIDs in the uuids file and sort the playtime
@@ -386,78 +465,7 @@ public class LeaderboardHandler {
             }
         }
 
-        if (type == TimeType.TOTAL_TIME) {
-            stringList.add(Lang.LEADERBOARD_HEADER_ALL_TIME.getConfigValue());
-        } else if (type == TimeType.DAILY_TIME) {
-            stringList.add(Lang.LEADERBOARD_HEADER_DAILY.getConfigValue());
-        } else if (type == TimeType.WEEKLY_TIME) {
-            stringList.add(Lang.LEADERBOARD_HEADER_WEEKLY.getConfigValue());
-        } else if (type == TimeType.MONTHLY_TIME) {
-            stringList.add(Lang.LEADERBOARD_HEADER_MONTHLY.getConfigValue());
-        }
-
-        int count = 0;
-
-        Iterator<Entry<String, Integer>> iterator = finalLeaderboard.entrySet().iterator();
-
-        for (int i = 0; i < leaderboardLength && iterator.hasNext(); i++) {
-
-            final Entry<String, Integer> entry = iterator.next();
-
-            Integer time = entry.getValue().intValue();
-
-            String message = layout.replace("&p", entry.getKey());
-
-            // divided by 1440
-            final int days = (time / 1440);
-
-            // (time - days) / 60
-            final int hours = (time - (days * 1440)) / 60;
-
-            // (time - days - hours)
-            final int minutes = time - (days * 1440) - (hours * 60);
-
-            message = message.replace("&r", Integer.toString(count + 1));
-            message = message.replace("&tm", Integer.toString(time));
-            message = message.replace("&th", Integer.toString(time / 60));
-            message = message.replace("&d", Integer.toString(days));
-            time = time - ((time / 1440) * 1440);
-            message = message.replace("&h", Integer.toString(hours));
-            time = time - ((time / 60) * 60);
-            message = message.replace("&m", Integer.toString(minutes));
-            message = ChatColor.translateAlternateColorCodes('&', message);
-
-            // Correctly show plural or singular format.
-            if (days > 1 || days == 0) {
-                message = message.replace("%day%", Lang.DAY_PLURAL.getConfigValue());
-            } else {
-                message = message.replace("%day%", Lang.DAY_SINGULAR.getConfigValue());
-            }
-
-            if (hours > 1 || hours == 0) {
-                message = message.replace("%hour%", Lang.HOUR_PLURAL.getConfigValue());
-            } else {
-                message = message.replace("%hour%", Lang.HOUR_SINGULAR.getConfigValue());
-            }
-
-            if (minutes > 1 || minutes == 0) {
-                message = message.replace("%minute%", Lang.MINUTE_PLURAL.getConfigValue());
-            } else {
-                message = message.replace("%minute%", Lang.MINUTE_SINGULAR.getConfigValue());
-            }
-
-            stringList.add(message);
-
-            count++;
-        }
-
-        stringList.add(Lang.LEADERBOARD_FOOTER.getConfigValue());
-
-        // Cache this leaderboard
-        plugin.getInternalPropertiesConfig().setCachedLeaderboard(type, stringList);
-
-        // Update latest update-time
-        plugin.getInternalPropertiesConfig().setLeaderboardLastUpdateTime(System.currentTimeMillis());
+        return finalLeaderboard;
     }
 
 }
