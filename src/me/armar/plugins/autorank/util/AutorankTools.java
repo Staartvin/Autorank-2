@@ -746,7 +746,7 @@ public class AutorankTools {
         while (i <= k) {
             try {
                 queue.add(array.get(i));
-            } catch (ArrayIndexOutOfBoundsException e) {
+            } catch (IndexOutOfBoundsException e) {
                 // Return null if invalid k
                 return null;
             }
