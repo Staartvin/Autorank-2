@@ -32,9 +32,6 @@ import me.armar.plugins.autorank.pathbuilder.result.Result;
  */
 public class RequirementsHolder {
 
-    // Is this requirements holder used as a prerequisite
-    private boolean isPrerequisite = false;
-
     private final Autorank plugin;
 
     private List<Requirement> requirements = new ArrayList<Requirement>();
@@ -266,7 +263,7 @@ public class RequirementsHolder {
 
                 // Player has not completed this requirement -> perform
                 // results
-                if (this.isPrerequisite) {
+                if (this.isPrerequisite()) {
                     // Do nothing for now, must be implemented in some future
                 } else {
                     plugin.getPlayerDataConfig().addCompletedRequirement(uuid, reqID);
@@ -325,6 +322,12 @@ public class RequirementsHolder {
      * @return
      */
     public boolean isPrerequisite() {
-        return isPrerequisite;
+        for (Requirement req : this.requirements) {
+            if (req.isPreRequisite()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
