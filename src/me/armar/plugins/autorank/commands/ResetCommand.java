@@ -47,17 +47,18 @@ public class ResetCommand extends AutorankCommand {
 
         final String realName = plugin.getUUIDStorage().getRealName(uuid);
 
-        if (!action.equalsIgnoreCase("progress") && !action.equalsIgnoreCase("chosenpath")) {
-            sender.sendMessage(ChatColor.RED + "Invalid action. You can only use: progress or chosenpath");
-            return true;
-        }
-
         if (action.equalsIgnoreCase("progress")) {
             plugin.getPlayerDataConfig().setCompletedRequirements(uuid, null);
             sender.sendMessage(ChatColor.GREEN + "Reset progress of " + ChatColor.YELLOW + realName);
         } else if (action.equalsIgnoreCase("chosenpath")) {
             plugin.getPlayerDataConfig().setChosenPath(uuid, null);
             sender.sendMessage(ChatColor.GREEN + "Reset chosen path of " + ChatColor.YELLOW + realName);
+        } else if (action.equalsIgnoreCase("completedpaths")) {
+            plugin.getPlayerDataConfig().setCompletedPaths(uuid, null);
+            sender.sendMessage(ChatColor.GREEN + "Reset completed paths of " + ChatColor.YELLOW + realName);
+        } else {
+            sender.sendMessage(ChatColor.RED + "Invalid action. You can only use: progress, chosenpath or completedpaths.");
+            return true;
         }
 
         return true;
