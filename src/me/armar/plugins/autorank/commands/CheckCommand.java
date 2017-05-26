@@ -61,7 +61,7 @@ public class CheckCommand extends AutorankCommand {
 
             // Remove paths that have already been completed by the
             // user.
-            for (Iterator<Path> iterator = paths.iterator(); iterator.hasNext();) {
+            for (Iterator<Path> iterator = paths.iterator(); iterator.hasNext(); ) {
                 Path path = iterator.next();
 
                 // If this path can be done over and over again, we obviously
@@ -160,14 +160,13 @@ public class CheckCommand extends AutorankCommand {
             // Player does not meet all requirements, so show which requirements he does not meet yet.
 
             // Show requirements list
-            if (showReqs) {
-                final List<String> messages = plugin.getPlayerChecker().formatRequirementsToList(holders,
-                        completedRequirements);
+            final List<String> messages = plugin.getPlayerChecker().formatRequirementsToList(holders,
+                    completedRequirements);
 
-                for (final String message : messages) {
-                    AutorankTools.sendColoredMessage(sender, message);
-                }
+            for (final String message : messages) {
+                AutorankTools.sendColoredMessage(sender, message);
             }
+
         }
 
         // Check player again.
