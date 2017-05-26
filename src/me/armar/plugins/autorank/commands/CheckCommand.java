@@ -134,102 +134,16 @@ public class CheckCommand extends AutorankCommand {
         if (!showReqs)
             return;
 
-        boolean onlyOptional = true;
-        boolean meetsAllRequirements = true;
-        final List<Integer> metRequirements = new ArrayList<Integer>();
+        //boolean onlyOptional = true;
+        boolean meetsAllRequirements = false;
 
-        // Check if we only have optional requirements
-        for (final RequirementsHolder holder : holders) {
-            if (!holder.isOptional())
-                onlyOptional = false;
+        // Get a list of completed requirements.
+        List<RequirementsHolder> completedRequirements = plugin.getPlayerChecker().getCompletedRequirementsHolders(player);
+
+        // Player completed all requirements of his path
+        if (completedRequirements.size() == plugin.getPlayerChecker().getAllRequirementsHolders(player).size()) {
+            meetsAllRequirements = true;
         }
-
-        // Check what requirements the player meets
-        for (final RequirementsHolder holder : holders) {
-            final int reqID = holder.getReqID();
-
-            // Use auto completion
-            if (holder.useAutoCompletion()) {
-                // Do auto complete
-
-                if (holder.meetsRequirement(player, false)) {
-                    // Player meets the requirement -> give him results
-
-                    // Doesn't need to check whether this requirement was
-                    // already done
-                    if (!plugin.getConfigHandler().usePartialCompletion())
-                        continue;
-
-                    if (!plugin.getPlayerDataConfig().hasCompletedRequirement(reqID, uuid)) {
-                        plugin.getPlayerDataConfig().addCompletedRequirement(uuid, reqID);
-
-                        // Run results
-                        holder.runResults(player);
-                    }
-                    metRequirements.add(reqID);
-                    continue;
-                } else {
-                    // Only check if player has done this when partial
-                    // completion is used
-                    if (plugin.getConfigHandler().usePartialCompletion()) {
-                        // Player does not meet requirements, but has done this
-                        // already
-                        if (plugin.getPlayerDataConfig().hasCompletedRequirement(reqID, uuid)) {
-                            metRequirements.add(reqID);
-                            continue;
-                        }
-                    }
-
-                    // If requirement is optional, we do not check.
-                    if (holder.isOptional()) {
-                        continue;
-                    }
-
-                    // Player does not meet requirements -> do nothing
-                    meetsAllRequirements = false;
-                    continue;
-                }
-            } else {
-
-                if (!plugin.getConfigHandler().usePartialCompletion()) {
-
-                    // Doesn't auto complete and doesn't meet requirement, then
-                    // continue searching
-                    if (!holder.meetsRequirement(player, false)) {
-
-                        // If requirement is optional, we do not check.
-                        if (holder.isOptional()) {
-                            continue;
-                        }
-
-                        meetsAllRequirements = false;
-                        continue;
-                    } else {
-                        // Player does meet requirement, continue searching
-                        continue;
-                    }
-
-                }
-
-                // Do not auto complete
-                if (plugin.getPlayerDataConfig().hasCompletedRequirement(reqID, uuid)) {
-                    // Player has completed requirement already
-                    metRequirements.add(reqID);
-                    continue;
-                } else {
-
-                    // If requirement is optional, we do not check.
-                    if (holder.isOptional()) {
-                        continue;
-                    }
-
-                    meetsAllRequirements = false;
-                    continue;
-                }
-            }
-        }
-
-        final String reqMessage = Lang.MEETS_ALL_REQUIREMENTS.getConfigValue(displayName);
 
         String reqMessage2 = "";
 
@@ -240,13 +154,15 @@ public class CheckCommand extends AutorankCommand {
         }
 
         // Player meets all requirements
-        if (meetsAllRequirements || onlyOptional) {
-            AutorankTools.sendColoredMessage(sender, reqMessage + reqMessage2);
+        if (meetsAllRequirements /*|| onlyOptional*/) {
+            AutorankTools.sendColoredMessage(sender, Lang.MEETS_ALL_REQUIREMENTS.getConfigValue(displayName) + reqMessage2);
         } else {
+            // Player does not meet all requirements, so show which requirements he does not meet yet.
+
             // Show requirements list
             if (showReqs) {
                 final List<String> messages = plugin.getPlayerChecker().formatRequirementsToList(holders,
-                        metRequirements);
+                        completedRequirements);
 
                 for (final String message : messages) {
                     AutorankTools.sendColoredMessage(sender, message);
