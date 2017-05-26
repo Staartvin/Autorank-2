@@ -71,8 +71,8 @@ public class UpdatePlaytime implements Runnable {
         // leaderboard exemption
         plugin.getPlayerChecker().doLeaderboardExemptCheck(player);
 
-        if (AutorankTools.isExcludedFromRanking(player)
-                || player.hasPermission(AutorankPermission.EXCLUDE_FROM_TIME_UPDATES)) {
+        // Don't add extra time to the player when he is excluded from time updates.
+        if (player.hasPermission(AutorankPermission.EXCLUDE_FROM_TIME_UPDATES)) {
             return;
         }
 
