@@ -27,6 +27,11 @@ public class ValidateHandler {
         return correctSetup;
     }
 
+
+    /**
+     * Check whether all permission groups that are used in the config also exist according to the permission's plugin.
+     * @return true if there are no unknown permission groups in the config.
+     */
     public boolean validatePermGroups() {
 
         List<Path> paths = plugin.getPathManager().getPaths();
