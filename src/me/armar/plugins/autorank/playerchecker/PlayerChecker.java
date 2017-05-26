@@ -1,6 +1,7 @@
 package me.armar.plugins.autorank.playerchecker;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.bukkit.ChatColor;
@@ -54,7 +55,7 @@ public class PlayerChecker {
     }
 
     public List<String> formatRequirementsToList(final List<RequirementsHolder> holders,
-            final List<Integer> metRequirements) {
+            final List<RequirementsHolder> metRequirements) {
         // Converts requirements into a list of readable requirements
 
         final List<String> messages = new ArrayList<String>();
@@ -63,11 +64,10 @@ public class PlayerChecker {
 
         for (int i = 0; i < holders.size(); i++) {
             final RequirementsHolder holder = holders.get(i);
-            final int reqID = holder.getReqID();
 
             if (holder != null) {
                 final StringBuilder message = new StringBuilder("     " + ChatColor.GOLD + (i + 1) + ". ");
-                if (metRequirements.contains(reqID)) {
+                if (metRequirements.contains(holder)) {
                     message.append(ChatColor.RED + holder.getDescription() + ChatColor.BLUE + " ("
                             + Lang.DONE_MARKER.getConfigValue() + ")");
                 } else {
@@ -111,6 +111,12 @@ public class PlayerChecker {
 
     }
 
+    /**
+     * Get a list of Requirements that the player needs to complete for its current path. Returns an empty list if
+     * the player has not chosen a path yet.
+     * @param player Player to check the path of.
+     * @return A list of RequirementsHolders that ought to be completed before the path is completed.
+     */
     public List<RequirementsHolder> getAllRequirementsHolders(final Player player) {
         // Get chosen path
         Path chosenPath = plugin.getPathManager().getCurrentPath(player.getUniqueId());
@@ -122,6 +128,12 @@ public class PlayerChecker {
         }
     }
 
+    /**
+     * Get a list of Requirements that the player did not pass (yet). Returns an empty list if the player has not chosen
+     * any path yet.
+     * @param player Player to check path for.
+     * @return a list of RequirementsHolders that the player did not complete yet.
+     */
     public List<RequirementsHolder> getFailedRequirementsHolders(final Player player) {
 
         List<RequirementsHolder> holders = new ArrayList<>();
@@ -136,8 +148,26 @@ public class PlayerChecker {
         return holders;
     }
 
-    public List<Integer> getMetRequirementsHolders(final List<RequirementsHolder> holders, final Player player) {
-        final List<Integer> metRequirements = new ArrayList<Integer>();
+    /**
+     * Get all requirements that a player has completed in its path.
+     * @param player Player to check
+     * @return List of RequirementsHolders that the player completed.
+     */
+    public List<RequirementsHolder> getCompletedRequirementsHolders(Player player) {
+       return this.getMetRequirementsHolders(this.getAllRequirementsHolders(player), player);
+
+    }
+
+    /**
+     * Get a list of Requirements that the player completed, given a set of Requirements.
+     * The {@link #getCompletedRequirementsHolders(Player)} uses this method with the requirements of the player's
+     * current path.
+     * @param holders A list of holders to check.
+     * @param player Player to check holders for.
+     * @return a subset of the given list of holders that the player completed.
+     */
+    public List<RequirementsHolder> getMetRequirementsHolders(final List<RequirementsHolder> holders, final Player player) {
+        final List<RequirementsHolder> metRequirements = new ArrayList<>();
 
         boolean onlyOptional = true;
 
@@ -148,13 +178,12 @@ public class PlayerChecker {
         }
 
         if (onlyOptional) {
-            final List<Integer> optionalRequirements = new ArrayList<Integer>();
 
             for (final RequirementsHolder holder : holders) {
-                optionalRequirements.add(holder.getReqID());
+                metRequirements.add(holder);
             }
 
-            return optionalRequirements;
+            return metRequirements;
         }
 
         for (final RequirementsHolder holder : holders) {
@@ -171,7 +200,7 @@ public class PlayerChecker {
                     if (!plugin.getConfigHandler().usePartialCompletion())
                         continue;
 
-                    metRequirements.add(reqID);
+                    metRequirements.add(holder);
                     continue;
                 } else {
 
@@ -181,7 +210,7 @@ public class PlayerChecker {
                         // Player does not meet requirements, but has done this
                         // already
                         if (plugin.getPlayerDataConfig().hasCompletedRequirement(reqID, player.getUniqueId())) {
-                            metRequirements.add(reqID);
+                            metRequirements.add(holder);
                             continue;
                         }
                     }
@@ -218,7 +247,7 @@ public class PlayerChecker {
                 // Do not auto complete
                 if (plugin.getPlayerDataConfig().hasCompletedRequirement(reqID, player.getUniqueId())) {
                     // Player has completed requirement already
-                    metRequirements.add(reqID);
+                    metRequirements.add(holder);
                     continue;
                 } else {
 
@@ -231,6 +260,7 @@ public class PlayerChecker {
                 }
             }
         }
+
         return metRequirements;
     }
 }
