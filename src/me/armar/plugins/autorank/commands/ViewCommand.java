@@ -153,11 +153,7 @@ public class ViewCommand extends AutorankCommand {
 
                 List<RequirementsHolder> holders = targetPath.getPrerequisites();
 
-                // Set messages depending on console or player
-                List<String> messages = (isPlayer
-                        ? plugin.getPlayerChecker().formatRequirementsToList(holders,
-                                plugin.getPlayerChecker().getMetRequirementsHolders(holders, (Player) sender))
-                        : plugin.getPlayerChecker().formatRequirementsToList(holders, new ArrayList<Integer>()));
+                List<String> messages = plugin.getPlayerChecker().formatRequirementsToList(holders, new ArrayList<RequirementsHolder>());
 
                 sender.sendMessage(ChatColor.GREEN + "Prerequisites of path '" + ChatColor.GRAY
                         + targetPath.getDisplayName() + ChatColor.GREEN + "':");
@@ -186,11 +182,7 @@ public class ViewCommand extends AutorankCommand {
             } else {
                 List<RequirementsHolder> holders = targetPath.getRequirements();
 
-                // Set messages depending on console or player
-                List<String> messages = (isPlayer
-                        ? plugin.getPlayerChecker().formatRequirementsToList(holders,
-                                plugin.getPlayerChecker().getMetRequirementsHolders(holders, (Player) sender))
-                        : plugin.getPlayerChecker().formatRequirementsToList(holders, new ArrayList<Integer>()));
+                List<String> messages = plugin.getPlayerChecker().formatRequirementsToList(holders, new ArrayList<RequirementsHolder>());
 
                 sender.sendMessage(ChatColor.GREEN + "Requirements of path '" + ChatColor.GRAY
                         + targetPath.getDisplayName() + ChatColor.GREEN + "':");
