@@ -221,4 +221,13 @@ public class API {
 
         return startedPaths;
     }
+
+    /**
+     * Get all the paths that a player is allowed to start.
+     * @param player Player to check paths for.
+     * @return a list of paths the player is able to start.
+     */
+    public List<Path> getEligiblePaths(Player player) {
+        return plugin.getPathManager().getEligiblePaths(player);
+    }
 }
