@@ -595,11 +595,15 @@ public class AutorankTools {
             minutes = string;
         }
 
+        System.out.println("DAYS: " + stringToDouble(days));
+        System.out.println("HOURS: " + stringToDouble(hours));
+        System.out.println("MINUTES: " + stringToDouble(minutes));
+
         int intDays = (int) stringToDouble(days);
         int intHours = (int) stringToDouble(hours);
         int intMinutes = (int) stringToDouble(minutes);
 
-        if (intDays + intHours + intMinutes < 0) {
+        if (intDays < 0 && intHours < 0 && intMinutes < 0) {
             // The total value is below 0, so there is clearly something wrong.
             return -1;
         }
