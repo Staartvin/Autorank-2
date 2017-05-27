@@ -71,6 +71,16 @@ public class API {
     }
 
     /**
+     * Get all {@linkplain RequirementsHolder}s that the player has already completed.
+     * If the player does not have a current path, it will return an empty list.
+     * @param player Player to get completed requirements for.
+     * @return a list of completed requirements.
+     */
+    public List<RequirementsHolder> getCompletedRequirements(final Player player) {
+        return plugin.getPlayerChecker().getCompletedRequirementsHolders(player);
+    }
+
+    /**
      * Get the global play time (playtime across all servers with the same MySQL
      * database linked) of a player.
      * <p>

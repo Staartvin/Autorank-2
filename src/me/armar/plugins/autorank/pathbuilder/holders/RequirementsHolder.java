@@ -41,7 +41,7 @@ public class RequirementsHolder {
     }
 
     /**
-     * Add requirement to this requirementsholder.
+     * Add requirement to this RequirementsHolder.
      * @param req Requirement to add
      */
     public void addRequirement(final Requirement req) {
