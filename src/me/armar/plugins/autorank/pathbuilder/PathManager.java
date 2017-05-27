@@ -17,9 +17,8 @@ import me.armar.plugins.autorank.util.AutorankTools;
  * Handles all things that have to do with paths checking
  * <p>
  * Date created: 16:32:49 5 aug. 2015
- * 
+ *
  * @author Staartvin
- * 
  */
 public class PathManager {
 
@@ -36,7 +35,7 @@ public class PathManager {
 
     /**
      * Return a list of messages that represents debug information of the paths.
-     * 
+     *
      * @return a list of strings.
      */
     public List<String> debugPaths() {
@@ -97,9 +96,8 @@ public class PathManager {
 
     /**
      * Get the path that the player is currently on.
-     * 
-     * @param uuid
-     *            UUID of the player
+     *
+     * @param uuid UUID of the player
      * @return path of the player, or null if not found.
      */
     public Path getCurrentPath(UUID uuid) {
@@ -115,7 +113,7 @@ public class PathManager {
 
     /**
      * Get a list of all paths that are defined in the paths.yml file.
-     * 
+     *
      * @return a list of {@link Path} objects.
      */
     public List<Path> getPaths() {
@@ -125,9 +123,8 @@ public class PathManager {
     /**
      * Get possible paths a player can take. A player can choose a path if he
      * meets the prerequisites.
-     * 
-     * @param player
-     *            Player
+     *
+     * @param player Player
      * @return List of paths that a player can choose.
      */
     public List<Path> getPossiblePaths(Player player) {
@@ -150,15 +147,15 @@ public class PathManager {
 
         // Clear before starting
         paths.clear();
-        
+
         List<Path> temp = builder.initialisePaths();
-        
+
         if (temp == null) {
             plugin.getLogger().warning("The paths file was not configured correctly! See your log file for more info.");
             return;
         } else {
             paths = temp;
-        }    
+        }
 
         // Output paths in the console if debug is turned on.
         for (final String message : debugPaths()) {
@@ -168,14 +165,11 @@ public class PathManager {
     }
 
     /**
-     * 
      * Get the path that corresponds to the given chosenPath string.
-     * 
-     * @param chosenPath
-     *            The display name of the path
-     * @param isCaseSensitive
-     *            true if we only match paths that have the exact wording,
-     *            taking into account case sensitivity.
+     *
+     * @param chosenPath      The display name of the path
+     * @param isCaseSensitive true if we only match paths that have the exact wording,
+     *                        taking into account case sensitivity.
      * @return matching path or null if none found.
      */
     public Path matchPathbyDisplayName(String chosenPath, boolean isCaseSensitive) {
@@ -196,14 +190,11 @@ public class PathManager {
     }
 
     /**
-     * 
      * Get the path that corresponds to the given chosenPath string.
-     * 
-     * @param chosenPath
-     *            The internal name of the path
-     * @param isCaseSensitive
-     *            true if we only match paths that have the exact wording,
-     *            taking into account case sensitivity.
+     *
+     * @param chosenPath      The internal name of the path
+     * @param isCaseSensitive true if we only match paths that have the exact wording,
+     *                        taking into account case sensitivity.
      * @return matching path or null if none found.
      */
     public Path matchPathbyInternalName(String chosenPath, boolean isCaseSensitive) {
@@ -226,11 +217,9 @@ public class PathManager {
     /**
      * Assign a path to a player. It will reset their progress and run any
      * results that should be performed.
-     * 
-     * @param player
-     *            Player to assign path to
-     * @param pathName
-     *            Name of the path
+     *
+     * @param player   Player to assign path to
+     * @param pathName Name of the path
      */
     public void assignPath(Player player, String pathName) {
         // Set chosen path to target path
@@ -258,11 +247,10 @@ public class PathManager {
 
     /**
      * Try to automatically assign a path to a player.
-     * 
-     * @param player
-     *            Player to assign a path to
+     *
+     * @param player Player to assign a path to
      * @return Path that has been automatically assigned to the player or null
-     *         if none was assigned.
+     * if none was assigned.
      */
     public Path autoAssignPath(Player player) {
 
@@ -280,7 +268,7 @@ public class PathManager {
         }
 
         // Remove paths that should not be automatically chosen by Autorank
-        for (Iterator<Path> iterator = possiblePaths.iterator(); iterator.hasNext();) {
+        for (Iterator<Path> iterator = possiblePaths.iterator(); iterator.hasNext(); ) {
             Path path = iterator.next();
 
             // Remove path if Autorank should not auto choose it
@@ -358,7 +346,7 @@ public class PathManager {
             // that is allowed to be repeated.
             for (Path path : highestPriorityPaths) {
                 if (plugin.getPathsConfig().allowInfinitePathing(path.getInternalName())) {
-                    
+
                     // Assign path to player
                     this.assignPath(player, path.getInternalName());
 
@@ -378,4 +366,50 @@ public class PathManager {
         this.builder = builder;
     }
 
+    /**
+     * Get the paths the player is able to choose. It checks whether the player has already completed the path (and
+     * whether it can be completed indefinitely) and whether it should be shown based on the prerequisites of the player.
+     * @param player Player to get the paths for. If null, all the known paths of Autorank will be returned.
+     * @return a list of paths that the player can start.
+     */
+    public List<Path> getEligiblePaths(Player player) {
+        final List<Path> paths = plugin.getPathManager().getPaths();
+
+        // If player is null, we just return all paths we know of.
+        if (player == null) {
+            return paths;
+        }
+
+        UUID uuid = player.getUniqueId();
+
+        // Remove paths that have already been completed by the
+        // user.
+        for (Iterator<Path> iterator = paths.iterator(); iterator.hasNext(); ) {
+            Path path = iterator.next();
+
+            // If this path can be done over and over again, we
+            // obviously don't want to remove it.
+            if (plugin.getPathsConfig().allowInfinitePathing(path.getInternalName())) {
+                continue;
+            }
+
+            // Remove it if player already completed the path
+            if (plugin.getPlayerDataConfig().hasCompletedPath(uuid, path.getInternalName())) {
+                iterator.remove();
+                continue;
+            }
+
+            // Remove path from list if this path can only be shown
+            // when a player meets the path's prerequisites (and the
+            // player does not match the prerequisites).
+            if (plugin.getPathsConfig().showBasedOnPrerequisites(path.getInternalName())
+                    && !plugin.getPathManager().matchPathbyInternalName(path.getInternalName(), false)
+                    .meetsPrerequisites(player)) {
+                iterator.remove();
+                continue;
+            }
+        }
+
+        return paths;
+    }
 }

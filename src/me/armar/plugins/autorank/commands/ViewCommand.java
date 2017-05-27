@@ -60,37 +60,7 @@ public class ViewCommand extends AutorankCommand {
             // Get a list of possible paths that a player can take?
             if (pathName.equals("list")) {
 
-                final List<Path> paths = plugin.getPathManager().getPaths();
-
-                if (isPlayer) {
-                    UUID uuid = ((Player) sender).getUniqueId();
-
-                    // Remove paths that have already been completed by the
-                    // user.
-                    for (Iterator<Path> iterator = paths.iterator(); iterator.hasNext();) {
-                        Path path = iterator.next();
-
-                        // If this path can be done over and over again, we
-                        // obviously don't want to remove it.
-                        if (plugin.getPathsConfig().allowInfinitePathing(path.getInternalName())) {
-                            continue;
-                        }
-
-                        // Remove it if player already completed the path
-                        if (plugin.getPlayerDataConfig().hasCompletedPath(uuid, path.getInternalName())) {
-                            iterator.remove();
-                        }
-
-                        // Remove path from list if this path can only be shown
-                        // when a player meets the path's prerequisites (and the
-                        // player does not match the prerequisites).
-                        if (plugin.getPathsConfig().showBasedOnPrerequisites(path.getInternalName())
-                                && !plugin.getPathManager().matchPathbyInternalName(path.getInternalName(), false)
-                                        .meetsPrerequisites((Player) sender)) {
-                            iterator.remove();
-                        }
-                    }
-                }
+                final List<Path> paths = plugin.getPathManager().getEligiblePaths(isPlayer ? (Player) sender : null);
 
                 if (paths.isEmpty()) {
                     sender.sendMessage(Lang.NO_PATHS_TO_CHOOSE.getConfigValue());
