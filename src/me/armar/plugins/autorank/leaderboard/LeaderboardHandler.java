@@ -292,7 +292,7 @@ public class LeaderboardHandler {
      * @return true if we should update the leaderboard
      */
     private boolean shouldUpdateLeaderboard(TimeType type) {
-        if (System.currentTimeMillis() - plugin.getInternalPropertiesConfig().getLeaderboardLastUpdateTime() > (60000
+        if (System.currentTimeMillis() - plugin.getInternalPropertiesConfig().getLeaderboardLastUpdateTime(type) > (60000
                 * LEADERBOARD_TIME_VALID)) {
             return true;
         } else if (plugin.getInternalPropertiesConfig().getCachedLeaderboard(type).size() <= 2) {
@@ -402,7 +402,7 @@ public class LeaderboardHandler {
         plugin.getInternalPropertiesConfig().setCachedLeaderboard(type, stringList);
 
         // Update latest update-time
-        plugin.getInternalPropertiesConfig().setLeaderboardLastUpdateTime(System.currentTimeMillis());
+        plugin.getInternalPropertiesConfig().setLeaderboardLastUpdateTime(type, System.currentTimeMillis());
     }
 
     /**
