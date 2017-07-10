@@ -44,8 +44,8 @@ public class InternalPropertiesConfig {
      * 
      * @return a UNIX timestamp or 0 if never updated before.
      */
-    public long getLeaderboardLastUpdateTime() {
-        return config.getLong("leaderboard last updated", 0);
+    public long getLeaderboardLastUpdateTime(final TimeType type) {
+        return config.getLong("leaderboards." + type.toString().toLowerCase() + ".last updated", 0);
     }
 
     /**
@@ -162,8 +162,8 @@ public class InternalPropertiesConfig {
      * @param time
      *            Last update time (UNIX timestamp)
      */
-    public void setLeaderboardLastUpdateTime(final long time) {
-        config.set("leaderboard last updated", time);
+    public void setLeaderboardLastUpdateTime(final TimeType type, final long time) {
+        config.set("leaderboards." + type.toString().toLowerCase() + ".last updated", time);
 
         config.saveFile();
     }

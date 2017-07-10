@@ -142,7 +142,7 @@ public class FlatFileManager {
                 // Update tracked data type
                 plugin.getInternalPropertiesConfig().setTrackedTimeType(type, value);
                 // We reset leaderboard time so it refreshes again.
-                plugin.getInternalPropertiesConfig().setLeaderboardLastUpdateTime(0);
+                plugin.getInternalPropertiesConfig().setLeaderboardLastUpdateTime(type, 0);
 
                 // Update leaderboard of reset time
                 plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
