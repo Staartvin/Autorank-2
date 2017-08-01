@@ -1,8 +1,10 @@
 package me.armar.plugins.autorank.pathbuilder.result;
 
+import me.staartvin.plugins.pluginlibrary.Library;
+import me.staartvin.plugins.pluginlibrary.hooks.VaultHook;
 import org.bukkit.entity.Player;
 
-import me.armar.plugins.autorank.hooks.vaultapi.VaultHandler;
+import me.armar.plugins.autorank.hooks.vaultapi.PluginLibraryHandler;
 import me.armar.plugins.autorank.language.Lang;
 import net.milkbowl.vault.economy.EconomyResponse;
 
@@ -12,9 +14,15 @@ public class MoneyResult extends Result {
 
     @Override
     public boolean applyResult(final Player player) {
-      EconomyResponse res =  VaultHandler.economy.depositPlayer(player, money);
-      
-      return res.transactionSuccess();
+
+        // We need Vault to check economy variables.
+        if (!this.getAutorank().getDependencyManager().isAvailable(Library.VAULT)) {
+            return false;
+        }
+
+        EconomyResponse res = VaultHook.getEconomy().depositPlayer(player, money);
+
+        return res.transactionSuccess();
     }
 
     /*
@@ -24,7 +32,15 @@ public class MoneyResult extends Result {
      */
     @Override
     public String getDescription() {
-        return Lang.MONEY_RESULT.getConfigValue(money + " " + VaultHandler.economy.currencyNamePlural());
+
+        String currencyName = "";
+
+        // We need Vault to check economy variables.
+        if (this.getAutorank().getDependencyManager().isAvailable(Library.VAULT)) {
+            currencyName = VaultHook.getEconomy().currencyNamePlural().trim();
+        }
+
+        return Lang.MONEY_RESULT.getConfigValue(money + " " + currencyName);
     }
 
     @Override
@@ -33,7 +49,7 @@ public class MoneyResult extends Result {
         if (options.length > 0) {
             money = Long.parseLong(options[0]);
         }
-        
+
         return money >= 0;
     }
 }

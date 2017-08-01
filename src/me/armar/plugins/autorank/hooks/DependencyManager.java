@@ -2,11 +2,13 @@ package me.armar.plugins.autorank.hooks;
 
 import java.util.HashMap;
 
+import me.staartvin.plugins.pluginlibrary.Library;
+import me.staartvin.plugins.pluginlibrary.hooks.LibraryHook;
 import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.statzapi.StatzAPIHandler;
-import me.armar.plugins.autorank.hooks.vaultapi.VaultHandler;
+import me.armar.plugins.autorank.hooks.vaultapi.PluginLibraryHandler;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.armar.plugins.autorank.statsmanager.StatsPluginManager;
 import me.staartvin.statz.hooks.Dependency;
@@ -36,7 +38,7 @@ public class DependencyManager {
      */
     public enum AutorankDependency {
 
-        AUTORANK, ONTIME, STATS, STATZ, VAULT
+        AUTORANK, ONTIME, STATS, STATZ, VAULT, PLUGINLIBRARY
     };
 
     private final HashMap<AutorankDependency, DependencyHandler> handlers = new HashMap<AutorankDependency, DependencyHandler>();
@@ -50,7 +52,7 @@ public class DependencyManager {
 
         // Register handlers
         handlers.put(AutorankDependency.STATZ, new StatzAPIHandler(instance));
-        handlers.put(AutorankDependency.VAULT, new VaultHandler(instance));
+        handlers.put(AutorankDependency.PLUGINLIBRARY, new PluginLibraryHandler());
 
         statsPluginManager = new StatsPluginManager(instance);
     }
@@ -182,6 +184,60 @@ public class DependencyManager {
 
         // After loading dependencies, search permissions plugin
         plugin.getPermPlugHandler().searchPermPlugin();
+    }
+
+    public boolean isAvailable(AutorankDependency dep) {
+        DependencyHandler handler = getDependency(dep);
+
+        if (handler == null)
+            return false;
+
+        return handler.isAvailable();
+    }
+
+    /**
+     * Get library hook of PluginLibrary
+     * @param library library to get
+     * @return hook used by PluginLibrary (if available) or null if not found.
+     */
+    public LibraryHook getLibraryHook(Library library) {
+        if (!this.isAvailable(AutorankDependency.PLUGINLIBRARY)) return null;
+
+        if (library == null) return null;
+
+        PluginLibraryHandler handler = (PluginLibraryHandler) getDependency(AutorankDependency.PLUGINLIBRARY);
+
+        if (handler == null) {
+            return null;
+        }
+
+        return handler.getLibraryHook(library);
+    }
+
+    /**
+     * Check whether a plugin is available using PluginLibrary.
+     * @param library Library to check
+     * @return true if it is available, false otherwise.
+     */
+    public boolean isAvailable(Library library) {
+
+        if (!this.isAvailable(AutorankDependency.PLUGINLIBRARY)) return false;
+
+        if (library == null) return false;
+
+        PluginLibraryHandler handler = (PluginLibraryHandler) getDependency(AutorankDependency.PLUGINLIBRARY);
+
+        if (handler == null) {
+            return false;
+        }
+
+        LibraryHook hook = handler.getLibraryHook(library);
+
+        if (hook == null) {
+            return false;
+        }
+
+        return hook.isAvailable();
     }
 
 }

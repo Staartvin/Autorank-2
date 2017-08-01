@@ -1,11 +1,14 @@
 package me.armar.plugins.autorank.permissions.handlers;
 
+import me.staartvin.plugins.pluginlibrary.Library;
+import me.staartvin.plugins.pluginlibrary.hooks.LibraryHook;
+import me.staartvin.plugins.pluginlibrary.hooks.VaultHook;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.DependencyManager.AutorankDependency;
-import me.armar.plugins.autorank.hooks.vaultapi.VaultHandler;
+import me.armar.plugins.autorank.hooks.vaultapi.PluginLibraryHandler;
 import me.armar.plugins.autorank.permissions.PermissionsHandler;
 
 import java.util.ArrayList;
@@ -41,17 +44,33 @@ public class VaultPermissionsHandler implements PermissionsHandler {
      * @return true if done, false if failed
      */
     public boolean addGroup(final Player player, final String world, final String group) {
-        if (VaultHandler.permission == null)
+        LibraryHook hook = plugin.getDependencyManager().getLibraryHook(Library.VAULT);
+
+        if (hook == null || !hook.isAvailable())
             return false;
 
-        return VaultHandler.permission.playerAddGroup(world, player, group);
+        if (VaultHook.getPermissions() == null) {
+            return false;
+        }
+
+        return VaultHook.getPermissions().playerAddGroup(world, player, group);
         // return permission.playerAddGroup(world, player.getName(), group);
     }
 
     @Override
     public boolean demotePlayer(final Player player, String world, final String groupFrom, final String groupTo) {
+
+        LibraryHook hook = plugin.getDependencyManager().getLibraryHook(Library.VAULT);
+
+        if (hook == null || !hook.isAvailable())
+            return false;
+
+        if (VaultHook.getPermissions() == null) {
+            return false;
+        }
+
         // Temporary fix for bPermissions
-        if (world == null && VaultHandler.permission.getName().toLowerCase().contains("bpermissions")) {
+        if (world == null && VaultHook.getPermissions().getName().toLowerCase().contains("bpermissions")) {
             world = player.getWorld().getName();
         }
 
@@ -94,11 +113,20 @@ public class VaultPermissionsHandler implements PermissionsHandler {
     public Collection<String> getGroups() {
         List<String> groups = new ArrayList<>();
 
-        if (VaultHandler.permission == null) {
+        LibraryHook hook = plugin.getDependencyManager().getLibraryHook(Library.VAULT);
+
+        if (hook == null || !hook.isAvailable())
+            return Collections.unmodifiableCollection(groups);
+
+        if (VaultHook.getPermissions() == null) {
             return Collections.unmodifiableCollection(groups);
         }
 
-        for (String groupName : VaultHandler.permission.getGroups()) {
+        if (VaultHook.getPermissions() == null) {
+            return Collections.unmodifiableCollection(groups);
+        }
+
+        for (String groupName : VaultHook.getPermissions().getGroups()) {
             groups.add(groupName);
         }
 
@@ -112,14 +140,23 @@ public class VaultPermissionsHandler implements PermissionsHandler {
      */
     @Override
     public String getName() {
-        return VaultHandler.permission.getName();
+        return VaultHook.getPermissions().getName();
     }
 
     @Override
     public Collection<String> getPlayerGroups(final Player player) {
         List<String> groups = new ArrayList<>();
 
-        if (VaultHandler.permission == null) {
+        LibraryHook hook = plugin.getDependencyManager().getLibraryHook(Library.VAULT);
+
+        if (hook == null || !hook.isAvailable())
+            return Collections.unmodifiableCollection(groups);
+
+        if (VaultHook.getPermissions() == null) {
+            return Collections.unmodifiableCollection(groups);
+        }
+
+        if (VaultHook.getPermissions() == null) {
             return Collections.unmodifiableCollection(groups);
         }
 
@@ -127,9 +164,9 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 
         // Let admin choose.
         if (plugin.getConfigHandler().onlyUsePrimaryGroupVault()) {
-            groups.add(VaultHandler.permission.getPrimaryGroup(player));
+            groups.add(VaultHook.getPermissions().getPrimaryGroup(player));
         } else {
-            for (String groupName : VaultHandler.permission.getPlayerGroups(player)) {
+            for (String groupName : VaultHook.getPermissions().getPlayerGroups(player)) {
                 groups.add(groupName);
             }
         }
@@ -142,11 +179,24 @@ public class VaultPermissionsHandler implements PermissionsHandler {
     public Collection<String> getWorldGroups(final Player player, final String world) {
         List<String> groups = new ArrayList<>();
 
-        if (VaultHandler.permission == null) {
+        LibraryHook hook = plugin.getDependencyManager().getLibraryHook(Library.VAULT);
+
+        if (hook == null || !hook.isAvailable())
+            return Collections.unmodifiableCollection(groups);
+
+        if (VaultHook.getPermissions() == null) {
             return Collections.unmodifiableCollection(groups);
         }
 
-        for (String groupName : VaultHandler.permission.getPlayerGroups(world, player.getName())) {
+        if (VaultHook.getPermissions() == null) {
+            return Collections.unmodifiableCollection(groups);
+        }
+
+        if (VaultHook.getPermissions() == null) {
+            return Collections.unmodifiableCollection(groups);
+        }
+
+        for (String groupName : VaultHook.getPermissions().getPlayerGroups(world, player.getName())) {
             groups.add(groupName);
         }
 
@@ -162,17 +212,42 @@ public class VaultPermissionsHandler implements PermissionsHandler {
      * @return true if done, false if failed
      */
     public boolean removeGroup(final Player player, final String world, final String group) {
-        if (VaultHandler.permission == null)
+
+        LibraryHook hook = plugin.getDependencyManager().getLibraryHook(Library.VAULT);
+
+        if (hook == null || !hook.isAvailable())
             return false;
 
-        return VaultHandler.permission.playerRemoveGroup(world, player, group);
+        if (VaultHook.getPermissions() == null) {
+            return false;
+        }
+
+        if (VaultHook.getPermissions() == null) {
+            return false;
+        }
+
+        return VaultHook.getPermissions().playerRemoveGroup(world, player, group);
         // return permission.playerRemoveGroup(world, player.getName(), group);
     }
 
     @Override
     public boolean replaceGroup(final Player player, String world, final String oldGroup, final String newGroup) {
+
+        LibraryHook hook = plugin.getDependencyManager().getLibraryHook(Library.VAULT);
+
+        if (hook == null || !hook.isAvailable())
+            return false;
+
+        if (VaultHook.getPermissions() == null) {
+            return false;
+        }
+
+        if (VaultHook.getPermissions() == null) {
+            return false;
+        }
+
         // Temporary fix for bPermissions
-        if (world == null && VaultHandler.permission.getName().toLowerCase().contains("bpermissions")) {
+        if (world == null && VaultHook.getPermissions().getName().toLowerCase().contains("bpermissions")) {
             world = player.getWorld().getName();
         }
 
@@ -207,7 +282,7 @@ public class VaultPermissionsHandler implements PermissionsHandler {
             // other groups after we added the new group the player was ranked
             // up to.
             // Thanks to @DeathStampler for this code and info.
-            if (VaultHandler.permission.getName().toLowerCase().contains("permissionsex")) {
+            if (VaultHook.getPermissions().getName().toLowerCase().contains("permissionsex")) {
                 // Normally the player should have one more group at this point.
                 if (groupsAfterAdd.size() >= (groupsBeforeAdd.size() + 1)) {
                     // We have one more groups than before. Great. Let's remove

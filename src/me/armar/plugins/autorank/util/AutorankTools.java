@@ -595,10 +595,6 @@ public class AutorankTools {
             minutes = string;
         }
 
-        System.out.println("DAYS: " + stringToDouble(days));
-        System.out.println("HOURS: " + stringToDouble(hours));
-        System.out.println("MINUTES: " + stringToDouble(minutes));
-
         int intDays = (int) stringToDouble(days);
         int intHours = (int) stringToDouble(hours);
         int intMinutes = (int) stringToDouble(minutes);

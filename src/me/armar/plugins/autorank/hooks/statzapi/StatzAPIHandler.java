@@ -20,7 +20,7 @@ import me.staartvin.statz.hooks.Dependency;
  * @author Staartvin
  * 
  */
-public class StatzAPIHandler implements DependencyHandler {
+public class StatzAPIHandler extends DependencyHandler {
 
     private final Autorank plugin;
     private Statz statz;
