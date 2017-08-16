@@ -1,14 +1,14 @@
 package me.armar.plugins.autorank.commands;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.hooks.DependencyManager.AutorankDependency;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
-import me.staartvin.statz.hooks.Dependency;
+import me.staartvin.plugins.pluginlibrary.Library;
+import me.staartvin.plugins.pluginlibrary.hooks.LibraryHook;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 
 /**
  * The command delegator for the '/ar hooks' command.
@@ -31,11 +31,11 @@ public class HooksCommand extends AutorankCommand {
 
         sender.sendMessage(ChatColor.GOLD + "Autorank Hooks:");
 
-        for (final Dependency dep : Dependency.values()) {
+        for (final Library dep : Library.values()) {
             // There is no AutorankDependency handler for Autorank
 
-            final me.staartvin.statz.hooks.DependencyHandler handler = plugin.getDependencyManager()
-                    .getDependencyHandler(dep);
+            final LibraryHook handler = plugin.getDependencyManager()
+                    .getLibraryHook(dep);
 
             final StringBuilder message = new StringBuilder(ChatColor.GRAY + dep.toString() + ": " + ChatColor.RESET);
 
