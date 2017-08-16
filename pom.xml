@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>Autorank</groupId>
 	<artifactId>Autorank</artifactId>
-	<version>4.0.7-Dev-${BUILD_NUMBER}</version>
+	<version>4.0.7-Dev-${BUILD_ID}</version>
 	<name>Autorank</name>
 	<description>Maven project for Bukkit plugin Autorank</description>
 	<url>http://dev.bukkit.org/server-mods/autorank/</url>
@@ -145,7 +145,7 @@
 		<dependency>
 			<groupId>me.staartvin.Statz</groupId>
 			<artifactId>Statz</artifactId>
-			<version>LATEST</version>
+			<version>1.4.3-Dev-9</version>
 		</dependency>
 
 		<dependency>
