@@ -1,19 +1,17 @@
 package me.armar.plugins.autorank.backup;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.logging.Level;
-
+import me.armar.plugins.autorank.Autorank;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import me.armar.plugins.autorank.Autorank;
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
 
 /**
  * This class is used to create a backup-data.yml that will store what files
  * were backed up and at what time.
- * 
+ *
  * @author Staartvin
  */
 public class BackupDataManager {
@@ -41,7 +39,7 @@ public class BackupDataManager {
 
     /**
      * Get the backup-data.yml file.
-     * 
+     *
      * @return
      */
     public FileConfiguration getConfig() {
@@ -53,11 +51,10 @@ public class BackupDataManager {
 
     /**
      * Get the last time a backup was made for a specific file.
-     * 
-     * @param file
-     *            File to check
+     *
+     * @param file File to check
      * @return the last time a file was backed up (UNIX timestamp), or -1 if it
-     *         was never backed up.
+     * was never backed up.
      */
     public long getLatestBackup(final String file) {
         return backupConfig.getLong(file, -1);
@@ -89,13 +86,6 @@ public class BackupDataManager {
                     "backup-data.yml");
         }
         backupConfig = YamlConfiguration.loadConfiguration(backupConfigFile);
-
-        // Look for defaults in the jar
-        final InputStream defConfigStream = plugin.getResource("backup-data.yml");
-        if (defConfigStream != null) {
-            final YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
-            backupConfig.setDefaults(defConfig);
-        }
     }
 
     /**

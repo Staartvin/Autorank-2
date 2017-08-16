@@ -1,14 +1,12 @@
 package me.armar.plugins.autorank.language;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.logging.Level;
-
+import me.armar.plugins.autorank.Autorank;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import me.armar.plugins.autorank.Autorank;
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
 
 /**
  * This class
@@ -64,13 +62,6 @@ public class LanguageHandler {
             languageConfigFile = new File(plugin.getDataFolder() + "/lang", "lang.yml");
         }
         languageConfig = YamlConfiguration.loadConfiguration(languageConfigFile);
-
-        // Look for defaults in the jar
-        final InputStream defConfigStream = plugin.getResource("lang.yml");
-        if (defConfigStream != null) {
-            final YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
-            languageConfig.setDefaults(defConfig);
-        }
     }
 
     public void saveConfig() {
