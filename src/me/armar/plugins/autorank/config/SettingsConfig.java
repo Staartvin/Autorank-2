@@ -206,7 +206,7 @@ public class SettingsConfig {
      * @return true if Autorank should, false otherwise.
      */
     public boolean useAdvancedDependencyLogs() {
-        return this.getConfig().getBoolean("advanced AutorankDependency output", false);
+        return this.getConfig().getBoolean("advanced dependency output", false);
     }
 
     /**
