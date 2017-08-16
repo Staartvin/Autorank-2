@@ -302,7 +302,7 @@ public class Autorank extends JavaPlugin {
 
                     // When an error occured!
 
-                    getLogger().severe("Could not hook into a AutorankDependency: \nCause: " + t.getMessage());
+                    getLogger().severe("Could not hook into a dependency: \nCause: " + t.getMessage());
                 }
 
                 // After dependencies, load paths
