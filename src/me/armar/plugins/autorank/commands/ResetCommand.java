@@ -1,15 +1,14 @@
 package me.armar.plugins.autorank.commands;
 
-import java.util.UUID;
-
-import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
+import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+
+import java.util.UUID;
 
 /**
  * The command delegator for the '/ar reset' command.
@@ -52,6 +51,7 @@ public class ResetCommand extends AutorankCommand {
             sender.sendMessage(ChatColor.GREEN + "Reset progress of " + ChatColor.YELLOW + realName);
         } else if (action.equalsIgnoreCase("chosenpath")) {
             plugin.getPlayerDataConfig().setChosenPath(uuid, null);
+            plugin.getPlayerDataConfig().setStartedPaths(uuid, null);
             sender.sendMessage(ChatColor.GREEN + "Reset chosen path of " + ChatColor.YELLOW + realName);
         } else if (action.equalsIgnoreCase("completedpaths")) {
             plugin.getPlayerDataConfig().setCompletedPaths(uuid, null);
