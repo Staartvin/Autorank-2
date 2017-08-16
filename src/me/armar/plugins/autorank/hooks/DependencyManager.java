@@ -38,7 +38,7 @@ public class DependencyManager {
      */
     public enum AutorankDependency {
 
-        AUTORANK, ONTIME, STATS, STATZ, VAULT, PLUGINLIBRARY
+        AUTORANK, ONTIME, STATS, STATZ, PLUGINLIBRARY
     };
 
     private final HashMap<AutorankDependency, DependencyHandler> handlers = new HashMap<AutorankDependency, DependencyHandler>();

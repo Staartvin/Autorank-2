@@ -27,7 +27,7 @@ public class VaultPermissionsHandler implements PermissionsHandler {
     private final Autorank plugin;
 
     public VaultPermissionsHandler(final Autorank plugin) {
-        if (!plugin.getDependencyManager().getDependency(AutorankDependency.VAULT).isAvailable()) {
+        if (plugin.getServer().getPluginManager().getPlugin("Vault") == null) { // Check if Vault is installed.
             plugin.getLogger().severe(
                     "Autorank did not find Vault when it started its boot sequence. This could cause problems!");
         }
