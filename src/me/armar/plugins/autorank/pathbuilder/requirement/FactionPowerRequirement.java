@@ -1,17 +1,16 @@
 package me.armar.plugins.autorank.pathbuilder.requirement;
 
-import java.text.DecimalFormat;
-
+import me.armar.plugins.autorank.language.Lang;
+import me.staartvin.plugins.pluginlibrary.Library;
+import me.staartvin.plugins.pluginlibrary.hooks.FactionsHook;
 import org.bukkit.entity.Player;
 
-import me.armar.plugins.autorank.language.Lang;
-import me.staartvin.statz.hooks.Dependency;
-import me.staartvin.statz.hooks.handlers.FactionsHandler;
+import java.text.DecimalFormat;
 
 public class FactionPowerRequirement extends Requirement {
 
     double factionPower = -1;
-    private FactionsHandler handler;
+    private FactionsHook handler;
 
     @Override
     public String getDescription() {
@@ -29,7 +28,7 @@ public class FactionPowerRequirement extends Requirement {
     @Override
     public String getProgress(final Player player) {
         final DecimalFormat df = new DecimalFormat("#.##");
-        final String doubleRounded = df.format(handler.getFactionPower(player));
+        final String doubleRounded = df.format(handler.getFactionPower(player.getUniqueId()));
 
         return doubleRounded + "/" + factionPower;
     }
@@ -44,14 +43,14 @@ public class FactionPowerRequirement extends Requirement {
                 return false;
         }
 
-        final double factionPower = handler.getFactionPower(player);
+        final double factionPower = handler.getFactionPower(player.getUniqueId());
 
         return factionPower >= this.factionPower;
     }
 
     @Override
     public boolean setOptions(final String[] options) {
-        handler = (FactionsHandler) this.getAutorank().getDependencyManager().getDependencyHandler(Dependency.FACTIONS);
+        handler = (FactionsHook) this.getAutorank().getDependencyManager().getLibraryHook(Library.FACTIONS);
 
         factionPower = Double.parseDouble(options[0]);
 

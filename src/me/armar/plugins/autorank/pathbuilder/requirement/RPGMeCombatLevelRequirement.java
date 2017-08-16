@@ -1,14 +1,14 @@
 package me.armar.plugins.autorank.pathbuilder.requirement;
 
+import me.staartvin.plugins.pluginlibrary.Library;
+import me.staartvin.plugins.pluginlibrary.hooks.RPGmeHook;
 import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.language.Lang;
-import me.staartvin.statz.hooks.Dependency;
-import me.staartvin.statz.hooks.handlers.RPGmeHandler;
 
 public class RPGMeCombatLevelRequirement extends Requirement {
 
-    private RPGmeHandler handler = null;
+    private RPGmeHook handler = null;
     private int skillLevel = -1;
 
     @Override
@@ -39,7 +39,7 @@ public class RPGMeCombatLevelRequirement extends Requirement {
     @Override
     public boolean setOptions(final String[] options) {
 
-        handler = (RPGmeHandler) this.getDependencyManager().getDependencyHandler(Dependency.RPGME);
+        handler = (RPGmeHook) this.getDependencyManager().getLibraryHook(Library.RPGME);
 
         if (options.length > 0) {
             skillLevel = Integer.parseInt(options[0]);

@@ -1,14 +1,13 @@
 package me.armar.plugins.autorank.pathbuilder.requirement;
 
-import org.bukkit.entity.Player;
-
 import me.armar.plugins.autorank.language.Lang;
-import me.staartvin.statz.hooks.Dependency;
-import me.staartvin.statz.hooks.handlers.EssentialsHandler;
+import me.staartvin.plugins.pluginlibrary.Library;
+import me.staartvin.plugins.pluginlibrary.hooks.EssentialsXHook;
+import org.bukkit.entity.Player;
 
 public class EssentialsGeoIPRequirement extends Requirement {
 
-    private EssentialsHandler essHandler = null;
+    private EssentialsXHook essHandler = null;
     String location = null;
 
     @Override
@@ -19,14 +18,14 @@ public class EssentialsGeoIPRequirement extends Requirement {
     @Override
     public String getProgress(final Player player) {
 
-        final String realLocation = essHandler.getGeoIPLocation(player);
+        final String realLocation = essHandler.getGeoIPLocation(player.getUniqueId());
 
         return realLocation + "/" + location;
     }
 
     @Override
     public boolean meetsRequirement(final Player player) {
-        final String realLocation = essHandler.getGeoIPLocation(player);
+        final String realLocation = essHandler.getGeoIPLocation(player.getUniqueId());
 
         if (realLocation == null)
             return false;
@@ -37,7 +36,7 @@ public class EssentialsGeoIPRequirement extends Requirement {
     @Override
     public boolean setOptions(final String[] options) {
 
-        essHandler = (EssentialsHandler) this.getDependencyManager().getDependencyHandler(Dependency.ESSENTIALS);
+        essHandler = (EssentialsXHook) this.getDependencyManager().getLibraryHook(Library.ESSENTIALSX);
 
         if (options.length != 1) {
             return false;

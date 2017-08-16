@@ -1,21 +1,15 @@
 package me.armar.plugins.autorank.hooks;
 
-import java.util.HashMap;
-
-import me.staartvin.plugins.pluginlibrary.Library;
-import me.staartvin.plugins.pluginlibrary.hooks.LibraryHook;
-import org.bukkit.entity.Player;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.statzapi.StatzAPIHandler;
 import me.armar.plugins.autorank.hooks.vaultapi.PluginLibraryHandler;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.armar.plugins.autorank.statsmanager.StatsPluginManager;
-import me.staartvin.statz.hooks.Dependency;
-import me.staartvin.statz.hooks.handlers.AFKTerminatorHandler;
-import me.staartvin.statz.hooks.handlers.EssentialsHandler;
-import me.staartvin.statz.hooks.handlers.RoyalCommandsHandler;
-import me.staartvin.statz.hooks.handlers.UltimateCoreHandler;
+import me.staartvin.plugins.pluginlibrary.Library;
+import me.staartvin.plugins.pluginlibrary.hooks.*;
+import org.bukkit.entity.Player;
+
+import java.util.HashMap;
 
 /**
  * This class is used for loading all the dependencies Autorank has. <br>
@@ -75,42 +69,10 @@ public class DependencyManager {
     }
 
     /**
-     * Get a Statz dependency handler
-     * 
-     * @param dep
-     *            Dependency to get
-     * @return a Statz dependency or null if Statz is not installed or not
-     *         properly enabled.
-     */
-    public me.staartvin.statz.hooks.DependencyHandler getDependencyHandler(Dependency dep) throws NoClassDefFoundError {
-        StatzAPIHandler statz = (StatzAPIHandler) plugin.getDependencyManager().getDependency(AutorankDependency.STATZ);
-
-        if (statz == null || !statz.isAvailable()) {
-            return null;
-        }
-
-        return statz.getDependencyHandler(dep);
-    }
-
-    /**
      * Get the installed Stats plugin that Autorank uses.
      */
     public StatsPlugin getStatsPlugin() {
         return statsPluginManager.getStatsPlugin();
-    }
-
-    /**
-     * Get the Statz plugin class to use as a connection between other
-     * dependencies of Statz.
-     */
-    public StatzAPIHandler getStatzConnector() {
-        StatzAPIHandler statz = (StatzAPIHandler) plugin.getDependencyManager().getDependency(AutorankDependency.STATZ);
-
-        if (statz == null || !statz.isAvailable()) {
-            return null;
-        }
-
-        return statz;
     }
 
     /**
@@ -127,22 +89,26 @@ public class DependencyManager {
             return false;
         }
 
-        if (this.getDependencyHandler(Dependency.ESSENTIALS).isAvailable()) {
-            plugin.debugMessage("Using Essentials for AFK");
-            return ((EssentialsHandler) this.getDependencyHandler(Dependency.ESSENTIALS)).isAFK(player);
-        } else if (this.getDependencyHandler(Dependency.ROYAL_COMMANDS).isAvailable()) {
+        boolean isAFK = false;
+
+        if (this.getLibraryHook(Library.ESSENTIALSX).isAvailable()) {
+            plugin.debugMessage("Using EssentialsX for AFK");
+            isAFK = ((EssentialsXHook) this.getLibraryHook(Library.ESSENTIALSX)).isAFK(player.getUniqueId());
+        } else if (this.getLibraryHook(Library.ROYALCOMMANDS).isAvailable()) {
             plugin.debugMessage("Using RoyalCommands for AFK");
-            return ((RoyalCommandsHandler) this.getDependencyHandler(Dependency.ROYAL_COMMANDS)).isAFK(player);
-        } else if (this.getDependencyHandler(Dependency.ULTIMATE_CORE).isAvailable()) {
+            isAFK = ((RoyalCommandsHook) this.getLibraryHook(Library.ROYALCOMMANDS)).isAFK(player);
+        } else if (this.getLibraryHook(Library.ULTIMATECORE).isAvailable()) {
             plugin.debugMessage("Using UltimateCore for AFK");
-            return ((UltimateCoreHandler) this.getDependencyHandler(Dependency.ULTIMATE_CORE)).isAFK(player);
-        } else if (this.getDependencyHandler(Dependency.AFKTERMINATOR).isAvailable()) {
+            isAFK = ((UltimateCoreHook) this.getLibraryHook(Library.ULTIMATECORE)).isAFK(player.getUniqueId());
+        } else if (this.getLibraryHook(Library.AFKTERMINATOR).isAvailable()) {
             plugin.debugMessage("Using AfkTerminator for AFK");
-            return ((AFKTerminatorHandler) this.getDependencyHandler(Dependency.AFKTERMINATOR)).isAFK(player);
+            isAFK = ((AFKTerminatorHook) this.getLibraryHook(Library.AFKTERMINATOR)).isAFKMachineDetected(player.getUniqueId());
         }
 
+
+
         // No suitable plugin found
-        return false;
+        return isAFK;
     }
 
     /**

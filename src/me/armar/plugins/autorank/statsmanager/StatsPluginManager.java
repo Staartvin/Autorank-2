@@ -1,19 +1,16 @@
 package me.armar.plugins.autorank.statsmanager;
 
+import me.staartvin.plugins.pluginlibrary.Library;
+import me.staartvin.plugins.pluginlibrary.hooks.StatsHook;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.DependencyManager.AutorankDependency;
 import me.armar.plugins.autorank.hooks.statzapi.StatzAPIHandler;
 import me.armar.plugins.autorank.statsmanager.handlers.FallbackHandler;
-import me.armar.plugins.autorank.statsmanager.handlers.StatisticsHandler;
 import me.armar.plugins.autorank.statsmanager.handlers.StatsHandler;
 import me.armar.plugins.autorank.statsmanager.handlers.StatzHandler;
-import me.staartvin.statz.hooks.Dependency;
-import me.staartvin.statz.hooks.handlers.StatisticsAPIHandler;
-import me.staartvin.statz.hooks.handlers.StatsAPIHandler;
 
 /**
  * This class decides which Stats plugin will be used for getting stat data.
@@ -52,7 +49,7 @@ public class StatsPluginManager {
             plugin.getLogger().info("Found Stats plugin: Stats (by Lolmewn)");
 
             statsPlugin = new StatsHandler(plugin,
-                    (StatsAPIHandler) plugin.getDependencyManager().getDependencyHandler(Dependency.STATS));
+                    (StatsHook) plugin.getDependencyManager().getLibraryHook(Library.STATS));
 
             if (statsPlugin == null) {
                 plugin.getLogger().info("Couldn't hook into Stats! StatsHandler was unable to hook.");
@@ -66,25 +63,6 @@ public class StatsPluginManager {
             }
 
             plugin.getLogger().info("Hooked into Stats (by Lolmewn)");
-        } else if (isPluginAvailable("Statistics")) {
-
-            plugin.getLogger().info("Found Stats plugin: Statistics (by bitWolfy)");
-
-            statsPlugin = new StatisticsHandler(plugin,
-                    (StatisticsAPIHandler) plugin.getDependencyManager().getDependencyHandler(Dependency.STATISTICS));
-
-            if (statsPlugin == null) {
-                plugin.getLogger().info("Couldn't hook into Statistics! StatisticsHandler was unable to hook.");
-                return;
-            }
-
-            if (!statsPlugin.isEnabled()) {
-                plugin.getLogger().info(
-                        "Couldn't hook into Statistics! Make sure the version is correct and Statistics properly connects to your MySQL database.");
-                return;
-            }
-
-            plugin.getLogger().info("Hooked into Statistics (by bitWolfy)");
         } else if (isPluginAvailable("Statz")) {
 
             plugin.getLogger().info("Found Statz plugin: Statz (by Staartvin)");

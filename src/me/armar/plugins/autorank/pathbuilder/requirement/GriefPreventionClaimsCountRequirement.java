@@ -1,15 +1,14 @@
 package me.armar.plugins.autorank.pathbuilder.requirement;
 
-import org.bukkit.entity.Player;
-
 import me.armar.plugins.autorank.language.Lang;
-import me.staartvin.statz.hooks.Dependency;
-import me.staartvin.statz.hooks.handlers.GriefPreventionHandler;
+import me.staartvin.plugins.pluginlibrary.Library;
+import me.staartvin.plugins.pluginlibrary.hooks.GriefPreventionHook;
+import org.bukkit.entity.Player;
 
 public class GriefPreventionClaimsCountRequirement extends Requirement {
 
     int claimsCount = -1;
-    private GriefPreventionHandler handler = null;
+    private GriefPreventionHook handler = null;
 
     @Override
     public String getDescription() {
@@ -37,8 +36,8 @@ public class GriefPreventionClaimsCountRequirement extends Requirement {
     @Override
     public boolean setOptions(final String[] options) {
 
-        handler = (GriefPreventionHandler) this.getDependencyManager()
-                .getDependencyHandler(Dependency.GRIEF_PREVENTION);
+        handler = (GriefPreventionHook) this.getDependencyManager()
+                .getLibraryHook(Library.GRIEFPREVENTION);
 
         if (options.length > 0) {
             claimsCount = Integer.parseInt(options[0]);

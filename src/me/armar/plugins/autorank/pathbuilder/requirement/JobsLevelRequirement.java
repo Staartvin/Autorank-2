@@ -1,15 +1,14 @@
 package me.armar.plugins.autorank.pathbuilder.requirement;
 
-import org.bukkit.entity.Player;
-
 import me.armar.plugins.autorank.language.Lang;
-import me.staartvin.statz.hooks.Dependency;
-import me.staartvin.statz.hooks.handlers.JobsHandler;
+import me.staartvin.plugins.pluginlibrary.Library;
+import me.staartvin.plugins.pluginlibrary.hooks.JobsHook;
+import org.bukkit.entity.Player;
 
 public class JobsLevelRequirement extends Requirement {
 
     String jobName;
-    private JobsHandler jobsHandler;
+    private JobsHook jobsHandler;
     int level = -1;
 
     @Override
@@ -56,7 +55,7 @@ public class JobsLevelRequirement extends Requirement {
     @Override
     public boolean setOptions(final String[] options) {
 
-        jobsHandler = (JobsHandler) this.getAutorank().getDependencyManager().getDependencyHandler(Dependency.JOBS);
+        jobsHandler = (JobsHook) this.getAutorank().getDependencyManager().getLibraryHook(Library.JOBS);
 
         level = Integer.parseInt(options[0]);
 

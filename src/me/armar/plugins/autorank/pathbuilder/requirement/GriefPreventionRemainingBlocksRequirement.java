@@ -1,14 +1,13 @@
 package me.armar.plugins.autorank.pathbuilder.requirement;
 
-import org.bukkit.entity.Player;
-
 import me.armar.plugins.autorank.language.Lang;
-import me.staartvin.statz.hooks.Dependency;
-import me.staartvin.statz.hooks.handlers.GriefPreventionHandler;
+import me.staartvin.plugins.pluginlibrary.Library;
+import me.staartvin.plugins.pluginlibrary.hooks.GriefPreventionHook;
+import org.bukkit.entity.Player;
 
 public class GriefPreventionRemainingBlocksRequirement extends Requirement {
 
-    private GriefPreventionHandler handler = null;
+    private GriefPreventionHook handler = null;
     int remainingBlocks = -1;
 
     @Override
@@ -37,8 +36,8 @@ public class GriefPreventionRemainingBlocksRequirement extends Requirement {
     @Override
     public boolean setOptions(final String[] options) {
 
-        handler = (GriefPreventionHandler) this.getDependencyManager()
-                .getDependencyHandler(Dependency.GRIEF_PREVENTION);
+        handler = (GriefPreventionHook) this.getDependencyManager()
+                .getLibraryHook(Library.GRIEFPREVENTION);
 
         if (options.length > 0) {
             remainingBlocks = Integer.parseInt(options[0]);

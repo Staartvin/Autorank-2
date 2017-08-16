@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>Autorank</groupId>
 	<artifactId>Autorank</artifactId>
-	<version>4.0.7-Dev-${BUILD_ID}</version>
+	<version>4.0.7-Dev-${BUILD_NUMBER}</version>
 	<name>Autorank</name>
 	<description>Maven project for Bukkit plugin Autorank</description>
 	<url>http://dev.bukkit.org/server-mods/autorank/</url>
@@ -120,20 +120,20 @@
         <dependency>
             <groupId>me.staartvin</groupId>
             <artifactId>PluginLibrary</artifactId>
-            <version>1.0.1</version>
+            <version>1.0.2</version>
         </dependency>
 
 		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot-api</artifactId>
-			<version>1.8-R0.1-SNAPSHOT</version>
+			<version>1.12.1-R0.1-SNAPSHOT</version>
 			<type>jar</type>
 		</dependency>
 
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
-			<version>1.12-R0.1-SNAPSHOT</version>
+			<version>1.12.1-R0.1-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
@@ -145,7 +145,7 @@
 		<dependency>
 			<groupId>me.staartvin.Statz</groupId>
 			<artifactId>Statz</artifactId>
-			<version>1.4.3-Dev-9</version>
+			<version>LATEST</version>
 		</dependency>
 
 		<dependency>
@@ -185,7 +185,7 @@
         <dependency>
             <groupId>me.staartvin.Statz</groupId>
             <artifactId>Statz</artifactId>
-            <version>1.4.3-Dev-43</version>
+            <version>LATEST</version>
         </dependency>
     </dependencies>
 </project>

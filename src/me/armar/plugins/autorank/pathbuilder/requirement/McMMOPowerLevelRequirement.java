@@ -1,14 +1,14 @@
 package me.armar.plugins.autorank.pathbuilder.requirement;
 
+import me.staartvin.plugins.pluginlibrary.Library;
+import me.staartvin.plugins.pluginlibrary.hooks.McMMOHook;
 import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.language.Lang;
-import me.staartvin.statz.hooks.Dependency;
-import me.staartvin.statz.hooks.handlers.McMMOHandler;
 
 public class McMMOPowerLevelRequirement extends Requirement {
 
-    private McMMOHandler handler = null;
+    private McMMOHook handler = null;
     int powerLevel = -1;
 
     @Override
@@ -37,7 +37,7 @@ public class McMMOPowerLevelRequirement extends Requirement {
     @Override
     public boolean setOptions(final String[] options) {
 
-        handler = (McMMOHandler) this.getDependencyManager().getDependencyHandler(Dependency.MCMMO);
+        handler = (McMMOHook) this.getDependencyManager().getLibraryHook(Library.MCMMO);
 
         if (options.length > 0) {
             powerLevel = Integer.parseInt(options[0]);

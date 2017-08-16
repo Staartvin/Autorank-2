@@ -1,12 +1,5 @@
 package me.armar.plugins.autorank;
 
-import java.util.HashMap;
-import java.util.Map.Entry;
-
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.plugin.java.JavaPlugin;
-
 import me.armar.plugins.autorank.addons.AddOnManager;
 import me.armar.plugins.autorank.api.API;
 import me.armar.plugins.autorank.backup.BackupManager;
@@ -26,56 +19,8 @@ import me.armar.plugins.autorank.listeners.PlayerJoinListener;
 import me.armar.plugins.autorank.pathbuilder.PathManager;
 import me.armar.plugins.autorank.pathbuilder.builders.RequirementBuilder;
 import me.armar.plugins.autorank.pathbuilder.builders.ResultBuilder;
-import me.armar.plugins.autorank.pathbuilder.requirement.ASkyBlockLevelRequirement;
-import me.armar.plugins.autorank.pathbuilder.requirement.AchievementRequirement;
-import me.armar.plugins.autorank.pathbuilder.requirement.AcidIslandLevelRequirement;
-import me.armar.plugins.autorank.pathbuilder.requirement.BlocksBrokenRequirement;
-import me.armar.plugins.autorank.pathbuilder.requirement.BlocksMovedRequirement;
-import me.armar.plugins.autorank.pathbuilder.requirement.BlocksPlacedRequirement;
-import me.armar.plugins.autorank.pathbuilder.requirement.DamageTakenRequirement;
-import me.armar.plugins.autorank.pathbuilder.requirement.EssentialsGeoIPRequirement;
-import me.armar.plugins.autorank.pathbuilder.requirement.ExpRequirement;
-import me.armar.plugins.autorank.pathbuilder.requirement.FactionPowerRequirement;
-import me.armar.plugins.autorank.pathbuilder.requirement.FishCaughtRequirement;
-import me.armar.plugins.autorank.pathbuilder.requirement.FoodEatenRequirement;
-import me.armar.plugins.autorank.pathbuilder.requirement.GamemodeRequirement;
-import me.armar.plugins.autorank.pathbuilder.requirement.GlobalTimeRequirement;
-import me.armar.plugins.autorank.pathbuilder.requirement.GriefPreventionBonusBlocksRequirement;
-import me.armar.plugins.autorank.pathbuilder.requirement.GriefPreventionClaimedBlocksRequirement;
-import me.armar.plugins.autorank.pathbuilder.requirement.GriefPreventionClaimsCountRequirement;
-import me.armar.plugins.autorank.pathbuilder.requirement.GriefPreventionRemainingBlocksRequirement;
-import me.armar.plugins.autorank.pathbuilder.requirement.GroupRequirement;
-import me.armar.plugins.autorank.pathbuilder.requirement.HasItemRequirement;
-import me.armar.plugins.autorank.pathbuilder.requirement.InBiomeRequirement;
-import me.armar.plugins.autorank.pathbuilder.requirement.ItemsCraftedRequirement;
-import me.armar.plugins.autorank.pathbuilder.requirement.JavaScriptRequirement;
-import me.armar.plugins.autorank.pathbuilder.requirement.JobsCurrentPointsRequirement;
-import me.armar.plugins.autorank.pathbuilder.requirement.JobsExperienceRequirement;
-import me.armar.plugins.autorank.pathbuilder.requirement.JobsLevelRequirement;
-import me.armar.plugins.autorank.pathbuilder.requirement.JobsTotalPointsRequirement;
-import me.armar.plugins.autorank.pathbuilder.requirement.LocationRequirement;
-import me.armar.plugins.autorank.pathbuilder.requirement.McMMOPowerLevelRequirement;
-import me.armar.plugins.autorank.pathbuilder.requirement.McMMOSkillLevelRequirement;
-import me.armar.plugins.autorank.pathbuilder.requirement.MobKillsRequirement;
-import me.armar.plugins.autorank.pathbuilder.requirement.MoneyRequirement;
-import me.armar.plugins.autorank.pathbuilder.requirement.PermissionRequirement;
-import me.armar.plugins.autorank.pathbuilder.requirement.PlayerKillsRequirement;
-import me.armar.plugins.autorank.pathbuilder.requirement.RPGMeCombatLevelRequirement;
-import me.armar.plugins.autorank.pathbuilder.requirement.RPGMeSkillLevelRequirement;
-import me.armar.plugins.autorank.pathbuilder.requirement.Requirement;
-import me.armar.plugins.autorank.pathbuilder.requirement.TimeRequirement;
-import me.armar.plugins.autorank.pathbuilder.requirement.TimesShearedRequirement;
-import me.armar.plugins.autorank.pathbuilder.requirement.TotalTimeRequirement;
-import me.armar.plugins.autorank.pathbuilder.requirement.TotalVotesRequirement;
-import me.armar.plugins.autorank.pathbuilder.requirement.WorldGuardRegionRequirement;
-import me.armar.plugins.autorank.pathbuilder.requirement.WorldRequirement;
-import me.armar.plugins.autorank.pathbuilder.result.CommandResult;
-import me.armar.plugins.autorank.pathbuilder.result.EffectResult;
-import me.armar.plugins.autorank.pathbuilder.result.MessageResult;
-import me.armar.plugins.autorank.pathbuilder.result.MoneyResult;
-import me.armar.plugins.autorank.pathbuilder.result.Result;
-import me.armar.plugins.autorank.pathbuilder.result.SpawnFireworkResult;
-import me.armar.plugins.autorank.pathbuilder.result.TeleportResult;
+import me.armar.plugins.autorank.pathbuilder.requirement.*;
+import me.armar.plugins.autorank.pathbuilder.result.*;
 import me.armar.plugins.autorank.permissions.PermissionsPluginManager;
 import me.armar.plugins.autorank.playerchecker.PlayerChecker;
 import me.armar.plugins.autorank.playtimes.PlaytimeManager;
@@ -87,6 +32,11 @@ import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.uuid.storage.UUIDStorage;
 import me.armar.plugins.autorank.validations.ValidateHandler;
 import me.armar.plugins.autorank.warningmanager.WarningManager;
+import org.bukkit.ChatColor;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.HashMap;
+import java.util.Map.Entry;
 
 /**
  * 
@@ -443,7 +393,7 @@ public class Autorank extends JavaPlugin {
         RequirementBuilder.registerRequirement("grief prevention claimed blocks", GriefPreventionClaimedBlocksRequirement.class);
         RequirementBuilder.registerRequirement("grief prevention remaining blocks", GriefPreventionRemainingBlocksRequirement.class);
         RequirementBuilder.registerRequirement("grief prevention bonus blocks", GriefPreventionBonusBlocksRequirement.class);
-        RequirementBuilder.registerRequirement("has achievement", AchievementRequirement.class);
+        RequirementBuilder.registerRequirement("has advancement", AdvancementRequirement.class);
         RequirementBuilder.registerRequirement("rpgme skill level", RPGMeSkillLevelRequirement.class);
         RequirementBuilder.registerRequirement("rpgme combat level", RPGMeCombatLevelRequirement.class);
         RequirementBuilder.registerRequirement("in group", GroupRequirement.class);

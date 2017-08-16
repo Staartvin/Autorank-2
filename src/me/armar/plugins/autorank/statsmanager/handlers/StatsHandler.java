@@ -5,15 +5,15 @@ import java.util.UUID;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
-import me.staartvin.statz.hooks.handlers.StatsAPIHandler;
+import me.staartvin.plugins.pluginlibrary.hooks.StatsHook;
 
 public class StatsHandler extends StatsPlugin {
 
     private final Autorank plugin;
 
-    private final StatsAPIHandler statsApi;;
+    private final StatsHook statsApi;;
 
-    public StatsHandler(final Autorank instance, final StatsAPIHandler statsAPI) {
+    public StatsHandler(final Autorank instance, final StatsHook statsAPI) {
         this.plugin = instance;
 
         statsApi = statsAPI;
@@ -33,7 +33,12 @@ public class StatsHandler extends StatsPlugin {
 
         int value = -1;
 
-        if (statType.equals(StatType.VOTES)) {
+        // As of 16th August 2017, I'm retracting support of Stats. It's not being updated by Lolmewn anymore (as he has
+        // no time) and there are (too) many buggy things going on with Stats. I can reconsider when Stats is being
+        // updated again.
+
+
+        /*if (statType.equals(StatType.VOTES)) {
             // Handle voting
             value = statsApi.getNormalStat(uuid, "Votes", worldName);
         } else if (statType.equals(StatType.PLAYERS_KILLED)) {
@@ -48,7 +53,7 @@ public class StatsHandler extends StatsPlugin {
             value = statsApi.getNormalStat(uuid, "Damage taken", worldName);
         } else if (statType.equals(StatType.BLOCKS_PLACED)) {
             // Handle blocks placed
-            value = statsApi.getBlocksStat(uuid, Integer.parseInt(arguments.get("typeID").toString()),
+            value = statsApi.get.getBlocksStat(uuid, Integer.parseInt(arguments.get("typeID").toString()),
                     Integer.parseInt(arguments.get("dataValue").toString()), worldName, "Blocks placed");
         } else if (statType.equals(StatType.BLOCKS_BROKEN)) {
             // Handle blocks broken
@@ -62,7 +67,7 @@ public class StatsHandler extends StatsPlugin {
             value = statsApi.getTotalBlocksBroken(uuid, worldName);
         } else if (statType.equals(StatType.TIME_PLAYED)) {
             // Handle time played
-            value = statsApi.getTotalPlayTime(uuid, worldName);
+            value = statsApi.getNormalStat(uuid, "Playtime", worldName);
         } else if (statType.equals(StatType.BLOCKS_MOVED)) {
             // Handle time played
             value = statsApi.getTotalBlocksMoved(uuid, (Integer) arguments.get("moveType"), worldName);
@@ -76,9 +81,7 @@ public class StatsHandler extends StatsPlugin {
             // Handle time played
             value = statsApi.getNormalStat(uuid, "Shears", worldName);
         } else if (statType.equals(StatType.FOOD_EATEN)) {
-            // TODO: Not supported by Stats. Fix so only checks amount and not
-            // what kind of food.
-        }
+        }*/
 
         return value;
     }

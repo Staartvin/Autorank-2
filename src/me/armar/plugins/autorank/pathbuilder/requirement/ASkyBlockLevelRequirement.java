@@ -1,16 +1,15 @@
 package me.armar.plugins.autorank.pathbuilder.requirement;
 
-import java.util.UUID;
-
+import me.armar.plugins.autorank.language.Lang;
+import me.staartvin.plugins.pluginlibrary.Library;
+import me.staartvin.plugins.pluginlibrary.hooks.ASkyBlockHook;
 import org.bukkit.entity.Player;
 
-import me.armar.plugins.autorank.language.Lang;
-import me.staartvin.statz.hooks.Dependency;
-import me.staartvin.statz.hooks.handlers.ASkyBlockHandler;
+import java.util.UUID;
 
 public class ASkyBlockLevelRequirement extends Requirement {
 
-    private ASkyBlockHandler handler;
+    private ASkyBlockHook handler;
     private int islandLevel = -1;
 
     @Override
@@ -49,8 +48,8 @@ public class ASkyBlockLevelRequirement extends Requirement {
     @Override
     public boolean setOptions(final String[] options) {
 
-        handler = (ASkyBlockHandler) this.getAutorank().getDependencyManager()
-                .getDependencyHandler(Dependency.ASKYBLOCK);
+        handler = (ASkyBlockHook) this.getAutorank().getDependencyManager()
+                .getLibraryHook(Library.ASKYBLOCK);
 
         islandLevel = Integer.parseInt(options[0]);
 

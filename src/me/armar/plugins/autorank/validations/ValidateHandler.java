@@ -1,14 +1,14 @@
 package me.armar.plugins.autorank.validations;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.pathbuilder.Path;
 import me.armar.plugins.autorank.pathbuilder.holders.RequirementsHolder;
 import me.armar.plugins.autorank.pathbuilder.requirement.GroupRequirement;
 import me.armar.plugins.autorank.pathbuilder.requirement.Requirement;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class ValidateHandler {
 

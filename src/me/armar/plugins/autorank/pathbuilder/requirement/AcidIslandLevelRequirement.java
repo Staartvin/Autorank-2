@@ -1,16 +1,15 @@
 package me.armar.plugins.autorank.pathbuilder.requirement;
 
-import java.util.UUID;
-
+import me.armar.plugins.autorank.language.Lang;
+import me.staartvin.plugins.pluginlibrary.Library;
+import me.staartvin.plugins.pluginlibrary.hooks.AcidIslandHook;
 import org.bukkit.entity.Player;
 
-import me.armar.plugins.autorank.language.Lang;
-import me.staartvin.statz.hooks.Dependency;
-import me.staartvin.statz.hooks.handlers.AcidIslandHandler;
+import java.util.UUID;
 
 public class AcidIslandLevelRequirement extends Requirement {
 
-    private AcidIslandHandler handler;
+    private AcidIslandHook handler;
     private int islandLevel = -1;
 
     @Override
@@ -48,8 +47,8 @@ public class AcidIslandLevelRequirement extends Requirement {
 
     @Override
     public boolean setOptions(final String[] options) {
-        handler = (AcidIslandHandler) this.getAutorank().getDependencyManager()
-                .getDependencyHandler(Dependency.ACIDISLAND);
+        handler = (AcidIslandHook) this.getAutorank().getDependencyManager()
+                .getLibraryHook(Library.ACIDISLAND);
 
         islandLevel = Integer.parseInt(options[0]);
 

@@ -8,7 +8,7 @@ import org.bukkit.configuration.file.FileConfiguration;
  * {@link #getPath()}. To get the default value, do {@link #getDefault()}.
  * 
  * For the defined value in the lang.yml config, use
- * {@link #getConfigValue(String... args)}. String objects are expected as
+ * {@link #getConfigValue(Object... args)}. String objects are expected as
  * input.
  * 
  * @author Staartvin and gomeow
@@ -17,13 +17,13 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 public enum Lang {
     /**
-     * Obtain at least {0} achievements
+     * Obtain at least {0} advancements
      */
-    ACHIEVEMENT_MULTIPLE_REQUIREMENT("achievement-multiple-requirement", "Obtain at least {0} achievements"),
+    ADVANCEMENT_MULTIPLE_REQUIREMENT("advancement-multiple-requirement", "Obtain at least {0} advancements"),
     /**
-     * Obtain Achievement '{0}'
+     * Obtain Advancement '{0}'
      */
-    ACHIEVEMENT_SINGLE_REQUIREMENT("achievement-single-requirement", "Obtain Achievement '{0}'"),
+    ADVANCEMENT_SINGLE_REQUIREMENT("advancement-single-requirement", "Obtain Advancement '{0}'"),
     /**
      * Have at least an (acid) island level of {0}.
      */
@@ -494,11 +494,11 @@ public enum Lang {
     public String getConfigValue(final Object... args) {
         String value = ChatColor.translateAlternateColorCodes('&', LANG.getString(this.path, this.def));
 
-        if (args == null)
+        if (args == null || args.length == 0)
             return value;
         else {
-            if (args.length == 0)
-                return value;
+
+            if (args[0] == null) return value;
 
             for (int i = 0; i < args.length; i++) {
                 value = value.replace("{" + i + "}", args[i].toString());

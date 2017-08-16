@@ -1,21 +1,20 @@
 package me.armar.plugins.autorank.pathbuilder.requirement;
 
+import me.staartvin.plugins.pluginlibrary.Library;
+import me.staartvin.plugins.pluginlibrary.hooks.WorldGuardHook;
 import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.language.Lang;
-import me.staartvin.statz.hooks.Dependency;
-import me.staartvin.statz.hooks.handlers.WorldGuardHandler;
 
 /**
  * This requirement checks for WorldGuard region Date created: 13:49:33 15 jan.
  * 2014
- * 
+ *
  * @author Staartvin
- * 
  */
 public class WorldGuardRegionRequirement extends Requirement {
 
-    private WorldGuardHandler handler;
+    private WorldGuardHook handler;
     String regionName = null;
 
     @Override
@@ -52,8 +51,8 @@ public class WorldGuardRegionRequirement extends Requirement {
 
     @Override
     public boolean setOptions(final String[] options) {
-        handler = (WorldGuardHandler) this.getAutorank().getDependencyManager()
-                .getDependencyHandler(Dependency.WORLDGUARD);
+        handler = (WorldGuardHook) this.getAutorank().getDependencyManager()
+                .getLibraryHook(Library.WORLDGUARD);
 
         if (options.length > 0) {
             regionName = options[0].trim();

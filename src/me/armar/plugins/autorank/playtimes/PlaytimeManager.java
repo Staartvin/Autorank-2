@@ -1,7 +1,5 @@
 package me.armar.plugins.autorank.playtimes;
 
-import java.util.UUID;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
 import me.armar.plugins.autorank.data.flatfile.UpdatePlaytime;
@@ -12,9 +10,11 @@ import me.armar.plugins.autorank.statsmanager.StatsPlugin.StatType;
 import me.armar.plugins.autorank.statsmanager.handlers.StatsHandler;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
-import me.staartvin.statz.hooks.Dependency;
-import me.staartvin.statz.hooks.handlers.OnTimeHandler;
-import me.staartvin.statz.hooks.handlers.StatsAPIHandler;
+import me.staartvin.plugins.pluginlibrary.Library;
+import me.staartvin.plugins.pluginlibrary.hooks.OnTimeHook;
+import me.staartvin.plugins.pluginlibrary.hooks.StatsHook;
+
+import java.util.UUID;
 
 public class PlaytimeManager {
 
@@ -45,7 +45,7 @@ public class PlaytimeManager {
     /**
      * Get the time of a player. <br>
      * This depends on what plugin is used to get the time from. <br>
-     * Time is seconds.
+     * Time in seconds.
      * 
      * @param playerName
      *            Player to get the time for
@@ -72,8 +72,7 @@ public class PlaytimeManager {
 
             if (stats instanceof StatsHandler) {
                 // In seconds
-                playTime = ((StatsAPIHandler) plugin.getDependencyManager().getDependencyHandler(Dependency.STATS))
-                        .getTotalPlayTime(uuid, null);
+                playTime = ((StatsHook) plugin.getDependencyManager().getLibraryHook(Library.STATS)).getNormalStat(uuid, "Playtime", null);
             } else {
 
                 if (uuid == null)
@@ -83,10 +82,7 @@ public class PlaytimeManager {
                 playTime = plugin.getFlatFileManager().getLocalTime(TimeType.TOTAL_TIME, uuid) * 60;
             }
         } else if (timePlugin.equals(AutorankDependency.ONTIME)) {
-            playTime = ((OnTimeHandler) plugin.getDependencyManager().getDependencyHandler(Dependency.ON_TIME))
-                    .getPlayTime(playerName);
-            // Time is in minutes, so convert to seconds
-            playTime = playTime * 60;
+            playTime = (int) (((OnTimeHook) plugin.getDependencyManager().getLibraryHook(Library.ONTIME)).getPlayerData(playerName, "TOTALPLAY") / 1000);
         } else if (timePlugin.equals(AutorankDependency.STATZ)) {
             playTime = (int) ((StatzAPIHandler) plugin.getDependencyManager().getDependency(AutorankDependency.STATZ))
                     .getTotalOf(uuid, StatType.TIME_PLAYED, null);

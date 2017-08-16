@@ -1,16 +1,15 @@
 package me.armar.plugins.autorank.hooks.statzapi;
 
-import java.util.UUID;
-
-import org.bukkit.plugin.Plugin;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.DependencyHandler;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.staartvin.statz.Statz;
 import me.staartvin.statz.database.datatype.RowRequirement;
 import me.staartvin.statz.datamanager.PlayerStat;
-import me.staartvin.statz.hooks.Dependency;
+import me.staartvin.statz.hooks.StatzDependency;
+import org.bukkit.plugin.Plugin;
+
+import java.util.UUID;
 
 /**
  * Handles all connections with Statz
@@ -53,7 +52,7 @@ public class StatzAPIHandler extends DependencyHandler {
         return plugin;
     }
 
-    public me.staartvin.statz.hooks.DependencyHandler getDependencyHandler(Dependency dep) {
+    public me.staartvin.statz.hooks.DependencyHandler getDependencyHandler(StatzDependency dep) {
         if (!this.isAvailable())
             return null;
 
