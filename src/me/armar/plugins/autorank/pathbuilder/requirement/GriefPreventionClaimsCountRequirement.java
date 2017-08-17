@@ -40,9 +40,24 @@ public class GriefPreventionClaimsCountRequirement extends Requirement {
                 .getLibraryHook(Library.GRIEFPREVENTION);
 
         if (options.length > 0) {
-            claimsCount = Integer.parseInt(options[0]);
+            try {
+                claimsCount = Integer.parseInt(options[0]);
+            } catch (NumberFormatException e) {
+                this.registerWarningMessage("An invalid number is provided");
+                return false;
+            }
         }
 
-        return claimsCount != -1 && handler != null;
+        if (claimsCount < 0) {
+            this.registerWarningMessage("No number is provided or smaller than 0.");
+            return false;
+        }
+
+        if (handler == null || !handler.isAvailable()) {
+            this.registerWarningMessage("GriefPrevention is not available");
+            return false;
+        }
+
+        return true;
     }
 }

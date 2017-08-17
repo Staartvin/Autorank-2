@@ -43,12 +43,13 @@ public class PermissionRequirement extends Requirement {
     @Override
     public boolean setOptions(final String[] options) {
 
-        try {
-            permission = options[0];
-        } catch (final Exception e) {
+        permission = options[0];
+
+        if (permission == null) {
+            this.registerWarningMessage("No permission is provided");
             return false;
         }
 
-        return permission != null;
+        return true;
     }
 }

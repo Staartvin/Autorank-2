@@ -8,9 +8,8 @@ import java.util.Collection;
 
 /**
  * This requirement checks whether a player is in a group
- * 
+ *
  * @author Staartvin
- * 
  */
 public class GroupRequirement extends Requirement {
 
@@ -52,6 +51,11 @@ public class GroupRequirement extends Requirement {
             group = options[0].trim();
         }
 
-        return group != null;
+        if (group == null) {
+            this.registerWarningMessage("No group is provided");
+            return false;
+        }
+
+        return true;
     }
 }

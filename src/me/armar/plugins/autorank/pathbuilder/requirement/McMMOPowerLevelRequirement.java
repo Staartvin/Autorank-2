@@ -41,9 +41,18 @@ public class McMMOPowerLevelRequirement extends Requirement {
 
         if (options.length > 0) {
             powerLevel = Integer.parseInt(options[0]);
-
         }
 
-        return powerLevel != -1 && handler != null;
+        if (powerLevel < 0) {
+            this.registerWarningMessage("No number is provided or smaller than 0.");
+            return false;
+        }
+
+        if (handler == null || !handler.isAvailable()) {
+            this.registerWarningMessage("mcMMO is not available");
+            return false;
+        }
+
+        return true;
     }
 }

@@ -53,6 +53,11 @@ public class InBiomeRequirement extends Requirement {
 
         biome = options[0].toUpperCase().replace(" ", "_");
 
-        return biome != null;
+        if (biome == null) {
+            this.registerWarningMessage("No biome is provided");
+            return false;
+        }
+
+        return true;
     }
 }

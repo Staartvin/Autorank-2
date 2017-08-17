@@ -108,6 +108,10 @@ public class LocationRequirement extends Requirement {
         yRadiusP = yLocation + radius;
         zRadiusP = zLocation + radius;
 
+        if (radius < 0) {
+            this.registerWarningMessage("No radius is provided or smaller than 0.");
+            return false;
+        }
 
         return this.radius != -1;
     }

@@ -147,7 +147,17 @@ public class BlocksPlacedRequirement extends Requirement {
 
         wrapper.setBlocksPlaced(amount);
 
-        return wrapper != null && amount > 0;
+        if (amount < 0) {
+            this.registerWarningMessage("Amount is not provided or smaller than 0.");
+            return false;
+        }
+
+        if (wrapper == null) {
+            this.registerWarningMessage("No valid block provided.");
+            return false;
+        }
+
+        return true;
     }
 }
 

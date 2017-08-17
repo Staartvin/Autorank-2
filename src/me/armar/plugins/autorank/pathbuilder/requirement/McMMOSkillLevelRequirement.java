@@ -56,6 +56,17 @@ public class McMMOSkillLevelRequirement extends Requirement {
         if (options.length > 1) {
             skillName = options[1];
         }
-        return skillLevel != -1 && handler != null;
+
+        if (skillLevel < 0) {
+            this.registerWarningMessage("No number is provided or smaller than 0.");
+            return false;
+        }
+
+        if (handler == null || !handler.isAvailable()) {
+            this.registerWarningMessage("mcMMO is not available");
+            return false;
+        }
+
+        return true;
     }
 }

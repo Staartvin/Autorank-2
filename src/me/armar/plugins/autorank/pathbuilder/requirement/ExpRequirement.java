@@ -49,6 +49,11 @@ public class ExpRequirement extends Requirement {
 
         minExp = (int) AutorankTools.stringToDouble(options[0]);
 
-        return minExp != -1;
+        if (minExp < 0) {
+            this.registerWarningMessage("No number is provided or smaller than 0.");
+            return false;
+        }
+
+        return true;
     }
 }

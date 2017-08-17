@@ -40,9 +40,24 @@ public class GriefPreventionRemainingBlocksRequirement extends Requirement {
                 .getLibraryHook(Library.GRIEFPREVENTION);
 
         if (options.length > 0) {
-            remainingBlocks = Integer.parseInt(options[0]);
+            try {
+                remainingBlocks = Integer.parseInt(options[0]);
+            } catch (NumberFormatException e) {
+                this.registerWarningMessage("An invalid number is provided");
+                return false;
+            }
         }
 
-        return remainingBlocks != -1 && handler != null;
+        if (remainingBlocks < 0) {
+            this.registerWarningMessage("No number is provided or smaller than 0.");
+            return false;
+        }
+
+        if (handler == null || !handler.isAvailable()) {
+            this.registerWarningMessage("GriefPrevention is not available");
+            return false;
+        }
+
+        return true;
     }
 }

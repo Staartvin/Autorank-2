@@ -46,8 +46,18 @@ public class DamageTakenRequirement extends Requirement {
     @Override
     public boolean setOptions(final String[] options) {
 
-        damageTaken = Integer.parseInt(options[0]);
+        try {
+            damageTaken = Integer.parseInt(options[0]);
+        } catch (NumberFormatException e) {
+            this.registerWarningMessage("An invalid number is provided");
+            return false;
+        }
 
-        return damageTaken != -1;
+        if (damageTaken < 0) {
+            this.registerWarningMessage("No number is provided or smaller than 0.");
+            return false;
+        }
+
+        return true;
     }
 }

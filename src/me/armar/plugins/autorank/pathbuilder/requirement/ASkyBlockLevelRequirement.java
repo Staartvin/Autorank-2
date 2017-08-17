@@ -51,8 +51,23 @@ public class ASkyBlockLevelRequirement extends Requirement {
         handler = (ASkyBlockHook) this.getAutorank().getDependencyManager()
                 .getLibraryHook(Library.ASKYBLOCK);
 
-        islandLevel = Integer.parseInt(options[0]);
+        try {
+            islandLevel = Integer.parseInt(options[0]);
+        } catch (NumberFormatException e) {
+            this.registerWarningMessage("An invalid number is provided");
+            return false;
+        }
 
-        return islandLevel != -1 && handler != null;
+        if (islandLevel < 0) {
+            this.registerWarningMessage("No number is provided or smaller than 0.");
+            return false;
+        }
+
+        if (handler == null || !handler.isAvailable()) {
+            this.registerWarningMessage("ASkyBlock is not available");
+            return false;
+        }
+
+        return true;
     }
 }

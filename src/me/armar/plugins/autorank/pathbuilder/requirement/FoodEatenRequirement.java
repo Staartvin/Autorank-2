@@ -83,7 +83,12 @@ public class FoodEatenRequirement extends Requirement {
 
         foodEaten = new FoodWrapper(foodType, total);
 
-        return foodEaten != null;
+        if (foodEaten == null) {
+            this.registerWarningMessage("No number is provided or smaller than 0.");
+            return false;
+        }
+
+        return true;
     }
 }
 

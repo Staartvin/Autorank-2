@@ -46,8 +46,18 @@ public class ItemsCraftedRequirement extends Requirement {
     @Override
     public boolean setOptions(final String[] options) {
 
-        itemsCrafted = Integer.parseInt(options[0]);
+        try {
+            itemsCrafted = Integer.parseInt(options[0]);
+        } catch (NumberFormatException e) {
+            this.registerWarningMessage("An invalid number is provided");
+            return false;
+        }
 
-        return itemsCrafted != -1;
+        if (itemsCrafted < 0) {
+            this.registerWarningMessage("No number is provided or smaller than 0.");
+            return false;
+        }
+
+        return true;
     }
 }

@@ -53,6 +53,11 @@ public class GamemodeRequirement extends Requirement {
         if (options.length > 0)
             gameMode = (int) AutorankTools.stringToDouble(options[0]);
 
-        return gameMode != -1;
+        if (gameMode < 0) {
+            this.registerWarningMessage("No number is provided or smaller than 0.");
+            return false;
+        }
+
+        return true;
     }
 }

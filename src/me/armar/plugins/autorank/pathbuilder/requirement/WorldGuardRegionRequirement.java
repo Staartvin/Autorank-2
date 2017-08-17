@@ -58,6 +58,16 @@ public class WorldGuardRegionRequirement extends Requirement {
             regionName = options[0].trim();
         }
 
-        return regionName != null && handler != null;
+        if (regionName == null) {
+            this.registerWarningMessage("Region is not specified");
+            return false;
+        }
+
+        if (handler == null || !handler.isAvailable()) {
+            this.registerWarningMessage("WorldGuard is not available");
+            return false;
+        }
+
+        return true;
     }
 }

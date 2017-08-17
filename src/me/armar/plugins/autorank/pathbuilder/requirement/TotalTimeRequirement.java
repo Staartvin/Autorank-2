@@ -56,9 +56,15 @@ public class TotalTimeRequirement extends Requirement {
         if (options.length > 0) {
             totalTime = AutorankTools.stringToTime(options[0], Time.MINUTES);
         } else {
+            this.registerWarningMessage("An invalid number is provided");
             return false;
         }
 
-        return totalTime != -1;
+        if (totalTime < 0) {
+            this.registerWarningMessage("No number is provided or smaller than 0.");
+            return false;
+        }
+
+        return true;
     }
 }

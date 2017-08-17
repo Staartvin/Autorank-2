@@ -111,7 +111,22 @@ public class HasItemRequirement extends Requirement {
 
         neededItem = new ItemWrapper(item, displayName, showShortValue, useDisplayName);
 
-        return neededItem != null && id != -1 && amount > 0;
+        if (neededItem == null) {
+            this.registerWarningMessage("No valid item is provided");
+            return false;
+        }
+
+        if (id < 0) {
+            this.registerWarningMessage("ID value cannot be negative");
+            return false;
+        }
+
+        if (amount <= 0) {
+            this.registerWarningMessage("Amount must be strictly higher than 0");
+            return false;
+        }
+
+        return true;
     }
 }
 

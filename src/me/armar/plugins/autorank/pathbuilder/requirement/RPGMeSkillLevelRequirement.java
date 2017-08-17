@@ -65,6 +65,11 @@ public class RPGMeSkillLevelRequirement extends Requirement {
             return false;
         }
 
+        if (handler == null || !handler.isAvailable()) {
+            this.registerWarningMessage("RPGme is not available");
+            return false;
+        }
+
         return true;
     }
 }

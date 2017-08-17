@@ -46,8 +46,18 @@ public class FishCaughtRequirement extends Requirement {
     @Override
     public boolean setOptions(final String[] options) {
 
-        fishCaught = Integer.parseInt(options[0]);
+        try {
+            fishCaught = Integer.parseInt(options[0]);
+        } catch (NumberFormatException e) {
+            this.registerWarningMessage("An invalid number is provided");
+            return false;
+        }
 
-        return fishCaught != -1;
+        if (fishCaught < 0) {
+            this.registerWarningMessage("No number is provided or smaller than 0.");
+            return false;
+        }
+
+        return true;
     }
 }

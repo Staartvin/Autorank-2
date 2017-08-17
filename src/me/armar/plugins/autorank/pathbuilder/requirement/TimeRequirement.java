@@ -1,11 +1,9 @@
 package me.armar.plugins.autorank.pathbuilder.requirement;
 
-import com.sun.org.apache.xpath.internal.SourceTree;
-import org.bukkit.entity.Player;
-
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
+import org.bukkit.entity.Player;
 
 /**
  * This requirement checks for local play time Date created: 13:49:33 15 jan.
@@ -48,6 +46,11 @@ public class TimeRequirement extends Requirement {
             timeNeeded = AutorankTools.stringToTime(options[0], Time.MINUTES);
         }
 
-        return timeNeeded != -1;
+        if (timeNeeded < 0) {
+            this.registerWarningMessage("No number is provided or smaller than 0.");
+            return false;
+        }
+
+        return true;
     }
 }

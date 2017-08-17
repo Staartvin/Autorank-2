@@ -34,6 +34,11 @@ public class WorldRequirement extends Requirement {
             worldName = options[0];
         }
 
-        return worldName != null;
+        if (worldName == null) {
+            this.registerWarningMessage("No world is specified");
+            return false;
+        }
+
+        return true;
     }
 }

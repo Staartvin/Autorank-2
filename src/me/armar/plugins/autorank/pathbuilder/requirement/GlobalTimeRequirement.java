@@ -1,12 +1,11 @@
 package me.armar.plugins.autorank.pathbuilder.requirement;
 
-import java.util.UUID;
-
-import org.bukkit.entity.Player;
-
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
+import org.bukkit.entity.Player;
+
+import java.util.UUID;
 
 /**
  * This requirement checks for global playtime Date created: 13:49:53 15 jan.
@@ -46,6 +45,11 @@ public class GlobalTimeRequirement extends Requirement {
 
         globalTime = AutorankTools.stringToTime(options[0], Time.MINUTES);
 
-        return globalTime != -1;
+        if (globalTime < 0) {
+            this.registerWarningMessage("No number is provided or smaller than 0.");
+            return false;
+        }
+
+        return true;
     }
 }

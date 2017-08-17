@@ -47,9 +47,15 @@ public class PlayerKillsRequirement extends Requirement {
         try {
             totalPlayersKilled = Integer.parseInt(options[0]);
         } catch (final Exception e) {
+            this.registerWarningMessage("An invalid number is provided");
             return false;
         }
 
-        return totalPlayersKilled != -1;
+        if (totalPlayersKilled < 0) {
+            this.registerWarningMessage("No number is provided or smaller than 0.");
+            return false;
+        }
+
+        return true;
     }
 }

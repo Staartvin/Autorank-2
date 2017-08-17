@@ -1,11 +1,9 @@
 package me.armar.plugins.autorank.pathbuilder.requirement;
 
+import me.armar.plugins.autorank.language.Lang;
 import me.staartvin.plugins.pluginlibrary.Library;
 import me.staartvin.plugins.pluginlibrary.hooks.VaultHook;
 import org.bukkit.entity.Player;
-
-import me.armar.plugins.autorank.hooks.vaultapi.PluginLibraryHandler;
-import me.armar.plugins.autorank.language.Lang;
 
 public class MoneyRequirement extends Requirement {
 
@@ -67,9 +65,15 @@ public class MoneyRequirement extends Requirement {
         try {
             minMoney = Double.parseDouble(options[0]);
         } catch (final Exception e) {
+            this.registerWarningMessage("An invalid number is provided");
             return false;
         }
 
-        return minMoney != -1;
+        if (minMoney < 0) {
+            this.registerWarningMessage("No number is provided or smaller than 0.");
+            return false;
+        }
+
+        return true;
     }
 }

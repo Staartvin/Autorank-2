@@ -56,8 +56,23 @@ public class JobsTotalPointsRequirement extends Requirement {
 
         jobsHandler = (JobsHook) this.getAutorank().getDependencyManager().getLibraryHook(Library.JOBS);
 
-        totalPoints = Integer.parseInt(options[0]);
+        try {
+            totalPoints = Integer.parseInt(options[0]);
+        } catch (NumberFormatException e) {
+            this.registerWarningMessage("An invalid number is provided");
+            return false;
+        }
 
-        return totalPoints != -1 && jobsHandler != null;
+        if (totalPoints < 0) {
+            this.registerWarningMessage("No level is provided or smaller than 0.");
+            return false;
+        }
+
+        if (jobsHandler == null || !jobsHandler.isAvailable()) {
+            this.registerWarningMessage("Jobs is not available");
+            return false;
+        }
+
+        return true;
     }
 }

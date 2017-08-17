@@ -45,9 +45,16 @@ public class TimesShearedRequirement extends Requirement {
         try {
             timesShorn = Integer.parseInt(options[0]);
         } catch (final Exception e) {
+            this.registerWarningMessage("An invalid number is provided");
             return false;
         }
 
-        return timesShorn != -1;
+        if (timesShorn < 0) {
+            this.registerWarningMessage("No number is provided or smaller than 0.");
+            return false;
+        }
+
+
+        return true;
     }
 }

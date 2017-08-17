@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 
 public class JobsLevelRequirement extends Requirement {
 
-    String jobName;
+    String jobName = null;
     private JobsHook jobsHandler;
     int level = -1;
 
@@ -57,12 +57,32 @@ public class JobsLevelRequirement extends Requirement {
 
         jobsHandler = (JobsHook) this.getAutorank().getDependencyManager().getLibraryHook(Library.JOBS);
 
-        level = Integer.parseInt(options[0]);
+        try {
+            level = Integer.parseInt(options[0]);
+        } catch (NumberFormatException e) {
+            this.registerWarningMessage("An invalid number is provided");
+            return false;
+        }
 
         if (options.length > 1) {
             jobName = options[1];
         }
 
-        return level != -1 && jobName != null && jobsHandler != null;
+        if (level < 0) {
+            this.registerWarningMessage("No level is provided or smaller than 0.");
+            return false;
+        }
+
+        if (jobsHandler == null || !jobsHandler.isAvailable()) {
+            this.registerWarningMessage("Jobs is not available");
+            return false;
+        }
+
+        if (jobName == null) {
+            this.registerWarningMessage("No job name is provided");
+            return false;
+        }
+
+        return true;
     }
 }

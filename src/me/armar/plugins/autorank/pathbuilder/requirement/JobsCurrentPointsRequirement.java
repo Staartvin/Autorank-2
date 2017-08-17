@@ -55,8 +55,23 @@ public class JobsCurrentPointsRequirement extends Requirement {
     public boolean setOptions(final String[] options) {
         jobsHandler = (JobsHook) this.getAutorank().getDependencyManager().getLibraryHook(Library.JOBS);
 
-        currentPoints = Integer.parseInt(options[0]);
+        try {
+            currentPoints = Integer.parseInt(options[0]);
+        } catch (NumberFormatException e) {
+            this.registerWarningMessage("An invalid number is provided");
+            return false;
+        }
 
-        return currentPoints != -1 && jobsHandler != null;
+        if (currentPoints < 0) {
+            this.registerWarningMessage("No number is provided or smaller than 0.");
+            return false;
+        }
+
+        if (jobsHandler == null || !jobsHandler.isAvailable()) {
+            this.registerWarningMessage("Jobs is not available");
+            return false;
+        }
+
+        return true;
     }
 }

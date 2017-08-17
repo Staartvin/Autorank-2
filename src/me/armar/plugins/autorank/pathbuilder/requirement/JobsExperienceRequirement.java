@@ -57,12 +57,32 @@ public class JobsExperienceRequirement extends Requirement {
 
         jobsHandler = (JobsHook) this.getAutorank().getDependencyManager().getLibraryHook(Library.JOBS);
 
-        experience = Integer.parseInt(options[0]);
+        try {
+            experience = Integer.parseInt(options[0]);
+        } catch (NumberFormatException e) {
+            this.registerWarningMessage("An invalid number is provided");
+            return false;
+        }
 
         if (options.length > 1) {
             jobName = options[1];
         }
 
-        return experience != -1 && jobName != null && jobsHandler != null;
+        if (experience < 0) {
+            this.registerWarningMessage("No experience level is provided or smaller than 0.");
+            return false;
+        }
+
+        if (jobsHandler == null || !jobsHandler.isAvailable()) {
+            this.registerWarningMessage("Jobs is not available");
+            return false;
+        }
+
+        if (jobName == null) {
+            this.registerWarningMessage("No job name is provided");
+            return false;
+        }
+
+        return true;
     }
 }

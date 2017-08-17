@@ -1,11 +1,11 @@
 package me.armar.plugins.autorank.pathbuilder.requirement;
 
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
-
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
 /**
  * This requirement checks for javascript evaluations
@@ -72,6 +72,16 @@ public class JavaScriptRequirement extends Requirement {
 
         engine.put("Server", Bukkit.getServer());
 
-        return code != null && engine != null;
+        if (code == null) {
+            this.registerWarningMessage("No expression provided");
+            return false;
+        }
+
+        if (engine == null) {
+            this.registerWarningMessage("Could not obtain Javascript Engine");
+            return false;
+        }
+
+        return true;
     }
 }

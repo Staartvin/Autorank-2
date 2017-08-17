@@ -62,7 +62,12 @@ public class BlocksMovedRequirement extends Requirement {
 
         wrapper = new BlocksMovedWrapper(blocksMoved, movementType);
 
-        return wrapper != null;
+        if (wrapper == null) {
+            this.registerWarningMessage("No valid block provided.");
+            return false;
+        }
+
+        return true;
     }
 }
 

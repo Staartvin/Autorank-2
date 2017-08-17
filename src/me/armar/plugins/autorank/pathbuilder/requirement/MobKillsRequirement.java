@@ -84,6 +84,11 @@ public class MobKillsRequirement extends Requirement {
             }
         }
 
-        return totalMobsKilled != -1;
+        if (totalMobsKilled < 0) {
+            this.registerWarningMessage("No number is provided or smaller than 0.");
+            return false;
+        }
+
+        return true;
     }
 }

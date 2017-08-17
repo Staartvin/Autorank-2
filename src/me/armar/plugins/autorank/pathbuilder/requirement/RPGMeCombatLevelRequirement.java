@@ -42,9 +42,24 @@ public class RPGMeCombatLevelRequirement extends Requirement {
         handler = (RPGmeHook) this.getDependencyManager().getLibraryHook(Library.RPGME);
 
         if (options.length > 0) {
-            skillLevel = Integer.parseInt(options[0]);
+            try {
+                skillLevel = Integer.parseInt(options[0]);
+            } catch (NumberFormatException e) {
+                this.registerWarningMessage("An invalid number is provided");
+                return false;
+            }
         }
 
-        return skillLevel != -1 && handler != null && handler.isAvailable();
+        if (skillLevel < 0) {
+            this.registerWarningMessage("No number is provided or smaller than 0.");
+            return false;
+        }
+
+        if (handler == null || !handler.isAvailable()) {
+            this.registerWarningMessage("RPGme is not available");
+            return false;
+        }
+
+        return true;
     }
 }

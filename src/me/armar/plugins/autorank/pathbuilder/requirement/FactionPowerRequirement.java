@@ -52,8 +52,23 @@ public class FactionPowerRequirement extends Requirement {
     public boolean setOptions(final String[] options) {
         handler = (FactionsHook) this.getAutorank().getDependencyManager().getLibraryHook(Library.FACTIONS);
 
-        factionPower = Double.parseDouble(options[0]);
+        try {
+            factionPower = Double.parseDouble(options[0]);
+        } catch (NumberFormatException e) {
+            this.registerWarningMessage("An invalid number is provided");
+            return false;
+        }
 
-        return factionPower != -1 && handler != null;
+        if (factionPower < 0.0) {
+            this.registerWarningMessage("No number is provided or smaller than 0.");
+            return false;
+        }
+
+        if (handler == null || !handler.isAvailable()) {
+            this.registerWarningMessage("Factions is not available");
+            return false;
+        }
+
+        return true;
     }
 }

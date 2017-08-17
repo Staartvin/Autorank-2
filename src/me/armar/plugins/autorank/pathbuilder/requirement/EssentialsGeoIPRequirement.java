@@ -44,7 +44,16 @@ public class EssentialsGeoIPRequirement extends Requirement {
 
         location = options[0];
 
-        return location != null;
+        if (location == null) {
+            this.registerWarningMessage("No location is provided");
+            return false;
+        }
 
+        if (essHandler == null || !essHandler.isAvailable()) {
+            this.registerWarningMessage("EssentialsX is not available");
+            return false;
+        }
+
+        return true;
     }
 }

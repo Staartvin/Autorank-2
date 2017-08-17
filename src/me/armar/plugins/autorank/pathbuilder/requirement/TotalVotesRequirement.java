@@ -47,9 +47,16 @@ public class TotalVotesRequirement extends Requirement {
         try {
             totalVotes = Integer.parseInt(options[0]);
         } catch (final Exception e) {
+            this.registerWarningMessage("An invalid number is provided");
             return false;
         }
 
-        return totalVotes != -1;
+        if (totalVotes < 0) {
+            this.registerWarningMessage("No number is provided or smaller than 0.");
+            return false;
+        }
+
+
+        return true;
     }
 }
