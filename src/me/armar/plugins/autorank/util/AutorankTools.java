@@ -1,17 +1,16 @@
 package me.armar.plugins.autorank.util;
 
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+import me.armar.plugins.autorank.language.Lang;
+import me.armar.plugins.autorank.permissions.AutorankPermission;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import me.armar.plugins.autorank.language.Lang;
-import me.armar.plugins.autorank.permissions.AutorankPermission;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /*
  * AutorankTools is a bunch of static methods, I put sendColoredMessage
@@ -288,50 +287,50 @@ public class AutorankTools {
             return null;
 
         switch (item.getType()) {
-            case APPLE:
-                return "APPLE";
-            case BAKED_POTATO:
-                return "BAKED_POTATO";
-            case BREAD:
-                return "BREAD";
-            case CAKE_BLOCK: // not working atm
-                return "CAKE_BLOCK";
-            case CARROT_ITEM:
-                return "CARROT_ITEM";
-            case COOKED_CHICKEN:
-                return "COOKED_CHICKEN";
+//            case APPLE:
+//                return "APPLE";
+//            case BAKED_POTATO:
+//                return "BAKED_POTATO";
+//            case BREAD:
+//                return "BREAD";
+//            case CAKE_BLOCK: // not working atm
+//                return "CAKE_BLOCK";
+//            case CARROT_ITEM:
+//                return "CARROT_ITEM";
+//            case COOKED_CHICKEN:
+//                return "COOKED_CHICKEN";
             case COOKED_FISH: {
                 if (item.getDurability() == (short) 1) {
                     return "COOKED_SALMON";
                 }
                 return "COOKED_FISH";
             }
-            case COOKED_MUTTON:
-                return "COOKED_MUTTON";
-            case GRILLED_PORK:
-                return "GRILLED_PORK";
-            case COOKED_RABBIT:
-                return "COOKED_RABBIT";
-            case COOKIE:
-                return "COOKIE";
+//            case COOKED_MUTTON:
+//                return "COOKED_MUTTON";
+//            case GRILLED_PORK:
+//                return "GRILLED_PORK";
+//            case COOKED_RABBIT:
+//                return "COOKED_RABBIT";
+//            case COOKIE:
+//                return "COOKIE";
             case GOLDEN_APPLE: {
                 if (item.getDurability() == (short) 1) {
                     return "ENCHANTED_GOLDEN_APPLE";
                 }
                 return "GOLDEN_APPLE";
             }
-            case GOLDEN_CARROT:
-                return "GOLDEN_CARROT";
-            case MELON:
-                return "MELON";
-            case MUSHROOM_SOUP:
-                return "MUSHROOM_SOUP";
-            case RABBIT_STEW:
-                return "RABBIT_STEW";
-            case RAW_BEEF:
-                return "RAW_BEEF";
-            case RAW_CHICKEN:
-                return "RAW_CHICKEN";
+//            case GOLDEN_CARROT:
+//                return "GOLDEN_CARROT";
+//            case MELON:
+//                return "MELON";
+//            case MUSHROOM_SOUP:
+//                return "MUSHROOM_SOUP";
+//            case RABBIT_STEW:
+//                return "RABBIT_STEW";
+//            case RAW_BEEF:
+//                return "RAW_BEEF";
+//            case RAW_CHICKEN:
+//                return "RAW_CHICKEN";
             case RAW_FISH: {
                 if (item.getDurability() == (short) 1) {
                     return "RAW_SALMON";
@@ -342,7 +341,7 @@ public class AutorankTools {
                 }
                 return "RAW_FISH";
             }
-            case POISONOUS_POTATO:
+            /*case POISONOUS_POTATO: Not needed anymore
                 return "POISONOUS_POTATO";
             case POTATO:
                 return "POTATO";
@@ -357,9 +356,9 @@ public class AutorankTools {
             case ROTTEN_FLESH:
                 return "ROTTEN_FLESH";
             case SPIDER_EYE:
-                return "SPIDER_EYE";
+                return "SPIDER_EYE";*/
             default:
-                return null;
+                return item.getType().toString();
         }
     }
 
