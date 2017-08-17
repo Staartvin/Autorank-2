@@ -1,17 +1,16 @@
 package me.armar.plugins.autorank.pathbuilder.builders;
 
+import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.pathbuilder.requirement.Requirement;
+import me.armar.plugins.autorank.pathbuilder.result.Result;
+import me.armar.plugins.autorank.util.AutorankTools;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.pathbuilder.result.Result;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-
-import me.armar.plugins.autorank.pathbuilder.requirement.Requirement;
-import me.armar.plugins.autorank.util.AutorankTools;
 
 public class RequirementBuilder {
 
@@ -24,12 +23,16 @@ public class RequirementBuilder {
     private boolean isValid = false;
 
     // Extra metadata for the associated requirement.
-    private String pathName, requirementType;
+    // Path name is, trivially, the name of the path
+    // Requirement type is the stripped (and correct) type of requirement (it does not include extra text)
+    // The original path string is the requirement type as provided in the paths file. It may include any arbitrary
+    // numbers or strings.
+    private String pathName, requirementType, originalPathString;
 
     // Whether this requirement is a prerequisite.
     private boolean isPreRequisite = false;
 
-    final String invalidRequirementMessage = "Could not set up requirement '%s' of %s! It's invalid: check the wiki for documentation.";
+    final String invalidRequirementMessage = "Could not set up requirement '%s' of %s! Autorank reported the following error: '%s'";
 
     final String dependencyNotFoundMessage = "Requirement '%s' relies on a third-party plugin being installed, but that plugin is not installed!";
 
@@ -45,6 +48,7 @@ public class RequirementBuilder {
         this.pathName = pathName;
         this.requirementType = requirementType;
         this.isPreRequisite = isPreRequisite;
+        this.originalPathString = requirementType;
 
         String originalReqType = requirementType;
 
@@ -91,8 +95,16 @@ public class RequirementBuilder {
         try {
             // Initiliaze the result with options.
             if (!requirement.setOptions(options)) {
-                Autorank.getInstance().getLogger().severe(String.format(invalidRequirementMessage, requirementType, pathName));
-                Autorank.getInstance().getWarningManager().registerWarning(String.format(invalidRequirementMessage, requirementType, pathName), 10);
+                String primaryErrorMessage = "unknown error (check wiki)";
+
+                if (requirement.getErrorMessages().size() > 0) {
+                    primaryErrorMessage = requirement.getErrorMessages().get(0);
+                }
+
+                String fullString = String.format(invalidRequirementMessage, originalPathString, pathName, primaryErrorMessage);
+
+                Autorank.getInstance().getLogger().severe(fullString);
+                Autorank.getInstance().getWarningManager().registerWarning(fullString, 10);
             }
         } catch (NoClassDefFoundError e) {
             Autorank.getInstance().getLogger().severe(String.format(dependencyNotFoundMessage, requirementType));
@@ -188,9 +200,10 @@ public class RequirementBuilder {
 
     /**
      * Create a Requirement using the RequirementBuilder factory.
-     * @param pathName Name of the path the requirement is in.
+     *
+     * @param pathName        Name of the path the requirement is in.
      * @param requirementType Type of the requirement, which does not have to be the exact string value.
-     * @param options The requirements options array.
+     * @param options         The requirements options array.
      * @return a newly created Requirement with the given data, or null if invalid data was given.
      */
     public static Requirement createRequirement(String pathName, String requirementType, String[] options, boolean isPreRequisite) {

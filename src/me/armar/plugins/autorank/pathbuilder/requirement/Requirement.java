@@ -1,15 +1,14 @@
 package me.armar.plugins.autorank.pathbuilder.requirement;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
-import org.bukkit.entity.Player;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.DependencyManager;
 import me.armar.plugins.autorank.pathbuilder.result.Result;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
+import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Whenever you want to create a new requirement, you'll have to extend this
@@ -26,6 +25,7 @@ public abstract class Requirement {
     private int reqId;
     private List<Result> results = new ArrayList<Result>();
     private String world = null;
+    private List<String> errorMessages = new ArrayList<>();
 
     public final Autorank getAutorank() {
         return Autorank.getInstance();
@@ -232,5 +232,31 @@ public abstract class Requirement {
      */
     public void setPreRequisite(boolean preRequisite) {
         isPreRequisite = preRequisite;
+    }
+
+    /**
+     * Add an error message to clarify what went wrong with this requirement.
+     * For example, the requirement was not correctly specified, incorrect data was provided, insufficient data
+     * was provided, etc.
+     * @param message Message to add.
+     */
+    public void registerWarningMessage(String message) {
+        if (message == null) {
+            return;
+        }
+
+        if (!errorMessages.contains(message)) {
+            this.errorMessages.add(message);
+        }
+    }
+
+    /**
+     * Get the error messages that were registered by the requirement.
+     * Note that, usually, error messages are only registered after the {@link #setOptions(String[])} method is called.
+     * Hence, calling {@link #getErrorMessages()} before calling {@link #setOptions(String[])} is useless.
+     * @return a list of error messages.
+     */
+    public List<String> getErrorMessages() {
+        return this.errorMessages;
     }
 }

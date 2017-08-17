@@ -59,6 +59,12 @@ public class RPGMeSkillLevelRequirement extends Requirement {
         if (options.length > 1) {
             skillName = options[1];
         }
-        return skillLevel != -1 && handler != null && handler.isAvailable();
+
+        if (skillLevel < 0) {
+            this.registerWarningMessage("Skill level was not specified (or smaller than 0)!");
+            return false;
+        }
+
+        return true;
     }
 }

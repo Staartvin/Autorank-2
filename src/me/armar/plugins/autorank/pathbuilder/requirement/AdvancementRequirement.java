@@ -46,7 +46,12 @@ public class AdvancementRequirement extends Requirement {
 
             return count + "/" + advancementCount;
         } else {
-            return "Cannot show progress";
+
+            if (!player.getAdvancementProgress(advancement).isDone()) {
+                return "advancement not yet obtained.";
+            } else {
+                return "advancement obtained.";
+            }
         }
     }
 
@@ -117,14 +122,30 @@ public class AdvancementRequirement extends Requirement {
 
         if (NumberUtils.isNumber(option)) {
             advancementCount = (int) AutorankTools.stringToDouble(options[0]);
+
+            if (advancementCount < 0) {
+                this.registerWarningMessage("No number of advancements provided (or smaller than 0).");
+                return false;
+            }
+
         } else {
             advancement = getAdvancement(options[0].trim());
+
+            if (advancement == null) {
+                this.registerWarningMessage("No advancement found with that string.");
+                return false;
+            }
 
             if (options.length > 1) {
                 advancementName = options[1].trim();
             }
+
+            if (advancementName == null) {
+                this.registerWarningMessage("No name for the advancement provided.");
+                return false;
+            }
         }
 
-        return advancementCount != -1 || (advancement != null && advancementName != null);
+        return true;
     }
 }
