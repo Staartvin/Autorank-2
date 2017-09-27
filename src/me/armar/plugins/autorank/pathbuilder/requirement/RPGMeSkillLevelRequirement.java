@@ -51,6 +51,9 @@ public class RPGMeSkillLevelRequirement extends Requirement {
     @Override
     public boolean setOptions(final String[] options) {
 
+        // Add dependency
+        addDependency(Library.RPGME);
+
         handler = (RPGmeHook) this.getDependencyManager().getLibraryHook(Library.RPGME);
 
         if (options.length > 0) {

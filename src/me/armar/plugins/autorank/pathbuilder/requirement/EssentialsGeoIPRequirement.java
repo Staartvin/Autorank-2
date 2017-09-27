@@ -36,6 +36,9 @@ public class EssentialsGeoIPRequirement extends Requirement {
     @Override
     public boolean setOptions(final String[] options) {
 
+        // Add dependency
+        addDependency(Library.ESSENTIALSX);
+
         essHandler = (EssentialsXHook) this.getDependencyManager().getLibraryHook(Library.ESSENTIALSX);
 
         if (options.length != 1) {

@@ -1,9 +1,11 @@
 package me.armar.plugins.autorank.pathbuilder.builders;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.hooks.DependencyManager;
 import me.armar.plugins.autorank.pathbuilder.requirement.Requirement;
 import me.armar.plugins.autorank.pathbuilder.result.Result;
 import me.armar.plugins.autorank.util.AutorankTools;
+import me.staartvin.plugins.pluginlibrary.Library;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
@@ -31,10 +33,6 @@ public class RequirementBuilder {
 
     // Whether this requirement is a prerequisite.
     private boolean isPreRequisite = false;
-
-    final String invalidRequirementMessage = "Could not set up requirement '%s' of %s! Autorank reported the following error: '%s'";
-
-    final String dependencyNotFoundMessage = "Requirement '%s' relies on a third-party plugin being installed, but that plugin is not installed!";
 
     /**
      * Create an empty Requirement.
@@ -92,8 +90,9 @@ public class RequirementBuilder {
             return this;
         }
 
+        String dependencyNotFoundMessage = "Requirement '%s' relies on a third-party plugin being installed, but that plugin is not installed!";
         try {
-            // Initiliaze the result with options.
+            // Initialize the result with options.
             if (!requirement.setOptions(options)) {
                 String primaryErrorMessage = "unknown error (check wiki)";
 
@@ -101,6 +100,7 @@ public class RequirementBuilder {
                     primaryErrorMessage = requirement.getErrorMessages().get(0);
                 }
 
+                String invalidRequirementMessage = "Could not set up requirement '%s' of %s! Autorank reported the following error: '%s'";
                 String fullString = String.format(invalidRequirementMessage, originalPathString, pathName, primaryErrorMessage);
 
                 Autorank.getInstance().getLogger().severe(fullString);
@@ -152,6 +152,19 @@ public class RequirementBuilder {
 
         // Set whether this requirement is world-specific.
         requirement.setWorld(Autorank.getInstance().getPathsConfig().getWorldOfRequirement(pathName, requirementType, isPreRequisite));
+
+        // Check if all dependencies are available for this requirement.
+        DependencyManager dependencyManager = Autorank.getInstance().getDependencyManager();
+
+        for (Library dependency : requirement.getDependencies()) {
+            if (!dependencyManager.isAvailable(dependency)) {
+                Autorank.getInstance().getLogger().severe(String.format("Requirement '%s' relies on '%s' being installed, but that plugin is not installed!", requirementType, dependency.getPluginName()));
+                Autorank.getInstance().getWarningManager().registerWarning(String.format("Requirement '%s' relies on '%s' being installed, but that plugin is not installed!", requirementType, dependency.getPluginName()), 10);
+                return this;
+            }
+        }
+
+        // ---- All checks are cleared!
 
         // Result is non-null and populated with data, so valid.
         isValid = true;
@@ -218,6 +231,12 @@ public class RequirementBuilder {
         final Requirement requirement = builder.finish();
 
         return requirement;
+    }
+
+    public boolean areDependenciesAvailable(Requirement requirement) {
+
+
+        return true;
     }
 
 }

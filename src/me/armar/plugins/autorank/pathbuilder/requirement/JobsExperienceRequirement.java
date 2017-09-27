@@ -55,6 +55,9 @@ public class JobsExperienceRequirement extends Requirement {
     @Override
     public boolean setOptions(final String[] options) {
 
+        // Add dependency
+        addDependency(Library.JOBS);
+
         jobsHandler = (JobsHook) this.getAutorank().getDependencyManager().getLibraryHook(Library.JOBS);
 
         try {

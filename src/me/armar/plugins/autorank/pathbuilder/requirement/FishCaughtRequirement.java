@@ -1,6 +1,7 @@
 package me.armar.plugins.autorank.pathbuilder.requirement;
 
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
+import me.staartvin.plugins.pluginlibrary.Library;
 import org.bukkit.entity.Player;
 
 import me.armar.plugins.autorank.language.Lang;
@@ -45,6 +46,9 @@ public class FishCaughtRequirement extends Requirement {
 
     @Override
     public boolean setOptions(final String[] options) {
+
+        // Add dependency
+        addDependency(Library.STATZ);
 
         try {
             fishCaught = Integer.parseInt(options[0]);

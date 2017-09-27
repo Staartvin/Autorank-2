@@ -37,6 +37,9 @@ public class McMMOPowerLevelRequirement extends Requirement {
     @Override
     public boolean setOptions(final String[] options) {
 
+        // Add dependency
+        addDependency(Library.MCMMO);
+
         handler = (McMMOHook) this.getDependencyManager().getLibraryHook(Library.MCMMO);
 
         if (options.length > 0) {

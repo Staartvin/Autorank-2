@@ -36,6 +36,9 @@ public class GriefPreventionRemainingBlocksRequirement extends Requirement {
     @Override
     public boolean setOptions(final String[] options) {
 
+        // Add dependency
+        addDependency(Library.GRIEFPREVENTION);
+
         handler = (GriefPreventionHook) this.getDependencyManager()
                 .getLibraryHook(Library.GRIEFPREVENTION);
 

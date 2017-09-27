@@ -4,6 +4,7 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.DependencyManager;
 import me.armar.plugins.autorank.pathbuilder.result.Result;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
+import me.staartvin.plugins.pluginlibrary.Library;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -26,6 +27,9 @@ public abstract class Requirement {
     private List<Result> results = new ArrayList<Result>();
     private String world = null;
     private List<String> errorMessages = new ArrayList<>();
+
+    // A list of third-party plugins that are needed to use this requirement.
+    private List<Library> dependencies = new ArrayList<>();
 
     public final Autorank getAutorank() {
         return Autorank.getInstance();
@@ -258,5 +262,26 @@ public abstract class Requirement {
      */
     public List<String> getErrorMessages() {
         return this.errorMessages;
+    }
+
+
+    /**
+     * Get a list of dependencies (third-party plugins) this requirement uses.
+     * @return a list of dependencies of this requirement.
+     */
+    public List<Library> getDependencies() {
+        return dependencies;
+    }
+
+    /**
+     * Add a dependency for this requirement.
+     * @param library Library to add as a dependency
+     */
+    public void addDependency(Library library) {
+        if (library == null) {
+            return;
+        }
+
+        dependencies.add(library);
     }
 }

@@ -1,6 +1,7 @@
 package me.armar.plugins.autorank.pathbuilder.requirement;
 
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
+import me.staartvin.plugins.pluginlibrary.Library;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -116,6 +117,10 @@ public class BlocksBrokenRequirement extends Requirement {
     @SuppressWarnings("deprecation")
     @Override
     public boolean setOptions(final String[] options) {
+
+        // Add dependency
+        addDependency(Library.STATZ);
+
         int id = -1;
         int amount = 1;
         short data = 0;

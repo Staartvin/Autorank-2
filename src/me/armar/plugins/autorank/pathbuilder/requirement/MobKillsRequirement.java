@@ -1,6 +1,7 @@
 package me.armar.plugins.autorank.pathbuilder.requirement;
 
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
+import me.staartvin.plugins.pluginlibrary.Library;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
@@ -61,6 +62,9 @@ public class MobKillsRequirement extends Requirement {
 
     @Override
     public boolean setOptions(final String[] options) {
+
+        // Add dependency
+        addDependency(Library.STATZ);
 
         totalMobsKilled = Integer.parseInt(options[0]);
 
