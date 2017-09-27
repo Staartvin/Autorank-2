@@ -142,7 +142,6 @@ public class Autorank extends JavaPlugin {
         // ------------- Init static variables -------------
         autorank = this;
 
-
         // ------------- Create files & folders -------------
 
         // Register configs

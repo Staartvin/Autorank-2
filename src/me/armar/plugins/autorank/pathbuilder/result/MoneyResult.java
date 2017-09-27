@@ -4,7 +4,6 @@ import me.staartvin.plugins.pluginlibrary.Library;
 import me.staartvin.plugins.pluginlibrary.hooks.VaultHook;
 import org.bukkit.entity.Player;
 
-import me.armar.plugins.autorank.hooks.vaultapi.PluginLibraryHandler;
 import me.armar.plugins.autorank.language.Lang;
 import net.milkbowl.vault.economy.EconomyResponse;
 
