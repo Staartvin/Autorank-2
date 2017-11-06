@@ -50,7 +50,7 @@ public class PluginLibraryHandler extends DependencyHandler {
     /*
      * (non-Javadoc)
      *
-     * @see me.armar.plugins.autorank.hooks.DependencyHandler#isAvailable()
+     * @see me.armar.plugins.autorank.hooks.DependencyHandler#isAvailablePluginLibrary()
      */
     @Override
     public boolean isAvailable() {

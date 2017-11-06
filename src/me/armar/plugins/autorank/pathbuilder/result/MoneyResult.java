@@ -1,12 +1,10 @@
 package me.armar.plugins.autorank.pathbuilder.result;
 
+import me.armar.plugins.autorank.language.Lang;
 import me.staartvin.plugins.pluginlibrary.Library;
 import me.staartvin.plugins.pluginlibrary.hooks.VaultHook;
-import org.bukkit.entity.Player;
-
-import me.armar.plugins.autorank.hooks.vaultapi.PluginLibraryHandler;
-import me.armar.plugins.autorank.language.Lang;
 import net.milkbowl.vault.economy.EconomyResponse;
+import org.bukkit.entity.Player;
 
 public class MoneyResult extends Result {
 

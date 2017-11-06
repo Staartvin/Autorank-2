@@ -152,6 +152,11 @@ public class DependencyManager {
         plugin.getPermPlugHandler().searchPermPlugin();
     }
 
+    /**
+     * Check whether a dependency of Autorank is available.
+     * @param dep Dependency to check.
+     * @return true if it is available, false otherwise.
+     */
     public boolean isAvailable(AutorankDependency dep) {
         DependencyHandler handler = getDependency(dep);
 
