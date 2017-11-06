@@ -47,6 +47,10 @@ public class AcidIslandLevelRequirement extends Requirement {
 
     @Override
     public boolean setOptions(final String[] options) {
+
+        // Add ACIDISLAND Dependency
+        addDependency(Library.ACIDISLAND);
+
         handler = (AcidIslandHook) this.getAutorank().getDependencyManager()
                 .getLibraryHook(Library.ACIDISLAND);
 

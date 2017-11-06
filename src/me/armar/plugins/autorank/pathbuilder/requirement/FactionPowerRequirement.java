@@ -50,6 +50,10 @@ public class FactionPowerRequirement extends Requirement {
 
     @Override
     public boolean setOptions(final String[] options) {
+
+        // Add dependency
+        addDependency(Library.FACTIONS);
+
         handler = (FactionsHook) this.getAutorank().getDependencyManager().getLibraryHook(Library.FACTIONS);
 
         try {

@@ -48,6 +48,9 @@ public class ASkyBlockLevelRequirement extends Requirement {
     @Override
     public boolean setOptions(final String[] options) {
 
+        // Add dependency
+        addDependency(Library.ASKYBLOCK);
+
         handler = (ASkyBlockHook) this.getAutorank().getDependencyManager()
                 .getLibraryHook(Library.ASKYBLOCK);
 

@@ -62,6 +62,9 @@ public class MoneyRequirement extends Requirement {
     @Override
     public boolean setOptions(final String[] options) {
 
+        // Add dependency
+        addDependency(Library.VAULT);
+
         try {
             minMoney = Double.parseDouble(options[0]);
         } catch (final Exception e) {

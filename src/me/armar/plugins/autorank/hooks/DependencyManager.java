@@ -14,9 +14,8 @@ import java.util.HashMap;
 /**
  * This class is used for loading all the dependencies Autorank has. <br>
  * Not all dependencies are required, some are optional.
- * 
+ *
  * @author Staartvin
- * 
  */
 public class DependencyManager {
 
@@ -26,14 +25,17 @@ public class DependencyManager {
      * the dependencies.<br>
      * Autorank is also included because this enum is used for methods that
      * require the own plugin.
-     * 
+     *
      * @author Staartvin
-     * 
      */
     public enum AutorankDependency {
 
-        AUTORANK, ONTIME, STATS, STATZ, PLUGINLIBRARY
-    };
+        AUTORANK,
+        ONTIME,
+        STATS,
+        STATZ,
+        PLUGINLIBRARY,
+    }
 
     private final HashMap<AutorankDependency, DependencyHandler> handlers = new HashMap<AutorankDependency, DependencyHandler>();
 
@@ -53,11 +55,10 @@ public class DependencyManager {
 
     /**
      * Get a specific AutorankDependency.
-     * 
-     * @param dep
-     *            Dependency to get.
+     *
+     * @param dep Dependency to get.
      * @return the {@linkplain DependencyHandler} that is associated with the
-     *         given {@linkplain AutorankDependency}, can be null.
+     * given {@linkplain AutorankDependency}, can be null.
      */
     public DependencyHandler getDependency(final AutorankDependency dep) {
 
@@ -78,9 +79,8 @@ public class DependencyManager {
     /**
      * Check whether the given player is AFK. <br>
      * Obeys the AFK setting in the Settings.yml.
-     * 
-     * @param player
-     *            Player to check.
+     *
+     * @param player Player to check.
      * @return true if the player is suspected of being AFK, false otherwise.
      */
     public boolean isAFK(final Player player) {
@@ -91,20 +91,19 @@ public class DependencyManager {
 
         boolean isAFK = false;
 
-        if (this.getLibraryHook(Library.ESSENTIALSX).isAvailable()) {
+        if (this.isAvailable(Library.ESSENTIALSX)) {
             plugin.debugMessage("Using EssentialsX for AFK");
             isAFK = ((EssentialsXHook) this.getLibraryHook(Library.ESSENTIALSX)).isAFK(player.getUniqueId());
-        } else if (this.getLibraryHook(Library.ROYALCOMMANDS).isAvailable()) {
+        } else if (this.isAvailable(Library.ROYALCOMMANDS)) {
             plugin.debugMessage("Using RoyalCommands for AFK");
             isAFK = ((RoyalCommandsHook) this.getLibraryHook(Library.ROYALCOMMANDS)).isAFK(player);
-        } else if (this.getLibraryHook(Library.ULTIMATECORE).isAvailable()) {
+        } else if (this.isAvailable(Library.ULTIMATECORE)) {
             plugin.debugMessage("Using UltimateCore for AFK");
             isAFK = ((UltimateCoreHook) this.getLibraryHook(Library.ULTIMATECORE)).isAFK(player.getUniqueId());
-        } else if (this.getLibraryHook(Library.AFKTERMINATOR).isAvailable()) {
+        } else if (this.isAvailable(Library.AFKTERMINATOR)) {
             plugin.debugMessage("Using AfkTerminator for AFK");
             isAFK = ((AFKTerminatorHook) this.getLibraryHook(Library.AFKTERMINATOR)).isAFKMachineDetected(player.getUniqueId());
         }
-
 
 
         // No suitable plugin found
@@ -114,10 +113,8 @@ public class DependencyManager {
     /**
      * Load all dependencies used for Autorank. <br>
      * Autorank will check for dependencies and shows the output on the console.
-     * 
-     * @throws Exception
-     *             This can be a multitude of exceptions
-     * 
+     *
+     * @throws Exception This can be a multitude of exceptions
      */
     public void loadDependencies() throws Exception {
 
@@ -168,6 +165,7 @@ public class DependencyManager {
 
     /**
      * Get library hook of PluginLibrary
+     *
      * @param library library to get
      * @return hook used by PluginLibrary (if available) or null if not found.
      */
@@ -187,6 +185,7 @@ public class DependencyManager {
 
     /**
      * Check whether a plugin is available using PluginLibrary.
+     *
      * @param library Library to check
      * @return true if it is available, false otherwise.
      */

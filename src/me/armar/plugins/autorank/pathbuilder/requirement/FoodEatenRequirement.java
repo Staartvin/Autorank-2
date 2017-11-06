@@ -1,6 +1,7 @@
 package me.armar.plugins.autorank.pathbuilder.requirement;
 
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
+import me.staartvin.plugins.pluginlibrary.Library;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -73,6 +74,9 @@ public class FoodEatenRequirement extends Requirement {
 
     @Override
     public boolean setOptions(final String[] options) {
+
+        // Add dependency
+        addDependency(Library.STATZ);
 
         final int total = Integer.parseInt(options[0]);
         String foodType = "";

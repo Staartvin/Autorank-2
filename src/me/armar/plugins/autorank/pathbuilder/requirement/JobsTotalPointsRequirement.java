@@ -40,6 +40,9 @@ public class JobsTotalPointsRequirement extends Requirement {
     @Override
     public boolean meetsRequirement(final Player player) {
 
+        // Add dependency
+        addDependency(Library.JOBS);
+
         double points = -1;
 
         if (jobsHandler == null || !jobsHandler.isAvailable()) {

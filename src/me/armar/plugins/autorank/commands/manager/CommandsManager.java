@@ -228,7 +228,7 @@ public class CommandsManager implements TabExecutor {
                 commands.add(list.get(0));
             }
 
-            return commands;
+            return createReturnList(commands, args[0]);
         }
 
         final String subCommand = args[0].trim();
@@ -269,5 +269,24 @@ public class CommandsManager implements TabExecutor {
         }
 
         return null;
+    }
+
+    /***
+     * Returns a sublist from a given list containing items that start with the given string if string is not empty
+     * @param list The list to process
+     * @param string The typed string
+     * @return Sublist if string is not empty
+     */
+
+    private List<String> createReturnList(List<String> list, String string) {
+        if (string.equals("")) return list;
+
+        List<String> returnList = new ArrayList<>();
+        for (String item : list) {
+            if (item.toLowerCase().startsWith(string.toLowerCase())) {
+                returnList.add(item);
+            }
+        }
+        return returnList;
     }
 }
