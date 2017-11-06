@@ -464,16 +464,16 @@ public class Autorank extends JavaPlugin {
     }
 
     /**
-     * @see {@linkplain me.armar.plugins.autorank.api.API#registerRequirement(String, Class)
-     *      registerRequirement()}
+     * @see me.armar.plugins.autorank.api.API#registerRequirement(String, Class)
+     *      registerRequirement()
      */
     public void registerRequirement(final String name, final Class<? extends Requirement> requirement) {
         RequirementBuilder.registerRequirement(name, requirement);
     }
 
     /**
-     * @see {@linkplain me.armar.plugins.autorank.api.API#registerResult(String, Class)
-     *      registerResult()}
+     * @see me.armar.plugins.autorank.api.API#registerResult(String, Class)
+     *      registerResult()
      */
     public void registerResult(final String name, final Class<? extends Result> result) {
         ResultBuilder.registerResult(name, result);
