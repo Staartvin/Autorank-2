@@ -44,11 +44,12 @@ public class HasItemRequirement extends Requirement {
 
         final ItemStack item = neededItem.getItem();
 
-        final int firstSlot = player.getInventory().first(item.getType());
         int slotAmount = 0;
 
-        if (firstSlot >= 0) {
-            slotAmount = player.getInventory().getItem(firstSlot).getAmount();
+        for (ItemStack itemInInv : player.getInventory().getStorageContents()) {
+            if (itemInInv != null && itemInInv.isSimilar(item)) {
+                slotAmount += itemInInv.getAmount();
+            }
         }
 
         return slotAmount + "/" + item.getAmount();
@@ -104,12 +105,17 @@ public class HasItemRequirement extends Requirement {
         }
         if (options.length > 4) {
             // use display name?
-            useDisplayName = (options[4].equalsIgnoreCase("true") ? true : false);
+            useDisplayName = (options[4].equalsIgnoreCase("true"));
         }
 
         final ItemStack item = new ItemStack(id, amount, data);
 
         neededItem = new ItemWrapper(item, displayName, showShortValue, useDisplayName);
+
+        System.out.println("ITEM ID: " + id);
+        System.out.println("AMOUNT: " + amount);
+        System.out.println("DATA: " + data);
+        System.out.println("Displayname: " + displayName);
 
         if (neededItem == null) {
             this.registerWarningMessage("No valid item is provided");
