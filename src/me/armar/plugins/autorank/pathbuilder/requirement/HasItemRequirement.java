@@ -112,11 +112,6 @@ public class HasItemRequirement extends Requirement {
 
         neededItem = new ItemWrapper(item, displayName, showShortValue, useDisplayName);
 
-        System.out.println("ITEM ID: " + id);
-        System.out.println("AMOUNT: " + amount);
-        System.out.println("DATA: " + data);
-        System.out.println("Displayname: " + displayName);
-
         if (neededItem == null) {
             this.registerWarningMessage("No valid item is provided");
             return false;
