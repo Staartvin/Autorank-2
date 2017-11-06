@@ -1,57 +1,28 @@
 package me.armar.plugins.autorank.commands.manager;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabExecutor;
-import org.bukkit.entity.Player;
-
 import com.google.common.collect.Lists;
-
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.commands.AddCommand;
-import me.armar.plugins.autorank.commands.ArchiveCommand;
-import me.armar.plugins.autorank.commands.CheckCommand;
-import me.armar.plugins.autorank.commands.ChooseCommand;
-import me.armar.plugins.autorank.commands.CompleteCommand;
-import me.armar.plugins.autorank.commands.ConvertCommand;
-import me.armar.plugins.autorank.commands.DebugCommand;
-import me.armar.plugins.autorank.commands.ForceCheckCommand;
-import me.armar.plugins.autorank.commands.GlobalAddCommand;
-import me.armar.plugins.autorank.commands.GlobalCheckCommand;
-import me.armar.plugins.autorank.commands.GlobalSetCommand;
-import me.armar.plugins.autorank.commands.HelpCommand;
-import me.armar.plugins.autorank.commands.HooksCommand;
-import me.armar.plugins.autorank.commands.ImportCommand;
-import me.armar.plugins.autorank.commands.LeaderboardCommand;
-import me.armar.plugins.autorank.commands.ReloadCommand;
-import me.armar.plugins.autorank.commands.RemoveCommand;
-import me.armar.plugins.autorank.commands.ResetCommand;
-import me.armar.plugins.autorank.commands.SetCommand;
-import me.armar.plugins.autorank.commands.SyncCommand;
-import me.armar.plugins.autorank.commands.SyncStatsCommand;
-import me.armar.plugins.autorank.commands.TimesCommand;
-import me.armar.plugins.autorank.commands.TrackCommand;
-import me.armar.plugins.autorank.commands.ViewCommand;
+import me.armar.plugins.autorank.commands.*;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
+import org.bukkit.entity.Player;
+
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * This class will manage all incoming command requests. Commands are not
  * performed here, they are only send to the correct place. A specific
  * {@linkplain AutorankCommand} class handles the task of performing the
  * command.
- * 
+ * <p>
  * <br>
  * <br>
  * Commands are stored in a hashmap. The key of this hashmap is a list of
@@ -59,7 +30,6 @@ import net.md_5.bungee.api.chat.HoverEvent;
  * command. For example, 'times' is stored for the '/ar times' command. The
  * value of the hashmap is a {@linkplain AutorankCommand} class that performs
  * the actual logic of the command.
- * 
  */
 public class CommandsManager implements TabExecutor {
 
@@ -104,7 +74,7 @@ public class CommandsManager implements TabExecutor {
     /**
      * Get a hashmap of commands that are used. For more info, see
      * {@link CommandsManager}.
-     * 
+     *
      * @return a hashmap of commands
      */
     public Map<List<String>, AutorankCommand> getRegisteredCommands() {
@@ -115,11 +85,9 @@ public class CommandsManager implements TabExecutor {
      * Get whether the given sender has the given permission. <br>
      * Will also send a 'you don't have this permission' message if the sender
      * does not have the given permission.
-     * 
-     * @param permission
-     *            Permission to check
-     * @param sender
-     *            Sender to check
+     *
+     * @param permission Permission to check
+     * @param sender     Sender to check
      * @return true if this sender has the given permission, false otherwise.
      */
     public boolean hasPermission(final String permission, final CommandSender sender) {
@@ -215,11 +183,10 @@ public class CommandsManager implements TabExecutor {
      */
     @Override
     public List<String> onTabComplete(final CommandSender sender, final Command cmd, final String commandLabel,
-            final String[] args) {
+                                      final String[] args) {
 
+        // Show a list of commands that match the characters already typed (if any).
         if (args.length <= 1) {
-            // Show a list of commands if needed
-
             final List<String> commands = new ArrayList<String>();
 
             for (final Entry<List<String>, AutorankCommand> entry : registeredCommands.entrySet()) {
@@ -228,11 +195,12 @@ public class CommandsManager implements TabExecutor {
                 commands.add(list.get(0));
             }
 
-            return createReturnList(commands, args[0]);
+            return findSuggestedCommands(commands, args[0]);
         }
 
         final String subCommand = args[0].trim();
 
+        // Give suggestions based on type of command. -- We can suggest on these commands
         if (subCommand.equalsIgnoreCase("set") || subCommand.equalsIgnoreCase("add")
                 || subCommand.equalsIgnoreCase("remove") || subCommand.equalsIgnoreCase("rem")
                 || subCommand.equalsIgnoreCase("gadd") || subCommand.equalsIgnoreCase("gset")) {
@@ -278,7 +246,7 @@ public class CommandsManager implements TabExecutor {
      * @return Sublist if string is not empty
      */
 
-    private List<String> createReturnList(List<String> list, String string) {
+    private List<String> findSuggestedCommands(List<String> list, String string) {
         if (string.equals("")) return list;
 
         List<String> returnList = new ArrayList<>();
