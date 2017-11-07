@@ -1,9 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
 >
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>Autorank</groupId>
 	<artifactId>Autorank</artifactId>
-    <version>4.1<!-- -Dev-${BUILD_NUMBER}--></version>
+    <version>4.1-Dev-${BUILD_NUMBER}</version>
 	<name>Autorank</name>
 	<description>Maven project for Bukkit plugin Autorank</description>
 	<url>http://dev.bukkit.org/server-mods/autorank/</url>
