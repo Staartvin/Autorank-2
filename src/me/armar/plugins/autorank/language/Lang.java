@@ -455,7 +455,54 @@ public enum Lang {
     /**
      * &4There are no paths that you can choose.
      */
-    NO_PATHS_TO_CHOOSE("no-paths-to-choose", "&4There are no paths that you can choose."),;
+    NO_PATHS_TO_CHOOSE("no-paths-to-choose", "&4There are no paths that you can choose."),
+    /**
+     * Have at least a level of {0} in BattleLevels.
+     */
+    BATTLELEVELS_LEVEL_REQUIREMENT("battlelevels-level-requirement", "Have at least a level of {0} in " +
+            "BattleLevels."),
+    /**
+     * Killed at least {0} players in BattleLevels.
+     */
+    BATTLELEVELS_KILLS_REQUIREMENT("battlelevels-kills-requirement", "Killed at least {0} players in " +
+            "BattleLevels."),
+    /**
+     * Have at least a score of {0} players in BattleLevels.
+     */
+    BATTLELEVELS_SCORE_REQUIREMENT("battlelevels-score-requirement", "Have at least a score of {0} in " +
+            "BattleLevels."),
+    /**
+     * Kill at least {0} players in a row in BattleLevels.
+     */
+    BATTLELEVELS_NORMAL_KILLSTREAK_REQUIREMENT("battlelevels-normal-killstreak-requirement", "Kill at least " +
+            "{0} players in a row in BattleLevels."),
+    /**
+     * Killed at least {0} players in a row in BattleLevels.
+     */
+    BATTLELEVELS_TOP_KILLSTREAK_REQUIREMENT("battlelevels-top-killstreak-requirement", "Killed at least " +
+            "{0} players in a row in BattleLevels."),
+    /**
+     * Have at least a KDR of {0} in BattleLevels.
+     */
+    BATTLELEVELS_KILL_DEATH_RATIO_REQUIREMENT("battlelevels-kill-death-ratio-requirement", "Have at least a KDR of " +
+            "{0} in BattleLevels."),
+    /**
+     * Have {0} quests active at the same time.
+     */
+    QUESTS_ACTIVE_QUESTS_REQUIREMENT("quests-active-quests-requirement", "Have {0} quests active at the same time."),
+    /**
+     * Complete at least {0} quests.
+     */
+    QUESTS_COMPLETED_QUESTS_REQUIREMENT("quests-completed-quests-requirement", "Complete at least {0} quests."),
+    /**
+     * Obtain at least {0} quest points.
+     */
+    QUESTS_QUEST_POINTS_REQUIREMENT("quests-quest-points-requirement", "Obtain at least {0} quest points."),
+    /**
+     * Complete the quest '{0}'.
+     */
+    QUESTS_COMPLETE_SPECIFIC_QUEST_REQUIREMENT("quests-complete-specific-quest-requirement", "Complete the quest " +
+            "'{0}'."),;
 
     private static FileConfiguration LANG;
 

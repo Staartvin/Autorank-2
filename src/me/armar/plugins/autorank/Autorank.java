@@ -378,24 +378,43 @@ public class Autorank extends JavaPlugin {
         RequirementBuilder.registerRequirement("items crafted", ItemsCraftedRequirement.class);
         RequirementBuilder.registerRequirement("time", TimeRequirement.class);
         RequirementBuilder.registerRequirement("times sheared", TimesShearedRequirement.class);
-        RequirementBuilder.registerRequirement("essentials geoip location", EssentialsGeoIPRequirement.class);
         RequirementBuilder.registerRequirement("in biome", InBiomeRequirement.class);
         RequirementBuilder.registerRequirement("food eaten", FoodEatenRequirement.class);
+        RequirementBuilder.registerRequirement("has advancement", AdvancementRequirement.class);
+        RequirementBuilder.registerRequirement("in group", GroupRequirement.class);
+
+        RequirementBuilder.registerRequirement("essentials geoip location", EssentialsGeoIPRequirement.class);
+
         RequirementBuilder.registerRequirement("acidisland level", AcidIslandLevelRequirement.class);
         RequirementBuilder.registerRequirement("askyblock level", ASkyBlockLevelRequirement.class);
+
         RequirementBuilder.registerRequirement("javascript", JavaScriptRequirement.class);
+
         RequirementBuilder.registerRequirement("jobs current points", JobsCurrentPointsRequirement.class);
         RequirementBuilder.registerRequirement("jobs total points", JobsTotalPointsRequirement.class);
         RequirementBuilder.registerRequirement("jobs level", JobsLevelRequirement.class);
         RequirementBuilder.registerRequirement("jobs experience", JobsExperienceRequirement.class);
+
         RequirementBuilder.registerRequirement("grief prevention claims", GriefPreventionClaimsCountRequirement.class);
         RequirementBuilder.registerRequirement("grief prevention claimed blocks", GriefPreventionClaimedBlocksRequirement.class);
         RequirementBuilder.registerRequirement("grief prevention remaining blocks", GriefPreventionRemainingBlocksRequirement.class);
         RequirementBuilder.registerRequirement("grief prevention bonus blocks", GriefPreventionBonusBlocksRequirement.class);
-        RequirementBuilder.registerRequirement("has advancement", AdvancementRequirement.class);
+
         RequirementBuilder.registerRequirement("rpgme skill level", RPGMeSkillLevelRequirement.class);
         RequirementBuilder.registerRequirement("rpgme combat level", RPGMeCombatLevelRequirement.class);
-        RequirementBuilder.registerRequirement("in group", GroupRequirement.class);
+
+        RequirementBuilder.registerRequirement("battlelevels kdr", BattleLevelsKDRRequirement.class);
+        RequirementBuilder.registerRequirement("battlelevels kills", BattleLevelsKillsRequirement.class);
+        RequirementBuilder.registerRequirement("battlelevels killstreak", BattleLevelsKillStreakRequirement.class);
+        RequirementBuilder.registerRequirement("battlelevels top killstreak", BattleLevelsTopKillStreakRequirement
+                .class);
+        RequirementBuilder.registerRequirement("battlelevels level", BattleLevelsLevelRequirement.class);
+        RequirementBuilder.registerRequirement("battlelevels score", BattleLevelsScoreRequirement.class);
+
+        RequirementBuilder.registerRequirement("quests quest points", QuestsQuestPointsRequirement.class);
+        RequirementBuilder.registerRequirement("quests complete quest", QuestsCompleteSpecificQuestRequirement.class);
+        RequirementBuilder.registerRequirement("quests active quests", QuestsActiveQuestsRequirement.class);
+        RequirementBuilder.registerRequirement("quests completed quests", QuestsCompletedQuestsRequirement.class);
 
         // Register 'main' results
         ResultBuilder.registerResult("command", CommandResult.class);
