@@ -1,10 +1,9 @@
 package me.armar.plugins.autorank.pathbuilder.requirement;
 
+import me.armar.plugins.autorank.language.Lang;
 import me.staartvin.plugins.pluginlibrary.Library;
 import me.staartvin.plugins.pluginlibrary.hooks.RPGmeHook;
 import org.bukkit.entity.Player;
-
-import me.armar.plugins.autorank.language.Lang;
 
 public class RPGMeSkillLevelRequirement extends Requirement {
 
@@ -65,11 +64,6 @@ public class RPGMeSkillLevelRequirement extends Requirement {
 
         if (skillLevel < 0) {
             this.registerWarningMessage("Skill level was not specified (or smaller than 0)!");
-            return false;
-        }
-
-        if (handler == null || !handler.isAvailable()) {
-            this.registerWarningMessage("RPGme is not available");
             return false;
         }
 
