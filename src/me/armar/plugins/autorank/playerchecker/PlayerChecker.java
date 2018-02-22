@@ -1,12 +1,5 @@
 package me.armar.plugins.autorank.playerchecker;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.pathbuilder.Path;
@@ -14,6 +7,11 @@ import me.armar.plugins.autorank.pathbuilder.holders.RequirementsHolder;
 import me.armar.plugins.autorank.pathbuilder.result.Result;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
 import me.armar.plugins.autorank.util.AutorankTools;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /*
  * PlayerChecker is where the magic happens :P It has a RankChangeBuilder that reads
@@ -22,9 +20,9 @@ import me.armar.plugins.autorank.util.AutorankTools;
  * factories because they don't have any hardcoded classes to build. You register all
  * the requirements or results when the plugin is started. Because of this other
  * plugins / addons can register their own custom requirements and results very easily.
- * 
+ *
  * So: PlayerChecker has a list of RankChanges and a RankChange has a list of AdditionalRequirement and Results.
- * 
+ *
  */
 public class PlayerChecker {
 
@@ -55,7 +53,7 @@ public class PlayerChecker {
     }
 
     public List<String> formatRequirementsToList(final List<RequirementsHolder> holders,
-            final List<RequirementsHolder> metRequirements) {
+                                                 final List<RequirementsHolder> metRequirements) {
         // Converts requirements into a list of readable requirements
 
         final List<String> messages = new ArrayList<String>();
@@ -114,6 +112,7 @@ public class PlayerChecker {
     /**
      * Get a list of Requirements that the player needs to complete for its current path. Returns an empty list if
      * the player has not chosen a path yet.
+     *
      * @param player Player to check the path of.
      * @return A list of RequirementsHolders that ought to be completed before the path is completed.
      */
@@ -131,6 +130,7 @@ public class PlayerChecker {
     /**
      * Get a list of Requirements that the player did not pass (yet). Returns an empty list if the player has not chosen
      * any path yet.
+     *
      * @param player Player to check path for.
      * @return a list of RequirementsHolders that the player did not complete yet.
      */
@@ -150,11 +150,12 @@ public class PlayerChecker {
 
     /**
      * Get all requirements that a player has completed in its path.
+     *
      * @param player Player to check
      * @return List of RequirementsHolders that the player completed.
      */
     public List<RequirementsHolder> getCompletedRequirementsHolders(Player player) {
-       return this.getMetRequirementsHolders(this.getAllRequirementsHolders(player), player);
+        return this.getMetRequirementsHolders(this.getAllRequirementsHolders(player), player);
 
     }
 
@@ -162,8 +163,9 @@ public class PlayerChecker {
      * Get a list of Requirements that the player completed, given a set of Requirements.
      * The {@link #getCompletedRequirementsHolders(Player)} uses this method with the requirements of the player's
      * current path.
+     *
      * @param holders A list of holders to check.
-     * @param player Player to check holders for.
+     * @param player  Player to check holders for.
      * @return a subset of the given list of holders that the player completed.
      */
     public List<RequirementsHolder> getMetRequirementsHolders(final List<RequirementsHolder> holders, final Player player) {

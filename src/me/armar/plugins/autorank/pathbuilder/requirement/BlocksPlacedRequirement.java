@@ -1,13 +1,12 @@
 package me.armar.plugins.autorank.pathbuilder.requirement;
 
+import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
+import me.armar.plugins.autorank.util.AutorankTools;
 import me.staartvin.plugins.pluginlibrary.Library;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-
-import me.armar.plugins.autorank.language.Lang;
-import me.armar.plugins.autorank.util.AutorankTools;
 
 public class BlocksPlacedRequirement extends Requirement {
 
@@ -143,7 +142,7 @@ public class BlocksPlacedRequirement extends Requirement {
         }
         if (options.length > 4) {
             // use display name?
-            useDisplayName = (options[4].equalsIgnoreCase("true") ? true : false);
+            useDisplayName = (options[4].equalsIgnoreCase("true"));
         }
 
         final ItemStack item = new ItemStack(id, amount, data);

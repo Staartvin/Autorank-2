@@ -1,13 +1,12 @@
 package me.armar.plugins.autorank.commands;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
 import me.armar.plugins.autorank.util.AutorankTools;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 
 /**
  * The command delegator for the '/ar reload' command.

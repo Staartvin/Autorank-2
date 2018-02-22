@@ -1,8 +1,7 @@
 package me.armar.plugins.autorank.pathbuilder.requirement;
 
-import org.bukkit.entity.Player;
-
 import me.armar.plugins.autorank.language.Lang;
+import org.bukkit.entity.Player;
 
 public class WorldRequirement extends Requirement {
 

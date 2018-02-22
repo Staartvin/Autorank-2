@@ -1,16 +1,15 @@
 package me.armar.plugins.autorank.commands;
 
-import java.util.UUID;
-
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
 import me.armar.plugins.autorank.util.AutorankTools;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+
+import java.util.UUID;
 
 /**
  * The command delegator for the '/ar gadd' command.
@@ -25,7 +24,7 @@ public class GlobalAddCommand extends AutorankCommand {
 
     @Override
     public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
-        
+
         if (!plugin.getCommandsManager().hasPermission(AutorankPermission.ADD_GLOBAL_TIME, sender)) {
             return true;
         }
@@ -56,7 +55,7 @@ public class GlobalAddCommand extends AutorankCommand {
             @Override
             public void run() {
                 int value = 0;
-                
+
                 if (args.length > 2) {
                     value = AutorankTools.readTimeInput(args, 2);
                 }

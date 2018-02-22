@@ -1,13 +1,12 @@
 package me.armar.plugins.autorank.pathbuilder.result;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import me.armar.plugins.autorank.language.Lang;
+import me.armar.plugins.autorank.util.AutorankTools;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 
-import me.armar.plugins.autorank.language.Lang;
-import me.armar.plugins.autorank.util.AutorankTools;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CommandResult extends Result {
 
@@ -31,7 +30,7 @@ public class CommandResult extends Result {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see me.armar.plugins.autorank.pathbuilder.result.Result#getDescription()
      */
     @Override

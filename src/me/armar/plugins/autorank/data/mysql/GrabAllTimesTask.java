@@ -11,9 +11,8 @@ import java.util.concurrent.Callable;
  * <br>
  * We have to wait for the thread to finish before we can get the results. <br>
  * Every database lookup will have to have its own thread.
- * 
+ *
  * @author Staartvin
- * 
  */
 public class GrabAllTimesTask implements Callable<HashMap<UUID, Integer>> {
 
@@ -28,11 +27,11 @@ public class GrabAllTimesTask implements Callable<HashMap<UUID, Integer>> {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.util.concurrent.Callable#call()
      */
     @Override
-    public HashMap<UUID, Integer> call() throws Exception {
+    public HashMap<UUID, Integer> call() {
         if (mysql == null)
             return times;
 

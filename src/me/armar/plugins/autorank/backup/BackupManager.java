@@ -1,21 +1,18 @@
 package me.armar.plugins.autorank.backup;
 
-import java.io.File;
-import java.io.IOException;
-
-import org.bukkit.ChatColor;
-
 import com.google.common.io.Files;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.data.flatfile.FlatFileManager;
 import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
+import org.bukkit.ChatColor;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * This class is used to backup several data files of Autorank.
- * 
+ *
  * @author Staartvin
- * 
  */
 public class BackupManager {
 
@@ -31,11 +28,9 @@ public class BackupManager {
 
     /**
      * Backup a file to a folder.
-     * 
-     * @param sourceFileName
-     *            Path of file to backup
-     * @param storePath
-     *            Path to backup the file to, can be null
+     *
+     * @param sourceFileName Path of file to backup
+     * @param storePath      Path to backup the file to, can be null
      */
     public void backupFile(final String sourceFileName, final String storePath) {
         // CAN ONLY COPY YML

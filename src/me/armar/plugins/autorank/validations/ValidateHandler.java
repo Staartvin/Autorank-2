@@ -30,6 +30,7 @@ public class ValidateHandler {
 
     /**
      * Check whether all permission groups that are used in the config also exist according to the permission's plugin.
+     *
      * @return true if there are no unknown permission groups in the config.
      */
     public boolean validatePermGroups() {

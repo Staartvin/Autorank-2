@@ -1,17 +1,17 @@
 package me.armar.plugins.autorank.statsmanager.handlers;
 
-import java.util.HashMap;
-import java.util.UUID;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.staartvin.plugins.pluginlibrary.hooks.StatsHook;
+
+import java.util.HashMap;
+import java.util.UUID;
 
 public class StatsHandler extends StatsPlugin {
 
     private final Autorank plugin;
 
-    private final StatsHook statsApi;;
+    private final StatsHook statsApi;
 
     public StatsHandler(final Autorank instance, final StatsHook statsAPI) {
         this.plugin = instance;

@@ -6,25 +6,19 @@
 
 package me.armar.plugins.autorank.updater;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.Plugin;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.Plugin;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 
 /**
  * Check dev.bukkit.org to find updates for a given plugin, and download the
@@ -43,7 +37,7 @@ import org.json.simple.JSONValue;
  * auto-updater. <br>
  * If you are unsure about these rules, please read the plugin submission
  * guidelines: http://goo.gl/8iU5l
- * 
+ *
  * @author Gravity
  * @version 2.0
  */
@@ -149,40 +143,40 @@ public class Updater {
 
     private static final int BYTE_SIZE = 1024; // Used for downloading files
     private static final String HOST = "https://api.curseforge.com"; // Slugs
-                                                                     // will be
-                                                                     // appended
-                                                                     // to this
-                                                                     // to get
-                                                                     // to the
-                                                                     // project's
-                                                                     // RSS feed
+    // will be
+    // appended
+    // to this
+    // to get
+    // to the
+    // project's
+    // RSS feed
     private static final String LINK_VALUE = "downloadUrl"; // Gets remote
-                                                            // file's download
-                                                            // link
+    // file's download
+    // link
 
-    private static final String[] NO_UPDATE_TAG = { "-DEV", "-PRE", "-SNAPSHOT" }; // If
-                                                                                   // the
-                                                                                   // version
-                                                                                   // number
-                                                                                   // contains
-                                                                                   // one
-                                                                                   // of
-                                                                                   // these,
-                                                                                   // don't
-                                                                                   // update.
+    private static final String[] NO_UPDATE_TAG = {"-DEV", "-PRE", "-SNAPSHOT"}; // If
+    // the
+    // version
+    // number
+    // contains
+    // one
+    // of
+    // these,
+    // don't
+    // update.
 
     private static final String QUERY = "/servermods/files?projectIds="; // Path
-                                                                         // to
-                                                                         // GET
+    // to
+    // GET
     private static final String TITLE_VALUE = "name"; // Gets remote file's
-                                                      // title
+    // title
     private static final String TYPE_VALUE = "releaseType"; // Gets remote
-                                                            // file's release
-                                                            // type
+    // file's release
+    // type
 
     private static final String VERSION_VALUE = "gameVersion"; // Gets remote
-                                                               // file's build
-                                                               // version
+    // file's build
+    // version
     private boolean announce; // Whether to announce file downloads
     private String apiKey = null; // BukkitDev ServerMods API key
     private YamlConfiguration config; // Config file
@@ -190,14 +184,14 @@ public class Updater {
     private int id = -1; // Project's Curse ID
     private Plugin plugin;
     private Updater.UpdateResult result = Updater.UpdateResult.SUCCESS; // Used
-                                                                        // for
-                                                                        // determining
-                                                                        // the
-                                                                        // outcome
-                                                                        // of
-                                                                        // the
-                                                                        // update
-                                                                        // process
+    // for
+    // determining
+    // the
+    // outcome
+    // of
+    // the
+    // update
+    // process
 
     private Thread thread; // Updater thread
     private UpdateType type;
@@ -213,20 +207,15 @@ public class Updater {
 
     /**
      * Initialize the updater
-     * 
-     * @param plugin
-     *            The plugin that is checking for an update.
-     * @param id
-     *            The dev.bukkit.org id of the project
-     * @param file
-     *            The file that the plugin is running from, get this by doing
-     *            this.getFile() from within your main class.
-     * @param type
-     *            Specify the type of update this will be. See
-     *            {@link UpdateType}
-     * @param announce
-     *            True if the program should announce the progress of new
-     *            updates in console
+     *
+     * @param plugin   The plugin that is checking for an update.
+     * @param id       The dev.bukkit.org id of the project
+     * @param file     The file that the plugin is running from, get this by doing
+     *                 this.getFile() from within your main class.
+     * @param type     Specify the type of update this will be. See
+     *                 {@link UpdateType}
+     * @param announce True if the program should announce the progress of new
+     *                 updates in console
      */
     public Updater(final Plugin plugin, final int id, final File file, final UpdateType type, final boolean announce) {
         this.plugin = plugin;
@@ -518,25 +507,25 @@ public class Updater {
                 if (dFile.isDirectory()) {
                     if (this.pluginFile(dFile.getName())) {
                         final File oFile = new File(this.plugin.getDataFolder().getParent(), dFile.getName()); // Get
-                                                                                                               // current
-                                                                                                               // dir
+                        // current
+                        // dir
                         final File[] contents = oFile.listFiles(); // List of
-                                                                   // existing
-                                                                   // files in
-                                                                   // the
-                                                                   // current
-                                                                   // dir
+                        // existing
+                        // files in
+                        // the
+                        // current
+                        // dir
                         for (final File cFile : dFile.listFiles()) // Loop
-                                                                   // through
-                                                                   // all the
-                                                                   // files in
-                                                                   // the new
-                                                                   // dir
+                        // through
+                        // all the
+                        // files in
+                        // the new
+                        // dir
                         {
                             boolean found = false;
                             for (final File xFile : contents) // Loop through
-                                                              // contents to see
-                                                              // if it exists
+                            // contents to see
+                            // if it exists
                             {
                                 if (xFile.getName().equals(cFile.getName())) {
                                     found = true;

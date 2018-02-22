@@ -1,26 +1,16 @@
 package me.armar.plugins.autorank.leaderboard;
 
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.UUID;
-
-import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
 import me.armar.plugins.autorank.hooks.DependencyManager.AutorankDependency;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+
+import java.text.DecimalFormat;
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * This class is used to handle all leaderboard things. <br>
@@ -295,11 +285,7 @@ public class LeaderboardHandler {
         if (System.currentTimeMillis() - plugin.getInternalPropertiesConfig().getLeaderboardLastUpdateTime(type) > (60000
                 * LEADERBOARD_TIME_VALID)) {
             return true;
-        } else if (plugin.getInternalPropertiesConfig().getCachedLeaderboard(type).size() <= 2) {
-            return true;
-        } else {
-            return false;
-        }
+        } else return plugin.getInternalPropertiesConfig().getCachedLeaderboard(type).size() <= 2;
     }
 
     /**
@@ -407,6 +393,7 @@ public class LeaderboardHandler {
 
     /**
      * Get a sorted list of all recorded players and their times.
+     *
      * @param type Type of time to get
      * @return a list of sorted player times.
      */

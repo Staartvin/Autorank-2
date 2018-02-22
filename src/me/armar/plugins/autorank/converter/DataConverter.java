@@ -1,17 +1,16 @@
 package me.armar.plugins.autorank.converter;
 
+import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.config.SimpleYamlConfiguration;
+import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
+import org.bukkit.configuration.ConfigurationSection;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import org.bukkit.configuration.ConfigurationSection;
-
-import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.config.SimpleYamlConfiguration;
-import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
 
 public class DataConverter {
 
@@ -23,9 +22,9 @@ public class DataConverter {
 
     /**
      * Convert data format from Autorank 3.8 (or lower) to Autorank 4.0
-     * 
+     *
      * @return true if it worked, false if it was already converted or did not
-     *         work.
+     * work.
      */
     public boolean convertData() {
         // Convert Autorank 3.8 or lower to Autorank 4.0
@@ -98,7 +97,7 @@ public class DataConverter {
 
     /**
      * Convert the SimpleConfig file to the new format of the Paths.yml file.
-     * 
+     *
      * @return true if correctly converted, false otherwise.
      */
     public boolean convertSimpleConfigToPaths() {
@@ -150,8 +149,8 @@ public class DataConverter {
             newPathsFile.set(pathName + ".requirements.time.value", timePeriod);
             newPathsFile.set(pathName + ".results.rank change", groupTo);
         }
-        
-     // Add a comment at the top of the file
+
+        // Add a comment at the top of the file
         newPathsFile.options().indent(4);
         newPathsFile.options().header("This is a Paths.yml generated from your SimpleConfig.yml. "
                 + "\nBeware that there can be errors made by the automatic transferring of formats."
@@ -168,7 +167,7 @@ public class DataConverter {
 
     /**
      * Convert the AdvancedConfig file to the new format of the Paths.yml file.
-     * 
+     *
      * @return true if correctly converted, false otherwise.
      */
     public boolean convertAdvancedConfigToPaths() {
@@ -262,7 +261,7 @@ public class DataConverter {
                 if (reqValue.matches("^-?\\d+$")) {
                     newPathsFile.set(pathName + ".requirements." + reqName + ".value", Integer.parseInt(reqValue));
                 } else {
-                    newPathsFile.set(pathName + ".requirements." + reqName + ".value", reqValue);    
+                    newPathsFile.set(pathName + ".requirements." + reqName + ".value", reqValue);
                 }
             }
 
@@ -284,7 +283,7 @@ public class DataConverter {
                 + "\n1. Stop your server (very important);"
                 + "\n2. Rename this file to 'Paths.yml' (without the quotation marks);"
                 + "\n3. Restart your server and voilá!");
-        
+
         // Save file at the end.
         newPathsFile.saveFile();
 

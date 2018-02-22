@@ -1,31 +1,25 @@
 package me.armar.plugins.autorank.util.uuid;
 
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.ByteBuffer;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.Callable;
-
+import com.google.common.collect.ImmutableList;
 import org.bukkit.Bukkit;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-import com.google.common.collect.ImmutableList;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.ByteBuffer;
+import java.util.*;
+import java.util.concurrent.Callable;
 
 /**
  * This class is used to get the UUID of a certain player.
  * <p>
  * Date created: 17:00:41 2 apr. 2014
- * 
+ *
  * @author evilmidget38
- * 
  */
 public class UUIDFetcher implements Callable<Map<String, UUID>> {
     private static final String PROFILE_URL = "https://api.mojang.com/profiles/minecraft";

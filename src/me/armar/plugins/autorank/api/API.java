@@ -1,11 +1,5 @@
 package me.armar.plugins.autorank.api;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
-import org.bukkit.entity.Player;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.addons.AddOnManager;
 import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
@@ -13,6 +7,11 @@ import me.armar.plugins.autorank.pathbuilder.Path;
 import me.armar.plugins.autorank.pathbuilder.holders.RequirementsHolder;
 import me.armar.plugins.autorank.pathbuilder.requirement.Requirement;
 import me.armar.plugins.autorank.pathbuilder.result.Result;
+import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * <b>Autorank's API class:</b>
@@ -21,9 +20,8 @@ import me.armar.plugins.autorank.pathbuilder.result.Result;
  * about paths. The API is never finished and if you want to see something
  * added, tell us!
  * <p>
- * 
+ *
  * @author Staartvin
- * 
  */
 public class API {
 
@@ -37,7 +35,7 @@ public class API {
      * Get the Addon manager of Autorank.
      * <p>
      * This class stores information about the loaded addons
-     * 
+     *
      * @return {@linkplain AddOnManager} class
      */
     public AddOnManager getAddOnManager() {
@@ -48,11 +46,10 @@ public class API {
      * Get all {@linkplain RequirementsHolder}s for a player at the exact
      * moment. This does not consider already finished requirement but just
      * mirrors the Paths.yml file.
-     * 
-     * @param player
-     *            Player to get the requirements from.
+     *
+     * @param player Player to get the requirements from.
      * @return a list of {@linkplain RequirementsHolder}s; An empty list when
-     *         none are found.
+     * none are found.
      */
     public List<RequirementsHolder> getAllRequirements(final Player player) {
         return plugin.getPlayerChecker().getAllRequirementsHolders(player);
@@ -60,11 +57,10 @@ public class API {
 
     /**
      * Get all {@linkplain RequirementsHolder}s that are not yet completed.
-     * 
-     * @param player
-     *            Player to get the failed requirements for.
+     *
+     * @param player Player to get the failed requirements for.
      * @return list of {@linkplain RequirementsHolder}s that still have to be
-     *         completed.
+     * completed.
      */
     public List<RequirementsHolder> getFailedRequirements(final Player player) {
         return plugin.getPlayerChecker().getFailedRequirementsHolders(player);
@@ -73,6 +69,7 @@ public class API {
     /**
      * Get all {@linkplain RequirementsHolder}s that the player has already completed.
      * If the player does not have a current path, it will return an empty list.
+     *
      * @param player Player to get completed requirements for.
      * @return a list of completed requirements.
      */
@@ -84,9 +81,8 @@ public class API {
      * Get the global play time (playtime across all servers with the same MySQL
      * database linked) of a player.
      * <p>
-     * 
-     * @param uuid
-     *            UUID of the player
+     *
+     * @param uuid UUID of the player
      * @return play time of a player. 0 if no entry was found.
      */
     public int getGlobalPlayTime(final UUID uuid) {
@@ -98,9 +94,8 @@ public class API {
      * Autorank (in minutes).<br>
      * This method will grab the time from the internal storage used by Autorank
      * and so this time does not depend on other plugins.
-     * 
-     * @param uuid
-     *            UUID of the player
+     *
+     * @param uuid UUID of the player
      * @return play time of this player or 0 if not found.
      */
     public int getLocalPlayTime(final UUID uuid) {
@@ -109,7 +104,7 @@ public class API {
 
     /**
      * Get the MySQL database name Autorank stores its global times in.
-     * 
+     *
      * @return name of database
      */
     public String getMySQLDatabase() {
@@ -122,9 +117,8 @@ public class API {
      * <br>
      * The time is always given in seconds.
      * <p>
-     * 
-     * @param player
-     *            Player to get the time for
+     *
+     * @param player Player to get the time for
      * @return play time of a player. 0 when has never played before.
      */
     public int getTimeOfPlayer(final Player player) {
@@ -137,11 +131,9 @@ public class API {
      * requirement.
      * <p>
      * The name will be the name that is used in the config.
-     * 
-     * @param uniqueName
-     *            Unique name identifier for the requirement
-     * @param clazz
-     *            Requirement class that does all the logic
+     *
+     * @param uniqueName Unique name identifier for the requirement
+     * @param clazz      Requirement class that does all the logic
      */
     public void registerRequirement(final String uniqueName, final Class<? extends Requirement> clazz) {
         plugin.getLogger().info("Loaded custom requirement: " + uniqueName);
@@ -154,11 +146,9 @@ public class API {
      * be unique as that is the way Autorank will identify the result.
      * <p>
      * The name will be the name that is used in the config.
-     * 
-     * @param uniqueName
-     *            Unique name identifier for the result
-     * @param clazz
-     *            Result class that does all the logic
+     *
+     * @param uniqueName Unique name identifier for the result
+     * @param clazz      Result class that does all the logic
      */
     public void registerResult(final String uniqueName, final Class<? extends Result> clazz) {
         plugin.getLogger().info("Loaded custom result: " + uniqueName);
@@ -168,9 +158,8 @@ public class API {
 
     /**
      * Get the active path of a player. Returns null if player has no path.
-     * 
-     * @param uuid
-     *            UUID of the player
+     *
+     * @param uuid UUID of the player
      * @return {@link Path} object or null if player has no active path.
      */
     public Path getActivePath(UUID uuid) {
@@ -179,11 +168,10 @@ public class API {
 
     /**
      * Get the paths that a player completed.
-     * 
-     * @param uuid
-     *            UUID of the player
+     *
+     * @param uuid UUID of the player
      * @return a list of {@link Path} objects that corresponds to the paths that
-     *         have been completed.
+     * have been completed.
      */
     public List<Path> getCompletedPaths(UUID uuid) {
         List<String> completedPathsString = plugin.getPlayerDataConfig().getCompletedPaths(uuid);
@@ -203,6 +191,7 @@ public class API {
 
     /**
      * Get the paths that a player has started but not yet completed.
+     *
      * @param uuid UUID of the player
      * @return a list of {@link Path} objects
      */
@@ -224,6 +213,7 @@ public class API {
 
     /**
      * Get all the paths that a player is allowed to start.
+     *
      * @param player Player to check paths for.
      * @return a list of paths the player is able to start.
      */

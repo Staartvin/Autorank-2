@@ -151,6 +151,7 @@ public class DependencyManager {
 
     /**
      * Check whether a dependency of Autorank is available.
+     *
      * @param dep Dependency to check.
      * @return true if it is available, false otherwise.
      */

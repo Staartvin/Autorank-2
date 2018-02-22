@@ -1,19 +1,17 @@
 package me.armar.plugins.autorank.pathbuilder.requirement;
 
-import org.bukkit.entity.Player;
-
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
+import org.bukkit.entity.Player;
 
 /**
  * This requirement checks for the total time on the server
- * 
+ * <p>
  * (i.e. the time now - the time he joined for the first time) Date created:
  * 13:49:33 15 jan. 2014
- * 
+ *
  * @author Staartvin
- * 
  */
 public class TotalTimeRequirement extends Requirement {
 

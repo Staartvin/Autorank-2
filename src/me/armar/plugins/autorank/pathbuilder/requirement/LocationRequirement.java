@@ -1,18 +1,17 @@
 package me.armar.plugins.autorank.pathbuilder.requirement;
 
+import me.armar.plugins.autorank.language.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-
-import me.armar.plugins.autorank.language.Lang;
 
 public class LocationRequirement extends Requirement {
 
     private int radius = -1;
     private String world;
     private int xLocation = 0, yLocation = 0, zLocation = 0;
-    
+
     // Store positive and negative values to create a boundary box.
     int xRadiusP, yRadiusP, zRadiusP, xRadiusN, yRadiusN, zRadiusN;
 
@@ -68,9 +67,7 @@ public class LocationRequirement extends Requirement {
         // Check if a player is within the radius
         if (pLocation.getBlockX() >= xRadiusN && pLocation.getBlockX() <= xRadiusP) {
             if (pLocation.getBlockY() >= yRadiusN && pLocation.getBlockY() <= yRadiusP) {
-                if (pLocation.getBlockZ() >= zRadiusN && pLocation.getBlockZ() <= zRadiusP) {
-                    return true;
-                }
+                return pLocation.getBlockZ() >= zRadiusN && pLocation.getBlockZ() <= zRadiusP;
             }
         }
 
@@ -99,7 +96,7 @@ public class LocationRequirement extends Requirement {
         if (radius < 0) {
             radius = 0;
         }
-        
+
         xRadiusN = xLocation - radius;
         yRadiusN = yLocation - radius;
         zRadiusN = zLocation - radius;

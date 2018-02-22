@@ -20,8 +20,25 @@ import java.util.regex.Pattern;
 
 public class AutorankTools {
 
-    public static enum Time {
-        DAYS, HOURS, MINUTES, SECONDS
+    /**
+     * Elaborate method to check whether a player is excluded from ranking.
+     * <p>
+     * When a player has a wildcard permission but is an OP, it will return
+     * false; When a player has a wildcard permission but is not an OP, it will
+     * return true; When a player only has autorank.exclude, it will return
+     * true;
+     *
+     * @param player Player to check for
+     * @return whether a player is excluded from ranking or not.
+     */
+    public static boolean isExcludedFromRanking(final Player player) {
+        if (player.hasPermission("autorank.askdjaslkdj")) {
+            // Op's have all permissions, but if he is a OP, he isn't excluded
+            return !player.isOp();
+        }
+
+        return player.hasPermission(AutorankPermission.EXCLUDE_FROM_PATHING);
+
     }
 
     public static int TICKS_PER_SECOND = 20, TICKS_PER_MINUTE = TICKS_PER_SECOND * 60;
@@ -405,32 +422,69 @@ public class AutorankTools {
     }
 
     /**
-     * Elaborate method to check whether a player is excluded from ranking.
-     * <p>
-     * When a player has a wildcard permission but is an OP, it will return
-     * false; When a player has a wildcard permission but is not an OP, it will
-     * return true; When a player only has autorank.exclude, it will return
-     * true;
+     * Convert a string to time.
      *
-     * @param player Player to check for
-     * @return whether a player is excluded from ranking or not.
+     * @param string input, this must be in the format '10d 14h 15m'
+     * @param time   the time type of the output
+     * @return the integer representing the number of seconds/minutes/hours/days
      */
-    public static boolean isExcludedFromRanking(final Player player) {
-        if (player.hasPermission("autorank.askdjaslkdj")) {
-            // Op's have all permissions, but if he is a OP, he isn't excluded
-            if (player.isOp()) {
-                return false;
-            }
+    public static int stringToTime(String string, final Time time) {
+        int res = 0;
 
-            // Player uses wildcard permission, so excluded
-            return true;
+        string = string.trim();
+
+        final Pattern pattern = Pattern.compile("((\\d+)d)?((\\d+)h)?((\\d+)m)?");
+        final Matcher matcher = pattern.matcher(string);
+
+        matcher.find();
+
+        final String days = matcher.group(2);
+        final String hours = matcher.group(4);
+        String minutes = matcher.group(6);
+
+        // No day or hours or minute was given, so default to minutes.
+        if (days == null && hours == null && minutes == null) {
+            minutes = string;
         }
 
-        if (player.hasPermission(AutorankPermission.EXCLUDE_FROM_PATHING)) {
-            return true;
+        int intDays = (int) stringToDouble(days);
+        int intHours = (int) stringToDouble(hours);
+        int intMinutes = (int) stringToDouble(minutes);
+
+        if (intDays < 0 && intHours < 0 && intMinutes < 0) {
+            // The total value is below 0, so there is clearly something wrong.
+            return -1;
         }
 
-        return false;
+        if (intDays < 0) {
+            intDays = 0;
+        }
+
+        if (intHours < 0) {
+            intHours = 0;
+        }
+
+        if (intMinutes < 0) {
+            intMinutes = 0;
+        }
+
+        res += intMinutes;
+        res += intHours * 60;
+        res += intDays * 60 * 24;
+
+        // Res time is in minutes
+
+        if (time.equals(Time.SECONDS)) {
+            return res * 60;
+        } else if (time.equals(Time.MINUTES)) {
+            return res;
+        } else if (time.equals(Time.HOURS)) {
+            return res / 60;
+        } else if (time.equals(Time.DAYS)) {
+            return res / 1440;
+        } else {
+            return 0;
+        }
     }
 
     public static String makeProgressString(final Collection<?> c, final String wordBetween,
@@ -568,70 +622,8 @@ public class AutorankTools {
         return res;
     }
 
-    /**
-     * Convert a string to time.
-     *
-     * @param string input, this must be in the format '10d 14h 15m'
-     * @param time the time type of the output
-     * @return the integer representing the number of seconds/minutes/hours/days
-     */
-    public static int stringToTime(String string, final Time time) {
-        int res = 0;
-
-        string = string.trim();
-
-        final Pattern pattern = Pattern.compile("((\\d+)d)?((\\d+)h)?((\\d+)m)?");
-        final Matcher matcher = pattern.matcher(string);
-
-        matcher.find();
-
-        final String days = matcher.group(2);
-        final String hours = matcher.group(4);
-        String minutes = matcher.group(6);
-
-        // No day or hours or minute was given, so default to minutes.
-        if (days == null && hours == null && minutes == null) {
-            minutes = string;
-        }
-
-        int intDays = (int) stringToDouble(days);
-        int intHours = (int) stringToDouble(hours);
-        int intMinutes = (int) stringToDouble(minutes);
-
-        if (intDays < 0 && intHours < 0 && intMinutes < 0) {
-            // The total value is below 0, so there is clearly something wrong.
-            return -1;
-        }
-
-        if (intDays < 0) {
-            intDays = 0;
-        }
-
-        if (intHours < 0) {
-            intHours = 0;
-        }
-
-        if (intMinutes < 0) {
-            intMinutes = 0;
-        }
-
-        res += intMinutes;
-        res += intHours * 60;
-        res += intDays * 60 * 24;
-
-        // Res time is in minutes
-
-        if (time.equals(Time.SECONDS)) {
-            return res * 60;
-        } else if (time.equals(Time.MINUTES)) {
-            return res;
-        } else if (time.equals(Time.HOURS)) {
-            return res / 60;
-        } else if (time.equals(Time.DAYS)) {
-            return res / 1440;
-        } else {
-            return 0;
-        }
+    public enum Time {
+        DAYS, HOURS, MINUTES, SECONDS
     }
 
     /**

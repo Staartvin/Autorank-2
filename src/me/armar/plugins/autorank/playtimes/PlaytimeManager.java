@@ -35,7 +35,7 @@ public class PlaytimeManager {
         INTERVAL_MINUTES = plugin.getConfigHandler().getIntervalTime();
 
         plugin.getLogger().info("Interval check every " + INTERVAL_MINUTES + " minutes.");
-        
+
         plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new UpdatePlaytime(plugin.getFlatFileManager(), plugin),
                 PlaytimeManager.INTERVAL_MINUTES * AutorankTools.TICKS_PER_MINUTE, PlaytimeManager.INTERVAL_MINUTES * AutorankTools.TICKS_PER_MINUTE);
 
@@ -46,11 +46,9 @@ public class PlaytimeManager {
      * Get the time of a player. <br>
      * This depends on what plugin is used to get the time from. <br>
      * Time in seconds.
-     * 
-     * @param playerName
-     *            Player to get the time for
-     * @param cache
-     *            whether to only use cache or use real time values.
+     *
+     * @param playerName Player to get the time for
+     * @param cache      whether to only use cache or use real time values.
      * @return play time of given player or 0 if not found.
      */
     public int getTimeOfPlayer(final String playerName, final boolean cache) {
@@ -98,9 +96,10 @@ public class PlaytimeManager {
 
         return playTime;
     }
-    
+
     /**
      * Get the time plugin that is used to retrieve time of a player
+     *
      * @return a {@linkplain AutorankDependency} representing the time plugin
      */
     public AutorankDependency getUsedTimePlugin() {

@@ -1,22 +1,16 @@
 package me.armar.plugins.autorank.util.uuid.storage;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.UUID;
-import java.util.logging.Level;
-
+import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.util.AutorankTools;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.util.AutorankTools;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.logging.Level;
 
 /**
  * This class represents a multitude of files where are looked up uuids are
@@ -25,9 +19,8 @@ import me.armar.plugins.autorank.util.AutorankTools;
  * stored.
  * <p>
  * Date created: 15:35:30 13 okt. 2014
- * 
+ *
  * @author Staartvin
- * 
  */
 public class UUIDStorage {
 
@@ -356,22 +349,22 @@ public class UUIDStorage {
         // Changed all names, now update boolean in internal properties.
         plugin.getInternalPropertiesConfig().hasTransferredUUIDs(true);
     }
-    
+
     public List<String> getStoredPlayerNames() {
         // Return all playernames that are stored in the UUID folders
-        
+
         List<String> playerNames = new ArrayList<>();
-        
-        for (Entry<String, FileConfiguration> entry: this.configs.entrySet()) {
+
+        for (Entry<String, FileConfiguration> entry : this.configs.entrySet()) {
             FileConfiguration config = entry.getValue();
-            
+
             for (String playerName : config.getKeys(false)) {
                 playerNames.add(playerName);
             }
         }
-        
+
         return playerNames;
-        
+
     }
 
 }

@@ -1,15 +1,15 @@
 package me.armar.plugins.autorank.util.uuid;
 
+import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
+import me.armar.plugins.autorank.util.AutorankTools;
+import me.armar.plugins.autorank.util.AutorankTools.Time;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
-
-import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
-import me.armar.plugins.autorank.util.AutorankTools;
-import me.armar.plugins.autorank.util.AutorankTools.Time;
 
 /**
  * This class is run on startup of the server to refresh all users (if they are
@@ -17,9 +17,8 @@ import me.armar.plugins.autorank.util.AutorankTools.Time;
  * It will run a task that is async that will update all users.
  * <p>
  * Date created: 20:02:53 2 sep. 2015
- * 
+ *
  * @author Staartvin
- * 
  */
 public class UUIDRefresher implements Runnable {
 
@@ -34,7 +33,7 @@ public class UUIDRefresher implements Runnable {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.lang.Runnable#run()
      */
     @Override

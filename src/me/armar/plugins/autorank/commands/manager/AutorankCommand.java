@@ -1,16 +1,15 @@
 package me.armar.plugins.autorank.commands.manager;
 
-import java.util.List;
-
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 
+import java.util.List;
+
 /**
  * This class represents an Autorank command, such as /ar check or /ar times.
- * 
+ *
  * @author Staartvin
- * 
  */
 public abstract class AutorankCommand implements TabExecutor {
 
@@ -35,18 +34,18 @@ public abstract class AutorankCommand implements TabExecutor {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.bukkit.command.CommandExecutor#onCommand(org.bukkit.command.
      * CommandSender, org.bukkit.command.Command, java.lang.String,
      * java.lang.String[])
      */
     @Override
     public abstract boolean onCommand(final CommandSender sender, final Command cmd, final String label,
-            final String[] args);
+                                      final String[] args);
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.bukkit.command.TabCompleter#onTabComplete(org.bukkit.command.
      * CommandSender, org.bukkit.command.Command, java.lang.String,
      * java.lang.String[])

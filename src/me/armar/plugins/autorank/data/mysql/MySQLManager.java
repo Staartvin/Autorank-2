@@ -1,33 +1,26 @@
 package me.armar.plugins.autorank.data.mysql;
 
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.UUID;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.config.SettingsConfig;
 import me.armar.plugins.autorank.config.SettingsConfig.MySQLCredentials;
 import me.armar.plugins.autorank.playtimes.PlaytimeManager;
 import me.armar.plugins.autorank.util.AutorankTools;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
+
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.UUID;
+import java.util.concurrent.*;
 
 /**
  * This class keeps all incoming and outgoing connections under control. It
  * sends MySQL queries and can locate the database. MySQLManager class is
  * (hopefully) fail-prove and organised.
- * 
+ * <p>
  * This also has a fail-safe when two queries are altering at the same time.
- * 
+ *
  * @author Staartvin
- * 
  */
 public class MySQLManager {
 
@@ -67,9 +60,9 @@ public class MySQLManager {
 
     /**
      * Get all the times of the players in the MySQL database
-     * 
+     *
      * @return A hashmap containing all uuids that are in the database, or an
-     *         empty one if MySQL is disabled
+     * empty one if MySQL is disabled
      */
     public HashMap<UUID, Integer> getAllPlayersFromDatabase() {
         HashMap<UUID, Integer> times = new HashMap<>();
@@ -106,9 +99,8 @@ public class MySQLManager {
 
     /**
      * Get the cached value of the global time of a player.
-     * 
-     * @param uuid
-     *            UUID of the player
+     *
+     * @param uuid UUID of the player
      * @return cached global time or 0 if nothing was cached.
      */
     public Integer getCachedGlobalTime(final UUID uuid) {
@@ -128,7 +120,7 @@ public class MySQLManager {
 
     /**
      * Get the name of the database Autorank uses to store global times.
-     * 
+     *
      * @return string name of the database
      */
     public String getDatabaseName() {
@@ -137,13 +129,10 @@ public class MySQLManager {
 
     /**
      * Add minutes to the global time of a player.
-     * 
-     * @param uuid
-     *            UUID of the player
-     * @param timeDifference
-     *            Minutes to add
-     * @throws IllegalArgumentException
-     *             Thrown when MySQL is not enabled.
+     *
+     * @param uuid           UUID of the player
+     * @param timeDifference Minutes to add
+     * @throws IllegalArgumentException Thrown when MySQL is not enabled.
      */
     public void addGlobalTime(final UUID uuid, final int timeDifference) throws IllegalArgumentException {
         // Check for MySQL
@@ -169,9 +158,8 @@ public class MySQLManager {
     /**
      * Get the fresh global time of the database. This will trigger a remote
      * lookup, so this method is blocking.
-     * 
-     * @param uuid
-     *            UUID of the player
+     *
+     * @param uuid UUID of the player
      * @return the non-cached global time of a player or 0 if nothing was found.
      */
     public int getFreshGlobalTime(final UUID uuid) {
@@ -183,9 +171,8 @@ public class MySQLManager {
     /**
      * Get the total playtime across all servers (multiple servers write to 1
      * database and get the total playtime from there).
-     * 
-     * @param uuid
-     *            UUID to check for
+     *
+     * @param uuid UUID to check for
      * @return Global playtime across all servers or 0 if no time was found
      */
     public int getGlobalTime(final UUID uuid) {
@@ -201,9 +188,8 @@ public class MySQLManager {
      * This will return an updated value every 5 minutes. Calling it every
      * minute isn't necessary, as it will only update every 5 minutes. You'll
      * get a cached value if you try to anyway.
-     * 
-     * @param uuid
-     *            UUID of the player
+     *
+     * @param uuid UUID of the player
      * @return Time player has played across all servers
      */
     public int getDatabaseTime(final UUID uuid) {
@@ -229,9 +215,8 @@ public class MySQLManager {
      * <p>
      * A new request will always be made to get the value, therefore this should
      * be run async.
-     * 
-     * @param uuid
-     *            UUID of the player
+     *
+     * @param uuid UUID of the player
      * @return Fresh value of database time for UUID.
      */
     public int getFreshDatabaseTime(final UUID uuid) {
@@ -280,7 +265,7 @@ public class MySQLManager {
 
     /**
      * Check whether MySQL is enabled in the Settings config.
-     * 
+     *
      * @return true if MySQL is enabled. False otherwise.
      */
     public boolean isMySQLEnabled() {
@@ -290,11 +275,10 @@ public class MySQLManager {
     /**
      * Check whether the cached value of a global time of a player is out of
      * date or not. If it is, Autorank will grab a fresh time.
-     * 
-     * @param uuid
-     *            UUID of the player
+     *
+     * @param uuid UUID of the player
      * @return true if the cached value is outdated (or if it's not stored).
-     *         False otherwise.
+     * False otherwise.
      */
     public boolean isOutOfDate(final UUID uuid) {
         // Checks whether the last check was five minutes ago.
@@ -316,11 +300,7 @@ public class MySQLManager {
         }
 
         // Get the difference in minutes
-        if ((currentTime - lastCheckedTime) / 60000 >= PlaytimeManager.INTERVAL_MINUTES) {
-            return true;
-        } else {
-            return false;
-        }
+        return (currentTime - lastCheckedTime) / 60000 >= PlaytimeManager.INTERVAL_MINUTES;
     }
 
     /**
@@ -349,11 +329,9 @@ public class MySQLManager {
 
     /**
      * Set the global time of a player
-     * 
-     * @param uuid
-     *            UUID of the player
-     * @param time
-     *            Time to change to in minutes
+     *
+     * @param uuid UUID of the player
+     * @param time Time to change to in minutes
      */
     public boolean setGlobalTime(final UUID uuid, final int time) {
 
@@ -418,11 +396,11 @@ public class MySQLManager {
         final SettingsConfig configHandler = plugin.getSettingsConfig();
         /*
          * final ConfigurationSection s = config.getConfigurationSection("sql");
-         * 
+         *
          * if (s == null) { plugin.getLogger().warning(
          * "MySQL options are missing in the advancedconfig.yml!"); return; }
          */
-        
+
         if (configHandler.useMySQL()) {
 
             hostname = configHandler.getMySQLCredentials(MySQLCredentials.HOSTNAME);

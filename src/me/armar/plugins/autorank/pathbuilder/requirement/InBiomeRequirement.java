@@ -1,9 +1,8 @@
 package me.armar.plugins.autorank.pathbuilder.requirement;
 
+import me.armar.plugins.autorank.language.Lang;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-
-import me.armar.plugins.autorank.language.Lang;
 
 public class InBiomeRequirement extends Requirement {
 

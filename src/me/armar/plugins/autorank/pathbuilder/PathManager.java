@@ -1,17 +1,16 @@
 package me.armar.plugins.autorank.pathbuilder;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.UUID;
-
-import org.bukkit.entity.Player;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.pathbuilder.holders.RequirementsHolder;
 import me.armar.plugins.autorank.pathbuilder.result.Result;
 import me.armar.plugins.autorank.util.AutorankTools;
+import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Handles all things that have to do with paths checking
@@ -306,7 +305,7 @@ public class PathManager {
                 return null;
             }
 
-            int highestPriority = (int) tempHighest;
+            int highestPriority = tempHighest;
 
             // Get paths that have the highest priority
             List<Path> highestPriorityPaths = new ArrayList<>();
@@ -369,6 +368,7 @@ public class PathManager {
     /**
      * Get the paths the player is able to choose. It checks whether the player has already completed the path (and
      * whether it can be completed indefinitely) and whether it should be shown based on the prerequisites of the player.
+     *
      * @param player Player to get the paths for. If null, all the known paths of Autorank will be returned.
      * @return a list of paths that the player can start.
      */

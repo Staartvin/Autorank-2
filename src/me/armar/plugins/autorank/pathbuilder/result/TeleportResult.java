@@ -1,10 +1,9 @@
 package me.armar.plugins.autorank.pathbuilder.result;
 
+import me.armar.plugins.autorank.language.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-
-import me.armar.plugins.autorank.language.Lang;
 
 public class TeleportResult extends Result {
 

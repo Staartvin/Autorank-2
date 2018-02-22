@@ -1,9 +1,8 @@
 package me.armar.plugins.autorank.warningmanager;
 
-import org.bukkit.entity.Player;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
+import org.bukkit.entity.Player;
 
 public class WarningNoticeTask implements Runnable {
 
@@ -17,7 +16,7 @@ public class WarningNoticeTask implements Runnable {
     public void run() {
         // Get all players -> Check if they have a certain permission -> send
         // the most important warning
-        
+
         // Don't show warnings if they are turned off.
         if (!plugin.getConfigHandler().showWarnings()) {
             return;
@@ -28,7 +27,7 @@ public class WarningNoticeTask implements Runnable {
             // If player has notice on warning permission
             if (p.hasPermission(AutorankPermission.NOTICE_ON_WARNINGS) || p.isOp()) {
 
-               plugin.getWarningManager().sendWarnings(p);
+                plugin.getWarningManager().sendWarnings(p);
             }
         }
 

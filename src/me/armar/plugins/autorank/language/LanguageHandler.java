@@ -10,7 +10,7 @@ import java.util.logging.Level;
 
 /**
  * This class
- * 
+ *
  * @author Staartvin Return the language being used.
  */
 public class LanguageHandler {

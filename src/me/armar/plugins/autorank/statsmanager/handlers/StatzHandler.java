@@ -1,12 +1,12 @@
 package me.armar.plugins.autorank.statsmanager.handlers;
 
-import java.util.HashMap;
-import java.util.UUID;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.statzapi.StatzAPIHandler;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.staartvin.statz.database.datatype.RowRequirement;
+
+import java.util.HashMap;
+import java.util.UUID;
 
 public class StatzHandler extends StatsPlugin {
 

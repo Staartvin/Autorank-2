@@ -1,22 +1,20 @@
 package me.armar.plugins.autorank.statsmanager;
 
-import me.staartvin.plugins.pluginlibrary.Library;
-import me.staartvin.plugins.pluginlibrary.hooks.StatsHook;
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.DependencyManager.AutorankDependency;
 import me.armar.plugins.autorank.hooks.statzapi.StatzAPIHandler;
 import me.armar.plugins.autorank.statsmanager.handlers.FallbackHandler;
 import me.armar.plugins.autorank.statsmanager.handlers.StatsHandler;
 import me.armar.plugins.autorank.statsmanager.handlers.StatzHandler;
+import me.staartvin.plugins.pluginlibrary.Library;
+import me.staartvin.plugins.pluginlibrary.hooks.StatsHook;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 
 /**
  * This class decides which Stats plugin will be used for getting stat data.
- * 
+ *
  * @author Staartvin
- * 
  */
 public class StatsPluginManager {
 
@@ -35,9 +33,9 @@ public class StatsPluginManager {
 
     /**
      * Get the current stats plugin running on this server
-     * 
+     *
      * @return returns the JavaPlugin that is responsible for stats. Null if
-     *         there is none.
+     * there is none.
      */
     public StatsPlugin getStatsPlugin() {
         return statsPlugin;

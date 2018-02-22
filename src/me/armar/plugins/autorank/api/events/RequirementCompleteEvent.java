@@ -1,18 +1,16 @@
 package me.armar.plugins.autorank.api.events;
 
+import me.armar.plugins.autorank.pathbuilder.holders.RequirementsHolder;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-import me.armar.plugins.autorank.pathbuilder.holders.RequirementsHolder;
-
 /**
  * This event is called when a player meets the requirement for a path and
  * certain results will be performed.
- * 
+ *
  * @author Staartvin
- * 
  */
 public class RequirementCompleteEvent extends Event implements Cancellable {
 
@@ -30,11 +28,9 @@ public class RequirementCompleteEvent extends Event implements Cancellable {
     /**
      * Create a new RequirementCompleteEvent. This event represents a
      * requirement that is completed by a player.
-     * 
-     * @param player
-     *            Player that completed the requirement
-     * @param reqHolder
-     *            {@linkplain RequirementsHolder} that was completed
+     *
+     * @param player    Player that completed the requirement
+     * @param reqHolder {@linkplain RequirementsHolder} that was completed
      */
     public RequirementCompleteEvent(final Player player, final RequirementsHolder reqHolder) {
         this.player = player;
@@ -48,7 +44,7 @@ public class RequirementCompleteEvent extends Event implements Cancellable {
 
     /**
      * Gets the player involved in this event.
-     * 
+     *
      * @return player object
      */
     public Player getPlayer() {
@@ -57,7 +53,7 @@ public class RequirementCompleteEvent extends Event implements Cancellable {
 
     /**
      * Get the {@linkplain RequirementsHolder} that has been completed.
-     * 
+     *
      * @return {@linkplain RequirementsHolder} that has been completed.
      */
     public RequirementsHolder getRequirement() {
@@ -66,7 +62,7 @@ public class RequirementCompleteEvent extends Event implements Cancellable {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.bukkit.event.Cancellable#isCancelled()
      */
     @Override
@@ -76,7 +72,7 @@ public class RequirementCompleteEvent extends Event implements Cancellable {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.bukkit.event.Cancellable#setCancelled(boolean)
      */
     @Override

@@ -2,6 +2,7 @@ package me.armar.plugins.autorank.permissions;
 
 /**
  * This class represents a permission node that is used by Autorank to check whether a player is able to perform an action.
+ *
  * @author Staartvin
  */
 public final class AutorankPermission {

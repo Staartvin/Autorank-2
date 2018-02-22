@@ -9,9 +9,8 @@ import org.bukkit.event.HandlerList;
  * This event is called when a player wants to check its status via /ar check.
  * <br>
  * This event is cancellable.
- * 
+ *
  * @author Staartvin
- * 
  */
 public class CheckCommandEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
@@ -25,8 +24,7 @@ public class CheckCommandEvent extends Event implements Cancellable {
     private final Player player;
 
     /**
-     * @param player
-     *            Player that performs the command
+     * @param player Player that performs the command
      */
     public CheckCommandEvent(final Player player) {
         this.player = player;
@@ -43,7 +41,7 @@ public class CheckCommandEvent extends Event implements Cancellable {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.bukkit.event.Cancellable#isCancelled()
      */
     @Override
@@ -53,7 +51,7 @@ public class CheckCommandEvent extends Event implements Cancellable {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.bukkit.event.Cancellable#setCancelled(boolean)
      */
     @Override

@@ -1,28 +1,21 @@
 package me.armar.plugins.autorank.data.flatfile;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.UUID;
-
-import org.bukkit.OfflinePlayer;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.config.SimpleYamlConfiguration;
-import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
+import org.bukkit.OfflinePlayer;
+
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * This class is used for getting and setting play time data of players.
- * 
- * @author "Staartvin"
  *
+ * @author "Staartvin"
  */
+
 /**
  * Type a nice description here
  *
@@ -32,11 +25,14 @@ public class FlatFileManager {
     private Autorank plugin;
 
     /**
-     * This enum represents a specific time type (daily time, monthly time,
-     * etc.)
+     * Get a data file for a specific time type.
+     *
+     * @param type
+     *            Type of time
+     * @return a data file where the given time type is stored.
      */
-    public static enum TimeType {
-        DAILY_TIME, MONTHLY_TIME, TOTAL_TIME, WEEKLY_TIME
+    public SimpleYamlConfiguration getDataFile(final TimeType type) {
+        return dataFiles.get(type);
     }
 
     public static HashMap<TimeType, String> dataTypePaths = new HashMap<>();
@@ -155,19 +151,8 @@ public class FlatFileManager {
     }
 
     /**
-     * Get a data file for a specific time type.
-     * 
-     * @param type
-     *            Type of time
-     * @return a data file where the given time type is stored.
-     */
-    public SimpleYamlConfiguration getDataFile(final TimeType type) {
-        return dataFiles.get(type);
-    }
-
-    /**
      * Set the local play time of a player.
-     * 
+     *
      * @param type
      *            Type of time
      * @param value
@@ -185,7 +170,7 @@ public class FlatFileManager {
 
     /**
      * Check whether Autorank should reset a specific data file.
-     * 
+     *
      * @param type
      *            Type of time
      * @return true if Autorank should reset the file, false otherwise.
@@ -197,17 +182,11 @@ public class FlatFileManager {
         cal.setFirstDayOfWeek(Calendar.MONDAY);
 
         if (type == TimeType.DAILY_TIME) {
-            if (cal.get(Calendar.DAY_OF_WEEK) != plugin.getInternalPropertiesConfig().getTrackedTimeType(type)) {
-                return true;
-            }
+            return cal.get(Calendar.DAY_OF_WEEK) != plugin.getInternalPropertiesConfig().getTrackedTimeType(type);
         } else if (type == TimeType.WEEKLY_TIME) {
-            if (cal.get(Calendar.WEEK_OF_YEAR) != plugin.getInternalPropertiesConfig().getTrackedTimeType(type)) {
-                return true;
-            }
+            return cal.get(Calendar.WEEK_OF_YEAR) != plugin.getInternalPropertiesConfig().getTrackedTimeType(type);
         } else if (type == TimeType.MONTHLY_TIME) {
-            if (cal.get(Calendar.MONTH) != plugin.getInternalPropertiesConfig().getTrackedTimeType(type)) {
-                return true;
-            }
+            return cal.get(Calendar.MONTH) != plugin.getInternalPropertiesConfig().getTrackedTimeType(type);
         }
 
         return false;
@@ -215,7 +194,7 @@ public class FlatFileManager {
 
     /**
      * Add local play time of a player to the currently stored play time.
-     * 
+     *
      * @param uuid
      *            UUID of the player
      * @param timeDifference
@@ -235,7 +214,7 @@ public class FlatFileManager {
     /**
      * Archive old records. Records below the minimum value will be removed
      * because they are 'inactive'.
-     * 
+     *
      * @param minimum
      *            Lowest threshold to check for
      * @return Number of records that were removed
@@ -268,7 +247,7 @@ public class FlatFileManager {
     public int removeOldEntries() {
         int counter = 0;
         // Remove data from users that haven't been online for a while
-        
+
         int daysThreshold = 60;
 
         final SimpleYamlConfiguration data = this.getDataFile(TimeType.TOTAL_TIME);
@@ -277,7 +256,7 @@ public class FlatFileManager {
 
         for (final UUID uuid : getUUIDKeys(TimeType.TOTAL_TIME)) {
             OfflinePlayer offPlayer = plugin.getServer().getOfflinePlayer(uuid);
-            
+
             if (offPlayer.getName() == null) {
                 // Remove record
                 data.set(uuid.toString(), null);
@@ -299,7 +278,7 @@ public class FlatFileManager {
 
     /**
      * Get a list of all the player names that are stored in a data file
-     * 
+     *
      * @param type
      *            Type of time.
      * @return a list of names of players that are stored in the given data
@@ -321,7 +300,7 @@ public class FlatFileManager {
 
     /**
      * Get the local play time of a player on this server as stored by Autorank.
-     * 
+     *
      * @param uuid
      *            UUID of the player
      * @param type
@@ -337,7 +316,7 @@ public class FlatFileManager {
 
     /**
      * Reset the data file of certain time type.
-     * 
+     *
      * @param type
      *            Type of time
      */
@@ -373,7 +352,7 @@ public class FlatFileManager {
 
     /**
      * Get a list of all the player UUIDs that are stored in a data file
-     * 
+     *
      * @param type
      *            Type of time.
      * @return a list of UUIDs of players that are stored in the given data
@@ -402,6 +381,14 @@ public class FlatFileManager {
         }
 
         return uuids;
+    }
+
+    /**
+     * This enum represents a specific time type (daily time, monthly time,
+     * etc.)
+     */
+    public enum TimeType {
+        DAILY_TIME, MONTHLY_TIME, TOTAL_TIME, WEEKLY_TIME
     }
 
     /**

@@ -7,9 +7,8 @@ import org.bukkit.event.HandlerList;
 
 /**
  * This event is called when a player is going to be promoted to a new group
- * 
+ *
  * @author Staartvin
- * 
  */
 public class PlayerPromoteEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
@@ -24,17 +23,13 @@ public class PlayerPromoteEvent extends Event implements Cancellable {
     private final String worldName, groupFrom, groupTo;
 
     /**
-     * @param player
-     *            Player
-     * @param worldName
-     *            World
-     * @param groupFrom
-     *            GroupFrom
-     * @param groupTo
-     *            GroupTo
+     * @param player    Player
+     * @param worldName World
+     * @param groupFrom GroupFrom
+     * @param groupTo   GroupTo
      */
     public PlayerPromoteEvent(final Player player, final String worldName, final String groupFrom,
-            final String groupTo) {
+                              final String groupTo) {
         this.player = player;
         this.worldName = worldName;
         this.groupFrom = groupFrom;
@@ -43,7 +38,7 @@ public class PlayerPromoteEvent extends Event implements Cancellable {
 
     /**
      * Gets the group a player is grouped from
-     * 
+     *
      * @return group a player was in
      */
     public String getGroupFrom() {
@@ -52,7 +47,7 @@ public class PlayerPromoteEvent extends Event implements Cancellable {
 
     /**
      * Gets the group a player is promoted to
-     * 
+     *
      * @return group where player will be promoted to
      */
     public String getGroupTo() {
@@ -71,7 +66,7 @@ public class PlayerPromoteEvent extends Event implements Cancellable {
     /**
      * Gets the world a player is ranked upon. If world is null, player will be
      * ranked globally.
-     * 
+     *
      * @return worldName or null if ranked globally
      */
     public String getWorld() {
@@ -80,7 +75,7 @@ public class PlayerPromoteEvent extends Event implements Cancellable {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.bukkit.event.Cancellable#isCancelled()
      */
     @Override
@@ -90,7 +85,7 @@ public class PlayerPromoteEvent extends Event implements Cancellable {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.bukkit.event.Cancellable#setCancelled(boolean)
      */
     @Override

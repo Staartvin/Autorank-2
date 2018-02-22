@@ -15,7 +15,7 @@ public class MoneyRequirement extends Requirement {
         String currencyName = "";
 
         if (this.getAutorank().getDependencyManager().isAvailable(Library.VAULT)) {
-            currencyName  = VaultHook.getEconomy().currencyNamePlural().trim();
+            currencyName = VaultHook.getEconomy().currencyNamePlural().trim();
         }
 
         String lang = Lang.MONEY_REQUIREMENT.getConfigValue(minMoney + " " + currencyName);

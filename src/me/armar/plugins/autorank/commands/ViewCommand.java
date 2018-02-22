@@ -1,15 +1,5 @@
 package me.armar.plugins.autorank.commands;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.UUID;
-
-import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
@@ -18,6 +8,13 @@ import me.armar.plugins.autorank.pathbuilder.holders.RequirementsHolder;
 import me.armar.plugins.autorank.pathbuilder.result.Result;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
 import me.armar.plugins.autorank.util.AutorankTools;
+import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The command delegator for the '/ar view' command.
@@ -171,7 +168,7 @@ public class ViewCommand extends AutorankCommand {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * me.armar.plugins.autorank.commands.manager.AutorankCommand#onTabComplete(
      * org.bukkit.command.CommandSender, org.bukkit.command.Command,
@@ -179,7 +176,7 @@ public class ViewCommand extends AutorankCommand {
      */
     @Override
     public List<String> onTabComplete(final CommandSender sender, final Command cmd, final String commandLabel,
-            final String[] args) {
+                                      final String[] args) {
         final List<String> possibilities = new ArrayList<String>();
 
         // List shows a list of changegroups to view

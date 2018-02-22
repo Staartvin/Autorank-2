@@ -1,20 +1,18 @@
 package me.armar.plugins.autorank.data.flatfile;
 
-import java.util.UUID;
-
-import org.bukkit.entity.Player;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
 import me.armar.plugins.autorank.hooks.DependencyManager;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
 import me.armar.plugins.autorank.playtimes.PlaytimeManager;
-import me.armar.plugins.autorank.util.AutorankTools;
+import org.bukkit.entity.Player;
+
+import java.util.UUID;
 
 /*
  * UpdatePlaytime does an update on all online players
  * every 5 minutes
- * 
+ *
  */
 public class UpdatePlaytime implements Runnable {
 
@@ -58,9 +56,8 @@ public class UpdatePlaytime implements Runnable {
 
     /**
      * Check whether a user is now allowed to complete the path
-     * 
-     * @param player
-     *            Player to check
+     *
+     * @param player Player to check
      */
     private void updateMinutesPlayed(final Player player) {
         // Changed this so it is readable ;)

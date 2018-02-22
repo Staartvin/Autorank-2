@@ -1,10 +1,9 @@
 package me.armar.plugins.autorank.pathbuilder.requirement;
 
+import me.armar.plugins.autorank.language.Lang;
 import me.staartvin.plugins.pluginlibrary.Library;
 import me.staartvin.plugins.pluginlibrary.hooks.McMMOHook;
 import org.bukkit.entity.Player;
-
-import me.armar.plugins.autorank.language.Lang;
 
 public class McMMOPowerLevelRequirement extends Requirement {
 

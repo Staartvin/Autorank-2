@@ -1,121 +1,121 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 >
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>Autorank</groupId>
-	<artifactId>Autorank</artifactId>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>Autorank</groupId>
+    <artifactId>Autorank</artifactId>
     <version>4.1-Dev-${BUILD_NUMBER}</version>
-	<name>Autorank</name>
-	<description>Maven project for Bukkit plugin Autorank</description>
-	<url>http://dev.bukkit.org/server-mods/autorank/</url>
-	<build>
+    <name>Autorank</name>
+    <description>Maven project for Bukkit plugin Autorank</description>
+    <url>http://dev.bukkit.org/server-mods/autorank/</url>
+    <build>
 
-		<sourceDirectory>src</sourceDirectory>
-		<testSourceDirectory>test</testSourceDirectory>
+        <sourceDirectory>src</sourceDirectory>
+        <testSourceDirectory>test</testSourceDirectory>
 
-		<resources>
+        <resources>
 
-			<resource>
-				<filtering>true</filtering>
-				<directory>${basedir}</directory>
-				<includes>
-					<include>*.yml</include>
-				</includes>
-			</resource>
+            <resource>
+                <filtering>true</filtering>
+                <directory>${basedir}</directory>
+                <includes>
+                    <include>*.yml</include>
+                </includes>
+            </resource>
 
 
-		</resources>
+        </resources>
 
-		<plugins>
+        <plugins>
 
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.5.1</version>
-				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
-					<excludes>
-						<exclude>${basedir}/Javadocs</exclude>
-						<exclude>${basedir}/lib</exclude>
-					</excludes>
-				</configuration>
-			</plugin>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.5.1</version>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                    <excludes>
+                        <exclude>${basedir}/Javadocs</exclude>
+                        <exclude>${basedir}/lib</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
 
-			<!-- Stop Maven from including the dependencies (.jars) in the artifact 
-				(created by Jenkins) -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.2</version>
-				<configuration>
-					<excludes>
-						<exclude>*.jar</exclude>
-					</excludes>
-				</configuration>
-			</plugin>
-			
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.9</version>
-				<configuration>
-					<failOnError>false</failOnError>
-				</configuration>
-			</plugin>
+            <!-- Stop Maven from including the dependencies (.jars) in the artifact
+                (created by Jenkins) -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <excludes>
+                        <exclude>*.jar</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
 
-		</plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9</version>
+                <configuration>
+                    <failOnError>false</failOnError>
+                </configuration>
+            </plugin>
 
-	</build>
+        </plugins>
 
-	<properties> <!-- Fix encoding warnings -->
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
+    </build>
 
-	<repositories>
-		<repository>
-			<id>staartvin-repo</id>
-			<url>http://62.131.38.74:8081/artifactory/ext-release-local/</url>
-		</repository>
+    <properties> <!-- Fix encoding warnings -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
-		<repository>
-			<id>Spigot-repo</id>
-			<url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
-		</repository>
-	</repositories>
+    <repositories>
+        <repository>
+            <id>staartvin-repo</id>
+            <url>http://62.131.38.74:8081/artifactory/ext-release-local/</url>
+        </repository>
 
-	<dependencies>
+        <repository>
+            <id>Spigot-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
+        </repository>
+    </repositories>
 
-		<dependency>
-			<groupId>EssentialsGroupManager</groupId>
-			<artifactId>EssentialsGroupManager</artifactId>
-			<version>2.1.11</version>
-			<type>jar</type>
-		</dependency>
+    <dependencies>
 
-		<dependency>
-			<groupId>com.platymuus</groupId>
-			<artifactId>bukkit-permissions</artifactId>
-			<version>2.5</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>metrics</artifactId>
-					<groupId>org.mcstats.bukkit</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
+        <dependency>
+            <groupId>EssentialsGroupManager</groupId>
+            <artifactId>EssentialsGroupManager</artifactId>
+            <version>2.1.11</version>
+            <type>jar</type>
+        </dependency>
 
-		<!-- OLD STATS <dependency> <groupId>nl.lolmewn.stats</groupId> <artifactId>Stats</artifactId> 
-			<version>2.0.1</version> <scope>provided</scope> <type>jar</type> </dependency> -->
+        <dependency>
+            <groupId>com.platymuus</groupId>
+            <artifactId>bukkit-permissions</artifactId>
+            <version>2.5</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>metrics</artifactId>
+                    <groupId>org.mcstats.bukkit</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
-		<!-- <dependency> <groupId>nl.lolmewn.stats</groupId> <artifactId>Stats</artifactId> 
-			<version>3.0.2-SNAPSHOT</version> <scope>provided</scope> <type>jar</type> 
-			</dependency> -->
+        <!-- OLD STATS <dependency> <groupId>nl.lolmewn.stats</groupId> <artifactId>Stats</artifactId>
+            <version>2.0.1</version> <scope>provided</scope> <type>jar</type> </dependency> -->
 
-		<!-- <dependency>
-			<groupId>org.mcstats.bukkit</groupId>
-			<artifactId>metrics</artifactId>
-			<version>R7</version>
-			<type>jar</type>
-		</dependency> -->
+        <!-- <dependency> <groupId>nl.lolmewn.stats</groupId> <artifactId>Stats</artifactId>
+            <version>3.0.2-SNAPSHOT</version> <scope>provided</scope> <type>jar</type>
+            </dependency> -->
+
+        <!-- <dependency>
+            <groupId>org.mcstats.bukkit</groupId>
+            <artifactId>metrics</artifactId>
+            <version>R7</version>
+            <type>jar</type>
+        </dependency> -->
 
         <dependency>
             <groupId>me.staartvin</groupId>
@@ -123,64 +123,64 @@
             <version>1.0.2</version>
         </dependency>
 
-		<dependency>
-			<groupId>org.spigotmc</groupId>
-			<artifactId>spigot-api</artifactId>
-			<version>1.12.1-R0.1-SNAPSHOT</version>
-			<type>jar</type>
-		</dependency>
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>1.12.1-R0.1-SNAPSHOT</version>
+            <type>jar</type>
+        </dependency>
 
-		<dependency>
-			<groupId>org.bukkit</groupId>
-			<artifactId>bukkit</artifactId>
-			<version>1.12.1-R0.1-SNAPSHOT</version>
-		</dependency>
+        <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>bukkit</artifactId>
+            <version>1.12.1-R0.1-SNAPSHOT</version>
+        </dependency>
 
-		<dependency>
-			<groupId>PowerfulPerms</groupId>
-			<artifactId>PowerfulPerms</artifactId>
-			<version>3.0.3</version>
-		</dependency>
+        <dependency>
+            <groupId>PowerfulPerms</groupId>
+            <artifactId>PowerfulPerms</artifactId>
+            <version>3.0.3</version>
+        </dependency>
 
-		<dependency>
-			<groupId>me.staartvin.Statz</groupId>
-			<artifactId>Statz</artifactId>
-			<version>LATEST</version>
-		</dependency>
+        <dependency>
+            <groupId>me.staartvin.Statz</groupId>
+            <artifactId>Statz</artifactId>
+            <version>LATEST</version>
+        </dependency>
 
-		<dependency>
-			<groupId>net.milkbowl.vault</groupId>
-			<artifactId>Vault</artifactId>
-			<version>1.5.6</version>
-			<type>jar</type>
-		</dependency>
+        <dependency>
+            <groupId>net.milkbowl.vault</groupId>
+            <artifactId>Vault</artifactId>
+            <version>1.5.6</version>
+            <type>jar</type>
+        </dependency>
 
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-			<version>4.12</version>
-		</dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+            <version>4.12</version>
+        </dependency>
 
-		<dependency>
-			<groupId>org.hamcrest</groupId>
-			<artifactId>java-hamcrest</artifactId>
-			<scope>test</scope>
-			<version>2.0.0.0</version>
-		</dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>java-hamcrest</artifactId>
+            <scope>test</scope>
+            <version>2.0.0.0</version>
+        </dependency>
 
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-core</artifactId>
-			<scope>test</scope>
-			<version>2.7.1</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>hamcrest-core</artifactId>
-					<groupId>org.hamcrest</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <scope>test</scope>
+            <version>2.7.1</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>hamcrest-core</artifactId>
+                    <groupId>org.hamcrest</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
         <dependency>
             <groupId>me.staartvin.Statz</groupId>

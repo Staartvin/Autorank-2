@@ -1,16 +1,11 @@
 package me.armar.plugins.autorank.util.uuid;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.UUID;
-
+import me.armar.plugins.autorank.Autorank;
 import org.bukkit.Bukkit;
 
-import me.armar.plugins.autorank.Autorank;
+import java.io.IOException;
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * This class allows developers to easily get UUIDs from names <br>
@@ -20,9 +15,8 @@ import me.armar.plugins.autorank.Autorank;
  * when not needed.
  * <p>
  * Date created: 17:13:57 2 apr. 2014
- * 
+ *
  * @author Staartvin
- * 
  */
 public class UUIDManager {
 
@@ -56,9 +50,8 @@ public class UUIDManager {
      * Get the Minecraft name of the player that is hooked to this Mojang
      * account UUID. <br>
      * It uses {@link #getPlayers(List)} to get the player's name.
-     * 
-     * @param uuid
-     *            the UUID of the Mojang account
+     *
+     * @param uuid the UUID of the Mojang account
      * @return the name of player or null if not found.
      */
     public static String getPlayerFromUUID(final UUID uuid) {
@@ -86,9 +79,8 @@ public class UUIDManager {
      * Mojang API. <br>
      * It also takes care of already cached values. It doesn't lookup new
      * players when it still has old, valid ones stored.
-     * 
-     * @param uuids
-     *            A list of uuids to get the player names of.
+     *
+     * @param uuids A list of uuids to get the player names of.
      * @return A map containing every player name per UUID.
      */
     public static Map<UUID, String> getPlayers(final List<UUID> uuids) {
@@ -207,9 +199,8 @@ public class UUIDManager {
     /**
      * Get the UUID of the Mojang account associated with this player name <br>
      * It uses {@link #getUUIDs(List)} to get the UUID.
-     * 
-     * @param playerName
-     *            Name of the player
+     *
+     * @param playerName Name of the player
      * @return UUID of the associated Mojang account or null if not found.
      */
     public static UUID getUUIDFromPlayer(final String playerName) {
@@ -243,9 +234,8 @@ public class UUIDManager {
      * Mojang API. <br>
      * It also takes care of already cached values. It doesn't lookup new
      * players when it still has old, valid ones stored.
-     * 
-     * @param names
-     *            A list of playernames that you want the UUIDs of.
+     *
+     * @param names A list of playernames that you want the UUIDs of.
      * @return A map containing every UUID per player name.
      */
     public static Map<String, UUID> getUUIDs(final List<String> names) {
@@ -351,6 +341,6 @@ public class UUIDManager {
         // Thread stopped now, collect results
         return uuids;
     }
-    
- 
+
+
 }

@@ -1,19 +1,18 @@
 package me.armar.plugins.autorank.commands;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.pathbuilder.Path;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
 import me.armar.plugins.autorank.util.AutorankTools;
+import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The command delegator for the '/ar choose' command.
@@ -85,17 +84,17 @@ public class ChooseCommand extends AutorankCommand {
 
         // Assign path to the player.
         plugin.getPathManager().assignPath(player, targetPath.getInternalName());
-        
+
         // Give player confirmation message.
         sender.sendMessage(Lang.CHOSEN_PATH.getConfigValue(targetPath.getDisplayName()));
-        sender.sendMessage(Lang.PROGRESS_RESET.getConfigValue());        
+        sender.sendMessage(Lang.PROGRESS_RESET.getConfigValue());
 
         return true;
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * me.armar.plugins.autorank.commands.manager.AutorankCommand#onTabComplete(
      * org.bukkit.command.CommandSender, org.bukkit.command.Command,
@@ -103,7 +102,7 @@ public class ChooseCommand extends AutorankCommand {
      */
     @Override
     public List<String> onTabComplete(final CommandSender sender, final Command cmd, final String commandLabel,
-            final String[] args) {
+                                      final String[] args) {
 
         final Player player = (Player) sender;
 

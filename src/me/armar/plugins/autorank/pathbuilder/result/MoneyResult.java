@@ -25,7 +25,7 @@ public class MoneyResult extends Result {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see me.armar.plugins.autorank.pathbuilder.result.Result#getDescription()
      */
     @Override

@@ -1,10 +1,9 @@
 package me.armar.plugins.autorank.pathbuilder.requirement;
 
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 public class HasItemRequirement extends Requirement {
 
@@ -141,7 +140,7 @@ class ItemWrapper {
     private boolean useDisplayName = false;
 
     public ItemWrapper(final ItemStack item, final String displayName, final boolean showShortValue,
-            final boolean useDisplayName) {
+                       final boolean useDisplayName) {
         this.setItem(item);
         this.setDisplayName(displayName);
         this.setShowShortValue(showShortValue);

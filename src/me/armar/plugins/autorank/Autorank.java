@@ -4,10 +4,7 @@ import me.armar.plugins.autorank.addons.AddOnManager;
 import me.armar.plugins.autorank.api.API;
 import me.armar.plugins.autorank.backup.BackupManager;
 import me.armar.plugins.autorank.commands.manager.CommandsManager;
-import me.armar.plugins.autorank.config.InternalPropertiesConfig;
-import me.armar.plugins.autorank.config.PathsConfig;
-import me.armar.plugins.autorank.config.PlayerDataConfig;
-import me.armar.plugins.autorank.config.SettingsConfig;
+import me.armar.plugins.autorank.config.*;
 import me.armar.plugins.autorank.converter.DataConverter;
 import me.armar.plugins.autorank.data.flatfile.FlatFileManager;
 import me.armar.plugins.autorank.data.mysql.MySQLManager;
@@ -39,13 +36,11 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 /**
- * 
  * Main class of Autorank
  * <p>
  * Date created: 18:34:00 13 jan. 2014
- * 
+ *
  * @author Staartvin
- * 
  */
 public class Autorank extends JavaPlugin {
 
@@ -59,7 +54,7 @@ public class Autorank extends JavaPlugin {
     //
     //
     //
-    
+
     // Managers
     private PathManager pathManager;
     private AddOnManager addonManager;
@@ -95,6 +90,7 @@ public class Autorank extends JavaPlugin {
     private InternalPropertiesConfig internalPropertiesConfig;
     private PathsConfig pathsConfig;
     private PlayerDataConfig playerDataConfig;
+    private DefaultBehaviorConfig defaultBehaviorConfig;
 
     // ---------- onEnable() & onDisable() ---------- \\
     //
@@ -103,7 +99,7 @@ public class Autorank extends JavaPlugin {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.bukkit.plugin.java.JavaPlugin#onDisable()
      */
     @Override
@@ -133,7 +129,7 @@ public class Autorank extends JavaPlugin {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.bukkit.plugin.java.JavaPlugin#onEnable()
      */
     @Override
@@ -149,8 +145,10 @@ public class Autorank extends JavaPlugin {
         setSettingsConfig(new SettingsConfig(this));
         setInternalPropertiesConfig(new InternalPropertiesConfig(this));
         setPlayerDataConfig(new PlayerDataConfig(this));
+        setDefaultBehaviorConfig(new DefaultBehaviorConfig((this)));
 
         // Create new configs
+        this.getDefaultBehaviorConfig().createNewFile();
         this.getPathsConfig().createNewFile();
         this.getSettingsConfig().createNewFile();
         this.getInternalPropertiesConfig().loadFile();
@@ -217,7 +215,7 @@ public class Autorank extends JavaPlugin {
 
         // Load uuids - ready for new ones
         getUUIDStorage().createNewFiles();
-        
+
         // Load data converter
         setDataConverter(new DataConverter(this));
 
@@ -257,24 +255,24 @@ public class Autorank extends JavaPlugin {
                 // After dependencies, load paths
                 // Initialize paths
                 getPathManager().initialiseFromConfigs();
-                
+
                 // Validate paths                
                 if (!getValidateHandler().startValidation()) {
                     getServer().getConsoleSender().sendMessage("[Autorank] " + ChatColor.RED + "Detected errors in your Paths.yml file. Log in to your server to see the problems!");
                 }
-                
+
                 // Show warnings (if there are any)
-                
+
                 HashMap<String, Integer> warnings = getWarningManager().getWarnings();
-                
+
                 if (warnings.size() > 0) {
                     getLogger().warning("Autorank has some warnings for you: ");
                 }
-                
+
                 for (Entry<String, Integer> entry : warnings.entrySet()) {
                     getLogger().warning("(Priority " + entry.getValue() + ") '" + entry.getKey() + "'");
                 }
-               
+
             }
         }, 1L);
 
@@ -283,15 +281,15 @@ public class Autorank extends JavaPlugin {
             @Override
             public void run() {
                 if (!getSettingsConfig().shouldRemoveOldEntries()) return;
-                
+
                 if (!getInternalPropertiesConfig().isConvertedToNewFormat()) return;
-                
+
                 // Remove old entries
                 int removed = getFlatFileManager().removeOldEntries();
 
                 getLogger().info("Removed " + removed + " old data entries from database!");
             }
-        }, 0, (long) AutorankTools.TICKS_PER_MINUTE*60*24);
+        }, 0, (long) AutorankTools.TICKS_PER_MINUTE * 60 * 24);
 
         // ------------- Register commands -------------
 
@@ -333,12 +331,12 @@ public class Autorank extends JavaPlugin {
 
         // ------------- Say Welcome! -------------
         getLogger().info(String.format("Autorank %s has been enabled!", getDescription().getVersion()));
-        
+
         // Run converter to Autorank 4.0
         getServer().getScheduler().runTaskLaterAsynchronously(this, new Runnable() {
             @Override
             public void run() {
-                
+
                 // Convert to new format (Autorank 4.0) if needed
                 if (!getInternalPropertiesConfig().isConvertedToNewFormat()) {
                     getDataConverter().convertData();
@@ -429,7 +427,7 @@ public class Autorank extends JavaPlugin {
     /**
      * This method can only be performed from the main class as it tries to do
      * {@link #getFile()}
-     * 
+     *
      * @return Whether an update is available
      */
     public boolean checkForUpdate() {
@@ -449,9 +447,8 @@ public class Autorank extends JavaPlugin {
      * Sends a message via the debug channel of Autorank. <br>
      * It will only show up in console if the debug option in the Settings.yml
      * is turned on.
-     * 
-     * @param message
-     *            Message to send.
+     *
+     * @param message Message to send.
      */
     public void debugMessage(final String message) {
         // Don't put out debug message when it is not needed.
@@ -464,9 +461,9 @@ public class Autorank extends JavaPlugin {
 
     /**
      * Get the current {@linkplain StatsPlugin} that is hooked.
-     * 
+     *
      * @return current {@linkplain StatsPlugin} that is hooked or
-     *         {@linkplain FallbackHandler} if no stats plugin is found.
+     * {@linkplain FallbackHandler} if no stats plugin is found.
      */
     public StatsPlugin getHookedStatsPlugin() {
         return getDependencyManager().getStatsPlugin();
@@ -474,7 +471,7 @@ public class Autorank extends JavaPlugin {
 
     /**
      * Checks whether the current version of Autorank is a DEV version.
-     * 
+     *
      * @return true if is, false otherwise.
      */
     public boolean isDevVersion() {
@@ -484,7 +481,7 @@ public class Autorank extends JavaPlugin {
 
     /**
      * @see me.armar.plugins.autorank.api.API#registerRequirement(String, Class)
-     *      registerRequirement()
+     * registerRequirement()
      */
     public void registerRequirement(final String name, final Class<? extends Requirement> requirement) {
         RequirementBuilder.registerRequirement(name, requirement);
@@ -492,7 +489,7 @@ public class Autorank extends JavaPlugin {
 
     /**
      * @see me.armar.plugins.autorank.api.API#registerResult(String, Class)
-     *      registerResult()
+     * registerResult()
      */
     public void registerResult(final String name, final Class<? extends Result> result) {
         ResultBuilder.registerResult(name, result);
@@ -607,8 +604,7 @@ public class Autorank extends JavaPlugin {
     }
 
     /**
-     * @param internalPropertiesConfig
-     *            the internalPropertiesConfig to set
+     * @param internalPropertiesConfig the internalPropertiesConfig to set
      */
     public void setInternalPropertiesConfig(InternalPropertiesConfig internalPropertiesConfig) {
         this.internalPropertiesConfig = internalPropertiesConfig;
@@ -650,8 +646,7 @@ public class Autorank extends JavaPlugin {
     }
 
     /**
-     * @param settingsConfig
-     *            the settingsConfig to set
+     * @param settingsConfig the settingsConfig to set
      */
     public void setSettingsConfig(SettingsConfig settingsConfig) {
         this.settingsConfig = settingsConfig;
@@ -711,5 +706,13 @@ public class Autorank extends JavaPlugin {
 
     public void setDataConverter(DataConverter dataConverter) {
         this.dataConverter = dataConverter;
+    }
+
+    public DefaultBehaviorConfig getDefaultBehaviorConfig() {
+        return defaultBehaviorConfig;
+    }
+
+    public void setDefaultBehaviorConfig(DefaultBehaviorConfig defaultBehaviorConfig) {
+        this.defaultBehaviorConfig = defaultBehaviorConfig;
     }
 }

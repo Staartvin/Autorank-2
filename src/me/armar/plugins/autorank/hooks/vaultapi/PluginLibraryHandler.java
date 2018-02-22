@@ -1,20 +1,18 @@
 package me.armar.plugins.autorank.hooks.vaultapi;
 
+import me.armar.plugins.autorank.hooks.DependencyHandler;
 import me.staartvin.plugins.pluginlibrary.Library;
 import me.staartvin.plugins.pluginlibrary.PluginLibrary;
 import me.staartvin.plugins.pluginlibrary.hooks.LibraryHook;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.Plugin;
 
-import me.armar.plugins.autorank.hooks.DependencyHandler;
-
 /**
  * Handles all connections with Statz
  * <p>
  * Date created: 11:47:01 16 jun. 2016
- * 
+ *
  * @author Staartvin
- * 
  */
 public class PluginLibraryHandler extends DependencyHandler {
 
@@ -101,6 +99,7 @@ public class PluginLibraryHandler extends DependencyHandler {
 
     /**
      * Get the library hook of PluginLibrary
+     *
      * @param library Library to obtain
      * @return library hook that is used by PluginLibrary or null if not found.
      */

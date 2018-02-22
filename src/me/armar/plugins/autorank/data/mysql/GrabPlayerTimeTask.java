@@ -10,9 +10,8 @@ import java.util.concurrent.Callable;
  * <br>
  * We have to wait for the thread to finish before we can get the results. <br>
  * Every database lookup will have to have its own thread.
- * 
+ *
  * @author Staartvin
- * 
  */
 public class GrabPlayerTimeTask implements Callable<Integer> {
 
@@ -28,11 +27,11 @@ public class GrabPlayerTimeTask implements Callable<Integer> {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.util.concurrent.Callable#call()
      */
     @Override
-    public Integer call() throws Exception {
+    public Integer call() {
         if (mysql == null)
             return -1;
 

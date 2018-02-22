@@ -1,9 +1,8 @@
 package me.armar.plugins.autorank.pathbuilder.requirement;
 
-import org.bukkit.entity.Player;
-
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
+import org.bukkit.entity.Player;
 
 public class GamemodeRequirement extends Requirement {
 
@@ -25,8 +24,7 @@ public class GamemodeRequirement extends Requirement {
     @Override
     public String getProgress(final Player player) {
 
-        @SuppressWarnings("deprecation")
-        final int gamemode = player.getGameMode().getValue();
+        @SuppressWarnings("deprecation") final int gamemode = player.getGameMode().getValue();
 
         return gamemode + "/" + gameMode;
     }
@@ -41,8 +39,7 @@ public class GamemodeRequirement extends Requirement {
                 return false;
         }
 
-        @SuppressWarnings("deprecation")
-        final int gamemode = player.getGameMode().getValue();
+        @SuppressWarnings("deprecation") final int gamemode = player.getGameMode().getValue();
 
         return gamemode == gameMode;
     }

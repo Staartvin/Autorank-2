@@ -6,13 +6,12 @@ import org.bukkit.configuration.file.FileConfiguration;
 /**
  * Every enumeration value has its path and default value. To get the path, do
  * {@link #getPath()}. To get the default value, do {@link #getDefault()}.
- * 
+ * <p>
  * For the defined value in the lang.yml config, use
  * {@link #getConfigValue(Object... args)}. String objects are expected as
  * input.
- * 
+ *
  * @author Staartvin and gomeow
- * 
  */
 
 public enum Lang {
@@ -507,35 +506,31 @@ public enum Lang {
     private static FileConfiguration LANG;
 
     /**
-     * Set the {@code FileConfiguration} to use.
-     * 
-     * @param config
-     *            The config to set.
-     */
-    public static void setFile(final FileConfiguration config) {
-        LANG = config;
-    }
-
-    private String path, def;
-
-    /**
      * Lang enum constructor.
-     * 
-     * @param path
-     *            The string path.
-     * @param start
-     *            The default string.
+     *
+     * @param path  The string path.
+     * @param start The default string.
      */
     Lang(final String path, final String start) {
         this.path = path;
         this.def = start;
     }
 
+    private String path, def;
+
+    /**
+     * Set the {@code FileConfiguration} to use.
+     *
+     * @param config The config to set.
+     */
+    public static void setFile(final FileConfiguration config) {
+        LANG = config;
+    }
+
     /**
      * Get the value in the config with certain arguments.
-     * 
-     * @param args
-     *            arguments that need to be given. (Can be null)
+     *
+     * @param args arguments that need to be given. (Can be null)
      * @return value in config or otherwise default value
      */
     public String getConfigValue(final Object... args) {
@@ -557,7 +552,7 @@ public enum Lang {
 
     /**
      * Get the default value of the path.
-     * 
+     *
      * @return The default value of the path.
      */
     public String getDefault() {
@@ -566,7 +561,7 @@ public enum Lang {
 
     /**
      * Get the path to the string.
-     * 
+     *
      * @return The path to the string.
      */
     public String getPath() {

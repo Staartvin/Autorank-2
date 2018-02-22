@@ -1,18 +1,17 @@
 package me.armar.plugins.autorank.commands;
 
-import java.util.UUID;
-
-import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
+import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+import java.util.UUID;
 
 /**
  * The command delegator for the '/ar gcheck' command.
@@ -49,7 +48,7 @@ public class GlobalCheckCommand extends AutorankCommand {
                     sender.sendMessage(Lang.PLAYER_IS_INVALID.getConfigValue(args[1]));
                     return true;
                 }
-                
+
                 if (plugin.getUUIDStorage().hasRealName(uuid)) {
                     args[1] = plugin.getUUIDStorage().getRealName(uuid);
                 }
@@ -80,7 +79,7 @@ public class GlobalCheckCommand extends AutorankCommand {
                 }
 
                 final UUID uuid = plugin.getUUIDStorage().getStoredUUID(args[1]);
-                
+
                 if (uuid == null) {
                     sender.sendMessage(Lang.PLAYER_IS_INVALID.getConfigValue(args[1]));
                     return true;
@@ -113,7 +112,7 @@ public class GlobalCheckCommand extends AutorankCommand {
                 sender.sendMessage(ChatColor.RED + Lang.PLAYER_IS_EXCLUDED.getConfigValue(sender.getName()));
                 return true;
             }
-            
+
             final Player player = (Player) sender;
 
             final UUID uuid = plugin.getUUIDStorage().getStoredUUID(player.getName());

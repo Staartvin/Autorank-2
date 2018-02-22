@@ -1,13 +1,12 @@
 package me.armar.plugins.autorank.pathbuilder.result;
 
-import java.util.ArrayList;
-import java.util.UUID;
-
+import me.armar.plugins.autorank.api.events.PlayerPromoteEvent;
+import me.armar.plugins.autorank.language.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import me.armar.plugins.autorank.api.events.PlayerPromoteEvent;
-import me.armar.plugins.autorank.language.Lang;
+import java.util.ArrayList;
+import java.util.UUID;
 
 public class RankChangeResult extends Result {
 
@@ -17,13 +16,13 @@ public class RankChangeResult extends Result {
 
     @Override
     public boolean applyResult(final Player player) {
-        
-        
+
+
         String oldrank = null;
         if (from != null) {
             oldrank = from;
         }
-        
+
         if (world != null) {
             this.getAutorank().getLogger()
                     .info("Promote " + player.getName() + " on world " + world + " from " + oldrank + " to " + to);
@@ -50,13 +49,13 @@ public class RankChangeResult extends Result {
 
         // Reset chosen path as the player is moved to another group
         getAutorank().getPlayerDataConfig().setChosenPath(uuid, null);
-        
+
         return this.getAutorank().getPermPlugHandler().getPermissionPlugin().replaceGroup(player, world, oldrank, to);
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see me.armar.plugins.autorank.pathbuilder.result.Result#getDescription()
      */
     @Override

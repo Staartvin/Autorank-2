@@ -15,9 +15,8 @@ import java.util.UUID;
  * Handles all connections with Statz
  * <p>
  * Date created: 11:47:01 16 jun. 2016
- * 
+ *
  * @author Staartvin
- * 
  */
 public class StatzAPIHandler extends DependencyHandler {
 
@@ -30,7 +29,7 @@ public class StatzAPIHandler extends DependencyHandler {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see me.armar.plugins.autorank.hooks.DependencyHandler#get()
      */
     @Override
@@ -137,7 +136,7 @@ public class StatzAPIHandler extends DependencyHandler {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see me.armar.plugins.autorank.hooks.DependencyHandler#isAvailablePluginLibrary()
      */
     @Override
@@ -147,7 +146,7 @@ public class StatzAPIHandler extends DependencyHandler {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see me.armar.plugins.autorank.hooks.DependencyHandler#isInstalled()
      */
     @Override
@@ -159,7 +158,7 @@ public class StatzAPIHandler extends DependencyHandler {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see me.armar.plugins.autorank.hooks.DependencyHandler#setup()
      */
     @Override

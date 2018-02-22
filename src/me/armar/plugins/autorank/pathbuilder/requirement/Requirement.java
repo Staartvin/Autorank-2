@@ -14,11 +14,10 @@ import java.util.UUID;
 /**
  * Whenever you want to create a new requirement, you'll have to extend this
  * class.
- * 
+ * <p>
  * A requirement can be seen as a task a player has to complete. A path consists of multiple requirements that should all be met to complete the path.
- * 
+ *
  * @author Staartvin
- * 
  */
 public abstract class Requirement {
 
@@ -39,7 +38,7 @@ public abstract class Requirement {
      * Get the Dependencymanager of Autorank that is used to connect to other
      * plugins. <br>
      * Can be used to get information from other plugins.
-     * 
+     *
      * @return DependencyManager class
      */
     public final DependencyManager getDependencyManager() {
@@ -49,16 +48,15 @@ public abstract class Requirement {
     /**
      * Get the description of the requirement. Make sure this is always a
      * translatable message.
-     * 
+     *
      * @return string containing description (in locale language)
      */
     public abstract String getDescription();
 
     /**
      * Get the current progress of a player on a certain requirement.
-     * 
-     * @param player
-     *            Player to check for
+     *
+     * @param player Player to check for
      * @return String containing the progress
      */
     public abstract String getProgress(Player player);
@@ -66,7 +64,7 @@ public abstract class Requirement {
     /**
      * Get the id of this requirement. This should get assigned automatically at
      * setOptions(). The id should always be dynamic.
-     * 
+     *
      * @return id
      */
     public int getId() {
@@ -74,8 +72,17 @@ public abstract class Requirement {
     }
 
     /**
+     * Set the requirement id of this requirement
+     *
+     * @param reqId id to set it to
+     */
+    public void setId(final int reqId) {
+        this.reqId = reqId;
+    }
+
+    /**
      * Get the results when this requirement is finished
-     * 
+     *
      * @return A list of results that has to be done.
      */
     public List<Result> getResults() {
@@ -83,8 +90,18 @@ public abstract class Requirement {
     }
 
     /**
+     * Set the results of this requirement. <br>
+     * These results will be performed when this requirement is met.
+     *
+     * @param results results to perform upon completion
+     */
+    public void setResults(final List<Result> results) {
+        this.results = results;
+    }
+
+    /**
      * Get the current running stats plugin.
-     * 
+     *
      * @return stats plugin that Autorank uses for stat data
      */
     public StatsPlugin getStatsPlugin() {
@@ -93,7 +110,7 @@ public abstract class Requirement {
 
     /**
      * If requirement is world specific, what world does it apply to?
-     * 
+     *
      * @return the world that this requirement is specific to.
      */
     public String getWorld() {
@@ -101,10 +118,18 @@ public abstract class Requirement {
     }
 
     /**
+     * Sets the world that this requirement is specific to.
+     *
+     * @param world name of the world
+     */
+    public void setWorld(final String world) {
+        this.world = world;
+    }
+
+    /**
      * Check if this requirement is completed already.
      *
-     * @param uuid
-     *            Player to check for
+     * @param uuid Player to check for
      * @return true if completed, false otherwise.
      */
     public final boolean isCompleted(final UUID uuid) {
@@ -118,7 +143,7 @@ public abstract class Requirement {
 
     /**
      * Check whether this requirement is optional.
-     * 
+     *
      * @return true when optional; false otherwise.
      */
     public boolean isOptional() {
@@ -126,8 +151,17 @@ public abstract class Requirement {
     }
 
     /**
+     * Set whether this requirement is optional or not
+     *
+     * @param optional true if optional; false otherwise
+     */
+    public void setOptional(final boolean optional) {
+        this.optional = optional;
+    }
+
+    /**
      * Check whether this requirement is world specific.
-     * 
+     *
      * @return true if it is, false otherwise.
      */
     public boolean isWorldSpecific() {
@@ -137,76 +171,32 @@ public abstract class Requirement {
     /**
      * Check whether a player meets this requirement. If a requirement is
      * optional, a player will always meet the requirement.
-     * 
-     * @param player
-     *            Player to check for
+     *
+     * @param player Player to check for
      * @return true if it meets the requirements; false otherwise
      */
     public abstract boolean meetsRequirement(Player player);
 
     /**
      * Set whether this requirement auto completes itself
-     * 
-     * @param autoComplete
-     *            true if auto complete; false otherwise
+     *
+     * @param autoComplete true if auto complete; false otherwise
      */
     public void setAutoComplete(final boolean autoComplete) {
         this.autoComplete = autoComplete;
     }
 
     /**
-     * Set whether this requirement is optional or not
-     * 
-     * @param optional
-     *            true if optional; false otherwise
-     */
-    public void setOptional(final boolean optional) {
-        this.optional = optional;
-    }
-
-    /**
      * Set up a requirement. You should initiliaze the requirement with an empty constructor.
      * Secondly, the {@link #setOptions(String[])} method must be called to supply the requirement with data.
      * Lastly, you can use {@link #meetsRequirement(Player)} to check whether a player meets the requirement.
-     * 
+     * <p>
      * The options parameter is an array that will contain the string as passed through the Paths.yml
-     * 
-     * @param options
-     *            Each element is an element supplied by the config.
+     *
+     * @param options Each element is an element supplied by the config.
      * @return true if everything was setup correctly; false otherwise
      */
     public abstract boolean setOptions(String[] options);
-
-    /**
-     * Set the requirement id of this requirement
-     * 
-     * @param reqId
-     *            id to set it to
-     */
-    public void setId(final int reqId) {
-        this.reqId = reqId;
-    }
-
-    /**
-     * Set the results of this requirement. <br>
-     * These results will be performed when this requirement is met.
-     * 
-     * @param results
-     *            results to perform upon completion
-     */
-    public void setResults(final List<Result> results) {
-        this.results = results;
-    }
-
-    /**
-     * Sets the world that this requirement is specific to.
-     * 
-     * @param world
-     *            name of the world
-     */
-    public void setWorld(final String world) {
-        this.world = world;
-    }
 
     @Override
     public String toString() {
@@ -215,7 +205,7 @@ public abstract class Requirement {
 
     /**
      * Check whether this requirement will automatically complete.
-     * 
+     *
      * @return true when auto complete; false otherwise
      */
     public boolean useAutoCompletion() {
@@ -224,6 +214,7 @@ public abstract class Requirement {
 
     /**
      * Check whether this requirement is a prerequisite.
+     *
      * @return true if it is a prerequisite, false otherwise.
      */
     public boolean isPreRequisite() {
@@ -232,6 +223,7 @@ public abstract class Requirement {
 
     /**
      * Set whether this requirement is a prerequisite requirement.
+     *
      * @param preRequisite value to set it to.
      */
     public void setPreRequisite(boolean preRequisite) {
@@ -242,6 +234,7 @@ public abstract class Requirement {
      * Add an error message to clarify what went wrong with this requirement.
      * For example, the requirement was not correctly specified, incorrect data was provided, insufficient data
      * was provided, etc.
+     *
      * @param message Message to add.
      */
     public void registerWarningMessage(String message) {
@@ -258,6 +251,7 @@ public abstract class Requirement {
      * Get the error messages that were registered by the requirement.
      * Note that, usually, error messages are only registered after the {@link #setOptions(String[])} method is called.
      * Hence, calling {@link #getErrorMessages()} before calling {@link #setOptions(String[])} is useless.
+     *
      * @return a list of error messages.
      */
     public List<String> getErrorMessages() {
@@ -267,6 +261,7 @@ public abstract class Requirement {
 
     /**
      * Get a list of dependencies (third-party plugins) this requirement uses.
+     *
      * @return a list of dependencies of this requirement.
      */
     public List<Library> getDependencies() {
@@ -275,6 +270,7 @@ public abstract class Requirement {
 
     /**
      * Add a dependency for this requirement.
+     *
      * @param library Library to add as a dependency
      */
     public void addDependency(Library library) {

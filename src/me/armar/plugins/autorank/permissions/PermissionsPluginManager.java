@@ -1,13 +1,12 @@
 package me.armar.plugins.autorank.permissions;
 
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.permissions.handlers.GroupManagerHandler;
 import me.armar.plugins.autorank.permissions.handlers.PermissionsBukkitHandler;
 import me.armar.plugins.autorank.permissions.handlers.PowerfulPermsHandler;
 import me.armar.plugins.autorank.permissions.handlers.VaultPermissionsHandler;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 
 /**
  * PermissionsPluginManager manages what permission handler should be given. It

@@ -1,5 +1,10 @@
 package me.armar.plugins.autorank.util.uuid;
 
+import com.google.common.collect.ImmutableList;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,19 +17,12 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
-import com.google.common.collect.ImmutableList;
-
 /**
  * This class is used to get the name of a player from a UUID.
  * <p>
  * Date created: 17:02:13 2 apr. 2014
- * 
+ *
  * @author evilmidget38
- * 
  */
 public class NameFetcher implements Callable<Map<UUID, String>> {
     private static final String PROFILE_URL = "https://sessionserver.mojang.com/session/minecraft/profile/";
@@ -53,7 +51,7 @@ public class NameFetcher implements Callable<Map<UUID, String>> {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.util.concurrent.Callable#call()
      */
     @Override

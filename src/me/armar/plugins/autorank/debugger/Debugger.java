@@ -1,5 +1,7 @@
 package me.armar.plugins.autorank.debugger;
 
+import me.armar.plugins.autorank.Autorank;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -8,17 +10,14 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import me.armar.plugins.autorank.Autorank;
-
 /**
  * This class is used to debug stuff when Autorank is running. <br>
  * Whenever a player uses the /ar debug command, it will create a new file with
  * all sorts of information. <br>
  * This information can be sent to the author of Autorank so that he can easily
  * see what's wrong.
- * 
+ *
  * @author Staartvin
- * 
  */
 public class Debugger {
 

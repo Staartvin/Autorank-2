@@ -1,17 +1,12 @@
 package me.armar.plugins.autorank.data.mysql;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 /**
  * This class is used to create a connection between the MySQL database and
  * Autorank.
- * 
- * @author Staartvin
  *
+ * @author Staartvin
  */
 public class SQLDataStorage {
 
@@ -24,15 +19,11 @@ public class SQLDataStorage {
 
     /**
      * Create a new MySQL Connection
-     * 
-     * @param hostname
-     *            Hostname (Ex. 127.0.0.1:3306)
-     * @param username
-     *            Username
-     * @param password
-     *            Password
-     * @param database
-     *            Database
+     *
+     * @param hostname Hostname (Ex. 127.0.0.1:3306)
+     * @param username Username
+     * @param password Password
+     * @param database Database
      */
     public SQLDataStorage(final String hostname, final String username, final String password, final String database) {
         this.hostname = hostname;
@@ -57,7 +48,7 @@ public class SQLDataStorage {
 
     /**
      * Open a new MySQL connection
-     * 
+     *
      * @return true if connection was successfully set up.
      */
     public boolean connect() {
@@ -83,9 +74,8 @@ public class SQLDataStorage {
     /**
      * Execute a query. Query cannot be null. This query doesn't return
      * anything. (Good for updating tables)
-     * 
-     * @param sql
-     *            Query to execute
+     *
+     * @param sql Query to execute
      */
     public void execute(final String sql) {
         Statement stmt = null;
@@ -118,9 +108,8 @@ public class SQLDataStorage {
 
     /**
      * Execute a query and returns a ResultSet. Query cannot be null.
-     * 
-     * @param sql
-     *            Query to execute
+     *
+     * @param sql Query to execute
      * @return ResultSet if successfully performed, null if an error occured.
      */
     public ResultSet executeQuery(final String sql) {
@@ -146,7 +135,7 @@ public class SQLDataStorage {
 
     /**
      * Returns state of MySQL connection
-     * 
+     *
      * @return true if closed, false if open.
      */
     public boolean isClosed() {

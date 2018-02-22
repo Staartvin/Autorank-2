@@ -1,17 +1,15 @@
 package me.armar.plugins.autorank.config;
 
-import org.bukkit.configuration.file.FileConfiguration;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
 import me.armar.plugins.autorank.hooks.DependencyManager.AutorankDependency;
+import org.bukkit.configuration.file.FileConfiguration;
 
 /**
  * This class is used to access the properties of the Settings.yml file. All
  * global configurations options can be accessed via this clas..
- * 
+ *
  * @author Staartvin
- * 
  */
 public class SettingsConfig {
 
@@ -44,7 +42,7 @@ public class SettingsConfig {
 
     /**
      * Get the Settings.yml file.
-     * 
+     *
      * @return
      */
     public FileConfiguration getConfig() {
@@ -78,9 +76,9 @@ public class SettingsConfig {
     /**
      * Check whether Autorank should display only the commands that a player is
      * able to perform when showing the help pages.
-     * 
+     *
      * @return true if Autorank should take permissions into consideration,
-     *         false otherwise.
+     * false otherwise.
      */
     public boolean doBaseHelpPageOnPermissions() {
         return this.getConfig().getBoolean("show help command based on permission", false);
@@ -89,7 +87,7 @@ public class SettingsConfig {
     /**
      * Check whether Autorank should validate whether there is a new version of
      * Autorank available online.
-     * 
+     *
      * @return true if Autorank should, false otherwise.
      */
     public boolean doCheckForNewerVersion() {
@@ -98,7 +96,7 @@ public class SettingsConfig {
 
     /**
      * Get the layout of the /ar check command.
-     * 
+     *
      * @return the layout of the /ar check command.
      */
     public String getCheckCommandLayout() {
@@ -109,7 +107,7 @@ public class SettingsConfig {
     /**
      * Get the time (in minutes) to let Autorank wait before checking players
      * again.
-     * 
+     *
      * @return interval time in minutes
      */
     public int getIntervalTime() {
@@ -118,7 +116,7 @@ public class SettingsConfig {
 
     /**
      * Get the layout of the leaderboards.
-     * 
+     *
      * @return the layout of the /ar leaderboard command
      */
     public String getLeaderboardLayout() {
@@ -128,7 +126,7 @@ public class SettingsConfig {
 
     /**
      * Get the number of players Autorank should display on any leaderboard.
-     * 
+     *
      * @return number of players to show. By default 10.
      */
     public int getLeaderboardLength() {
@@ -137,9 +135,8 @@ public class SettingsConfig {
 
     /**
      * Get the value of a specific MySQL credential.
-     * 
-     * @param option
-     *            Type of credential
+     *
+     * @param option Type of credential
      * @return the value for the given MySQL credential.
      */
     public String getMySQLCredentials(final MySQLCredentials option) {
@@ -162,7 +159,7 @@ public class SettingsConfig {
     /**
      * Check whether Autorank should disable automatically checking whether a
      * player has completed a path.
-     * 
+     *
      * @return true if Autorank should disable it, false otherwise.
      */
     public boolean isAutomaticPathDisabled() {
@@ -172,7 +169,7 @@ public class SettingsConfig {
     /**
      * Check whether Autorank should only use the primary permission group that
      * Vault returns instead of using all the permission groups of a player.
-     * 
+     *
      * @return true if Autorank should, false otherwise.
      */
     public boolean onlyUsePrimaryGroupVault() {
@@ -182,7 +179,7 @@ public class SettingsConfig {
     /**
      * Check whether Autorank should broadcast a message to all online players
      * when a {@link TimeType} file is reset.
-     * 
+     *
      * @return true if Autorank should notice all players. False otherwise.
      */
     public boolean shouldBroadcastDataReset() {
@@ -192,7 +189,7 @@ public class SettingsConfig {
     /**
      * Check whether Autorank should output warnings (when an admin comes
      * online) if there are any.
-     * 
+     *
      * @return true if Autorank should output warnings, false otherwise.
      */
     public boolean showWarnings() {
@@ -202,7 +199,7 @@ public class SettingsConfig {
     /**
      * Check whether Autorank should log detailed information about <br>
      * the found third party plugins.
-     * 
+     *
      * @return true if Autorank should, false otherwise.
      */
     public boolean useAdvancedDependencyLogs() {
@@ -215,7 +212,7 @@ public class SettingsConfig {
      * plugins to detect whether a player is AFK. See
      * {@link me.armar.plugins.autorank.hooks.DependencyManager#isAFK(org.bukkit.entity.Player)}
      * .
-     * 
+     *
      * @return true when AFK integration should be used, false otherwise.
      */
     public boolean useAFKIntegration() {
@@ -233,7 +230,7 @@ public class SettingsConfig {
     /**
      * Check whether Autorank should display the global time of players instead
      * of their local time in any of the leaderboards.
-     * 
+     *
      * @return true if Autorank should, false otherwise.
      */
     public boolean useGlobalTimeInLeaderboard() {
@@ -262,9 +259,9 @@ public class SettingsConfig {
      * Get the plugin that is used to get the local play time of player. This is
      * only accounted for the local time. The global time is still calculated by
      * Autorank.
-     * 
+     *
      * @return {@link me.armar.plugins.autorank.hooks.DependencyManager.AutorankDependency}
-     *         AutorankDependency that is used
+     * AutorankDependency that is used
      */
     public AutorankDependency useTimeOf() {
 
@@ -279,9 +276,10 @@ public class SettingsConfig {
         else
             return AutorankDependency.AUTORANK;
     }
-    
+
     /**
      * Check whether Autorank should automatically remove old data from its database.
+     *
      * @return true if it should, false otherwise.
      */
     public boolean shouldRemoveOldEntries() {

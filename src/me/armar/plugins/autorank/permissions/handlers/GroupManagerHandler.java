@@ -1,7 +1,7 @@
 package me.armar.plugins.autorank.permissions.handlers;
 
-import java.util.*;
-
+import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.permissions.PermissionsHandler;
 import org.anjocaido.groupmanager.GroupManager;
 import org.anjocaido.groupmanager.data.Group;
 import org.anjocaido.groupmanager.dataholder.OverloadedWorldHolder;
@@ -11,8 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
-import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.permissions.PermissionsHandler;
+import java.util.*;
 
 /**
  * @author Staartvin This file handles all work done with GroupManager.
@@ -58,7 +57,7 @@ public class GroupManagerHandler implements PermissionsHandler {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see me.armar.plugins.autorank.permissions.PermissionsHandler#getName()
      */
     @Override

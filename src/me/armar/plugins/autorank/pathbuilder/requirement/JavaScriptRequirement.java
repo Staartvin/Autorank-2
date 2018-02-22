@@ -9,9 +9,8 @@ import javax.script.ScriptException;
 
 /**
  * This requirement checks for javascript evaluations
- * 
+ *
  * @author Staartvin
- * 
  */
 public class JavaScriptRequirement extends Requirement {
 

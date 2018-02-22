@@ -1,8 +1,7 @@
 package me.armar.plugins.autorank.pathbuilder.result;
 
-import org.bukkit.entity.Player;
-
 import me.armar.plugins.autorank.language.Lang;
+import org.bukkit.entity.Player;
 
 public class MessageResult extends Result {
 

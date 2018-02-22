@@ -3,9 +3,6 @@ package me.armar.plugins.autorank.util;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
 import org.junit.Test;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
@@ -92,8 +89,8 @@ public class AutorankToolsTest {
 
     private void checkConversion(String input, Time outputType, int expectedValue) {
 
-     int result = AutorankTools.stringToTime(input, outputType);
+        int result = AutorankTools.stringToTime(input, outputType);
 
-     assertEquals("Incorrect conversion, should be " + expectedValue + " was " + result, expectedValue, result);
+        assertEquals("Incorrect conversion, should be " + expectedValue + " was " + result, expectedValue, result);
     }
 }

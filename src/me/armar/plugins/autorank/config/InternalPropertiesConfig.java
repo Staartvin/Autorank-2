@@ -1,10 +1,10 @@
 package me.armar.plugins.autorank.config;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class manages the internalprops.yml file. It is used to store data that
@@ -13,9 +13,8 @@ import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
  * leaderboard, the last time something was updated, etc. <br>
  * This file should not be altered by the server owner, since Autorank manages
  * it.
- * 
- * @author Staartvin
  *
+ * @author Staartvin
  */
 public class InternalPropertiesConfig {
 
@@ -28,9 +27,8 @@ public class InternalPropertiesConfig {
 
     /**
      * Get the cached leaderboard for a certain time {@linkplain TimeType}.
-     * 
-     * @param type
-     *            Type of time
+     *
+     * @param type Type of time
      * @return the cached leaderboard for the given time type.
      */
     public List<String> getCachedLeaderboard(final TimeType type) {
@@ -41,7 +39,7 @@ public class InternalPropertiesConfig {
 
     /**
      * Get the last time any of the leaderboard was updated (UNIX timestamp).
-     * 
+     *
      * @return a UNIX timestamp or 0 if never updated before.
      */
     public long getLeaderboardLastUpdateTime(final TimeType type) {
@@ -49,16 +47,14 @@ public class InternalPropertiesConfig {
     }
 
     /**
-     * 
      * Get the last stored value of a time type. Autorank stores the current
      * day, week and month. On a new calendar day, any of will be changed (as a
      * new day has arrived). Autorank then knows a new day/week/month has
      * arrived, so it can reset the data files.
-     * 
-     * @param type
-     *            type of time
+     *
+     * @param type type of time
      * @return the previously stored value. Returns 1 if nothing was stored yet
-     *         or 0 if you try to access the total time.
+     * or 0 if you try to access the total time.
      */
     public int getTrackedTimeType(final TimeType type) {
         if (type == TimeType.DAILY_TIME) {
@@ -78,7 +74,7 @@ public class InternalPropertiesConfig {
      * were properly converted, this method will return true. If it hasn't been
      * run before or did not successfully convert all names, it will return
      * false.
-     * 
+     *
      * @return true if the uuids are stored in the new format, false otherwise.
      */
     public boolean hasTransferredUUIDs() {
@@ -87,9 +83,8 @@ public class InternalPropertiesConfig {
 
     /**
      * Set whether the UUIDS have been correctly converted to a new format.
-     * 
-     * @param value
-     *            Value of the conversion
+     *
+     * @param value Value of the conversion
      */
     public void hasTransferredUUIDs(final boolean value) {
         config.set("has converted uuids", value);
@@ -108,26 +103,26 @@ public class InternalPropertiesConfig {
                         + "\nAutorank uses these to keep track of certain aspects of the plugin.");
 
         config.addDefault("leaderboard last updated", 0); // When was the
-                                                          // leaderboard
-                                                          // updated for last
-                                                          // time? In UNIX
-                                                          // time.
+        // leaderboard
+        // updated for last
+        // time? In UNIX
+        // time.
         config.addDefault("has converted uuids", false); // Did it already
-                                                         // convert uuids?
+        // convert uuids?
 
         config.addDefault("tracked month", 1); // This is used to keep track of
-                                               // what month we are checking the
-                                               // data for. If this is changed,
-                                               // the montly_data.yml gets
-                                               // reset.
+        // what month we are checking the
+        // data for. If this is changed,
+        // the montly_data.yml gets
+        // reset.
         config.addDefault("tracked week", 1); // This is used to keep track of
-                                              // what week we are checking the
-                                              // data for. If this is changed,
-                                              // the weekly_data.yml gets reset.
+        // what week we are checking the
+        // data for. If this is changed,
+        // the weekly_data.yml gets reset.
         config.addDefault("tracked day", 1); // This is used to keep track of
-                                             // what day we are checking the
-                                             // data for. If this is changed,
-                                             // the daily_data.yml gets reset.
+        // what day we are checking the
+        // data for. If this is changed,
+        // the daily_data.yml gets reset.
 
         final List<String> newList = new ArrayList<String>();
         newList.add("&cThis leaderboard wasn't set up yet.");
@@ -144,11 +139,9 @@ public class InternalPropertiesConfig {
 
     /**
      * Set the cached leaderboard for a certain time type.
-     * 
-     * @param type
-     *            Type of time
-     * @param cachedLeaderboard
-     *            A list of strings
+     *
+     * @param type              Type of time
+     * @param cachedLeaderboard A list of strings
      */
     public void setCachedLeaderboard(final TimeType type, final List<String> cachedLeaderboard) {
         config.set("leaderboards." + type.toString().toLowerCase() + ".cached leaderboard", cachedLeaderboard);
@@ -158,9 +151,8 @@ public class InternalPropertiesConfig {
 
     /**
      * Set the time any leaderboard was last updated.
-     * 
-     * @param time
-     *            Last update time (UNIX timestamp)
+     *
+     * @param time Last update time (UNIX timestamp)
      */
     public void setLeaderboardLastUpdateTime(final TimeType type, final long time) {
         config.set("leaderboards." + type.toString().toLowerCase() + ".last updated", time);
@@ -171,11 +163,9 @@ public class InternalPropertiesConfig {
     /**
      * Set the value of a time type. See {@link #getTrackedTimeType(TimeType)}
      * for more info.
-     * 
-     * @param type
-     *            Type of time
-     * @param value
-     *            Value to set the time to.
+     *
+     * @param type  Type of time
+     * @param value Value to set the time to.
      */
     public void setTrackedTimeType(final TimeType type, final int value) {
         if (type == TimeType.DAILY_TIME) {
@@ -190,22 +180,24 @@ public class InternalPropertiesConfig {
 
         config.saveFile();
     }
-    
+
     /**
      * Check whether Autorank is using a 4.0+ format.
+     *
      * @return true if it is, false otherwise.
      */
     public boolean isConvertedToNewFormat() {
         return config.getBoolean("is converted to new format", false);
     }
-    
+
     /**
      * Set whether Autorank is using the 4.0+ format.
+     *
      * @param value either true or false
      */
     public void setConvertedToNewFormat(boolean value) {
         config.set("is converted to new format", value);
-        
+
         config.saveFile();
     }
 }

@@ -106,7 +106,7 @@ public class AdvancementRequirement extends Requirement {
     public static boolean hasAdvancement(Player player, String name) {
         // name should be something like minecraft:husbandry/break_diamond_hoe
         Advancement a = getAdvancement(name);
-        if(a == null){
+        if (a == null) {
             // advancement does not exists.
             return false;
         }

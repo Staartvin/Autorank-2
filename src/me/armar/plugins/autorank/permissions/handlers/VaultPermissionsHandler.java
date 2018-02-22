@@ -1,15 +1,12 @@
 package me.armar.plugins.autorank.permissions.handlers;
 
+import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.permissions.PermissionsHandler;
 import me.staartvin.plugins.pluginlibrary.Library;
 import me.staartvin.plugins.pluginlibrary.hooks.LibraryHook;
 import me.staartvin.plugins.pluginlibrary.hooks.VaultHook;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-
-import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.hooks.DependencyManager.AutorankDependency;
-import me.armar.plugins.autorank.hooks.vaultapi.PluginLibraryHandler;
-import me.armar.plugins.autorank.permissions.PermissionsHandler;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,9 +15,9 @@ import java.util.List;
 
 /**
  * @author Staartvin & DeathStampler (see replaceGroup())
- *         <p>
- *         VaultPermissionsHandler tackles all work that has to be done with
- *         Vault. (Most of the permissions plugins are supported with Vault)
+ * <p>
+ * VaultPermissionsHandler tackles all work that has to be done with
+ * Vault. (Most of the permissions plugins are supported with Vault)
  */
 public class VaultPermissionsHandler implements PermissionsHandler {
 
@@ -135,7 +132,7 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see me.armar.plugins.autorank.permissions.PermissionsHandler#getName()
      */
     @Override

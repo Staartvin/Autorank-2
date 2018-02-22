@@ -1,5 +1,7 @@
 package me.armar.plugins.autorank.listeners;
 
+import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.permissions.AutorankPermission;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -7,15 +9,11 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.permissions.AutorankPermission;
-
 /**
  * This listener will listen to players joining and send them a message when an
  * update is available or an error has been found
- * 
+ *
  * @author Staartvin
- * 
  */
 public class PlayerJoinListener implements Listener {
 
@@ -33,7 +31,7 @@ public class PlayerJoinListener implements Listener {
         if (plugin.getUUIDStorage().isOutdated(player.getName())) {
             plugin.getUUIDStorage().storeUUID(player.getName(), player.getUniqueId(), player.getName());
         }
-        
+
         // Save whether this player is exempted from the leaderboard.
         plugin.getPlayerChecker().doLeaderboardExemptCheck(player);
 
@@ -41,10 +39,10 @@ public class PlayerJoinListener implements Listener {
         // Try to automatically assign a path to a player.
         plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
             public void run() {
-                
+
                 // Try to auto assign path to a player
                 plugin.getPathManager().autoAssignPath(player);
-                
+
                 // Perform check for player on login
                 plugin.getPlayerChecker().checkPlayer(player);
             }
@@ -88,7 +86,7 @@ public class PlayerJoinListener implements Listener {
 
                     @Override
                     public void run() {
-                         plugin.getWarningManager().sendWarnings(player);
+                        plugin.getWarningManager().sendWarnings(player);
                     }
 
                 }, 10L);

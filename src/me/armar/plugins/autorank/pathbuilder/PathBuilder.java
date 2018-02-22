@@ -1,15 +1,14 @@
 package me.armar.plugins.autorank.pathbuilder;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.pathbuilder.builders.RequirementBuilder;
 import me.armar.plugins.autorank.pathbuilder.builders.ResultBuilder;
 import me.armar.plugins.autorank.pathbuilder.holders.RequirementsHolder;
 import me.armar.plugins.autorank.pathbuilder.requirement.Requirement;
 import me.armar.plugins.autorank.pathbuilder.result.Result;
-import me.armar.plugins.autorank.util.AutorankTools;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class builds all the paths from the paths.yml. <br>

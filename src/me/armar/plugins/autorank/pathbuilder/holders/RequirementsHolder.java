@@ -1,17 +1,16 @@
 package me.armar.plugins.autorank.pathbuilder.holders;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.api.events.RequirementCompleteEvent;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.pathbuilder.requirement.Requirement;
 import me.armar.plugins.autorank.pathbuilder.result.Result;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Since a requirement in Autorank's config can have multiple real requirements,
@@ -21,14 +20,13 @@ import me.armar.plugins.autorank.pathbuilder.result.Result;
  * the requirements is met instead of implementing it in the code of a specific
  * requirement <br>
  * (which was super labor-intensive).
- * 
+ * <p>
  * <br>
  * <br>
  * This class holds multiple requirements, but only represents one 'line' in the
  * paths file.
- * 
- * @author Staartvin
  *
+ * @author Staartvin
  */
 public class RequirementsHolder {
 
@@ -42,6 +40,7 @@ public class RequirementsHolder {
 
     /**
      * Add requirement to this RequirementsHolder.
+     *
      * @param req Requirement to add
      */
     public void addRequirement(final Requirement req) {
@@ -52,6 +51,7 @@ public class RequirementsHolder {
      * Get the description of the requirements.
      * If this requirementsholder contains multiple requirements, the string will made up of the following:
      * <Requirement 1 description> OR <Requirement 2 description> OR etc.
+     *
      * @return a string representing the description (or combined description) of the requirements.
      */
     public String getDescription() {
@@ -78,7 +78,7 @@ public class RequirementsHolder {
                 builder.append(desc + " or ");
             } else {
                 // Other indices
-                
+
                 // Find the part of this description that is the same as the first description
                 // For example, let's say we have 2 requirements: kill 2 cows or kill 10 creepers.
                 // As a description, we don't want to have 'Kill 2 cows or kill 10 creepers', as the 'kill' is redundant. 
@@ -89,7 +89,7 @@ public class RequirementsHolder {
                 if (difIndex < 0) {
                     continue;
                 }
-                
+
                 // Remove the redundant part of the description string.
                 // Result is 'Kill 20 cows or 20 creepers'
                 desc = desc.substring(difIndex);
@@ -127,6 +127,7 @@ public class RequirementsHolder {
 
     /**
      * Get the progress for a player for this requirementsholder. For more info, see {@link #getDescription()}.
+     *
      * @param player Player to check
      * @return progress string in the format as {@link #getDescription()}.
      */
@@ -173,7 +174,7 @@ public class RequirementsHolder {
     /**
      * Get the requirement id of this requirementsholder. Since all the requiremens that are part of this requirementsholder are essentialy specified as the same
      * requirement in the Paths file, we may assume that all requirement ids are the same.
-     * 
+     *
      * @return the requirement id of any of the requirements of this requirementsholder.
      */
     public int getReqID() {
@@ -209,7 +210,8 @@ public class RequirementsHolder {
 
     /**
      * Check whether a player has completed any of the requirements in this RequirementsHolder.
-     * @param player Player to check.
+     *
+     * @param player       Player to check.
      * @param forceCommand whether this command is forced.
      * @return true if the player meets any of the requirements.
      */
@@ -297,6 +299,7 @@ public class RequirementsHolder {
 
     /**
      * Run the results of this requirementsholder (if there are any).
+     *
      * @param player Player to run it for.
      */
     public void runResults(final Player player) {
@@ -319,6 +322,7 @@ public class RequirementsHolder {
 
     /**
      * Check whether this requirementsholder is used as a prerequisite.
+     *
      * @return
      */
     public boolean isPrerequisite() {
