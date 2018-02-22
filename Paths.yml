@@ -3,15 +3,23 @@
 # For more information, go to https://github.com/Armarr/Autorank-2/wiki/How-to-configure-the-Paths.yml-file%3F.
 Test:
   prerequisites:
-    world: world_nether
-    money: 1000
+    world:
+      value: world_nether
+    money:
+      value: 1000
   requirements:
-    money: 10000
-    blocks broken: 50
+    money:
+      value: 10000
+    blocks broken:
+      value: 50
   results:
-    command: broadcast &p has just completed path 'Default'!
-    command2: give &p 1 100
-    command3: 'pex user &p group set Default'
-    message: Congratulations, you completed the 'Default' path!
+    command:
+      value: broadcast &p has just completed path 'Default'!
+    command2:
+      value: give &p 1 100
+    command3:
+      value: 'pex user &p group set Default'
+    message:
+      value: Congratulations, you completed the 'Default' path!
   options:
     display name: Test path
