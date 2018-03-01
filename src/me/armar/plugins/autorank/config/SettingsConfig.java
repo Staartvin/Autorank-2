@@ -3,7 +3,6 @@ package me.armar.plugins.autorank.config;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
 import me.armar.plugins.autorank.hooks.DependencyManager.AutorankDependency;
-import org.bukkit.configuration.file.FileConfiguration;
 
 /**
  * This class is used to access the properties of the Settings.yml file. All
@@ -11,7 +10,7 @@ import org.bukkit.configuration.file.FileConfiguration;
  *
  * @author Staartvin
  */
-public class SettingsConfig {
+public class SettingsConfig extends AbstractConfig {
 
     /**
      * The different type of credentials that is used to connect to a MySQL
@@ -21,56 +20,11 @@ public class SettingsConfig {
         DATABASE, HOSTNAME, PASSWORD, TABLE, USERNAME
     }
 
-    private SimpleYamlConfiguration config;
-
     private String fileName = "Settings.yml";
 
-    private final Autorank plugin;
-
     public SettingsConfig(final Autorank instance) {
-        plugin = instance;
-    }
-
-    /**
-     * Create a new Settings.yml file.
-     */
-    public void createNewFile() {
-        config = new SimpleYamlConfiguration(plugin, fileName, fileName);
-
-        plugin.getLogger().info("Settings file loaded (Settings.yml)");
-    }
-
-    /**
-     * Get the Settings.yml file.
-     *
-     * @return
-     */
-    public FileConfiguration getConfig() {
-        if (config != null) {
-            return config;
-        }
-
-        return null;
-    }
-
-    /**
-     * Reload the Settings.yml file.
-     */
-    public void reloadConfig() {
-        if (config != null) {
-            config.reloadFile();
-        }
-    }
-
-    /**
-     * Save the Settings.yml file.
-     */
-    public void saveConfig() {
-        if (config == null) {
-            return;
-        }
-
-        config.saveFile();
+        this.setFileName(fileName);
+        this.setPlugin(instance);
     }
 
     /**

@@ -16,13 +16,13 @@ import java.util.List;
  *
  * @author Staartvin
  */
-public class InternalPropertiesConfig {
+public class InternalPropertiesConfig extends AbstractConfig {
 
-    private final Autorank plugin;
-    private SimpleYamlConfiguration config;
+    private String fileName = "internalprops.yml";
 
     public InternalPropertiesConfig(final Autorank instance) {
-        this.plugin = instance;
+        setPlugin(instance);
+        setFileName(fileName);
     }
 
     /**
@@ -34,7 +34,7 @@ public class InternalPropertiesConfig {
     public List<String> getCachedLeaderboard(final TimeType type) {
         // Type is the leaderboard type you want to get (all time, daily, weekly
         // or monthly)
-        return config.getStringList("leaderboards." + type.toString().toLowerCase() + ".cached leaderboard");
+        return this.getConfig().getStringList("leaderboards." + type.toString().toLowerCase() + ".cached leaderboard");
     }
 
     /**
@@ -43,7 +43,7 @@ public class InternalPropertiesConfig {
      * @return a UNIX timestamp or 0 if never updated before.
      */
     public long getLeaderboardLastUpdateTime(final TimeType type) {
-        return config.getLong("leaderboards." + type.toString().toLowerCase() + ".last updated", 0);
+        return this.getConfig().getLong("leaderboards." + type.toString().toLowerCase() + ".last updated", 0);
     }
 
     /**
@@ -58,11 +58,11 @@ public class InternalPropertiesConfig {
      */
     public int getTrackedTimeType(final TimeType type) {
         if (type == TimeType.DAILY_TIME) {
-            return config.getInt("tracked day", 1);
+            return this.getConfig().getInt("tracked day", 1);
         } else if (type == TimeType.WEEKLY_TIME) {
-            return config.getInt("tracked week", 1);
+            return this.getConfig().getInt("tracked week", 1);
         } else if (type == TimeType.MONTHLY_TIME) {
-            return config.getInt("tracked month", 1);
+            return this.getConfig().getInt("tracked month", 1);
         } else {
             return 0;
         }
@@ -78,7 +78,7 @@ public class InternalPropertiesConfig {
      * @return true if the uuids are stored in the new format, false otherwise.
      */
     public boolean hasTransferredUUIDs() {
-        return config.getBoolean("has converted uuids", false);
+        return this.getConfig().getBoolean("has converted uuids", false);
     }
 
     /**
@@ -87,39 +87,41 @@ public class InternalPropertiesConfig {
      * @param value Value of the conversion
      */
     public void hasTransferredUUIDs(final boolean value) {
-        config.set("has converted uuids", value);
+        this.getConfig().set("has converted uuids", value);
 
-        config.saveFile();
+        this.saveConfig();
     }
 
     /**
      * Load the internalprops.yml file.
      */
-    public void loadFile() {
-        config = new SimpleYamlConfiguration(plugin, "internalprops.yml", "Internal properties");
+    @Override
+    public void loadConfig() {
 
-        config.options()
+        super.loadConfig();
+
+        this.getConfig().options()
                 .header("This is the internal properties file of Autorank. \nYou should not touch any values here, unless instructed by a developer."
                         + "\nAutorank uses these to keep track of certain aspects of the plugin.");
 
-        config.addDefault("leaderboard last updated", 0); // When was the
+        this.getConfig().addDefault("leaderboard last updated", 0); // When was the
         // leaderboard
         // updated for last
         // time? In UNIX
         // time.
-        config.addDefault("has converted uuids", false); // Did it already
+        this.getConfig().addDefault("has converted uuids", false); // Did it already
         // convert uuids?
 
-        config.addDefault("tracked month", 1); // This is used to keep track of
+        this.getConfig().addDefault("tracked month", 1); // This is used to keep track of
         // what month we are checking the
         // data for. If this is changed,
         // the montly_data.yml gets
         // reset.
-        config.addDefault("tracked week", 1); // This is used to keep track of
+        this.getConfig().addDefault("tracked week", 1); // This is used to keep track of
         // what week we are checking the
         // data for. If this is changed,
         // the weekly_data.yml gets reset.
-        config.addDefault("tracked day", 1); // This is used to keep track of
+        this.getConfig().addDefault("tracked day", 1); // This is used to keep track of
         // what day we are checking the
         // data for. If this is changed,
         // the daily_data.yml gets reset.
@@ -127,14 +129,14 @@ public class InternalPropertiesConfig {
         final List<String> newList = new ArrayList<String>();
         newList.add("&cThis leaderboard wasn't set up yet.");
 
-        config.addDefault("leaderboards.total_time.cached leaderboard", newList);
-        config.addDefault("leaderboards.daily_time.cached leaderboard", newList);
-        config.addDefault("leaderboards.weekly_time.cached leaderboard", newList);
-        config.addDefault("leaderboards.monthly_time.cached leaderboard", newList);
+        this.getConfig().addDefault("leaderboards.total_time.cached leaderboard", newList);
+        this.getConfig().addDefault("leaderboards.daily_time.cached leaderboard", newList);
+        this.getConfig().addDefault("leaderboards.weekly_time.cached leaderboard", newList);
+        this.getConfig().addDefault("leaderboards.monthly_time.cached leaderboard", newList);
 
-        config.options().copyDefaults(true);
+        this.getConfig().options().copyDefaults(true);
 
-        config.saveFile();
+        this.saveConfig();
     }
 
     /**
@@ -144,9 +146,10 @@ public class InternalPropertiesConfig {
      * @param cachedLeaderboard A list of strings
      */
     public void setCachedLeaderboard(final TimeType type, final List<String> cachedLeaderboard) {
-        config.set("leaderboards." + type.toString().toLowerCase() + ".cached leaderboard", cachedLeaderboard);
+        this.getConfig().set("leaderboards." + type.toString().toLowerCase() + ".cached leaderboard",
+                cachedLeaderboard);
 
-        config.saveFile();
+        this.saveConfig();
     }
 
     /**
@@ -155,9 +158,9 @@ public class InternalPropertiesConfig {
      * @param time Last update time (UNIX timestamp)
      */
     public void setLeaderboardLastUpdateTime(final TimeType type, final long time) {
-        config.set("leaderboards." + type.toString().toLowerCase() + ".last updated", time);
+        this.getConfig().set("leaderboards." + type.toString().toLowerCase() + ".last updated", time);
 
-        config.saveFile();
+        this.saveConfig();
     }
 
     /**
@@ -169,16 +172,16 @@ public class InternalPropertiesConfig {
      */
     public void setTrackedTimeType(final TimeType type, final int value) {
         if (type == TimeType.DAILY_TIME) {
-            config.set("tracked day", value);
+            this.getConfig().set("tracked day", value);
         } else if (type == TimeType.WEEKLY_TIME) {
-            config.set("tracked week", value);
+            this.getConfig().set("tracked week", value);
         } else if (type == TimeType.MONTHLY_TIME) {
-            config.set("tracked month", value);
+            this.getConfig().set("tracked month", value);
         } else {
             return;
         }
 
-        config.saveFile();
+        this.saveConfig();
     }
 
     /**
@@ -187,7 +190,7 @@ public class InternalPropertiesConfig {
      * @return true if it is, false otherwise.
      */
     public boolean isConvertedToNewFormat() {
-        return config.getBoolean("is converted to new format", false);
+        return this.getConfig().getBoolean("is converted to new format", false);
     }
 
     /**
@@ -196,8 +199,8 @@ public class InternalPropertiesConfig {
      * @param value either true or false
      */
     public void setConvertedToNewFormat(boolean value) {
-        config.set("is converted to new format", value);
+        this.getConfig().set("is converted to new format", value);
 
-        config.saveFile();
+        this.saveConfig();
     }
 }

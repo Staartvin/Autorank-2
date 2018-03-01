@@ -1,7 +1,6 @@
 package me.armar.plugins.autorank.config;
 
 import me.armar.plugins.autorank.Autorank;
-import org.bukkit.configuration.file.FileConfiguration;
 
 enum DefaultBehaviorOption {
     /**
@@ -63,63 +62,21 @@ enum DefaultBehaviorOption {
  *
  * @author Staartvin
  */
-public class DefaultBehaviorConfig {
+public class DefaultBehaviorConfig extends AbstractConfig {
 
-    private final Autorank plugin;
-    private SimpleYamlConfiguration config;
     private String fileName = "DefaultBehavior.yml";
 
     public DefaultBehaviorConfig(final Autorank instance) {
-        plugin = instance;
+        setPlugin(instance);
+        setFileName(fileName);
     }
 
-    /**
-     * Create a new Settings.yml file.
-     */
-    public void createNewFile() {
-        config = new SimpleYamlConfiguration(plugin, fileName, fileName);
-
-        this.loadConfig();
-
-        plugin.getLogger().info("DefaultBehavior file loaded (" + fileName + ")");
-    }
-
-    /**
-     * Get the YML file.
-     *
-     * @return
-     */
-    public FileConfiguration getConfig() {
-        if (config != null) {
-            return config;
-        }
-
-        return null;
-    }
-
-    /**
-     * Reload the YML file.
-     */
-    public void reloadConfig() {
-        if (config != null) {
-            config.reloadFile();
-        }
-    }
-
-    /**
-     * Save the YML file.
-     */
-    public void saveConfig() {
-        if (config == null) {
-            return;
-        }
-
-        config.saveFile();
-    }
-
+    @Override
     public void loadConfig() {
 
-        config.options().header("This file allows you to change the default behavior of a path. " +
+        super.loadConfig();
+
+        this.getConfig().options().header("This file allows you to change the default behavior of a path. " +
                 "\nFor example, if you change 'ALLOW_INFINITE_PATHING' to true, " +
                 "all paths will by default allow infinite pathing, unless specified otherwise by setting it to false" +
                 " for a path." +
@@ -129,10 +86,10 @@ public class DefaultBehaviorConfig {
 
         // Load all default options in if they are not present.
         for (DefaultBehaviorOption option : DefaultBehaviorOption.values()) {
-            config.addDefault(option.toString(), option.getDefaultValue());
+            this.getConfig().addDefault(option.toString(), option.getDefaultValue());
         }
 
-        config.options().copyDefaults(true);
+        this.getConfig().options().copyDefaults(true);
 
         saveConfig();
     }

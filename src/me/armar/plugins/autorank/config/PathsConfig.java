@@ -2,7 +2,6 @@ package me.armar.plugins.autorank.config;
 
 import com.google.common.collect.Lists;
 import me.armar.plugins.autorank.Autorank;
-import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -17,59 +16,13 @@ import java.util.Set;
  *
  * @author Staartvin
  */
-public class PathsConfig {
+public class PathsConfig extends AbstractConfig {
 
-    private SimpleYamlConfiguration config;
     private String fileName = "Paths.yml";
 
-    private Autorank plugin;
-
     public PathsConfig(Autorank instance) {
-        this.plugin = instance;
-    }
-
-    /**
-     * Create a new Paths.yml file (if it doesn't exist) and load it.
-     */
-    public void createNewFile() {
-        config = new SimpleYamlConfiguration(plugin, fileName, fileName);
-
-        loadConfig();
-
-        plugin.getLogger().info("Paths file loaded (" + fileName + ")");
-    }
-
-    /**
-     * Get the Paths.yml file.
-     *
-     * @return Paths.yml file or null if it doesn't exist
-     */
-    public FileConfiguration getConfig() {
-        if (config != null) {
-            return config;
-        }
-
-        return null;
-    }
-
-    /**
-     * Reload Paths.yml config.
-     */
-    public void reloadConfig() {
-        if (config != null) {
-            config.reloadFile();
-        }
-    }
-
-    /**
-     * Save Paths.yml config.
-     */
-    public void saveConfig() {
-        if (config == null) {
-            return;
-        }
-
-        config.saveFile();
+        setPlugin(instance);
+        setFileName(fileName);
     }
 
     /**
@@ -80,7 +33,8 @@ public class PathsConfig {
      * otherwise.
      */
     public boolean allowInfinitePathing(String pathName) {
-        return this.getConfig().getBoolean(pathName + ".options.infinite pathing", plugin.getDefaultBehaviorConfig
+        return this.getConfig().getBoolean(pathName + ".options.infinite pathing", this.getPlugin()
+                .getDefaultBehaviorConfig
                 ().getDefaultBooleanBehaviorOfOption(DefaultBehaviorOption.ALLOW_INFINITE_PATHING));
     }
 
@@ -102,7 +56,7 @@ public class PathsConfig {
      * @return a list of path names.
      */
     public List<String> getPaths() {
-        return new ArrayList<String>(getConfig().getKeys(false));
+        return new ArrayList<>(getConfig().getKeys(false));
     }
 
     /**
@@ -156,7 +110,7 @@ public class PathsConfig {
         // Grab options from string
         final String org = this.getRequirementValue(pathName, reqName, isPreRequisite);
 
-        final List<String[]> list = new ArrayList<String[]>();
+        final List<String[]> list = new ArrayList<>();
 
         final String[] split = org.split(",");
 
@@ -187,7 +141,7 @@ public class PathsConfig {
     public List<String> getRequirements(String pathName, boolean isPreRequisite) {
         String keyType = (isPreRequisite ? "prerequisites" : "requirements");
 
-        return new ArrayList<String>(getConfig().getConfigurationSection(pathName + "." + keyType).getKeys(false));
+        return new ArrayList<>(getConfig().getConfigurationSection(pathName + "." + keyType).getKeys(false));
     }
 
     /**
@@ -199,17 +153,16 @@ public class PathsConfig {
      * @param reqName  Name of the requirement.
      * @return the value string which can be null if none is specified.
      */
-    public String getRequirementValue(final String pathName, final String reqName, boolean isPreRequisite) {
+    private String getRequirementValue(final String pathName, final String reqName, boolean isPreRequisite) {
 
         String keyType = (isPreRequisite ? "prerequisites" : "requirements");
 
         // Check if there is a value for PathName.requirements.RequirementName.Value
         // If not, use PathName.requirements.RequirementName (without the Value).
-        String result = (this.getConfig().get(pathName + "." + keyType + "." + reqName + ".value") != null)
+
+        return (this.getConfig().get(pathName + "." + keyType + "." + reqName + ".value") != null)
                 ? this.getConfig().get(pathName + "." + keyType + "." + reqName + ".value").toString()
                 : this.getConfig().getString(pathName + "." + keyType + "." + reqName);
-
-        return result;
     }
 
     /**
@@ -238,17 +191,19 @@ public class PathsConfig {
      * @param resName  Name of the result
      * @return the value string or null if it doesn't exist.
      */
-    public String getResultOfRequirement(final String pathName, final String reqName, final String resName, boolean isPreRequisite) {
+    public String getResultOfRequirement(final String pathName, final String reqName, final String resName, boolean
+            isPreRequisite) {
 
         String keyType = (isPreRequisite ? "prerequisites" : "requirements");
 
         // Check if there is a value for PathName.requirements.RequirementName.results.ResultName.Value
         // If not, use PathName.requirements.RequirementName.results.ResultName (without the Value).
-        String result = (this.getConfig().get(pathName + "." + keyType + "." + reqName + ".results." + resName + ".value") != null)
-                ? this.getConfig().get(pathName + "." + keyType + "." + reqName + ".results." + resName + ".value").toString()
-                : this.getConfig().getString(pathName + "." + keyType + "." + reqName + ".results." + resName);
 
-        return result;
+        return (this.getConfig().get(pathName + "." + keyType + "." + reqName + ".results." + resName + "" +
+                ".value") != null)
+                ? this.getConfig().get(pathName + "." + keyType + "." + reqName + ".results." + resName + ".value")
+                .toString()
+                : this.getConfig().getString(pathName + "." + keyType + "." + reqName + ".results." + resName);
     }
 
     /**
@@ -258,7 +213,7 @@ public class PathsConfig {
      * @return a list of names as results.
      */
     public List<String> getResults(String pathName) {
-        return new ArrayList<String>(getConfig().getConfigurationSection(pathName + ".results").getKeys(false));
+        return new ArrayList<>(getConfig().getConfigurationSection(pathName + ".results").getKeys(false));
     }
 
     /**
@@ -269,12 +224,12 @@ public class PathsConfig {
      * @return a list of names that correspond with results or an empty list.
      */
     public List<String> getResultsOfRequirement(final String pathName, final String reqName, boolean isPreRequisite) {
-        Set<String> results = new HashSet<String>();
-
         String keyType = (isPreRequisite ? "prerequisites" : "requirements");
 
-        results = (getConfig().getConfigurationSection(pathName + "." + keyType + "." + reqName + ".results") != null)
-                ? getConfig().getConfigurationSection(pathName + "." + keyType + "." + reqName + ".results").getKeys(false)
+        Set<String> results = (getConfig().getConfigurationSection(pathName + "." + keyType + "." + reqName + "" +
+                ".results") != null)
+                ? getConfig().getConfigurationSection(pathName + "." + keyType + "." + reqName + ".results").getKeys
+                (false)
                 : new HashSet<String>();
 
         return Lists.newArrayList(results);
@@ -305,11 +260,9 @@ public class PathsConfig {
     public boolean isOptionalRequirement(final String pathName, final String reqName, boolean isPreRequisite) {
         String keyType = (isPreRequisite ? "prerequisites" : "requirements");
 
-        final boolean optional = getConfig().getBoolean(pathName + "." + keyType + "." + reqName + ".options.optional",
-                plugin.getDefaultBehaviorConfig().getDefaultBooleanBehaviorOfOption(DefaultBehaviorOption
+        return getConfig().getBoolean(pathName + "." + keyType + "." + reqName + ".options.optional",
+                this.getPlugin().getDefaultBehaviorConfig().getDefaultBooleanBehaviorOfOption(DefaultBehaviorOption
                         .IS_OPTIONAL_REQUIREMENT));
-
-        return optional;
     }
 
     /**
@@ -326,13 +279,6 @@ public class PathsConfig {
     }
 
     /**
-     * Load the Paths.yml file.
-     */
-    public void loadConfig() {
-
-    }
-
-    /**
      * Get whether Autorank should auto complete for a certain requirement in a
      * path. <br>
      * If auto completion is turned on for a requirement, Autorank will mark it
@@ -344,13 +290,11 @@ public class PathsConfig {
      * @return true if auto completion is turned on, false otherwise.
      */
     public boolean useAutoCompletion(final String pathName, final String reqName, boolean isPreRequisite) {
-        final boolean optional = isOptionalRequirement(pathName, reqName, isPreRequisite);
-
         String keyType = (isPreRequisite ? "prerequisites" : "requirements");
 
         // If the option is not defined, use default value of auto complete.
         if (this.getConfig().get(pathName + "." + keyType + "." + reqName + ".options.auto complete") == null) {
-            return plugin.getDefaultBehaviorConfig().getDefaultBooleanBehaviorOfOption(DefaultBehaviorOption
+            return this.getPlugin().getDefaultBehaviorConfig().getDefaultBooleanBehaviorOfOption(DefaultBehaviorOption
                     .AUTO_COMPLETE_REQUIREMENT);
         } else {
             // Else, return defined value
@@ -365,9 +309,7 @@ public class PathsConfig {
      * @return a list of result names that should be used performed
      */
     public ArrayList<String> getResultsUponChoosing(String pathName) {
-        Set<String> results = new HashSet<String>();
-
-        results = (getConfig().getConfigurationSection(pathName + ".upon choosing") != null)
+        Set<String> results = (getConfig().getConfigurationSection(pathName + ".upon choosing") != null)
                 ? getConfig().getConfigurationSection(pathName + ".upon choosing").getKeys(false)
                 : new HashSet<String>();
 
@@ -399,30 +341,35 @@ public class PathsConfig {
      */
     public boolean shouldAutoChoosePath(String pathName) {
         return this.getConfig().getBoolean(pathName + ".options.auto choose",
-                plugin.getDefaultBehaviorConfig().getDefaultBooleanBehaviorOfOption(DefaultBehaviorOption
+                this.getPlugin().getDefaultBehaviorConfig().getDefaultBooleanBehaviorOfOption(DefaultBehaviorOption
                         .AUTO_CHOOSE_PATH));
     }
 
     /**
      * Get the priority of a given path. The priority of a path is used to determine which path Autorank
-     * should automatically assign to a player. The priority is a positive integer (unbounded). By default, all paths have a priority of 1.
+     * should automatically assign to a player. The priority is a positive integer (unbounded). By default, all paths
+     * have a priority of 1.
      *
      * @param pathName Name of the path
      * @return a positive integer representing the priority of the path. By default the priority is 1.
      */
     public int getPriorityOfPath(String pathName) {
         return this.getConfig().getInt(pathName + ".options.priority",
-                plugin.getDefaultBehaviorConfig().getDefaultIntegerBehaviorOfOption(DefaultBehaviorOption.PRIORITY_PATH));
+                this.getPlugin().getDefaultBehaviorConfig().getDefaultIntegerBehaviorOfOption(DefaultBehaviorOption
+                        .PRIORITY_PATH));
     }
 
     /**
-     * Check whether Autorank should show the given path in the list of possible paths based on whether a player meets the prerequisites of the path.
+     * Check whether Autorank should show the given path in the list of possible paths based on whether a player
+     * meets the prerequisites of the path.
      *
      * @param pathName Name of the path
-     * @return true if Autorank should only show the given path if the player meets the path's prerequisites, false otherwise.
+     * @return true if Autorank should only show the given path if the player meets the path's prerequisites, false
+     * otherwise.
      */
     public boolean showBasedOnPrerequisites(String pathName) {
-        return this.getConfig().getBoolean(pathName + ".options.show based on prerequisites", plugin
-                .getDefaultBehaviorConfig().getDefaultBooleanBehaviorOfOption(DefaultBehaviorOption.SHOW_PATH_BASED_ON_PREREQUISITES));
+        return this.getConfig().getBoolean(pathName + ".options.show based on prerequisites", this.getPlugin()
+                .getDefaultBehaviorConfig().getDefaultBooleanBehaviorOfOption(DefaultBehaviorOption
+                        .SHOW_PATH_BASED_ON_PREREQUISITES));
     }
 }

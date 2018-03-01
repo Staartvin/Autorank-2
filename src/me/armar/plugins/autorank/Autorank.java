@@ -148,11 +148,11 @@ public class Autorank extends JavaPlugin {
         setDefaultBehaviorConfig(new DefaultBehaviorConfig((this)));
 
         // Create new configs
-        this.getDefaultBehaviorConfig().createNewFile();
-        this.getPathsConfig().createNewFile();
-        this.getSettingsConfig().createNewFile();
-        this.getInternalPropertiesConfig().loadFile();
-        this.getPlayerDataConfig().createNewFile();
+        this.getDefaultBehaviorConfig().loadConfig();
+        this.getPathsConfig().loadConfig();
+        this.getSettingsConfig().loadConfig();
+        this.getInternalPropertiesConfig().loadConfig();
+        this.getPlayerDataConfig().loadConfig();
 
         // ------------- Initialize managers -------------
 

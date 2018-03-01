@@ -2,7 +2,6 @@ package me.armar.plugins.autorank.config;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.util.AutorankTools;
-import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.List;
 import java.util.UUID;
@@ -16,69 +15,24 @@ import java.util.UUID;
  *
  * @author Staartvin
  */
-public class PlayerDataConfig {
+public class PlayerDataConfig extends AbstractConfig {
 
-    private final Autorank plugin;
-
-    private SimpleYamlConfiguration config;
-
-    private String fileName = "PlayerData.yml";
+    private String fileName = "/playerdata/PlayerData.yml";
 
     private boolean convertingData = false;
 
     public PlayerDataConfig(final Autorank instance) {
-        this.plugin = instance;
+        setPlugin(instance);
+        setFileName(fileName);
 
         // Start requirement saver task
         // Run save task every 2 minutes
-        plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new Runnable() {
+        this.getPlugin().getServer().getScheduler().runTaskTimerAsynchronously(this.getPlugin(), new Runnable() {
             @Override
             public void run() {
                 saveConfig();
             }
         }, AutorankTools.TICKS_PER_MINUTE, AutorankTools.TICKS_PER_MINUTE * 2);
-    }
-
-    /**
-     * Create a new PlayerData.yml file.
-     */
-    public void createNewFile() {
-        config = new SimpleYamlConfiguration(plugin, "/playerdata/" + fileName, fileName);
-
-        plugin.getLogger().info("PlayerData file loaded (" + fileName + ")");
-    }
-
-    /**
-     * Get the PlayerData.yml file.
-     *
-     * @return the PlayerData.yml
-     */
-    public FileConfiguration getConfig() {
-        if (config != null) {
-            return config;
-        }
-
-        return null;
-    }
-
-    /**
-     * Reload the PlayerData.yml file.
-     */
-    public void reloadConfig() {
-        if (config != null) {
-            config.reloadFile();
-        }
-    }
-
-    /**
-     * Save the PlayerData.yml file.
-     */
-    public void saveConfig() {
-        if (config == null) {
-            return;
-        }
-
-        config.saveFile();
     }
 
     /**
@@ -105,7 +59,7 @@ public class PlayerDataConfig {
      * @param requirements Requirements that the player completed.
      */
     public void setCompletedRequirements(final UUID uuid, final List<Integer> requirements) {
-        config.set(uuid.toString() + ".completed requirements", requirements);
+        this.getConfig().set(uuid.toString() + ".completed requirements", requirements);
     }
 
     /**
@@ -116,7 +70,7 @@ public class PlayerDataConfig {
      * @return a list of requirements a player completed.
      */
     public List<Integer> getCompletedRequirements(final UUID uuid) {
-        return config.getIntegerList(uuid.toString() + ".completed requirements");
+        return this.getConfig().getIntegerList(uuid.toString() + ".completed requirements");
     }
 
     /**
@@ -157,7 +111,7 @@ public class PlayerDataConfig {
      * @param prerequisites Prerequisites that the player completed.
      */
     public void setCompletedPrerequisites(final UUID uuid, final List<Integer> prerequisites) {
-        config.set(uuid.toString() + ".completed prerequisites", prerequisites);
+        this.getConfig().set(uuid.toString() + ".completed prerequisites", prerequisites);
     }
 
     /**
@@ -168,7 +122,7 @@ public class PlayerDataConfig {
      * @return a list of prerequisites a player completed.
      */
     public List<Integer> getCompletedPrerequisites(final UUID uuid) {
-        return config.getIntegerList(uuid.toString() + ".completed prerequisites");
+        return this.getConfig().getIntegerList(uuid.toString() + ".completed prerequisites");
     }
 
     /**
@@ -215,15 +169,15 @@ public class PlayerDataConfig {
 
         convertingData = true;
 
-        plugin.getLogger().info("Starting to convert playerdata.yml");
+        this.getPlugin().getLogger().info("Starting to convert playerdata.yml");
 
         // Run async to prevent problems.
-        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+        this.getPlugin().getServer().getScheduler().runTaskAsynchronously(this.getPlugin(), new Runnable() {
 
             @Override
             public void run() {
                 // Backup beforehand
-                plugin.getBackupManager().backupFile("/playerdata/playerdata.yml", null);
+                getPlugin().getBackupManager().backupFile("/playerdata/playerdata.yml", null);
 
                 for (final String name : getConfig().getKeys(false)) {
 
@@ -231,23 +185,23 @@ public class PlayerDataConfig {
                     if (name.contains("-"))
                         continue;
 
-                    final UUID uuid = plugin.getUUIDStorage().getStoredUUID(name);
+                    final UUID uuid = getPlugin().getUUIDStorage().getStoredUUID(name);
 
                     if (uuid == null)
                         continue;
 
-                    final List<Integer> progress = config.getIntegerList(name + ".progress");
-                    final String lastKnownGroup = config.getString(name + ".last group");
+                    final List<Integer> progress = getConfig().getIntegerList(name + ".progress");
+                    final String lastKnownGroup = getConfig().getString(name + ".last group");
 
                     // Remove name
-                    config.set(name, null);
+                    getConfig().set(name, null);
 
                     // Replace name with UUID
-                    config.set(uuid.toString() + ".progress", progress);
-                    config.set(uuid.toString() + ".last group", lastKnownGroup);
+                    getConfig().set(uuid.toString() + ".progress", progress);
+                    getConfig().set(uuid.toString() + ".last group", lastKnownGroup);
                 }
 
-                plugin.getLogger().info("Converted playerdata.yml to UUID format");
+                getPlugin().getLogger().info("Converted playerdata.yml to UUID format");
             }
         });
     }
@@ -260,7 +214,7 @@ public class PlayerDataConfig {
      * not choose a path (yet).
      */
     public String getChosenPath(final UUID uuid) {
-        return config.getString(uuid.toString() + ".chosen path", "unknown");
+        return this.getConfig().getString(uuid.toString() + ".chosen path", "unknown");
     }
 
     /**
@@ -270,9 +224,8 @@ public class PlayerDataConfig {
      * @return a list of path names that the given player completed.
      */
     public List<String> getCompletedPaths(final UUID uuid) {
-        final List<String> completed = config.getStringList(uuid.toString() + ".completed paths");
 
-        return completed;
+        return this.getConfig().getStringList(uuid.toString() + ".completed paths");
     }
 
     /**
@@ -286,7 +239,7 @@ public class PlayerDataConfig {
     public boolean hasCompletedPath(final UUID uuid, final String pathName) {
         // If player can rank up forever on the same rank, we will always return
         // false.
-        if (plugin.getPathsConfig().allowInfinitePathing(pathName)) {
+        if (this.getPlugin().getPathsConfig().allowInfinitePathing(pathName)) {
             return false;
         }
 
@@ -301,7 +254,7 @@ public class PlayerDataConfig {
      * leaderboard. False otherwise.
      */
     public boolean hasLeaderboardExemption(final UUID uuid) {
-        return config.getBoolean(uuid.toString() + ".exempt leaderboard", false);
+        return this.getConfig().getBoolean(uuid.toString() + ".exempt leaderboard", false);
     }
 
     /**
@@ -311,7 +264,7 @@ public class PlayerDataConfig {
      * @param value Value to set the exemption status to.
      */
     public void hasLeaderboardExemption(final UUID uuid, final boolean value) {
-        config.set(uuid.toString() + ".exempt leaderboard", value);
+        this.getConfig().set(uuid.toString() + ".exempt leaderboard", value);
     }
 
     /**
@@ -357,7 +310,7 @@ public class PlayerDataConfig {
      * @return a list of path names that the player started
      */
     public List<String> getStartedPaths(UUID uuid) {
-        return config.getStringList(uuid + ".started paths");
+        return this.getConfig().getStringList(uuid + ".started paths");
     }
 
     /**
@@ -367,7 +320,7 @@ public class PlayerDataConfig {
      * @param pathNames The paths the player started
      */
     public void setStartedPaths(UUID uuid, List<String> pathNames) {
-        config.set(uuid + ".started paths", pathNames);
+        this.getConfig().set(uuid + ".started paths", pathNames);
     }
 
     /**
@@ -388,7 +341,7 @@ public class PlayerDataConfig {
      * @param path Name of path
      */
     public void setChosenPath(final UUID uuid, final String path) {
-        config.set(uuid.toString() + ".chosen path", path);
+        this.getConfig().set(uuid.toString() + ".chosen path", path);
     }
 
     /**
@@ -398,6 +351,7 @@ public class PlayerDataConfig {
      * @param completedPaths Paths that the player has completed
      */
     public void setCompletedPaths(final UUID uuid, final List<String> completedPaths) {
-        config.set(uuid.toString() + ".completed paths", completedPaths);
+        this.getConfig().set(uuid.toString() + ".completed paths", completedPaths);
     }
+
 }
