@@ -1,5 +1,7 @@
 package me.armar.plugins.autorank.commands.manager;
 
+import me.armar.plugins.autorank.language.Lang;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -53,5 +55,22 @@ public abstract class AutorankCommand implements TabExecutor {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         return null;
+    }
+
+    /**
+     * Get whether the given sender has the given permission. <br>
+     * Will also send a 'you don't have this permission' message if the sender
+     * does not have the given permission.
+     *
+     * @param permission Permission to check
+     * @param sender     Sender to check
+     * @return true if this sender has the given permission, false otherwise.
+     */
+    public boolean hasPermission(String permission, CommandSender sender) {
+        if (!sender.hasPermission(permission)) {
+            sender.sendMessage(ChatColor.RED + Lang.NO_PERMISSION.getConfigValue(permission));
+            return false;
+        }
+        return true;
     }
 }
