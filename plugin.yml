@@ -117,4 +117,7 @@ permissions:
     autorank.convert.advancedconfig:
         description: Allows a player to convert data from AdvancedConfig to Paths
         default: op
+    autorank.backup.data:
+        description: Allows a player to backup data files
+        default: op
     
