@@ -8,6 +8,9 @@ import org.bukkit.ChatColor;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * This class is used to backup several data files of Autorank.
@@ -16,6 +19,7 @@ import java.io.IOException;
  */
 public class BackupManager {
 
+    private final static DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
     private final BackupDataManager backupDataManager;
     private final Autorank plugin;
 
@@ -39,11 +43,13 @@ public class BackupManager {
 
         File copyFile = null;
 
+        String dateFormatForFiles = dateFormat.format(new Date());
+
         if (storePath == null) {
             copyFile = new File(
-                    folderPath + sourceFileName.replace(".yml", "") + "-backup-" + System.currentTimeMillis() + ".yml");
+                    folderPath + sourceFileName.replace(".yml", "") + "-backup-" + dateFormatForFiles + ".yml");
         } else {
-            copyFile = new File(storePath.replace(".yml", "") + "-backup-" + System.currentTimeMillis() + ".yml");
+            copyFile = new File(storePath.replace(".yml", "") + "-backup-" + dateFormatForFiles + ".yml");
         }
 
         // Create folder if it doesn't exist.
@@ -60,6 +66,42 @@ public class BackupManager {
     }
 
     /**
+     * Backup data files of either playerdata or regular time data.
+     * It will notify the backup manager that it does not have to backup the files again within 24 hours.
+     * @param dataType Type of data to backup (data or playerdata).
+     */
+    public void backupDataFolders(String dataType) {
+
+        if (dataType.equalsIgnoreCase("data")) {
+            plugin.debugMessage(ChatColor.GREEN + "Making a backup of all data files!");
+
+            // For every type of time data file
+            for (TimeType type : TimeType.values()) {
+
+                // Get the path to the file and back it up!
+                String path = FlatFileManager.dataTypePaths.get(type);
+
+                plugin.getBackupManager().backupFile(path, plugin.getDataFolder().getAbsolutePath()
+                        + File.separator + "backups" + File.separator + path.replace("/data/", ""));
+            }
+
+            // Update latest backup time so backup manager does not backup again within 24 hours.
+            backupDataManager.getConfig().set("data", System.currentTimeMillis());
+
+        } else if (dataType.equalsIgnoreCase("playerdata")) {
+            plugin.debugMessage(ChatColor.GREEN + "Making a backup of PlayerData file!");
+
+            // Before running, backup stuff.
+            plugin.getBackupManager().backupFile("/playerdata/PlayerData.yml",
+                    plugin.getDataFolder().getAbsolutePath() + File.separator + "backups" + File.separator
+                            + "PlayerData.yml");
+
+            // Update latest backup time so backup manager does not backup again within 24 hours.
+            backupDataManager.getConfig().set("playerdata", System.currentTimeMillis());
+        }
+    }
+
+    /**
      * Start the internal backup system of Autorank. This will make a backup of
      * each data file every 24 hours.
      */
@@ -70,37 +112,25 @@ public class BackupManager {
             public void run() {
 
                 // Older than a day
-                if ((System.currentTimeMillis() - backupDataManager.getLatestBackup("data")) > 86400000) {
-                    plugin.debugMessage(ChatColor.RED + "Making a backup of all data files!");
-
-                    for (TimeType type : TimeType.values()) {
-                        String path = FlatFileManager.dataTypePaths.get(type);
-
-                        plugin.getBackupManager().backupFile(path, plugin.getDataFolder().getAbsolutePath()
-                                + File.separator + "backups" + File.separator + path.replace("/data/", ""));
-                    }
-
-                    // Update latest backup time
-                    backupDataManager.getConfig().set("data", System.currentTimeMillis());
+                if ((System.currentTimeMillis() - backupDataManager.getLatestBackup("data")) > 1000 * 60 * 60 * 24
+                    /* One day (in ms)*/) {
+                    backupDataFolders("data");
+                } else {
+                    plugin.debugMessage("Data files did not have to be backed up yet.");
                 }
 
                 // Older than a day
-                if ((System.currentTimeMillis() - backupDataManager.getLatestBackup("playerdata")) > 86400000) {
-                    plugin.debugMessage(ChatColor.RED + "Making a backup of PlayerData file!");
-
-                    // Before running, backup stuff.
-                    plugin.getBackupManager().backupFile("/playerdata/PlayerData.yml",
-                            plugin.getDataFolder().getAbsolutePath() + File.separator + "backups" + File.separator
-                                    + "PlayerData.yml");
-
-                    // Update latest backup time
-                    backupDataManager.getConfig().set("playerdata", System.currentTimeMillis());
+                if ((System.currentTimeMillis() - backupDataManager.getLatestBackup("playerdata")) > 1000 * 60 * 60 * 24
+                    /* One day (in ms)*/) {
+                    backupDataFolders("playerdata");
+                } else {
+                    plugin.debugMessage("Playerdata files did not have to be backed up yet.");
                 }
 
                 // Save config
                 backupDataManager.saveConfig();
             }
-        }, 0, 1728000);
+        }, 0, 20 * 60 * 60 * 24 /* One day (in ticks) */);
     }
 
 }
