@@ -70,6 +70,7 @@ public class UpdatePlaytime implements Runnable {
 
         // Don't add extra time to the player when he is excluded from time updates.
         if (player.hasPermission(AutorankPermission.EXCLUDE_FROM_TIME_UPDATES)) {
+            plugin.debugMessage("Player " + player.getName() + " is excluded from time updates by given permissions.");
             return;
         }
 
@@ -77,6 +78,7 @@ public class UpdatePlaytime implements Runnable {
 
         // Check to see if player is afk
         if (depManager.isAFK(player)) {
+            plugin.debugMessage("Player " + player.getName() + " is AFK and so we don't add time.");
             return;
         }
 
