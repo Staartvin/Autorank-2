@@ -213,8 +213,13 @@ public class Autorank extends JavaPlugin {
         // Set debugger
         setDebugger(new Debugger(this));
 
-        // Load uuids - ready for new ones
-        getUUIDStorage().createNewFiles();
+        this.getServer().getScheduler().runTaskAsynchronously(this, new Runnable() {
+            @Override
+            public void run() {
+                // Load uuids - ready for new ones
+                getUUIDStorage().createNewFiles();
+            }
+        });
 
         // Load data converter
         setDataConverter(new DataConverter(this));
