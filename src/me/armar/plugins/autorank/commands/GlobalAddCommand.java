@@ -25,7 +25,7 @@ public class GlobalAddCommand extends AutorankCommand {
     @Override
     public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
-        if (!plugin.getCommandsManager().hasPermission(AutorankPermission.ADD_GLOBAL_TIME, sender)) {
+        if (!this.hasPermission(AutorankPermission.ADD_GLOBAL_TIME, sender)) {
             return true;
         }
 

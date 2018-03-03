@@ -30,7 +30,7 @@ public class ConvertCommand extends AutorankCommand {
 
         if (targetFile.equalsIgnoreCase("playerdata")) {
 
-            if (!plugin.getCommandsManager().hasPermission(AutorankPermission.CONVERT_PLAYER_DATA, sender)) {
+            if (!this.hasPermission(AutorankPermission.CONVERT_PLAYER_DATA, sender)) {
                 return true;
             }
 
@@ -40,14 +40,14 @@ public class ConvertCommand extends AutorankCommand {
             sender.sendMessage(ChatColor.RED + "Converting playerdata.yml to use new UUID format.");
         } else if (targetFile.equalsIgnoreCase("data") || targetFile.equalsIgnoreCase("times")) {
 
-            if (!plugin.getCommandsManager().hasPermission(AutorankPermission.CONVERT_TIME_DATA, sender)) {
+            if (!this.hasPermission(AutorankPermission.CONVERT_TIME_DATA, sender)) {
                 return true;
             }
 
             sender.sendMessage(ChatColor.RED + "This operation is not supported anymore!");
         } else if (targetFile.equalsIgnoreCase("simpleconfig")) {
 
-            if (!plugin.getCommandsManager().hasPermission(AutorankPermission.CONVERT_SIMPLE_CONFIG, sender)) {
+            if (!this.hasPermission(AutorankPermission.CONVERT_SIMPLE_CONFIG, sender)) {
                 return true;
             }
 
@@ -59,7 +59,7 @@ public class ConvertCommand extends AutorankCommand {
             }
         } else if (targetFile.equalsIgnoreCase("advancedconfig")) {
 
-            if (!plugin.getCommandsManager().hasPermission(AutorankPermission.CONVERT_ADVANCED_CONFIG, sender)) {
+            if (!this.hasPermission(AutorankPermission.CONVERT_ADVANCED_CONFIG, sender)) {
                 return true;
             }
 

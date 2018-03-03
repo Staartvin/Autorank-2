@@ -22,7 +22,7 @@ public class ImportCommand extends AutorankCommand {
     @Override
     public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
-        if (!plugin.getCommandsManager().hasPermission(AutorankPermission.IMPORT_DATA, sender)) {
+        if (!this.hasPermission(AutorankPermission.IMPORT_DATA, sender)) {
             return true;
         }
 

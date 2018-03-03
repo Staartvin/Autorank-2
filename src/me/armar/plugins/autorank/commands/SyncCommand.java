@@ -26,7 +26,7 @@ public class SyncCommand extends AutorankCommand {
     @Override
     public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
-        if (!plugin.getCommandsManager().hasPermission(AutorankPermission.SYNC_MYSQL_TABLE, sender))
+        if (!this.hasPermission(AutorankPermission.SYNC_MYSQL_TABLE, sender))
             return true;
 
         if (args.length > 1 && args[1].equalsIgnoreCase("stats")) {

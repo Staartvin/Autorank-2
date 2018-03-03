@@ -23,7 +23,7 @@ public class LeaderboardCommand extends AutorankCommand {
     @Override
     public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
-        if (!plugin.getCommandsManager().hasPermission(AutorankPermission.VIEW_LEADERBOARD, sender)) {
+        if (!this.hasPermission(AutorankPermission.VIEW_LEADERBOARD, sender)) {
             return true;
         }
 

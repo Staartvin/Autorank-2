@@ -24,7 +24,7 @@ public class ArchiveCommand extends AutorankCommand {
     @Override
     public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
-        if (!plugin.getCommandsManager().hasPermission(AutorankPermission.ARCHIVE_PLAYERS, sender)) {
+        if (!this.hasPermission(AutorankPermission.ARCHIVE_PLAYERS, sender)) {
             return true;
         }
 

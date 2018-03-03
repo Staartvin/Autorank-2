@@ -25,7 +25,7 @@ public class AddCommand extends AutorankCommand {
     @Override
     public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
-        if (!plugin.getCommandsManager().hasPermission(AutorankPermission.ADD_LOCAL_TIME, sender)) {
+        if (!this.hasPermission(AutorankPermission.ADD_LOCAL_TIME, sender)) {
             return true;
         }
 

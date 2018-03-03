@@ -45,7 +45,7 @@ public class TrackCommand extends AutorankCommand {
          * ); return true; }
          */
 
-        if (!plugin.getCommandsManager().hasPermission(AutorankPermission.TRACK_REQUIREMENT, sender))
+        if (!this.hasPermission(AutorankPermission.TRACK_REQUIREMENT, sender))
             return true;
 
         final Player player = (Player) sender;

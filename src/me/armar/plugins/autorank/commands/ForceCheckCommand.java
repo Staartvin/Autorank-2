@@ -24,7 +24,7 @@ public class ForceCheckCommand extends AutorankCommand {
     @Override
     public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
-        if (!plugin.getCommandsManager().hasPermission(AutorankPermission.FORCE_CHECK, sender))
+        if (!this.hasPermission(AutorankPermission.FORCE_CHECK, sender))
             return true;
 
         if (args.length != 2) {

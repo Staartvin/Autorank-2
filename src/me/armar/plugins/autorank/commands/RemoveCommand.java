@@ -26,7 +26,7 @@ public class RemoveCommand extends AutorankCommand {
     @Override
     public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
-        if (!plugin.getCommandsManager().hasPermission(AutorankPermission.REMOVE_LOCAL_TIME, sender)) {
+        if (!this.hasPermission(AutorankPermission.REMOVE_LOCAL_TIME, sender)) {
             return true;
         }
 

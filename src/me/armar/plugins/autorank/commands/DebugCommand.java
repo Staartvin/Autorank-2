@@ -23,7 +23,7 @@ public class DebugCommand extends AutorankCommand {
 
         // This will create a 'debug.txt' file containing a lot of information
         // about the plugin
-        if (!plugin.getCommandsManager().hasPermission(AutorankPermission.DEBUG_FILE, sender)) {
+        if (!this.hasPermission(AutorankPermission.DEBUG_FILE, sender)) {
             return true;
         }
 

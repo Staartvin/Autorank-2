@@ -37,14 +37,14 @@ public class TimesCommand extends AutorankCommand {
         // A player specified a target
         if (args.length > 1) {
 
-            if (!plugin.getCommandsManager().hasPermission(AutorankPermission.CHECK_TIME_PLAYED_OTHERS, sender)) {
+            if (!this.hasPermission(AutorankPermission.CHECK_TIME_PLAYED_OTHERS, sender)) {
                 return true;
             }
 
             targetName = args[1];
 
         } else if (sender instanceof Player) {
-            if (!plugin.getCommandsManager().hasPermission(AutorankPermission.CHECK_TIME_PLAYED_SELF, sender)) {
+            if (!this.hasPermission(AutorankPermission.CHECK_TIME_PLAYED_SELF, sender)) {
                 return true;
             }
 

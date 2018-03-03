@@ -37,7 +37,7 @@ public class GlobalSetCommand extends AutorankCommand {
 
         if (value >= 0) {
 
-            if (!plugin.getCommandsManager().hasPermission(AutorankPermission.SET_GLOBAL_TIME,
+            if (!this.hasPermission(AutorankPermission.SET_GLOBAL_TIME,
                     sender)) {
                 return true;
             }

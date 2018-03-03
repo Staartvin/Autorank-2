@@ -35,7 +35,7 @@ public class GlobalCheckCommand extends AutorankCommand {
 
         if (args.length > 1) {
 
-            if (!plugin.getCommandsManager().hasPermission(AutorankPermission.CHECK_OTHERS, sender)) {
+            if (!this.hasPermission(AutorankPermission.CHECK_OTHERS, sender)) {
                 return true;
             }
 
@@ -104,7 +104,7 @@ public class GlobalCheckCommand extends AutorankCommand {
                 });
             }
         } else if (sender instanceof Player) {
-            if (!plugin.getCommandsManager().hasPermission(AutorankPermission.CHECK_GLOBAL, sender)) {
+            if (!this.hasPermission(AutorankPermission.CHECK_GLOBAL, sender)) {
                 return true;
             }
 

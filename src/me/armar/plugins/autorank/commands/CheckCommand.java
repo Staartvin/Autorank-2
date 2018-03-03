@@ -177,7 +177,7 @@ public class CheckCommand extends AutorankCommand {
         // This is a local check. It will not show you the database numbers
         if (args.length > 1) {
 
-            if (!plugin.getCommandsManager().hasPermission(AutorankPermission.CHECK_OTHERS,
+            if (!this.hasPermission(AutorankPermission.CHECK_OTHERS,
                     sender)) {
                 return true;
             }
@@ -208,7 +208,7 @@ public class CheckCommand extends AutorankCommand {
                 check(sender, player);
             }
         } else if (sender instanceof Player) {
-            if (!plugin.getCommandsManager().hasPermission(AutorankPermission.CHECK_SELF,
+            if (!this.hasPermission(AutorankPermission.CHECK_SELF,
                     sender)) {
                 return true;
             }
