@@ -60,9 +60,6 @@ public class UUIDStorage {
             loadConfig(suffix);
         }
 
-        // Convert old format to new UUID storage format
-        // convertNamesToUUIDs();
-
         plugin.debugMessage(ChatColor.RED + "Loaded stored uuids.");
     }
 
