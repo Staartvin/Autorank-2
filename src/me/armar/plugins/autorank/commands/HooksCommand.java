@@ -5,6 +5,7 @@ import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.hooks.DependencyManager.AutorankDependency;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
 import me.staartvin.plugins.pluginlibrary.Library;
+import me.staartvin.plugins.pluginlibrary.hooks.AutorankHook;
 import me.staartvin.plugins.pluginlibrary.hooks.LibraryHook;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -24,20 +25,19 @@ public class HooksCommand extends AutorankCommand {
     @Override
     public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
-        if (!plugin.getDependencyManager().getDependency(AutorankDependency.STATZ).isAvailable()) {
-            sender.sendMessage(ChatColor.RED + "Cannot show dependencies as Statz is not installed");
+        if (!plugin.getDependencyManager().getDependency(AutorankDependency.PLUGINLIBRARY).isAvailable()) {
+            sender.sendMessage(ChatColor.RED + "Cannot show dependencies as PluginLibrary is not installed");
             return true;
         }
 
         sender.sendMessage(ChatColor.GOLD + "Autorank Hooks:");
 
         for (final Library dep : Library.values()) {
-            // There is no AutorankDependency handler for Autorank
 
             final LibraryHook handler = plugin.getDependencyManager()
                     .getLibraryHook(dep);
 
-            if (handler.isAvailable()) {
+            if (handler.isAvailable() && !(handler instanceof AutorankHook)) {
                 sender.sendMessage(org.bukkit.ChatColor.GRAY + "- " + org.bukkit.ChatColor.GREEN + dep.getPluginName());
             }
         }
@@ -47,7 +47,7 @@ public class HooksCommand extends AutorankCommand {
 
     @Override
     public String getDescription() {
-        return "Shows a list of hookable plugins for Autorank";
+        return "Shows a list of plugins Autorank is hooked into.";
     }
 
     @Override
