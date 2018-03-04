@@ -34,7 +34,7 @@ public class MoneyAbstractResult extends AbstractResult {
         String currencyName = "";
 
         // We need Vault to check economy variables.
-        if (this.getAutorank().getDependencyManager().isAvailable(Library.VAULT)) {
+        if (this.getAutorank().getDependencyManager().isAvailable(Library.VAULT) && VaultHook.getEconomy() != null) {
             currencyName = VaultHook.getEconomy().currencyNamePlural().trim();
         }
 
