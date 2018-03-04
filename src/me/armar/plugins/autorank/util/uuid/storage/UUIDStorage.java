@@ -97,6 +97,10 @@ public class UUIDStorage {
         for (final String suffix : fileSuffixes) {
             final FileConfiguration config = getConfig(suffix);
 
+            if (config == null) {
+                return null;
+            }
+
             for (final String fPlayerName : config.getKeys(false)) {
                 final String fuuid = config.getString(fPlayerName + ".uuid");
 
@@ -115,6 +119,10 @@ public class UUIDStorage {
 
     public String getCachedPlayerName(final UUID uuid, final String key) {
         final FileConfiguration config = configs.get(key);
+
+        if (config == null) {
+            return null;
+        }
 
         for (final String fPlayerName : config.getKeys(false)) {
             final String fuuid = config.getString(fPlayerName + ".uuid");
