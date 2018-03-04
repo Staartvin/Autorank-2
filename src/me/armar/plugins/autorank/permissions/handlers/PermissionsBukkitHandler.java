@@ -17,24 +17,16 @@ import java.util.List;
  * @author Staartvin This is a special permission handler that handles all work
  * from PermissionsBukkit
  */
-public class PermissionsBukkitHandler implements PermissionsHandler {
+public class PermissionsBukkitHandler extends PermissionsHandler {
 
     private PermissionsPlugin permissionsBukkit;
     private final Autorank plugin;
 
     public PermissionsBukkitHandler(final Autorank plugin) {
         this.plugin = plugin;
-        setupPermissionsBukkit();
+        this.setupPermissionsHandler();
     }
 
-    /**
-     * Add a player to group
-     *
-     * @param player Player to add
-     * @param world  On a specific world
-     * @param group  Group to add the player to
-     * @return true if done, false if failed
-     */
     public boolean addGroup(final Player player, final String world, final String group) {
         // PermissionsBukkit doesn't have a method to set the actual group.
         // Therefore we need to do it with commands...
@@ -45,17 +37,7 @@ public class PermissionsBukkitHandler implements PermissionsHandler {
         // There is no way to check if the command was successful.
     }
 
-    @Override
-    public boolean demotePlayer(final Player player, final String world, final String groupFrom, final String groupTo) {
-        return (addGroup(player, world, groupTo) && removeGroup(player, world, groupFrom));
-    }
 
-    /**
-     * Get all known groups
-     *
-     * @return an array of strings containing all setup groups of the
-     * permissions plugin.
-     */
     @Override
     public Collection<String> getGroups() {
         final List<Group> groups = permissionsBukkit.getAllGroups();
@@ -102,14 +84,6 @@ public class PermissionsBukkitHandler implements PermissionsHandler {
         return Collections.unmodifiableCollection(groupNames);
     }
 
-    /**
-     * Remove a player from a group
-     *
-     * @param player Player to remove
-     * @param world  On a specific world
-     * @param group  Group to remove the player from
-     * @return true if done, false if failed
-     */
     public boolean removeGroup(final Player player, final String world, final String group) {
         // PermissionsBukkit doesn't have a method to set the actual group.
         // Therefore we need to do it with commands...
@@ -125,7 +99,8 @@ public class PermissionsBukkitHandler implements PermissionsHandler {
         return (addGroup(player, world, newGroup) && removeGroup(player, world, oldGroup));
     }
 
-    private boolean setupPermissionsBukkit() {
+    @Override
+    public boolean setupPermissionsHandler() {
         final PluginManager pluginManager = plugin.getServer().getPluginManager();
         final Plugin permBukkit = pluginManager.getPlugin("PermissionsBukkit");
 

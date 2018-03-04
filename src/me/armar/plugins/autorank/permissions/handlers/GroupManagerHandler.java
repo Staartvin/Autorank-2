@@ -16,19 +16,14 @@ import java.util.*;
 /**
  * @author Staartvin This file handles all work done with GroupManager.
  */
-public class GroupManagerHandler implements PermissionsHandler {
+public class GroupManagerHandler extends PermissionsHandler {
 
     private GroupManager groupManager;
     private final Autorank plugin;
 
     public GroupManagerHandler(final Autorank plugin) {
         this.plugin = plugin;
-        setupGroupManager();
-    }
-
-    @Override
-    public boolean demotePlayer(final Player player, final String world, final String groupFrom, final String groupTo) {
-        return setGroup(player, groupTo, world);
+        this.setupPermissionsHandler();
     }
 
     public String getGroup(final Player player) {
@@ -131,13 +126,13 @@ public class GroupManagerHandler implements PermissionsHandler {
         return true;
     }
 
-    public boolean setupGroupManager() {
+    @Override
+    public boolean setupPermissionsHandler() {
         final PluginManager pluginManager = plugin.getServer().getPluginManager();
         final Plugin GMplugin = pluginManager.getPlugin("GroupManager");
 
         if (GMplugin != null && GMplugin.isEnabled()) {
             groupManager = (GroupManager) GMplugin;
-
         }
 
         return groupManager != null;

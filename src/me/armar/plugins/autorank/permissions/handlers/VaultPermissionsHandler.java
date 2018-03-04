@@ -5,13 +5,9 @@ import me.armar.plugins.autorank.permissions.PermissionsHandler;
 import me.staartvin.plugins.pluginlibrary.Library;
 import me.staartvin.plugins.pluginlibrary.hooks.LibraryHook;
 import me.staartvin.plugins.pluginlibrary.hooks.VaultHook;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Staartvin & DeathStampler (see replaceGroup())
@@ -19,7 +15,7 @@ import java.util.List;
  * VaultPermissionsHandler tackles all work that has to be done with
  * Vault. (Most of the permissions plugins are supported with Vault)
  */
-public class VaultPermissionsHandler implements PermissionsHandler {
+public class VaultPermissionsHandler extends PermissionsHandler {
 
     private final Autorank plugin;
 
@@ -30,6 +26,7 @@ public class VaultPermissionsHandler implements PermissionsHandler {
         }
 
         this.plugin = plugin;
+        this.setupPermissionsHandler();
     }
 
     /**
@@ -51,10 +48,9 @@ public class VaultPermissionsHandler implements PermissionsHandler {
         }
 
         return VaultHook.getPermissions().playerAddGroup(world, player, group);
-        // return permission.playerAddGroup(world, player.getName(), group);
     }
 
-    @Override
+
     public boolean demotePlayer(final Player player, String world, final String groupFrom, final String groupTo) {
 
         LibraryHook hook = plugin.getDependencyManager().getLibraryHook(Library.VAULT);
@@ -79,7 +75,7 @@ public class VaultPermissionsHandler implements PermissionsHandler {
             plugin.debugMessage("Group of " + player.getName() + " before removing: " + group);
         }
 
-        Collection<String> groupsAfterAdd = null;
+        Collection<String> groupsAfterAdd;
 
         final boolean worked1 = removeGroup(player, world, groupFrom);
 
@@ -119,13 +115,7 @@ public class VaultPermissionsHandler implements PermissionsHandler {
             return Collections.unmodifiableCollection(groups);
         }
 
-        if (VaultHook.getPermissions() == null) {
-            return Collections.unmodifiableCollection(groups);
-        }
-
-        for (String groupName : VaultHook.getPermissions().getGroups()) {
-            groups.add(groupName);
-        }
+        groups.addAll(Arrays.asList(VaultHook.getPermissions().getGroups()));
 
         return Collections.unmodifiableCollection(groups);
     }
@@ -153,19 +143,11 @@ public class VaultPermissionsHandler implements PermissionsHandler {
             return Collections.unmodifiableCollection(groups);
         }
 
-        if (VaultHook.getPermissions() == null) {
-            return Collections.unmodifiableCollection(groups);
-        }
-
-        final Autorank plugin = (Autorank) Bukkit.getPluginManager().getPlugin("Autorank");
-
         // Let admin choose.
         if (plugin.getConfigHandler().onlyUsePrimaryGroupVault()) {
             groups.add(VaultHook.getPermissions().getPrimaryGroup(player));
         } else {
-            for (String groupName : VaultHook.getPermissions().getPlayerGroups(player)) {
-                groups.add(groupName);
-            }
+            groups.addAll(Arrays.asList(VaultHook.getPermissions().getPlayerGroups(player)));
         }
 
         return Collections.unmodifiableCollection(groups);
@@ -185,17 +167,7 @@ public class VaultPermissionsHandler implements PermissionsHandler {
             return Collections.unmodifiableCollection(groups);
         }
 
-        if (VaultHook.getPermissions() == null) {
-            return Collections.unmodifiableCollection(groups);
-        }
-
-        if (VaultHook.getPermissions() == null) {
-            return Collections.unmodifiableCollection(groups);
-        }
-
-        for (String groupName : VaultHook.getPermissions().getPlayerGroups(world, player.getName())) {
-            groups.add(groupName);
-        }
+        groups.addAll(Arrays.asList(VaultHook.getPermissions().getPlayerGroups(world, player.getName())));
 
         return Collections.unmodifiableCollection(groups);
     }
@@ -214,10 +186,6 @@ public class VaultPermissionsHandler implements PermissionsHandler {
 
         if (hook == null || !hook.isAvailable())
             return false;
-
-        if (VaultHook.getPermissions() == null) {
-            return false;
-        }
 
         if (VaultHook.getPermissions() == null) {
             return false;
@@ -256,7 +224,7 @@ public class VaultPermissionsHandler implements PermissionsHandler {
             plugin.debugMessage("Group of " + player.getName() + " before adding: " + group);
         }
 
-        Collection<String> groupsAfterAdd = null;
+        Collection<String> groupsAfterAdd;
 
         final boolean worked1 = addGroup(player, world, newGroup);
 
@@ -312,5 +280,10 @@ public class VaultPermissionsHandler implements PermissionsHandler {
         }
 
         return worked1 && worked2;
+    }
+
+    @Override
+    public boolean setupPermissionsHandler() {
+        return plugin.getDependencyManager().getLibraryHook(Library.VAULT).isAvailable();
     }
 }

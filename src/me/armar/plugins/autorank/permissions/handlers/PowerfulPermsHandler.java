@@ -16,14 +16,14 @@ import java.util.Map.Entry;
  * @author Staartvin This is a special permission handler that handles all work
  * from PowerfulPerms
  */
-public class PowerfulPermsHandler implements PermissionsHandler {
+public class PowerfulPermsHandler extends PermissionsHandler {
 
     private final Autorank plugin;
     private PowerfulPermsPlugin powerfulPerms;
 
     public PowerfulPermsHandler(final Autorank plugin) {
         this.plugin = plugin;
-        setup();
+        this.setupPermissionsHandler();
     }
 
     /**
@@ -43,20 +43,6 @@ public class PowerfulPermsHandler implements PermissionsHandler {
         // There is no way to check if the command was successful.
     }
 
-    @Override
-    public boolean demotePlayer(final Player player, final String world, final String groupFrom, final String groupTo) {
-        return (addGroup(player, world,
-                groupTo)/*
-         * && removeGroup(player, world, groupFrom)
-         */);
-    }
-
-    /**
-     * Get all known groups
-     *
-     * @return an array of strings containing all setup groups of the
-     * permissions plugin.
-     */
     @Override
     public Collection<String> getGroups() {
         final PermissionManager permManager = powerfulPerms.getPermissionManager();
@@ -127,7 +113,8 @@ public class PowerfulPermsHandler implements PermissionsHandler {
          */);
     }
 
-    private boolean setup() {
+    @Override
+    public boolean setupPermissionsHandler() {
         final PluginManager pluginManager = plugin.getServer().getPluginManager();
         final Plugin permPlugin = pluginManager.getPlugin("PowerfulPerms");
 

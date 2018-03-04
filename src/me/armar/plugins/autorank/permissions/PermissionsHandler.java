@@ -9,19 +9,11 @@ import java.util.Collection;
  * plugin.
  *
  */
-public interface PermissionsHandler {
+public abstract class PermissionsHandler {
 
-    /**
-     * Sometimes replaceGroup does not work. You can then try to do it the
-     * reverse way, by demoting someone.
-     *
-     * @param player    Player to demote
-     * @param world     On which world should we demote him? (null if every world)
-     * @param groupFrom What is the group he's currently in
-     * @param groupTo   What is the group you want the player to demote to.
-     * @return true if properly demoted, false otherwise.
-     */
-    boolean demotePlayer(Player player, String world, String groupFrom, String groupTo);
+    public PermissionsHandler() {
+        this.setupPermissionsHandler();
+    }
 
     /**
      * Get all defined groups
@@ -29,14 +21,14 @@ public interface PermissionsHandler {
      * @return an array of all groups defined in the config(s) of the permission
      * plugin.
      */
-    Collection<String> getGroups();
+    public abstract Collection<String> getGroups();
 
     /**
      * Get the name of the permissions plugin.
      *
      * @return
      */
-    String getName();
+    public abstract String getName();
 
     /**
      * Get the permission groups of a player.
@@ -44,7 +36,7 @@ public interface PermissionsHandler {
      * @param player Player to use
      * @return a list of permission groups names
      */
-    Collection<String> getPlayerGroups(Player player);
+    public abstract Collection<String> getPlayerGroups(Player player);
 
     /**
      * Get the groups of the player in a world.
@@ -53,7 +45,7 @@ public interface PermissionsHandler {
      * @param world  World to get the world from
      * @return an array containing all groups that the player is in.
      */
-    Collection<String> getWorldGroups(Player player, String world);
+    public abstract Collection<String> getWorldGroups(Player player, String world);
 
     /**
      * Remove a group from a player and then add one to the player.
@@ -64,6 +56,13 @@ public interface PermissionsHandler {
      * @param addedGroup   Group to add
      * @return true if it worked, false otherwise.
      */
-    boolean replaceGroup(Player player, String world, String deletedGroup, String addedGroup);
+    public abstract boolean replaceGroup(Player player, String world, String deletedGroup, String addedGroup);
+
+    /**
+     * Set up the permissions handler so that it can be used to handle requests.
+     *
+     * @return true when the permissions handler was properly set up. False otherwise.
+     */
+    public abstract boolean setupPermissionsHandler();
 
 }
