@@ -53,6 +53,9 @@ public class UUIDStorage {
 
     public void createNewFiles() {
 
+        plugin.getLogger().info("Loading UUID data files...");
+        long startTime = System.currentTimeMillis();
+
         for (final String suffix : fileSuffixes) {
             plugin.debugMessage("Loading uuids_" + suffix + " ...");
 
@@ -60,7 +63,8 @@ public class UUIDStorage {
             loadConfig(suffix);
         }
 
-        plugin.debugMessage(ChatColor.RED + "Loaded stored uuids.");
+        plugin.getLogger().info("Loaded UUID data in " + (System.currentTimeMillis() - startTime) /
+                1000 + " seconds.");
     }
 
     public FileConfiguration findCorrectConfig(String playerName) {
