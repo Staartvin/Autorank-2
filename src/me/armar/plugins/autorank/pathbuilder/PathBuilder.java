@@ -4,8 +4,8 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.pathbuilder.builders.RequirementBuilder;
 import me.armar.plugins.autorank.pathbuilder.builders.ResultBuilder;
 import me.armar.plugins.autorank.pathbuilder.holders.RequirementsHolder;
-import me.armar.plugins.autorank.pathbuilder.requirement.Requirement;
-import me.armar.plugins.autorank.pathbuilder.result.Result;
+import me.armar.plugins.autorank.pathbuilder.requirement.AbstractRequirement;
+import me.armar.plugins.autorank.pathbuilder.result.AbstractResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,14 +39,15 @@ public class PathBuilder {
 
             // First initialize results
             for (String resultName : plugin.getPathsConfig().getResults(pathName)) {
-                Result result = ResultBuilder.createResult(pathName, resultName, plugin.getPathsConfig().getResultOfPath(pathName, resultName));
+                AbstractResult abstractResult = ResultBuilder.createResult(pathName, resultName, plugin
+                        .getPathsConfig().getResultOfPath(pathName, resultName));
 
-                if (result == null) {
+                if (abstractResult == null) {
                     continue;
                 }
 
-                // Add result to path
-                path.addResult(result);
+                // Add abstractResult to path
+                path.addResult(abstractResult);
             }
 
             // Now initialize requirements
@@ -60,7 +61,7 @@ public class PathBuilder {
 
                 // Find all options of this requirement
                 for (final String[] options : optionsList) {
-                    final Requirement requirement = RequirementBuilder.createRequirement(pathName, reqName, options, false);
+                    final AbstractRequirement requirement = RequirementBuilder.createRequirement(pathName, reqName, options, false);
 
                     if (requirement == null) {
                         continue;
@@ -89,7 +90,7 @@ public class PathBuilder {
 
                 // Find all options of this prerequisites
                 for (final String[] options : optionsList) {
-                    final Requirement requirement = RequirementBuilder.createRequirement(pathName, preReqName, options, true);
+                    final AbstractRequirement requirement = RequirementBuilder.createRequirement(pathName, preReqName, options, true);
 
                     if (requirement == null) {
                         continue;
@@ -108,28 +109,28 @@ public class PathBuilder {
 
             }
 
-            // Result for this path (upon choosing)
+            // AbstractResult for this path (upon choosing)
             final List<String> results = plugin.getPathsConfig().getResultsUponChoosing(pathName);
 
             // Create a new result List that will get all result when this
             // path is chosen
-            final List<Result> realResults = new ArrayList<>();
+            final List<AbstractResult> realAbstractResults = new ArrayList<>();
 
             // Get results of requirement
             for (final String resultType : results) {
 
-                Result result = ResultBuilder.createResult(pathName, resultType,
+                AbstractResult abstractResult = ResultBuilder.createResult(pathName, resultType,
                         plugin.getPathsConfig().getResultValueUponChoosing(pathName, resultType));
 
-                if (result == null) {
+                if (abstractResult == null) {
                     continue;
                 }
 
-                realResults.add(result);
+                realAbstractResults.add(abstractResult);
             }
 
             // Now set the result upon choosing for this path
-            path.setResultsUponChoosing(realResults);
+            path.setResultsUponChoosing(realAbstractResults);
 
             // Now add display name to this path.
             path.setDisplayName(plugin.getPathsConfig().getDisplayName(pathName));

@@ -3,8 +3,8 @@ package me.armar.plugins.autorank.pathbuilder.holders;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.api.events.RequirementCompleteEvent;
 import me.armar.plugins.autorank.language.Lang;
-import me.armar.plugins.autorank.pathbuilder.requirement.Requirement;
-import me.armar.plugins.autorank.pathbuilder.result.Result;
+import me.armar.plugins.autorank.pathbuilder.requirement.AbstractRequirement;
+import me.armar.plugins.autorank.pathbuilder.result.AbstractResult;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -32,7 +32,7 @@ public class RequirementsHolder {
 
     private final Autorank plugin;
 
-    private List<Requirement> requirements = new ArrayList<Requirement>();
+    private List<AbstractRequirement> requirements = new ArrayList<AbstractRequirement>();
 
     public RequirementsHolder(final Autorank plugin) {
         this.plugin = plugin;
@@ -41,23 +41,23 @@ public class RequirementsHolder {
     /**
      * Add requirement to this RequirementsHolder.
      *
-     * @param req Requirement to add
+     * @param req AbstractRequirement to add
      */
-    public void addRequirement(final Requirement req) {
+    public void addRequirement(final AbstractRequirement req) {
         requirements.add(req);
     }
 
     /**
      * Get the description of the requirements.
      * If this requirementsholder contains multiple requirements, the string will made up of the following:
-     * <Requirement 1 description> OR <Requirement 2 description> OR etc.
+     * <AbstractRequirement 1 description> OR <AbstractRequirement 2 description> OR etc.
      *
      * @return a string representing the description (or combined description) of the requirements.
      */
     public String getDescription() {
         final StringBuilder builder = new StringBuilder("");
 
-        final List<Requirement> reqs = this.getRequirements();
+        final List<AbstractRequirement> reqs = this.getRequirements();
         final int size = reqs.size();
 
         if (size == 0) {
@@ -69,7 +69,7 @@ public class RequirementsHolder {
         final String original = reqs.get(0).getDescription();
 
         for (int i = 0; i < size; i++) {
-            final Requirement r = reqs.get(i);
+            final AbstractRequirement r = reqs.get(i);
 
             String desc = r.getDescription();
 
@@ -91,7 +91,7 @@ public class RequirementsHolder {
                 }
 
                 // Remove the redundant part of the description string.
-                // Result is 'Kill 20 cows or 20 creepers'
+                // AbstractResult is 'Kill 20 cows or 20 creepers'
                 desc = desc.substring(difIndex);
 
                 if (i == (size - 1)) {
@@ -134,7 +134,7 @@ public class RequirementsHolder {
     public String getProgress(final Player player) {
         final StringBuilder builder = new StringBuilder("");
 
-        final List<Requirement> reqs = this.getRequirements();
+        final List<AbstractRequirement> reqs = this.getRequirements();
         final int size = reqs.size();
 
         if (size == 0) {
@@ -146,7 +146,7 @@ public class RequirementsHolder {
         final String original = reqs.get(0).getProgress(player);
 
         for (int i = 0; i < size; i++) {
-            final Requirement r = reqs.get(i);
+            final AbstractRequirement r = reqs.get(i);
 
             String progress = r.getProgress(player);
 
@@ -179,28 +179,32 @@ public class RequirementsHolder {
      */
     public int getReqID() {
         // All req ids are the same.
-        for (final Requirement r : this.getRequirements()) {
+        for (final AbstractRequirement r : this.getRequirements()) {
             return r.getId();
         }
 
         return -1;
     }
 
-    public List<Requirement> getRequirements() {
+    public List<AbstractRequirement> getRequirements() {
         return this.requirements;
     }
 
-    public List<Result> getResults() {
-        for (final Requirement r : this.getRequirements()) {
-            return r.getResults();
+    public void setRequirements(final List<AbstractRequirement> requirements) {
+        this.requirements = requirements;
+    }
+
+    public List<AbstractResult> getResults() {
+        for (final AbstractRequirement r : this.getRequirements()) {
+            return r.getAbstractResults();
         }
 
-        return new ArrayList<Result>();
+        return new ArrayList<AbstractResult>();
     }
 
     public boolean isOptional() {
         // If any requirement is optional, they are all optional
-        for (final Requirement r : this.getRequirements()) {
+        for (final AbstractRequirement r : this.getRequirements()) {
             if (r.isOptional())
                 return true;
         }
@@ -223,7 +227,7 @@ public class RequirementsHolder {
 
         UUID uuid = player.getUniqueId();
 
-        for (final Requirement r : this.getRequirements()) {
+        for (final AbstractRequirement r : this.getRequirements()) {
 
             final int reqID = r.getId();
 
@@ -284,12 +288,8 @@ public class RequirementsHolder {
         return false;
     }
 
-    public void setRequirements(final List<Requirement> requirements) {
-        this.requirements = requirements;
-    }
-
     public boolean useAutoCompletion() {
-        for (final Requirement r : this.getRequirements()) {
+        for (final AbstractRequirement r : this.getRequirements()) {
             if (r.useAutoCompletion())
                 return true;
         }
@@ -315,8 +315,8 @@ public class RequirementsHolder {
             return;
 
         // Apply result
-        for (final Result realResult : this.getResults()) {
-            realResult.applyResult(player);
+        for (final AbstractResult realAbstractResult : this.getResults()) {
+            realAbstractResult.applyResult(player);
         }
     }
 
@@ -326,7 +326,7 @@ public class RequirementsHolder {
      * @return
      */
     public boolean isPrerequisite() {
-        for (Requirement req : this.requirements) {
+        for (AbstractRequirement req : this.requirements) {
             if (req.isPreRequisite()) {
                 return true;
             }

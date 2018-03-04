@@ -2,7 +2,7 @@ package me.armar.plugins.autorank.pathbuilder;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.pathbuilder.holders.RequirementsHolder;
-import me.armar.plugins.autorank.pathbuilder.result.Result;
+import me.armar.plugins.autorank.pathbuilder.result.AbstractResult;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ import java.util.UUID;
 
 /**
  * Represents a path that a player can take, including all requirements and
- * results.
+ * abstractResults.
  * <p>
  * Date created: 14:23:30 5 aug. 2015
  *
@@ -32,10 +32,10 @@ public class Path {
     private List<RequirementsHolder> requirements = new ArrayList<RequirementsHolder>();
 
     // Results that are performed when all requirements are met.
-    private List<Result> results = new ArrayList<Result>();
+    private List<AbstractResult> abstractResults = new ArrayList<AbstractResult>();
 
     // Results that are performed when the path is assigned to the player.
-    private List<Result> resultsUponChoosing = new ArrayList<Result>();
+    private List<AbstractResult> resultsUponChoosing = new ArrayList<AbstractResult>();
 
     public Path(final Autorank plugin) {
         this.plugin = plugin;
@@ -64,7 +64,7 @@ public class Path {
     /**
      * Add a requirement to the path.
      *
-     * @param requirement Requirement to add.
+     * @param requirement AbstractRequirement to add.
      * @throws NullPointerException if requirement == null
      */
     public void addRequirement(final RequirementsHolder requirement) throws NullPointerException {
@@ -76,18 +76,18 @@ public class Path {
     }
 
     /**
-     * Add a result to the path.
+     * Add a abstractResult to the path.
      *
-     * @param result Result to add.
-     * @throws NullPointerException if result == null
+     * @param abstractResult AbstractResult to add.
+     * @throws NullPointerException if abstractResult == null
      */
-    public void addResult(Result result) throws NullPointerException {
+    public void addResult(AbstractResult abstractResult) throws NullPointerException {
 
-        if (result == null) {
-            throw new NullPointerException("Result is null");
+        if (abstractResult == null) {
+            throw new NullPointerException("AbstractResult is null");
         }
 
-        this.results.add(result);
+        this.abstractResults.add(abstractResult);
     }
 
     public boolean applyChange(final Player player) {
@@ -97,7 +97,7 @@ public class Path {
 
             final UUID uuid = plugin.getUUIDStorage().getStoredUUID(player.getName());
 
-            // Apply all 'main' results
+            // Apply all 'main' abstractResults
 
             // Get chosen path of player
             Path currentPath = plugin.getPathManager().getCurrentPath(uuid);
@@ -117,7 +117,7 @@ public class Path {
             // Remove path from started paths if it's completed.
             plugin.getPlayerDataConfig().removeStartedPath(uuid, currentPath.getInternalName());
 
-            for (final Result r : this.getResults()) {
+            for (final AbstractResult r : this.getAbstractResults()) {
                 if (r != null) {
                     if (!r.applyResult(player)) {
                         result = false;
@@ -125,7 +125,7 @@ public class Path {
                 }
             }
 
-            // After getting results, chosen path is reset.
+            // After getting abstractResults, chosen path is reset.
             plugin.getPlayerDataConfig().setChosenPath(uuid, null);
 
             // Reset progress
@@ -195,8 +195,8 @@ public class Path {
         return requirements;
     }
 
-    public List<Result> getResults() {
-        return results;
+    public List<AbstractResult> getAbstractResults() {
+        return abstractResults;
     }
 
     public boolean meetRequirements(final Player player) {
@@ -256,22 +256,8 @@ public class Path {
         return true;
     }
 
-    /**
-     * Perform the results upon choosing this path.
-     *
-     * @param player Player to perform them for.
-     * @return true if all results were performed succesfully, false otherwise.
-     */
-    public boolean performResultsUponChoosing(Player player) {
-        boolean success = true;
-
-        for (Result r : this.getResultsUponChoosing()) {
-            if (!r.applyResult(player)) {
-                success = false;
-            }
-        }
-
-        return success;
+    public void setAbstractResults(final List<AbstractResult> abstractResults) {
+        this.abstractResults = abstractResults;
     }
 
     public void setDisplayName(String displayName) {
@@ -282,8 +268,22 @@ public class Path {
         this.requirements = holders;
     }
 
-    public void setResults(final List<Result> results) {
-        this.results = results;
+    /**
+     * Perform the abstractResults upon choosing this path.
+     *
+     * @param player Player to perform them for.
+     * @return true if all abstractResults were performed succesfully, false otherwise.
+     */
+    public boolean performResultsUponChoosing(Player player) {
+        boolean success = true;
+
+        for (AbstractResult r : this.getResultsUponChoosing()) {
+            if (!r.applyResult(player)) {
+                success = false;
+            }
+        }
+
+        return success;
     }
 
     @Override
@@ -299,11 +299,11 @@ public class Path {
         this.internalName = internalName;
     }
 
-    public List<Result> getResultsUponChoosing() {
+    public List<AbstractResult> getResultsUponChoosing() {
         return resultsUponChoosing;
     }
 
-    public void setResultsUponChoosing(List<Result> resultsUponChoosing) {
+    public void setResultsUponChoosing(List<AbstractResult> resultsUponChoosing) {
         this.resultsUponChoosing = resultsUponChoosing;
     }
 }

@@ -4,7 +4,7 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.pathbuilder.Path;
 import me.armar.plugins.autorank.pathbuilder.holders.RequirementsHolder;
-import me.armar.plugins.autorank.pathbuilder.result.Result;
+import me.armar.plugins.autorank.pathbuilder.result.AbstractResult;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
 import me.armar.plugins.autorank.util.AutorankTools;
 import org.bukkit.ChatColor;
@@ -85,20 +85,20 @@ public class PlayerChecker {
 
     }
 
-    public List<String> formatResultsToList(List<Result> results) {
+    public List<String> formatResultsToList(List<AbstractResult> abstractResults) {
         // Converts requirements into a list of readable requirements
 
         final List<String> messages = new ArrayList<String>();
 
         messages.add(ChatColor.GRAY + " ------------ ");
 
-        for (int i = 0; i < results.size(); i++) {
-            final Result result = results.get(i);
+        for (int i = 0; i < abstractResults.size(); i++) {
+            final AbstractResult abstractResult = abstractResults.get(i);
 
-            if (result != null) {
+            if (abstractResult != null) {
                 final StringBuilder message = new StringBuilder("     " + ChatColor.GOLD + (i + 1) + ". ");
 
-                message.append(ChatColor.RED + result.getDescription());
+                message.append(ChatColor.RED + abstractResult.getDescription());
 
                 messages.add(message.toString());
 

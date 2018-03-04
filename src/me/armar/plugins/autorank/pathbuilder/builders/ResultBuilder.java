@@ -1,7 +1,7 @@
 package me.armar.plugins.autorank.pathbuilder.builders;
 
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.pathbuilder.result.Result;
+import me.armar.plugins.autorank.pathbuilder.result.AbstractResult;
 import me.armar.plugins.autorank.util.AutorankTools;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -10,28 +10,29 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This class is used to create a new Result. It uses the Factory Method Design Pattern.
+ * This class is used to create a new AbstractResult. It uses the Factory Method Design Pattern.
  */
 public class ResultBuilder {
 
-    private static final Map<String, Class<? extends Result>> results = new HashMap<String, Class<? extends Result>>();
+    private static final Map<String, Class<? extends AbstractResult>> results = new HashMap<String, Class<? extends
+            AbstractResult>>();
 
-    // Keep track of the associated result.
-    private Result result = null;
+    // Keep track of the associated abstractResult.
+    private AbstractResult abstractResult = null;
 
-    // Whether the associated result is valid.
+    // Whether the associated abstractResult is valid.
     private boolean isValid = false;
 
-    // Extra metadata for the associated result.
+    // Extra metadata for the associated abstractResult.
     private String pathName, resultName;
 
     /**
-     * Add a new type of Result that can be used in the Paths.yml file.
+     * Add a new type of AbstractResult that can be used in the Paths.yml file.
      *
-     * @param type   String literal that must be used in the file to identify the result.
-     * @param result Class of the Result that must be instantiated.
+     * @param type   String literal that must be used in the file to identify the abstractResult.
+     * @param result Class of the AbstractResult that must be instantiated.
      */
-    public static void registerResult(final String type, final Class<? extends Result> result) {
+    public static void registerResult(final String type, final Class<? extends AbstractResult> result) {
         results.put(type, result);
 
         // Add type to the list of AutorankTools so it can use the correct name.
@@ -39,32 +40,32 @@ public class ResultBuilder {
     }
 
     /**
-     * Create a Result using the ResultBuilder factory.
+     * Create a AbstractResult using the ResultBuilder factory.
      *
-     * @param pathName    Name of the path the result is in.
-     * @param resultType  Type of the result, which does not have to be the exact string value.
-     * @param stringValue Value of the result string.
-     * @return a newly created Result with the given data, or null if invalid data was given.
+     * @param pathName    Name of the path the abstractResult is in.
+     * @param resultType  Type of the abstractResult, which does not have to be the exact string value.
+     * @param stringValue Value of the abstractResult string.
+     * @return a newly created AbstractResult with the given data, or null if invalid data was given.
      */
-    public static Result createResult(String pathName, String resultType, String stringValue) {
+    public static AbstractResult createResult(String pathName, String resultType, String stringValue) {
         ResultBuilder builder = new ResultBuilder().createEmpty(pathName, resultType).populateResult(stringValue);
 
-        // Check if result is valid before building it.
+        // Check if abstractResult is valid before building it.
         if (!builder.isValid()) {
             return null;
         }
 
-        // Get result of ResultBuilder.
-        final Result result = builder.finish();
+        // Get abstractResult of ResultBuilder.
+        final AbstractResult abstractResult = builder.finish();
 
-        return result;
+        return abstractResult;
     }
 
     /**
-     * Create an empty Result.
+     * Create an empty AbstractResult.
      *
-     * @param pathName   Name of the path that this result is in.
-     * @param resultType Type of the result.
+     * @param pathName   Name of the path that this abstractResult is in.
+     * @param resultType Type of the abstractResult.
      * @return this builder.
      */
     public ResultBuilder createEmpty(String pathName, String resultType) {
@@ -79,34 +80,35 @@ public class ResultBuilder {
 
         if (resultType == null) {
             Autorank.getInstance().getWarningManager().registerWarning(
-                    String.format("You are using a '%s' result in path '%s', but that result doesn't exist!", originalResType,
+                    String.format("You are using a '%s' abstractResult in path '%s', but that abstractResult doesn't " +
+                                    "exist!", originalResType,
                             pathName),
                     10);
             return this;
         }
 
-        final Class<? extends Result> c = results.get(resultType);
+        final Class<? extends AbstractResult> c = results.get(resultType);
         if (c != null) {
             try {
-                result = c.newInstance();
+                abstractResult = c.newInstance();
             } catch (final Exception e) {
                 e.printStackTrace();
             }
         } else {
             Bukkit.getServer().getConsoleSender()
-                    .sendMessage("[Autorank] " + ChatColor.RED + "Result '" + originalResType + "' is not a valid result type!");
+                    .sendMessage("[Autorank] " + ChatColor.RED + "AbstractResult '" + originalResType + "' is not a valid abstractResult type!");
         }
         return this;
     }
 
     /**
-     * Populate the created Result with data.
+     * Populate the created AbstractResult with data.
      *
      * @return this builder.
      */
     public ResultBuilder populateResult(String stringValue) {
 
-        if (result == null) {
+        if (abstractResult == null) {
             return this;
         }
 
@@ -114,32 +116,32 @@ public class ResultBuilder {
             return this;
         }
 
-        // Initiliaze the result with options.
-        result.setOptions(stringValue.split(";"));
+        // Initiliaze the abstractResult with options.
+        abstractResult.setOptions(stringValue.split(";"));
 
-        // Result is non-null and populated with data, so valid.
+        // AbstractResult is non-null and populated with data, so valid.
         isValid = true;
 
         return this;
     }
 
     /**
-     * Finish the creation of the Result, will return the result object that was created.
+     * Finish the creation of the AbstractResult, will return the abstractResult object that was created.
      *
-     * @return created Result object.
-     * @throws IllegalStateException if the result was not valid and could not be finished.
+     * @return created AbstractResult object.
+     * @throws IllegalStateException if the abstractResult was not valid and could not be finished.
      */
-    public Result finish() throws IllegalStateException {
-        if (!isValid || result == null) {
-            throw new IllegalStateException("Result '" + resultName + "' of '" + pathName + "' was not valid" +
+    public AbstractResult finish() throws IllegalStateException {
+        if (!isValid || abstractResult == null) {
+            throw new IllegalStateException("AbstractResult '" + resultName + "' of '" + pathName + "' was not valid" +
                     " and could not be finished.");
         }
 
-        return result;
+        return abstractResult;
     }
 
     /**
-     * Check whether the associated result is valid.
+     * Check whether the associated abstractResult is valid.
      *
      * @return true if it is, false otherwise.
      */

@@ -5,8 +5,8 @@ import me.armar.plugins.autorank.addons.AddOnManager;
 import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
 import me.armar.plugins.autorank.pathbuilder.Path;
 import me.armar.plugins.autorank.pathbuilder.holders.RequirementsHolder;
-import me.armar.plugins.autorank.pathbuilder.requirement.Requirement;
-import me.armar.plugins.autorank.pathbuilder.result.Result;
+import me.armar.plugins.autorank.pathbuilder.requirement.AbstractRequirement;
+import me.armar.plugins.autorank.pathbuilder.result.AbstractResult;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -133,9 +133,9 @@ public class API {
      * The name will be the name that is used in the config.
      *
      * @param uniqueName Unique name identifier for the requirement
-     * @param clazz      Requirement class that does all the logic
+     * @param clazz      AbstractRequirement class that does all the logic
      */
-    public void registerRequirement(final String uniqueName, final Class<? extends Requirement> clazz) {
+    public void registerRequirement(final String uniqueName, final Class<? extends AbstractRequirement> clazz) {
         plugin.getLogger().info("Loaded custom requirement: " + uniqueName);
 
         plugin.registerRequirement(uniqueName, clazz);
@@ -148,9 +148,9 @@ public class API {
      * The name will be the name that is used in the config.
      *
      * @param uniqueName Unique name identifier for the result
-     * @param clazz      Result class that does all the logic
+     * @param clazz      AbstractResult class that does all the logic
      */
-    public void registerResult(final String uniqueName, final Class<? extends Result> clazz) {
+    public void registerResult(final String uniqueName, final Class<? extends AbstractResult> clazz) {
         plugin.getLogger().info("Loaded custom result: " + uniqueName);
 
         plugin.registerResult(uniqueName, clazz);

@@ -3,8 +3,8 @@ package me.armar.plugins.autorank.validations;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.pathbuilder.Path;
 import me.armar.plugins.autorank.pathbuilder.holders.RequirementsHolder;
-import me.armar.plugins.autorank.pathbuilder.requirement.GroupRequirement;
-import me.armar.plugins.autorank.pathbuilder.requirement.Requirement;
+import me.armar.plugins.autorank.pathbuilder.requirement.AbstractRequirement;
+import me.armar.plugins.autorank.pathbuilder.requirement.GroupAbstractRequirement;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -48,8 +48,8 @@ public class ValidateHandler {
 
             // Check if there are any group requirements/prerequisites
             for (RequirementsHolder reqHolder : holders) {
-                for (Requirement req : reqHolder.getRequirements()) {
-                    if (req instanceof GroupRequirement) {
+                for (AbstractRequirement req : reqHolder.getRequirements()) {
+                    if (req instanceof GroupAbstractRequirement) {
 
                         String requirementName = plugin.getPathsConfig().getRequirementName(path.getInternalName(),
                                 req.getId(), reqHolder.isPrerequisite());

@@ -5,7 +5,7 @@ import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.pathbuilder.Path;
 import me.armar.plugins.autorank.pathbuilder.holders.RequirementsHolder;
-import me.armar.plugins.autorank.pathbuilder.result.Result;
+import me.armar.plugins.autorank.pathbuilder.result.AbstractResult;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
 import me.armar.plugins.autorank.util.AutorankTools;
 import org.bukkit.ChatColor;
@@ -133,10 +133,10 @@ public class ViewCommand extends AutorankCommand {
 
             } else if (viewType.contains("res")) {
 
-                List<Result> results = targetPath.getResults();
+                List<AbstractResult> abstractResults = targetPath.getAbstractResults();
 
                 // Set messages depending on console or player
-                List<String> messages = plugin.getPlayerChecker().formatResultsToList(results);
+                List<String> messages = plugin.getPlayerChecker().formatResultsToList(abstractResults);
 
                 sender.sendMessage(ChatColor.GREEN + "Results of path '" + ChatColor.GRAY + targetPath.getDisplayName()
                         + ChatColor.GREEN + "':");

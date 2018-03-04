@@ -3,7 +3,7 @@ package me.armar.plugins.autorank.pathbuilder;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.pathbuilder.holders.RequirementsHolder;
-import me.armar.plugins.autorank.pathbuilder.result.Result;
+import me.armar.plugins.autorank.pathbuilder.result.AbstractResult;
 import me.armar.plugins.autorank.util.AutorankTools;
 import org.bukkit.entity.Player;
 
@@ -47,7 +47,7 @@ public class PathManager {
             String pathName = path.getInternalName();
             List<RequirementsHolder> requirements = path.getRequirements();
             List<RequirementsHolder> prerequisites = path.getPrerequisites();
-            List<Result> results = path.getResults();
+            List<AbstractResult> abstractResults = path.getAbstractResults();
 
             int count = 1;
 
@@ -77,7 +77,7 @@ public class PathManager {
 
             messages.add("Results: ");
 
-            for (Result res : results) {
+            for (AbstractResult res : abstractResults) {
                 messages.add("    " + count + ". " + res.getDescription());
                 count++;
             }

@@ -544,7 +544,7 @@ public class AutorankTools {
      * requirement is not passed through this method, it will not show up in
      * {@link #findMatchingRequirementName(String)}.
      *
-     * @param type Requirement name
+     * @param type AbstractRequirement name
      */
     public static void registerRequirement(final String type) {
         reqTypes.add(type);
@@ -555,7 +555,7 @@ public class AutorankTools {
      * result is not passed through this method, it will not show up in
      * {@link #findMatchingResultName(String)}.
      *
-     * @param type Result name
+     * @param type AbstractResult name
      */
     public static void registerResult(final String type) {
         resTypes.add(type);
