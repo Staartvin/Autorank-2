@@ -1,10 +1,7 @@
 package me.armar.plugins.autorank.permissions;
 
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.permissions.handlers.GroupManagerHandler;
-import me.armar.plugins.autorank.permissions.handlers.PermissionsBukkitHandler;
-import me.armar.plugins.autorank.permissions.handlers.PowerfulPermsHandler;
-import me.armar.plugins.autorank.permissions.handlers.VaultPermissionsHandler;
+import me.armar.plugins.autorank.permissions.handlers.*;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
@@ -13,7 +10,7 @@ import org.bukkit.plugin.Plugin;
  * just does basic checks of availability and calculates what permissions plugin
  * suits best.
  * <p>
- * It can choose from GroupManager, PermissionsBukkit, PowerfulPerms and Vault.
+ * It can choose from GroupManager, PermissionsBukkit, PowerfulPerms, LuckPerms and Vault.
  *
  * @author Staartvin
  */
@@ -39,15 +36,23 @@ public class PermissionsPluginManager {
         if (isPluginAvailable("GroupManager")) {
             // use Groupmanager
             permissionPlugin = new GroupManagerHandler(plugin);
+            plugin.debugMessage("Using GroupManager as permissions plugin");
         } else if (isPluginAvailable("PermissionsBukkit")) {
             // Use PermissionsBukkit
             permissionPlugin = new PermissionsBukkitHandler(plugin);
+            plugin.debugMessage("Using PermissionsBukkit as permissions plugin");
         } else if (isPluginAvailable("PowerfulPerms")) {
             // Use PermissionsBukkit
             permissionPlugin = new PowerfulPermsHandler(plugin);
+            plugin.debugMessage("Using PowerfulPerms as permissions plugin");
+        } else if (isPluginAvailable("LuckPerms")) {
+            // Use LuckPerms
+            permissionPlugin = new LuckPermsHandler(plugin);
+            plugin.debugMessage("Using LuckPerms as permissions plugin");
         } else {
             // use Vault
             permissionPlugin = new VaultPermissionsHandler(plugin);
+            plugin.debugMessage("Using Vault as permissions plugin");
         }
     }
 }

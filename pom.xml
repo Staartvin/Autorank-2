@@ -61,6 +61,14 @@
                     <failOnError>false</failOnError>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
 
         </plugins>
 
@@ -186,6 +194,13 @@
             <groupId>me.staartvin.Statz</groupId>
             <artifactId>Statz</artifactId>
             <version>LATEST</version>
+        </dependency>
+
+        <dependency>
+            <groupId>me.lucko.luckperms</groupId>
+            <artifactId>luckperms-api</artifactId>
+            <version>4.1</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>
