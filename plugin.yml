@@ -43,10 +43,10 @@ permissions:
         description: Allows reloading the config.
         default: op
     autorank.import:
-        description: Allows importing old data.
+        description: Allows importing old storage.
         default: op
     autorank.archive:
-        description: Allows a player to archive old data.
+        description: Allows a player to archive old storage.
         default: op
     autorank.noticeonupdate:
         description: When a new update is available, Autorank will tell all players with this permission that a new version is available.
@@ -70,7 +70,7 @@ permissions:
         description: Allows a player to convert the playerdata to UUID format.
         default: op
     autorank.convert.data:
-        description: Allows a player to convert the data.yml to UUID format.
+        description: Allows a player to convert the storage.yml to UUID format.
         default: op
     autorank.help:
         description: Allows a player to view a list of commands
@@ -112,12 +112,12 @@ permissions:
         description: Allows checking time statistics of other players.
         default: op
     autorank.convert.simpleconfig:
-        description: Allows a player to convert data from SimpleConfig to Paths
+        description: Allows a player to convert storage from SimpleConfig to Paths
         default: op
     autorank.convert.advancedconfig:
-        description: Allows a player to convert data from AdvancedConfig to Paths
+        description: Allows a player to convert storage from AdvancedConfig to Paths
         default: op
     autorank.backup.data:
-        description: Allows a player to backup data files
+        description: Allows a player to backup storage files
         default: op
     

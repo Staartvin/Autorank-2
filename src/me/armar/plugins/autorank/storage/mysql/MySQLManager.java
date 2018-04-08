@@ -1,4 +1,4 @@
-package me.armar.plugins.autorank.data.mysql;
+package me.armar.plugins.autorank.storage.mysql;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.config.SettingsConfig;
@@ -24,7 +24,7 @@ import java.util.concurrent.*;
  */
 public class MySQLManager {
 
-    // Thread pool for saving and retrieving data.
+    // Thread pool for saving and retrieving storage.
     private ExecutorService executor = Executors.newSingleThreadExecutor();
     String hostname, username, password, database, table;
     // Keeps track of when a call to the database was for this player

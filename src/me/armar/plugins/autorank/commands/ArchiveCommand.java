@@ -51,7 +51,7 @@ public class ArchiveCommand extends AutorankCommand {
 
     @Override
     public String getDescription() {
-        return "Archive data with a minimum";
+        return "Archive storage with a minimum";
     }
 
     @Override

@@ -34,7 +34,7 @@ public class ImportCommand extends AutorankCommand {
 
     @Override
     public String getDescription() {
-        return "Import old data.";
+        return "Import old storage.";
     }
 
     @Override

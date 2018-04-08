@@ -45,7 +45,7 @@ public class ResultBuilder {
      * @param pathName    Name of the path the abstractResult is in.
      * @param resultType  Type of the abstractResult, which does not have to be the exact string value.
      * @param stringValue Value of the abstractResult string.
-     * @return a newly created AbstractResult with the given data, or null if invalid data was given.
+     * @return a newly created AbstractResult with the given storage, or null if invalid storage was given.
      */
     public static AbstractResult createResult(String pathName, String resultType, String stringValue) {
         ResultBuilder builder = new ResultBuilder().createEmpty(pathName, resultType).populateResult(stringValue);
@@ -102,7 +102,7 @@ public class ResultBuilder {
     }
 
     /**
-     * Populate the created AbstractResult with data.
+     * Populate the created AbstractResult with storage.
      *
      * @return this builder.
      */
@@ -119,7 +119,7 @@ public class ResultBuilder {
         // Initiliaze the abstractResult with options.
         abstractResult.setOptions(stringValue.split(";"));
 
-        // AbstractResult is non-null and populated with data, so valid.
+        // AbstractResult is non-null and populated with storage, so valid.
         isValid = true;
 
         return this;

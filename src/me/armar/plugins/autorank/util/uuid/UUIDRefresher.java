@@ -1,7 +1,7 @@
 package me.armar.plugins.autorank.util.uuid;
 
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
+import me.armar.plugins.autorank.storage.flatfile.FlatFileManager.TimeType;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
 

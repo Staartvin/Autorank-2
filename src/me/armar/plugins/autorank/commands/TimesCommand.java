@@ -2,9 +2,9 @@ package me.armar.plugins.autorank.commands;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
-import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
+import me.armar.plugins.autorank.storage.flatfile.FlatFileManager.TimeType;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
 import org.bukkit.command.Command;
@@ -62,7 +62,7 @@ public class TimesCommand extends AutorankCommand {
             return true;
         }
 
-        // Now show data for target.
+        // Now show storage for target.
         targetName = plugin.getUUIDStorage().getRealName(uuid);
 
         if (targetName == null) {

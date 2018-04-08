@@ -38,7 +38,7 @@ public class ConvertCommand extends AutorankCommand {
             plugin.getPlayerDataConfig().convertNamesToUUIDs();
 
             sender.sendMessage(ChatColor.RED + "Converting playerdata.yml to use new UUID format.");
-        } else if (targetFile.equalsIgnoreCase("data") || targetFile.equalsIgnoreCase("times")) {
+        } else if (targetFile.equalsIgnoreCase("storage") || targetFile.equalsIgnoreCase("times")) {
 
             if (!this.hasPermission(AutorankPermission.CONVERT_TIME_DATA, sender)) {
                 return true;

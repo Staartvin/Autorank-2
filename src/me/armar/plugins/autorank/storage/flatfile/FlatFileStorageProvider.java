@@ -1,0 +1,252 @@
+package me.armar.plugins.autorank.storage.flatfile;
+
+import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.config.SimpleYamlConfiguration;
+import me.armar.plugins.autorank.storage.StorageProvider;
+import me.armar.plugins.autorank.storage.TimeType;
+import me.armar.plugins.autorank.util.AutorankTools;
+import org.bukkit.OfflinePlayer;
+
+import java.util.*;
+
+public class FlatFileStorageProvider extends StorageProvider {
+
+    // Store where the file for each time type is saved.
+    private static HashMap<TimeType, String> dataTypePaths = new HashMap<>();
+
+    // Store for each time type a file to store data about players.
+    private final HashMap<TimeType, SimpleYamlConfiguration> dataFiles = new HashMap<>();
+
+    public FlatFileStorageProvider(Autorank instance) {
+        super(instance);
+    }
+
+    @Override
+    public void setPlayerTime(TimeType timeType, UUID uuid, int time) {
+        // Set time of a player of a specific type
+
+        final SimpleYamlConfiguration data = this.getDataFile(timeType);
+
+        data.set(uuid.toString(), time);
+    }
+
+    @Override
+    public int getPlayerTime(TimeType timeType, UUID uuid) {
+        // Get time of a player with specific type
+        final SimpleYamlConfiguration data = this.getDataFile(timeType);
+
+        return data.getInt(uuid.toString(), 0);
+    }
+
+    @Override
+    public void resetDataFile(TimeType timeType) {
+        final SimpleYamlConfiguration data = this.getDataFile(timeType);
+
+        plugin.debugMessage("Resetting storage file '" + timeType + "'!");
+
+        // Delete file
+        final boolean deleted = data.getInternalFile().delete();
+
+        // Don't create a new file if it wasn't deleted in the first place.
+        if (!deleted) {
+            plugin.debugMessage("Tried deleting storage file, but could not delete!");
+            return;
+        }
+
+        // Create a new file so it's empty
+        if (timeType == TimeType.DAILY_TIME) {
+            dataFiles.put(TimeType.DAILY_TIME,
+                    new SimpleYamlConfiguration(plugin, dataTypePaths.get(TimeType.DAILY_TIME), "Daily storage"));
+        } else if (timeType == TimeType.WEEKLY_TIME) {
+            dataFiles.put(TimeType.WEEKLY_TIME,
+                    new SimpleYamlConfiguration(plugin, dataTypePaths.get(TimeType.WEEKLY_TIME), "Weekly storage"));
+        } else if (timeType == TimeType.MONTHLY_TIME) {
+            dataFiles.put(TimeType.MONTHLY_TIME,
+                    new SimpleYamlConfiguration(plugin, dataTypePaths.get(TimeType.MONTHLY_TIME), "Monthly storage"));
+        } else if (timeType == TimeType.TOTAL_TIME) {
+            dataFiles.put(TimeType.TOTAL_TIME,
+                    new SimpleYamlConfiguration(plugin, dataTypePaths.get(TimeType.TOTAL_TIME), "Total storage"));
+        }
+    }
+
+    @Override
+    public void addPlayerTime(TimeType timeType, UUID uuid, int timeToAdd) {
+        int time = this.getPlayerTime(timeType, uuid);
+
+        if (time < 0) {
+            time = 0;
+        }
+
+        this.setPlayerTime(timeType, uuid, time + timeToAdd);
+    }
+
+    @Override
+    public String getName() {
+        return "FlatFileStorageProvider";
+    }
+
+    @Override
+    public boolean initialiseProvider() {
+
+        // Load data files
+        this.loadDataFiles();
+
+        // Register task for saving data files.
+        this.registerTasks();
+
+        // Do calendar check to reset storage files that are outdated.
+        this.doCalendarCheck();
+
+        return true;
+    }
+
+    @Override
+    public int purgeOldEntries(int threshold) {
+        int entriesRemoved = 0;
+
+        final SimpleYamlConfiguration data = this.getDataFile(TimeType.TOTAL_TIME);
+
+        long currentTime = System.currentTimeMillis();
+
+        for (final UUID uuid : getStoredPlayers(TimeType.TOTAL_TIME)) {
+            // Get the player object that represents this UUID
+            OfflinePlayer offPlayer = plugin.getServer().getOfflinePlayer(uuid);
+
+            // Check if this player has ever logged in on the server
+            if (offPlayer.getName() == null) {
+                // Remove record
+                data.set(uuid.toString(), null);
+                entriesRemoved++;
+                continue;
+            }
+
+            // Check when the player has last logged in.
+            long lastPlayed = offPlayer.getLastPlayed();
+
+            // Check if 'last played time' is over threshold time.
+            if (lastPlayed <= 0 || (currentTime - lastPlayed) / 86400000 >= threshold) {
+                // Remove record
+                data.set(uuid.toString(), null);
+                entriesRemoved++;
+            }
+        }
+
+        return entriesRemoved;
+    }
+
+    @Override
+    public int getNumberOfStoredPlayers(TimeType timeType) {
+        return getStoredPlayers(timeType).size();
+    }
+
+    @Override
+    public List<UUID> getStoredPlayers(TimeType timeType) {
+        final List<UUID> uuids = new ArrayList<UUID>();
+
+        final SimpleYamlConfiguration data = this.getDataFile(timeType);
+
+        // Loop over all entries in the file and retrieve their uuids.
+        for (final String uuidString : data.getKeys(false)) {
+            UUID uuid = null;
+            try {
+                uuid = UUID.fromString(uuidString);
+            } catch (final IllegalArgumentException e) {
+                continue;
+            }
+
+            uuids.add(uuid);
+        }
+
+        return uuids;
+    }
+
+    @Override
+    public void saveData() {
+        for (final Map.Entry<TimeType, SimpleYamlConfiguration> entry : dataFiles.entrySet()) {
+            entry.getValue().saveFile();
+        }
+    }
+
+    /**
+     * Get a storage file for a specific time type.
+     *
+     * @param type Type of time
+     * @return a storage file where the given time type is stored.
+     */
+    private SimpleYamlConfiguration getDataFile(final TimeType type) {
+        return dataFiles.get(type);
+    }
+
+    /**
+     * Load all the storage files (daily time, weekly time, etc.).
+     */
+    private void loadDataFiles() {
+
+        // Register storage path for each time type
+        dataTypePaths.put(TimeType.TOTAL_TIME, "/storage/Total_time.yml");
+        dataTypePaths.put(TimeType.DAILY_TIME, "/storage/Daily_time.yml");
+        dataTypePaths.put(TimeType.WEEKLY_TIME, "/storage/Weekly_time.yml");
+        dataTypePaths.put(TimeType.MONTHLY_TIME, "/storage/Monthly_time.yml");
+
+        // Create new files for the time type.
+        dataFiles.put(TimeType.TOTAL_TIME,
+                new SimpleYamlConfiguration(plugin, dataTypePaths.get(TimeType.TOTAL_TIME), "Total storage"));
+        dataFiles.put(TimeType.DAILY_TIME,
+                new SimpleYamlConfiguration(plugin, dataTypePaths.get(TimeType.DAILY_TIME), "Daily storage"));
+        dataFiles.put(TimeType.WEEKLY_TIME,
+                new SimpleYamlConfiguration(plugin, dataTypePaths.get(TimeType.WEEKLY_TIME), "Weekly storage"));
+        dataFiles.put(TimeType.MONTHLY_TIME,
+                new SimpleYamlConfiguration(plugin, dataTypePaths.get(TimeType.MONTHLY_TIME), "Monthly storage"));
+    }
+
+
+    /**
+     * Register tasks for saving and updating time of players.
+     */
+    private void registerTasks() {
+        // Run save task every 30 seconds
+        this.plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new Runnable() {
+            public void run() {
+                saveData();
+            }
+        }, AutorankTools.TICKS_PER_SECOND, AutorankTools.TICKS_PER_MINUTE);
+    }
+
+    /**
+     * Archive old records. Records below the minimum value will be removed
+     * because they are 'inactive'.
+     *
+     * @param minimum Lowest threshold to check for
+     * @return Number of records that were removed
+     */
+    private int archive(final int minimum) {
+        // Keep a counter of archived items
+        int counter = 0;
+
+        final SimpleYamlConfiguration data = this.getDataFile(TimeType.TOTAL_TIME);
+
+        for (final UUID uuid : getStoredPlayers(TimeType.TOTAL_TIME)) {
+            final int time = this.getPlayerTime(TimeType.TOTAL_TIME, uuid);
+
+            // Found a record to be archived
+            if (time < minimum) {
+                counter++;
+                // Remove record
+                data.set(uuid.toString(), null);
+            }
+        }
+
+        saveData();
+        return counter;
+    }
+
+    /**
+     * Import total play time from the current {@link TimeType} storage
+     * file.
+     */
+    private void importData() {
+        final SimpleYamlConfiguration data = this.getDataFile(TimeType.TOTAL_TIME);
+        data.reloadFile();
+    }
+
+}

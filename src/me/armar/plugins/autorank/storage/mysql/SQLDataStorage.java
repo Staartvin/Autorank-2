@@ -1,4 +1,4 @@
-package me.armar.plugins.autorank.data.mysql;
+package me.armar.plugins.autorank.storage.mysql;
 
 import java.sql.*;
 

@@ -1,13 +1,13 @@
 package me.armar.plugins.autorank.config;
 
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
+import me.armar.plugins.autorank.storage.TimeType;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class manages the internalprops.yml file. It is used to store data that
+ * This class manages the internalprops.yml file. It is used to store storage that
  * is not specific to players or admins, <br>
  * but is used internally (hence the name) by Autorank. Think of the cached
  * leaderboard, the last time something was updated, etc. <br>
@@ -50,7 +50,7 @@ public class InternalPropertiesConfig extends AbstractConfig {
      * Get the last stored value of a time type. Autorank stores the current
      * day, week and month. On a new calendar day, any of will be changed (as a
      * new day has arrived). Autorank then knows a new day/week/month has
-     * arrived, so it can reset the data files.
+     * arrived, so it can reset the storage files.
      *
      * @param type type of time
      * @return the previously stored value. Returns 1 if nothing was stored yet
@@ -114,16 +114,16 @@ public class InternalPropertiesConfig extends AbstractConfig {
 
         this.getConfig().addDefault("tracked month", 1); // This is used to keep track of
         // what month we are checking the
-        // data for. If this is changed,
+        // storage for. If this is changed,
         // the montly_data.yml gets
         // reset.
         this.getConfig().addDefault("tracked week", 1); // This is used to keep track of
         // what week we are checking the
-        // data for. If this is changed,
+        // storage for. If this is changed,
         // the weekly_data.yml gets reset.
         this.getConfig().addDefault("tracked day", 1); // This is used to keep track of
         // what day we are checking the
-        // data for. If this is changed,
+        // storage for. If this is changed,
         // the daily_data.yml gets reset.
 
         final List<String> newList = new ArrayList<String>();

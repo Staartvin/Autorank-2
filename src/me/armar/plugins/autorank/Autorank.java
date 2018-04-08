@@ -6,8 +6,6 @@ import me.armar.plugins.autorank.backup.BackupManager;
 import me.armar.plugins.autorank.commands.manager.CommandsManager;
 import me.armar.plugins.autorank.config.*;
 import me.armar.plugins.autorank.converter.DataConverter;
-import me.armar.plugins.autorank.data.flatfile.FlatFileManager;
-import me.armar.plugins.autorank.data.mysql.MySQLManager;
 import me.armar.plugins.autorank.debugger.Debugger;
 import me.armar.plugins.autorank.hooks.DependencyManager;
 import me.armar.plugins.autorank.language.LanguageHandler;
@@ -23,6 +21,8 @@ import me.armar.plugins.autorank.playerchecker.PlayerChecker;
 import me.armar.plugins.autorank.playtimes.PlaytimeManager;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.armar.plugins.autorank.statsmanager.handlers.FallbackHandler;
+import me.armar.plugins.autorank.storage.StorageManager;
+import me.armar.plugins.autorank.storage.mysql.MySQLManager;
 import me.armar.plugins.autorank.updater.UpdateHandler;
 import me.armar.plugins.autorank.updater.Updater;
 import me.armar.plugins.autorank.util.AutorankTools;
@@ -75,10 +75,10 @@ public class Autorank extends JavaPlugin {
 
     // Data connection
     private MySQLManager mysqlManager;
-    private FlatFileManager flatFileManager;
 
     // UUID storage
     private UUIDStorage uuidStorage;
+    private StorageManager storageManager;
 
     // Validation & Warning
     private ValidateHandler validateHandler;
@@ -112,7 +112,7 @@ public class Autorank extends JavaPlugin {
 
         // ------------- Save files and databases -------------
 
-        this.getFlatFileManager().saveFiles();
+        this.getStorageManager().saveAllStorageProviders();
 
         getUUIDStorage().saveAllFiles();
 
@@ -162,11 +162,11 @@ public class Autorank extends JavaPlugin {
         // Create warning manager
         setWarningManager(new WarningManager(this));
 
+        // Create Storage Manager
+        setStorageManager(new StorageManager(this));
+
         // Create MySQL Manager
         setMySQLManager(new MySQLManager(this));
-
-        // Create FlatFile Manager
-        setFlatFileManager(new FlatFileManager(this));
 
         // Load AutorankDependency manager
         setDependencyManager(new DependencyManager(this));
@@ -217,7 +217,7 @@ public class Autorank extends JavaPlugin {
         // Load uuids - ready for new ones
         getUUIDStorage().createNewFiles();
 
-        // Load data converter
+        // Load storage converter
         setDataConverter(new DataConverter(this));
 
         // ------------- Create files & folders -------------
@@ -277,7 +277,7 @@ public class Autorank extends JavaPlugin {
             }
         }, 1L);
 
-        // Remove old data of players
+        // Run task that updates storage providers if something changed.
         getServer().getScheduler().runTaskTimerAsynchronously(this, new Runnable() {
             @Override
             public void run() {
@@ -286,9 +286,9 @@ public class Autorank extends JavaPlugin {
                 if (!getInternalPropertiesConfig().isConvertedToNewFormat()) return;
 
                 // Remove old entries
-                int removed = getFlatFileManager().removeOldEntries();
+                int removed = getStorageManager().getPrimaryStorageProvider().purgeOldEntries();
 
-                getLogger().info("Removed " + removed + " old data entries from database!");
+                getLogger().info("Removed " + removed + " old storage entries from database!");
             }
         }, 0, (long) AutorankTools.TICKS_PER_MINUTE * 60 * 24);
 
@@ -324,8 +324,9 @@ public class Autorank extends JavaPlugin {
         // Convert all UUIDS to lowercase.
         this.getUUIDStorage().transferUUIDs();
 
-        // Check whether the data files are still up to date.
-        this.getFlatFileManager().doCalendarCheck();
+        // TODO: implement that all storage providers do calendar checks themselves periodically.
+        // Check whether the storage files are still up to date.
+        this.getStorageManager().getPrimaryStorageProvider().doCalendarCheck();
 
         // Spawn thread to check if MySQL database times are up to date
         this.getMySQLManager().refreshGlobalTime();
@@ -701,14 +702,6 @@ public class Autorank extends JavaPlugin {
         this.mysqlManager = mysqlManager;
     }
 
-    public FlatFileManager getFlatFileManager() {
-        return flatFileManager;
-    }
-
-    public void setFlatFileManager(FlatFileManager flatFileManager) {
-        this.flatFileManager = flatFileManager;
-    }
-
     public DataConverter getDataConverter() {
         return dataConverter;
     }
@@ -723,5 +716,13 @@ public class Autorank extends JavaPlugin {
 
     public void setDefaultBehaviorConfig(DefaultBehaviorConfig defaultBehaviorConfig) {
         this.defaultBehaviorConfig = defaultBehaviorConfig;
+    }
+
+    public StorageManager getStorageManager() {
+        return storageManager;
+    }
+
+    public void setStorageManager(StorageManager storageManager) {
+        this.storageManager = storageManager;
     }
 }

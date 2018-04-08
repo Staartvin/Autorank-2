@@ -12,7 +12,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
 /**
- * This class decides which Stats plugin will be used for getting stat data.
+ * This class decides which Stats plugin will be used for getting stat storage.
  *
  * @author Staartvin
  */

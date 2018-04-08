@@ -2,11 +2,11 @@ package me.armar.plugins.autorank.api;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.addons.AddOnManager;
-import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
 import me.armar.plugins.autorank.pathbuilder.Path;
 import me.armar.plugins.autorank.pathbuilder.holders.RequirementsHolder;
 import me.armar.plugins.autorank.pathbuilder.requirement.AbstractRequirement;
 import me.armar.plugins.autorank.pathbuilder.result.AbstractResult;
+import me.armar.plugins.autorank.storage.flatfile.FlatFileManager.TimeType;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ import java.util.UUID;
 /**
  * <b>Autorank's API class:</b>
  * <p>
- * You, as a developer, can you use this class to get data from players or data
+ * You, as a developer, can you use this class to get storage from players or storage
  * about paths. The API is never finished and if you want to see something
  * added, tell us!
  * <p>

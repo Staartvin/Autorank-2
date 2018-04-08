@@ -11,7 +11,7 @@ import java.util.ConcurrentModificationException;
 
 /**
  * This represents any YAML file that Autorank uses. <br>
- * It is used for the data.yml, playerdata.yml and daily/monthly/weekly data
+ * It is used for the storage.yml, playerdata.yml and daily/monthly/weekly storage
  * files.
  *
  * @author Staartvin

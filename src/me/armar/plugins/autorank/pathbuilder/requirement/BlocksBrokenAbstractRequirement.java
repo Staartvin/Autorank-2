@@ -64,7 +64,7 @@ public class BlocksBrokenAbstractRequirement extends AbstractRequirement {
                     progressBar = getStatsPlugin().getNormalStat(StatsPlugin.StatType.BLOCKS_BROKEN,
                             player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld()));
                 } else {
-                    // ID was given, but no data value
+                    // ID was given, but no storage value
                     progressBar = getStatsPlugin().getNormalStat(StatsPlugin.StatType.BLOCKS_BROKEN,
                             player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld(), "typeID",
                                     wrapper.getItem().getTypeId()));
@@ -102,7 +102,7 @@ public class BlocksBrokenAbstractRequirement extends AbstractRequirement {
                     progress = getStatsPlugin().getNormalStat(StatsPlugin.StatType.BLOCKS_BROKEN,
                             player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld()));
                 } else {
-                    // ID was given, but no data value
+                    // ID was given, but no storage value
                     progress = getStatsPlugin().getNormalStat(StatsPlugin.StatType.BLOCKS_BROKEN,
                             player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld(), "typeID",
                                     wrapper.getItem().getTypeId()));

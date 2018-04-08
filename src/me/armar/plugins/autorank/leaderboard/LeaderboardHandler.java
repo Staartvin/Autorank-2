@@ -1,9 +1,10 @@
 package me.armar.plugins.autorank.leaderboard;
 
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
 import me.armar.plugins.autorank.hooks.DependencyManager.AutorankDependency;
 import me.armar.plugins.autorank.language.Lang;
+import me.armar.plugins.autorank.storage.StorageProvider;
+import me.armar.plugins.autorank.storage.TimeType;
 import me.armar.plugins.autorank.util.AutorankTools;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -105,7 +106,9 @@ public class LeaderboardHandler {
      */
     private Map<UUID, Integer> getSortedTimesByUUID(final TimeType type) {
 
-        final List<UUID> uuids = plugin.getFlatFileManager().getUUIDKeys(type);
+        StorageProvider primaryStorageProvider = plugin.getStorageManager().getPrimaryStorageProvider();
+
+        final List<UUID> uuids = primaryStorageProvider.getStoredPlayers(type);
 
         final HashMap<UUID, Integer> times = new HashMap<UUID, Integer>();
 
@@ -147,7 +150,8 @@ public class LeaderboardHandler {
 
                     // If we are using Autorank, we do not need the player name.
                     if (plugin.getPlaytimes().getUsedTimePlugin().equals(AutorankDependency.AUTORANK)) {
-                        times.put(uuid, plugin.getFlatFileManager().getLocalTime(type, uuid));
+                        times.put(uuid, primaryStorageProvider.getPlayerTime(type,
+                                uuid));
                     } else {
                         // Get the cached value of this uuid
                         final String playerName = plugin.getUUIDStorage().getCachedPlayerName(uuid);
@@ -161,7 +165,7 @@ public class LeaderboardHandler {
                     }
                 }
             } else {
-                times.put(uuid, plugin.getFlatFileManager().getLocalTime(type, uuid));
+                times.put(uuid, primaryStorageProvider.getPlayerTime(type, uuid));
             }
         }
 
@@ -172,6 +176,8 @@ public class LeaderboardHandler {
     }
 
     private Map<String, Integer> getSortedTimesByNames(final TimeType type) {
+
+        StorageProvider primaryStorageProvider = plugin.getStorageManager().getPrimaryStorageProvider();
 
         final List<String> playerNames = plugin.getUUIDStorage().getStoredPlayerNames();
 
@@ -220,13 +226,13 @@ public class LeaderboardHandler {
 
                     // If we are using Autorank, we do not need the player name.
                     if (plugin.getPlaytimes().getUsedTimePlugin().equals(AutorankDependency.AUTORANK)) {
-                        times.put(playerName, plugin.getFlatFileManager().getLocalTime(type, uuid));
+                        times.put(playerName, primaryStorageProvider.getPlayerTime(type, uuid));
                     } else {
                         times.put(playerName, (plugin.getPlaytimes().getTimeOfPlayer(playerName, true) / 60));
                     }
                 }
             } else {
-                times.put(playerName, plugin.getFlatFileManager().getLocalTime(type, uuid));
+                times.put(playerName, primaryStorageProvider.getPlayerTime(type, uuid));
             }
         }
 
@@ -282,7 +288,8 @@ public class LeaderboardHandler {
      * @return true if we should update the leaderboard
      */
     private boolean shouldUpdateLeaderboard(TimeType type) {
-        if (System.currentTimeMillis() - plugin.getInternalPropertiesConfig().getLeaderboardLastUpdateTime(type) > (60000
+        if (System.currentTimeMillis() - plugin.getInternalPropertiesConfig().getLeaderboardLastUpdateTime(type) >
+                (60000
                 * LEADERBOARD_TIME_VALID)) {
             return true;
         } else return plugin.getInternalPropertiesConfig().getCachedLeaderboard(type).size() <= 2;

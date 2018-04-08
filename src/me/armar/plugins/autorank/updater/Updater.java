@@ -501,7 +501,7 @@ public class Updater {
             zipFile.close();
             zipFile = null;
 
-            // Move any plugin data folders that were included to the right
+            // Move any plugin storage folders that were included to the right
             // place, Bukkit won't do this for us.
             for (final File dFile : new File(zipPath).listFiles()) {
                 if (dFile.isDirectory()) {

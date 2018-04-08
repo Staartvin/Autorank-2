@@ -29,13 +29,13 @@ public class BackupCommand extends AutorankCommand {
         }
 
         if (args.length >= 2) {
-            // A specific data file was given to backup, so backup only the specific file.
+            // A specific storage file was given to backup, so backup only the specific file.
             backupAll = false;
             fileToBackup = args[1].toLowerCase();
         }
 
-        if (fileToBackup != null && !fileToBackup.equals("playerdata") && !fileToBackup.equals("data")) {
-            sender.sendMessage(ChatColor.RED + "Invalid data file. You can only backup 'playerdata' or 'data'.");
+        if (fileToBackup != null && !fileToBackup.equals("playerdata") && !fileToBackup.equals("storage")) {
+            sender.sendMessage(ChatColor.RED + "Invalid storage file. You can only backup 'playerdata' or 'storage'.");
             return true;
         }
 
@@ -44,9 +44,9 @@ public class BackupCommand extends AutorankCommand {
             sender.sendMessage(ChatColor.GREEN + "Successfully created a backup of playerdata!");
         }
 
-        if (backupAll || fileToBackup.equals("data")) {
-            plugin.getBackupManager().backupDataFolders("data");
-            sender.sendMessage(ChatColor.GREEN + "Successfully created a backup of regular time data!");
+        if (backupAll || fileToBackup.equals("storage")) {
+            plugin.getBackupManager().backupDataFolders("storage");
+            sender.sendMessage(ChatColor.GREEN + "Successfully created a backup of regular time storage!");
         }
 
         return true;
@@ -54,7 +54,7 @@ public class BackupCommand extends AutorankCommand {
 
     @Override
     public String getDescription() {
-        return "Backup files with playerdata and/or regular data.";
+        return "Backup files with playerdata and/or regular storage.";
     }
 
     @Override

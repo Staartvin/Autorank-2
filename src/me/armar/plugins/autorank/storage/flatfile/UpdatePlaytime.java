@@ -1,10 +1,10 @@
-package me.armar.plugins.autorank.data.flatfile;
+package me.armar.plugins.autorank.storage.flatfile;
 
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
 import me.armar.plugins.autorank.hooks.DependencyManager;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
 import me.armar.plugins.autorank.playtimes.PlaytimeManager;
+import me.armar.plugins.autorank.storage.flatfile.FlatFileManager.TimeType;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
