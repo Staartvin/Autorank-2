@@ -2,7 +2,6 @@ package me.armar.plugins.autorank.config;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.DependencyManager.AutorankDependency;
-import me.armar.plugins.autorank.storage.flatfile.FlatFileManager.TimeType;
 
 /**
  * This class is used to access the properties of the Settings.yml file. All

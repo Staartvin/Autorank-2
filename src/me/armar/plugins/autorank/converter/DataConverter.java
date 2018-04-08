@@ -2,7 +2,6 @@ package me.armar.plugins.autorank.converter;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.config.SimpleYamlConfiguration;
-import me.armar.plugins.autorank.storage.flatfile.FlatFileManager.TimeType;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.io.File;

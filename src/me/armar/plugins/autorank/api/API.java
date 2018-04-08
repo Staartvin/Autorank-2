@@ -6,7 +6,6 @@ import me.armar.plugins.autorank.pathbuilder.Path;
 import me.armar.plugins.autorank.pathbuilder.holders.RequirementsHolder;
 import me.armar.plugins.autorank.pathbuilder.requirement.AbstractRequirement;
 import me.armar.plugins.autorank.pathbuilder.result.AbstractResult;
-import me.armar.plugins.autorank.storage.flatfile.FlatFileManager.TimeType;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;

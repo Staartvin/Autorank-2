@@ -2,8 +2,6 @@ package me.armar.plugins.autorank.backup;
 
 import com.google.common.io.Files;
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.storage.flatfile.FlatFileManager;
-import me.armar.plugins.autorank.storage.flatfile.FlatFileManager.TimeType;
 import org.bukkit.ChatColor;
 
 import java.io.File;
