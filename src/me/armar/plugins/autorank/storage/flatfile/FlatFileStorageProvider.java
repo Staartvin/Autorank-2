@@ -7,18 +7,27 @@ import me.armar.plugins.autorank.storage.TimeType;
 import me.armar.plugins.autorank.util.AutorankTools;
 import org.bukkit.OfflinePlayer;
 
+import java.io.File;
 import java.util.*;
 
 public class FlatFileStorageProvider extends StorageProvider {
 
+    private final String pathTotalTimeFile = "/storage/Total_time.yml";
+    private final String pathDailyTimeFile = "/storage/Daily_time.yml";
+    private final String pathWeeklyTimeFile = "/storage/Weekly_time.yml";
+    private final String pathMonthlyTimeFile = "/storage/Monthly_time.yml";
     // Store where the file for each time type is saved.
-    private static HashMap<TimeType, String> dataTypePaths = new HashMap<>();
-
+    private Map<TimeType, String> dataTypePaths = new HashMap<>();
     // Store for each time type a file to store data about players.
-    private final HashMap<TimeType, SimpleYamlConfiguration> dataFiles = new HashMap<>();
+    private Map<TimeType, SimpleYamlConfiguration> dataFiles = new HashMap<>();
 
     public FlatFileStorageProvider(Autorank instance) {
         super(instance);
+
+        // Initialise provider to make it ready for use.
+        if (!this.initialiseProvider()) {
+            plugin.debugMessage("There was an error loading storage provider '" + getName() + "'.");
+        }
     }
 
     @Override
@@ -167,6 +176,41 @@ public class FlatFileStorageProvider extends StorageProvider {
         }
     }
 
+    @Override
+    public StorageType getStorageType() {
+        return StorageType.FLAT_FILE;
+    }
+
+    @Override
+    public boolean canImportData() {
+        return true;
+    }
+
+
+    @Override
+    public void importData() {
+        final SimpleYamlConfiguration data = this.getDataFile(TimeType.TOTAL_TIME);
+        data.reloadFile();
+    }
+
+    @Override
+    public boolean canBackupData() {
+        return true;
+    }
+
+    @Override
+    public boolean backupData() {
+
+        // Back up all files
+        for (Map.Entry<TimeType, String> entry : dataTypePaths.entrySet()) {
+            plugin.debugMessage("Making a backup of " + entry.getValue());
+            plugin.getBackupManager().backupFile(entry.getValue(), plugin.getDataFolder().getAbsolutePath()
+                    + File.separator + "backups" + File.separator + entry.getValue().replace("/storage/", ""));
+        }
+
+        return true;
+    }
+
     /**
      * Get a storage file for a specific time type.
      *
@@ -183,10 +227,10 @@ public class FlatFileStorageProvider extends StorageProvider {
     private void loadDataFiles() {
 
         // Register storage path for each time type
-        dataTypePaths.put(TimeType.TOTAL_TIME, "/storage/Total_time.yml");
-        dataTypePaths.put(TimeType.DAILY_TIME, "/storage/Daily_time.yml");
-        dataTypePaths.put(TimeType.WEEKLY_TIME, "/storage/Weekly_time.yml");
-        dataTypePaths.put(TimeType.MONTHLY_TIME, "/storage/Monthly_time.yml");
+        dataTypePaths.put(TimeType.TOTAL_TIME, pathTotalTimeFile);
+        dataTypePaths.put(TimeType.DAILY_TIME, pathDailyTimeFile);
+        dataTypePaths.put(TimeType.WEEKLY_TIME, pathWeeklyTimeFile);
+        dataTypePaths.put(TimeType.MONTHLY_TIME, pathMonthlyTimeFile);
 
         // Create new files for the time type.
         dataFiles.put(TimeType.TOTAL_TIME,
@@ -238,15 +282,6 @@ public class FlatFileStorageProvider extends StorageProvider {
 
         saveData();
         return counter;
-    }
-
-    /**
-     * Import total play time from the current {@link TimeType} storage
-     * file.
-     */
-    private void importData() {
-        final SimpleYamlConfiguration data = this.getDataFile(TimeType.TOTAL_TIME);
-        data.reloadFile();
     }
 
 }

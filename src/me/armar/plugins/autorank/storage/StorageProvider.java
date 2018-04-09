@@ -17,13 +17,15 @@ public abstract class StorageProvider {
 
     public Autorank plugin;
 
+    /**
+     * Get the storage type that this storage provider uses.
+     *
+     * @return type of storage used
+     */
+    public abstract StorageType getStorageType();
+
     public StorageProvider(Autorank instance) {
         this.plugin = instance;
-
-        // Initialise provider to make it ready for use.
-        if (!this.initialiseProvider()) {
-            plugin.debugMessage("There was an error loading storage provider '" + getName() + "'.");
-        }
     }
 
     /**
@@ -119,8 +121,6 @@ public abstract class StorageProvider {
      * Also see {@link #isDataFileOutdated(TimeType)} for more info.
      */
     public void doCalendarCheck() {
-
-
         // Check if all storage files are still up to date.
         // Check if daily, weekly or monthly files should be reset.
 
@@ -210,4 +210,38 @@ public abstract class StorageProvider {
      * Force save all data that the storage provider is currently using.
      */
     public abstract void saveData();
+
+    /**
+     * Check whether this storage provider supports importing data.
+     *
+     * @return true if this storage provider can import data. False otherwise.
+     */
+    public abstract boolean canImportData();
+
+    /**
+     * Import data using this storage provider. This may overwrite existing data about players (depending on the
+     * storage provider)
+     */
+    public abstract void importData();
+
+    /**
+     * Check whether this storage provider allows you to back up its data.
+     *
+     * @return true if you can backup data of this storage provider
+     */
+    public abstract boolean canBackupData();
+
+    /**
+     * Back up data of this storage provider. Note that this only works for storage providers that support this, see
+     * {@link #canBackupData()}.
+     *
+     * @return whether the back up succeeded.
+     */
+    public abstract boolean backupData();
+
+    /**
+     * Different types of storage that a StorageProvider may use.
+     */
+    public enum StorageType {
+        FLAT_FILE, DATABASE, HYBRID, OTHER}
 }

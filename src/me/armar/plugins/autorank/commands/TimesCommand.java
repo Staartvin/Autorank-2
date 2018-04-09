@@ -4,6 +4,8 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
+import me.armar.plugins.autorank.storage.StorageProvider;
+import me.armar.plugins.autorank.storage.TimeType;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
 import org.bukkit.command.Command;
@@ -69,10 +71,12 @@ public class TimesCommand extends AutorankCommand {
             targetName = plugin.getUUIDStorage().getCachedPlayerName(uuid);
         }
 
-        final int daily = plugin.getFlatFileManager().getLocalTime(TimeType.DAILY_TIME, uuid);
-        final int weekly = plugin.getFlatFileManager().getLocalTime(TimeType.WEEKLY_TIME, uuid);
-        final int monthly = plugin.getFlatFileManager().getLocalTime(TimeType.MONTHLY_TIME, uuid);
-        final int total = plugin.getFlatFileManager().getLocalTime(TimeType.TOTAL_TIME, uuid);
+        StorageProvider primaryStorageProvider = plugin.getStorageManager().getPrimaryStorageProvider();
+
+        final int daily = primaryStorageProvider.getPlayerTime(TimeType.DAILY_TIME, uuid);
+        final int weekly = primaryStorageProvider.getPlayerTime(TimeType.WEEKLY_TIME, uuid);
+        final int monthly = primaryStorageProvider.getPlayerTime(TimeType.MONTHLY_TIME, uuid);
+        final int total = primaryStorageProvider.getPlayerTime(TimeType.TOTAL_TIME, uuid);
 
         sender.sendMessage(Lang.AR_TIMES_HEADER.getConfigValue(targetName));
         sender.sendMessage(Lang.AR_TIMES_PLAYER_PLAYED.getConfigValue(targetName));

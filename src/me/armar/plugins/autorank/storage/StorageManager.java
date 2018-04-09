@@ -4,6 +4,7 @@ import me.armar.plugins.autorank.Autorank;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The StorageManager class is responsible for connection with the registered storage providers. It allows you to
@@ -30,7 +31,7 @@ public class StorageManager {
     }
 
     /**
-     * Get the primary storage provider (or null if storage provider is active).
+     * Get the primary storage provider (or null if no storage provider is active).
      *
      * @return primary storage provider
      */
@@ -101,6 +102,9 @@ public class StorageManager {
         if (getPrimaryStorageProvider() == null) {
             setPrimaryStorageProvider(storageProvider);
         }
+
+        plugin.debugMessage("Registered new storage provider: " + storageProvider.getName() + " (type: " +
+                storageProvider.getStorageType() + ")");
     }
 
     /**
@@ -125,4 +129,133 @@ public class StorageManager {
             storageProvider.saveData();
         }
     }
+
+    /**
+     * Do a calendar check for all storage providers to see whether a certain storage file is outdated.
+     */
+    public void doCalendarCheck() {
+        for (StorageProvider storageProvider : activeStorageProviders) {
+            storageProvider.doCalendarCheck();
+        }
+    }
+
+    /**
+     * Set the time of a player (for a given time type) for all storage providers.
+     *
+     * @param timeType Type of time
+     * @param uuid     UUID of the player
+     * @param value    value to set the player time to
+     */
+    public void setPlayerTime(TimeType timeType, UUID uuid, int value) {
+        for (StorageProvider storageProvider : activeStorageProviders) {
+            storageProvider.setPlayerTime(timeType, uuid, value);
+        }
+    }
+
+    /**
+     * Set the time of a player (for all types of time) for all storage providers.
+     *
+     * @param uuid  UUID of the player
+     * @param value value to set the player time to
+     */
+    public void setPlayerTime(UUID uuid, int value) {
+        for (TimeType timeType : TimeType.values()) {
+            this.setPlayerTime(timeType, uuid, value);
+        }
+    }
+
+    /**
+     * Add time to a player's current time (for a given time type) for all storage providers.
+     *
+     * @param timeType Type of time
+     * @param uuid     UUID of the player
+     * @param value    time to add.
+     */
+    public void addPlayerTime(TimeType timeType, UUID uuid, int value) {
+        for (StorageProvider storageProvider : activeStorageProviders) {
+            storageProvider.addPlayerTime(timeType, uuid, value);
+        }
+    }
+
+    /**
+     * Add time to a player's current time (for all time types) for all storage providers.
+     *
+     * @param uuid  UUID of the player
+     * @param value time to add.
+     */
+    public void addPlayerTime(UUID uuid, int value) {
+        for (TimeType timeType : TimeType.values()) {
+            this.addPlayerTime(timeType, uuid, value);
+        }
+    }
+
+    /**
+     * Check whether there is a storage provider that is using the requested storage type.
+     *
+     * @param storageType Storage type to search
+     * @return true if there is an active storage provider that is using the given storage type.
+     */
+    public boolean isStorageTypeActive(StorageProvider.StorageType storageType) {
+        for (StorageProvider storageProvider : activeStorageProviders) {
+            if (storageProvider.getStorageType() == storageType) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Get an active storage provider that is using a certain type of storage. Note that the returned storage provider
+     * may be non-deterministic if more than one storage provider with the same storage type is active.
+     *
+     * @param storageType Type of storage that the storage provider must use
+     * @return first found active storage provider that uses the requested storage type (or null if none was found).
+     */
+    public StorageProvider getStorageProvider(StorageProvider.StorageType storageType) {
+        for (StorageProvider storageProvider : activeStorageProviders) {
+            if (storageProvider.getStorageType() == storageType) {
+                return storageProvider;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Import data for all active storage providers (if they allow importing).
+     */
+    public void importDataForStorageProviders() {
+        for (StorageProvider storageProvider : activeStorageProviders) {
+            if (!storageProvider.canImportData()) {
+                continue;
+            }
+
+            storageProvider.importData();
+        }
+    }
+
+    /**
+     * Back up all active storage providers that allow backups to be made.
+     *
+     * @return whether all backup were successfully made.
+     */
+    public boolean backupStorageProviders() {
+        boolean successfulBackup = true;
+
+        for (StorageProvider storageProvider : activeStorageProviders) {
+            if (!storageProvider.canBackupData()) {
+                continue;
+            }
+
+            boolean result = storageProvider.backupData();
+
+            if (!result) {
+                successfulBackup = false;
+            }
+        }
+
+        return successfulBackup;
+    }
+
 }

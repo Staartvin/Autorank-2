@@ -10,8 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 /**
- * This listener will listen to players joining and send them a message when an
- * update is available or an error has been found
+ * This listener will listen to players joining and perform actions based on the player.
  *
  * @author Staartvin
  */
@@ -34,7 +33,6 @@ public class PlayerJoinListener implements Listener {
 
         // Save whether this player is exempted from the leaderboard.
         plugin.getPlayerChecker().doLeaderboardExemptCheck(player);
-
 
         // Try to automatically assign a path to a player.
         plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
@@ -92,5 +90,8 @@ public class PlayerJoinListener implements Listener {
                 }, 10L);
             }
         }
+
+        // Register new task that updates the play time of a player
+        plugin.getTaskManager().startUpdatePlayTimeTask(player.getUniqueId());
     }
 }

@@ -11,6 +11,7 @@ import me.armar.plugins.autorank.hooks.DependencyManager;
 import me.armar.plugins.autorank.language.LanguageHandler;
 import me.armar.plugins.autorank.leaderboard.LeaderboardHandler;
 import me.armar.plugins.autorank.listeners.PlayerJoinListener;
+import me.armar.plugins.autorank.listeners.PlayerQuitListener;
 import me.armar.plugins.autorank.pathbuilder.PathManager;
 import me.armar.plugins.autorank.pathbuilder.builders.RequirementBuilder;
 import me.armar.plugins.autorank.pathbuilder.builders.ResultBuilder;
@@ -18,11 +19,13 @@ import me.armar.plugins.autorank.pathbuilder.requirement.*;
 import me.armar.plugins.autorank.pathbuilder.result.*;
 import me.armar.plugins.autorank.permissions.PermissionsPluginManager;
 import me.armar.plugins.autorank.playerchecker.PlayerChecker;
-import me.armar.plugins.autorank.playtimes.PlaytimeManager;
+import me.armar.plugins.autorank.playtimes.PlayTimeManager;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.armar.plugins.autorank.statsmanager.handlers.FallbackHandler;
 import me.armar.plugins.autorank.storage.StorageManager;
+import me.armar.plugins.autorank.storage.flatfile.FlatFileStorageProvider;
 import me.armar.plugins.autorank.storage.mysql.MySQLManager;
+import me.armar.plugins.autorank.tasks.TaskManager;
 import me.armar.plugins.autorank.updater.UpdateHandler;
 import me.armar.plugins.autorank.updater.Updater;
 import me.armar.plugins.autorank.util.AutorankTools;
@@ -70,7 +73,7 @@ public class Autorank extends JavaPlugin {
 
     // Miscalleaneous
     private PlayerChecker playerChecker;
-    private PlaytimeManager playtimes;
+    private PlayTimeManager playtimes;
     private DataConverter dataConverter;
 
     // Data connection
@@ -79,6 +82,9 @@ public class Autorank extends JavaPlugin {
     // UUID storage
     private UUIDStorage uuidStorage;
     private StorageManager storageManager;
+
+    // Managing periodic tasks
+    private TaskManager taskManager;
 
     // Validation & Warning
     private ValidateHandler validateHandler;
@@ -180,6 +186,9 @@ public class Autorank extends JavaPlugin {
         // Create Path Manager
         setPathManager(new PathManager(this));
 
+        // Create Task Manager so we can schedule tasks.
+        setTaskManager(new TaskManager(this));
+
         // ------------- Initialize handlers -------------
 
         // Create update handler
@@ -205,14 +214,13 @@ public class Autorank extends JavaPlugin {
         // ------------- Initialize others -------------
 
         // Create playtime class
-        setPlaytimes(new PlaytimeManager(this));
+        setPlaytimes(new PlayTimeManager(this));
 
         // Create player check class
         setPlayerChecker(new PlayerChecker(this));
 
         // Set debugger
         setDebugger(new Debugger(this));
-
 
         // Load uuids - ready for new ones
         getUUIDStorage().createNewFiles();
@@ -225,6 +233,9 @@ public class Autorank extends JavaPlugin {
         // Setup language file
         languageHandler.createNewFile();
 
+        // Register FlatFile storage provider
+        getStorageManager().registerStorageProvider(new FlatFileStorageProvider(this));
+
         // ------------- Initialize requirements and results -------------
         this.initializeReqsAndRes();
 
@@ -235,6 +246,7 @@ public class Autorank extends JavaPlugin {
 
         // Register listeners
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerQuitListener(this), this);
 
         // ------------- Schedule tasks -------------
 
@@ -313,7 +325,7 @@ public class Autorank extends JavaPlugin {
                     "DEV versions are not guaranteed to be stable and generally shouldn't be used on big production servers with lots of players.");
         }
 
-        // ------------- Do miscalleaneous tasks -------------
+        // ------------- Do miscellaneous tasks -------------
 
         // Start automatic backup
         this.getBackupManager().startBackupSystem();
@@ -326,7 +338,7 @@ public class Autorank extends JavaPlugin {
 
         // TODO: implement that all storage providers do calendar checks themselves periodically.
         // Check whether the storage files are still up to date.
-        this.getStorageManager().getPrimaryStorageProvider().doCalendarCheck();
+        this.getStorageManager().doCalendarCheck();
 
         // Spawn thread to check if MySQL database times are up to date
         this.getMySQLManager().refreshGlobalTime();
@@ -530,7 +542,7 @@ public class Autorank extends JavaPlugin {
         return playerChecker;
     }
 
-    public PlaytimeManager getPlaytimes() {
+    public PlayTimeManager getPlaytimes() {
         return playtimes;
     }
 
@@ -628,7 +640,7 @@ public class Autorank extends JavaPlugin {
         this.playerChecker = playerChecker;
     }
 
-    private void setPlaytimes(final PlaytimeManager playtimes) {
+    private void setPlaytimes(final PlayTimeManager playtimes) {
         this.playtimes = playtimes;
     }
 
@@ -724,5 +736,13 @@ public class Autorank extends JavaPlugin {
 
     public void setStorageManager(StorageManager storageManager) {
         this.storageManager = storageManager;
+    }
+
+    public TaskManager getTaskManager() {
+        return taskManager;
+    }
+
+    public void setTaskManager(TaskManager taskManager) {
+        this.taskManager = taskManager;
     }
 }

@@ -6,8 +6,7 @@ import me.armar.plugins.autorank.hooks.statzapi.StatzAPIHandler;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin.StatType;
 import me.armar.plugins.autorank.statsmanager.handlers.StatsHandler;
-import me.armar.plugins.autorank.storage.flatfile.UpdatePlaytime;
-import me.armar.plugins.autorank.util.AutorankTools;
+import me.armar.plugins.autorank.storage.TimeType;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
 import me.staartvin.plugins.pluginlibrary.Library;
 import me.staartvin.plugins.pluginlibrary.hooks.OnTimeHook;
@@ -15,12 +14,9 @@ import me.staartvin.plugins.pluginlibrary.hooks.StatsHook;
 
 import java.util.UUID;
 
-public class PlaytimeManager {
+public class PlayTimeManager {
 
-    // Autorank keeps track of total time, time online on one day, time online
-    // in a week and time online in a month.
-    // There are all tracked in minutes.
-
+    // How often do we check whether a player is still online? (in minutes)
     public static int INTERVAL_MINUTES = 5;
 
     private final Autorank plugin;
@@ -28,15 +24,12 @@ public class PlaytimeManager {
     // What plugin should Autorank use to check time?
     private final AutorankDependency timePlugin;
 
-    public PlaytimeManager(final Autorank plugin) {
+    public PlayTimeManager(final Autorank plugin) {
         this.plugin = plugin;
 
         INTERVAL_MINUTES = plugin.getConfigHandler().getIntervalTime();
 
         plugin.getLogger().info("Interval check every " + INTERVAL_MINUTES + " minutes.");
-
-        plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new UpdatePlaytime(plugin.getFlatFileManager(), plugin),
-                PlaytimeManager.INTERVAL_MINUTES * AutorankTools.TICKS_PER_MINUTE, PlaytimeManager.INTERVAL_MINUTES * AutorankTools.TICKS_PER_MINUTE);
 
         timePlugin = plugin.getConfigHandler().useTimeOf();
     }
@@ -76,7 +69,8 @@ public class PlaytimeManager {
                     return playTime;
 
                 // Stats not found, using Autorank's system.
-                playTime = plugin.getFlatFileManager().getLocalTime(TimeType.TOTAL_TIME, uuid) * 60;
+                playTime = plugin.getStorageManager().getPrimaryStorageProvider().getPlayerTime(TimeType.TOTAL_TIME,
+                        uuid) * 60;
             }
         } else if (timePlugin.equals(AutorankDependency.ONTIME)) {
             playTime = (int) (((OnTimeHook) plugin.getDependencyManager().getLibraryHook(Library.ONTIME)).getPlayerData(playerName, "TOTALPLAY") / 1000);
@@ -90,7 +84,8 @@ public class PlaytimeManager {
                 return playTime;
 
             // Use internal system of Autorank.
-            playTime = plugin.getFlatFileManager().getLocalTime(TimeType.TOTAL_TIME, uuid) * 60;
+            playTime = plugin.getStorageManager().getPrimaryStorageProvider().getPlayerTime(TimeType.TOTAL_TIME,
+                    uuid) * 60;
         }
 
         return playTime;

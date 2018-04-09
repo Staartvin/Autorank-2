@@ -4,6 +4,7 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
+import me.armar.plugins.autorank.storage.TimeType;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -57,7 +58,7 @@ public class SyncCommand extends AutorankCommand {
 
                     // Update all storage.yml records
                     for (Entry<UUID, Integer> entry : plugin.getMySQLManager().getAllPlayersFromDatabase().entrySet()) {
-                        plugin.getFlatFileManager().setLocalTime(TimeType.TOTAL_TIME, entry.getValue(), entry.getKey());
+                        plugin.getStorageManager().setPlayerTime(TimeType.TOTAL_TIME, entry.getKey(), entry.getValue());
                         count++;
                     }
 
@@ -72,8 +73,11 @@ public class SyncCommand extends AutorankCommand {
                 @Override
                 public void run() {
                     // Update all mysql records
-                    for (final UUID uuid : plugin.getFlatFileManager().getUUIDKeys(TimeType.TOTAL_TIME)) {
-                        final int localTime = plugin.getFlatFileManager().getLocalTime(TimeType.TOTAL_TIME, uuid);
+                    for (final UUID uuid : plugin.getStorageManager().getPrimaryStorageProvider().getStoredPlayers
+                            (TimeType.TOTAL_TIME)) {
+                        final int localTime = plugin.getStorageManager().getPrimaryStorageProvider().getPlayerTime
+                                (TimeType
+                                .TOTAL_TIME, uuid);
 
                         if (localTime <= 0)
                             continue;

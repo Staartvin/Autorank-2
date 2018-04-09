@@ -4,6 +4,7 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
+import me.armar.plugins.autorank.storage.TimeType;
 import me.armar.plugins.autorank.util.AutorankTools;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -52,8 +53,10 @@ public class AddCommand extends AutorankCommand {
                 args[1] = plugin.getUUIDStorage().getRealName(uuid);
             }
 
-            plugin.getFlatFileManager().setLocalTime(TimeType.TOTAL_TIME, plugin.getFlatFileManager().getLocalTime(TimeType.TOTAL_TIME, uuid) + value, uuid);
-            AutorankTools.sendColoredMessage(sender, Lang.PLAYTIME_CHANGED.getConfigValue(args[1], value + ""));
+            plugin.getStorageManager().addPlayerTime(uuid, value);
+
+            AutorankTools.sendColoredMessage(sender, Lang.PLAYTIME_CHANGED.getConfigValue(args[1], plugin
+                    .getStorageManager().getPrimaryStorageProvider().getPlayerTime(TimeType.TOTAL_TIME, uuid) + ""));
         } else {
             AutorankTools.sendColoredMessage(sender, Lang.INVALID_FORMAT.getConfigValue("/ar add [player] [value]"));
         }

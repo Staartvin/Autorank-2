@@ -3,7 +3,7 @@ package me.armar.plugins.autorank.storage.mysql;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.config.SettingsConfig;
 import me.armar.plugins.autorank.config.SettingsConfig.MySQLCredentials;
-import me.armar.plugins.autorank.playtimes.PlaytimeManager;
+import me.armar.plugins.autorank.playtimes.PlayTimeManager;
 import me.armar.plugins.autorank.util.AutorankTools;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -300,7 +300,7 @@ public class MySQLManager {
         }
 
         // Get the difference in minutes
-        return (currentTime - lastCheckedTime) / 60000 >= PlaytimeManager.INTERVAL_MINUTES;
+        return (currentTime - lastCheckedTime) / 60000 >= PlayTimeManager.INTERVAL_MINUTES;
     }
 
     /**
@@ -323,7 +323,7 @@ public class MySQLManager {
                 }
             }
 
-        }, AutorankTools.TICKS_PER_SECOND, AutorankTools.TICKS_PER_MINUTE * PlaytimeManager.INTERVAL_MINUTES);
+        }, AutorankTools.TICKS_PER_SECOND, AutorankTools.TICKS_PER_MINUTE * PlayTimeManager.INTERVAL_MINUTES);
 
     }
 

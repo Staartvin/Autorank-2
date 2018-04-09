@@ -74,15 +74,8 @@ public class BackupManager {
         if (dataType.equalsIgnoreCase("storage")) {
             plugin.debugMessage(ChatColor.GREEN + "Making a backup of all storage files!");
 
-            // For every type of time storage file
-            for (TimeType type : TimeType.values()) {
-
-                // Get the path to the file and back it up!
-                String path = FlatFileManager.dataTypePaths.get(type);
-
-                plugin.getBackupManager().backupFile(path, plugin.getDataFolder().getAbsolutePath()
-                        + File.separator + "backups" + File.separator + path.replace("/storage/", ""));
-            }
+            // Try to backup all storage providers
+            plugin.getStorageManager().backupStorageProviders();
 
             // Update latest backup time so backup manager does not backup again within 24 hours.
             backupDataManager.getConfig().set("storage", System.currentTimeMillis());

@@ -6,6 +6,7 @@ import me.armar.plugins.autorank.pathbuilder.Path;
 import me.armar.plugins.autorank.pathbuilder.holders.RequirementsHolder;
 import me.armar.plugins.autorank.pathbuilder.requirement.AbstractRequirement;
 import me.armar.plugins.autorank.pathbuilder.result.AbstractResult;
+import me.armar.plugins.autorank.storage.TimeType;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -98,7 +99,18 @@ public class API {
      * @return play time of this player or 0 if not found.
      */
     public int getLocalPlayTime(final UUID uuid) {
-        return plugin.getFlatFileManager().getLocalTime(TimeType.TOTAL_TIME, uuid);
+        return getPlayTime(TimeType.TOTAL_TIME, uuid);
+    }
+
+    /**
+     * Get the play time of a player for a given type of time (daily, weekly, monthly).
+     *
+     * @param timeType Type of time
+     * @param uuid     UUID of the player
+     * @return play time of a player (in minutes).
+     */
+    public int getPlayTime(TimeType timeType, UUID uuid) {
+        return plugin.getStorageManager().getPrimaryStorageProvider().getPlayerTime(timeType, uuid);
     }
 
     /**
