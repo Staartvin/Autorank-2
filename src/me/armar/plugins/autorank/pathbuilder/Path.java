@@ -221,7 +221,7 @@ public class Path {
 
             // We don't do partial completion so we only need to check if a
             // player passes all requirements holders.
-            if (!plugin.getConfigHandler().usePartialCompletion()) {
+            if (!plugin.getSettingsConfigHandler().usePartialCompletion()) {
                 if (!holder.meetsRequirement(player, false)) {
                     return false;
                 } else {

@@ -104,7 +104,7 @@ public class CheckCommand extends AutorankCommand {
 
         // Start building layout
 
-        String layout = plugin.getConfigHandler().getCheckCommandLayout();
+        String layout = plugin.getSettingsConfigHandler().getCheckCommandLayout();
 
         layout = layout.replace("&path", displayName);
         layout = layout.replace("&p", player.getName());

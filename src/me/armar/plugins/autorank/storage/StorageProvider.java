@@ -48,11 +48,11 @@ public abstract class StorageProvider {
     public abstract int getPlayerTime(TimeType timeType, UUID uuid);
 
     /**
-     * Reset a data file for a given type of time, setting all times (for the given time type) to zero for all players.
+     * Reset data for a given type of time, setting all times (for the given time type) to zero for all players.
      *
      * @param timeType Type of time.
      */
-    public abstract void resetDataFile(TimeType timeType);
+    public abstract void resetData(TimeType timeType);
 
     /**
      * Add time to a player's time, for a given time type.
@@ -134,14 +134,14 @@ public abstract class StorageProvider {
             }
 
             // We should reset it now, it has expired.
-            this.resetDataFile(type);
+            this.resetData(type);
 
             int value = 0;
 
             if (type == TimeType.DAILY_TIME) {
                 value = cal.get(Calendar.DAY_OF_WEEK);
 
-                if (plugin.getConfigHandler().shouldBroadcastDataReset()) {
+                if (plugin.getSettingsConfigHandler().shouldBroadcastDataReset()) {
                     // Should we broadcast the reset?
                     plugin.getServer().broadcastMessage(Lang.RESET_DAILY_TIME.getConfigValue());
                 }
@@ -149,7 +149,7 @@ public abstract class StorageProvider {
             } else if (type == TimeType.WEEKLY_TIME) {
                 value = cal.get(Calendar.WEEK_OF_YEAR);
 
-                if (plugin.getConfigHandler().shouldBroadcastDataReset()) {
+                if (plugin.getSettingsConfigHandler().shouldBroadcastDataReset()) {
                     // Should we broadcast the reset?
 
                     plugin.getServer().broadcastMessage(Lang.RESET_WEEKLY_TIME.getConfigValue());
@@ -157,7 +157,7 @@ public abstract class StorageProvider {
             } else if (type == TimeType.MONTHLY_TIME) {
                 value = cal.get(Calendar.MONTH);
 
-                if (plugin.getConfigHandler().shouldBroadcastDataReset()) {
+                if (plugin.getSettingsConfigHandler().shouldBroadcastDataReset()) {
                     // Should we broadcast the reset?
 
                     plugin.getServer().broadcastMessage(Lang.RESET_MONTHLY_TIME.getConfigValue());

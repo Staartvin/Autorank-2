@@ -36,8 +36,8 @@ public class LeaderboardHandler {
     public LeaderboardHandler(final Autorank plugin) {
         this.plugin = plugin;
 
-        leaderboardLength = plugin.getConfigHandler().getLeaderboardLength();
-        layout = plugin.getConfigHandler().getLeaderboardLayout();
+        leaderboardLength = plugin.getSettingsConfigHandler().getLeaderboardLength();
+        layout = plugin.getSettingsConfigHandler().getLeaderboardLayout();
     }
     // LeaderboardHandler
     // is valid
@@ -144,7 +144,7 @@ public class LeaderboardHandler {
             // uuids in existence.
             if (type == TimeType.TOTAL_TIME) {
 
-                if (plugin.getConfigHandler().useGlobalTimeInLeaderboard()) {
+                if (plugin.getSettingsConfigHandler().useGlobalTimeInLeaderboard()) {
                     times.put(uuid, plugin.getMySQLManager().getGlobalTime(uuid));
                 } else {
 
@@ -220,7 +220,7 @@ public class LeaderboardHandler {
             // uuids in existence.
             if (type == TimeType.TOTAL_TIME) {
 
-                if (plugin.getConfigHandler().useGlobalTimeInLeaderboard()) {
+                if (plugin.getSettingsConfigHandler().useGlobalTimeInLeaderboard()) {
                     times.put(playerName, plugin.getMySQLManager().getGlobalTime(uuid));
                 } else {
 

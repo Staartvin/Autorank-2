@@ -1,6 +1,7 @@
 package me.armar.plugins.autorank.storage.mysql;
 
 import java.sql.*;
+import java.util.Collection;
 
 /**
  * This class is used to create a connection between the MySQL database and
@@ -53,7 +54,7 @@ public class SQLDataStorage {
      */
     public boolean connect() {
         try {
-            final String url = "jdbc:mysql://" + hostname + "/" + database;
+            final String url = "jdbc:mysql://" + hostname + "/" + database + "?useSSL=false";
 
             conn = DriverManager.getConnection(url, username, password);
 
@@ -103,7 +104,18 @@ public class SQLDataStorage {
                 }
             }
         }
+    }
 
+    /**
+     * Convenience method for execute multiple queries at once. Does not return anything, just sends the queries to
+     * the database.
+     *
+     * @param queries Queries to sent.
+     */
+    public void executeQueries(Collection<String> queries) {
+        for (String query : queries) {
+            this.execute(query);
+        }
     }
 
     /**

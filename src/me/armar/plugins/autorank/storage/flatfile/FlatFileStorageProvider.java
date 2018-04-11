@@ -48,7 +48,7 @@ public class FlatFileStorageProvider extends StorageProvider {
     }
 
     @Override
-    public void resetDataFile(TimeType timeType) {
+    public void resetData(TimeType timeType) {
         final SimpleYamlConfiguration data = this.getDataFile(timeType);
 
         plugin.debugMessage("Resetting storage file '" + timeType + "'!");

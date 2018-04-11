@@ -411,7 +411,8 @@ public class MySQLManager {
 
             mysql = new SQLDataStorage(hostname, username, password, database);
 
-            plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+            return;
+            /*plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
 
                 @Override
                 public void run() {
@@ -427,7 +428,7 @@ public class MySQLManager {
                         setupTable();
                     }
                 }
-            });
+            });*/
         }
     }
 }

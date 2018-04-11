@@ -42,7 +42,7 @@ public class SyncCommand extends AutorankCommand {
             reverse = true;
         }
 
-        if (!plugin.getConfigHandler().useMySQL()) {
+        if (!plugin.getSettingsConfigHandler().useMySQL()) {
             sender.sendMessage(Lang.MYSQL_IS_NOT_ENABLED.getConfigValue());
             return true;
         }

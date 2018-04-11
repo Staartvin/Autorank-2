@@ -23,8 +23,8 @@ import me.armar.plugins.autorank.playtimes.PlayTimeManager;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.armar.plugins.autorank.statsmanager.handlers.FallbackHandler;
 import me.armar.plugins.autorank.storage.StorageManager;
-import me.armar.plugins.autorank.storage.flatfile.FlatFileStorageProvider;
 import me.armar.plugins.autorank.storage.mysql.MySQLManager;
+import me.armar.plugins.autorank.storage.mysql.MySQLStorageProvider;
 import me.armar.plugins.autorank.tasks.TaskManager;
 import me.armar.plugins.autorank.updater.UpdateHandler;
 import me.armar.plugins.autorank.updater.Updater;
@@ -233,8 +233,16 @@ public class Autorank extends JavaPlugin {
         // Setup language file
         languageHandler.createNewFile();
 
+        // ------------- Register storage providers -------------
+
         // Register FlatFile storage provider
-        getStorageManager().registerStorageProvider(new FlatFileStorageProvider(this));
+        //getStorageManager().registerStorageProvider(new FlatFileStorageProvider(this));
+
+
+        if (this.getSettingsConfigHandler().useMySQL()) {
+            // Register MySQL storage provider
+            getStorageManager().registerStorageProvider(new MySQLStorageProvider(this));
+        }
 
         // ------------- Initialize requirements and results -------------
         this.initializeReqsAndRes();
@@ -312,7 +320,7 @@ public class Autorank extends JavaPlugin {
         // ------------- Log messages -------------
 
         // Debug message telling what plugin is used for timing.
-        getLogger().info("Using timings of: " + getConfigHandler().useTimeOf().toString().toLowerCase());
+        getLogger().info("Using timings of: " + getSettingsConfigHandler().useTimeOf().toString().toLowerCase());
 
         debugMessage("Autorank debug is turned on!");
 
@@ -474,7 +482,7 @@ public class Autorank extends JavaPlugin {
      */
     public void debugMessage(final String message) {
         // Don't put out debug message when it is not needed.
-        if (!this.getConfigHandler().useDebugOutput())
+        if (!this.getSettingsConfigHandler().useDebugOutput())
             return;
 
         this.getServer().getConsoleSender()
@@ -578,7 +586,7 @@ public class Autorank extends JavaPlugin {
         return commandsManager;
     }
 
-    public SettingsConfig getConfigHandler() {
+    public SettingsConfig getSettingsConfigHandler() {
         return settingsConfig;
     }
 
@@ -600,10 +608,6 @@ public class Autorank extends JavaPlugin {
 
     public void setCommandsManager(final CommandsManager commandsManager) {
         this.commandsManager = commandsManager;
-    }
-
-    public void setConfigHandler(final SettingsConfig configHandler) {
-        this.settingsConfig = configHandler;
     }
 
     public void setDebugger(final Debugger debugger) {
