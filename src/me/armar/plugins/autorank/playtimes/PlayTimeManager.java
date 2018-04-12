@@ -28,11 +28,11 @@ public class PlayTimeManager {
     public PlayTimeManager(final Autorank plugin) {
         this.plugin = plugin;
 
-        INTERVAL_MINUTES = plugin.getSettingsConfigHandler().getIntervalTime();
+        INTERVAL_MINUTES = plugin.getSettingsConfig().getIntervalTime();
 
         plugin.getLogger().info("Interval check every " + INTERVAL_MINUTES + " minutes.");
 
-        timePlugin = plugin.getSettingsConfigHandler().useTimeOf();
+        timePlugin = plugin.getSettingsConfig().useTimeOf();
     }
 
     /**

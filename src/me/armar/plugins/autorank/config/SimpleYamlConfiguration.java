@@ -1,8 +1,8 @@
 package me.armar.plugins.autorank.config;
 
+import me.armar.plugins.autorank.Autorank;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -27,7 +27,7 @@ public class SimpleYamlConfiguration extends YamlConfiguration {
      * @param fileName Path of the file.
      * @param name     Name of the file that is used to show in the console.
      */
-    public SimpleYamlConfiguration(final JavaPlugin plugin, final String fileName, final String name) {
+    public SimpleYamlConfiguration(final Autorank plugin, final String fileName, final String name) {
         /*
          * accepts null as configDefaults -> check for resource and copies it if
          * found, makes an empty config if nothing is found
@@ -38,7 +38,7 @@ public class SimpleYamlConfiguration extends YamlConfiguration {
         if (!file.exists()) {
             if (plugin.getResource(fileName) != null) {
                 plugin.saveResource(fileName, false);
-                plugin.getLogger().info("New " + name + " file copied from jar");
+                plugin.debugMessage("New " + name + " file copied from jar");
                 try {
                     this.load(file);
                 } catch (final Exception e) {
@@ -48,7 +48,7 @@ public class SimpleYamlConfiguration extends YamlConfiguration {
         } else {
             try {
                 this.load(file);
-                plugin.getLogger().info(name + " file loaded");
+                plugin.debugMessage(name + " file loaded");
             } catch (final Exception e) {
                 e.printStackTrace();
             }

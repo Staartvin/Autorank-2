@@ -100,3 +100,8 @@ disable automatic path checking: false
 
 automatically archive old data: true
 # This is turned on by default. When this is set to true, Autorank will archive storage of players that haven't seen been online for some time.
+
+primary storage provider: flatfile
+# Set the primary storage provider for Autorank. By default, this is the flatfile provider that stores data in the
+# /storage folder. The primary storage provider is used to get the time a player has played when for example
+# /ar times is requested. You can choose from 'flatfile' or 'mysql'.

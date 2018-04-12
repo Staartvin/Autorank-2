@@ -141,7 +141,7 @@ public abstract class StorageProvider {
             if (type == TimeType.DAILY_TIME) {
                 value = cal.get(Calendar.DAY_OF_WEEK);
 
-                if (plugin.getSettingsConfigHandler().shouldBroadcastDataReset()) {
+                if (plugin.getSettingsConfig().shouldBroadcastDataReset()) {
                     // Should we broadcast the reset?
                     plugin.getServer().broadcastMessage(Lang.RESET_DAILY_TIME.getConfigValue());
                 }
@@ -149,7 +149,7 @@ public abstract class StorageProvider {
             } else if (type == TimeType.WEEKLY_TIME) {
                 value = cal.get(Calendar.WEEK_OF_YEAR);
 
-                if (plugin.getSettingsConfigHandler().shouldBroadcastDataReset()) {
+                if (plugin.getSettingsConfig().shouldBroadcastDataReset()) {
                     // Should we broadcast the reset?
 
                     plugin.getServer().broadcastMessage(Lang.RESET_WEEKLY_TIME.getConfigValue());
@@ -157,7 +157,7 @@ public abstract class StorageProvider {
             } else if (type == TimeType.MONTHLY_TIME) {
                 value = cal.get(Calendar.MONTH);
 
-                if (plugin.getSettingsConfigHandler().shouldBroadcastDataReset()) {
+                if (plugin.getSettingsConfig().shouldBroadcastDataReset()) {
                     // Should we broadcast the reset?
 
                     plugin.getServer().broadcastMessage(Lang.RESET_MONTHLY_TIME.getConfigValue());

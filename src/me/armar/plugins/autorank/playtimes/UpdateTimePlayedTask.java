@@ -77,7 +77,7 @@ public class UpdateTimePlayedTask extends BukkitRunnable {
         plugin.getPathManager().autoAssignPath(player);
 
         // Only check a player if it is not disabled in the Settings.yml
-        if (!plugin.getSettingsConfigHandler().isAutomaticPathDisabled()) {
+        if (!plugin.getSettingsConfig().isAutomaticPathDisabled()) {
             // Check if player meets requirements
             plugin.getPlayerChecker().checkPlayer(player);
         }

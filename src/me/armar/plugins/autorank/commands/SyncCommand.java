@@ -44,7 +44,7 @@ public class SyncCommand extends AutorankCommand {
         }
 
         // Check if MySQL is active
-        if (!plugin.getSettingsConfigHandler().useMySQL()) {
+        if (!plugin.getSettingsConfig().useMySQL()) {
             sender.sendMessage(Lang.MYSQL_IS_NOT_ENABLED.getConfigValue());
             return true;
         }

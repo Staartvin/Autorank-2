@@ -18,7 +18,7 @@ public class WarningNoticeTask implements Runnable {
         // the most important warning
 
         // Don't show warnings if they are turned off.
-        if (!plugin.getSettingsConfigHandler().showWarnings()) {
+        if (!plugin.getSettingsConfig().showWarnings()) {
             return;
         }
 

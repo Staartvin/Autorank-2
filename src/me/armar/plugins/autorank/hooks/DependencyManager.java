@@ -84,7 +84,7 @@ public class DependencyManager {
      * @return true if the player is suspected of being AFK, false otherwise.
      */
     public boolean isAFK(final Player player) {
-        if (!plugin.getSettingsConfigHandler().useAFKIntegration()) {
+        if (!plugin.getSettingsConfig().useAFKIntegration()) {
             return false;
         }
 
@@ -118,7 +118,7 @@ public class DependencyManager {
     public void loadDependencies() throws Exception {
 
         // Make seperate loading bar
-        if (plugin.getSettingsConfigHandler().useAdvancedDependencyLogs()) {
+        if (plugin.getSettingsConfig().useAdvancedDependencyLogs()) {
             plugin.getLogger().info("---------------[Autorank Dependencies]---------------");
             plugin.getLogger().info("Searching dependencies...");
         }
@@ -126,10 +126,10 @@ public class DependencyManager {
         // Load all dependencies
         for (final DependencyHandler depHandler : handlers.values()) {
             // Make sure to respect settings
-            depHandler.setup(plugin.getSettingsConfigHandler().useAdvancedDependencyLogs());
+            depHandler.setup(plugin.getSettingsConfig().useAdvancedDependencyLogs());
         }
 
-        if (plugin.getSettingsConfigHandler().useAdvancedDependencyLogs()) {
+        if (plugin.getSettingsConfig().useAdvancedDependencyLogs()) {
             plugin.getLogger().info("Searching stats plugin...");
             plugin.getLogger().info("");
         }
@@ -137,7 +137,7 @@ public class DependencyManager {
         // Search a stats plugin.
         statsPluginManager.searchStatsPlugin();
 
-        if (plugin.getSettingsConfigHandler().useAdvancedDependencyLogs()) {
+        if (plugin.getSettingsConfig().useAdvancedDependencyLogs()) {
             // Make seperate stop loading bar
             plugin.getLogger().info("---------------[Autorank Dependencies]---------------");
         }

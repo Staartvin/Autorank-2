@@ -239,4 +239,13 @@ public class SettingsConfig extends AbstractConfig {
         return this.getConfig().getBoolean("automatically archive old storage", true);
     }
 
+    /**
+     * Get the primary storage provider.
+     *
+     * @return string in config representing the primary storage provider.
+     */
+    public String getPrimaryStorageProvider() {
+        return this.getConfig().getString("primary storage provider", "flatfile");
+    }
+
 }

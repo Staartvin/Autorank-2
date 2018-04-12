@@ -34,7 +34,7 @@ public class BackupDataManager {
 
         loadConfig();
 
-        plugin.getLogger().info("Backup storage file loaded (backup-storage.yml)");
+        plugin.debugMessage("Backup storage file loaded (backup-storage.yml)");
     }
 
     /**

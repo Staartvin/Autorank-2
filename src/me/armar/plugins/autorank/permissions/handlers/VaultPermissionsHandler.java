@@ -144,7 +144,7 @@ public class VaultPermissionsHandler extends PermissionsHandler {
         }
 
         // Let admin choose.
-        if (plugin.getSettingsConfigHandler().onlyUsePrimaryGroupVault()) {
+        if (plugin.getSettingsConfig().onlyUsePrimaryGroupVault()) {
             groups.add(VaultHook.getPermissions().getPrimaryGroup(player));
         } else {
             groups.addAll(Arrays.asList(VaultHook.getPermissions().getPlayerGroups(player)));

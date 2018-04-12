@@ -39,7 +39,7 @@ public class TrackCommand extends AutorankCommand {
         }
 
         /*
-         * if (!plugin.getSettingsConfigHandler().usePartialCompletion()) { /
+         * if (!plugin.getSettingsConfig().usePartialCompletion()) { /
          * sender.sendMessage(ChatColor.RED +
          * "You cannot use this command as this server has not enabled partial completion!"
          * ); return true; }

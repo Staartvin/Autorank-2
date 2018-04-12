@@ -56,11 +56,7 @@ public class GlobalAddCommand extends AutorankCommand {
 
             @Override
             public void run() {
-                int value = 0;
-
-                if (args.length > 2) {
-                    value = AutorankTools.readTimeInput(args, 2);
-                }
+                int value = AutorankTools.readTimeInput(args, 2);
 
                 if (value >= 0) {
 
