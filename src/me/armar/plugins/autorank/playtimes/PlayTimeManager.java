@@ -149,4 +149,20 @@ public class PlayTimeManager {
                 uuid, valueToAdd);
     }
 
+    /**
+     * Get local play time of a player (for a specific type of time).
+     *
+     * @param timeType Type of time
+     * @param uuid     UUID of player
+     * @return value of time or -1 if no data could be found for the given player
+     */
+    public int getLocalPlayTime(TimeType timeType, UUID uuid) {
+        if (!plugin.getStorageManager().isStorageTypeActive(StorageProvider.StorageType.FLAT_FILE)) {
+            return -1;
+        }
+
+        return plugin.getStorageManager().getStorageProvider(StorageProvider.StorageType.FLAT_FILE).getPlayerTime
+                (timeType, uuid);
+    }
+
 }
