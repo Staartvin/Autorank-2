@@ -4,6 +4,8 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
+import me.armar.plugins.autorank.storage.StorageProvider;
+import me.armar.plugins.autorank.storage.TimeType;
 import me.armar.plugins.autorank.util.AutorankTools;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -34,7 +36,7 @@ public class GlobalAddCommand extends AutorankCommand {
             return true;
         }
 
-        if (!plugin.getMySQLManager().isMySQLEnabled()) {
+        if (!plugin.getStorageManager().isStorageTypeActive(StorageProvider.StorageType.DATABASE)) {
             sender.sendMessage(ChatColor.RED + Lang.MYSQL_IS_NOT_ENABLED.getConfigValue());
             return true;
         }
@@ -61,11 +63,13 @@ public class GlobalAddCommand extends AutorankCommand {
                 }
 
                 if (value >= 0) {
-                    if (!plugin.getMySQLManager().setGlobalTime(uuid, plugin.getMySQLManager().getFreshGlobalTime(uuid) + value)) {
-                        sender.sendMessage(Lang.MYSQL_IS_NOT_ENABLED.getConfigValue());
-                        return;
+
+                    for (TimeType timeType : TimeType.values()) {
+                        plugin.getPlayTimeManager().addGlobalPlayTime(timeType, uuid, value);
                     }
-                    AutorankTools.sendColoredMessage(sender, Lang.PLAYTIME_CHANGED.getConfigValue(args[1], value + ""));
+
+                    AutorankTools.sendColoredMessage(sender, Lang.PLAYTIME_CHANGED.getConfigValue(args[1], plugin
+                            .getPlayTimeManager().getGlobalPlayTime(TimeType.TOTAL_TIME, uuid) + value));
                 } else {
                     AutorankTools.sendColoredMessage(sender,
                             Lang.INVALID_FORMAT.getConfigValue("/ar gadd [player] [value]"));

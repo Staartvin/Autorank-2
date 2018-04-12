@@ -6,6 +6,7 @@ import me.armar.plugins.autorank.pathbuilder.Path;
 import me.armar.plugins.autorank.pathbuilder.holders.RequirementsHolder;
 import me.armar.plugins.autorank.pathbuilder.requirement.AbstractRequirement;
 import me.armar.plugins.autorank.pathbuilder.result.AbstractResult;
+import me.armar.plugins.autorank.storage.StorageProvider;
 import me.armar.plugins.autorank.storage.TimeType;
 import org.bukkit.entity.Player;
 
@@ -86,7 +87,12 @@ public class API {
      * @return play time of a player. 0 if no entry was found.
      */
     public int getGlobalPlayTime(final UUID uuid) {
-        return plugin.getMySQLManager().getGlobalTime(uuid);
+        if (!plugin.getStorageManager().isStorageTypeActive(StorageProvider.StorageType.DATABASE)) {
+            return 0;
+        }
+
+        return plugin.getStorageManager().getStorageProvider(StorageProvider.StorageType.DATABASE).getPlayerTime
+                (TimeType.TOTAL_TIME, uuid);
     }
 
     /**
@@ -114,15 +120,6 @@ public class API {
     }
 
     /**
-     * Get the MySQL database name Autorank stores its global times in.
-     *
-     * @return name of database
-     */
-    public String getMySQLDatabase() {
-        return plugin.getMySQLManager().getDatabaseName();
-    }
-
-    /**
      * Get the local play time (play time on this server) of a player. The
      * returned time depends on what plugin is used for keeping track of time.
      * <br>
@@ -133,7 +130,7 @@ public class API {
      * @return play time of a player. 0 when has never played before.
      */
     public int getTimeOfPlayer(final Player player) {
-        return plugin.getPlaytimes().getTimeOfPlayer(player.getName(), true);
+        return plugin.getPlayTimeManager().getTimeOfPlayer(player.getName(), true);
     }
 
     /**

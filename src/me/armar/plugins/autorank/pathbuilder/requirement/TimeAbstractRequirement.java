@@ -23,7 +23,7 @@ public class TimeAbstractRequirement extends AbstractRequirement {
     @Override
     public String getProgress(final Player player) {
 
-        final int playtime = (getAutorank().getPlaytimes().getTimeOfPlayer(player.getName(), true) / 60);
+        final int playtime = (getAutorank().getPlayTimeManager().getTimeOfPlayer(player.getName(), true) / 60);
 
         return playtime + " min/" + timeNeeded + " min";
     }
@@ -33,7 +33,7 @@ public class TimeAbstractRequirement extends AbstractRequirement {
         // Use getTimeOf so that when switched to another time, it'll still
         // work.
         // getTimeOfPlayer() is in seconds, so convert.
-        final double playtime = this.getAutorank().getPlaytimes().getTimeOfPlayer(player.getName(), true) / 60;
+        final double playtime = this.getAutorank().getPlayTimeManager().getTimeOfPlayer(player.getName(), true) / 60;
 
         return timeNeeded != -1 && playtime >= timeNeeded;
     }

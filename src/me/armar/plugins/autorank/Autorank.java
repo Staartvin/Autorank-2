@@ -23,7 +23,6 @@ import me.armar.plugins.autorank.playtimes.PlayTimeManager;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.armar.plugins.autorank.statsmanager.handlers.FallbackHandler;
 import me.armar.plugins.autorank.storage.StorageManager;
-import me.armar.plugins.autorank.storage.mysql.MySQLManager;
 import me.armar.plugins.autorank.storage.mysql.MySQLStorageProvider;
 import me.armar.plugins.autorank.tasks.TaskManager;
 import me.armar.plugins.autorank.updater.UpdateHandler;
@@ -73,11 +72,8 @@ public class Autorank extends JavaPlugin {
 
     // Miscalleaneous
     private PlayerChecker playerChecker;
-    private PlayTimeManager playtimes;
+    private PlayTimeManager playTimeManager;
     private DataConverter dataConverter;
-
-    // Data connection
-    private MySQLManager mysqlManager;
 
     // UUID storage
     private UUIDStorage uuidStorage;
@@ -121,9 +117,6 @@ public class Autorank extends JavaPlugin {
         this.getStorageManager().saveAllStorageProviders();
 
         getUUIDStorage().saveAllFiles();
-
-        // Close database connection
-        this.getMySQLManager().disconnectDatabase();
 
         // Save playerdata.yml
         this.getPlayerDataConfig().saveConfig();
@@ -171,9 +164,6 @@ public class Autorank extends JavaPlugin {
         // Create Storage Manager
         setStorageManager(new StorageManager(this));
 
-        // Create MySQL Manager
-        setMySQLManager(new MySQLManager(this));
-
         // Load AutorankDependency manager
         setDependencyManager(new DependencyManager(this));
 
@@ -214,7 +204,7 @@ public class Autorank extends JavaPlugin {
         // ------------- Initialize others -------------
 
         // Create playtime class
-        setPlaytimes(new PlayTimeManager(this));
+        setPlayTimeManager(new PlayTimeManager(this));
 
         // Create player check class
         setPlayerChecker(new PlayerChecker(this));
@@ -347,9 +337,6 @@ public class Autorank extends JavaPlugin {
         // TODO: implement that all storage providers do calendar checks themselves periodically.
         // Check whether the storage files are still up to date.
         this.getStorageManager().doCalendarCheck();
-
-        // Spawn thread to check if MySQL database times are up to date
-        this.getMySQLManager().refreshGlobalTime();
 
         // ------------- Say Welcome! -------------
         getLogger().info(String.format("Autorank %s has been enabled!", getDescription().getVersion()));
@@ -550,8 +537,8 @@ public class Autorank extends JavaPlugin {
         return playerChecker;
     }
 
-    public PlayTimeManager getPlaytimes() {
-        return playtimes;
+    public PlayTimeManager getPlayTimeManager() {
+        return playTimeManager;
     }
 
     public UpdateHandler getUpdateHandler() {
@@ -644,8 +631,8 @@ public class Autorank extends JavaPlugin {
         this.playerChecker = playerChecker;
     }
 
-    private void setPlaytimes(final PlayTimeManager playtimes) {
-        this.playtimes = playtimes;
+    private void setPlayTimeManager(final PlayTimeManager playTimeManager) {
+        this.playTimeManager = playTimeManager;
     }
 
     public void setUpdateHandler(final UpdateHandler updateHandler) {
@@ -708,14 +695,6 @@ public class Autorank extends JavaPlugin {
 
     public void setLeaderboardManager(LeaderboardHandler leaderboardManager) {
         this.leaderboardManager = leaderboardManager;
-    }
-
-    public MySQLManager getMySQLManager() {
-        return mysqlManager;
-    }
-
-    public void setMySQLManager(MySQLManager mysqlManager) {
-        this.mysqlManager = mysqlManager;
     }
 
     public DataConverter getDataConverter() {

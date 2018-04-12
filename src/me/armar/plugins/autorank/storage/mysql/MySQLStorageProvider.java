@@ -222,8 +222,6 @@ public class MySQLStorageProvider extends StorageProvider {
 
     @Override
     public boolean backupData() {
-        // TODO: implement a way to back up MySQL database.
-
         List<String> statements = new ArrayList<>();
 
         DateFormat df = new SimpleDateFormat("yyyy_MM_dd HH_mm_ss");
@@ -344,5 +342,23 @@ public class MySQLStorageProvider extends StorageProvider {
                 " " + value);
 
         return value;
+    }
+
+    /**
+     * Disconnect from database manually.
+     */
+    private void disconnectDatabase() {
+        executor.shutdown();
+
+        try {
+            plugin.debugMessage(ChatColor.RED + "Awaiting termination of MySQL thread...");
+            executor.awaitTermination(30, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            plugin.getLogger().warning("Failed to await termination of thread pool. Interrupted.");
+        }
+
+        if (mysqlLibrary != null) {
+            mysqlLibrary.closeConnection();
+        }
     }
 }

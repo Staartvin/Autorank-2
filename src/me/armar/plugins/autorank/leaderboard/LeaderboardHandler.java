@@ -144,12 +144,14 @@ public class LeaderboardHandler {
             // uuids in existence.
             if (type == TimeType.TOTAL_TIME) {
 
-                if (plugin.getSettingsConfigHandler().useGlobalTimeInLeaderboard()) {
-                    times.put(uuid, plugin.getMySQLManager().getGlobalTime(uuid));
+                if (plugin.getSettingsConfigHandler().useGlobalTimeInLeaderboard() && plugin.getStorageManager()
+                        .isStorageTypeActive(StorageProvider.StorageType.DATABASE)) {
+
+                    times.put(uuid, plugin.getPlayTimeManager().getGlobalPlayTime(type, uuid));
                 } else {
 
                     // If we are using Autorank, we do not need the player name.
-                    if (plugin.getPlaytimes().getUsedTimePlugin().equals(AutorankDependency.AUTORANK)) {
+                    if (plugin.getPlayTimeManager().getUsedTimePlugin().equals(AutorankDependency.AUTORANK)) {
                         times.put(uuid, primaryStorageProvider.getPlayerTime(type,
                                 uuid));
                     } else {
@@ -161,7 +163,7 @@ public class LeaderboardHandler {
                             continue;
                         }
 
-                        times.put(uuid, (plugin.getPlaytimes().getTimeOfPlayer(playerName, true) / 60));
+                        times.put(uuid, (plugin.getPlayTimeManager().getTimeOfPlayer(playerName, true) / 60));
                     }
                 }
             } else {
@@ -220,15 +222,17 @@ public class LeaderboardHandler {
             // uuids in existence.
             if (type == TimeType.TOTAL_TIME) {
 
-                if (plugin.getSettingsConfigHandler().useGlobalTimeInLeaderboard()) {
-                    times.put(playerName, plugin.getMySQLManager().getGlobalTime(uuid));
+                if (plugin.getSettingsConfigHandler().useGlobalTimeInLeaderboard() && plugin.getStorageManager()
+                        .isStorageTypeActive(StorageProvider.StorageType.DATABASE)) {
+
+                    times.put(playerName, plugin.getPlayTimeManager().getGlobalPlayTime(type, uuid));
                 } else {
 
                     // If we are using Autorank, we do not need the player name.
-                    if (plugin.getPlaytimes().getUsedTimePlugin().equals(AutorankDependency.AUTORANK)) {
+                    if (plugin.getPlayTimeManager().getUsedTimePlugin().equals(AutorankDependency.AUTORANK)) {
                         times.put(playerName, primaryStorageProvider.getPlayerTime(type, uuid));
                     } else {
-                        times.put(playerName, (plugin.getPlaytimes().getTimeOfPlayer(playerName, true) / 60));
+                        times.put(playerName, (plugin.getPlayTimeManager().getTimeOfPlayer(playerName, true) / 60));
                     }
                 }
             } else {
@@ -239,9 +243,8 @@ public class LeaderboardHandler {
         // Sort all values
         // final Map<String, Integer> sortedMap = sortByComparatorString(times,
         // false);
-        final Map<String, Integer> sortedMap = LeaderboardHandler.sortByValue(times);
 
-        return sortedMap;
+        return LeaderboardHandler.sortByValue(times);
     }
 
     /**

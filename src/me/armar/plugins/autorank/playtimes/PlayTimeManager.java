@@ -6,6 +6,7 @@ import me.armar.plugins.autorank.hooks.statzapi.StatzAPIHandler;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin.StatType;
 import me.armar.plugins.autorank.statsmanager.handlers.StatsHandler;
+import me.armar.plugins.autorank.storage.StorageProvider;
 import me.armar.plugins.autorank.storage.TimeType;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
 import me.staartvin.plugins.pluginlibrary.Library;
@@ -98,6 +99,54 @@ public class PlayTimeManager {
      */
     public AutorankDependency getUsedTimePlugin() {
         return timePlugin;
+    }
+
+    /**
+     * Get global time (for a given type of time) of a player.
+     *
+     * @param timeType Type of time
+     * @param uuid     UUID of player
+     * @return global time of a player or -1 if no active storage provider supports global time.
+     */
+    public int getGlobalPlayTime(TimeType timeType, UUID uuid) {
+        if (!plugin.getStorageManager().isStorageTypeActive(StorageProvider.StorageType.DATABASE)) {
+            return -1;
+        }
+
+        return plugin.getStorageManager().getStorageProvider(StorageProvider.StorageType.DATABASE).getPlayerTime
+                (timeType, uuid);
+    }
+
+    /**
+     * Set global time (for a given type of time) of a player.
+     *
+     * @param timeType Type of time
+     * @param uuid     UUID of player
+     * @param value    time to set
+     */
+    public void setGlobalPlayTime(TimeType timeType, UUID uuid, int value) {
+        if (!plugin.getStorageManager().isStorageTypeActive(StorageProvider.StorageType.DATABASE)) {
+            return;
+        }
+
+        plugin.getStorageManager().getStorageProvider(StorageProvider.StorageType.DATABASE).setPlayerTime(timeType,
+                uuid, value);
+    }
+
+    /**
+     * Add global time (for a given type of time) of a player.
+     *
+     * @param timeType   Type of time
+     * @param uuid       UUID of player
+     * @param valueToAdd time to add
+     */
+    public void addGlobalPlayTime(TimeType timeType, UUID uuid, int valueToAdd) {
+        if (!plugin.getStorageManager().isStorageTypeActive(StorageProvider.StorageType.DATABASE)) {
+            return;
+        }
+
+        plugin.getStorageManager().getStorageProvider(StorageProvider.StorageType.DATABASE).addPlayerTime(timeType,
+                uuid, valueToAdd);
     }
 
 }
