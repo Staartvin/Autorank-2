@@ -4,7 +4,7 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.pathbuilder.Path;
 import me.armar.plugins.autorank.pathbuilder.holders.RequirementsHolder;
 import me.armar.plugins.autorank.pathbuilder.requirement.AbstractRequirement;
-import me.armar.plugins.autorank.pathbuilder.requirement.GroupAbstractRequirement;
+import me.armar.plugins.autorank.pathbuilder.requirement.InGroupRequirement;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -49,7 +49,7 @@ public class ValidateHandler {
             // Check if there are any group requirements/prerequisites
             for (RequirementsHolder reqHolder : holders) {
                 for (AbstractRequirement req : reqHolder.getRequirements()) {
-                    if (req instanceof GroupAbstractRequirement) {
+                    if (req instanceof InGroupRequirement) {
 
                         String requirementName = plugin.getPathsConfig().getRequirementName(path.getInternalName(),
                                 req.getId(), reqHolder.isPrerequisite());

@@ -353,74 +353,74 @@ public class Autorank extends JavaPlugin {
 
     private void initializeReqsAndRes() {
         // Register 'main' requirements
-        RequirementBuilder.registerRequirement("exp", ExpAbstractRequirement.class);
-        RequirementBuilder.registerRequirement("money", MoneyAbstractRequirement.class);
-        RequirementBuilder.registerRequirement("gamemode", GamemodeAbstractRequirement.class);
-        RequirementBuilder.registerRequirement("has item", HasItemAbstractRequirement.class);
-        RequirementBuilder.registerRequirement("blocks broken", BlocksBrokenAbstractRequirement.class);
-        RequirementBuilder.registerRequirement("blocks placed", BlocksPlacedAbstractRequirement.class);
-        RequirementBuilder.registerRequirement("blocks moved", BlocksMovedAbstractRequirement.class);
-        RequirementBuilder.registerRequirement("votes", TotalVotesAbstractRequirement.class);
-        RequirementBuilder.registerRequirement("damage taken", DamageTakenAbstractRequirement.class);
-        RequirementBuilder.registerRequirement("mobs killed", MobKillsAbstractRequirement.class);
-        RequirementBuilder.registerRequirement("location", LocationAbstractRequirement.class);
-        RequirementBuilder.registerRequirement("faction power", FactionPowerAbstractRequirement.class);
-        RequirementBuilder.registerRequirement("players killed", PlayerKillsAbstractRequirement.class);
-        RequirementBuilder.registerRequirement("global time", GlobalTimeAbstractRequirement.class);
-        RequirementBuilder.registerRequirement("total time", TotalTimeAbstractRequirement.class);
-        RequirementBuilder.registerRequirement("world", WorldAbstractRequirement.class);
-        RequirementBuilder.registerRequirement("worldguard region", WorldGuardRegionAbstractRequirement.class);
-        RequirementBuilder.registerRequirement("mcmmo skill level", McMMOSkillLevelAbstractRequirement.class);
-        RequirementBuilder.registerRequirement("mcmmo power level", McMMOPowerLevelAbstractRequirement.class);
-        RequirementBuilder.registerRequirement("permission", PermissionAbstractRequirement.class);
-        RequirementBuilder.registerRequirement("fish caught", FishCaughtAbstractRequirement.class);
-        RequirementBuilder.registerRequirement("items crafted", ItemsCraftedAbstractRequirement.class);
-        RequirementBuilder.registerRequirement("time", TimeAbstractRequirement.class);
-        RequirementBuilder.registerRequirement("times sheared", TimesShearedAbstractRequirement.class);
-        RequirementBuilder.registerRequirement("in biome", InBiomeAbstractRequirement.class);
-        RequirementBuilder.registerRequirement("food eaten", FoodEatenAbstractRequirement.class);
-        RequirementBuilder.registerRequirement("has advancement", AdvancementAbstractRequirement.class);
-        RequirementBuilder.registerRequirement("in group", GroupAbstractRequirement.class);
+        RequirementBuilder.registerRequirement("exp", ExpRequirement.class);
+        RequirementBuilder.registerRequirement("money", MoneyRequirement.class);
+        RequirementBuilder.registerRequirement("gamemode", GamemodeRequirement.class);
+        RequirementBuilder.registerRequirement("has item", HasItemRequirement.class);
+        RequirementBuilder.registerRequirement("blocks broken", BlocksBrokenRequirement.class);
+        RequirementBuilder.registerRequirement("blocks placed", BlocksPlacedRequirement.class);
+        RequirementBuilder.registerRequirement("blocks moved", BlocksMovedRequirement.class);
+        RequirementBuilder.registerRequirement("votes", TotalVotesRequirement.class);
+        RequirementBuilder.registerRequirement("damage taken", DamageTakenRequirement.class);
+        RequirementBuilder.registerRequirement("mobs killed", MobKillsRequirement.class);
+        RequirementBuilder.registerRequirement("location", LocationRequirement.class);
+        RequirementBuilder.registerRequirement("faction power", FactionPowerRequirement.class);
+        RequirementBuilder.registerRequirement("players killed", PlayerKillsRequirement.class);
+        RequirementBuilder.registerRequirement("global time", GlobalTimeRequirement.class);
+        RequirementBuilder.registerRequirement("total time", TotalTimeRequirement.class);
+        RequirementBuilder.registerRequirement("world", WorldRequirement.class);
+        RequirementBuilder.registerRequirement("worldguard region", WorldGuardRegionRequirement.class);
+        RequirementBuilder.registerRequirement("mcmmo skill level", McMMOSkillLevelRequirement.class);
+        RequirementBuilder.registerRequirement("mcmmo power level", McMMOPowerLevelRequirement.class);
+        RequirementBuilder.registerRequirement("permission", PermissionRequirement.class);
+        RequirementBuilder.registerRequirement("fish caught", FishCaughtRequirement.class);
+        RequirementBuilder.registerRequirement("items crafted", ItemsCraftedRequirement.class);
+        RequirementBuilder.registerRequirement("time", TimeRequirement.class);
+        RequirementBuilder.registerRequirement("times sheared", TimesShearedRequirement.class);
+        RequirementBuilder.registerRequirement("in biome", InBiomeRequirement.class);
+        RequirementBuilder.registerRequirement("food eaten", FoodEatenRequirement.class);
+        RequirementBuilder.registerRequirement("has advancement", AdvancementRequirement.class);
+        RequirementBuilder.registerRequirement("in group", InGroupRequirement.class);
 
-        RequirementBuilder.registerRequirement("essentials geoip location", EssentialsGeoIPAbstractRequirement.class);
+        RequirementBuilder.registerRequirement("essentials geoip location", EssentialsGeoIPRequirement.class);
 
-        RequirementBuilder.registerRequirement("acidisland level", AcidIslandLevelAbstractRequirement.class);
-        RequirementBuilder.registerRequirement("askyblock level", ASkyBlockLevelAbstractRequirement.class);
+        RequirementBuilder.registerRequirement("acidisland level", AcidIslandLevelRequirement.class);
+        RequirementBuilder.registerRequirement("askyblock level", ASkyBlockLevelRequirement.class);
 
-        RequirementBuilder.registerRequirement("javascript", JavaScriptAbstractRequirement.class);
+        RequirementBuilder.registerRequirement("javascript", JavaScriptRequirement.class);
 
-        RequirementBuilder.registerRequirement("jobs current points", JobsCurrentPointsAbstractRequirement.class);
-        RequirementBuilder.registerRequirement("jobs total points", JobsTotalPointsAbstractRequirement.class);
-        RequirementBuilder.registerRequirement("jobs level", JobsLevelAbstractRequirement.class);
-        RequirementBuilder.registerRequirement("jobs experience", JobsExperienceAbstractRequirement.class);
+        RequirementBuilder.registerRequirement("jobs current points", JobsCurrentPointsRequirement.class);
+        RequirementBuilder.registerRequirement("jobs total points", JobsTotalPointsRequirement.class);
+        RequirementBuilder.registerRequirement("jobs level", JobsLevelRequirement.class);
+        RequirementBuilder.registerRequirement("jobs experience", JobsExperienceRequirement.class);
 
         RequirementBuilder.registerRequirement("grief prevention claims",
-                GriefPreventionClaimsCountAbstractRequirement.class);
+                GriefPreventionClaimsCountRequirement.class);
         RequirementBuilder.registerRequirement("grief prevention claimed blocks",
-                GriefPreventionClaimedBlocksAbstractRequirement.class);
+                GriefPreventionClaimedBlocksRequirement.class);
         RequirementBuilder.registerRequirement("grief prevention remaining blocks",
-                GriefPreventionRemainingBlocksAbstractRequirement.class);
+                GriefPreventionRemainingBlocksRequirement.class);
         RequirementBuilder.registerRequirement("grief prevention bonus blocks",
-                GriefPreventionBonusBlocksAbstractRequirement.class);
+                GriefPreventionBonusBlocksRequirement.class);
 
-        RequirementBuilder.registerRequirement("rpgme skill level", RPGMeSkillLevelAbstractRequirement.class);
-        RequirementBuilder.registerRequirement("rpgme combat level", RPGMeCombatLevelAbstractRequirement.class);
+        RequirementBuilder.registerRequirement("rpgme skill level", RPGMeSkillLevelRequirement.class);
+        RequirementBuilder.registerRequirement("rpgme combat level", RPGMeCombatLevelRequirement.class);
 
-        RequirementBuilder.registerRequirement("battlelevels kdr", BattleLevelsKDRAbstractRequirement.class);
-        RequirementBuilder.registerRequirement("battlelevels kills", BattleLevelsKillsAbstractRequirement.class);
-        RequirementBuilder.registerRequirement("battlelevels killstreak", BattleLevelsKillStreakAbstractRequirement
+        RequirementBuilder.registerRequirement("battlelevels kdr", BattleLevelsKDRRequirement.class);
+        RequirementBuilder.registerRequirement("battlelevels kills", BattleLevelsKillsRequirement.class);
+        RequirementBuilder.registerRequirement("battlelevels killstreak", BattleLevelsKillStreakRequirement
                 .class);
         RequirementBuilder.registerRequirement("battlelevels top killstreak",
-                BattleLevelsTopKillStreakAbstractRequirement
+                BattleLevelsTopKillStreakRequirement
                 .class);
-        RequirementBuilder.registerRequirement("battlelevels level", BattleLevelsLevelAbstractRequirement.class);
-        RequirementBuilder.registerRequirement("battlelevels score", BattleLevelsScoreAbstractRequirement.class);
+        RequirementBuilder.registerRequirement("battlelevels level", BattleLevelsLevelRequirement.class);
+        RequirementBuilder.registerRequirement("battlelevels score", BattleLevelsScoreRequirement.class);
 
-        RequirementBuilder.registerRequirement("quests quest points", QuestsQuestPointsAbstractRequirement.class);
+        RequirementBuilder.registerRequirement("quests quest points", QuestsQuestPointsRequirement.class);
         RequirementBuilder.registerRequirement("quests complete quest",
-                QuestsCompleteSpecificQuestAbstractRequirement.class);
-        RequirementBuilder.registerRequirement("quests active quests", QuestsActiveQuestsAbstractRequirement.class);
-        RequirementBuilder.registerRequirement("quests completed quests", QuestsCompletedQuestsAbstractRequirement
+                QuestsCompleteSpecificQuestRequirement.class);
+        RequirementBuilder.registerRequirement("quests active quests", QuestsActiveQuestsRequirement.class);
+        RequirementBuilder.registerRequirement("quests completed quests", QuestsCompletedQuestsRequirement
                 .class);
 
         // Register 'main' results
