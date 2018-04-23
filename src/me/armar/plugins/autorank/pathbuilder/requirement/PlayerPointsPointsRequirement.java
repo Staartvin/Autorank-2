@@ -2,22 +2,22 @@ package me.armar.plugins.autorank.pathbuilder.requirement;
 
 import me.armar.plugins.autorank.language.Lang;
 import me.staartvin.plugins.pluginlibrary.Library;
-import me.staartvin.plugins.pluginlibrary.hooks.QuestsHook;
+import me.staartvin.plugins.pluginlibrary.hooks.PlayerPointsHook;
 import org.bukkit.entity.Player;
 
 public class PlayerPointsPointsRequirement extends AbstractRequirement {
 
     private PlayerPointsHook handler = null;
-    private int questPoints = -1;
+    private int requiredPoints = -1;
 
     @Override
     public String getDescription() {
-        return Lang.QUESTS_QUEST_POINTS_REQUIREMENT.getConfigValue(questPoints);
+        return Lang.PLAYERPOINTS_POINTS_REQUIREMENT.getConfigValue(requiredPoints);
     }
 
     @Override
     public String getProgress(final Player player) {
-        return handler.getQuestsPoints(player.getUniqueId()) + "/" + questPoints;
+        return handler.getPlayerPoints(player.getUniqueId()) + "/" + requiredPoints;
     }
 
     @Override
@@ -26,27 +26,27 @@ public class PlayerPointsPointsRequirement extends AbstractRequirement {
         if (!handler.isAvailable())
             return false;
 
-        return handler.getQuestsPoints(player.getUniqueId()) >= questPoints;
+        return handler.getPlayerPoints(player.getUniqueId()) >= requiredPoints;
     }
 
     @Override
     public boolean setOptions(final String[] options) {
 
         // Add dependency
-        addDependency(Library.QUESTS);
+        addDependency(Library.PLAYERPOINTS);
 
-        handler = (QuestsHook) this.getDependencyManager().getLibraryHook(Library.QUESTS);
+        handler = (PlayerPointsHook) this.getDependencyManager().getLibraryHook(Library.PLAYERPOINTS);
 
         if (options.length > 0) {
             try {
-                questPoints = Integer.parseInt(options[0]);
+                requiredPoints = Integer.parseInt(options[0]);
             } catch (NumberFormatException e) {
                 this.registerWarningMessage("An invalid number is provided");
                 return false;
             }
         }
 
-        if (questPoints < 0) {
+        if (requiredPoints < 0) {
             this.registerWarningMessage("No number is provided or smaller than 0.");
             return false;
         }

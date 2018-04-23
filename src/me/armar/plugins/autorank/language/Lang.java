@@ -501,7 +501,11 @@ public enum Lang {
      * Complete the quest '{0}'.
      */
     QUESTS_COMPLETE_SPECIFIC_QUEST_REQUIREMENT("quests-complete-specific-quest-requirement", "Complete the quest " +
-            "'{0}'."),;
+            "'{0}'."),
+    /**
+     * Obtain at least {0} player points.
+     */
+    PLAYERPOINTS_POINTS_REQUIREMENT("playerpoints-points-requirement", "Obtain at least {0} player points."),;
 
     private static FileConfiguration LANG;
 

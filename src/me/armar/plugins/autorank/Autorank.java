@@ -484,6 +484,9 @@ public class Autorank extends JavaPlugin {
         RequirementBuilder.registerRequirement("savagefactions faction power",
                 SavageFactionsPowerRequirement.class);
 
+        // PlayerPoints
+        RequirementBuilder.registerRequirement("playerpoints points", PlayerPointsPointsRequirement.class);
+
 
         // Register 'main' results
         ResultBuilder.registerResult("command", CommandAbstractResult.class);
