@@ -736,22 +736,6 @@ public class Autorank extends JavaPlugin {
         this.leaderboardManager = leaderboardManager;
     }
 
-    public MySQLManager getMySQLManager() {
-        return mysqlManager;
-    }
-
-    public void setMySQLManager(MySQLManager mysqlManager) {
-        this.mysqlManager = mysqlManager;
-    }
-
-    public FlatFileManager getFlatFileManager() {
-        return flatFileManager;
-    }
-
-    public void setFlatFileManager(FlatFileManager flatFileManager) {
-        this.flatFileManager = flatFileManager;
-    }
-
     public DataConverter getDataConverter() {
         return dataConverter;
     }
