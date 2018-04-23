@@ -235,9 +235,8 @@ public class UUIDStorage {
         File configFile = null;
         FileConfiguration config = null;
 
-        if (!configFiles.containsKey(key) || configFiles.get(key) == null) {
-            configFile = new File(desFolder, "uuids_" + key + ".yml");
-        }
+        configFile = new File(desFolder, "uuids_" + key + ".yml");
+
         config = YamlConfiguration.loadConfiguration(configFile);
 
         // Store new configs
@@ -327,7 +326,8 @@ public class UUIDStorage {
             return; // UUIDs were already successfully converted.
 
         plugin.getServer().getConsoleSender().sendMessage("[Autorank] " + ChatColor.RED
-                + "Since this is the first time running Autorank 3.7.1, I need to convert your UUID files to a new format.");
+                + "Since this is the first time running Autorank 3.7.1, I need to convert your UUID files to a new " +
+                "format.");
         plugin.getServer().getConsoleSender().sendMessage(
                 "[Autorank] " + ChatColor.RED + "Converting UUID files to new format (3.7.1), this may take a while.");
 
