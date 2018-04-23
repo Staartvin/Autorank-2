@@ -53,7 +53,7 @@ public class UUIDStorage {
 
     public void createNewFiles() {
 
-        plugin.getLogger().info("Loading UUID data files...");
+        plugin.getLogger().info("Loading UUID storage files...");
         long startTime = System.currentTimeMillis();
 
         for (final String suffix : fileSuffixes) {
@@ -63,7 +63,7 @@ public class UUIDStorage {
             loadConfig(suffix);
         }
 
-        plugin.getLogger().info("Loaded UUID data in " + (System.currentTimeMillis() - startTime) /
+        plugin.getLogger().info("Loaded UUID storage in " + (System.currentTimeMillis() - startTime) /
                 1000 + " seconds.");
     }
 

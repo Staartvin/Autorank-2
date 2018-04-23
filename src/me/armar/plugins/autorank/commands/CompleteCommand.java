@@ -38,7 +38,7 @@ public class CompleteCommand extends AutorankCommand {
             return true;
         }
 
-        if (!plugin.getConfigHandler().usePartialCompletion()) {
+        if (!plugin.getSettingsConfig().usePartialCompletion()) {
             sender.sendMessage(Lang.PARTIAL_COMPLETION_NOT_ENABLED.getConfigValue());
             return true;
         }

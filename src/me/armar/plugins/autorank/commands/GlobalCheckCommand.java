@@ -4,6 +4,8 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
+import me.armar.plugins.autorank.storage.StorageProvider;
+import me.armar.plugins.autorank.storage.TimeType;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
 import org.bukkit.ChatColor;
@@ -28,13 +30,16 @@ public class GlobalCheckCommand extends AutorankCommand {
     public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
         // This is a global check. It will not show you the database numbers
-        if (!plugin.getMySQLManager().isMySQLEnabled()) {
+        if (!plugin.getStorageManager().isStorageTypeActive(StorageProvider.StorageType.DATABASE)) {
             sender.sendMessage(ChatColor.RED + Lang.MYSQL_IS_NOT_ENABLED.getConfigValue());
             return true;
         }
 
-        if (args.length > 1) {
+        UUID uuid;
+        String playerName = null;
 
+        // There was a player specified
+        if (args.length > 1) {
             if (!this.hasPermission(AutorankPermission.CHECK_OTHERS, sender)) {
                 return true;
             }
@@ -42,7 +47,7 @@ public class GlobalCheckCommand extends AutorankCommand {
             final Player player = plugin.getServer().getPlayer(args[1]);
             if (player == null) {
 
-                final UUID uuid = plugin.getUUIDStorage().getStoredUUID(args[1]);
+                uuid = plugin.getUUIDStorage().getStoredUUID(args[1]);
 
                 if (uuid == null) {
                     sender.sendMessage(Lang.PLAYER_IS_INVALID.getConfigValue(args[1]));
@@ -50,60 +55,24 @@ public class GlobalCheckCommand extends AutorankCommand {
                 }
 
                 if (plugin.getUUIDStorage().hasRealName(uuid)) {
-                    args[1] = plugin.getUUIDStorage().getRealName(uuid);
+                    playerName = plugin.getUUIDStorage().getRealName(uuid);
                 }
-
-                plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
-
-                    @Override
-                    public void run() {
-                        final int minutes = plugin.getMySQLManager().getGlobalTime(uuid);
-
-                        if (minutes < 0) {
-                            sender.sendMessage(Lang.PLAYER_IS_INVALID.getConfigValue(args[1]));
-                            return;
-                        }
-
-                        AutorankTools.sendColoredMessage(sender, args[1] + " has played for "
-                                + AutorankTools.timeToString(minutes, Time.MINUTES) + " across all servers.");
-
-                    }
-
-                });
-                return true;
-
             } else {
                 if (player.hasPermission(AutorankPermission.EXCLUDE_FROM_PATHING)) {
                     sender.sendMessage(ChatColor.RED + Lang.PLAYER_IS_EXCLUDED.getConfigValue(player.getName()));
                     return true;
                 }
 
-                final UUID uuid = plugin.getUUIDStorage().getStoredUUID(args[1]);
+                uuid = plugin.getUUIDStorage().getStoredUUID(args[1]);
 
                 if (uuid == null) {
                     sender.sendMessage(Lang.PLAYER_IS_INVALID.getConfigValue(args[1]));
                     return true;
                 }
 
-                plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
-
-                    @Override
-                    public void run() {
-                        final int minutes = plugin.getMySQLManager().getGlobalTime(uuid);
-
-                        if (minutes < 0) {
-                            sender.sendMessage(Lang.PLAYER_IS_INVALID.getConfigValue(args[1]));
-                            return;
-                        }
-
-                        AutorankTools.sendColoredMessage(sender, player.getName() + " has played for "
-                                + AutorankTools.timeToString(minutes, Time.MINUTES) + " across all servers.");
-
-                    }
-
-                });
+                playerName = player.getName();
             }
-        } else if (sender instanceof Player) {
+        } else if (sender instanceof Player) { // There was no player specified, so take sender as target
             if (!this.hasPermission(AutorankPermission.CHECK_GLOBAL, sender)) {
                 return true;
             }
@@ -115,21 +84,30 @@ public class GlobalCheckCommand extends AutorankCommand {
 
             final Player player = (Player) sender;
 
-            final UUID uuid = plugin.getUUIDStorage().getStoredUUID(player.getName());
-
-            plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
-                @Override
-                public void run() {
-                    AutorankTools.sendColoredMessage(sender,
-                            "You have played for " + AutorankTools
-                                    .timeToString(plugin.getMySQLManager().getGlobalTime(uuid), Time.MINUTES)
-                                    + " across all servers.");
-                }
-            });
+            uuid = plugin.getUUIDStorage().getStoredUUID(player.getName());
+            playerName = player.getName();
 
         } else {
             AutorankTools.sendColoredMessage(sender, Lang.CANNOT_CHECK_CONSOLE.getConfigValue());
+            return true;
         }
+
+        UUID finalUuid = uuid;
+        String finalPlayerName = playerName;
+
+        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+            final int minutes = plugin.getPlayTimeManager().getGlobalPlayTime(TimeType.TOTAL_TIME, finalUuid);
+
+            if (minutes < 0) {
+                sender.sendMessage(Lang.PLAYER_IS_INVALID.getConfigValue(finalPlayerName));
+                return;
+            }
+
+            AutorankTools.sendColoredMessage(sender, finalPlayerName + " has played for "
+                    + AutorankTools.timeToString(minutes, Time.MINUTES) + " across all servers.");
+
+        });
+
         return true;
     }
 

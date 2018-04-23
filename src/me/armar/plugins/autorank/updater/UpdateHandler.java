@@ -15,7 +15,7 @@ public class UpdateHandler {
     }
 
     public boolean doCheckForNewVersion() {
-        return plugin.getConfigHandler().doCheckForNewerVersion();
+        return plugin.getSettingsConfig().doCheckForNewerVersion();
     }
 
     public Updater getUpdater() {

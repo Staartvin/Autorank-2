@@ -199,7 +199,7 @@ public class PlayerChecker {
 
                     // Doesn't need to check whether this requirement was
                     // already done
-                    if (!plugin.getConfigHandler().usePartialCompletion())
+                    if (!plugin.getSettingsConfig().usePartialCompletion())
                         continue;
 
                     metRequirements.add(holder);
@@ -208,7 +208,7 @@ public class PlayerChecker {
 
                     // Only check if player has done this when partial
                     // completion is used
-                    if (plugin.getConfigHandler().usePartialCompletion()) {
+                    if (plugin.getSettingsConfig().usePartialCompletion()) {
                         // Player does not meet requirements, but has done this
                         // already
                         if (plugin.getPlayerDataConfig().hasCompletedRequirement(reqID, player.getUniqueId())) {
@@ -227,7 +227,7 @@ public class PlayerChecker {
                 }
             } else {
 
-                if (!plugin.getConfigHandler().usePartialCompletion()) {
+                if (!plugin.getSettingsConfig().usePartialCompletion()) {
 
                     // Doesn't auto complete and doesn't meet requirement, then
                     // continue searching

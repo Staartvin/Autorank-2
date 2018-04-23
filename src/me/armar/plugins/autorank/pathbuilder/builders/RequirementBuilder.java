@@ -55,7 +55,7 @@ public class RequirementBuilder {
      * @param pathName        Name of the path the requirement is in.
      * @param requirementType Type of the requirement, which does not have to be the exact string value.
      * @param options         The requirements options array.
-     * @return a newly created AbstractRequirement with the given data, or null if invalid data was given.
+     * @return a newly created AbstractRequirement with the given storage, or null if invalid storage was given.
      */
     public static AbstractRequirement createRequirement(String pathName, String requirementType, String[] options,
                                                         boolean isPreRequisite) {
@@ -124,7 +124,7 @@ public class RequirementBuilder {
     }
 
     /**
-     * Populate the created AbstractRequirement with data.
+     * Populate the created AbstractRequirement with storage.
      *
      * @return this builder.
      */
@@ -220,7 +220,7 @@ public class RequirementBuilder {
 
         // ---- All checks are cleared!
 
-        // AbstractResult is non-null and populated with data, so valid.
+        // AbstractResult is non-null and populated with storage, so valid.
         isValid = true;
 
         return this;

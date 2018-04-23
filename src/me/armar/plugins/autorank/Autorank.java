@@ -6,13 +6,12 @@ import me.armar.plugins.autorank.backup.BackupManager;
 import me.armar.plugins.autorank.commands.manager.CommandsManager;
 import me.armar.plugins.autorank.config.*;
 import me.armar.plugins.autorank.converter.DataConverter;
-import me.armar.plugins.autorank.data.flatfile.FlatFileManager;
-import me.armar.plugins.autorank.data.mysql.MySQLManager;
 import me.armar.plugins.autorank.debugger.Debugger;
 import me.armar.plugins.autorank.hooks.DependencyManager;
 import me.armar.plugins.autorank.language.LanguageHandler;
 import me.armar.plugins.autorank.leaderboard.LeaderboardHandler;
 import me.armar.plugins.autorank.listeners.PlayerJoinListener;
+import me.armar.plugins.autorank.listeners.PlayerQuitListener;
 import me.armar.plugins.autorank.pathbuilder.PathManager;
 import me.armar.plugins.autorank.pathbuilder.builders.RequirementBuilder;
 import me.armar.plugins.autorank.pathbuilder.builders.ResultBuilder;
@@ -20,9 +19,14 @@ import me.armar.plugins.autorank.pathbuilder.requirement.*;
 import me.armar.plugins.autorank.pathbuilder.result.*;
 import me.armar.plugins.autorank.permissions.PermissionsPluginManager;
 import me.armar.plugins.autorank.playerchecker.PlayerChecker;
-import me.armar.plugins.autorank.playtimes.PlaytimeManager;
+import me.armar.plugins.autorank.playtimes.PlayTimeManager;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.armar.plugins.autorank.statsmanager.handlers.FallbackHandler;
+import me.armar.plugins.autorank.storage.StorageManager;
+import me.armar.plugins.autorank.storage.StorageProvider;
+import me.armar.plugins.autorank.storage.flatfile.FlatFileStorageProvider;
+import me.armar.plugins.autorank.storage.mysql.MySQLStorageProvider;
+import me.armar.plugins.autorank.tasks.TaskManager;
 import me.armar.plugins.autorank.updater.UpdateHandler;
 import me.armar.plugins.autorank.updater.Updater;
 import me.armar.plugins.autorank.util.AutorankTools;
@@ -46,10 +50,6 @@ public class Autorank extends JavaPlugin {
 
     private static Autorank autorank;
 
-    public static Autorank getInstance() {
-        return autorank;
-    }
-
     // ---------- INITIALIZING VARIABLES ---------- \\
     //
     //
@@ -57,6 +57,11 @@ public class Autorank extends JavaPlugin {
 
     // Managers
     private PathManager pathManager;
+
+    // ---------- INITIALIZING VARIABLES ---------- \\
+    //
+    //
+    //
     private AddOnManager addonManager;
     private BackupManager backupManager;
     private CommandsManager commandsManager;
@@ -70,27 +75,27 @@ public class Autorank extends JavaPlugin {
 
     // Miscalleaneous
     private PlayerChecker playerChecker;
-    private PlaytimeManager playtimes;
+    private PlayTimeManager playTimeManager;
     private DataConverter dataConverter;
-
-    // Data connection
-    private MySQLManager mysqlManager;
-    private FlatFileManager flatFileManager;
-
     // UUID storage
     private UUIDStorage uuidStorage;
-
+    private StorageManager storageManager;
+    // Managing periodic tasks
+    private TaskManager taskManager;
     // Validation & Warning
     private ValidateHandler validateHandler;
     private WarningManager warningManager;
     private Debugger debugger;
-
     // Configs
     private SettingsConfig settingsConfig;
     private InternalPropertiesConfig internalPropertiesConfig;
     private PathsConfig pathsConfig;
     private PlayerDataConfig playerDataConfig;
     private DefaultBehaviorConfig defaultBehaviorConfig;
+
+    public static Autorank getInstance() {
+        return autorank;
+    }
 
     // ---------- onEnable() & onDisable() ---------- \\
     //
@@ -112,12 +117,9 @@ public class Autorank extends JavaPlugin {
 
         // ------------- Save files and databases -------------
 
-        this.getFlatFileManager().saveFiles();
+        this.getStorageManager().saveAllStorageProviders();
 
         getUUIDStorage().saveAllFiles();
-
-        // Close database connection
-        this.getMySQLManager().disconnectDatabase();
 
         // Save playerdata.yml
         this.getPlayerDataConfig().saveConfig();
@@ -162,11 +164,8 @@ public class Autorank extends JavaPlugin {
         // Create warning manager
         setWarningManager(new WarningManager(this));
 
-        // Create MySQL Manager
-        setMySQLManager(new MySQLManager(this));
-
-        // Create FlatFile Manager
-        setFlatFileManager(new FlatFileManager(this));
+        // Create Storage Manager
+        setStorageManager(new StorageManager(this));
 
         // Load AutorankDependency manager
         setDependencyManager(new DependencyManager(this));
@@ -179,6 +178,9 @@ public class Autorank extends JavaPlugin {
 
         // Create Path Manager
         setPathManager(new PathManager(this));
+
+        // Create Task Manager so we can schedule tasks.
+        setTaskManager(new TaskManager(this));
 
         // ------------- Initialize handlers -------------
 
@@ -205,7 +207,7 @@ public class Autorank extends JavaPlugin {
         // ------------- Initialize others -------------
 
         // Create playtime class
-        setPlaytimes(new PlaytimeManager(this));
+        setPlayTimeManager(new PlayTimeManager(this));
 
         // Create player check class
         setPlayerChecker(new PlayerChecker(this));
@@ -213,17 +215,43 @@ public class Autorank extends JavaPlugin {
         // Set debugger
         setDebugger(new Debugger(this));
 
+        // Run this async, as it can take a bit of time.
+        this.getServer().getScheduler().runTaskAsynchronously(this, new Runnable() {
+            @Override
+            public void run() {
+                // Load UUID files
+                getUUIDStorage().createNewFiles();
+            }
+        });
 
-        // Load uuids - ready for new ones
-        getUUIDStorage().createNewFiles();
-
-        // Load data converter
+        // Load storage converter
         setDataConverter(new DataConverter(this));
 
         // ------------- Create files & folders -------------
 
         // Setup language file
         languageHandler.createNewFile();
+
+        // ------------- Register storage providers -------------
+
+        // Register FlatFile storage provider
+        getStorageManager().registerStorageProvider(new FlatFileStorageProvider(this));
+
+
+        if (this.getSettingsConfig().useMySQL()) {
+            StorageProvider mysqlStorageProvider = new MySQLStorageProvider(this);
+
+            // Register MySQL storage provider
+            getStorageManager().registerStorageProvider(mysqlStorageProvider);
+
+            // Set mysql as primary storage provider.
+            if (this.getSettingsConfig().getPrimaryStorageProvider().equalsIgnoreCase("mysql")) {
+                getStorageManager().setPrimaryStorageProvider(mysqlStorageProvider);
+            }
+        }
+
+        this.getLogger().info("Primary storage provider of Autorank: " + this.getStorageManager()
+                .getPrimaryStorageProvider().getName());
 
         // ------------- Initialize requirements and results -------------
         this.initializeReqsAndRes();
@@ -235,6 +263,7 @@ public class Autorank extends JavaPlugin {
 
         // Register listeners
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerQuitListener(this), this);
 
         // ------------- Schedule tasks -------------
 
@@ -259,7 +288,8 @@ public class Autorank extends JavaPlugin {
 
                 // Validate paths                
                 if (!getValidateHandler().startValidation()) {
-                    getServer().getConsoleSender().sendMessage("[Autorank] " + ChatColor.RED + "Detected errors in your Paths.yml file. Log in to your server to see the problems!");
+                    getServer().getConsoleSender().sendMessage("[Autorank] " + ChatColor.RED + "Detected errors in " +
+                            "your Paths.yml file. Log in to your server to see the problems!");
                 }
 
                 // Show warnings (if there are any)
@@ -277,7 +307,7 @@ public class Autorank extends JavaPlugin {
             }
         }, 1L);
 
-        // Remove old data of players
+        // Run task that updates storage providers if something changed.
         getServer().getScheduler().runTaskTimerAsynchronously(this, new Runnable() {
             @Override
             public void run() {
@@ -286,9 +316,9 @@ public class Autorank extends JavaPlugin {
                 if (!getInternalPropertiesConfig().isConvertedToNewFormat()) return;
 
                 // Remove old entries
-                int removed = getFlatFileManager().removeOldEntries();
+                int removed = getStorageManager().getPrimaryStorageProvider().purgeOldEntries();
 
-                getLogger().info("Removed " + removed + " old data entries from database!");
+                getLogger().info("Removed " + removed + " old storage entries from database!");
             }
         }, 0, (long) AutorankTools.TICKS_PER_MINUTE * 60 * 24);
 
@@ -300,7 +330,7 @@ public class Autorank extends JavaPlugin {
         // ------------- Log messages -------------
 
         // Debug message telling what plugin is used for timing.
-        getLogger().info("Using timings of: " + getConfigHandler().useTimeOf().toString().toLowerCase());
+        getLogger().info("Using timings of: " + getSettingsConfig().useTimeOf().toString().toLowerCase());
 
         debugMessage("Autorank debug is turned on!");
 
@@ -310,10 +340,11 @@ public class Autorank extends JavaPlugin {
         if (isDevVersion()) {
             this.getLogger().warning("You're running a DEV version, be sure to backup your Autorank folder!");
             this.getLogger().warning(
-                    "DEV versions are not guaranteed to be stable and generally shouldn't be used on big production servers with lots of players.");
+                    "DEV versions are not guaranteed to be stable and generally shouldn't be used on big production " +
+                            "servers with lots of players.");
         }
 
-        // ------------- Do miscalleaneous tasks -------------
+        // ------------- Do miscellaneous tasks -------------
 
         // Start automatic backup
         this.getBackupManager().startBackupSystem();
@@ -324,11 +355,9 @@ public class Autorank extends JavaPlugin {
         // Convert all UUIDS to lowercase.
         this.getUUIDStorage().transferUUIDs();
 
-        // Check whether the data files are still up to date.
-        this.getFlatFileManager().doCalendarCheck();
-
-        // Spawn thread to check if MySQL database times are up to date
-        this.getMySQLManager().refreshGlobalTime();
+        // TODO: implement that all storage providers do calendar checks themselves periodically.
+        // Check whether the storage files are still up to date.
+        this.getStorageManager().doCalendarCheck();
 
         // ------------- Say Welcome! -------------
         getLogger().info(String.format("Autorank %s has been enabled!", getDescription().getVersion()));
@@ -493,8 +522,11 @@ public class Autorank extends JavaPlugin {
      */
     public void debugMessage(final String message) {
         // Don't put out debug message when it is not needed.
-        if (!this.getConfigHandler().useDebugOutput())
+
+        // Settings file not loaded yet.
+        if (this.getSettingsConfig().getConfig() == null || !this.getSettingsConfig().useDebugOutput()) {
             return;
+        }
 
         this.getServer().getConsoleSender()
                 .sendMessage("[Autorank DEBUG] " + ChatColor.translateAlternateColorCodes('&', message));
@@ -553,36 +585,72 @@ public class Autorank extends JavaPlugin {
         return languageHandler;
     }
 
+    private void setLanguageHandler(final LanguageHandler lHandler) {
+        this.languageHandler = lHandler;
+    }
+
     public PermissionsPluginManager getPermPlugHandler() {
         return permPlugHandler;
+    }
+
+    public void setPermPlugHandler(final PermissionsPluginManager permPlugHandler) {
+        this.permPlugHandler = permPlugHandler;
     }
 
     public PlayerChecker getPlayerChecker() {
         return playerChecker;
     }
 
-    public PlaytimeManager getPlaytimes() {
-        return playtimes;
+    private void setPlayerChecker(final PlayerChecker playerChecker) {
+        this.playerChecker = playerChecker;
+    }
+
+    public PlayTimeManager getPlayTimeManager() {
+        return playTimeManager;
+    }
+
+    private void setPlayTimeManager(final PlayTimeManager playTimeManager) {
+        this.playTimeManager = playTimeManager;
     }
 
     public UpdateHandler getUpdateHandler() {
         return updateHandler;
     }
 
+    public void setUpdateHandler(final UpdateHandler updateHandler) {
+        this.updateHandler = updateHandler;
+    }
+
     public UUIDStorage getUUIDStorage() {
         return uuidStorage;
+    }
+
+    public void setUUIDStorage(final UUIDStorage uuidStorage) {
+        this.uuidStorage = uuidStorage;
     }
 
     public ValidateHandler getValidateHandler() {
         return validateHandler;
     }
 
+    public void setValidateHandler(final ValidateHandler validateHandler) {
+        this.validateHandler = validateHandler;
+    }
+
     public WarningManager getWarningManager() {
         return warningManager;
     }
 
+    public void setWarningManager(final WarningManager warningManager) {
+        this.warningManager = warningManager;
+    }
+
     public AddOnManager getAddonManager() {
         return addonManager;
+    }
+
+    public void setAddonManager(final AddOnManager addonManager) {
+        this.addonManager = addonManager;
     }
 
     public API getAPI() {
@@ -593,102 +661,45 @@ public class Autorank extends JavaPlugin {
         return backupManager;
     }
 
-    public CommandsManager getCommandsManager() {
-        return commandsManager;
-    }
-
-    public SettingsConfig getConfigHandler() {
-        return settingsConfig;
-    }
-
-    public Debugger getDebugger() {
-        return debugger;
-    }
-
-    public DependencyManager getDependencyManager() {
-        return dependencyManager;
-    }
-
-    public void setAddonManager(final AddOnManager addonManager) {
-        this.addonManager = addonManager;
-    }
-
     public void setBackupManager(final BackupManager backupManager) {
         this.backupManager = backupManager;
+    }
+
+    public CommandsManager getCommandsManager() {
+        return commandsManager;
     }
 
     public void setCommandsManager(final CommandsManager commandsManager) {
         this.commandsManager = commandsManager;
     }
 
-    public void setConfigHandler(final SettingsConfig configHandler) {
-        this.settingsConfig = configHandler;
+    public Debugger getDebugger() {
+        return debugger;
     }
 
     public void setDebugger(final Debugger debugger) {
         this.debugger = debugger;
     }
 
+    public DependencyManager getDependencyManager() {
+        return dependencyManager;
+    }
+
     public void setDependencyManager(final DependencyManager dependencyManager) {
         this.dependencyManager = dependencyManager;
     }
-
-    private void setLanguageHandler(final LanguageHandler lHandler) {
-        this.languageHandler = lHandler;
-    }
-
-    /**
-     * @return the internalPropertiesConfig
-     */
     public InternalPropertiesConfig getInternalPropertiesConfig() {
         return internalPropertiesConfig;
     }
 
-    /**
-     * @param internalPropertiesConfig the internalPropertiesConfig to set
-     */
     public void setInternalPropertiesConfig(InternalPropertiesConfig internalPropertiesConfig) {
         this.internalPropertiesConfig = internalPropertiesConfig;
     }
 
-    public void setPermPlugHandler(final PermissionsPluginManager permPlugHandler) {
-        this.permPlugHandler = permPlugHandler;
-    }
-
-    private void setPlayerChecker(final PlayerChecker playerChecker) {
-        this.playerChecker = playerChecker;
-    }
-
-    private void setPlaytimes(final PlaytimeManager playtimes) {
-        this.playtimes = playtimes;
-    }
-
-    public void setUpdateHandler(final UpdateHandler updateHandler) {
-        this.updateHandler = updateHandler;
-    }
-
-    public void setUUIDStorage(final UUIDStorage uuidStorage) {
-        this.uuidStorage = uuidStorage;
-    }
-
-    public void setValidateHandler(final ValidateHandler validateHandler) {
-        this.validateHandler = validateHandler;
-    }
-
-    public void setWarningManager(final WarningManager warningManager) {
-        this.warningManager = warningManager;
-    }
-
-    /**
-     * @return the settingsConfig
-     */
     public SettingsConfig getSettingsConfig() {
         return settingsConfig;
     }
 
-    /**
-     * @param settingsConfig the settingsConfig to set
-     */
     public void setSettingsConfig(SettingsConfig settingsConfig) {
         this.settingsConfig = settingsConfig;
     }
@@ -755,5 +766,21 @@ public class Autorank extends JavaPlugin {
 
     public void setDefaultBehaviorConfig(DefaultBehaviorConfig defaultBehaviorConfig) {
         this.defaultBehaviorConfig = defaultBehaviorConfig;
+    }
+
+    public StorageManager getStorageManager() {
+        return storageManager;
+    }
+
+    public void setStorageManager(StorageManager storageManager) {
+        this.storageManager = storageManager;
+    }
+
+    public TaskManager getTaskManager() {
+        return taskManager;
+    }
+
+    public void setTaskManager(TaskManager taskManager) {
+        this.taskManager = taskManager;
     }
 }

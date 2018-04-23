@@ -100,9 +100,9 @@ public enum Lang {
      */
     DAMAGE_TAKEN_REQUIREMENT("damage-taken-requirement", "Take at least {0} damage"),
     /**
-     * New data has been imported!
+     * New storage has been imported!
      */
-    DATA_IMPORTED("data-imported", "New data has been imported!"),
+    DATA_IMPORTED("storage-imported", "New storage has been imported!"),
     /**
      * days
      */

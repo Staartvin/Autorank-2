@@ -1,14 +1,13 @@
 package me.armar.plugins.autorank.playtimes;
 
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
-import me.armar.plugins.autorank.data.flatfile.UpdatePlaytime;
 import me.armar.plugins.autorank.hooks.DependencyManager.AutorankDependency;
 import me.armar.plugins.autorank.hooks.statzapi.StatzAPIHandler;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin.StatType;
 import me.armar.plugins.autorank.statsmanager.handlers.StatsHandler;
-import me.armar.plugins.autorank.util.AutorankTools;
+import me.armar.plugins.autorank.storage.StorageProvider;
+import me.armar.plugins.autorank.storage.TimeType;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
 import me.staartvin.plugins.pluginlibrary.Library;
 import me.staartvin.plugins.pluginlibrary.hooks.OnTimeHook;
@@ -16,12 +15,9 @@ import me.staartvin.plugins.pluginlibrary.hooks.StatsHook;
 
 import java.util.UUID;
 
-public class PlaytimeManager {
+public class PlayTimeManager {
 
-    // Autorank keeps track of total time, time online on one day, time online
-    // in a week and time online in a month.
-    // There are all tracked in minutes.
-
+    // How often do we check whether a player is still online? (in minutes)
     public static int INTERVAL_MINUTES = 5;
 
     private final Autorank plugin;
@@ -29,17 +25,14 @@ public class PlaytimeManager {
     // What plugin should Autorank use to check time?
     private final AutorankDependency timePlugin;
 
-    public PlaytimeManager(final Autorank plugin) {
+    public PlayTimeManager(final Autorank plugin) {
         this.plugin = plugin;
 
-        INTERVAL_MINUTES = plugin.getConfigHandler().getIntervalTime();
+        INTERVAL_MINUTES = plugin.getSettingsConfig().getIntervalTime();
 
         plugin.getLogger().info("Interval check every " + INTERVAL_MINUTES + " minutes.");
 
-        plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new UpdatePlaytime(plugin.getFlatFileManager(), plugin),
-                PlaytimeManager.INTERVAL_MINUTES * AutorankTools.TICKS_PER_MINUTE, PlaytimeManager.INTERVAL_MINUTES * AutorankTools.TICKS_PER_MINUTE);
-
-        timePlugin = plugin.getConfigHandler().useTimeOf();
+        timePlugin = plugin.getSettingsConfig().useTimeOf();
     }
 
     /**
@@ -77,7 +70,8 @@ public class PlaytimeManager {
                     return playTime;
 
                 // Stats not found, using Autorank's system.
-                playTime = plugin.getFlatFileManager().getLocalTime(TimeType.TOTAL_TIME, uuid) * 60;
+                playTime = plugin.getStorageManager().getPrimaryStorageProvider().getPlayerTime(TimeType.TOTAL_TIME,
+                        uuid) * 60;
             }
         } else if (timePlugin.equals(AutorankDependency.ONTIME)) {
             playTime = (int) (((OnTimeHook) plugin.getDependencyManager().getLibraryHook(Library.ONTIME)).getPlayerData(playerName, "TOTALPLAY") / 1000);
@@ -91,7 +85,8 @@ public class PlaytimeManager {
                 return playTime;
 
             // Use internal system of Autorank.
-            playTime = plugin.getFlatFileManager().getLocalTime(TimeType.TOTAL_TIME, uuid) * 60;
+            playTime = plugin.getStorageManager().getPrimaryStorageProvider().getPlayerTime(TimeType.TOTAL_TIME,
+                    uuid) * 60;
         }
 
         return playTime;
@@ -104,6 +99,70 @@ public class PlaytimeManager {
      */
     public AutorankDependency getUsedTimePlugin() {
         return timePlugin;
+    }
+
+    /**
+     * Get global time (for a given type of time) of a player.
+     *
+     * @param timeType Type of time
+     * @param uuid     UUID of player
+     * @return global time of a player or -1 if no active storage provider supports global time.
+     */
+    public int getGlobalPlayTime(TimeType timeType, UUID uuid) {
+        if (!plugin.getStorageManager().isStorageTypeActive(StorageProvider.StorageType.DATABASE)) {
+            return -1;
+        }
+
+        return plugin.getStorageManager().getStorageProvider(StorageProvider.StorageType.DATABASE).getPlayerTime
+                (timeType, uuid);
+    }
+
+    /**
+     * Set global time (for a given type of time) of a player.
+     *
+     * @param timeType Type of time
+     * @param uuid     UUID of player
+     * @param value    time to set
+     */
+    public void setGlobalPlayTime(TimeType timeType, UUID uuid, int value) {
+        if (!plugin.getStorageManager().isStorageTypeActive(StorageProvider.StorageType.DATABASE)) {
+            return;
+        }
+
+        plugin.getStorageManager().getStorageProvider(StorageProvider.StorageType.DATABASE).setPlayerTime(timeType,
+                uuid, value);
+    }
+
+    /**
+     * Add global time (for a given type of time) of a player.
+     *
+     * @param timeType   Type of time
+     * @param uuid       UUID of player
+     * @param valueToAdd time to add
+     */
+    public void addGlobalPlayTime(TimeType timeType, UUID uuid, int valueToAdd) {
+        if (!plugin.getStorageManager().isStorageTypeActive(StorageProvider.StorageType.DATABASE)) {
+            return;
+        }
+
+        plugin.getStorageManager().getStorageProvider(StorageProvider.StorageType.DATABASE).addPlayerTime(timeType,
+                uuid, valueToAdd);
+    }
+
+    /**
+     * Get local play time of a player (for a specific type of time).
+     *
+     * @param timeType Type of time
+     * @param uuid     UUID of player
+     * @return value of time or -1 if no data could be found for the given player
+     */
+    public int getLocalPlayTime(TimeType timeType, UUID uuid) {
+        if (!plugin.getStorageManager().isStorageTypeActive(StorageProvider.StorageType.FLAT_FILE)) {
+            return -1;
+        }
+
+        return plugin.getStorageManager().getStorageProvider(StorageProvider.StorageType.FLAT_FILE).getPlayerTime
+                (timeType, uuid);
     }
 
 }

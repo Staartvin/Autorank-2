@@ -18,7 +18,7 @@ public abstract class AbstractConfig {
     public void createNewFile() {
         configFile = new SimpleYamlConfiguration(plugin, fileName, fileName);
 
-        plugin.getLogger().info("File loaded (" + fileName + ")");
+        plugin.debugMessage("File loaded (" + fileName + ")");
     }
 
 

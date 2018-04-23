@@ -2,14 +2,15 @@ package me.armar.plugins.autorank.commands;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
-import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
+import me.armar.plugins.autorank.storage.StorageProvider;
+import me.armar.plugins.autorank.storage.TimeType;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
-import java.util.Map.Entry;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -42,49 +43,79 @@ public class SyncCommand extends AutorankCommand {
             reverse = true;
         }
 
-        if (!plugin.getConfigHandler().useMySQL()) {
+        // Check if MySQL is active
+        if (!plugin.getSettingsConfig().useMySQL()) {
             sender.sendMessage(Lang.MYSQL_IS_NOT_ENABLED.getConfigValue());
+            return true;
+        }
+
+        // Check if Flatfile is active
+        if (!plugin.getStorageManager().isStorageTypeActive(StorageProvider.StorageType.FLAT_FILE)) {
+            sender.sendMessage(ChatColor.RED + "There is no active storage provider that supports flatfile data.");
             return true;
         }
 
         sender.sendMessage(ChatColor.RED + "You do not have to use this command regularly.");
 
+        StorageProvider flatfileStorageProvider = plugin.getStorageManager().getStorageProvider(StorageProvider
+                .StorageType.FLAT_FILE);
+
+        StorageProvider databaseStorageProvider = plugin.getStorageManager().getStorageProvider(StorageProvider
+                .StorageType.DATABASE);
+
         if (reverse) {
-            plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+            plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+                int count = 0;
 
-                @Override
-                public void run() {
-                    int count = 0;
+                // Loop over all time types
+                for (TimeType timeType : TimeType.values()) {
+                    // Get all UUIDs.
+                    List<UUID> storedUUIDsFlatfile = flatfileStorageProvider.getStoredPlayers(timeType);
 
-                    // Update all data.yml records
-                    for (Entry<UUID, Integer> entry : plugin.getMySQLManager().getAllPlayersFromDatabase().entrySet()) {
-                        plugin.getFlatFileManager().setLocalTime(TimeType.TOTAL_TIME, entry.getValue(), entry.getKey());
+                    // For each uuid, set its time to that of the database.
+                    for (UUID uuid : storedUUIDsFlatfile) {
+                        int databaseValue = databaseStorageProvider.getPlayerTime(timeType, uuid);
+
+                        // Skip entries that are empty.
+                        if (databaseValue <= 0) {
+                            continue;
+                        }
+
+                        flatfileStorageProvider.setPlayerTime(timeType, uuid, databaseValue);
                         count++;
                     }
 
-                    sender.sendMessage(ChatColor.GREEN + "Successfully updated Data.yml from " + count
-                            + " MySQL database records!");
                 }
+
+                sender.sendMessage(ChatColor.GREEN + "Successfully updated " + count + " items in data.yml from " +
+                        "MySQL database records!");
             });
         } else {
             // Do this async as we are accessing mysql database.
-            plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+            plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
 
-                @Override
-                public void run() {
-                    // Update all mysql records
-                    for (final UUID uuid : plugin.getFlatFileManager().getUUIDKeys(TimeType.TOTAL_TIME)) {
-                        final int localTime = plugin.getFlatFileManager().getLocalTime(TimeType.TOTAL_TIME, uuid);
+                // Get all stored uuids and update MySQL database
 
-                        if (localTime <= 0)
+                // Loop over all time types
+                for (TimeType timeType : TimeType.values()) {
+                    // Get all UUIDs.
+                    List<UUID> storedUUIDsFlatfile = flatfileStorageProvider.getStoredPlayers(timeType);
+
+                    // For each uuid, get the flatfile value and update the MYSQL database.
+                    for (UUID uuid : storedUUIDsFlatfile) {
+                        int flatfileValue = flatfileStorageProvider.getPlayerTime(timeType, uuid);
+
+                        // Skip entries that are empty.
+                        if (flatfileValue <= 0) {
                             continue;
+                        }
 
-                        final int globalTime = plugin.getMySQLManager().getGlobalTime(uuid);
-
-                        plugin.getMySQLManager().setGlobalTime(uuid, localTime + globalTime);
+                        // Add time to database instead of overwriting it
+                        databaseStorageProvider.addPlayerTime(timeType, uuid, flatfileValue);
                     }
-                    sender.sendMessage(ChatColor.GREEN + "Successfully updated MySQL records!");
+
                 }
+                sender.sendMessage(ChatColor.GREEN + "Successfully updated MySQL records!");
             });
         }
 

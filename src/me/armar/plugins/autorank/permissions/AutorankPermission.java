@@ -13,7 +13,7 @@ public final class AutorankPermission {
     public static final String CHECK_OTHERS = "autorank.checkothers";
     public static final String CHOOSE_PATH = "autorank.choose";
     public static final String COMPLETE_REQUIREMENT = "autorank.complete";
-    public static final String CONVERT_TIME_DATA = "autorank.convert.data";
+    public static final String CONVERT_TIME_DATA = "autorank.convert.storage";
     public static final String CONVERT_PLAYER_DATA = "autorank.convert.playerdata";
     public static final String CONVERT_SIMPLE_CONFIG = "autorank.convert.simpleconfig";
     public static final String CONVERT_ADVANCED_CONFIG = "autorank.convert.advancedconfig";
@@ -43,7 +43,7 @@ public final class AutorankPermission {
     public static final String NOTICE_ON_UPDATE_AVAILABLE = "autorank.noticeonupdate";
     public static final String NOTICE_ON_WARNINGS = "autorank.noticeonwarning";
     public static final String EXCLUDE_FROM_LEADERBOARD = "autorank.leaderboard.exclude";
-    public static final String BACKUP_DATA_FILES = "autorank.backup.data";
+    public static final String BACKUP_DATA_FILES = "autorank.backup.storage";
 
     private AutorankPermission() {
     }

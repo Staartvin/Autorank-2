@@ -66,7 +66,7 @@ public class ResetCommand extends AutorankCommand {
 
     @Override
     public String getDescription() {
-        return "Reset certain data of a player";
+        return "Reset certain storage of a player";
     }
 
     @Override

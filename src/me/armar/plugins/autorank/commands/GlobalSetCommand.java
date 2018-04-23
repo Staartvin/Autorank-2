@@ -4,7 +4,10 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
+import me.armar.plugins.autorank.storage.StorageProvider;
+import me.armar.plugins.autorank.storage.TimeType;
 import me.armar.plugins.autorank.util.AutorankTools;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
@@ -31,14 +34,17 @@ public class GlobalSetCommand extends AutorankCommand {
             return true;
         }
 
-        if (args.length > 2) {
-            value = AutorankTools.readTimeInput(args, 2);
+        // This is a global check. It will not show you the database numbers
+        if (!plugin.getStorageManager().isStorageTypeActive(StorageProvider.StorageType.DATABASE)) {
+            sender.sendMessage(ChatColor.RED + Lang.MYSQL_IS_NOT_ENABLED.getConfigValue());
+            return true;
         }
+
+        value = AutorankTools.readTimeInput(args, 2);
 
         if (value >= 0) {
 
-            if (!this.hasPermission(AutorankPermission.SET_GLOBAL_TIME,
-                    sender)) {
+            if (!this.hasPermission(AutorankPermission.SET_GLOBAL_TIME, sender)) {
                 return true;
             }
 
@@ -53,9 +59,8 @@ public class GlobalSetCommand extends AutorankCommand {
                 args[1] = plugin.getUUIDStorage().getRealName(uuid);
             }
 
-            if (!plugin.getMySQLManager().setGlobalTime(uuid, value)) {
-                sender.sendMessage(Lang.MYSQL_IS_NOT_ENABLED.getConfigValue());
-                return true;
+            for (TimeType timeType : TimeType.values()) {
+                plugin.getPlayTimeManager().setGlobalPlayTime(timeType, uuid, value);
             }
 
             AutorankTools.sendColoredMessage(sender,

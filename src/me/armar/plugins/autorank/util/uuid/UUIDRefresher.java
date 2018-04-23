@@ -1,7 +1,7 @@
 package me.armar.plugins.autorank.util.uuid;
 
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
+import me.armar.plugins.autorank.storage.TimeType;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
 
@@ -41,7 +41,8 @@ public class UUIDRefresher implements Runnable {
         isRunning = true;
 
         // Get a list of all uuid keys.
-        final List<UUID> uuids = plugin.getFlatFileManager().getUUIDKeys(TimeType.TOTAL_TIME);
+        final List<UUID> uuids = plugin.getStorageManager().getPrimaryStorageProvider().getStoredPlayers(TimeType
+                .TOTAL_TIME);
 
         final List<UUID> notOutdated = new ArrayList<UUID>();
 

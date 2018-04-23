@@ -106,7 +106,7 @@ public class Debugger {
             out.write("");
             out.newLine();
 
-            out.write("Using MySQL: " + plugin.getConfigHandler().useMySQL());
+            out.write("Using MySQL: " + plugin.getSettingsConfig().useMySQL());
             out.newLine();
             out.write("");
             out.newLine();

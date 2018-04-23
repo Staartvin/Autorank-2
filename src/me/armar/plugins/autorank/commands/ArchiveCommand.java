@@ -43,15 +43,14 @@ public class ArchiveCommand extends AutorankCommand {
             return true;
         }
 
-        sender.sendMessage(ChatColor.GREEN + "Removed " + ChatColor.YELLOW + plugin.getFlatFileManager().archive(rate)
-                + "" + ChatColor.GREEN + " records below " + ChatColor.YELLOW
-                + AutorankTools.timeToString(rate, Time.MINUTES) + ChatColor.GREEN + ".");
+        sender.sendMessage(ChatColor.RED + "This command has been deprecated and can therefore not be used anymore.");
+
         return true;
     }
 
     @Override
     public String getDescription() {
-        return "Archive data with a minimum";
+        return "Archive storage with a minimum";
     }
 
     @Override

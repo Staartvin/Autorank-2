@@ -48,10 +48,10 @@ ranks:
 #       money: 2000 (requires vault ! Player has to have at least this amount of money)
 #       world: world_nether (player has to be in this world to get ranked)
 #       gamemode: 1 (player has to have a certain gamemode, 0 = Survival mode, 1 = Creative mode, 2 = Adventure mode)
-#       has item: id(;amount;data;name;false/true) (checks the players inventory for the item, the name would be the display name of the item. When the false/true (boolean) parameter is true, the player should have the item with the given display name, if it is false, the player only needs the specific amount and material type.)
-#       blocks broken: id(;amount;data;name) (a player has to have broken x amount blocks of item id and data) (Requires Statz) (when no data or id is given, it will check total blocks)
+#       has item: id(;amount;storage;name;false/true) (checks the players inventory for the item, the name would be the display name of the item. When the false/true (boolean) parameter is true, the player should have the item with the given display name, if it is false, the player only needs the specific amount and material type.)
+#       blocks broken: id(;amount;storage;name) (a player has to have broken x amount blocks of item id and storage) (Requires Statz) (when no storage or id is given, it will check total blocks)
 #       Example: break 10 magenta wool would be: 'blocks broken: 35;10;2' 35 = itemid, 10 = amount, 2 = damagevalue
-#       blocks placed: id(;amount;data;name) (a player has to have placed x amount blocks of item id and data) (Requires Statz) (when no data or amount is given, it will check total blocks)
+#       blocks placed: id(;amount;storage;name) (a player has to have placed x amount blocks of item id and storage) (Requires Statz) (when no storage or amount is given, it will check total blocks)
 #       votes: 10 (player has to have voted at least 10 times) (Requires Statz and Votifier)
 #       damage taken: 10 (player has to have taken 10 damage) (damage is not counted in hearts) (Requires Statz)
 #       mobs killed: 5;spider (player has to have killed 5 spiders) (if no entity is specified, then any kill counts) (Requires Statz) (for a list of entities: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/EntityType.html) Can also use WITHER_SKELETON, 
@@ -94,7 +94,7 @@ ranks:
 #       rank change: old-rank; new-rank; world (only works for permissions plugins that support this)
 #       message: 'You got ranked up'
 #       command: 'say &p hi; give &p 1 100'(executes a console command. &p will be replaced by the player name) You can perform more commands with the ';' sign.
-#       effect: STEP_SOUND;8 (first argument is the effect name, second is the effect data. For a list of possible effects go to https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Effect.html)
+#       effect: STEP_SOUND;8 (first argument is the effect name, second is the effect storage. For a list of possible effects go to https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Effect.html)
 #       tp: x;y;z;world;yaw;pitch (tp: 0;0;0;world_nether;1.0;2.0)
 #       firework: target;power;type;R;G;B (Spawn a firework with on a player or spawn, with specified power, type and RGB colour) (target can be 'player' or 'spawn', power is an integer, type is a type (see https://hub.spigotmc.org/javadocs/spigot/org/bukkit/FireworkEffect.Type.html), R;G;B is a RGB colour code (see http://www.rapidtables.com/web/color/RGB_Color.htm))
 #       money: 1000 (Reward a player with a 1000 money.) (Requires Vault!)

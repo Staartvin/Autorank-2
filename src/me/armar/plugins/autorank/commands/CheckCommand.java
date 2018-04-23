@@ -7,6 +7,7 @@ import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.pathbuilder.Path;
 import me.armar.plugins.autorank.pathbuilder.holders.RequirementsHolder;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
+import me.armar.plugins.autorank.storage.TimeType;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
 import org.bukkit.Bukkit;
@@ -76,7 +77,8 @@ public class CheckCommand extends AutorankCommand {
 
             if (paths.isEmpty()) {
                 sender.sendMessage(Lang.NO_PATH_LEFT_TO_CHOOSE.getConfigValue(sender.getName(), AutorankTools
-                        .timeToString(plugin.getPlaytimes().getTimeOfPlayer(player.getName(), true), Time.SECONDS)));
+                        .timeToString(plugin.getPlayTimeManager().getTimeOfPlayer(player.getName(), true), Time
+                                .SECONDS)));
 
                 return;
             }
@@ -104,14 +106,16 @@ public class CheckCommand extends AutorankCommand {
 
         // Start building layout
 
-        String layout = plugin.getConfigHandler().getCheckCommandLayout();
+        String layout = plugin.getSettingsConfig().getCheckCommandLayout();
 
         layout = layout.replace("&path", displayName);
         layout = layout.replace("&p", player.getName());
         layout = layout.replace("&time", AutorankTools
-                .timeToString(plugin.getPlaytimes().getTimeOfPlayer(player.getName(), true), Time.SECONDS));
+                .timeToString(plugin.getPlayTimeManager().getTimeOfPlayer(player.getName(), true), Time.SECONDS));
         layout = layout.replace("&globaltime",
-                AutorankTools.timeToString(plugin.getMySQLManager().getGlobalTime(uuid), Time.MINUTES));
+                AutorankTools.timeToString(plugin.getPlayTimeManager().getGlobalPlayTime(TimeType.TOTAL_TIME, uuid),
+                        Time
+                        .MINUTES));
 
         boolean showReqs = false;
 
@@ -185,7 +189,7 @@ public class CheckCommand extends AutorankCommand {
             final Player player = plugin.getServer().getPlayer(args[1]);
             if (player == null) {
 
-                final int time = plugin.getPlaytimes().getTimeOfPlayer(args[1], true);
+                final int time = plugin.getPlayTimeManager().getTimeOfPlayer(args[1], true);
 
                 if (time <= 0) {
                     sender.sendMessage(Lang.PLAYER_IS_INVALID.getConfigValue(args[1]));

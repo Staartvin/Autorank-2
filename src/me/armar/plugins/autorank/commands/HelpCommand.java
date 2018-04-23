@@ -45,7 +45,7 @@ public class HelpCommand extends AutorankCommand {
                 plugin.getCommandsManager().getRegisteredCommands().values());
 
         // Change commands list
-        if (plugin.getConfigHandler().doBaseHelpPageOnPermissions()) {
+        if (plugin.getSettingsConfig().doBaseHelpPageOnPermissions()) {
             // Create a new list that will be new commands list. This is done so
             // Autorank automatically adjusts help pages.
 

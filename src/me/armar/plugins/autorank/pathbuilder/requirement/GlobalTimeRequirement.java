@@ -1,6 +1,8 @@
 package me.armar.plugins.autorank.pathbuilder.requirement;
 
 import me.armar.plugins.autorank.language.Lang;
+import me.armar.plugins.autorank.storage.StorageProvider;
+import me.armar.plugins.autorank.storage.TimeType;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
 import org.bukkit.entity.Player;
@@ -15,7 +17,7 @@ import java.util.UUID;
  */
 public class GlobalTimeRequirement extends AbstractRequirement {
 
-    int globalTime = -1;
+    private int globalTime = -1;
 
     @Override
     public String getDescription() {
@@ -25,7 +27,8 @@ public class GlobalTimeRequirement extends AbstractRequirement {
     @Override
     public String getProgress(final Player player) {
 
-        final int playtime = getAutorank().getMySQLManager().getGlobalTime(player.getUniqueId());
+        final int playtime = getAutorank().getPlayTimeManager().getGlobalPlayTime(TimeType.TOTAL_TIME, player
+                .getUniqueId());
 
         return playtime + "/" + globalTime;
     }
@@ -34,7 +37,7 @@ public class GlobalTimeRequirement extends AbstractRequirement {
     public boolean meetsRequirement(final Player player) {
         final UUID uuid = player.getUniqueId();
 
-        final double playtime = this.getAutorank().getMySQLManager().getGlobalTime(uuid);
+        final double playtime = this.getAutorank().getPlayTimeManager().getGlobalPlayTime(TimeType.TOTAL_TIME, uuid);
 
         return globalTime != -1 && playtime >= globalTime;
     }
@@ -46,6 +49,11 @@ public class GlobalTimeRequirement extends AbstractRequirement {
 
         if (globalTime < 0) {
             this.registerWarningMessage("No number is provided or smaller than 0.");
+            return false;
+        }
+
+        if (!getAutorank().getStorageManager().isStorageTypeActive(StorageProvider.StorageType.DATABASE)) {
+            this.registerWarningMessage("There is no active storage provider that supports global time!");
             return false;
         }
 

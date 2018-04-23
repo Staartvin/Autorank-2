@@ -1,7 +1,6 @@
 package me.armar.plugins.autorank.config;
 
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
 import me.armar.plugins.autorank.hooks.DependencyManager.AutorankDependency;
 
 /**
@@ -137,7 +136,7 @@ public class SettingsConfig extends AbstractConfig {
      * @return true if Autorank should notice all players. False otherwise.
      */
     public boolean shouldBroadcastDataReset() {
-        return this.getConfig().getBoolean("broadcast resetting of data files", true);
+        return this.getConfig().getBoolean("broadcast resetting of storage files", true);
     }
 
     /**
@@ -232,12 +231,21 @@ public class SettingsConfig extends AbstractConfig {
     }
 
     /**
-     * Check whether Autorank should automatically remove old data from its database.
+     * Check whether Autorank should automatically remove old storage from its database.
      *
      * @return true if it should, false otherwise.
      */
     public boolean shouldRemoveOldEntries() {
-        return this.getConfig().getBoolean("automatically archive old data", true);
+        return this.getConfig().getBoolean("automatically archive old storage", true);
+    }
+
+    /**
+     * Get the primary storage provider.
+     *
+     * @return string in config representing the primary storage provider.
+     */
+    public String getPrimaryStorageProvider() {
+        return this.getConfig().getString("primary storage provider", "flatfile");
     }
 
 }

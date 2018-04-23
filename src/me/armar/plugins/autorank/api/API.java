@@ -2,11 +2,12 @@ package me.armar.plugins.autorank.api;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.addons.AddOnManager;
-import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
 import me.armar.plugins.autorank.pathbuilder.Path;
 import me.armar.plugins.autorank.pathbuilder.holders.RequirementsHolder;
 import me.armar.plugins.autorank.pathbuilder.requirement.AbstractRequirement;
 import me.armar.plugins.autorank.pathbuilder.result.AbstractResult;
+import me.armar.plugins.autorank.storage.StorageProvider;
+import me.armar.plugins.autorank.storage.TimeType;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ import java.util.UUID;
 /**
  * <b>Autorank's API class:</b>
  * <p>
- * You, as a developer, can you use this class to get data from players or data
+ * You, as a developer, can you use this class to get storage from players or storage
  * about paths. The API is never finished and if you want to see something
  * added, tell us!
  * <p>
@@ -86,7 +87,12 @@ public class API {
      * @return play time of a player. 0 if no entry was found.
      */
     public int getGlobalPlayTime(final UUID uuid) {
-        return plugin.getMySQLManager().getGlobalTime(uuid);
+        if (!plugin.getStorageManager().isStorageTypeActive(StorageProvider.StorageType.DATABASE)) {
+            return 0;
+        }
+
+        return plugin.getStorageManager().getStorageProvider(StorageProvider.StorageType.DATABASE).getPlayerTime
+                (TimeType.TOTAL_TIME, uuid);
     }
 
     /**
@@ -99,16 +105,18 @@ public class API {
      * @return play time of this player or 0 if not found.
      */
     public int getLocalPlayTime(final UUID uuid) {
-        return plugin.getFlatFileManager().getLocalTime(TimeType.TOTAL_TIME, uuid);
+        return getPlayTime(TimeType.TOTAL_TIME, uuid);
     }
 
     /**
-     * Get the MySQL database name Autorank stores its global times in.
+     * Get the play time of a player for a given type of time (daily, weekly, monthly).
      *
-     * @return name of database
+     * @param timeType Type of time
+     * @param uuid     UUID of the player
+     * @return play time of a player (in minutes).
      */
-    public String getMySQLDatabase() {
-        return plugin.getMySQLManager().getDatabaseName();
+    public int getPlayTime(TimeType timeType, UUID uuid) {
+        return plugin.getStorageManager().getPrimaryStorageProvider().getPlayerTime(timeType, uuid);
     }
 
     /**
@@ -122,7 +130,7 @@ public class API {
      * @return play time of a player. 0 when has never played before.
      */
     public int getTimeOfPlayer(final Player player) {
-        return plugin.getPlaytimes().getTimeOfPlayer(player.getName(), true);
+        return plugin.getPlayTimeManager().getTimeOfPlayer(player.getName(), true);
     }
 
     /**

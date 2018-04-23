@@ -88,7 +88,7 @@ use primary group for vault: true
 broadcast resetting of data files: true
 # Autorank keeps track of amount of time played per day, week and month.
 # When a new day, week or month starts, Autorank will reset the times of all players (except the total time, this is always preserved).
-# If this value is set to true, Autorank will broadcast to all players when their data gets reset.
+# If this value is set to true, Autorank will broadcast to all players when their storage gets reset.
 
 use global time in leaderboard: false
 # By default, Autorank will use the local time of a player when for the leaderboard. When this is set to true,
@@ -99,4 +99,9 @@ disable automatic path checking: false
 # If you want to disable this feature and let players manually check whether they completed all requirements, set this to true.
 
 automatically archive old data: true
-# This is turned on by default. When this is set to true, Autorank will archive data of players that haven't seen been online for some time.
+# This is turned on by default. When this is set to true, Autorank will archive storage of players that haven't seen been online for some time.
+
+primary storage provider: flatfile
+# Set the primary storage provider for Autorank. By default, this is the flatfile provider that stores data in the
+# /storage folder. The primary storage provider is used to get the time a player has played when for example
+# /ar times is requested. You can choose from 'flatfile' or 'mysql'.

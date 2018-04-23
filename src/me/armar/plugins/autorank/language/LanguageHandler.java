@@ -34,7 +34,7 @@ public class LanguageHandler {
 
         loadConfig();
 
-        plugin.getLogger().info("Language file loaded (lang.yml)");
+        plugin.debugMessage("Language file loaded (lang.yml)");
     }
 
     public FileConfiguration getConfig() {

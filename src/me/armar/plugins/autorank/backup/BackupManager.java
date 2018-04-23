@@ -2,8 +2,6 @@ package me.armar.plugins.autorank.backup;
 
 import com.google.common.io.Files;
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.data.flatfile.FlatFileManager;
-import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
 import org.bukkit.ChatColor;
 
 import java.io.File;
@@ -13,7 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * This class is used to backup several data files of Autorank.
+ * This class is used to backup several storage files of Autorank.
  *
  * @author Staartvin
  */
@@ -67,27 +65,20 @@ public class BackupManager {
     }
 
     /**
-     * Backup data files of either playerdata or regular time data.
+     * Backup storage files of either playerdata or regular time storage.
      * It will notify the backup manager that it does not have to backup the files again within 24 hours.
-     * @param dataType Type of data to backup (data or playerdata).
+     * @param dataType Type of storage to backup (storage or playerdata).
      */
     public void backupDataFolders(String dataType) {
 
-        if (dataType.equalsIgnoreCase("data")) {
-            plugin.debugMessage(ChatColor.GREEN + "Making a backup of all data files!");
+        if (dataType.equalsIgnoreCase("storage")) {
+            plugin.debugMessage(ChatColor.GREEN + "Making a backup of all storage files!");
 
-            // For every type of time data file
-            for (TimeType type : TimeType.values()) {
-
-                // Get the path to the file and back it up!
-                String path = FlatFileManager.dataTypePaths.get(type);
-
-                plugin.getBackupManager().backupFile(path, plugin.getDataFolder().getAbsolutePath()
-                        + File.separator + "backups" + File.separator + path.replace("/data/", ""));
-            }
+            // Try to backup all storage providers
+            plugin.getStorageManager().backupStorageProviders();
 
             // Update latest backup time so backup manager does not backup again within 24 hours.
-            backupDataManager.getConfig().set("data", System.currentTimeMillis());
+            backupDataManager.getConfig().set("storage", System.currentTimeMillis());
 
         } else if (dataType.equalsIgnoreCase("playerdata")) {
             plugin.debugMessage(ChatColor.GREEN + "Making a backup of PlayerData file!");
@@ -104,7 +95,7 @@ public class BackupManager {
 
     /**
      * Start the internal backup system of Autorank. This will make a backup of
-     * each data file every 24 hours.
+     * each storage file every 24 hours.
      */
     public void startBackupSystem() {
         // Makes a backup every day
@@ -113,9 +104,9 @@ public class BackupManager {
             public void run() {
 
                 // Older than a day
-                if ((System.currentTimeMillis() - backupDataManager.getLatestBackup("data")) > 1000 * 60 * 60 * 24
+                if ((System.currentTimeMillis() - backupDataManager.getLatestBackup("storage")) > 1000 * 60 * 60 * 24
                     /* One day (in ms)*/) {
-                    backupDataFolders("data");
+                    backupDataFolders("storage");
                 } else {
                     plugin.debugMessage("Data files did not have to be backed up yet.");
                 }

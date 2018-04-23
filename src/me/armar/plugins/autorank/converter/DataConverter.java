@@ -2,7 +2,6 @@ package me.armar.plugins.autorank.converter;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.config.SimpleYamlConfiguration;
-import me.armar.plugins.autorank.data.flatfile.FlatFileManager.TimeType;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.io.File;
@@ -21,7 +20,7 @@ public class DataConverter {
     }
 
     /**
-     * Convert data format from Autorank 3.8 (or lower) to Autorank 4.0
+     * Convert storage format from Autorank 3.8 (or lower) to Autorank 4.0
      *
      * @return true if it worked, false if it was already converted or did not
      * work.
@@ -40,28 +39,29 @@ public class DataConverter {
 
         final String folderPath = plugin.getDataFolder().getAbsolutePath() + File.separator;
 
-        // Rename data files
-        if (!new File(folderPath + "/data/daily_time.yml").renameTo(new File(folderPath + "/data/Daily_time.yml"))) {
+        // Rename storage files
+        if (!new File(folderPath + "/storage/daily_time.yml").renameTo(new File(folderPath + "/storage/Daily_time" +
+                ".yml"))) {
             plugin.getLogger().info("Could not rename daily_time.yml to Daily_time.yml!");
         } else {
             plugin.getLogger().info("Successfully converted Daily_time.yml!");
         }
 
-        if (!new File(folderPath + "/data/weekly_time.yml").renameTo(new File(folderPath + "/data/Weekly_time.yml"))) {
+        if (!new File(folderPath + "/storage/weekly_time.yml").renameTo(new File(folderPath + "/storage/Weekly_time.yml"))) {
             plugin.getLogger().info("Could not rename weekly_time.yml to Weekly_time.yml!");
         } else {
             plugin.getLogger().info("Successfully converted Weekly_time.yml!");
         }
 
-        if (!new File(folderPath + "/data/monthly_time.yml")
-                .renameTo(new File(folderPath + "/data/Monthly_time.yml"))) {
+        if (!new File(folderPath + "/storage/monthly_time.yml")
+                .renameTo(new File(folderPath + "/storage/Monthly_time.yml"))) {
             plugin.getLogger().info("Could not rename monthly_time.yml to Monthly_time.yml!");
         } else {
             plugin.getLogger().info("Successfully converted Monthly_time.yml!");
         }
 
-        // Now move Data.yml to /data/Total_time.yml
-        File totalTimeFile = new File(folderPath + "/data/Total_time.yml");
+        // Now move Data.yml to /storage/Total_time.yml
+        File totalTimeFile = new File(folderPath + "/storage/Total_time.yml");
 
         if (totalTimeFile.exists()) {
             plugin.getLogger().info("Deleting Total_time.yml");
@@ -87,10 +87,10 @@ public class DataConverter {
         plugin.getInternalPropertiesConfig().setConvertedToNewFormat(true);
 
         // Reload file
-        plugin.getFlatFileManager().getDataFile(TimeType.TOTAL_TIME).reloadFile();
-        plugin.getFlatFileManager().getDataFile(TimeType.WEEKLY_TIME).reloadFile();
-        plugin.getFlatFileManager().getDataFile(TimeType.MONTHLY_TIME).reloadFile();
-        plugin.getFlatFileManager().getDataFile(TimeType.DAILY_TIME).reloadFile();
+        //plugin.getFlatFileManager().getDataFile(TimeType.TOTAL_TIME).reloadFile();
+        //plugin.getFlatFileManager().getDataFile(TimeType.WEEKLY_TIME).reloadFile();
+        //plugin.getFlatFileManager().getDataFile(TimeType.MONTHLY_TIME).reloadFile();
+        //plugin.getFlatFileManager().getDataFile(TimeType.DAILY_TIME).reloadFile();
 
         return true;
     }

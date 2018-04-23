@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 
 /**
- * This class is used to create a backup-data.yml that will store what files
+ * This class is used to create a backup-storage.yml that will store what files
  * were backed up and at what time.
  *
  * @author Staartvin
@@ -25,7 +25,7 @@ public class BackupDataManager {
     }
 
     /**
-     * Create a new backup data file if it did not exist already. <br>
+     * Create a new backup storage file if it did not exist already. <br>
      * If it already exists, it will be loaded into memory.
      */
     public void createNewFile() {
@@ -34,11 +34,11 @@ public class BackupDataManager {
 
         loadConfig();
 
-        plugin.getLogger().info("Backup data file loaded (backup-data.yml)");
+        plugin.debugMessage("Backup storage file loaded (backup-storage.yml)");
     }
 
     /**
-     * Get the backup-data.yml file.
+     * Get the backup-storage.yml file.
      *
      * @return
      */
@@ -61,15 +61,15 @@ public class BackupDataManager {
     }
 
     /**
-     * Load the backup data file of Autorank (backup-data.yml).
+     * Load the backup storage file of Autorank (backup-storage.yml).
      */
     public void loadConfig() {
 
         backupConfig.options()
-                .header("Backup-data file" + "\nDon't edit this file if you don't know what you are doing. "
+                .header("Backup-storage file" + "\nDon't edit this file if you don't know what you are doing. "
                         + "\nThis file is used by Autorank to check when the latest backups were made.");
 
-        backupConfig.addDefault("data", 0);
+        backupConfig.addDefault("storage", 0);
         backupConfig.addDefault("playerdata", 0);
 
         backupConfig.options().copyDefaults(true);
@@ -77,19 +77,19 @@ public class BackupDataManager {
     }
 
     /**
-     * Reload the backup-data.yml file.
+     * Reload the backup-storage.yml file.
      */
     @SuppressWarnings("deprecation")
     public void reloadConfig() {
         if (backupConfigFile == null) {
             backupConfigFile = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "backups",
-                    "backup-data.yml");
+                    "backup-storage.yml");
         }
         backupConfig = YamlConfiguration.loadConfiguration(backupConfigFile);
     }
 
     /**
-     * Save the backup-data.yml file.
+     * Save the backup-storage.yml file.
      */
     public void saveConfig() {
         if (backupConfig == null || backupConfigFile == null) {

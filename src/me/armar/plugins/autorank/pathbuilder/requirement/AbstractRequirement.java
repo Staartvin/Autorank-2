@@ -102,7 +102,7 @@ public abstract class AbstractRequirement {
     /**
      * Get the current running stats plugin.
      *
-     * @return stats plugin that Autorank uses for stat data
+     * @return stats plugin that Autorank uses for stat storage
      */
     public StatsPlugin getStatsPlugin() {
         return getAutorank().getHookedStatsPlugin();
@@ -188,7 +188,7 @@ public abstract class AbstractRequirement {
 
     /**
      * Set up a requirement. You should initiliaze the requirement with an empty constructor.
-     * Secondly, the {@link #setOptions(String[])} method must be called to supply the requirement with data.
+     * Secondly, the {@link #setOptions(String[])} method must be called to supply the requirement with storage.
      * Lastly, you can use {@link #meetsRequirement(Player)} to check whether a player meets the requirement.
      * <p>
      * The options parameter is an array that will contain the string as passed through the Paths.yml
@@ -232,7 +232,7 @@ public abstract class AbstractRequirement {
 
     /**
      * Add an error message to clarify what went wrong with this requirement.
-     * For example, the requirement was not correctly specified, incorrect data was provided, insufficient data
+     * For example, the requirement was not correctly specified, incorrect storage was provided, insufficient storage
      * was provided, etc.
      *
      * @param message Message to add.
