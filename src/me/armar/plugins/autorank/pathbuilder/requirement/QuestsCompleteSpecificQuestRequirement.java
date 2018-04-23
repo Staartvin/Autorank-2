@@ -2,14 +2,12 @@ package me.armar.plugins.autorank.pathbuilder.requirement;
 
 import me.armar.plugins.autorank.language.Lang;
 import me.staartvin.plugins.pluginlibrary.Library;
-import me.staartvin.plugins.pluginlibrary.hooks.QuestsFatPigsAreFatHook;
+import me.staartvin.plugins.pluginlibrary.hooks.QuestsHook;
 import org.bukkit.entity.Player;
 
-// Quests plugin that is used is from FatPigsAreFat, hence FPAF in name.
+public class QuestsCompleteSpecificQuestRequirement extends AbstractRequirement {
 
-public class QuestsFPAFCompleteSpecificQuestRequirement extends AbstractRequirement {
-
-    private QuestsFatPigsAreFatHook handler = null;
+    private QuestsHook handler = null;
     private String questName = null;
 
     @Override
@@ -35,9 +33,9 @@ public class QuestsFPAFCompleteSpecificQuestRequirement extends AbstractRequirem
     public boolean setOptions(final String[] options) {
 
         // Add dependency
-        addDependency(Library.QUESTS_FATPIGSAREFAT);
+        addDependency(Library.QUESTS);
 
-        handler = (QuestsFatPigsAreFatHook) this.getDependencyManager().getLibraryHook(Library.QUESTS_FATPIGSAREFAT);
+        handler = (QuestsHook) this.getDependencyManager().getLibraryHook(Library.QUESTS);
 
         if (options.length > 0) {
             questName = options[0];

@@ -353,47 +353,64 @@ public class Autorank extends JavaPlugin {
 
     private void initializeReqsAndRes() {
         // Register 'main' requirements
+
+        // Autorank related
         RequirementBuilder.registerRequirement("exp", ExpRequirement.class);
-        RequirementBuilder.registerRequirement("money", MoneyRequirement.class);
         RequirementBuilder.registerRequirement("gamemode", GamemodeRequirement.class);
         RequirementBuilder.registerRequirement("has item", HasItemRequirement.class);
+        RequirementBuilder.registerRequirement("location", LocationRequirement.class);
+        RequirementBuilder.registerRequirement("global time", GlobalTimeRequirement.class);
+        RequirementBuilder.registerRequirement("total time", TotalTimeRequirement.class);
+        RequirementBuilder.registerRequirement("world", WorldRequirement.class);
+        RequirementBuilder.registerRequirement("permission", PermissionRequirement.class);
+        RequirementBuilder.registerRequirement("time", TimeRequirement.class);
+        RequirementBuilder.registerRequirement("in biome", InBiomeRequirement.class);
+        RequirementBuilder.registerRequirement("has advancement", AdvancementRequirement.class);
+        RequirementBuilder.registerRequirement("in group", InGroupRequirement.class);
+        RequirementBuilder.registerRequirement("javascript", JavaScriptRequirement.class);
+
+        // Vault related
+        RequirementBuilder.registerRequirement("money", MoneyRequirement.class);
+
+        // Statz related
         RequirementBuilder.registerRequirement("blocks broken", BlocksBrokenRequirement.class);
         RequirementBuilder.registerRequirement("blocks placed", BlocksPlacedRequirement.class);
         RequirementBuilder.registerRequirement("blocks moved", BlocksMovedRequirement.class);
         RequirementBuilder.registerRequirement("votes", TotalVotesRequirement.class);
         RequirementBuilder.registerRequirement("damage taken", DamageTakenRequirement.class);
         RequirementBuilder.registerRequirement("mobs killed", MobKillsRequirement.class);
-        RequirementBuilder.registerRequirement("location", LocationRequirement.class);
-        RequirementBuilder.registerRequirement("faction power", FactionPowerRequirement.class);
         RequirementBuilder.registerRequirement("players killed", PlayerKillsRequirement.class);
-        RequirementBuilder.registerRequirement("global time", GlobalTimeRequirement.class);
-        RequirementBuilder.registerRequirement("total time", TotalTimeRequirement.class);
-        RequirementBuilder.registerRequirement("world", WorldRequirement.class);
-        RequirementBuilder.registerRequirement("worldguard region", WorldGuardRegionRequirement.class);
-        RequirementBuilder.registerRequirement("mcmmo skill level", McMMOSkillLevelRequirement.class);
-        RequirementBuilder.registerRequirement("mcmmo power level", McMMOPowerLevelRequirement.class);
-        RequirementBuilder.registerRequirement("permission", PermissionRequirement.class);
         RequirementBuilder.registerRequirement("fish caught", FishCaughtRequirement.class);
         RequirementBuilder.registerRequirement("items crafted", ItemsCraftedRequirement.class);
-        RequirementBuilder.registerRequirement("time", TimeRequirement.class);
         RequirementBuilder.registerRequirement("times sheared", TimesShearedRequirement.class);
-        RequirementBuilder.registerRequirement("in biome", InBiomeRequirement.class);
         RequirementBuilder.registerRequirement("food eaten", FoodEatenRequirement.class);
-        RequirementBuilder.registerRequirement("has advancement", AdvancementRequirement.class);
-        RequirementBuilder.registerRequirement("in group", InGroupRequirement.class);
 
+        // Faction related
+        RequirementBuilder.registerRequirement("faction power", FactionPowerRequirement.class);
+
+        // WorldGuard related
+        RequirementBuilder.registerRequirement("worldguard region", WorldGuardRegionRequirement.class);
+
+        // mcMMO
+        RequirementBuilder.registerRequirement("mcmmo skill level", McMMOSkillLevelRequirement.class);
+        RequirementBuilder.registerRequirement("mcmmo power level", McMMOPowerLevelRequirement.class);
+
+        // EssentialsX
         RequirementBuilder.registerRequirement("essentials geoip location", EssentialsGeoIPRequirement.class);
 
+        //  AcidIsland
         RequirementBuilder.registerRequirement("acidisland level", AcidIslandLevelRequirement.class);
+
+        // ASkyBlock
         RequirementBuilder.registerRequirement("askyblock level", ASkyBlockLevelRequirement.class);
 
-        RequirementBuilder.registerRequirement("javascript", JavaScriptRequirement.class);
-
+        // Jobs
         RequirementBuilder.registerRequirement("jobs current points", JobsCurrentPointsRequirement.class);
         RequirementBuilder.registerRequirement("jobs total points", JobsTotalPointsRequirement.class);
         RequirementBuilder.registerRequirement("jobs level", JobsLevelRequirement.class);
         RequirementBuilder.registerRequirement("jobs experience", JobsExperienceRequirement.class);
 
+        // GriefPrevention
         RequirementBuilder.registerRequirement("grief prevention claims",
                 GriefPreventionClaimsCountRequirement.class);
         RequirementBuilder.registerRequirement("grief prevention claimed blocks",
@@ -403,19 +420,22 @@ public class Autorank extends JavaPlugin {
         RequirementBuilder.registerRequirement("grief prevention bonus blocks",
                 GriefPreventionBonusBlocksRequirement.class);
 
+        // RPGme
         RequirementBuilder.registerRequirement("rpgme skill level", RPGMeSkillLevelRequirement.class);
         RequirementBuilder.registerRequirement("rpgme combat level", RPGMeCombatLevelRequirement.class);
 
+        // BattleLevels
         RequirementBuilder.registerRequirement("battlelevels kdr", BattleLevelsKDRRequirement.class);
         RequirementBuilder.registerRequirement("battlelevels kills", BattleLevelsKillsRequirement.class);
         RequirementBuilder.registerRequirement("battlelevels killstreak", BattleLevelsKillStreakRequirement
                 .class);
         RequirementBuilder.registerRequirement("battlelevels top killstreak",
                 BattleLevelsTopKillStreakRequirement
-                .class);
+                        .class);
         RequirementBuilder.registerRequirement("battlelevels level", BattleLevelsLevelRequirement.class);
         RequirementBuilder.registerRequirement("battlelevels score", BattleLevelsScoreRequirement.class);
 
+        // Quests (HappyPikachu)
         RequirementBuilder.registerRequirement("quests quest points", QuestsQuestPointsRequirement.class);
         RequirementBuilder.registerRequirement("quests complete quest",
                 QuestsCompleteSpecificQuestRequirement.class);
@@ -423,11 +443,23 @@ public class Autorank extends JavaPlugin {
         RequirementBuilder.registerRequirement("quests completed quests", QuestsCompletedQuestsRequirement
                 .class);
 
+        // Quests (fatpigsarefat)
+        RequirementBuilder.registerRequirement("quests fatpigsarefat complete quest",
+                QuestsFPAFCompleteSpecificQuestRequirement.class);
+        RequirementBuilder.registerRequirement("quests fatpigsarefat completed quests",
+                QuestsFPAFCompletedQuestsRequirement.class);
+        RequirementBuilder.registerRequirement("quests fatpigsarefat active quests", QuestsFPAFActiveQuestsRequirement
+                .class);
+
+        // SavageFactions
+        RequirementBuilder.registerRequirement("savagefactions faction power",
+                SavageFactionsPowerRequirement.class);
+
+
         // Register 'main' results
         ResultBuilder.registerResult("command", CommandAbstractResult.class);
         ResultBuilder.registerResult("effect", EffectAbstractResult.class);
         ResultBuilder.registerResult("message", MessageAbstractResult.class);
-        //res.registerResult("rank change", RankChangeAbstractResult.class); -- Temporarily disabled until fixed
         ResultBuilder.registerResult("tp", TeleportAbstractResult.class);
         ResultBuilder.registerResult("firework", SpawnFireworkAbstractResult.class);
         ResultBuilder.registerResult("money", MoneyAbstractResult.class);

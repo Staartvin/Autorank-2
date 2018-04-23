@@ -210,8 +210,10 @@ public class RequirementBuilder {
             if (!dependencyManager.isAvailable(dependency)) {
                 Autorank.getInstance().getLogger().severe(String.format("AbstractRequirement '%s' relies on '%s' " +
                         "being installed, but that plugin is not installed!", requirementType, dependency
-                        .getPluginName()));
-                Autorank.getInstance().getWarningManager().registerWarning(String.format("AbstractRequirement '%s' relies on '%s' being installed, but that plugin is not installed!", requirementType, dependency.getPluginName()), 10);
+                        .getHumanPluginName()));
+                Autorank.getInstance().getWarningManager().registerWarning(String.format("AbstractRequirement '%s' " +
+                                "relies on '%s' being installed, but that plugin is not installed!", requirementType,
+                        dependency.getHumanPluginName()), 10);
                 return this;
             }
         }

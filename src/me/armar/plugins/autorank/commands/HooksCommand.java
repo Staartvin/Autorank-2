@@ -38,7 +38,8 @@ public class HooksCommand extends AutorankCommand {
                     .getLibraryHook(dep);
 
             if (handler.isAvailable() && !(handler instanceof AutorankHook)) {
-                sender.sendMessage(org.bukkit.ChatColor.GRAY + "- " + org.bukkit.ChatColor.GREEN + dep.getPluginName());
+                sender.sendMessage(org.bukkit.ChatColor.GRAY + "- " + org.bukkit.ChatColor.GREEN + dep
+                        .getHumanPluginName());
             }
         }
 

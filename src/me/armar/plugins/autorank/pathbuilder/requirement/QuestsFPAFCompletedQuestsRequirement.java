@@ -5,21 +5,19 @@ import me.staartvin.plugins.pluginlibrary.Library;
 import me.staartvin.plugins.pluginlibrary.hooks.QuestsFatPigsAreFatHook;
 import org.bukkit.entity.Player;
 
-// Quests plugin that is used is from FatPigsAreFat, hence FPAF in name.
-
-public class QuestsFPAFCompleteSpecificQuestRequirement extends AbstractRequirement {
+public class QuestsFPAFCompletedQuestsRequirement extends AbstractRequirement {
 
     private QuestsFatPigsAreFatHook handler = null;
-    private String questName = null;
+    private int completedQuests = -1;
 
     @Override
     public String getDescription() {
-        return Lang.QUESTS_COMPLETE_SPECIFIC_QUEST_REQUIREMENT.getConfigValue(questName);
+        return Lang.QUESTS_COMPLETED_QUESTS_REQUIREMENT.getConfigValue(completedQuests);
     }
 
     @Override
     public String getProgress(final Player player) {
-        return handler.isQuestCompleted(player.getUniqueId(), questName) + "";
+        return handler.getNumberOfCompletedQuests(player.getUniqueId()) + "/" + completedQuests;
     }
 
     @Override
@@ -28,7 +26,7 @@ public class QuestsFPAFCompleteSpecificQuestRequirement extends AbstractRequirem
         if (!handler.isAvailable())
             return false;
 
-        return handler.isQuestCompleted(player.getUniqueId(), questName);
+        return handler.getNumberOfCompletedQuests(player.getUniqueId()) >= completedQuests;
     }
 
     @Override
@@ -40,9 +38,16 @@ public class QuestsFPAFCompleteSpecificQuestRequirement extends AbstractRequirem
         handler = (QuestsFatPigsAreFatHook) this.getDependencyManager().getLibraryHook(Library.QUESTS_FATPIGSAREFAT);
 
         if (options.length > 0) {
-            questName = options[0];
-        } else {
-            this.registerWarningMessage("No quest name was provided.");
+            try {
+                completedQuests = Integer.parseInt(options[0]);
+            } catch (NumberFormatException e) {
+                this.registerWarningMessage("An invalid number is provided");
+                return false;
+            }
+        }
+
+        if (completedQuests < 0) {
+            this.registerWarningMessage("No number is provided or smaller than 0.");
             return false;
         }
 

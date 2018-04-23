@@ -5,7 +5,7 @@ import me.armar.plugins.autorank.hooks.DependencyHandler;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.staartvin.statz.Statz;
 import me.staartvin.statz.database.datatype.RowRequirement;
-import me.staartvin.statz.datamanager.PlayerStat;
+import me.staartvin.statz.datamanager.player.PlayerStat;
 import me.staartvin.statz.hooks.StatzDependency;
 import org.bukkit.plugin.Plugin;
 

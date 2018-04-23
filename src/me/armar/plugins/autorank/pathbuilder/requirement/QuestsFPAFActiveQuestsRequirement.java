@@ -5,21 +5,19 @@ import me.staartvin.plugins.pluginlibrary.Library;
 import me.staartvin.plugins.pluginlibrary.hooks.QuestsFatPigsAreFatHook;
 import org.bukkit.entity.Player;
 
-// Quests plugin that is used is from FatPigsAreFat, hence FPAF in name.
-
-public class QuestsFPAFCompleteSpecificQuestRequirement extends AbstractRequirement {
+public class QuestsFPAFActiveQuestsRequirement extends AbstractRequirement {
 
     private QuestsFatPigsAreFatHook handler = null;
-    private String questName = null;
+    private int activeQuests = -1;
 
     @Override
     public String getDescription() {
-        return Lang.QUESTS_COMPLETE_SPECIFIC_QUEST_REQUIREMENT.getConfigValue(questName);
+        return Lang.QUESTS_ACTIVE_QUESTS_REQUIREMENT.getConfigValue(activeQuests);
     }
 
     @Override
     public String getProgress(final Player player) {
-        return handler.isQuestCompleted(player.getUniqueId(), questName) + "";
+        return handler.getNumberOfActiveQuests(player.getUniqueId()) + "/" + activeQuests;
     }
 
     @Override
@@ -28,7 +26,7 @@ public class QuestsFPAFCompleteSpecificQuestRequirement extends AbstractRequirem
         if (!handler.isAvailable())
             return false;
 
-        return handler.isQuestCompleted(player.getUniqueId(), questName);
+        return handler.getNumberOfActiveQuests(player.getUniqueId()) >= activeQuests;
     }
 
     @Override
@@ -40,14 +38,16 @@ public class QuestsFPAFCompleteSpecificQuestRequirement extends AbstractRequirem
         handler = (QuestsFatPigsAreFatHook) this.getDependencyManager().getLibraryHook(Library.QUESTS_FATPIGSAREFAT);
 
         if (options.length > 0) {
-            questName = options[0];
-        } else {
-            this.registerWarningMessage("No quest name was provided.");
-            return false;
+            try {
+                activeQuests = Integer.parseInt(options[0]);
+            } catch (NumberFormatException e) {
+                this.registerWarningMessage("An invalid number is provided");
+                return false;
+            }
         }
 
-        if (handler == null || !handler.isAvailable()) {
-            this.registerWarningMessage("Quests is not available!");
+        if (activeQuests < 0) {
+            this.registerWarningMessage("No number is provided or smaller than 0.");
             return false;
         }
 
