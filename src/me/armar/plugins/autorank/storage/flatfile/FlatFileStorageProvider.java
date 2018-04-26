@@ -12,10 +12,10 @@ import java.util.*;
 
 public class FlatFileStorageProvider extends StorageProvider {
 
-    private final String pathTotalTimeFile = "/storage/Total_time.yml";
-    private final String pathDailyTimeFile = "/storage/Daily_time.yml";
-    private final String pathWeeklyTimeFile = "/storage/Weekly_time.yml";
-    private final String pathMonthlyTimeFile = "/storage/Monthly_time.yml";
+    private final String pathTotalTimeFile = "/data/Total_time.yml";
+    private final String pathDailyTimeFile = "/data/Daily_time.yml";
+    private final String pathWeeklyTimeFile = "/data/Weekly_time.yml";
+    private final String pathMonthlyTimeFile = "/data/Monthly_time.yml";
     // Store where the file for each time type is saved.
     private Map<TimeType, String> dataTypePaths = new HashMap<>();
     // Store for each time type a file to store data about players.
@@ -205,7 +205,7 @@ public class FlatFileStorageProvider extends StorageProvider {
         for (Map.Entry<TimeType, String> entry : dataTypePaths.entrySet()) {
             plugin.debugMessage("Making a backup of " + entry.getValue());
             plugin.getBackupManager().backupFile(entry.getValue(), plugin.getDataFolder().getAbsolutePath()
-                    + File.separator + "backups" + File.separator + entry.getValue().replace("/storage/", ""));
+                    + File.separator + "backups" + File.separator + entry.getValue().replace("/data/", ""));
         }
 
         return true;
