@@ -63,7 +63,8 @@ public class PlayTimeManager {
 
             if (stats instanceof StatsHandler) {
                 // In seconds
-                playTime = ((StatsHook) plugin.getDependencyManager().getLibraryHook(Library.STATS)).getNormalStat(uuid, "Playtime", null);
+                playTime = ((StatsHook) plugin.getDependencyManager().getLibraryHook(Library.STATS)).getNormalStat
+                        (uuid, "Playtime", null);
             } else {
 
                 if (uuid == null)
@@ -74,7 +75,8 @@ public class PlayTimeManager {
                         uuid) * 60;
             }
         } else if (timePlugin.equals(AutorankDependency.ONTIME)) {
-            playTime = (int) (((OnTimeHook) plugin.getDependencyManager().getLibraryHook(Library.ONTIME)).getPlayerData(playerName, "TOTALPLAY") / 1000);
+            playTime = (int) (((OnTimeHook) plugin.getDependencyManager().getLibraryHook(Library.ONTIME))
+                    .getPlayerData(playerName, "TOTALPLAY") / 1000);
         } else if (timePlugin.equals(AutorankDependency.STATZ)) {
             playTime = (int) ((StatzAPIHandler) plugin.getDependencyManager().getDependency(AutorankDependency.STATZ))
                     .getTotalOf(uuid, StatType.TIME_PLAYED, null);
@@ -163,6 +165,38 @@ public class PlayTimeManager {
 
         return plugin.getStorageManager().getStorageProvider(StorageProvider.StorageType.FLAT_FILE).getPlayerTime
                 (timeType, uuid);
+    }
+
+    /**
+     * Set the local play time of a player (for a specific type of time).
+     *
+     * @param timeType Type of time
+     * @param uuid     UUID of the player
+     * @param value    value to set the local play time.
+     */
+    public void setLocalPlayTime(TimeType timeType, UUID uuid, int value) {
+        if (!plugin.getStorageManager().isStorageTypeActive(StorageProvider.StorageType.FLAT_FILE)) {
+            return;
+        }
+
+        plugin.getStorageManager().getStorageProvider(StorageProvider.StorageType.FLAT_FILE).setPlayerTime(timeType,
+                uuid, value);
+    }
+
+    /**
+     * Add local time (for a given type of time) of a player.
+     *
+     * @param timeType   Type of time
+     * @param uuid       UUID of player
+     * @param valueToAdd time to add
+     */
+    public void addLocalPlayTime(TimeType timeType, UUID uuid, int valueToAdd) {
+        if (!plugin.getStorageManager().isStorageTypeActive(StorageProvider.StorageType.FLAT_FILE)) {
+            return;
+        }
+
+        plugin.getStorageManager().getStorageProvider(StorageProvider.StorageType.FLAT_FILE).addPlayerTime(timeType,
+                uuid, valueToAdd);
     }
 
 }
