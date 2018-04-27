@@ -4,7 +4,10 @@ import me.armar.plugins.autorank.addons.AddOnManager;
 import me.armar.plugins.autorank.api.API;
 import me.armar.plugins.autorank.backup.BackupManager;
 import me.armar.plugins.autorank.commands.manager.CommandsManager;
-import me.armar.plugins.autorank.config.*;
+import me.armar.plugins.autorank.config.DefaultBehaviorConfig;
+import me.armar.plugins.autorank.config.InternalPropertiesConfig;
+import me.armar.plugins.autorank.config.PathsConfig;
+import me.armar.plugins.autorank.config.SettingsConfig;
 import me.armar.plugins.autorank.converter.DataConverter;
 import me.armar.plugins.autorank.debugger.Debugger;
 import me.armar.plugins.autorank.hooks.DependencyManager;
@@ -90,7 +93,6 @@ public class Autorank extends JavaPlugin {
     private SettingsConfig settingsConfig;
     private InternalPropertiesConfig internalPropertiesConfig;
     private PathsConfig pathsConfig;
-    private PlayerDataConfig playerDataConfig;
     private DefaultBehaviorConfig defaultBehaviorConfig;
 
     public static Autorank getInstance() {
@@ -121,9 +123,6 @@ public class Autorank extends JavaPlugin {
 
         getUUIDStorage().saveAllFiles();
 
-        // Save playerdata.yml
-        this.getPlayerDataConfig().saveConfig();
-
         // ------------- Say bye-bye -------------
 
         getLogger().info(String.format("Autorank %s has been disabled!", getDescription().getVersion()));
@@ -146,7 +145,6 @@ public class Autorank extends JavaPlugin {
         setPathsConfig(new PathsConfig(this));
         setSettingsConfig(new SettingsConfig(this));
         setInternalPropertiesConfig(new InternalPropertiesConfig(this));
-        setPlayerDataConfig(new PlayerDataConfig(this));
         setDefaultBehaviorConfig(new DefaultBehaviorConfig((this)));
 
         // Create new configs
@@ -154,7 +152,6 @@ public class Autorank extends JavaPlugin {
         this.getPathsConfig().loadConfig();
         this.getSettingsConfig().loadConfig();
         this.getInternalPropertiesConfig().loadConfig();
-        this.getPlayerDataConfig().loadConfig();
 
         // ------------- Initialize managers -------------
 
@@ -489,12 +486,12 @@ public class Autorank extends JavaPlugin {
 
 
         // Register 'main' results
-        ResultBuilder.registerResult("command", CommandAbstractResult.class);
-        ResultBuilder.registerResult("effect", EffectAbstractResult.class);
-        ResultBuilder.registerResult("message", MessageAbstractResult.class);
-        ResultBuilder.registerResult("tp", TeleportAbstractResult.class);
-        ResultBuilder.registerResult("firework", SpawnFireworkAbstractResult.class);
-        ResultBuilder.registerResult("money", MoneyAbstractResult.class);
+        ResultBuilder.registerResult("command", CommandResult.class);
+        ResultBuilder.registerResult("effect", EffectResult.class);
+        ResultBuilder.registerResult("message", MessageResult.class);
+        ResultBuilder.registerResult("tp", TeleportResult.class);
+        ResultBuilder.registerResult("firework", SpawnFireworkResult.class);
+        ResultBuilder.registerResult("money", MoneyResult.class);
     }
 
     /**
@@ -705,14 +702,6 @@ public class Autorank extends JavaPlugin {
 
     public void setSettingsConfig(SettingsConfig settingsConfig) {
         this.settingsConfig = settingsConfig;
-    }
-
-    public PlayerDataConfig getPlayerDataConfig() {
-        return playerDataConfig;
-    }
-
-    public void setPlayerDataConfig(PlayerDataConfig playerDataConfig) {
-        this.playerDataConfig = playerDataConfig;
     }
 
     public PathsConfig getPathsConfig() {

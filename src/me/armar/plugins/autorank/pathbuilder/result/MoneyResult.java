@@ -6,7 +6,7 @@ import me.staartvin.plugins.pluginlibrary.hooks.VaultHook;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.entity.Player;
 
-public class MoneyAbstractResult extends AbstractResult {
+public class MoneyResult extends AbstractResult {
 
     private long money = -1;
 

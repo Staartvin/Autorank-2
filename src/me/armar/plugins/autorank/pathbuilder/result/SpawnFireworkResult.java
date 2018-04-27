@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.FireworkMeta;
 
 
-public class SpawnFireworkAbstractResult extends AbstractResult {
+public class SpawnFireworkResult extends AbstractResult {
 
     private Color colour = Color.ORANGE;
     private Location location;

@@ -67,14 +67,9 @@ public class UpdateTimePlayedTask extends BukkitRunnable {
         for (final TimeType type : TimeType.values()) {
             plugin.getStorageManager().addPlayerTime(type, uuid, PlayTimeManager.INTERVAL_MINUTES);
         }
-//
-//        // Modify global time
-//        if (plugin.getMySQLManager().isMySQLEnabled()) {
-//            plugin.getMySQLManager().addGlobalTime(uuid, PlayTimeManager.INTERVAL_MINUTES);
-//        }
 
         // Auto assign path (if possible)
-        plugin.getPathManager().autoAssignPath(player);
+        plugin.getPathManager().autoAssignPaths(player);
 
         // Only check a player if it is not disabled in the Settings.yml
         if (!plugin.getSettingsConfig().isAutomaticPathDisabled()) {

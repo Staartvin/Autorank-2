@@ -28,7 +28,6 @@ public class ReloadCommand extends AutorankCommand {
 
         // Reload files
         plugin.getPathsConfig().reloadConfig();
-        plugin.getPlayerDataConfig().reloadConfig();
         plugin.getSettingsConfig().reloadConfig();
 
         // Rebuild paths

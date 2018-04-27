@@ -2,6 +2,7 @@ package me.armar.plugins.autorank.config;
 
 import com.google.common.collect.Lists;
 import me.armar.plugins.autorank.Autorank;
+import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -26,16 +27,24 @@ public class PathsConfig extends AbstractConfig {
     }
 
     /**
-     * Check whether a certain path can be done over and over again.
+     * Check whether a path can be completed more than once.
      *
-     * @param pathName Name of path to check
-     * @return true if a player can do a path infinitely many times, false
-     * otherwise.
+     * @param pathName Name of path
+     * @return true if a player can do a path multiple times, false otherwise.
      */
-    public boolean allowInfinitePathing(String pathName) {
-        return this.getConfig().getBoolean(pathName + ".options.infinite pathing", this.getPlugin()
-                .getDefaultBehaviorConfig
-                ().getDefaultBooleanBehaviorOfOption(DefaultBehaviorOption.ALLOW_INFINITE_PATHING));
+    public boolean isPathRepeatable(String pathName) {
+        boolean allowInfinitePathing = this.getConfig().getBoolean(pathName + ".options.infinite pathing", false);
+
+        boolean defaultValue = this.getPlugin().getDefaultBehaviorConfig().getDefaultBooleanBehaviorOfOption(
+                DefaultBehaviorOption.ALLOW_INFINITE_PATHING);
+
+        boolean isRepeatable = this.getConfig().getBoolean(pathName + ".options.is repeatable", false);
+
+        if (allowInfinitePathing || isRepeatable) {
+            return true;
+        }
+
+        return defaultValue;
     }
 
     /**
@@ -141,7 +150,13 @@ public class PathsConfig extends AbstractConfig {
     public List<String> getRequirements(String pathName, boolean isPreRequisite) {
         String keyType = (isPreRequisite ? "prerequisites" : "requirements");
 
-        return new ArrayList<>(getConfig().getConfigurationSection(pathName + "." + keyType).getKeys(false));
+        ConfigurationSection section = getConfig().getConfigurationSection(pathName + "." + keyType);
+
+        if (section == null) {
+            return new ArrayList<>();
+        }
+
+        return new ArrayList<>(section.getKeys(false));
     }
 
     /**
@@ -339,7 +354,7 @@ public class PathsConfig extends AbstractConfig {
      * @param pathName Name of the path
      * @return true if Autorank should assign the given path to the player, false otherwise.
      */
-    public boolean shouldAutoChoosePath(String pathName) {
+    public boolean shouldAutoAssignPath(String pathName) {
         return this.getConfig().getBoolean(pathName + ".options.auto choose",
                 this.getPlugin().getDefaultBehaviorConfig().getDefaultBooleanBehaviorOfOption(DefaultBehaviorOption
                         .AUTO_CHOOSE_PATH));
@@ -371,5 +386,15 @@ public class PathsConfig extends AbstractConfig {
         return this.getConfig().getBoolean(pathName + ".options.show based on prerequisites", this.getPlugin()
                 .getDefaultBehaviorConfig().getDefaultBooleanBehaviorOfOption(DefaultBehaviorOption
                         .SHOW_PATH_BASED_ON_PREREQUISITES));
+    }
+
+    /**
+     * Get the description of a path
+     *
+     * @param pathName Name of the path
+     * @return a description (if provided) or an empty string.
+     */
+    public String getPathDescription(String pathName) {
+        return this.getConfig().getString(pathName + ".options.description", "");
     }
 }

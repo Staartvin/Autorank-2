@@ -3,7 +3,7 @@ package me.armar.plugins.autorank.pathbuilder.result;
 import me.armar.plugins.autorank.language.Lang;
 import org.bukkit.entity.Player;
 
-public class MessageAbstractResult extends AbstractResult {
+public class MessageResult extends AbstractResult {
 
     String msg = null;
 

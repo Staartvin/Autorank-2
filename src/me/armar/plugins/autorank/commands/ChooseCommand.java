@@ -47,34 +47,28 @@ public class ChooseCommand extends AutorankCommand {
 
         final String pathName = AutorankTools.getStringFromArgs(args, 1);
 
-        // Get current path
-        Path activePath = plugin.getPathManager().getCurrentPath(player.getUniqueId());
-
-        if (activePath != null && activePath.getDisplayName().equalsIgnoreCase(pathName)) {
-            sender.sendMessage(Lang.ALREADY_ON_THIS_PATH.getConfigValue());
-            return true;
-        }
-
         // Try to find path that matches given name
-        Path targetPath = plugin.getPathManager().matchPathbyDisplayName(pathName, false);
+        Path targetPath = plugin.getPathManager().findPathByDisplayName(pathName, false);
 
+        // Check if the path exists
         if (targetPath == null) {
             sender.sendMessage(Lang.NO_PATH_FOUND_WITH_THAT_NAME.getConfigValue());
             return true;
         }
 
-        if (plugin.getPathManager().getCurrentPath(player.getUniqueId()) != null && plugin.getPathManager()
-                .getCurrentPath(player.getUniqueId()).getInternalName().equals(targetPath.getInternalName())) {
-            sender.sendMessage(ChatColor.RED + "You are already on this path! No need for choosing it now!");
+        // Check if player is already on this path
+        if (targetPath.isActive(player.getUniqueId())) {
+            sender.sendMessage(Lang.ALREADY_ON_THIS_PATH.getConfigValue());
             return true;
         }
 
-        if (plugin.getPlayerDataConfig().hasCompletedPath(player.getUniqueId(), targetPath.getInternalName())
-                && !plugin.getPathsConfig().allowInfinitePathing(targetPath.getInternalName())) {
+        // Check if player can retake this path if it has already been completed before.
+        if (plugin.getPathManager().hasCompletedPath(player.getUniqueId(), targetPath) && !targetPath.isRepeatable()) {
             sender.sendMessage(Lang.PATH_NOT_ALLOWED_TO_RETAKE.getConfigValue());
             return true;
         }
 
+        // Check if the path is eligible.
         if (!targetPath.meetsPrerequisites(player)) {
             sender.sendMessage(ChatColor.RED + "You do not meet the prerequisites of this path!");
             sender.sendMessage(ChatColor.RED + "Type " + ChatColor.GOLD + "/ar view prereq "
@@ -83,7 +77,7 @@ public class ChooseCommand extends AutorankCommand {
         }
 
         // Assign path to the player.
-        plugin.getPathManager().assignPath(player, targetPath.getInternalName());
+        plugin.getPathManager().assignPath(player, targetPath);
 
         // Give player confirmation message.
         sender.sendMessage(Lang.CHOSEN_PATH.getConfigValue(targetPath.getDisplayName()));
@@ -108,7 +102,7 @@ public class ChooseCommand extends AutorankCommand {
 
         final List<String> possibilities = new ArrayList<String>();
 
-        final List<Path> possiblePaths = plugin.getPathManager().getPossiblePaths(player);
+        final List<Path> possiblePaths = plugin.getPathManager().getEligiblePaths(player);
 
         for (Path possiblePath : possiblePaths) {
             possibilities.add(possiblePath.getDisplayName());

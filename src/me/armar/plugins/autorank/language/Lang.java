@@ -505,7 +505,12 @@ public enum Lang {
     /**
      * Obtain at least {0} player points.
      */
-    PLAYERPOINTS_POINTS_REQUIREMENT("playerpoints-points-requirement", "Obtain at least {0} player points."),;
+    PLAYERPOINTS_POINTS_REQUIREMENT("playerpoints-points-requirement", "Obtain at least {0} player points."),
+
+    /**
+     * You are not active on path {0}.
+     */
+    PATH_IS_NOT_ACTIVE("path-is-not-active", "You are not active on path {0}."),;
 
     private static FileConfiguration LANG;
 

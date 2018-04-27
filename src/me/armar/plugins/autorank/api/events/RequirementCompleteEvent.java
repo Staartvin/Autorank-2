@@ -1,6 +1,6 @@
 package me.armar.plugins.autorank.api.events;
 
-import me.armar.plugins.autorank.pathbuilder.holders.RequirementsHolder;
+import me.armar.plugins.autorank.pathbuilder.holders.CompositeRequirement;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -23,16 +23,16 @@ public class RequirementCompleteEvent extends Event implements Cancellable {
     private boolean isCancelled;
     private final Player player;
 
-    private final RequirementsHolder reqHolder;
+    private final CompositeRequirement reqHolder;
 
     /**
      * Create a new RequirementCompleteEvent. This event represents a
      * requirement that is completed by a player.
      *
      * @param player    Player that completed the requirement
-     * @param reqHolder {@linkplain RequirementsHolder} that was completed
+     * @param reqHolder {@linkplain CompositeRequirement} that was completed
      */
-    public RequirementCompleteEvent(final Player player, final RequirementsHolder reqHolder) {
+    public RequirementCompleteEvent(final Player player, final CompositeRequirement reqHolder) {
         this.player = player;
         this.reqHolder = reqHolder;
     }
@@ -52,11 +52,11 @@ public class RequirementCompleteEvent extends Event implements Cancellable {
     }
 
     /**
-     * Get the {@linkplain RequirementsHolder} that has been completed.
+     * Get the {@linkplain CompositeRequirement} that has been completed.
      *
-     * @return {@linkplain RequirementsHolder} that has been completed.
+     * @return {@linkplain CompositeRequirement} that has been completed.
      */
-    public RequirementsHolder getRequirement() {
+    public CompositeRequirement getRequirement() {
         return reqHolder;
     }
 

@@ -5,7 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-public class TeleportAbstractResult extends AbstractResult {
+public class TeleportResult extends AbstractResult {
 
     private Location location;
 

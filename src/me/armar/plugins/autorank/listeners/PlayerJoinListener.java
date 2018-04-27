@@ -39,7 +39,7 @@ public class PlayerJoinListener implements Listener {
             public void run() {
 
                 // Try to auto assign path to a player
-                plugin.getPathManager().autoAssignPath(player);
+                plugin.getPathManager().autoAssignPaths(player);
 
                 // Perform check for player on login
                 plugin.getPlayerChecker().checkPlayer(player);

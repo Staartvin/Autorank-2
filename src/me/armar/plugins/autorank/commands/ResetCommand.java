@@ -44,20 +44,24 @@ public class ResetCommand extends AutorankCommand {
             return true;
         }
 
+        // TODO: implement reset command!
+
         final String realName = plugin.getUUIDStorage().getRealName(uuid);
 
         if (action.equalsIgnoreCase("progress")) {
-            plugin.getPlayerDataConfig().setCompletedRequirements(uuid, null);
-            sender.sendMessage(ChatColor.GREEN + "Reset progress of " + ChatColor.YELLOW + realName);
-        } else if (action.equalsIgnoreCase("chosenpath")) {
-            plugin.getPlayerDataConfig().setChosenPath(uuid, null);
-            plugin.getPlayerDataConfig().setStartedPaths(uuid, null);
-            sender.sendMessage(ChatColor.GREEN + "Reset chosen path of " + ChatColor.YELLOW + realName);
+            // Reset progress of active paths.
+            plugin.getPathManager().resetProgressOnActivePaths(uuid);
+            sender.sendMessage(ChatColor.GREEN + "Reset progress on all active paths of " + ChatColor.YELLOW +
+                    realName);
+        } else if (action.equalsIgnoreCase("activepaths")) {
+            plugin.getPathManager().resetActivePaths(uuid);
+            sender.sendMessage(ChatColor.GREEN + "Removed all active paths of " + ChatColor.YELLOW + realName);
         } else if (action.equalsIgnoreCase("completedpaths")) {
-            plugin.getPlayerDataConfig().setCompletedPaths(uuid, null);
-            sender.sendMessage(ChatColor.GREEN + "Reset completed paths of " + ChatColor.YELLOW + realName);
+            plugin.getPathManager().resetCompletedPaths(uuid);
+            sender.sendMessage(ChatColor.GREEN + "Removed all completed paths of " + ChatColor.YELLOW + realName);
         } else {
-            sender.sendMessage(ChatColor.RED + "Invalid action. You can only use: progress, chosenpath or completedpaths.");
+            sender.sendMessage(ChatColor.RED + "Invalid action. You can only use: progress, activepaths or " +
+                    "completedpaths.");
             return true;
         }
 

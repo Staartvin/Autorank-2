@@ -9,7 +9,6 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Whenever you want to create a new requirement, you'll have to extend this
@@ -125,21 +124,21 @@ public abstract class AbstractRequirement {
     public void setWorld(final String world) {
         this.world = world;
     }
-
-    /**
-     * Check if this requirement is completed already.
-     *
-     * @param uuid Player to check for
-     * @return true if completed, false otherwise.
-     */
-    public final boolean isCompleted(final UUID uuid) {
-
-        if (this.isPreRequisite()) {
-            return getAutorank().getPlayerDataConfig().hasCompletedPrerequisite(this.getId(), uuid);
-        } else {
-            return getAutorank().getPlayerDataConfig().hasCompletedRequirement(this.getId(), uuid);
-        }
-    }
+//
+//    /**
+//     * Check if this requirement is completed already.
+//     *
+//     * @param uuid Player to check for
+//     * @return true if completed, false otherwise.
+//     */
+//    public final boolean isCompleted(final UUID uuid) {
+//
+//        if (this.isPreRequisite()) {
+//            return getAutorank().getPlayerDataConfig().hasCompletedPrerequisite(this.getId(), uuid);
+//        } else {
+//            return getAutorank().getPlayerDataConfig().hasCompletedRequirement(this.getId(), uuid);
+//        }
+//    }
 
     /**
      * Check whether this requirement is optional.
