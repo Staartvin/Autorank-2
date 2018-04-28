@@ -326,7 +326,7 @@ public class UUIDStorage {
             return; // UUIDs were already successfully converted.
 
         plugin.getServer().getConsoleSender().sendMessage("[Autorank] " + ChatColor.RED
-                + "Since this is the first time running Autorank 3.7.1, I need to convert your UUID files to a new " +
+                + "Since the uuid storage have not been converted yet, I need to convert your UUID files to a new " +
                 "format.");
         plugin.getServer().getConsoleSender().sendMessage(
                 "[Autorank] " + ChatColor.RED + "Converting UUID files to new format (3.7.1), this may take a while.");
@@ -334,6 +334,10 @@ public class UUIDStorage {
         // Get every name in every file and change it to lowercase.
         for (final String suffix : fileSuffixes) {
             final FileConfiguration config = getConfig(suffix);
+
+            if (config == null) {
+                continue;
+            }
 
             // All names that are in this config
             final Set<String> names = config.getKeys(false);
