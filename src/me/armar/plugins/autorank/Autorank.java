@@ -28,7 +28,6 @@ import me.armar.plugins.autorank.storage.flatfile.FlatFileStorageProvider;
 import me.armar.plugins.autorank.storage.mysql.MySQLStorageProvider;
 import me.armar.plugins.autorank.tasks.TaskManager;
 import me.armar.plugins.autorank.updater.UpdateHandler;
-import me.armar.plugins.autorank.updater.Updater;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.uuid.storage.UUIDStorage;
 import me.armar.plugins.autorank.validations.ValidateHandler;
@@ -496,25 +495,6 @@ public class Autorank extends JavaPlugin {
         ResultBuilder.registerResult("tp", TeleportAbstractResult.class);
         ResultBuilder.registerResult("firework", SpawnFireworkAbstractResult.class);
         ResultBuilder.registerResult("money", MoneyAbstractResult.class);
-    }
-
-    /**
-     * This method can only be performed from the main class as it tries to do
-     * {@link #getFile()}
-     *
-     * @return Whether an update is available
-     */
-    public boolean checkForUpdate() {
-
-        // We are not allowed to check for new versions.
-        if (!updateHandler.doCheckForNewVersion())
-            return false;
-
-        final Updater updater = new Updater(this, 34447, this.getFile(), Updater.UpdateType.NO_DOWNLOAD, false);
-        updateHandler.setUpdater(updater);
-
-        return (updater.getResult().equals(Updater.UpdateResult.UPDATE_AVAILABLE));
-
     }
 
     /**

@@ -62,10 +62,12 @@ public class PlayerJoinListener implements Listener {
                             @Override
                             public void run() {
                                 player.sendMessage(
-                                        ChatColor.GREEN + plugin.getUpdateHandler().getUpdater().getLatestName()
-                                                + ChatColor.GOLD + " is now available for download!");
+                                        ChatColor.GREEN + plugin.getName() + " " + plugin.getUpdateHandler()
+                                                .getUpdater().getLatestVersion() + ChatColor.GOLD + " is now " +
+                                                "available for download!");
+
                                 player.sendMessage(ChatColor.GREEN + "Available at: " + ChatColor.GOLD
-                                        + plugin.getUpdateHandler().getUpdater().getLatestFileLink());
+                                        + plugin.getUpdateHandler().getUpdater().getResourceURL());
                             }
 
                         }, 10L);

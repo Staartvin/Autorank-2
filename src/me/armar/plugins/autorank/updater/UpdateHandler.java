@@ -4,43 +4,58 @@ import me.armar.plugins.autorank.Autorank;
 
 public class UpdateHandler {
 
-    long latestCheck = 0;
-
     private final Autorank plugin;
+    private long latestCheck = 0;
+    private SpigotUpdater updater;
 
-    private Updater updater;
+    private boolean lastResult;
 
     public UpdateHandler(final Autorank instance) {
         plugin = instance;
+        updater = new SpigotUpdater(instance, 3239);
     }
 
     public boolean doCheckForNewVersion() {
         return plugin.getSettingsConfig().doCheckForNewerVersion();
     }
 
-    public Updater getUpdater() {
-        return updater;
-    }
-
     public boolean isUpdateAvailable() {
 
         // Do not check for updates when DEV version is used.
-        if (plugin.isDevVersion())
+        // Or when we should not check.
+        if (plugin.isDevVersion() || !doCheckForNewVersion()) {
+            System.out.println("DEV VERSION");
             return false;
+        }
+
 
         // Latest check was more than 1 hour ago (Check again)
         if (((System.currentTimeMillis() - latestCheck) / 60000) >= 60) {
+            System.out.println("Checking once");
             // Check for new version
-            return plugin.checkForUpdate();
+            return checkForUpdate();
         } else {
+            System.out.println("Not checking again");
             // We checked less than an hour ago. (Recent enough)
-            return (updater.getResult().equals(Updater.UpdateResult.UPDATE_AVAILABLE));
+            return lastResult;
         }
     }
 
-    public void setUpdater(final Updater updater) {
-        // Store latest check time
-        latestCheck = System.currentTimeMillis();
-        this.updater = updater;
+    public SpigotUpdater getUpdater() {
+        return updater;
+    }
+
+    public boolean checkForUpdate() {
+        try {
+            System.out.println("CHECKING UPDATES");
+            latestCheck = System.currentTimeMillis();
+            lastResult = updater.checkForUpdates();
+            return lastResult;
+        } catch (Exception e) {
+            //getLogger().warn("Could not check for updates! Stacktrace:");
+            e.printStackTrace();
+        }
+
+        return false;
     }
 }
