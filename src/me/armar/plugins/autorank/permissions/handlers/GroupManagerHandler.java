@@ -19,11 +19,9 @@ import java.util.*;
 public class GroupManagerHandler extends PermissionsHandler {
 
     private GroupManager groupManager;
-    private final Autorank plugin;
 
     public GroupManagerHandler(final Autorank plugin) {
-        this.plugin = plugin;
-        this.setupPermissionsHandler();
+        super(plugin);
     }
 
     public String getGroup(final Player player) {
@@ -38,7 +36,7 @@ public class GroupManagerHandler extends PermissionsHandler {
     public Collection<String> getGroups() {
         final List<String> groups = new ArrayList<String>();
 
-        for (final World world : plugin.getServer().getWorlds()) {
+        for (final World world : getPlugin().getServer().getWorlds()) {
             final String worldName = world.getName();
             final Collection<Group> worldGroup = groupManager.getWorldsHolder().getWorldData(worldName).getGroupList();
             final List<Group> list = new ArrayList<Group>(worldGroup);
@@ -128,7 +126,7 @@ public class GroupManagerHandler extends PermissionsHandler {
 
     @Override
     public boolean setupPermissionsHandler() {
-        final PluginManager pluginManager = plugin.getServer().getPluginManager();
+        final PluginManager pluginManager = getPlugin().getServer().getPluginManager();
         final Plugin GMplugin = pluginManager.getPlugin("GroupManager");
 
         if (GMplugin != null && GMplugin.isEnabled()) {

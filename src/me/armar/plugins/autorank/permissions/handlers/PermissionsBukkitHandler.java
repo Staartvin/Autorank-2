@@ -20,18 +20,16 @@ import java.util.List;
 public class PermissionsBukkitHandler extends PermissionsHandler {
 
     private PermissionsPlugin permissionsBukkit;
-    private final Autorank plugin;
 
     public PermissionsBukkitHandler(final Autorank plugin) {
-        this.plugin = plugin;
-        this.setupPermissionsHandler();
+        super(plugin);
     }
 
     public boolean addGroup(final Player player, final String world, final String group) {
         // PermissionsBukkit doesn't have a method to set the actual group.
         // Therefore we need to do it with commands...
         // Come on PermBukkit. Fix your API..
-        plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(),
+        getPlugin().getServer().dispatchCommand(getPlugin().getServer().getConsoleSender(),
                 "permissions player addgroup " + player.getName() + " " + group);
         return true;
         // There is no way to check if the command was successful.
@@ -88,7 +86,7 @@ public class PermissionsBukkitHandler extends PermissionsHandler {
         // PermissionsBukkit doesn't have a method to set the actual group.
         // Therefore we need to do it with commands...
         // Come on PermBukkit. Fix your API..
-        plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(),
+        getPlugin().getServer().dispatchCommand(getPlugin().getServer().getConsoleSender(),
                 "permissions player removegroup " + player.getName() + " " + group);
         return true;
         // There is no way to check if the command was successful.
@@ -101,7 +99,7 @@ public class PermissionsBukkitHandler extends PermissionsHandler {
 
     @Override
     public boolean setupPermissionsHandler() {
-        final PluginManager pluginManager = plugin.getServer().getPluginManager();
+        final PluginManager pluginManager = getPlugin().getServer().getPluginManager();
         final Plugin permBukkit = pluginManager.getPlugin("PermissionsBukkit");
 
         if (permBukkit != null && permBukkit.isEnabled()) {

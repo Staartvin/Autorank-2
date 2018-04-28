@@ -16,12 +16,10 @@ import java.util.*;
  */
 public class LuckPermsHandler extends PermissionsHandler {
 
-    private final Autorank plugin;
     private LuckPermsApi luckPermsApi = null;
 
     public LuckPermsHandler(final Autorank plugin) {
-        this.plugin = plugin;
-        this.setupPermissionsHandler();
+        super(plugin);
     }
 
     /**
@@ -37,10 +35,10 @@ public class LuckPermsHandler extends PermissionsHandler {
         // commands).
 
         if (world != null) {
-            plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(),
+            getPlugin().getServer().dispatchCommand(getPlugin().getServer().getConsoleSender(),
                     "lp user " + player.getName() + " parent add " + group + " global " + world);
         } else {
-            plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(),
+            getPlugin().getServer().dispatchCommand(getPlugin().getServer().getConsoleSender(),
                     "lp user " + player.getName() + " parent add " + group);
         }
 
@@ -61,10 +59,10 @@ public class LuckPermsHandler extends PermissionsHandler {
         // commands).`
 
         if (world != null) {
-            plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(),
+            getPlugin().getServer().dispatchCommand(getPlugin().getServer().getConsoleSender(),
                     "lp user " + player.getName() + " parent remove " + group + " global " + world);
         } else {
-            plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(),
+            getPlugin().getServer().dispatchCommand(getPlugin().getServer().getConsoleSender(),
                     "lp user " + player.getName() + " parent remove " + group);
         }
 

@@ -1,5 +1,6 @@
 package me.armar.plugins.autorank.permissions;
 
+import me.armar.plugins.autorank.Autorank;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;
@@ -11,7 +12,10 @@ import java.util.Collection;
  */
 public abstract class PermissionsHandler {
 
-    public PermissionsHandler() {
+    private Autorank plugin;
+
+    public PermissionsHandler(Autorank plugin) {
+        this.plugin = plugin;
         this.setupPermissionsHandler();
     }
 
@@ -65,4 +69,7 @@ public abstract class PermissionsHandler {
      */
     public abstract boolean setupPermissionsHandler();
 
+    public Autorank getPlugin() {
+        return plugin;
+    }
 }

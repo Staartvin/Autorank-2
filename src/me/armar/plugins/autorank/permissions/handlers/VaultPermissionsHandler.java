@@ -17,16 +17,8 @@ import java.util.*;
  */
 public class VaultPermissionsHandler extends PermissionsHandler {
 
-    private final Autorank plugin;
-
     public VaultPermissionsHandler(final Autorank plugin) {
-        if (plugin.getServer().getPluginManager().getPlugin("Vault") == null) { // Check if Vault is installed.
-            plugin.getLogger().severe(
-                    "Autorank did not find Vault when it started its boot sequence. This could cause problems!");
-        }
-
-        this.plugin = plugin;
-        this.setupPermissionsHandler();
+        super(plugin);
     }
 
     /**
@@ -38,7 +30,7 @@ public class VaultPermissionsHandler extends PermissionsHandler {
      * @return true if done, false if failed
      */
     public boolean addGroup(final Player player, final String world, final String group) {
-        LibraryHook hook = plugin.getDependencyManager().getLibraryHook(Library.VAULT);
+        LibraryHook hook = getPlugin().getDependencyManager().getLibraryHook(Library.VAULT);
 
         if (hook == null || !hook.isAvailable())
             return false;
@@ -53,7 +45,7 @@ public class VaultPermissionsHandler extends PermissionsHandler {
 
     public boolean demotePlayer(final Player player, String world, final String groupFrom, final String groupTo) {
 
-        LibraryHook hook = plugin.getDependencyManager().getLibraryHook(Library.VAULT);
+        LibraryHook hook = getPlugin().getDependencyManager().getLibraryHook(Library.VAULT);
 
         if (hook == null || !hook.isAvailable())
             return false;
@@ -72,7 +64,7 @@ public class VaultPermissionsHandler extends PermissionsHandler {
 
         // Output array for debug
         for (final String group : groupsBeforeAdd) {
-            plugin.debugMessage("Group of " + player.getName() + " before removing: " + group);
+            getPlugin().debugMessage("Group of " + player.getName() + " before removing: " + group);
         }
 
         Collection<String> groupsAfterAdd;
@@ -87,7 +79,7 @@ public class VaultPermissionsHandler extends PermissionsHandler {
 
             // Output array for debug
             for (final String group : groupsAfterAdd) {
-                plugin.debugMessage("Group of " + player.getName() + " after removing: " + group);
+                getPlugin().debugMessage("Group of " + player.getName() + " after removing: " + group);
             }
 
             worked2 = addGroup(player, world, groupTo);
@@ -106,7 +98,7 @@ public class VaultPermissionsHandler extends PermissionsHandler {
     public Collection<String> getGroups() {
         List<String> groups = new ArrayList<>();
 
-        LibraryHook hook = plugin.getDependencyManager().getLibraryHook(Library.VAULT);
+        LibraryHook hook = getPlugin().getDependencyManager().getLibraryHook(Library.VAULT);
 
         if (hook == null || !hook.isAvailable())
             return Collections.unmodifiableCollection(groups);
@@ -134,7 +126,7 @@ public class VaultPermissionsHandler extends PermissionsHandler {
     public Collection<String> getPlayerGroups(final Player player) {
         List<String> groups = new ArrayList<>();
 
-        LibraryHook hook = plugin.getDependencyManager().getLibraryHook(Library.VAULT);
+        LibraryHook hook = getPlugin().getDependencyManager().getLibraryHook(Library.VAULT);
 
         if (hook == null || !hook.isAvailable())
             return Collections.unmodifiableCollection(groups);
@@ -144,7 +136,7 @@ public class VaultPermissionsHandler extends PermissionsHandler {
         }
 
         // Let admin choose.
-        if (plugin.getSettingsConfig().onlyUsePrimaryGroupVault()) {
+        if (getPlugin().getSettingsConfig().onlyUsePrimaryGroupVault()) {
             groups.add(VaultHook.getPermissions().getPrimaryGroup(player));
         } else {
             groups.addAll(Arrays.asList(VaultHook.getPermissions().getPlayerGroups(player)));
@@ -158,7 +150,7 @@ public class VaultPermissionsHandler extends PermissionsHandler {
     public Collection<String> getWorldGroups(final Player player, final String world) {
         List<String> groups = new ArrayList<>();
 
-        LibraryHook hook = plugin.getDependencyManager().getLibraryHook(Library.VAULT);
+        LibraryHook hook = getPlugin().getDependencyManager().getLibraryHook(Library.VAULT);
 
         if (hook == null || !hook.isAvailable())
             return Collections.unmodifiableCollection(groups);
@@ -182,7 +174,7 @@ public class VaultPermissionsHandler extends PermissionsHandler {
      */
     public boolean removeGroup(final Player player, final String world, final String group) {
 
-        LibraryHook hook = plugin.getDependencyManager().getLibraryHook(Library.VAULT);
+        LibraryHook hook = getPlugin().getDependencyManager().getLibraryHook(Library.VAULT);
 
         if (hook == null || !hook.isAvailable())
             return false;
@@ -198,7 +190,7 @@ public class VaultPermissionsHandler extends PermissionsHandler {
     @Override
     public boolean replaceGroup(final Player player, String world, final String oldGroup, final String newGroup) {
 
-        LibraryHook hook = plugin.getDependencyManager().getLibraryHook(Library.VAULT);
+        LibraryHook hook = getPlugin().getDependencyManager().getLibraryHook(Library.VAULT);
 
         if (hook == null || !hook.isAvailable())
             return false;
@@ -221,7 +213,7 @@ public class VaultPermissionsHandler extends PermissionsHandler {
 
         // Output array for debug
         for (final String group : groupsBeforeAdd) {
-            plugin.debugMessage("Group of " + player.getName() + " before adding: " + group);
+            getPlugin().debugMessage("Group of " + player.getName() + " before adding: " + group);
         }
 
         Collection<String> groupsAfterAdd;
@@ -236,7 +228,7 @@ public class VaultPermissionsHandler extends PermissionsHandler {
 
             // Output array for debug
             for (final String group : groupsAfterAdd) {
-                plugin.debugMessage("Group of " + player.getName() + " after adding: " + group);
+                getPlugin().debugMessage("Group of " + player.getName() + " after adding: " + group);
             }
 
             // When using PEX, if a player is in a default group this is not
@@ -284,6 +276,6 @@ public class VaultPermissionsHandler extends PermissionsHandler {
 
     @Override
     public boolean setupPermissionsHandler() {
-        return plugin.getDependencyManager().getLibraryHook(Library.VAULT).isAvailable();
+        return getPlugin().getDependencyManager().getLibraryHook(Library.VAULT).isAvailable();
     }
 }

@@ -277,9 +277,10 @@ public class Autorank extends JavaPlugin {
 
                 } catch (final Throwable t) {
 
-                    // When an error occured!
+                    // When an error occurred!
 
-                    getLogger().severe("Could not hook into a dependency: \nCause: " + t.getMessage());
+                    getLogger().severe("Could not hook into a dependency: \nCause: ");
+                    t.printStackTrace();
                 }
 
                 // After dependencies, load paths
@@ -578,6 +579,8 @@ public class Autorank extends JavaPlugin {
         getServer().getPluginManager().disablePlugin(this);
         getServer().getPluginManager().enablePlugin(this);
     }
+
+    // TODO: add requirement that checks for how many times you completed a path.
 
     // ---------- GETTERS & SETTERS ---------- \\
     //

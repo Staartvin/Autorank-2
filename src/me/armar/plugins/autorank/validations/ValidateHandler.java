@@ -38,6 +38,7 @@ public class ValidateHandler {
         List<Path> paths = plugin.getPathManager().getPaths();
 
         List<String> permGroups = new ArrayList<>();
+
         Collection<String> vaultGroups = plugin.getPermPlugHandler().getPermissionPlugin().getGroups();
 
         for (Path path : paths) {

@@ -18,12 +18,10 @@ import java.util.Map.Entry;
  */
 public class PowerfulPermsHandler extends PermissionsHandler {
 
-    private final Autorank plugin;
     private PowerfulPermsPlugin powerfulPerms;
 
-    public PowerfulPermsHandler(final Autorank plugin) {
-        this.plugin = plugin;
-        this.setupPermissionsHandler();
+    public PowerfulPermsHandler(Autorank plugin) {
+        super(plugin);
     }
 
     /**
@@ -37,7 +35,7 @@ public class PowerfulPermsHandler extends PermissionsHandler {
     public boolean addGroup(final Player player, final String world, final String group) {
         // No known way to set via API, hence we do it the ugly route (via
         // commands).
-        plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(),
+        getPlugin().getServer().dispatchCommand(getPlugin().getServer().getConsoleSender(),
                 "pp user " + player.getName() + " setrank " + group);
         return true;
         // There is no way to check if the command was successful.
@@ -99,7 +97,7 @@ public class PowerfulPermsHandler extends PermissionsHandler {
         // No known way to set via API, hence we do it the ugly route (via
         // commands).`
         // Does not seem to work properly.
-        plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(),
+        getPlugin().getServer().dispatchCommand(getPlugin().getServer().getConsoleSender(),
                 "pp user " + player.getName() + " removegroup " + group);
         return true;
         // There is no way to check if the command was successful.
@@ -115,7 +113,7 @@ public class PowerfulPermsHandler extends PermissionsHandler {
 
     @Override
     public boolean setupPermissionsHandler() {
-        final PluginManager pluginManager = plugin.getServer().getPluginManager();
+        final PluginManager pluginManager = getPlugin().getServer().getPluginManager();
         final Plugin permPlugin = pluginManager.getPlugin("PowerfulPerms");
 
         if (permPlugin != null && permPlugin.isEnabled()) {
