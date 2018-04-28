@@ -16,7 +16,7 @@ import java.util.*;
  */
 public class LuckPermsHandler extends PermissionsHandler {
 
-    private LuckPermsApi luckPermsApi = null;
+    private LuckPermsApi luckPermsApi;
 
     public LuckPermsHandler(final Autorank plugin) {
         super(plugin);

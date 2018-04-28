@@ -16,7 +16,10 @@ public abstract class PermissionsHandler {
 
     public PermissionsHandler(Autorank plugin) {
         this.plugin = plugin;
-        this.setupPermissionsHandler();
+
+        if (!this.setupPermissionsHandler()) {
+            plugin.getServer().getLogger().severe("Could not connect to permissions plugin. Is it up to date?");
+        }
     }
 
     /**
