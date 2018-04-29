@@ -53,10 +53,16 @@ public class CompositeRequirement {
      * @return a string representing the description (or combined description) of the requirements.
      */
     public String getDescription() {
+
         final StringBuilder builder = new StringBuilder();
 
         final List<AbstractRequirement> reqs = this.getRequirements();
         final int size = reqs.size();
+
+        // Check whether a requirement has a custom description. If so, return that one.
+        if (size > 0 && reqs.get(0).hasCustomDescription()) {
+            return reqs.get(0).getCustomDescription();
+        }
 
         if (size == 0) {
             return "";

@@ -1,8 +1,7 @@
-package me.armar.plugins.autorank.pathbuilder;
+package me.armar.plugins.autorank.pathbuilder.builders;
 
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.pathbuilder.builders.RequirementBuilder;
-import me.armar.plugins.autorank.pathbuilder.builders.ResultBuilder;
+import me.armar.plugins.autorank.pathbuilder.Path;
 import me.armar.plugins.autorank.pathbuilder.holders.CompositeRequirement;
 import me.armar.plugins.autorank.pathbuilder.requirement.AbstractRequirement;
 import me.armar.plugins.autorank.pathbuilder.result.AbstractResult;
@@ -72,6 +71,9 @@ public class PathBuilder {
 
             // Set whether a path is automatically assigned to a player or not.
             path.setAutomaticallyAssigned(plugin.getPathsConfig().shouldAutoAssignPath(pathName));
+
+            // Set whether partial completion is allowed.
+            path.setAllowPartialCompletion(plugin.getPathsConfig().isPartialCompletionAllowed(pathName));
 
             // Add path to list of paths
             paths.add(path);

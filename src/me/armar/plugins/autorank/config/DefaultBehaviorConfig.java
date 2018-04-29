@@ -28,7 +28,11 @@ enum DefaultBehaviorOption {
     /**
      * Whether we allow a player to complete a path over and over again. (boolean)
      */
-    ALLOW_INFINITE_PATHING(Boolean.class, false);
+    ALLOW_INFINITE_PATHING(Boolean.class, false),
+    /**
+     * Whether a player can complete requirements one by one or should meet all requirements at the same time.
+     */
+    ALLOW_PARTIAL_COMPLETION(Boolean.class, true);
 
     private Class classType;
     private Object defaultValue;

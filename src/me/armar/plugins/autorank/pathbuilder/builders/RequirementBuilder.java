@@ -68,9 +68,8 @@ public class RequirementBuilder {
         }
 
         // Get requirement of RequirementBuilder.
-        final AbstractRequirement requirement = builder.finish();
 
-        return requirement;
+        return builder.finish();
     }
 
     /**
@@ -201,7 +200,19 @@ public class RequirementBuilder {
         requirement.setId(requirementId);
 
         // Set whether this requirement is world-specific.
-        requirement.setWorld(Autorank.getInstance().getPathsConfig().getWorldOfRequirement(pathName, requirementType, isPreRequisite));
+        if (Autorank.getInstance().getPathsConfig().isRequirementWorldSpecific(pathName, requirementType,
+                isPreRequisite)) {
+            requirement.setWorld(Autorank.getInstance().getPathsConfig().getWorldOfRequirement(pathName,
+                    requirementType, isPreRequisite));
+        }
+
+        // Check whether a requirement has a custom description.
+        if (Autorank.getInstance().getPathsConfig().hasCustomRequirementDescription(pathName, requirementType,
+                isPreRequisite)) {
+            requirement.setCustomDescription(Autorank.getInstance().getPathsConfig().getCustomRequirementDescription
+                    (pathName, requirementType, isPreRequisite));
+        }
+
 
         // Check if all dependencies are available for this requirement.
         DependencyManager dependencyManager = Autorank.getInstance().getDependencyManager();

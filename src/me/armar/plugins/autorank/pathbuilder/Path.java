@@ -50,6 +50,11 @@ public class Path {
     // Results that are performed when the path is assigned to the player.
     private List<AbstractResult> resultsUponChoosing = new ArrayList<AbstractResult>();
 
+    // Whether a player on this path can complete requirements at different times. If partial completion is true,
+    // players can complete a requirement and then come back later to complete a different one. They don't need to
+    // complete all requirements at the same time.
+    private boolean allowPartialCompletion = true;
+
     public Path(final Autorank plugin) {
         this.plugin = plugin;
     }
@@ -128,7 +133,7 @@ public class Path {
      */
     public boolean checkPathProgress(Player player) {
         // Player does not meet all requirements, so don't do anything.
-        if (!this.meetsRequirements(player)) {
+        if (!this.meetsAllRequirements(player)) {
             return false;
         }
 
@@ -249,7 +254,7 @@ public class Path {
      * @param player Player to check
      * @return true when a player has completed all requirements at least once.
      */
-    public boolean meetsRequirements(final Player player) {
+    public boolean meetsAllRequirements(final Player player) {
 
         UUID uuid = player.getUniqueId();
 
@@ -260,12 +265,27 @@ public class Path {
 
         boolean meetAllRequirements = true;
 
+        // If we do not allow partial completion, we do not run any intermediary results of requirements. We only
+        // check if a player completed all requirements or not.
+        if (!this.allowPartialCompletion()) {
+            for (final CompositeRequirement holder : this.getRequirements()) {
+                if (!holder.meetsRequirement(player)) {
+                    // If player does not meet the requirement, we can immediately return false.
+                    return false;
+                }
+            }
+
+            // All requirements are met, so we return true.
+            return true;
+        }
+
         for (final CompositeRequirement holder : this.getRequirements()) {
             if (holder == null)
                 return false;
 
             // Skip completed requirements.
-            if (this.hasCompletedRequirement(player.getUniqueId(), holder.getRequirementId())) {
+            if (this.hasCompletedRequirement(player.getUniqueId(), holder
+                    .getRequirementId())) {
                 System.out.println("Requirement " + holder.getDescription() + " has already been completed");
                 continue;
             }
@@ -413,6 +433,20 @@ public class Path {
      */
     public void setResultsUponChoosing(List<AbstractResult> resultsUponChoosing) {
         this.resultsUponChoosing = resultsUponChoosing;
+    }
+
+    /**
+     * Check whether a player can complete requirements in steps instead of meeting all requirements at the same time.
+     *
+     * @return true if players can complete requirements one by one. False if they need to complete the requirements
+     * at the same time.
+     */
+    public boolean allowPartialCompletion() {
+        return allowPartialCompletion;
+    }
+
+    public void setAllowPartialCompletion(boolean allowPartialCompletion) {
+        this.allowPartialCompletion = allowPartialCompletion;
     }
 
     /**

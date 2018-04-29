@@ -23,7 +23,7 @@ public abstract class AbstractRequirement {
     private boolean optional = false, autoComplete = false, isPreRequisite = false;
     private int reqId;
     private List<AbstractResult> abstractResults = new ArrayList<AbstractResult>();
-    private String world = null;
+    private String world, customDescription;
     private List<String> errorMessages = new ArrayList<>();
 
     // A list of third-party plugins that are needed to use this requirement.
@@ -263,5 +263,27 @@ public abstract class AbstractRequirement {
         }
 
         dependencies.add(library);
+    }
+
+    /**
+     * Check whether this requirement has a custom description by an admin.
+     *
+     * @return true if there is a custom description, false otherwise.
+     */
+    public boolean hasCustomDescription() {
+        return getCustomDescription() != null;
+    }
+
+    public String getCustomDescription() {
+        return this.customDescription;
+    }
+
+    /**
+     * Set the custom description of this requirement
+     *
+     * @param description custom description
+     */
+    public void setCustomDescription(String description) {
+        this.customDescription = description;
     }
 }

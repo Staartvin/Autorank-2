@@ -87,6 +87,12 @@ public class CompleteCommand extends AutorankCommand {
             return true;
         }
 
+        if (!targetPath.allowPartialCompletion()) {
+            sender.sendMessage(ChatColor.RED + "This path does not allow you to complete requirements one by one. You" +
+                    " need to meet all requirements simulateneously.");
+            return true;
+        }
+
         // Rank player as he has fulfilled all requirements
         if (targetPath.getFailedRequirements(player, true).size() == 0) {
             player.sendMessage(ChatColor.GREEN + "You don't have any requirements left.");

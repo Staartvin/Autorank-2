@@ -2,6 +2,7 @@ package me.armar.plugins.autorank.pathbuilder;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.language.Lang;
+import me.armar.plugins.autorank.pathbuilder.builders.PathBuilder;
 import me.armar.plugins.autorank.pathbuilder.config.PlayerDataConfig;
 import me.armar.plugins.autorank.pathbuilder.holders.CompositeRequirement;
 import me.armar.plugins.autorank.pathbuilder.result.AbstractResult;
@@ -19,7 +20,7 @@ import java.util.*;
 public class PathManager {
 
     private final Autorank plugin;
-    private PathBuilder builder;
+    private me.armar.plugins.autorank.pathbuilder.builders.PathBuilder builder;
     // A list of paths any player is able to take
     private List<Path> paths = new ArrayList<Path>();
     // PlayerDataConfig keeps track of what paths are active for a player.
@@ -27,7 +28,7 @@ public class PathManager {
 
     public PathManager(final Autorank plugin) {
         this.plugin = plugin;
-        setBuilder(new PathBuilder(plugin));
+        setBuilder(new me.armar.plugins.autorank.pathbuilder.builders.PathBuilder(plugin));
 
         // Initialize player data config.
         playerDataConfig = new PlayerDataConfig(plugin);
@@ -92,7 +93,7 @@ public class PathManager {
         return messages;
     }
 
-    public PathBuilder getBuilder() {
+    public me.armar.plugins.autorank.pathbuilder.builders.PathBuilder getBuilder() {
         return builder;
     }
 

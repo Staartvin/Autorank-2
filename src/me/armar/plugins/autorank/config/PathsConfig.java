@@ -389,6 +389,20 @@ public class PathsConfig extends AbstractConfig {
     }
 
     /**
+     * Check whether a player on a given path can complete requirements one by one, or if he should meet all
+     * requirements at the same time to complete the path.
+     *
+     * @param pathName Name of the path
+     * @return true if the player can complete requirements one by one. False if all requirements need to be met
+     * simultaneously.
+     */
+    public boolean isPartialCompletionAllowed(String pathName) {
+        return this.getConfig().getBoolean(pathName + ".options.allow partial completion",
+                this.getPlugin().getDefaultBehaviorConfig().getDefaultBooleanBehaviorOfOption(DefaultBehaviorOption
+                        .ALLOW_PARTIAL_COMPLETION));
+    }
+
+    /**
      * Get the description of a path
      *
      * @param pathName Name of the path
@@ -396,5 +410,31 @@ public class PathsConfig extends AbstractConfig {
      */
     public String getPathDescription(String pathName) {
         return this.getConfig().getString(pathName + ".options.description", "");
+    }
+
+    /**
+     * Check whether a requirement has a custom description.
+     *
+     * @param pathName       Name of the path where the requirement resides in
+     * @param reqName        Name of the requirement
+     * @param isPreRequisite whether the requirement is a prerequisite or not.
+     * @return true if the given requirement has a custom requirement.
+     */
+    public boolean hasCustomRequirementDescription(String pathName, String reqName, boolean isPreRequisite) {
+        return this.getCustomRequirementDescription(pathName, reqName, isPreRequisite) != null;
+    }
+
+    /**
+     * Get the custom description of a requirement as set in the paths file.
+     *
+     * @param pathName       Name of the path the requirement is part of.
+     * @param reqName        Name of the requirement.
+     * @param isPreRequisite Whether the requirement is a prerequisite or not.
+     * @return the custom description or null if there is no custom description.
+     */
+    public String getCustomRequirementDescription(String pathName, String reqName, boolean isPreRequisite) {
+        String keyType = (isPreRequisite ? "prerequisites" : "requirements");
+
+        return this.getConfig().getString(pathName + "." + keyType + "." + reqName + ".options.description", null);
     }
 }
