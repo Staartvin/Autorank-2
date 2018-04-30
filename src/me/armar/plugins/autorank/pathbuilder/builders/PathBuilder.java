@@ -75,6 +75,12 @@ public class PathBuilder {
             // Set whether partial completion is allowed.
             path.setAllowPartialCompletion(plugin.getPathsConfig().isPartialCompletionAllowed(pathName));
 
+            // Set whether this path can be seen by players if they do not meet the prerequisites
+            path.setOnlyShowIfPrerequisitesMet(plugin.getPathsConfig().showBasedOnPrerequisites(pathName));
+
+            // Set whether the progress for this path should be stored.
+            path.setStoreProgressOnDeactivation(plugin.getPathsConfig().shouldStoreProgressOnDeactivation(pathName));
+
             // Add path to list of paths
             paths.add(path);
         }

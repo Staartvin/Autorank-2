@@ -32,7 +32,11 @@ enum DefaultBehaviorOption {
     /**
      * Whether a player can complete requirements one by one or should meet all requirements at the same time.
      */
-    ALLOW_PARTIAL_COMPLETION(Boolean.class, true);
+    ALLOW_PARTIAL_COMPLETION(Boolean.class, true),
+    /**
+     * Whether Autorank should store the progress of a player's path when he deactivates a path.
+     */
+    STORE_PROGRESS_ON_DEACTIVATION(Boolean.class, false);
 
     private Class classType;
     private Object defaultValue;

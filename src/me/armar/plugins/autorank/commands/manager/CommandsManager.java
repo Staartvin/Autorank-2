@@ -65,7 +65,8 @@ public class CommandsManager implements TabExecutor {
         registeredCommands.put(Arrays.asList("hooks", "hook"), new HooksCommand(plugin));
         registeredCommands.put(Arrays.asList("gadd", "globaladd"), new GlobalAddCommand(plugin));
         registeredCommands.put(Arrays.asList("view", "preview"), new ViewCommand(plugin));
-        registeredCommands.put(Arrays.asList("choose"), new ChooseCommand(plugin));
+        registeredCommands.put(Arrays.asList("choose", "activate"), new ChooseCommand(plugin));
+        registeredCommands.put(Arrays.asList("deactivate", "deact"), new DeactivateCommand(plugin));
         registeredCommands.put(Arrays.asList("times", "time"), new TimesCommand(plugin));
         registeredCommands.put(Arrays.asList("reset"), new ResetCommand(plugin));
         registeredCommands.put(Arrays.asList("backup"), new BackupCommand(plugin));

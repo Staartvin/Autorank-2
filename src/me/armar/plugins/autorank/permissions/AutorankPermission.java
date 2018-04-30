@@ -44,6 +44,7 @@ public final class AutorankPermission {
     public static final String NOTICE_ON_WARNINGS = "autorank.noticeonwarning";
     public static final String EXCLUDE_FROM_LEADERBOARD = "autorank.leaderboard.exclude";
     public static final String BACKUP_DATA_FILES = "autorank.backup.storage";
+    public static final String DEACTIVATE_PATH = "autorank.deactivate";
 
     private AutorankPermission() {
     }

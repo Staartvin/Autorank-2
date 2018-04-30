@@ -334,6 +334,10 @@ public enum Lang {
      */
     PROGRESS_RESET("progress-reset", "&eYour progress for the path is reset."),
     /**
+     * &eYour progress for the path has been restored.
+     */
+    PROGRESS_RESTORED("progress-restored", "&eYour progress for the path has been restored."),
+    /**
      * Change rank to {0}.
      */
     RANK_CHANGE_RESULT("rank-change-result", "Change rank to {0}."),

@@ -437,4 +437,17 @@ public class PathsConfig extends AbstractConfig {
 
         return this.getConfig().getString(pathName + "." + keyType + "." + reqName + ".options.description", null);
     }
+
+    /**
+     * Check whether Autorank should store the progress of a player's path when he deactivates a path. If the
+     * progress is stored and the player reactivates the path, he can start where he left off.
+     *
+     * @param pathName Name of the path
+     * @return true if progress should be stored, false otherwise.
+     */
+    public boolean shouldStoreProgressOnDeactivation(String pathName) {
+        return this.getConfig().getBoolean(pathName + ".options.store progress on deactivation", this.getPlugin()
+                .getDefaultBehaviorConfig().getDefaultBooleanBehaviorOfOption(DefaultBehaviorOption
+                        .STORE_PROGRESS_ON_DEACTIVATION));
+    }
 }

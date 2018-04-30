@@ -55,6 +55,13 @@ public class Path {
     // complete all requirements at the same time.
     private boolean allowPartialCompletion = true;
 
+    // This variable is true when players can only see this path in '/ar view list' if they meet the prerequisites of
+    // the path. If it is false, the path will always be shown.
+    private boolean onlyShowIfPrerequisitesMet = false;
+
+    // Whether Autorank should store progress of a player's path when he deactivates this path.
+    private boolean storeProgressOnDeactivation = false;
+
     public Path(final Autorank plugin) {
         this.plugin = plugin;
     }
@@ -524,5 +531,44 @@ public class Path {
      */
     public void setAutomaticallyAssigned(boolean automaticallyAssigned) {
         isAutomaticallyAssigned = automaticallyAssigned;
+    }
+
+    /**
+     * Check whether this path is only shown to a player when all prerequisites are met. If this method returns true,
+     * players will only be able to see this path if they meet all prerequisites. If it is false, players will always
+     * see this path.
+     *
+     * @return whether a player will see this path if they meet the prerequisites or not.
+     */
+    public boolean onlyShowIfPrerequisitesMet() {
+        return onlyShowIfPrerequisitesMet;
+    }
+
+    /**
+     * Set whether this path should only be shown to a player when they meet all prerequisites.
+     *
+     * @param onlyShowIfPrerequisitesMet value to set.
+     */
+    public void setOnlyShowIfPrerequisitesMet(boolean onlyShowIfPrerequisitesMet) {
+        this.onlyShowIfPrerequisitesMet = onlyShowIfPrerequisitesMet;
+    }
+
+    /**
+     * Check whether Autorank should store the progress of a player's path when he deactivates a path. If he leaves
+     * the path and the progress is stored, he can return to the path at any time and start where he left of.
+     *
+     * @return true if progress should be stored, false otherwise.
+     */
+    public boolean shouldStoreProgressOnDeactivation() {
+        return storeProgressOnDeactivation;
+    }
+
+    /**
+     * Set whether Autorank should store progress of a path.
+     *
+     * @param storeProgressOnDeactivation Value to set it to.
+     */
+    public void setStoreProgressOnDeactivation(boolean storeProgressOnDeactivation) {
+        this.storeProgressOnDeactivation = storeProgressOnDeactivation;
     }
 }

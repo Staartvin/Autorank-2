@@ -41,6 +41,11 @@ public class CompleteCommand extends AutorankCommand {
         if (!this.hasPermission(AutorankPermission.COMPLETE_REQUIREMENT, sender))
             return true;
 
+        if (args.length < 2) {
+            sender.sendMessage(Lang.INVALID_FORMAT.getConfigValue(this.getUsage()));
+            return true;
+        }
+
         final Player player = (Player) sender;
 
         String reqIdString;

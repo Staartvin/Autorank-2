@@ -42,7 +42,7 @@ public class PlayerDataConfig extends AbstractConfig {
      * @return a list of requirements a player has completed for a given path.
      */
     public Collection<Integer> getCompletedRequirements(final UUID uuid, String pathName) {
-        ConfigurationSection section = this.getActivePathSection(uuid, pathName);
+        ConfigurationSection section = this.getProgressOnPathSection(uuid, pathName);
 
         if (section == null) {
             return new ArrayList<>();
@@ -90,7 +90,7 @@ public class PlayerDataConfig extends AbstractConfig {
      * @param requirements Requirements ids to set as completed.
      */
     public void setCompletedRequirements(UUID uuid, String pathName, Collection<Integer> requirements) {
-        getActivePathsSection(uuid).set(pathName + ".completed requirements", requirements);
+        getProgressOnPathsSection(uuid).set(pathName + ".completed requirements", requirements);
     }
 
     // ------------ COMPLETED PREREQUISITES ------------
@@ -103,7 +103,13 @@ public class PlayerDataConfig extends AbstractConfig {
      * @return a list of prerequisites a player has completed for a given path.
      */
     public Collection<Integer> getCompletedPrerequisites(final UUID uuid, String pathName) {
-        return getCompletedPrerequisitesSection(uuid).getIntegerList(pathName);
+        ConfigurationSection section = this.getProgressOnPathSection(uuid, pathName);
+
+        if (section == null) {
+            return new ArrayList<>();
+        }
+
+        return section.getIntegerList("completed prerequisites");
     }
 
     /**
@@ -146,7 +152,7 @@ public class PlayerDataConfig extends AbstractConfig {
      * @param prerequisites Prerequisites ids to set as completed.
      */
     public void setCompletedPrerequisites(UUID uuid, String pathName, Collection<Integer> prerequisites) {
-        getCompletedPrerequisitesSection(uuid).set(pathName, prerequisites);
+        getProgressOnPathsSection(uuid).set(pathName + ".completed prerequisites", prerequisites);
     }
 
     /**
@@ -419,16 +425,21 @@ public class PlayerDataConfig extends AbstractConfig {
         return section.getConfigurationSection(pathName);
     }
 
-    private ConfigurationSection getCompletedPrerequisitesSection(UUID uuid) {
+    private ConfigurationSection getProgressOnPathsSection(UUID uuid) {
         ConfigurationSection playerSection = getPlayerSection(uuid);
 
-        ConfigurationSection completedPrerequisitesSection = playerSection.getConfigurationSection("completed " +
-                "prerequisites");
+        ConfigurationSection progressSection = playerSection.getConfigurationSection("progress on paths");
 
-        if (completedPrerequisitesSection == null) {
-            completedPrerequisitesSection = playerSection.createSection("completed prerequisites");
+        if (progressSection == null) {
+            progressSection = playerSection.createSection("progress on paths");
         }
 
-        return completedPrerequisitesSection;
+        return progressSection;
+    }
+
+    private ConfigurationSection getProgressOnPathSection(UUID uuid, String pathName) {
+        ConfigurationSection section = getProgressOnPathsSection(uuid);
+
+        return section.getConfigurationSection(pathName);
     }
 }

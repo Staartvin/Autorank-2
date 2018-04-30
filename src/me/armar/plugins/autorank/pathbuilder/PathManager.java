@@ -146,6 +146,18 @@ public class PathManager {
     }
 
     /**
+     * Reset the progress of a player for a given path. It will reset both the completed requirements and
+     * prerequisites of the given path.
+     *
+     * @param uuid UUID of the player
+     * @param path Path to reset progress of.
+     */
+    public void resetProgressOfPath(UUID uuid, Path path) {
+        this.playerDataConfig.setCompletedPrerequisites(uuid, path.getInternalName(), new ArrayList<>());
+        this.playerDataConfig.setCompletedRequirements(uuid, path.getInternalName(), new ArrayList<>());
+    }
+
+    /**
      * Remove all active paths a player currently has.
      *
      * @param uuid UUID of the player
@@ -383,14 +395,40 @@ public class PathManager {
         // Add path as an active path.
         this.playerDataConfig.addActivePath(player.getUniqueId(), internalName);
 
-        // Reset progress of requirements
-        this.playerDataConfig.setCompletedRequirements(player.getUniqueId(), internalName, new ArrayList<>());
+        // Only reset progress if there was no progress stored.
+        if (!path.shouldStoreProgressOnDeactivation()) {
+            // Reset progress of requirements
+            this.playerDataConfig.setCompletedRequirements(player.getUniqueId(), internalName, new ArrayList<>());
 
-        // Reset progress of prerequisites for a path.
-        this.playerDataConfig.setCompletedPrerequisites(uuid, internalName, new ArrayList<>());
+            // Reset progress of prerequisites for a path.
+            this.playerDataConfig.setCompletedPrerequisites(uuid, internalName, new ArrayList<>());
+        }
 
         // Perform results upon choosing this path.
         path.performResultsUponChoosing(player);
+    }
+
+    /**
+     * Deassign a path from a player. Depending on the property of {@link Path#shouldStoreProgressOnDeactivation()}
+     * the progress of the player for the path gets stored or not. The path is set to inactive.
+     *
+     * @param uuid UUID of the player
+     * @param path Path to deactivate.
+     */
+    public void deassignPath(UUID uuid, Path path) {
+
+        // We can't deassign a path if it is not active.
+        if (!this.hasActivePath(uuid, path)) {
+            return;
+        }
+
+        // Remove progress of a player if necessary
+        if (!path.shouldStoreProgressOnDeactivation()) {
+            plugin.getPathManager().resetProgressOfPath(uuid, path);
+        }
+
+        // Remove active path of a player.
+        this.playerDataConfig.removeActivePath(uuid, path.getInternalName());
     }
 
     /**

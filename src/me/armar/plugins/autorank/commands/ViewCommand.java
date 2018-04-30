@@ -55,7 +55,16 @@ public class ViewCommand extends AutorankCommand {
         // Get a list of possible paths that a player can take?
         if (pathName.equals("list")) {
 
-            final List<Path> paths = plugin.getPathManager().getAllPaths();
+            final List<Path> paths = new ArrayList<>();
+
+            // Loop through all paths and check if we can show it or not.
+            for (Path path : plugin.getPathManager().getAllPaths()) {
+                if (isPlayer && path.onlyShowIfPrerequisitesMet() && path.meetsPrerequisites((Player) sender)) {
+                    continue;
+                }
+
+                paths.add(path);
+            }
 
             if (paths.isEmpty()) {
                 sender.sendMessage(Lang.NO_PATHS_TO_CHOOSE.getConfigValue());

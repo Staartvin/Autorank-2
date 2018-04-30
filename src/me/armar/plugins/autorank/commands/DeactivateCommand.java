@@ -11,17 +11,17 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
- * The command delegator for the '/ar choose' command.
+ * The command delegator for the '/ar deactivate' command.
  */
-public class ChooseCommand extends AutorankCommand {
+public class DeactivateCommand extends AutorankCommand {
 
     private final Autorank plugin;
 
-    public ChooseCommand(final Autorank instance) {
+    public DeactivateCommand(final Autorank instance) {
         plugin = instance;
     }
 
@@ -29,7 +29,7 @@ public class ChooseCommand extends AutorankCommand {
     public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
         // This command will give a preview of a certain path of ranking.
-        if (!this.hasPermission(AutorankPermission.CHOOSE_PATH, sender)) {
+        if (!this.hasPermission(AutorankPermission.DEACTIVATE_PATH, sender)) {
             return true;
         }
 
@@ -39,7 +39,7 @@ public class ChooseCommand extends AutorankCommand {
         }
 
         if (!(sender instanceof Player)) {
-            sender.sendMessage(Lang.YOU_ARE_A_ROBOT.getConfigValue("you can't choose ranking paths, silly.."));
+            sender.sendMessage(Lang.YOU_ARE_A_ROBOT.getConfigValue("you can't deactivate paths, silly.."));
             return true;
         }
 
@@ -56,36 +56,20 @@ public class ChooseCommand extends AutorankCommand {
             return true;
         }
 
-        // Check if player is already on this path
-        if (targetPath.isActive(player.getUniqueId())) {
-            sender.sendMessage(Lang.ALREADY_ON_THIS_PATH.getConfigValue());
+        // Check if player is not on this path
+        if (!targetPath.isActive(player.getUniqueId())) {
+            sender.sendMessage(Lang.PATH_IS_NOT_ACTIVE.getConfigValue(targetPath.getDisplayName()));
             return true;
         }
 
-        // Check if player can retake this path if it has already been completed before.
-        if (plugin.getPathManager().hasCompletedPath(player.getUniqueId(), targetPath) && !targetPath.isRepeatable()) {
-            sender.sendMessage(Lang.PATH_NOT_ALLOWED_TO_RETAKE.getConfigValue());
-            return true;
-        }
-
-        // Check if the path is eligible.
-        if (!targetPath.meetsPrerequisites(player)) {
-            sender.sendMessage(ChatColor.RED + "You do not meet the prerequisites of this path!");
-            sender.sendMessage(ChatColor.RED + "Type " + ChatColor.GOLD + "/ar view "
-                    + targetPath.getDisplayName() + ChatColor.RED + " to see a list of prerequisites.");
-            return true;
-        }
-
-        // Assign path to the player.
-        plugin.getPathManager().assignPath(player, targetPath);
-
-        // Give player confirmation message.
-        sender.sendMessage(Lang.CHOSEN_PATH.getConfigValue(targetPath.getDisplayName()));
+        plugin.getPathManager().deassignPath(player.getUniqueId(), targetPath);
 
         if (!targetPath.shouldStoreProgressOnDeactivation()) {
-            sender.sendMessage(Lang.PROGRESS_RESET.getConfigValue());
+            sender.sendMessage(ChatColor.GREEN + "Path '" + targetPath.getDisplayName() + "' is deactivated " +
+                    ChatColor.RED + "and your progress for this path has been reset.");
         } else {
-            sender.sendMessage(Lang.PROGRESS_RESTORED.getConfigValue());
+            sender.sendMessage(ChatColor.GREEN + "Path '" + targetPath.getDisplayName() + "' is deactivated " +
+                    ChatColor.GOLD + "but your progress for this path has been stored.");
         }
 
         return true;
@@ -105,30 +89,30 @@ public class ChooseCommand extends AutorankCommand {
 
         final Player player = (Player) sender;
 
-        final List<String> possibilities = new ArrayList<String>();
+        final List<Path> possiblePaths = plugin.getPathManager().getActivePaths(player.getUniqueId());
 
-        final List<Path> possiblePaths = plugin.getPathManager().getEligiblePaths(player);
+        List<String> possibilities = possiblePaths.stream().map(Path::getDisplayName).collect(Collectors.toList());
 
-        for (Path possiblePath : possiblePaths) {
-            possibilities.add(possiblePath.getDisplayName());
-        }
+//        for (Path possiblePath : possiblePaths) {
+//            possibilities.add(possiblePath.getDisplayName());
+//        }
 
         return possibilities;
     }
 
     @Override
     public String getDescription() {
-        return "Activate a path";
+        return "Deactivate a path";
     }
 
     @Override
     public String getPermission() {
-        return AutorankPermission.CHOOSE_PATH;
+        return AutorankPermission.DEACTIVATE_PATH;
     }
 
     @Override
     public String getUsage() {
-        return "/ar choose <path>";
+        return "/ar deactivate <path>";
     }
 
 }

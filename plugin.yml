@@ -120,4 +120,7 @@ permissions:
     autorank.backup.data:
         description: Allows a player to backup storage files
         default: op
+    autorank.deactivate:
+            description: Allows a player to deactivate a path
+            default: true
     
