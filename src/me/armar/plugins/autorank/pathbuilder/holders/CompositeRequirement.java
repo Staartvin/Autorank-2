@@ -252,12 +252,12 @@ public class CompositeRequirement {
 
         for (final AbstractRequirement r : this.getRequirements()) {
 
-            // When optional, always true
-            if (r.isOptional()) {
+            if (r.meetsRequirement(player)) {
                 return true;
             }
 
-            if (r.meetsRequirement(player)) {
+            // When optional, always true
+            if (r.isOptional()) {
                 return true;
             }
         }

@@ -311,7 +311,8 @@ public class PathManager {
         List<Path> temp = builder.initialisePaths();
 
         if (temp == null) {
-            plugin.getLogger().warning("The paths file was not configured correctly! See your log file for more info.");
+            plugin.getLogger().warning("The paths file was not configured correctly! See your log file for more " +
+                    "info.");
             return;
         } else {
             paths = temp;
