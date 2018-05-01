@@ -44,8 +44,6 @@ public class ResetCommand extends AutorankCommand {
             return true;
         }
 
-        // TODO: implement reset command!
-
         final String realName = plugin.getUUIDStorage().getRealName(uuid);
 
         if (action.equalsIgnoreCase("progress")) {

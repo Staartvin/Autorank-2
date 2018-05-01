@@ -72,8 +72,6 @@ public class CommandsManager implements TabExecutor {
         registeredCommands.put(Arrays.asList("backup"), new BackupCommand(plugin));
     }
 
-    //TODO: Commands do not autocomplete if an alias is used instead of the base command.
-
     /**
      * Get a hashmap of commands that are used. For more info, see
      * {@link CommandsManager}.

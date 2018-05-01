@@ -394,6 +394,8 @@ public class Autorank extends JavaPlugin {
         RequirementBuilder.registerRequirement("has advancement", AdvancementRequirement.class);
         RequirementBuilder.registerRequirement("in group", InGroupRequirement.class);
         RequirementBuilder.registerRequirement("javascript", JavaScriptRequirement.class);
+        RequirementBuilder.registerRequirement("active paths", AutorankActivePathsRequirement.class);
+        RequirementBuilder.registerRequirement("completed paths", AutorankCompletedPathsRequirement.class);
 
         // Vault related
         RequirementBuilder.registerRequirement("money", MoneyRequirement.class);
