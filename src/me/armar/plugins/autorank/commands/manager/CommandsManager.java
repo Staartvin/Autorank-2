@@ -66,11 +66,13 @@ public class CommandsManager implements TabExecutor {
         registeredCommands.put(Arrays.asList("gadd", "globaladd"), new GlobalAddCommand(plugin));
         registeredCommands.put(Arrays.asList("view", "preview"), new ViewCommand(plugin));
         registeredCommands.put(Arrays.asList("choose", "activate"), new ChooseCommand(plugin));
-        registeredCommands.put(Arrays.asList("deactivate", "deact"), new DeactivateCommand(plugin));
+        registeredCommands.put(Arrays.asList("deactivate"), new DeactivateCommand(plugin));
         registeredCommands.put(Arrays.asList("times", "time"), new TimesCommand(plugin));
         registeredCommands.put(Arrays.asList("reset"), new ResetCommand(plugin));
         registeredCommands.put(Arrays.asList("backup"), new BackupCommand(plugin));
     }
+
+    //TODO: Commands do not autocomplete if an alias is used instead of the base command.
 
     /**
      * Get a hashmap of commands that are used. For more info, see
@@ -178,7 +180,7 @@ public class CommandsManager implements TabExecutor {
             for (final Entry<List<String>, AutorankCommand> entry : registeredCommands.entrySet()) {
                 final List<String> list = entry.getKey();
 
-                commands.add(list.get(0));
+                commands.addAll(list);
             }
 
             return findSuggestedCommands(commands, args[0]);
