@@ -72,11 +72,9 @@ enum DefaultBehaviorOption {
  */
 public class DefaultBehaviorConfig extends AbstractConfig {
 
-    private String fileName = "DefaultBehavior.yml";
-
     public DefaultBehaviorConfig(final Autorank instance) {
         setPlugin(instance);
-        setFileName(fileName);
+        setFileName("DefaultBehavior.yml");
     }
 
     @Override

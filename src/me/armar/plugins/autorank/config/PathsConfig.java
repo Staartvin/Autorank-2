@@ -19,11 +19,9 @@ import java.util.Set;
  */
 public class PathsConfig extends AbstractConfig {
 
-    private String fileName = "Paths.yml";
-
     public PathsConfig(Autorank instance) {
         setPlugin(instance);
-        setFileName(fileName);
+        setFileName("Paths.yml");
     }
 
     /**
