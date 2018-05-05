@@ -18,18 +18,23 @@ import java.util.*;
  */
 public class PlayerDataConfig extends AbstractConfig {
 
-    private String fileName = "/playerdata/PlayerData.yml";
-
     private boolean convertingData = false;
 
     public PlayerDataConfig(final Autorank instance) {
         setPlugin(instance);
-        setFileName(fileName);
+        setFileName("/playerdata/PlayerData.yml");
 
         // Start requirement saver task
         // Run save task every 2 minutes
-        this.getPlugin().getServer().getScheduler().runTaskTimerAsynchronously(this.getPlugin(), () -> saveConfig(),
+        this.getPlugin().getServer().getScheduler().runTaskTimerAsynchronously(this.getPlugin(), this::saveConfig,
                 AutorankTools.TICKS_PER_SECOND * 30, AutorankTools.TICKS_PER_SECOND * 30);
+
+        this.getPlugin().getServer().getScheduler().runTaskLater(this.getPlugin(), new Runnable() {
+            @Override
+            public void run() {
+                convertFormatToSupportMultiplePathsFormat();
+            }
+        }, 20 * 10);
     }
 
     // ------------ COMPLETED REQUIREMENTS ------------
@@ -56,7 +61,7 @@ public class PlayerDataConfig extends AbstractConfig {
      *
      * @param uuid     UUID of the player
      * @param pathName Name of the path.
-     * @param reqId ID of requirement
+     * @param reqId    ID of requirement
      * @return true if the player completed the given requirement. False
      * otherwise.
      */
@@ -66,9 +71,10 @@ public class PlayerDataConfig extends AbstractConfig {
 
     /**
      * Add a completed requirement of a path for a given player.
-     * @param uuid UUID of the player
+     *
+     * @param uuid     UUID of the player
      * @param pathName Name of the path
-     * @param reqId Id of the requirement that has been completed.
+     * @param reqId    Id of the requirement that has been completed.
      */
     public void addCompletedRequirement(UUID uuid, String pathName, int reqId) {
         // Player has already completed this requirement
@@ -85,8 +91,9 @@ public class PlayerDataConfig extends AbstractConfig {
 
     /**
      * Set the completed requirements of a player for a path.
-     * @param uuid UUID of the player
-     * @param pathName Name of the path
+     *
+     * @param uuid         UUID of the player
+     * @param pathName     Name of the path
      * @param requirements Requirements ids to set as completed.
      */
     public void setCompletedRequirements(UUID uuid, String pathName, Collection<Integer> requirements) {
@@ -127,7 +134,8 @@ public class PlayerDataConfig extends AbstractConfig {
 
     /**
      * Add a completed prerequisite of a path for a given player.
-     * @param uuid UUID of the player
+     *
+     * @param uuid     UUID of the player
      * @param pathName Name of the path
      * @param preReqId Id of the prerequisite that has been completed.
      */
@@ -204,6 +212,63 @@ public class PlayerDataConfig extends AbstractConfig {
         });
     }
 
+    // ------------ CONVERT PATHS FILE TO NEW FORMAT ------------
+
+    private void convertFormatToSupportMultiplePathsFormat() {
+
+        this.getPlugin().debugMessage("Looking for UUIDs to convert in PlayerData.yml file!");
+
+        int convertedUUIDCount = 0;
+
+        // Loop over all users and convert them
+        for (String uuidString : this.getConfig().getKeys(false)) {
+
+            UUID uuid = UUID.fromString(uuidString);
+
+            String chosenPath = this.getConfig().getString(uuidString + ".chosen path");
+
+            // We have already converting this uuid.
+            if (chosenPath == null) {
+                continue;
+            }
+
+            this.getPlugin().debugMessage("Converting UUID " + uuidString + "...");
+
+            // Convert the active path and its completed requirements
+            this.addActivePath(uuid, chosenPath);
+
+            // Set any requirement that was completed for this chosen path.
+            for (int completedRequirementId : this.getConfig().getIntegerList(uuidString
+                    + ".completed requirements")) {
+
+                // Add completed requirement of the chosen path.
+                this.addCompletedRequirement(uuid, chosenPath, completedRequirementId);
+            }
+
+
+            java.util.List<String> completedPaths = this.getConfig().getStringList(uuidString + ".completed paths");
+
+            this.getConfig().set(uuidString + ".completed paths", null);
+
+            // Convert the completed paths.
+            for (String completedPathName : completedPaths) {
+                this.addCompletedPath(uuid, completedPathName);
+            }
+
+            // Remove all traces to previous data.
+            this.getConfig().set(uuidString + ".chosen path", null);
+            this.getConfig().set(uuidString + ".started paths", null);
+            this.getConfig().set(uuidString + ".completed requirements", null);
+
+            convertedUUIDCount++;
+        }
+
+        this.getPlugin().debugMessage("Converted " + convertedUUIDCount + " uuids to new format.");
+
+        this.saveConfig();
+    }
+
+
     // ------------ ACTIVE PATHS ------------
 
     /**
@@ -249,7 +314,7 @@ public class PlayerDataConfig extends AbstractConfig {
 
         ConfigurationSection activePathsSection = getActivePathsSection(uuid);
 
-        activePathsSection.set(pathName + ".completed requirements", new ArrayList<>());
+        activePathsSection.set(pathName + ".started", System.currentTimeMillis());
     }
 
     /**
@@ -262,7 +327,7 @@ public class PlayerDataConfig extends AbstractConfig {
         ConfigurationSection activePathsSection = getActivePathsSection(uuid);
 
         for (String pathName : paths) {
-            activePathsSection.set(pathName + ".completed requirements", new ArrayList<>());
+            activePathsSection.set(pathName + ".started", System.currentTimeMillis());
         }
     }
 
