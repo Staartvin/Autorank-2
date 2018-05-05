@@ -8,9 +8,9 @@ import org.bukkit.configuration.file.FileConfiguration;
  */
 public abstract class AbstractConfig {
 
-    private SimpleYamlConfiguration configFile = null;
-    private Autorank plugin = null;
-    private String fileName = "";
+    private SimpleYamlConfiguration configFile;
+    private Autorank plugin;
+    private String fileName;
 
     /**
      * Create a new config file.
@@ -64,6 +64,10 @@ public abstract class AbstractConfig {
 
     public void setFileName(String fileName) {
         this.fileName = fileName;
+    }
+
+    public String getFileName() {
+        return fileName;
     }
 
     public Autorank getPlugin() {

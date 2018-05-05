@@ -2,7 +2,6 @@ package me.armar.plugins.autorank.pathbuilder.holders;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.api.events.RequirementCompleteEvent;
-import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.pathbuilder.requirement.AbstractRequirement;
 import me.armar.plugins.autorank.pathbuilder.result.AbstractResult;
 import org.bukkit.Bukkit;
@@ -10,7 +9,6 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Since a requirement in Autorank's config can have multiple real requirements,
@@ -20,7 +18,7 @@ import java.util.UUID;
  * the requirements is met instead of implementing it in the code of a specific
  * requirement <br>
  * (which was super labor-intensive).
- * <p>
+ *
  * <br>
  * <br>
  * This class holds multiple requirements, but only represents one 'line' in the
@@ -28,18 +26,18 @@ import java.util.UUID;
  *
  * @author Staartvin
  */
-public class RequirementsHolder {
+public class CompositeRequirement {
 
     private final Autorank plugin;
 
     private List<AbstractRequirement> requirements = new ArrayList<AbstractRequirement>();
 
-    public RequirementsHolder(final Autorank plugin) {
+    public CompositeRequirement(final Autorank plugin) {
         this.plugin = plugin;
     }
 
     /**
-     * Add requirement to this RequirementsHolder.
+     * Add a requirement to this CompositeRequirement.
      *
      * @param req AbstractRequirement to add
      */
@@ -49,16 +47,22 @@ public class RequirementsHolder {
 
     /**
      * Get the description of the requirements.
-     * If this requirementsholder contains multiple requirements, the string will made up of the following:
-     * <AbstractRequirement 1 description> OR <AbstractRequirement 2 description> OR etc.
+     * If this CompositeRequirement contains multiple requirements, the string will made up of the following:
+     * <Requirement 1 description> OR <Requirement 2 description> OR etc.
      *
      * @return a string representing the description (or combined description) of the requirements.
      */
     public String getDescription() {
-        final StringBuilder builder = new StringBuilder("");
+
+        final StringBuilder builder = new StringBuilder();
 
         final List<AbstractRequirement> reqs = this.getRequirements();
         final int size = reqs.size();
+
+        // Check whether a requirement has a custom description. If so, return that one.
+        if (size > 0 && reqs.get(0).hasCustomDescription()) {
+            return reqs.get(0).getCustomDescription();
+        }
 
         if (size == 0) {
             return "";
@@ -75,14 +79,16 @@ public class RequirementsHolder {
 
             if (i == 0) {
                 // First index
-                builder.append(desc + " or ");
+                builder.append(desc).append(" or ");
             } else {
                 // Other indices
 
                 // Find the part of this description that is the same as the first description
                 // For example, let's say we have 2 requirements: kill 2 cows or kill 10 creepers.
-                // As a description, we don't want to have 'Kill 2 cows or kill 10 creepers', as the 'kill' is redundant. 
-                // Hence, we remove the 'redundant' part of the description by searching for the index where the two descriptions differ
+                // As a description, we don't want to have 'Kill 2 cows or kill 10 creepers', as the 'kill' is
+                // redundant.
+                // Hence, we remove the 'redundant' part of the description by searching for the index where the two
+                // descriptions differ
                 final int difIndex = this.getDifferenceIndex(original, desc);
 
                 // Did not find the same index
@@ -97,7 +103,7 @@ public class RequirementsHolder {
                 if (i == (size - 1)) {
                     builder.append(desc);
                 } else {
-                    builder.append(desc + " or ");
+                    builder.append(desc).append(" or ");
                 }
 
             }
@@ -126,13 +132,13 @@ public class RequirementsHolder {
     }
 
     /**
-     * Get the progress for a player for this requirementsholder. For more info, see {@link #getDescription()}.
+     * Get the progress for a player for this CompositeRequirement. For more info, see {@link #getDescription()}.
      *
      * @param player Player to check
      * @return progress string in the format as {@link #getDescription()}.
      */
     public String getProgress(final Player player) {
-        final StringBuilder builder = new StringBuilder("");
+        final StringBuilder builder = new StringBuilder();
 
         final List<AbstractRequirement> reqs = this.getRequirements();
         final int size = reqs.size();
@@ -152,7 +158,7 @@ public class RequirementsHolder {
 
             if (i == 0) {
                 // First index
-                builder.append(progress + " or ");
+                builder.append(progress).append(" or ");
             } else {
 
                 final int difIndex = this.getDifferenceIndex(original, progress);
@@ -162,7 +168,7 @@ public class RequirementsHolder {
                 if (i == (size - 1)) {
                     builder.append(progress);
                 } else {
-                    builder.append(progress + " or ");
+                    builder.append(progress).append(" or ");
                 }
 
             }
@@ -172,12 +178,12 @@ public class RequirementsHolder {
     }
 
     /**
-     * Get the requirement id of this requirementsholder. Since all the requiremens that are part of this requirementsholder are essentialy specified as the same
-     * requirement in the Paths file, we may assume that all requirement ids are the same.
+     * Get the requirement id of this CompositeRequirement. All requirements in the CompositeRequirement have the
+     * same requirement id.
      *
-     * @return the requirement id of any of the requirements of this requirementsholder.
+     * @return the requirement id of any of the requirements of this CompositeRequirement.
      */
-    public int getReqID() {
+    public int getRequirementId() {
         // All req ids are the same.
         for (final AbstractRequirement r : this.getRequirements()) {
             return r.getId();
@@ -186,22 +192,42 @@ public class RequirementsHolder {
         return -1;
     }
 
+    /**
+     * Get requirements that are part of this CompositeRequirement.
+     *
+     * @return a list of requirements.
+     */
     public List<AbstractRequirement> getRequirements() {
         return this.requirements;
     }
 
+    /**
+     * Set requirements that are part of this CompositeRequirement.
+     *
+     * @param requirements requirements to set.
+     */
     public void setRequirements(final List<AbstractRequirement> requirements) {
         this.requirements = requirements;
     }
 
+    /**
+     * Get results of this CompositeRequirement.
+     *
+     * @return list of results
+     */
     public List<AbstractResult> getResults() {
         for (final AbstractRequirement r : this.getRequirements()) {
             return r.getAbstractResults();
         }
 
-        return new ArrayList<AbstractResult>();
+        return new ArrayList<>();
     }
 
+    /**
+     * Get whether this CompositeRequirement is optional.
+     *
+     * @return
+     */
     public boolean isOptional() {
         // If any requirement is optional, they are all optional
         for (final AbstractRequirement r : this.getRequirements()) {
@@ -213,74 +239,25 @@ public class RequirementsHolder {
     }
 
     /**
-     * Check whether a player has completed any of the requirements in this RequirementsHolder.
+     * Check whether a player has completed any of the requirements in this CompositeRequirement.
      *
-     * @param player       Player to check.
-     * @param forceCommand whether this command is forced.
+     * @param player Player to check.
      * @return true if the player meets any of the requirements.
      */
     // Check if the player meets any of the requirements
     // Using OR logic.
     // If any of the requirements is true, you can return true since were using
     // OR logic.
-    public boolean meetsRequirement(final Player player, boolean forceCommand) {
-
-        UUID uuid = player.getUniqueId();
+    public boolean meetsRequirement(final Player player) {
 
         for (final AbstractRequirement r : this.getRequirements()) {
 
-            final int reqID = r.getId();
+            if (r.meetsRequirement(player)) {
+                return true;
+            }
 
             // When optional, always true
             if (r.isOptional()) {
-                return true;
-            }
-
-            if (this.isPrerequisite()) {
-                // If this requirement doesn't auto complete and hasn't already
-                // been completed, continue to next requirement.
-                if (!r.useAutoCompletion() && !r.isCompleted(uuid)) {
-                    continue;
-                }
-            } else {
-                // If this requirement doesn't auto complete and hasn't already
-                // been completed, continue to next requirement.
-                if (!r.useAutoCompletion() && !r.isCompleted(uuid)) {
-                    // If not forcing via /ar complete command, we return false.
-                    if (!forceCommand) {
-                        return false;
-                    }
-
-                    continue;
-                }
-            }
-
-            // Player has completed it already, so we return true.
-            if (r.isCompleted(uuid)) {
-                return true;
-            }
-
-            if (!r.meetsRequirement(player)) {
-                continue;
-            } else {
-                // Player meets requirement, thus perform results of
-                // requirement
-                // Perform results of a requirement as well
-
-                // Player has not completed this requirement -> perform
-                // results
-                if (this.isPrerequisite()) {
-                    // Do nothing for now, must be implemented in some future
-                } else {
-                    plugin.getPlayerDataConfig().addCompletedRequirement(uuid, reqID);
-                }
-
-                if (!this.isPrerequisite()) {
-                    // Let player know he completed a requirement
-                    player.sendMessage(Lang.COMPLETED_REQUIREMENT.getConfigValue(r.getId() + 1, r.getDescription()));
-                }
-
-                this.runResults(player);
                 return true;
             }
         }
@@ -288,6 +265,11 @@ public class RequirementsHolder {
         return false;
     }
 
+    /**
+     * Get whether this CompositeRequirement automatically completes.
+     *
+     * @return true if it completes automatically, false otherwise.
+     */
     public boolean useAutoCompletion() {
         for (final AbstractRequirement r : this.getRequirements()) {
             if (r.useAutoCompletion())
@@ -298,7 +280,7 @@ public class RequirementsHolder {
     }
 
     /**
-     * Run the results of this requirementsholder (if there are any).
+     * Run the results of this CompositeRequirement (if there are any).
      *
      * @param player Player to run it for.
      */
@@ -321,9 +303,9 @@ public class RequirementsHolder {
     }
 
     /**
-     * Check whether this requirementsholder is used as a prerequisite.
+     * Check whether this CompositeRequirement is used as a prerequisite.
      *
-     * @return
+     * @return true when it is used as a prerequisite.
      */
     public boolean isPrerequisite() {
         for (AbstractRequirement req : this.requirements) {

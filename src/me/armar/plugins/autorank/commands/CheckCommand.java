@@ -1,22 +1,19 @@
 package me.armar.plugins.autorank.commands;
 
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.api.events.CheckCommandEvent;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.pathbuilder.Path;
-import me.armar.plugins.autorank.pathbuilder.holders.RequirementsHolder;
+import me.armar.plugins.autorank.pathbuilder.holders.CompositeRequirement;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
-import me.armar.plugins.autorank.storage.TimeType;
 import me.armar.plugins.autorank.util.AutorankTools;
-import me.armar.plugins.autorank.util.AutorankTools.Time;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Iterator;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,187 +28,166 @@ public class CheckCommand extends AutorankCommand {
         plugin = instance;
     }
 
-    public void check(final CommandSender sender, final Player player) {
-        // Call event to let other plugins know that a player wants to check
-        // itself.
-        // Create the event here
-        final CheckCommandEvent event = new CheckCommandEvent(player);
-        // Call the event
-        Bukkit.getServer().getPluginManager().callEvent(event);
+    // Show an overview of paths.
+    public void showPathsOverview(CommandSender sender, String playerName, UUID uuid) {
 
-        final UUID uuid = plugin.getUUIDStorage().getStoredUUID(player.getName());
+        plugin.getPathManager().autoAssignPaths(plugin.getServer().getPlayer(uuid));
 
-        // Check if event is cancelled.
-        if (event.isCancelled())
+        List<Path> activePaths = plugin.getPathManager().getActivePaths(uuid);
+
+        if (activePaths.isEmpty()) {
+            sender.sendMessage(ChatColor.GOLD + playerName + ChatColor.RED + " does not have any active paths.");
             return;
-
-        Path activePath = plugin.getPathManager().getCurrentPath(uuid);
-
-        if (activePath == null) {
-            // Try assign a path to a player first.
-            activePath = plugin.getPathManager().autoAssignPath(player);
         }
 
-        // No path assigned to the player.
-        if (activePath == null) {
-            // Player should first choose a path.
+        sender.sendMessage(String.format(ChatColor.GREEN + "----- " + ChatColor.GRAY + "[Progress of paths for" +
+                " " +
+                ChatColor.GOLD + "%s" + ChatColor.GRAY + "] " + ChatColor.GREEN + " -----", playerName));
 
-            final List<Path> paths = plugin.getPathManager().getPaths();
+        for (Path activePath : activePaths) {
 
-            // Remove paths that have already been completed by the
-            // user.
-            for (Iterator<Path> iterator = paths.iterator(); iterator.hasNext(); ) {
-                Path path = iterator.next();
+            StringBuilder message = new StringBuilder(ChatColor.GRAY + "Progress of '" + ChatColor.BLUE + activePath
+                    .getDisplayName() + ChatColor.GRAY + "': ");
 
-                // If this path can be done over and over again, we obviously
-                // don't want to remove it.
-                if (plugin.getPathsConfig().allowInfinitePathing(path.getInternalName())) {
-                    continue;
-                }
+            int totalRequirements = activePath.getRequirements().size();
+            int completedRequirements = activePath.getCompletedRequirements(uuid).size();
 
-                // Remove it if player already completed the path
-                if (plugin.getPlayerDataConfig().hasCompletedPath(uuid, path.getInternalName())) {
-                    iterator.remove();
-                }
+            double completeRatio = completedRequirements * 1.0 / totalRequirements * 1.0;
+
+            message.append(ChatColor.GRAY + "[");
+
+            for (int i = 0; i < completeRatio * 10; i++) {
+                message.append(ChatColor.GREEN + "|");
             }
 
-            if (paths.isEmpty()) {
-                sender.sendMessage(Lang.NO_PATH_LEFT_TO_CHOOSE.getConfigValue(sender.getName(), AutorankTools
-                        .timeToString(plugin.getPlayTimeManager().getTimeOfPlayer(player.getName(), true), Time
-                                .SECONDS)));
-
-                return;
+            for (int i = 0; i < 10 - completeRatio * 10; i++) {
+                message.append(ChatColor.RED + "|");
             }
 
-            sender.sendMessage(ChatColor.BLACK + "-------------------------------------");
-            sender.sendMessage(ChatColor.BLUE + "There are multiple ranking paths, please choose one with "
-                    + ChatColor.RED + "'/ar choose'" + ChatColor.BLUE + ".");
-            sender.sendMessage(
-                    ChatColor.GREEN + "You can always change later if you want, but you'll lose your progress.");
-            sender.sendMessage(ChatColor.BLUE + "To check what each path looks like, use " + ChatColor.RED
-                    + "'/ar view'" + ChatColor.DARK_BLUE + ".");
-            sender.sendMessage(ChatColor.YELLOW + "You can see a list of paths with '" + ChatColor.RED + "/ar view list"
-                    + ChatColor.YELLOW + "'.");
-            sender.sendMessage(ChatColor.BLACK + "-------------------------------------");
-            return;
+            message.append(ChatColor.GRAY + "]").append(ChatColor.GOLD + " (").append(new BigDecimal(completeRatio *
+                    100).setScale(2, RoundingMode.HALF_UP)).append("%)");
 
+            sender.sendMessage(message.toString());
         }
 
-        // Get display name of Path
-        String displayName = activePath.getDisplayName();
+    }
 
-        if (displayName == null) {
-            displayName = "Unknown path name";
+    // Show specific requirements for a path.
+    public void showSpecificPath(CommandSender sender, String playerName, UUID uuid, Path path) {
+
+        // Check player first.
+        plugin.getPlayerChecker().checkPlayer(plugin.getServer().getPlayer(uuid));
+
+        sender.sendMessage(ChatColor.DARK_AQUA + "-----------------------");
+
+        sender.sendMessage(ChatColor.DARK_GREEN + "You are viewing the path '" + ChatColor.GOLD + path.getDisplayName
+                () + ChatColor.DARK_GREEN + "' for " +
+                playerName + ".");
+
+        sender.sendMessage(ChatColor.DARK_AQUA + "-----------------------");
+
+        sender.sendMessage(ChatColor.GRAY + "Requirements:");
+
+        List<CompositeRequirement> allRequirements = path.getRequirements();
+
+        List<CompositeRequirement> completedRequirements = path.getCompletedRequirements(uuid);
+
+        final List<String> messages = plugin.getPlayerChecker().formatRequirementsToList(allRequirements,
+                completedRequirements);
+
+        for (final String message : messages) {
+            AutorankTools.sendColoredMessage(sender, message);
         }
 
-        // Start building layout
-
-        String layout = plugin.getSettingsConfig().getCheckCommandLayout();
-
-        layout = layout.replace("&path", displayName);
-        layout = layout.replace("&p", player.getName());
-        layout = layout.replace("&time", AutorankTools
-                .timeToString(plugin.getPlayTimeManager().getTimeOfPlayer(player.getName(), true), Time.SECONDS));
-        layout = layout.replace("&globaltime",
-                AutorankTools.timeToString(plugin.getPlayTimeManager().getGlobalPlayTime(TimeType.TOTAL_TIME, uuid),
-                        Time
-                        .MINUTES));
-
-        boolean showReqs = false;
-
-        List<RequirementsHolder> holders = activePath.getRequirements();
-
-        if (holders == null || holders.size() == 0) {
-            layout = layout.replace("&reqs", Lang.NO_FURTHER_PATH_FOUND.getConfigValue());
-        } else {
-            layout = layout.replace("&reqs", "");
-            showReqs = true;
-        }
-
-        // Send layout to player
-
-        AutorankTools.sendColoredMessage(sender, layout);
-
-        // Don't get requirements when the player has no new requirements
-        if (!showReqs)
-            return;
-
-        //boolean onlyOptional = true;
-        boolean meetsAllRequirements = false;
-
-        // Get a list of completed requirements.
-        List<RequirementsHolder> completedRequirements = plugin.getPlayerChecker().getCompletedRequirementsHolders(player);
-
-        // Player completed all requirements of his path
-        if (completedRequirements.size() == plugin.getPlayerChecker().getAllRequirementsHolders(player).size()) {
-            meetsAllRequirements = true;
-        }
-
-        String reqMessage2 = "";
-
-        if (plugin.getPlayerDataConfig().hasCompletedPath(uuid, activePath.getInternalName())) {
-            reqMessage2 = " " + Lang.ALREADY_COMPLETED_PATH.getConfigValue();
-        } else {
-            reqMessage2 = Lang.COMPLETED_PATH_NOW.getConfigValue();
-        }
-
-        // Player meets all requirements
-        if (meetsAllRequirements /*|| onlyOptional*/) {
-            AutorankTools.sendColoredMessage(sender, Lang.MEETS_ALL_REQUIREMENTS.getConfigValue(displayName) + reqMessage2);
-        } else {
-            // Player does not meet all requirements, so show which requirements he does not meet yet.
-
-            // Show requirements list
-            final List<String> messages = plugin.getPlayerChecker().formatRequirementsToList(holders,
-                    completedRequirements);
-
-            for (final String message : messages) {
-                AutorankTools.sendColoredMessage(sender, message);
-            }
-
-        }
-
-        // Check player again.
-        plugin.getPlayerChecker().checkPlayer(player);
     }
 
     @Override
     public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
-        // This is a local check. It will not show you the database numbers
         if (args.length > 1) {
+            // Check a specific path or check player
 
-            if (!this.hasPermission(AutorankPermission.CHECK_OTHERS,
-                    sender)) {
+            boolean showPathsOverview = true;
+
+            String targetPlayerName;
+            String targetPathName = null;
+
+            if (args.length > 2) {
+                // Sender performed /ar check <player> <path>
+                showPathsOverview = false;
+
+                targetPlayerName = args[1];
+                targetPathName = AutorankTools.getStringFromArgs(args, 2);
+
+            } else {
+                // Sender performed /ar check <player>
+                targetPlayerName = args[1];
+            }
+
+            // Check if console is performing this command.
+            if (targetPlayerName == null && !(sender instanceof Player)) {
+                sender.sendMessage("You must specify a player to view path data of!");
                 return true;
             }
 
-            final Player player = plugin.getServer().getPlayer(args[1]);
-            if (player == null) {
-
-                final int time = plugin.getPlayTimeManager().getTimeOfPlayer(args[1], true);
-
-                if (time <= 0) {
-                    sender.sendMessage(Lang.PLAYER_IS_INVALID.getConfigValue(args[1]));
+            // Check if the sender is allowed to view other players.
+            if (targetPlayerName != null && !targetPlayerName.equalsIgnoreCase(sender.getName())) {
+                if (!this.hasPermission(AutorankPermission.CHECK_OTHERS, sender)) {
                     return true;
                 }
-
-                final UUID uuid = plugin.getUUIDStorage().getStoredUUID(args[1]);
-
-                if (plugin.getUUIDStorage().hasRealName(uuid)) {
-                    args[1] = plugin.getUUIDStorage().getRealName(uuid);
-                }
-
-                AutorankTools.sendColoredMessage(sender,
-                        Lang.HAS_PLAYED_FOR.getConfigValue(args[1], AutorankTools.timeToString(time, Time.SECONDS)));
-            } else {
-                if (AutorankTools.isExcludedFromRanking(player)) {
-                    sender.sendMessage(ChatColor.RED + Lang.PLAYER_IS_EXCLUDED.getConfigValue(player.getName()));
-                    return true;
-                }
-                check(sender, player);
             }
+
+            // If we are showing a path overview, we need a target player.
+            if (showPathsOverview && targetPlayerName == null) {
+                targetPlayerName = sender.getName();
+            }
+
+            // Player does not exist
+            if (!showPathsOverview && !plugin.getServer().getOfflinePlayer(targetPlayerName).hasPlayedBefore()) {
+                // Player does not exist, but we are expecting a player, so be probably look for a path instead.
+                targetPlayerName = sender.getName();
+                targetPathName = AutorankTools.getStringFromArgs(args, 1);
+            }
+
+            Path targetPath = plugin.getPathManager().findPathByDisplayName(targetPathName, false);
+
+            if (!showPathsOverview && targetPath == null) {
+                sender.sendMessage(ChatColor.RED + "Path " + targetPathName + " does not exist.");
+                return true;
+            }
+
+            final Player player = plugin.getServer().getPlayer(targetPlayerName);
+
+            if (plugin.getServer().getPlayer(targetPlayerName) == null) {
+                sender.sendMessage(ChatColor.RED + "The target player must be online to view their data!");
+                return true;
+            }
+
+            if (AutorankTools.isExcludedFromRanking(player)) {
+                sender.sendMessage(ChatColor.RED + Lang.PLAYER_IS_EXCLUDED.getConfigValue(player.getName()));
+                return true;
+            }
+
+            if (!showPathsOverview && !plugin.getPathManager().hasActivePath(player.getUniqueId(), targetPath)) {
+                sender.sendMessage(ChatColor.GOLD + player.getName() + ChatColor.RED + " does not have " + ChatColor
+                        .GRAY + targetPath.getDisplayName() + ChatColor.RED + " as an active path!");
+                return true;
+            }
+
+            if (showPathsOverview) {
+                this.showPathsOverview(sender, player.getName(), player.getUniqueId());
+            } else {
+                this.showSpecificPath(sender, player.getName(), player.getUniqueId(), targetPath);
+            }
+
+            int time = plugin.getPlayTimeManager().getTimeOfPlayer(targetPlayerName, true);
+
+            AutorankTools.sendColoredMessage(sender,
+                    Lang.HAS_PLAYED_FOR.getConfigValue(targetPlayerName, AutorankTools.timeToString(time,
+                            AutorankTools.Time.SECONDS)));
+
         } else if (sender instanceof Player) {
+            // Show overview of active paths of the sender
             if (!this.hasPermission(AutorankPermission.CHECK_SELF,
                     sender)) {
                 return true;
@@ -221,9 +197,14 @@ public class CheckCommand extends AutorankCommand {
                 sender.sendMessage(ChatColor.RED + Lang.PLAYER_IS_EXCLUDED.getConfigValue(sender.getName()));
                 return true;
             }
+
             final Player player = (Player) sender;
-            check(sender, player);
+
+            this.showPathsOverview(sender, player.getName(), player.getUniqueId());
+
+            //check(sender, player);
         } else {
+            // We cannot check paths of console.
             AutorankTools.sendColoredMessage(sender, Lang.CANNOT_CHECK_CONSOLE.getConfigValue());
         }
         return true;
@@ -241,6 +222,6 @@ public class CheckCommand extends AutorankCommand {
 
     @Override
     public String getUsage() {
-        return "/ar check [player]";
+        return "/ar check <player> <path>";
     }
 }

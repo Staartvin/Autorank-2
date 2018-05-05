@@ -2,7 +2,7 @@ package me.armar.plugins.autorank.validations;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.pathbuilder.Path;
-import me.armar.plugins.autorank.pathbuilder.holders.RequirementsHolder;
+import me.armar.plugins.autorank.pathbuilder.holders.CompositeRequirement;
 import me.armar.plugins.autorank.pathbuilder.requirement.AbstractRequirement;
 import me.armar.plugins.autorank.pathbuilder.requirement.InGroupRequirement;
 
@@ -35,20 +35,20 @@ public class ValidateHandler {
      */
     public boolean validatePermGroups() {
 
-        List<Path> paths = plugin.getPathManager().getPaths();
+        List<Path> paths = plugin.getPathManager().getAllPaths();
 
         List<String> permGroups = new ArrayList<>();
 
         Collection<String> vaultGroups = plugin.getPermPlugHandler().getPermissionPlugin().getGroups();
 
         for (Path path : paths) {
-            List<RequirementsHolder> holders = new ArrayList<>();
+            List<CompositeRequirement> holders = new ArrayList<>();
 
             holders.addAll(path.getPrerequisites());
             holders.addAll(path.getRequirements());
 
             // Check if there are any group requirements/prerequisites
-            for (RequirementsHolder reqHolder : holders) {
+            for (CompositeRequirement reqHolder : holders) {
                 for (AbstractRequirement req : reqHolder.getRequirements()) {
                     if (req instanceof InGroupRequirement) {
 

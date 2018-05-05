@@ -3,7 +3,7 @@ package me.armar.plugins.autorank.api;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.addons.AddOnManager;
 import me.armar.plugins.autorank.pathbuilder.Path;
-import me.armar.plugins.autorank.pathbuilder.holders.RequirementsHolder;
+import me.armar.plugins.autorank.pathbuilder.holders.CompositeRequirement;
 import me.armar.plugins.autorank.pathbuilder.requirement.AbstractRequirement;
 import me.armar.plugins.autorank.pathbuilder.result.AbstractResult;
 import me.armar.plugins.autorank.storage.StorageProvider;
@@ -44,38 +44,41 @@ public class API {
     }
 
     /**
-     * Get all {@linkplain RequirementsHolder}s for a player at the exact
+     * Get all {@linkplain CompositeRequirement}s for a player at the exact
      * moment. This does not consider already finished requirement but just
      * mirrors the Paths.yml file.
      *
      * @param player Player to get the requirements from.
-     * @return a list of {@linkplain RequirementsHolder}s; An empty list when
+     * @return a list of {@linkplain CompositeRequirement}s; An empty list when
      * none are found.
      */
-    public List<RequirementsHolder> getAllRequirements(final Player player) {
-        return plugin.getPlayerChecker().getAllRequirementsHolders(player);
+    @Deprecated
+    public List<CompositeRequirement> getAllRequirements(final Player player) {
+        return new ArrayList<>();
     }
 
     /**
-     * Get all {@linkplain RequirementsHolder}s that are not yet completed.
+     * Get all {@linkplain CompositeRequirement}s that are not yet completed.
      *
      * @param player Player to get the failed requirements for.
-     * @return list of {@linkplain RequirementsHolder}s that still have to be
+     * @return list of {@linkplain CompositeRequirement}s that still have to be
      * completed.
      */
-    public List<RequirementsHolder> getFailedRequirements(final Player player) {
-        return plugin.getPlayerChecker().getFailedRequirementsHolders(player);
+    @Deprecated
+    public List<CompositeRequirement> getFailedRequirements(final Player player) {
+        return new ArrayList<>();
     }
 
     /**
-     * Get all {@linkplain RequirementsHolder}s that the player has already completed.
+     * Get all {@linkplain CompositeRequirement}s that the player has already completed.
      * If the player does not have a current path, it will return an empty list.
      *
      * @param player Player to get completed requirements for.
      * @return a list of completed requirements.
      */
-    public List<RequirementsHolder> getCompletedRequirements(final Player player) {
-        return plugin.getPlayerChecker().getCompletedRequirementsHolders(player);
+    @Deprecated
+    public List<CompositeRequirement> getCompletedRequirements(final Player player) {
+        return new ArrayList<>();
     }
 
     /**
@@ -165,13 +168,13 @@ public class API {
     }
 
     /**
-     * Get the active path of a player. Returns null if player has no path.
+     * Get the active paths of a player. Returns empty list if no paths are active.
      *
      * @param uuid UUID of the player
-     * @return {@link Path} object or null if player has no active path.
+     * @return List of {@link Path} objects or empty if player has no active path.
      */
-    public Path getActivePath(UUID uuid) {
-        return plugin.getPathManager().getCurrentPath(uuid);
+    public List<Path> getActivePaths(UUID uuid) {
+        return plugin.getPathManager().getActivePaths(uuid);
     }
 
     /**
@@ -182,19 +185,7 @@ public class API {
      * have been completed.
      */
     public List<Path> getCompletedPaths(UUID uuid) {
-        List<String> completedPathsString = plugin.getPlayerDataConfig().getCompletedPaths(uuid);
-
-        List<Path> completedPaths = new ArrayList<>();
-
-        for (String pathString : completedPathsString) {
-            Path path = plugin.getPathManager().matchPathbyInternalName(pathString, false);
-
-            if (path != null) {
-                completedPaths.add(path);
-            }
-        }
-
-        return completedPaths;
+        return plugin.getPathManager().getCompletedPaths(uuid);
     }
 
     /**
@@ -203,20 +194,9 @@ public class API {
      * @param uuid UUID of the player
      * @return a list of {@link Path} objects
      */
+    @Deprecated
     public List<Path> getStartedPaths(UUID uuid) {
-        List<String> startedPathsString = plugin.getPlayerDataConfig().getStartedPaths(uuid);
-
-        List<Path> startedPaths = new ArrayList<>();
-
-        for (String pathString : startedPathsString) {
-            Path path = plugin.getPathManager().matchPathbyInternalName(pathString, false);
-
-            if (path != null) {
-                startedPaths.add(path);
-            }
-        }
-
-        return startedPaths;
+        return new ArrayList<>();
     }
 
     /**

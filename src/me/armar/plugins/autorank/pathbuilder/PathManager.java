@@ -2,15 +2,13 @@ package me.armar.plugins.autorank.pathbuilder;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.language.Lang;
-import me.armar.plugins.autorank.pathbuilder.holders.RequirementsHolder;
+import me.armar.plugins.autorank.pathbuilder.builders.PathBuilder;
+import me.armar.plugins.autorank.pathbuilder.config.PlayerDataConfig;
+import me.armar.plugins.autorank.pathbuilder.holders.CompositeRequirement;
 import me.armar.plugins.autorank.pathbuilder.result.AbstractResult;
-import me.armar.plugins.autorank.util.AutorankTools;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Handles all things that have to do with paths checking
@@ -21,15 +19,21 @@ import java.util.UUID;
  */
 public class PathManager {
 
-    private PathBuilder builder;
+    private final Autorank plugin;
+    private me.armar.plugins.autorank.pathbuilder.builders.PathBuilder builder;
     // A list of paths any player is able to take
     private List<Path> paths = new ArrayList<Path>();
-
-    private final Autorank plugin;
+    // PlayerDataConfig keeps track of what paths are active for a player.
+    private PlayerDataConfig playerDataConfig;
 
     public PathManager(final Autorank plugin) {
         this.plugin = plugin;
-        setBuilder(new PathBuilder(plugin));
+        setBuilder(new me.armar.plugins.autorank.pathbuilder.builders.PathBuilder(plugin));
+
+        // Initialize player data config.
+        playerDataConfig = new PlayerDataConfig(plugin);
+
+        playerDataConfig.loadConfig();
     }
 
     /**
@@ -45,9 +49,9 @@ public class PathManager {
 
         for (Path path : paths) {
             String pathName = path.getInternalName();
-            List<RequirementsHolder> requirements = path.getRequirements();
-            List<RequirementsHolder> prerequisites = path.getPrerequisites();
-            List<AbstractResult> abstractResults = path.getAbstractResults();
+            List<CompositeRequirement> requirements = path.getRequirements();
+            List<CompositeRequirement> prerequisites = path.getPrerequisites();
+            List<AbstractResult> abstractResults = path.getResults();
 
             int count = 1;
 
@@ -57,7 +61,7 @@ public class PathManager {
 
             messages.add("Prerequisites: ");
 
-            for (RequirementsHolder prereq : prerequisites) {
+            for (CompositeRequirement prereq : prerequisites) {
                 messages.add("    " + count + ". " + prereq.getDescription());
                 count++;
             }
@@ -67,7 +71,7 @@ public class PathManager {
 
             messages.add("Requirements: ");
 
-            for (RequirementsHolder req : requirements) {
+            for (CompositeRequirement req : requirements) {
                 messages.add("    " + count + ". " + req.getDescription());
                 count++;
             }
@@ -89,25 +93,151 @@ public class PathManager {
         return messages;
     }
 
-    public PathBuilder getBuilder() {
+    public me.armar.plugins.autorank.pathbuilder.builders.PathBuilder getBuilder() {
         return builder;
     }
 
+    public void setBuilder(final PathBuilder builder) {
+        this.builder = builder;
+    }
+
     /**
-     * Get the path that the player is currently on.
+     * Get paths that are active for a player
      *
      * @param uuid UUID of the player
-     * @return path of the player, or null if not found.
+     * @return paths that a player has chosen and is currently on.
      */
-    public Path getCurrentPath(UUID uuid) {
-        String chosenPath = plugin.getPlayerDataConfig().getChosenPath(uuid);
+    public List<Path> getActivePaths(UUID uuid) {
+        Collection<String> activePathNames = this.playerDataConfig.getActivePaths(uuid);
 
-        // Unknown path, so return null
-        if (chosenPath.equalsIgnoreCase("unknown")) {
-            return null;
+        List<Path> activePaths = new ArrayList<>();
+
+        for (String activePathName : activePathNames) {
+            Path activePath = findPathByInternalName(activePathName, false);
+
+            if (activePath == null) {
+                continue;
+            }
+
+            activePaths.add(activePath);
         }
 
-        return this.matchPathbyInternalName(chosenPath, true);
+        return activePaths;
+    }
+
+    /**
+     * Check whether a player has a path set as active.
+     *
+     * @param uuid UUID of the player
+     * @param path Path to check
+     * @return true if the given path is active for the given player. False otherwise.
+     */
+    public boolean hasActivePath(UUID uuid, Path path) {
+        return getActivePaths(uuid).contains(path);
+    }
+
+    /**
+     * Reset the completed requirements of all active paths of a player.
+     *
+     * @param uuid UUID of the player.
+     */
+    public void resetProgressOnActivePaths(UUID uuid) {
+        this.playerDataConfig.setActivePaths(uuid, new ArrayList<>());
+    }
+
+    /**
+     * Reset the progress of a player for a given path. It will reset both the completed requirements and
+     * prerequisites of the given path.
+     *
+     * @param uuid UUID of the player
+     * @param path Path to reset progress of.
+     */
+    public void resetProgressOfPath(UUID uuid, Path path) {
+        this.playerDataConfig.setCompletedPrerequisites(uuid, path.getInternalName(), new ArrayList<>());
+        this.playerDataConfig.setCompletedRequirements(uuid, path.getInternalName(), new ArrayList<>());
+    }
+
+    /**
+     * Remove all active paths a player currently has.
+     *
+     * @param uuid UUID of the player
+     */
+    public void resetActivePaths(UUID uuid) {
+        for (String activePathName : this.playerDataConfig.getActivePaths(uuid)) {
+            this.playerDataConfig.removeActivePath(uuid, activePathName);
+        }
+    }
+
+    /**
+     * Get the paths that a player has completed. A path has been completed when all requirements have been met by
+     * the player. Note that completing a path does not mean that a player cannot do the path again, as some paths
+     * are repeatable.
+     *
+     * @param uuid UUID of the player
+     * @return a list of paths a player has completed.
+     */
+    public List<Path> getCompletedPaths(UUID uuid) {
+        Collection<String> completedPathsNames = this.playerDataConfig.getCompletedPaths(uuid);
+
+        List<Path> completedPaths = new ArrayList<>();
+
+        for (String completedPathName : completedPathsNames) {
+            Path completedPath = this.findPathByInternalName(completedPathName, false);
+
+            if (completedPath == null) {
+                continue;
+            }
+
+            completedPaths.add(completedPath);
+        }
+
+        return completedPaths;
+    }
+
+    /**
+     * Remove all completed paths of a player.
+     *
+     * @param uuid UUID of the player
+     */
+    public void resetCompletedPaths(UUID uuid) {
+        for (String completedPath : this.playerDataConfig.getCompletedPaths(uuid)) {
+            this.playerDataConfig.removeCompletedPath(uuid, completedPath);
+        }
+    }
+
+
+    /**
+     * Add a completed requirement for a path for a player.
+     *
+     * @param uuid  UUID of the player
+     * @param path  Path
+     * @param reqId Id of the requirement.
+     */
+    public void addCompletedRequirement(UUID uuid, Path path, int reqId) {
+        this.playerDataConfig.addCompletedRequirement(uuid, path.getInternalName(), reqId);
+    }
+
+    /**
+     * Check whether a player has completed a requirement for a path.
+     *
+     * @param uuid  UUID of the player
+     * @param path  Path to check
+     * @param reqId Id of the requirement
+     * @return true if the player has completed the requirement, false otherwise.
+     */
+    public boolean hasCompletedRequirement(UUID uuid, Path path, int reqId) {
+        return this.playerDataConfig.hasCompletedRequirement(uuid, path.getInternalName(), reqId);
+    }
+
+    /**
+     * Check whether a player has completed a path.
+     *
+     * @param uuid UUID of the player
+     * @param path Path to check
+     * @return true when the player has completed a path, false otherwise.
+     */
+    public boolean hasCompletedPath(UUID uuid, Path path) {
+        return getCompletedPaths(uuid).contains(path);
     }
 
     /**
@@ -115,28 +245,59 @@ public class PathManager {
      *
      * @return a list of {@link Path} objects.
      */
-    public List<Path> getPaths() {
-        return new ArrayList<Path>(paths);
+    public List<Path> getAllPaths() {
+        return Collections.unmodifiableList(paths);
     }
 
     /**
-     * Get possible paths a player can take. A player can choose a path if he
-     * meets the prerequisites.
+     * Get paths that a player can choose. A player can choose a path if he
+     * meets the prerequisites of that path.
      *
      * @param player Player
      * @return List of paths that a player can choose.
      */
-    public List<Path> getPossiblePaths(Player player) {
+    public List<Path> getEligiblePaths(Player player) {
         List<Path> possibilities = new ArrayList<>();
 
-        for (Path path : this.getPaths()) {
-            // Add path to possibilities, if player meets all prerequisites
-            if (path.meetsPrerequisites(player)) {
-                possibilities.add(path);
+        for (Path path : this.getAllPaths()) {
+
+            // The path is not eligible, so skip it.
+            if (!isPathEligible(player, path)) {
+                continue;
             }
+
+            // Add path to possibilities, if player meets all prerequisites
+            possibilities.add(path);
         }
 
         return possibilities;
+    }
+
+    /**
+     * Check whether a path is eligible for a player. A path is eligible for a player if all of the following apply:
+     * <ul>
+     * <li>The path is not active for the player.</li>
+     * <li>The player has not completed the path yet, or the path is repeatable.</li>
+     * <li>The player meets the prerequisites of the path.</li>
+     * </ul>
+     *
+     * @param player Player to check
+     * @param path   Path to check
+     * @return true if the path is eligible for the given player.
+     */
+    public boolean isPathEligible(Player player, Path path) {
+        // A path is not eligible when a player has already has it as active.
+        if (hasActivePath(player.getUniqueId(), path)) {
+            return false;
+        }
+
+        // If a path has been completed and cannot be repeated, the player cannot take this path again.
+        if (hasCompletedPath(player.getUniqueId(), path) && !path.isRepeatable()) {
+            return false;
+        }
+
+        // If a path does not meet the prerequisites of a path, the player cannot take the path.
+        return path.meetsPrerequisites(player);
     }
 
     /**
@@ -150,7 +311,8 @@ public class PathManager {
         List<Path> temp = builder.initialisePaths();
 
         if (temp == null) {
-            plugin.getLogger().warning("The paths file was not configured correctly! See your log file for more info.");
+            plugin.getLogger().warning("The paths file was not configured correctly! See your log file for more " +
+                    "info.");
             return;
         } else {
             paths = temp;
@@ -164,22 +326,22 @@ public class PathManager {
     }
 
     /**
-     * Get the path that corresponds to the given chosenPath string.
+     * Get the path that corresponds to the display name.
      *
-     * @param chosenPath      The display name of the path
+     * @param displayName     The display name of the path
      * @param isCaseSensitive true if we only match paths that have the exact wording,
      *                        taking into account case sensitivity.
      * @return matching path or null if none found.
      */
-    public Path matchPathbyDisplayName(String chosenPath, boolean isCaseSensitive) {
-        for (final Path path : this.getPaths()) {
+    public Path findPathByDisplayName(String displayName, boolean isCaseSensitive) {
+        for (final Path path : this.getAllPaths()) {
 
             if (isCaseSensitive) {
-                if (path.getDisplayName().equals(chosenPath)) {
+                if (path.getDisplayName().equals(displayName)) {
                     return path;
                 }
             } else {
-                if (path.getDisplayName().equalsIgnoreCase(chosenPath)) {
+                if (path.getDisplayName().equalsIgnoreCase(displayName)) {
                     return path;
                 }
             }
@@ -189,22 +351,22 @@ public class PathManager {
     }
 
     /**
-     * Get the path that corresponds to the given chosenPath string.
+     * Get the path that corresponds to the given internal name.
      *
-     * @param chosenPath      The internal name of the path
+     * @param internalName    The internal name of the path
      * @param isCaseSensitive true if we only match paths that have the exact wording,
      *                        taking into account case sensitivity.
      * @return matching path or null if none found.
      */
-    public Path matchPathbyInternalName(String chosenPath, boolean isCaseSensitive) {
-        for (final Path path : this.getPaths()) {
+    public Path findPathByInternalName(String internalName, boolean isCaseSensitive) {
+        for (final Path path : this.getAllPaths()) {
 
             if (isCaseSensitive) {
-                if (path.getInternalName().equals(chosenPath)) {
+                if (path.getInternalName().equals(internalName)) {
                     return path;
                 }
             } else {
-                if (path.getInternalName().equalsIgnoreCase(chosenPath)) {
+                if (path.getInternalName().equalsIgnoreCase(internalName)) {
                     return path;
                 }
             }
@@ -214,202 +376,125 @@ public class PathManager {
     }
 
     /**
-     * Assign a path to a player. It will reset their progress and run any
-     * results that should be performed.
+     * Assign a path to a player. This means that the path is now set to active for a player. A path can only be
+     * assigned to the player if it is eligible ({@link #isPathEligible(Player, Path)}) for the player.
      *
-     * @param player   Player to assign path to
-     * @param pathName Name of the path
+     * @param player Player to assign path to
+     * @param path   Path to check
+     * @throws IllegalArgumentException if the path is not eligible (see {@link #isPathEligible(Player, Path)}).
      */
-    public void assignPath(Player player, String pathName) {
-        // Set chosen path to target path
-        plugin.getPlayerDataConfig().setChosenPath(player.getUniqueId(), pathName);
+    public void assignPath(Player player, Path path) throws IllegalArgumentException {
 
-        // Reset progress
-        plugin.getPlayerDataConfig().setCompletedRequirements(player.getUniqueId(), new ArrayList<Integer>());
-
-        Path targetPath = plugin.getPathManager().matchPathbyInternalName(pathName, false);
-
-        // Check if a player did not already start this path before (or complete
-        // it).
-        // If he did not, perform the results for choosing that path.
-        if (plugin.getPlayerDataConfig().hasStartedPath(player.getUniqueId(), pathName)
-                || plugin.getPlayerDataConfig().getCompletedPaths(player.getUniqueId()).contains(pathName)) {
-            // Do not show anything - player already completed this path
-        } else {
-            // Perform results of path (if specified)
-            targetPath.performResultsUponChoosing(player);
-
-            // Add path to started path list
-            plugin.getPlayerDataConfig().addStartedPath(player.getUniqueId(), pathName);
-        }
-    }
-
-    /**
-     * Try to automatically assign a path to a player.
-     *
-     * @param player Player to assign a path to
-     * @return Path that has been automatically assigned to the player or null
-     * if none was assigned.
-     */
-    public Path autoAssignPath(Player player) {
-
-        // Player has already chosen a path, so we don't assign a new path
-        if (plugin.getPathManager().getCurrentPath(player.getUniqueId()) != null) {
-            return null;
-        }
-
-        // Get all paths that the player currently is able to choose.
-        List<Path> possiblePaths = plugin.getPathManager().getPossiblePaths(player);
-
-        // There is no path to choose.
-        if (possiblePaths.size() < 1) {
-            return null;
-        }
-
-        // Remove paths that should not be automatically chosen by Autorank
-        for (Iterator<Path> iterator = possiblePaths.iterator(); iterator.hasNext(); ) {
-            Path path = iterator.next();
-
-            // Remove path if Autorank should not auto choose it
-            if (!plugin.getPathsConfig().shouldAutoChoosePath(path.getInternalName())) {
-                iterator.remove();
-                continue;
-            }
-        }
-
-        // A list of all priorities (without duplicates)
-        List<Integer> priorities = new ArrayList<>();
-
-        // Add all priorities to a list
-        for (Path possiblePath : possiblePaths) {
-
-            int priority = plugin.getPathsConfig().getPriorityOfPath(possiblePath.getInternalName());
-
-            // Do not put in duplicates
-            if (priorities.contains(priority)) {
-                continue;
-            }
-
-            priorities.add(priority);
-        }
-
-        // Keep count to use for nth biggest element
-        int count = 0;
-
-        while (true) {
-            // Get the nth highest path
-            Integer tempHighest = AutorankTools.largestK(priorities, count);
-
-            // No highest found (array is empty)
-            if (tempHighest == null) {
-                return null;
-            }
-
-            int highestPriority = tempHighest;
-
-            // Get paths that have the highest priority
-            List<Path> highestPriorityPaths = new ArrayList<>();
-
-            for (Path path : possiblePaths) {
-                if (plugin.getPathsConfig().getPriorityOfPath(path.getInternalName()) == highestPriority) {
-                    highestPriorityPaths.add(path);
-                }
-            }
-
-            // Get a list of paths that have been completed already
-            List<String> completedPaths = plugin.getPlayerDataConfig().getCompletedPaths(player.getUniqueId());
-
-            // Loop through each path to see if there are any non-completed
-            // paths
-            for (Path path : highestPriorityPaths) {
-
-                // Path has already been completed
-                if (completedPaths.contains(path.getInternalName())) {
-                    continue;
-                }
-
-                // Assign path to the player
-                plugin.getPathManager().assignPath(player, path.getInternalName());
-
-                // Send message to player
-                player.sendMessage(Lang.AUTOMATICALLY_ASSIGNED_PATH.getConfigValue(path.getDisplayName()));
-
-                // Return the path that has been assigned to the player
-                return path;
-            }
-
-            // All paths were already completed, so now look at those paths that
-            // a player is allowed to repeat
-
-            // Since all paths have been completed, just look at the first path
-            // that is allowed to be repeated.
-            for (Path path : highestPriorityPaths) {
-                if (plugin.getPathsConfig().allowInfinitePathing(path.getInternalName())) {
-
-                    // Assign path to player
-                    this.assignPath(player, path.getInternalName());
-
-                    // Send message to player
-                    player.sendMessage(Lang.AUTOMATICALLY_ASSIGNED_PATH.getConfigValue(path.getDisplayName()));
-
-                    return path;
-                }
-            }
-
-            // We did not find a path, so continue to next biggest elements
-            count++;
-        }
-    }
-
-    public void setBuilder(final PathBuilder builder) {
-        this.builder = builder;
-    }
-
-    /**
-     * Get the paths the player is able to choose. It checks whether the player has already completed the path (and
-     * whether it can be completed indefinitely) and whether it should be shown based on the prerequisites of the player.
-     *
-     * @param player Player to get the paths for. If null, all the known paths of Autorank will be returned.
-     * @return a list of paths that the player can start.
-     */
-    public List<Path> getEligiblePaths(Player player) {
-        final List<Path> paths = plugin.getPathManager().getPaths();
-
-        // If player is null, we just return all paths we know of.
-        if (player == null) {
-            return paths;
+        if (!isPathEligible(player, path)) {
+            throw new IllegalArgumentException("Path is not eligible, so cannot be assigned to the player!");
         }
 
         UUID uuid = player.getUniqueId();
 
-        // Remove paths that have already been completed by the
-        // user.
-        for (Iterator<Path> iterator = paths.iterator(); iterator.hasNext(); ) {
-            Path path = iterator.next();
+        String internalName = path.getInternalName();
 
-            // If this path can be done over and over again, we
-            // obviously don't want to remove it.
-            if (plugin.getPathsConfig().allowInfinitePathing(path.getInternalName())) {
-                continue;
-            }
+        // Add path as an active path.
+        this.playerDataConfig.addActivePath(player.getUniqueId(), internalName);
 
-            // Remove it if player already completed the path
-            if (plugin.getPlayerDataConfig().hasCompletedPath(uuid, path.getInternalName())) {
-                iterator.remove();
-                continue;
-            }
+        // Only reset progress if there was no progress stored.
+        if (!path.shouldStoreProgressOnDeactivation()) {
+            // Reset progress of requirements
+            this.playerDataConfig.setCompletedRequirements(player.getUniqueId(), internalName, new ArrayList<>());
 
-            // Remove path from list if this path can only be shown
-            // when a player meets the path's prerequisites (and the
-            // player does not match the prerequisites).
-            if (plugin.getPathsConfig().showBasedOnPrerequisites(path.getInternalName())
-                    && !plugin.getPathManager().matchPathbyInternalName(path.getInternalName(), false)
-                    .meetsPrerequisites(player)) {
-                iterator.remove();
-                continue;
+            // Reset progress of prerequisites for a path.
+            this.playerDataConfig.setCompletedPrerequisites(uuid, internalName, new ArrayList<>());
+        }
+
+        // Perform results upon choosing this path.
+        path.performResultsUponChoosing(player);
+    }
+
+    /**
+     * Deassign a path from a player. Depending on the property of {@link Path#shouldStoreProgressOnDeactivation()}
+     * the progress of the player for the path gets stored or not. The path is set to inactive.
+     *
+     * @param uuid UUID of the player
+     * @param path Path to deactivate.
+     */
+    public void deassignPath(UUID uuid, Path path) {
+
+        // We can't deassign a path if it is not active.
+        if (!this.hasActivePath(uuid, path)) {
+            return;
+        }
+
+        // Remove progress of a player if necessary
+        if (!path.shouldStoreProgressOnDeactivation()) {
+            plugin.getPathManager().resetProgressOfPath(uuid, path);
+        }
+
+        // Remove active path of a player.
+        this.playerDataConfig.removeActivePath(uuid, path.getInternalName());
+    }
+
+    /**
+     * Try to automatically assign paths to a player.
+     *
+     * @param player Player to assign paths to.
+     * @return a list of paths that have been been assigned to the player.
+     */
+    public List<Path> autoAssignPaths(Player player) {
+
+        plugin.debugMessage("Trying to assign paths to " + player.getName());
+
+        List<Path> assignedPaths = new ArrayList<>();
+
+        for (Path path : getAllPaths()) {
+            if (isPathEligible(player, path) && path.isAutomaticallyAssigned()) {
+                assignPath(player, path);
+
+                plugin.debugMessage("Assigned " + path.getDisplayName() + " to " + player.getName());
+
+                // Send message to player
+                player.sendMessage(Lang.AUTOMATICALLY_ASSIGNED_PATH.getConfigValue(path.getDisplayName()));
+
+                assignedPaths.add(path);
             }
         }
 
-        return paths;
+        return assignedPaths;
+    }
+
+    /**
+     * Complete a path for a player and run the results of the path.
+     *
+     * @param path   Path to complete
+     * @param player Player to complete it for
+     * @return true when all results of the given path are executed successfully.
+     */
+    public boolean completePath(Path path, Player player) {
+
+        // Add progress of completed requirements
+        this.playerDataConfig.addCompletedPath(player.getUniqueId(), path.getInternalName());
+
+        // Remove path from active paths.
+        this.playerDataConfig.removeActivePath(player.getUniqueId(), path.getInternalName());
+
+        // Perform results on completion
+        boolean result = path.performResults(player);
+
+        // Try to assign new paths to a player
+        plugin.getPathManager().autoAssignPaths(player);
+
+        return result;
+    }
+
+    public void setLeaderboardExemption(UUID uuid, boolean value) {
+        this.playerDataConfig.hasLeaderboardExemption(uuid, value);
+    }
+
+    /**
+     * Check whether a player is exempted from the leaderboard or not.
+     *
+     * @param uuid UUID of the player
+     * @return true if the player is exempted from the leaderboard.
+     */
+    public boolean hasLeaderboardExemption(UUID uuid) {
+        return this.playerDataConfig.hasLeaderboardExemption(uuid);
     }
 }

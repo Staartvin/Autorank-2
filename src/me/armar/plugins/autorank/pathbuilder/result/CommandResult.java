@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CommandAbstractResult extends AbstractResult {
+public class CommandResult extends AbstractResult {
 
     private List<String> commands = null;
     private Server server = null;

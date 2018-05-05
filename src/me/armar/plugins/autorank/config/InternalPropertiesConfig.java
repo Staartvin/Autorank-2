@@ -18,11 +18,9 @@ import java.util.List;
  */
 public class InternalPropertiesConfig extends AbstractConfig {
 
-    private String fileName = "internalprops.yml";
-
     public InternalPropertiesConfig(final Autorank instance) {
         setPlugin(instance);
-        setFileName(fileName);
+        setFileName("internalprops.yml");
     }
 
     /**

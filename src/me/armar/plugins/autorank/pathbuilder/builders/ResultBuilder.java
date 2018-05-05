@@ -80,7 +80,7 @@ public class ResultBuilder {
 
         if (resultType == null) {
             Autorank.getInstance().getWarningManager().registerWarning(
-                    String.format("You are using a '%s' abstractResult in path '%s', but that abstractResult doesn't " +
+                    String.format("You are using a '%s' result in path '%s', but that result doesn't " +
                                     "exist!", originalResType,
                             pathName),
                     10);
@@ -96,7 +96,8 @@ public class ResultBuilder {
             }
         } else {
             Bukkit.getServer().getConsoleSender()
-                    .sendMessage("[Autorank] " + ChatColor.RED + "AbstractResult '" + originalResType + "' is not a valid abstractResult type!");
+                    .sendMessage("[Autorank] " + ChatColor.RED + "Result '" + originalResType + "' is not a valid " +
+                            "result type!");
         }
         return this;
     }
@@ -133,7 +134,7 @@ public class ResultBuilder {
      */
     public AbstractResult finish() throws IllegalStateException {
         if (!isValid || abstractResult == null) {
-            throw new IllegalStateException("AbstractResult '" + resultName + "' of '" + pathName + "' was not valid" +
+            throw new IllegalStateException("Result '" + resultName + "' of '" + pathName + "' was not valid" +
                     " and could not be finished.");
         }
 

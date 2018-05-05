@@ -19,10 +19,8 @@ public class SettingsConfig extends AbstractConfig {
         DATABASE, HOSTNAME, PASSWORD, TABLE, USERNAME
     }
 
-    private String fileName = "Settings.yml";
-
     public SettingsConfig(final Autorank instance) {
-        this.setFileName(fileName);
+        this.setFileName("Settings.yml");
         this.setPlugin(instance);
     }
 

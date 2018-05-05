@@ -28,7 +28,15 @@ enum DefaultBehaviorOption {
     /**
      * Whether we allow a player to complete a path over and over again. (boolean)
      */
-    ALLOW_INFINITE_PATHING(Boolean.class, false);
+    ALLOW_INFINITE_PATHING(Boolean.class, false),
+    /**
+     * Whether a player can complete requirements one by one or should meet all requirements at the same time.
+     */
+    ALLOW_PARTIAL_COMPLETION(Boolean.class, true),
+    /**
+     * Whether Autorank should store the progress of a player's path when he deactivates a path.
+     */
+    STORE_PROGRESS_ON_DEACTIVATION(Boolean.class, false);
 
     private Class classType;
     private Object defaultValue;
@@ -64,11 +72,9 @@ enum DefaultBehaviorOption {
  */
 public class DefaultBehaviorConfig extends AbstractConfig {
 
-    private String fileName = "DefaultBehavior.yml";
-
     public DefaultBehaviorConfig(final Autorank instance) {
         setPlugin(instance);
-        setFileName(fileName);
+        setFileName("DefaultBehavior.yml");
     }
 
     @Override

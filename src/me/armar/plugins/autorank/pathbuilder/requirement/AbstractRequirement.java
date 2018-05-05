@@ -9,7 +9,6 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Whenever you want to create a new requirement, you'll have to extend this
@@ -24,7 +23,7 @@ public abstract class AbstractRequirement {
     private boolean optional = false, autoComplete = false, isPreRequisite = false;
     private int reqId;
     private List<AbstractResult> abstractResults = new ArrayList<AbstractResult>();
-    private String world = null;
+    private String world, customDescription;
     private List<String> errorMessages = new ArrayList<>();
 
     // A list of third-party plugins that are needed to use this requirement.
@@ -124,21 +123,6 @@ public abstract class AbstractRequirement {
      */
     public void setWorld(final String world) {
         this.world = world;
-    }
-
-    /**
-     * Check if this requirement is completed already.
-     *
-     * @param uuid Player to check for
-     * @return true if completed, false otherwise.
-     */
-    public final boolean isCompleted(final UUID uuid) {
-
-        if (this.isPreRequisite()) {
-            return getAutorank().getPlayerDataConfig().hasCompletedPrerequisite(this.getId(), uuid);
-        } else {
-            return getAutorank().getPlayerDataConfig().hasCompletedRequirement(this.getId(), uuid);
-        }
     }
 
     /**
@@ -279,5 +263,27 @@ public abstract class AbstractRequirement {
         }
 
         dependencies.add(library);
+    }
+
+    /**
+     * Check whether this requirement has a custom description by an admin.
+     *
+     * @return true if there is a custom description, false otherwise.
+     */
+    public boolean hasCustomDescription() {
+        return getCustomDescription() != null;
+    }
+
+    public String getCustomDescription() {
+        return this.customDescription;
+    }
+
+    /**
+     * Set the custom description of this requirement
+     *
+     * @param description custom description
+     */
+    public void setCustomDescription(String description) {
+        this.customDescription = description;
     }
 }

@@ -154,7 +154,13 @@ public class UUIDStorage {
         // Everything is now stored in lowercase.
         playerName = playerName.toLowerCase();
 
-        final long lastUpdateTime = findCorrectConfig(playerName).getLong(playerName + ".updateTime", -1);
+        FileConfiguration fileConfiguration = findCorrectConfig(playerName);
+
+        if (fileConfiguration == null) {
+            return -1;
+        }
+
+        final long lastUpdateTime = fileConfiguration.getLong(playerName + ".updateTime", -1);
 
         if (lastUpdateTime < 0) {
             return -1;
@@ -190,7 +196,13 @@ public class UUIDStorage {
         // Everything is now stored in lowercase.
         playerName = playerName.toLowerCase();
 
-        final String uuidString = findCorrectConfig(playerName).getString(playerName + ".uuid", null);
+        FileConfiguration fileConfiguration = findCorrectConfig(playerName);
+
+        if (fileConfiguration == null) {
+            return null;
+        }
+
+        final String uuidString = fileConfiguration.getString(playerName + ".uuid", null);
 
         if (uuidString == null) {
             return null;
@@ -300,6 +312,11 @@ public class UUIDStorage {
         }
 
         config = findCorrectConfig(playerName);
+
+        if (config == null) {
+            plugin.debugMessage("Could not store uuid " + uuid.toString() + " of player " + playerName);
+            return;
+        }
 
         config.set(playerName + ".uuid", uuid.toString());
         config.set(playerName + ".updateTime", System.currentTimeMillis());

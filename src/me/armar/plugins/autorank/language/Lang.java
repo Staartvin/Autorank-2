@@ -334,6 +334,10 @@ public enum Lang {
      */
     PROGRESS_RESET("progress-reset", "&eYour progress for the path is reset."),
     /**
+     * &eYour progress for the path has been restored.
+     */
+    PROGRESS_RESTORED("progress-restored", "&eYour progress for the path has been restored."),
+    /**
      * Change rank to {0}.
      */
     RANK_CHANGE_RESULT("rank-change-result", "Change rank to {0}."),
@@ -478,34 +482,51 @@ public enum Lang {
     /**
      * Killed at least {0} players in a row in BattleLevels.
      */
-    BATTLELEVELS_TOP_KILLSTREAK_REQUIREMENT("battlelevels-top-killstreak-requirement", "Killed at least " +
-            "{0} players in a row in BattleLevels."),
+    BATTLELEVELS_TOP_KILLSTREAK_REQUIREMENT("Killed at least {0} players in a row in BattleLevels."),
     /**
      * Have at least a KDR of {0} in BattleLevels.
      */
-    BATTLELEVELS_KILL_DEATH_RATIO_REQUIREMENT("battlelevels-kill-death-ratio-requirement", "Have at least a KDR of " +
-            "{0} in BattleLevels."),
+    BATTLELEVELS_KILL_DEATH_RATIO_REQUIREMENT("Have at least a KDR of {0} in BattleLevels."),
     /**
      * Have {0} quests active at the same time.
      */
-    QUESTS_ACTIVE_QUESTS_REQUIREMENT("quests-active-quests-requirement", "Have {0} quests active at the same time."),
+    QUESTS_ACTIVE_QUESTS_REQUIREMENT("Have {0} quests active at the same time."),
     /**
      * Complete at least {0} quests.
      */
-    QUESTS_COMPLETED_QUESTS_REQUIREMENT("quests-completed-quests-requirement", "Complete at least {0} quests."),
+    QUESTS_COMPLETED_QUESTS_REQUIREMENT("Complete at least {0} quests."),
     /**
      * Obtain at least {0} quest points.
      */
-    QUESTS_QUEST_POINTS_REQUIREMENT("quests-quest-points-requirement", "Obtain at least {0} quest points."),
+    QUESTS_QUEST_POINTS_REQUIREMENT("Obtain at least {0} quest points."),
     /**
      * Complete the quest '{0}'.
      */
-    QUESTS_COMPLETE_SPECIFIC_QUEST_REQUIREMENT("quests-complete-specific-quest-requirement", "Complete the quest " +
-            "'{0}'."),
+    QUESTS_COMPLETE_SPECIFIC_QUEST_REQUIREMENT("Complete the quest '{0}'."),
     /**
      * Obtain at least {0} player points.
      */
-    PLAYERPOINTS_POINTS_REQUIREMENT("playerpoints-points-requirement", "Obtain at least {0} player points."),;
+    PLAYERPOINTS_POINTS_REQUIREMENT("Obtain at least {0} player points."),
+    /**
+     * You are not active on path {0}.
+     */
+    PATH_IS_NOT_ACTIVE("You are not active on path {0}."),
+    /**
+     * Have at least {0} active paths.
+     */
+    AUTORANK_NUMBER_OF_ACTIVE_PATHS_REQUIREMENT("Have at least {0} active paths."),
+    /**
+     * Have '{0}' set as an active path.
+     */
+    AUTORANK_SPECIFIC_ACTIVE_PATH_REQUIREMENT("Have '{0}' set as an active path."),
+    /**
+     * Have at least completed {0} paths.
+     */
+    AUTORANK_NUMBER_OF_COMPLETED_PATHS_REQUIREMENT("Have at least completed {0} paths."),
+    /**
+     * Have completed path '{0}'.
+     */
+    AUTORANK_SPECIFIC_COMPLETED_PATH_REQUIREMENT("Have completed path '{0}'."),;
 
     private static FileConfiguration LANG;
 
@@ -518,6 +539,10 @@ public enum Lang {
     Lang(final String path, final String start) {
         this.path = path;
         this.def = start;
+    }
+
+    Lang(String string) {
+        this.def = string;
     }
 
     private String path, def;
@@ -538,7 +563,7 @@ public enum Lang {
      * @return value in config or otherwise default value
      */
     public String getConfigValue(final Object... args) {
-        String value = ChatColor.translateAlternateColorCodes('&', LANG.getString(this.path, this.def));
+        String value = ChatColor.translateAlternateColorCodes('&', LANG.getString(getPath(), getDefault()));
 
         if (args == null || args.length == 0)
             return value;
@@ -569,6 +594,10 @@ public enum Lang {
      * @return The path to the string.
      */
     public String getPath() {
+        if (path == null) {
+            return this.toString().replace("_", "-");
+        }
+
         return this.path;
     }
 }

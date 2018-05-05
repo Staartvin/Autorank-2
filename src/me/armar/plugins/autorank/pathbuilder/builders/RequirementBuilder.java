@@ -68,9 +68,8 @@ public class RequirementBuilder {
         }
 
         // Get requirement of RequirementBuilder.
-        final AbstractRequirement requirement = builder.finish();
 
-        return requirement;
+        return builder.finish();
     }
 
     /**
@@ -108,7 +107,8 @@ public class RequirementBuilder {
             }
         else {
             Bukkit.getServer().getConsoleSender().sendMessage(
-                    "[Autorank] " + ChatColor.RED + "AbstractRequirement '" + originalReqType + "' is not a valid requirement type!");
+                    "[Autorank] " + ChatColor.RED + "Requirement '" + originalReqType + "' is not a valid requirement" +
+                            " type!");
             return null;
         }
         return this;
@@ -138,7 +138,7 @@ public class RequirementBuilder {
             return this;
         }
 
-        String dependencyNotFoundMessage = "AbstractRequirement '%s' relies on a third-party plugin being installed, but that plugin is not installed!";
+        String dependencyNotFoundMessage = "Requirement '%s' relies on a third-party plugin being installed, but that plugin is not installed!";
         try {
             // Initialize the result with options.
             if (!requirement.setOptions(options)) {
@@ -191,27 +191,39 @@ public class RequirementBuilder {
 
         // Do sanity check
         if (requirementId < 0) {
-            throw new IllegalStateException("AbstractRequirement ID of a requirement could not be found. This means " +
+            throw new IllegalStateException("Requirement ID of a requirement could not be found. This means " +
                     "there is something wrong with your configuration." +
                     " Path: " + pathName
-                    + ", AbstractRequirement: " + requirementType);
+                    + ", Requirement: " + requirementType);
         }
 
         // Set ID of the requirement
         requirement.setId(requirementId);
 
         // Set whether this requirement is world-specific.
-        requirement.setWorld(Autorank.getInstance().getPathsConfig().getWorldOfRequirement(pathName, requirementType, isPreRequisite));
+        if (Autorank.getInstance().getPathsConfig().isRequirementWorldSpecific(pathName, requirementType,
+                isPreRequisite)) {
+            requirement.setWorld(Autorank.getInstance().getPathsConfig().getWorldOfRequirement(pathName,
+                    requirementType, isPreRequisite));
+        }
+
+        // Check whether a requirement has a custom description.
+        if (Autorank.getInstance().getPathsConfig().hasCustomRequirementDescription(pathName, requirementType,
+                isPreRequisite)) {
+            requirement.setCustomDescription(Autorank.getInstance().getPathsConfig().getCustomRequirementDescription
+                    (pathName, requirementType, isPreRequisite));
+        }
+
 
         // Check if all dependencies are available for this requirement.
         DependencyManager dependencyManager = Autorank.getInstance().getDependencyManager();
 
         for (Library dependency : requirement.getDependencies()) {
             if (!dependencyManager.isAvailable(dependency)) {
-                Autorank.getInstance().getLogger().severe(String.format("AbstractRequirement '%s' relies on '%s' " +
+                Autorank.getInstance().getLogger().severe(String.format("Requirement '%s' relies on '%s' " +
                         "being installed, but that plugin is not installed!", requirementType, dependency
                         .getHumanPluginName()));
-                Autorank.getInstance().getWarningManager().registerWarning(String.format("AbstractRequirement '%s' " +
+                Autorank.getInstance().getWarningManager().registerWarning(String.format("Requirement '%s' " +
                                 "relies on '%s' being installed, but that plugin is not installed!", requirementType,
                         dependency.getHumanPluginName()), 10);
                 return this;
@@ -234,7 +246,7 @@ public class RequirementBuilder {
      */
     public AbstractRequirement finish() throws IllegalStateException {
         if (!isValid || requirement == null) {
-            throw new IllegalStateException("AbstractResult '" + requirementType + "' of '" + pathName + "' was not valid" +
+            throw new IllegalStateException("Result '" + requirementType + "' of '" + pathName + "' was not valid" +
                     " and could not be finished.");
         }
 

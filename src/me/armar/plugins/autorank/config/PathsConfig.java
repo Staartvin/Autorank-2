@@ -2,6 +2,7 @@ package me.armar.plugins.autorank.config;
 
 import com.google.common.collect.Lists;
 import me.armar.plugins.autorank.Autorank;
+import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -18,24 +19,30 @@ import java.util.Set;
  */
 public class PathsConfig extends AbstractConfig {
 
-    private String fileName = "Paths.yml";
-
     public PathsConfig(Autorank instance) {
         setPlugin(instance);
-        setFileName(fileName);
+        setFileName("Paths.yml");
     }
 
     /**
-     * Check whether a certain path can be done over and over again.
+     * Check whether a path can be completed more than once.
      *
-     * @param pathName Name of path to check
-     * @return true if a player can do a path infinitely many times, false
-     * otherwise.
+     * @param pathName Name of path
+     * @return true if a player can do a path multiple times, false otherwise.
      */
-    public boolean allowInfinitePathing(String pathName) {
-        return this.getConfig().getBoolean(pathName + ".options.infinite pathing", this.getPlugin()
-                .getDefaultBehaviorConfig
-                ().getDefaultBooleanBehaviorOfOption(DefaultBehaviorOption.ALLOW_INFINITE_PATHING));
+    public boolean isPathRepeatable(String pathName) {
+        boolean allowInfinitePathing = this.getConfig().getBoolean(pathName + ".options.infinite pathing", false);
+
+        boolean defaultValue = this.getPlugin().getDefaultBehaviorConfig().getDefaultBooleanBehaviorOfOption(
+                DefaultBehaviorOption.ALLOW_INFINITE_PATHING);
+
+        boolean isRepeatable = this.getConfig().getBoolean(pathName + ".options.is repeatable", false);
+
+        if (allowInfinitePathing || isRepeatable) {
+            return true;
+        }
+
+        return defaultValue;
     }
 
     /**
@@ -141,7 +148,13 @@ public class PathsConfig extends AbstractConfig {
     public List<String> getRequirements(String pathName, boolean isPreRequisite) {
         String keyType = (isPreRequisite ? "prerequisites" : "requirements");
 
-        return new ArrayList<>(getConfig().getConfigurationSection(pathName + "." + keyType).getKeys(false));
+        ConfigurationSection section = getConfig().getConfigurationSection(pathName + "." + keyType);
+
+        if (section == null) {
+            return new ArrayList<>();
+        }
+
+        return new ArrayList<>(section.getKeys(false));
     }
 
     /**
@@ -339,7 +352,7 @@ public class PathsConfig extends AbstractConfig {
      * @param pathName Name of the path
      * @return true if Autorank should assign the given path to the player, false otherwise.
      */
-    public boolean shouldAutoChoosePath(String pathName) {
+    public boolean shouldAutoAssignPath(String pathName) {
         return this.getConfig().getBoolean(pathName + ".options.auto choose",
                 this.getPlugin().getDefaultBehaviorConfig().getDefaultBooleanBehaviorOfOption(DefaultBehaviorOption
                         .AUTO_CHOOSE_PATH));
@@ -371,5 +384,68 @@ public class PathsConfig extends AbstractConfig {
         return this.getConfig().getBoolean(pathName + ".options.show based on prerequisites", this.getPlugin()
                 .getDefaultBehaviorConfig().getDefaultBooleanBehaviorOfOption(DefaultBehaviorOption
                         .SHOW_PATH_BASED_ON_PREREQUISITES));
+    }
+
+    /**
+     * Check whether a player on a given path can complete requirements one by one, or if he should meet all
+     * requirements at the same time to complete the path.
+     *
+     * @param pathName Name of the path
+     * @return true if the player can complete requirements one by one. False if all requirements need to be met
+     * simultaneously.
+     */
+    public boolean isPartialCompletionAllowed(String pathName) {
+        return this.getConfig().getBoolean(pathName + ".options.allow partial completion",
+                this.getPlugin().getDefaultBehaviorConfig().getDefaultBooleanBehaviorOfOption(DefaultBehaviorOption
+                        .ALLOW_PARTIAL_COMPLETION));
+    }
+
+    /**
+     * Get the description of a path
+     *
+     * @param pathName Name of the path
+     * @return a description (if provided) or an empty string.
+     */
+    public String getPathDescription(String pathName) {
+        return this.getConfig().getString(pathName + ".options.description", "");
+    }
+
+    /**
+     * Check whether a requirement has a custom description.
+     *
+     * @param pathName       Name of the path where the requirement resides in
+     * @param reqName        Name of the requirement
+     * @param isPreRequisite whether the requirement is a prerequisite or not.
+     * @return true if the given requirement has a custom requirement.
+     */
+    public boolean hasCustomRequirementDescription(String pathName, String reqName, boolean isPreRequisite) {
+        return this.getCustomRequirementDescription(pathName, reqName, isPreRequisite) != null;
+    }
+
+    /**
+     * Get the custom description of a requirement as set in the paths file.
+     *
+     * @param pathName       Name of the path the requirement is part of.
+     * @param reqName        Name of the requirement.
+     * @param isPreRequisite Whether the requirement is a prerequisite or not.
+     * @return the custom description or null if there is no custom description.
+     */
+    public String getCustomRequirementDescription(String pathName, String reqName, boolean isPreRequisite) {
+        String keyType = (isPreRequisite ? "prerequisites" : "requirements");
+
+        return this.getConfig().getString(pathName + "." + keyType + "." + reqName + ".options.description", null);
+    }
+
+    /**
+     * Check whether Autorank should store the progress of a player's path when he deactivates a path. If the
+     * progress is stored and the player reactivates the path, he can start where he left off.
+     *
+     * @param pathName Name of the path
+     * @return true if progress should be stored, false otherwise.
+     */
+    public boolean shouldStoreProgressOnDeactivation(String pathName) {
+        return this.getConfig().getBoolean(pathName + ".options.store progress on deactivation", this.getPlugin()
+                .getDefaultBehaviorConfig().getDefaultBooleanBehaviorOfOption(DefaultBehaviorOption
+                        .STORE_PROGRESS_ON_DEACTIVATION));
     }
 }

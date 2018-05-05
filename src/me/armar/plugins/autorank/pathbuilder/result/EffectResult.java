@@ -4,7 +4,7 @@ import me.armar.plugins.autorank.language.Lang;
 import org.bukkit.Effect;
 import org.bukkit.entity.Player;
 
-public class EffectAbstractResult extends AbstractResult {
+public class EffectResult extends AbstractResult {
 
     private int data;
     private Effect effect;
