@@ -87,11 +87,6 @@
             <id>Spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
         </repository>
-
-        <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
     </repositories>
 
     <dependencies>
@@ -143,11 +138,10 @@
 
 
         <dependency>
-            <groupId>com.github.gustav9797.PowerfulPerms</groupId>
-            <artifactId>PowerfulPermsAPI</artifactId>
+            <groupId>com.github.gustav9797</groupId>
+            <artifactId>PowerfulPerms</artifactId>
             <version>4.5.2</version>
         </dependency>
-
 
         <dependency>
             <groupId>me.staartvin.Statz</groupId>
