@@ -106,9 +106,7 @@ public class PowerfulPermsHandler extends PermissionsHandler {
     @Override
     public boolean replaceGroup(final Player player, final String world, final String oldGroup, final String newGroup) {
         return (addGroup(player, world,
-                newGroup) /*
-         * && removeGroup(player, world, oldGroup)
-         */);
+                newGroup));
     }
 
     @Override
