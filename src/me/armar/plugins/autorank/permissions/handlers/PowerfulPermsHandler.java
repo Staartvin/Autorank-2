@@ -1,8 +1,6 @@
 package me.armar.plugins.autorank.permissions.handlers;
 
-import com.github.cheesesoftware.PowerfulPermsAPI.Group;
-import com.github.cheesesoftware.PowerfulPermsAPI.PermissionManager;
-import com.github.cheesesoftware.PowerfulPermsAPI.PowerfulPermsPlugin;
+import com.github.gustav9797.PowerfulPerms.PowerfulPerms;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.permissions.PermissionsHandler;
 import org.bukkit.entity.Player;
@@ -18,7 +16,7 @@ import java.util.Map.Entry;
  */
 public class PowerfulPermsHandler extends PermissionsHandler {
 
-    private PowerfulPermsPlugin powerfulPerms;
+    private PowerfulPerms powerfulPerms;
 
     public PowerfulPermsHandler(Autorank plugin) {
         super(plugin);
@@ -43,12 +41,13 @@ public class PowerfulPermsHandler extends PermissionsHandler {
 
     @Override
     public Collection<String> getGroups() {
-        final PermissionManager permManager = powerfulPerms.getPermissionManager();
-        final Map<Integer, com.github.cheesesoftware.PowerfulPermsAPI.Group> groups = permManager.getGroups();
+        final com.github.gustav9797.PowerfulPermsAPI.PermissionManager permManager = powerfulPerms
+                .getPermissionManager();
+        final Map<Integer, com.github.gustav9797.PowerfulPermsAPI.Group> groups = permManager.getGroups();
 
         List<String> groupNames = new ArrayList<>();
 
-        for (final Entry<Integer, com.github.cheesesoftware.PowerfulPermsAPI.Group> entry : groups.entrySet()) {
+        for (final Entry<Integer, com.github.gustav9797.PowerfulPermsAPI.Group> entry : groups.entrySet()) {
             groupNames.add(entry.getValue().getName());
         }
 
@@ -67,13 +66,14 @@ public class PowerfulPermsHandler extends PermissionsHandler {
 
     @Override
     public Collection<String> getPlayerGroups(final Player player) {
-        final PermissionManager permManager = powerfulPerms.getPermissionManager();
-        final List<com.github.cheesesoftware.PowerfulPermsAPI.Group> groups = permManager
+        final com.github.gustav9797.PowerfulPermsAPI.PermissionManager permManager = powerfulPerms
+                .getPermissionManager();
+        final List<com.github.gustav9797.PowerfulPermsAPI.Group> groups = permManager
                 .getPermissionPlayer(player.getUniqueId()).getGroups();
 
         List<String> groupNames = new ArrayList<>();
 
-        for (Group group : groups) {
+        for (com.github.gustav9797.PowerfulPermsAPI.Group group : groups) {
             groupNames.add(group.getName());
         }
 
@@ -115,7 +115,12 @@ public class PowerfulPermsHandler extends PermissionsHandler {
         final Plugin permPlugin = pluginManager.getPlugin("PowerfulPerms");
 
         if (permPlugin != null && permPlugin.isEnabled()) {
-            powerfulPerms = (PowerfulPermsPlugin) permPlugin;
+
+            if (!(permPlugin instanceof PowerfulPerms)) {
+                return false;
+            }
+
+            powerfulPerms = (PowerfulPerms) permPlugin;
         }
 
         return powerfulPerms != null;
