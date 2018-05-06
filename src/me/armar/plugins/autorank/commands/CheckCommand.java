@@ -125,9 +125,14 @@ public class CheckCommand extends AutorankCommand {
             }
 
             // Check if console is performing this command.
-            if (targetPlayerName == null && !(sender instanceof Player)) {
-                sender.sendMessage("You must specify a player to view path data of!");
-                return true;
+            if (targetPlayerName == null) {
+
+                if (!(sender instanceof Player)) {
+                    sender.sendMessage("You must specify a player to view path data of!");
+                    return true;
+                }
+
+                targetPlayerName = sender.getName();
             }
 
             // Check if the sender is allowed to view other players.
@@ -135,6 +140,13 @@ public class CheckCommand extends AutorankCommand {
                 if (!this.hasPermission(AutorankPermission.CHECK_OTHERS, sender)) {
                     return true;
                 }
+            }
+
+            // Check to see if the player that was specified was indeed a player or whether we should check for a path.
+            if (showPathsOverview && !plugin.getServer().getOfflinePlayer(targetPlayerName).hasPlayedBefore()) {
+                // Target player is not a player, so switch to path name instead
+                targetPathName = targetPlayerName;
+                showPathsOverview = false;
             }
 
             // If we are showing a path overview, we need a target player.
@@ -202,7 +214,11 @@ public class CheckCommand extends AutorankCommand {
 
             this.showPathsOverview(sender, player.getName(), player.getUniqueId());
 
-            //check(sender, player);
+            int time = plugin.getPlayTimeManager().getTimeOfPlayer(player.getName(), true);
+
+            AutorankTools.sendColoredMessage(sender,
+                    Lang.HAS_PLAYED_FOR.getConfigValue(player.getName(), AutorankTools.timeToString(time,
+                            AutorankTools.Time.SECONDS)));
         } else {
             // We cannot check paths of console.
             AutorankTools.sendColoredMessage(sender, Lang.CANNOT_CHECK_CONSOLE.getConfigValue());
