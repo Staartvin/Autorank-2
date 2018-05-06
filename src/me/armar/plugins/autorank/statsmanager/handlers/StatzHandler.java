@@ -50,7 +50,6 @@ public class StatzHandler extends StatsPlugin {
                 } else {
                     value = statzApi.getSpecificData(uuid, statType,
                             new RowRequirement("mob", arguments.get("mobType").toString()));
-                    System.out.println("VALUE FOUND FOR MOBS KILLED: " + value);
                 }
 
                 break;

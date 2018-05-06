@@ -293,7 +293,6 @@ public class Path {
             // Skip completed requirements.
             if (this.hasCompletedRequirement(player.getUniqueId(), holder
                     .getRequirementId())) {
-                System.out.println("Requirement " + holder.getDescription() + " has already been completed");
                 continue;
             }
 
@@ -301,16 +300,12 @@ public class Path {
                 // Optional requirements can only be completed by performing /ar complete, so don't perform them
                 // automatically.
                 if (holder.isOptional()) {
-                    System.out.println("Requirement " + holder.getDescription() + " is met, but optional, so not " +
-                            "performing results automatically.");
                     continue;
                 }
 
-                System.out.println("Requirement " + holder.getDescription() + " is met, performing results");
                 // Meets requirement, so perform results
                 this.completeRequirement(player, holder.getRequirementId());
             } else {
-                System.out.println("Requirement " + holder.getDescription() + " is not met");
                 meetAllRequirements = false;
             }
 

@@ -24,18 +24,15 @@ public class UpdateHandler {
         // Do not check for updates when DEV version is used.
         // Or when we should not check.
         if (plugin.isDevVersion() || !doCheckForNewVersion()) {
-            System.out.println("DEV VERSION");
             return false;
         }
 
 
         // Latest check was more than 1 hour ago (Check again)
         if (((System.currentTimeMillis() - latestCheck) / 60000) >= 60) {
-            System.out.println("Checking once");
             // Check for new version
             return checkForUpdate();
         } else {
-            System.out.println("Not checking again");
             // We checked less than an hour ago. (Recent enough)
             return lastResult;
         }
@@ -47,7 +44,6 @@ public class UpdateHandler {
 
     public boolean checkForUpdate() {
         try {
-            System.out.println("CHECKING UPDATES");
             latestCheck = System.currentTimeMillis();
             lastResult = updater.checkForUpdates();
             return lastResult;
