@@ -292,7 +292,7 @@ public class MySQLStorageProvider extends StorageProvider {
 
         // Create tables if they do not exist.
         for (Map.Entry<TimeType, String> entry : this.tableNames.entrySet()) {
-            String statement = "CREATE TABLE IF NOT EXISTS " + entry.getValue() + " (uuid VARCHAR(255) not NULL, "
+            String statement = "CREATE TABLE IF NOT EXISTS " + entry.getValue() + " (uuid VARCHAR(40) not NULL, "
                     + " time INTEGER not NULL, " + " modified TIMESTAMP not NULL, " + " PRIMARY KEY ( uuid ))";
 
             // Run async to prevent load issues.
