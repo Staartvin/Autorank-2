@@ -70,6 +70,8 @@ public class CheckCommand extends AutorankCommand {
             sender.sendMessage(message.toString());
         }
 
+
+        sender.sendMessage(ChatColor.GOLD + "To view the progress of a specific path, use /ar check <path name>.");
     }
 
     // Show specific requirements for a path.
@@ -186,17 +188,17 @@ public class CheckCommand extends AutorankCommand {
                 return true;
             }
 
-            if (showPathsOverview) {
-                this.showPathsOverview(sender, player.getName(), player.getUniqueId());
-            } else {
-                this.showSpecificPath(sender, player.getName(), player.getUniqueId(), targetPath);
-            }
-
             int time = plugin.getPlayTimeManager().getTimeOfPlayer(targetPlayerName, true);
 
             AutorankTools.sendColoredMessage(sender,
                     Lang.HAS_PLAYED_FOR.getConfigValue(targetPlayerName, AutorankTools.timeToString(time,
                             AutorankTools.Time.SECONDS)));
+
+            if (showPathsOverview) {
+                this.showPathsOverview(sender, player.getName(), player.getUniqueId());
+            } else {
+                this.showSpecificPath(sender, player.getName(), player.getUniqueId(), targetPath);
+            }
 
         } else if (sender instanceof Player) {
             // Show overview of active paths of the sender
@@ -212,13 +214,13 @@ public class CheckCommand extends AutorankCommand {
 
             final Player player = (Player) sender;
 
-            this.showPathsOverview(sender, player.getName(), player.getUniqueId());
-
             int time = plugin.getPlayTimeManager().getTimeOfPlayer(player.getName(), true);
 
             AutorankTools.sendColoredMessage(sender,
                     Lang.HAS_PLAYED_FOR.getConfigValue(player.getName(), AutorankTools.timeToString(time,
                             AutorankTools.Time.SECONDS)));
+
+            this.showPathsOverview(sender, player.getName(), player.getUniqueId());
         } else {
             // We cannot check paths of console.
             AutorankTools.sendColoredMessage(sender, Lang.CANNOT_CHECK_CONSOLE.getConfigValue());

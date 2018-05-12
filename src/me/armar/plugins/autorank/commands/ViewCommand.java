@@ -96,9 +96,14 @@ public class ViewCommand extends AutorankCommand {
             sender.sendMessage(ChatColor.GREEN + "Prerequisites of path '" + ChatColor.GRAY
                     + targetPath.getDisplayName() + ChatColor.GREEN + "':");
 
-            for (final String message : messages) {
-                AutorankTools.sendColoredMessage(sender, message);
+            if (messages.isEmpty()) {
+                AutorankTools.sendColoredMessage(sender, "none");
+            } else {
+                for (final String message : messages) {
+                    AutorankTools.sendColoredMessage(sender, message);
+                }
             }
+
 
             List<CompositeRequirement> requirements = targetPath.getRequirements();
 
@@ -108,8 +113,12 @@ public class ViewCommand extends AutorankCommand {
             sender.sendMessage(ChatColor.GREEN + "Requirements of path '" + ChatColor.GRAY
                     + targetPath.getDisplayName() + ChatColor.GREEN + "':");
 
-            for (final String message : messages) {
-                AutorankTools.sendColoredMessage(sender, message);
+            if (messages.isEmpty()) {
+                AutorankTools.sendColoredMessage(sender, "none");
+            } else {
+                for (final String message : messages) {
+                    AutorankTools.sendColoredMessage(sender, message);
+                }
             }
 
             List<AbstractResult> results = targetPath.getResults();
@@ -120,10 +129,13 @@ public class ViewCommand extends AutorankCommand {
             sender.sendMessage(ChatColor.GREEN + "Results of path '" + ChatColor.GRAY + targetPath.getDisplayName()
                     + ChatColor.GREEN + "':");
 
-            for (final String message : messages) {
-                AutorankTools.sendColoredMessage(sender, message);
+            if (messages.isEmpty()) {
+                AutorankTools.sendColoredMessage(sender, "none");
+            } else {
+                for (final String message : messages) {
+                    AutorankTools.sendColoredMessage(sender, message);
+                }
             }
-
 
         }
         return true;
