@@ -35,6 +35,11 @@ public class CommandResult extends AbstractResult {
      */
     @Override
     public String getDescription() {
+        // Check if we have a custom description. If so, return that instead.
+        if (this.hasCustomDescription()) {
+            return this.getCustomDescription();
+        }
+
         return Lang.COMMAND_RESULT.getConfigValue(AutorankTools.createStringFromList(commands));
     }
 

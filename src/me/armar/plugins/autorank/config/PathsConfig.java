@@ -437,6 +437,29 @@ public class PathsConfig extends AbstractConfig {
     }
 
     /**
+     * Check whether a result has a custom description.
+     *
+     * @param pathName Name of the path where the result resides in
+     * @param resName  Name of the requirement
+     * @return true if the given result has a custom description.
+     */
+    public boolean hasCustomResultDescription(String pathName, String resName) {
+        return this.getCustomResultDescription(pathName, resName) != null;
+    }
+
+    /**
+     * Get the custom description of a result as set in the paths file.
+     *
+     * @param pathName Name of the path the result is part of.
+     * @param resName  Name of the result.
+     * @return the custom description or null if there is no custom description.
+     */
+    public String getCustomResultDescription(String pathName, String resName) {
+        return this.getConfig().getString(pathName + ".results." + resName + ".options.description",
+                null);
+    }
+
+    /**
      * Check whether Autorank should store the progress of a player's path when he deactivates a path. If the
      * progress is stored and the player reactivates the path, he can start where he left off.
      *

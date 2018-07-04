@@ -20,6 +20,11 @@ public class TeleportResult extends AbstractResult {
 
     @Override
     public String getDescription() {
+        // Check if we have a custom description. If so, return that instead.
+        if (this.hasCustomDescription()) {
+            return this.getCustomDescription();
+        }
+
         String locationString = location.getBlockX() + ", " + location.getBlockY() + ", " + location.getBlockZ()
                 + " on " + location.getWorld().getName();
 

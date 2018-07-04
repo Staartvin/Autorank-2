@@ -9,6 +9,9 @@ import org.bukkit.entity.Player;
  */
 public abstract class AbstractResult {
 
+    // Used to check if this result has a custom description
+    private String customDescription;
+
     /**
      * Apply this result to a player
      *
@@ -40,6 +43,33 @@ public abstract class AbstractResult {
     @Override
     public String toString() {
         return this.getClass().getSimpleName();
+    }
+
+    /**
+     * Check if this result has a custom description set
+     *
+     * @return true if their is custom description, false otherwise.
+     */
+    public boolean hasCustomDescription() {
+        return getCustomDescription() != null;
+    }
+
+    /**
+     * Get the custom description of this result
+     *
+     * @return a custom description if it was set, null otherwise.
+     */
+    public String getCustomDescription() {
+        return this.customDescription;
+    }
+
+    /**
+     * Set the custom description of this result
+     *
+     * @param value the description to set it to.
+     */
+    public void setCustomDescription(String description) {
+        this.customDescription = description;
     }
 
 }

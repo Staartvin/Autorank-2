@@ -30,6 +30,10 @@ public class MoneyResult extends AbstractResult {
      */
     @Override
     public String getDescription() {
+        // Check if we have a custom description. If so, return that instead.
+        if (this.hasCustomDescription()) {
+            return this.getCustomDescription();
+        }
 
         String currencyName = "";
 

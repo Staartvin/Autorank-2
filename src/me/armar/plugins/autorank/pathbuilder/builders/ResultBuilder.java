@@ -26,6 +26,10 @@ public class ResultBuilder {
     // Extra metadata for the associated abstractResult.
     private String pathName, resultName;
 
+    public final Autorank getAutorank() {
+        return Autorank.getInstance();
+    }
+
     /**
      * Add a new type of AbstractResult that can be used in the Paths.yml file.
      *
@@ -117,8 +121,18 @@ public class ResultBuilder {
             return this;
         }
 
-        // Initiliaze the abstractResult with options.
+        // Initialize the abstractResult with options.
         abstractResult.setOptions(stringValue.split(";"));
+
+        System.out.println("I TOUCH THIS");
+        System.out.println("PATH NAME: " + this.pathName);
+        System.out.println("RESULT NAME: " + this.resultName);
+
+        // Check if there is a custom description set for this result, if so, set it.
+        if (getAutorank().getPathsConfig().hasCustomResultDescription(this.pathName, this.resultName)) {
+            abstractResult.setCustomDescription(getAutorank().getPathsConfig().getCustomResultDescription(this
+                    .pathName, this.resultName));
+        }
 
         // AbstractResult is non-null and populated with storage, so valid.
         isValid = true;

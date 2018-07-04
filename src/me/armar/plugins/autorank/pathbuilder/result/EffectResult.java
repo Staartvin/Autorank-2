@@ -19,6 +19,11 @@ public class EffectResult extends AbstractResult {
 
     @Override
     public String getDescription() {
+        // Check if we have a custom description. If so, return that instead.
+        if (this.hasCustomDescription()) {
+            return this.getCustomDescription();
+        }
+
         return Lang.EFFECT_RESULT.getConfigValue(effect.getName());
     }
 

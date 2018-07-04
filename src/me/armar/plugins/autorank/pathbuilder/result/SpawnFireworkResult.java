@@ -41,6 +41,11 @@ public class SpawnFireworkResult extends AbstractResult {
 
     @Override
     public String getDescription() {
+        // Check if we have a custom description. If so, return that instead.
+        if (this.hasCustomDescription()) {
+            return this.getCustomDescription();
+        }
+
         String targetLocation = (target.equals("player") ? "your location" : "at spawn");
 
         return Lang.SPAWN_FIREWORK_RESULT.getConfigValue(targetLocation);
