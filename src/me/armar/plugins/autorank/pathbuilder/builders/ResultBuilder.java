@@ -124,10 +124,6 @@ public class ResultBuilder {
         // Initialize the abstractResult with options.
         abstractResult.setOptions(stringValue.split(";"));
 
-        System.out.println("I TOUCH THIS");
-        System.out.println("PATH NAME: " + this.pathName);
-        System.out.println("RESULT NAME: " + this.resultName);
-
         // Check if there is a custom description set for this result, if so, set it.
         if (getAutorank().getPathsConfig().hasCustomResultDescription(this.pathName, this.resultName)) {
             abstractResult.setCustomDescription(getAutorank().getPathsConfig().getCustomResultDescription(this
