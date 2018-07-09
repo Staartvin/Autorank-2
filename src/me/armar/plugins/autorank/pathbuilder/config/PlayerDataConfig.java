@@ -29,12 +29,8 @@ public class PlayerDataConfig extends AbstractConfig {
         this.getPlugin().getServer().getScheduler().runTaskTimerAsynchronously(this.getPlugin(), this::saveConfig,
                 AutorankTools.TICKS_PER_SECOND * 30, AutorankTools.TICKS_PER_SECOND * 30);
 
-        this.getPlugin().getServer().getScheduler().runTaskLater(this.getPlugin(), new Runnable() {
-            @Override
-            public void run() {
-                convertFormatToSupportMultiplePathsFormat();
-            }
-        }, 20 * 10);
+        this.getPlugin().getServer().getScheduler().runTaskLater(this.getPlugin(),
+                this::convertFormatToSupportMultiplePathsFormat, 20 * 10);
     }
 
     // ------------ COMPLETED REQUIREMENTS ------------

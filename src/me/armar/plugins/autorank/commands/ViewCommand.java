@@ -155,11 +155,27 @@ public class ViewCommand extends AutorankCommand {
                                       final String[] args) {
         final List<String> possibilities = new ArrayList<String>();
 
-        // List shows a list of changegroups to view
-        possibilities.add("list");
+        // There are no words entered, so give all paths
+        if (args.length <= 1) {
+            for (final Path path : plugin.getPathManager().getAllPaths()) {
+                possibilities.add(path.getDisplayName());
+            }
 
-        for (final Path path : plugin.getPathManager().getAllPaths()) {
-            possibilities.add(path.getDisplayName());
+            // List shows a list of changegroups to view
+            possibilities.add("list");
+        } else {
+            // Something was typed, so use that to suggest paths.
+            for (final Path path : plugin.getPathManager().getAllPaths()) {
+
+                // Only suggest paths that start with the given word.
+                if (path.getDisplayName().toLowerCase().startsWith(args[1].toLowerCase())) {
+                    possibilities.add(path.getDisplayName());
+                }
+
+                if (args[1].trim().equals("")) {
+                    possibilities.add("list");
+                }
+            }
         }
 
         return possibilities;
