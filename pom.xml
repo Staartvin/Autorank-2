@@ -4,8 +4,8 @@
     <artifactId>Autorank</artifactId>
     <version>4.2.4<!---Dev-${BUILD_NUMBER}--></version>
     <name>Autorank</name>
-    <description>Maven project for Bukkit plugin Autorank</description>
-    <url>http://dev.bukkit.org/server-mods/autorank/</url>
+    <description>Maven project for Spigot plugin Autorank</description>
+    <url>https://www.spigotmc.org/resources/autorank.3239/</url>
     <build>
 
         <sourceDirectory>src</sourceDirectory>
@@ -110,13 +110,6 @@
             </exclusions>
         </dependency>
 
-        <!-- <dependency>
-            <groupId>org.mcstats.bukkit</groupId>
-            <artifactId>metrics</artifactId>
-            <version>R7</version>
-            <type>jar</type>
-        </dependency> -->
-
         <dependency>
             <groupId>me.staartvin</groupId>
             <artifactId>PluginLibrary</artifactId>
@@ -181,12 +174,6 @@
                     <groupId>org.hamcrest</groupId>
                 </exclusion>
             </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>me.staartvin.Statz</groupId>
-            <artifactId>Statz</artifactId>
-            <version>LATEST</version>
         </dependency>
 
         <dependency>
