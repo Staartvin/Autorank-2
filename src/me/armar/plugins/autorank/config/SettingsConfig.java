@@ -196,17 +196,6 @@ public class SettingsConfig extends AbstractConfig {
     }
 
     /**
-     * Check whether Autorank should use partial completion. If this is set to
-     * true, Autorank will mark completed requirements when a player is on a
-     * path so that they don't have to meet all requirements at the same time.
-     * Instead, they can first complete requirement 1 and then 2, and Autorank
-     * will still consider the path as completed.
-     */
-    public boolean usePartialCompletion() {
-        return this.getConfig().getBoolean("use partial completion", true);
-    }
-
-    /**
      * Get the plugin that is used to get the local play time of player. This is
      * only accounted for the local time. The global time is still calculated by
      * Autorank.

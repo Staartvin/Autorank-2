@@ -50,7 +50,7 @@ public class SpigotUpdater {
 
     public boolean checkForUpdates() throws Exception {
         URLConnection con = checkURL.openConnection();
-        this.newVersion = new BufferedReader(new InputStreamReader(con.getInputStream())).readLine();
+        this.newVersion = new BufferedReader(new InputStreamReader(con.getInputStream())).readLine().replace("v", "");
         return !plugin.getDescription().getVersion().equals(newVersion);
     }
 
