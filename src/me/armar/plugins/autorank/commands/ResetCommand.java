@@ -8,6 +8,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -64,6 +66,17 @@ public class ResetCommand extends AutorankCommand {
         }
 
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(final CommandSender sender, final Command cmd, final String commandLabel,
+                                      final String[] args) {
+
+        if (args.length == 2) {
+            return null;
+        } else {
+            return Arrays.asList("progress", "activepaths", "completedpaths");
+        }
     }
 
     @Override

@@ -12,8 +12,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * The command delegator for the '/ar track' command.
@@ -123,6 +122,32 @@ public class TrackCommand extends AutorankCommand {
         player.sendMessage(ChatColor.GREEN + "Current: " + ChatColor.GOLD + holder.getProgress(player));
 
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+
+        // If the sender is not a player, just send first 10 numbers.
+        if (!(sender instanceof Player)) {
+            return Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
+        }
+
+        Set<String> suggestedIds = new HashSet<>();
+
+        // Player has not entered a second argument yet.
+        if (args.length == 2 && args[args.length - 1].trim().equals("")) {
+
+            // For all active paths, get the id of the requirements that they have not completed yet.
+            for (Path activePath : plugin.getPathManager().getActivePaths(((Player) sender).getUniqueId())) {
+                for (CompositeRequirement requirement : activePath.getFailedRequirements((Player) sender, true)) {
+                    suggestedIds.add("" + (requirement.getRequirementId() + 1));
+                }
+            }
+
+            return new ArrayList<>(suggestedIds);
+        }
+
+        return null;
     }
 
     @Override

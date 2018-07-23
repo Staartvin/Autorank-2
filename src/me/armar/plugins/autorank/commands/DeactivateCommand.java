@@ -87,17 +87,16 @@ public class DeactivateCommand extends AutorankCommand {
     public List<String> onTabComplete(final CommandSender sender, final Command cmd, final String commandLabel,
                                       final String[] args) {
 
+        // If the sender is not a player, just return all paths
+        if (!(sender instanceof Player)) {
+            return plugin.getPathManager().getAllPaths().stream().map(Path::getDisplayName).collect(Collectors.toList
+                    ());
+        }
+
         final Player player = (Player) sender;
 
-        final List<Path> possiblePaths = plugin.getPathManager().getActivePaths(player.getUniqueId());
-
-        List<String> possibilities = possiblePaths.stream().map(Path::getDisplayName).collect(Collectors.toList());
-
-//        for (Path possiblePath : possiblePaths) {
-//            possibilities.add(possiblePath.getDisplayName());
-//        }
-
-        return possibilities;
+        return plugin.getPathManager().getActivePaths(player.getUniqueId()).stream().map(Path::getDisplayName)
+                .collect(Collectors.toList());
     }
 
     @Override

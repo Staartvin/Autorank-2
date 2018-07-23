@@ -11,8 +11,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * The command delegator for the '/ar choose' command.
@@ -103,17 +103,17 @@ public class ChooseCommand extends AutorankCommand {
     public List<String> onTabComplete(final CommandSender sender, final Command cmd, final String commandLabel,
                                       final String[] args) {
 
-        final Player player = (Player) sender;
-
-        final List<String> possibilities = new ArrayList<String>();
-
-        final List<Path> possiblePaths = plugin.getPathManager().getEligiblePaths(player);
-
-        for (Path possiblePath : possiblePaths) {
-            possibilities.add(possiblePath.getDisplayName());
+        // If the sender is not a player, just return all paths
+        if (!(sender instanceof Player)) {
+            return plugin.getPathManager().getAllPaths().stream().map(Path::getDisplayName).collect(Collectors.toList
+                    ());
         }
 
-        return possibilities;
+        final Player player = (Player) sender;
+
+        // Return the name of the paths that the player has active.
+        return plugin.getPathManager().getEligiblePaths(player).stream().map(Path::getDisplayName).collect(Collectors
+                .toList());
     }
 
     @Override

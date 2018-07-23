@@ -40,11 +40,11 @@ public class ImportCommand extends AutorankCommand {
 
                 if (!offlinePlayer.hasPlayedBefore() || offlinePlayer.getPlayer() == null) continue;
 
-                // Time in seconds
-                int vanillaTime = offlinePlayer.getPlayer().getStatistic(Statistic.PLAY_ONE_TICK) / 20;
+                // Time in minutes
+                int vanillaTime = offlinePlayer.getPlayer().getStatistic(Statistic.PLAY_ONE_MINUTE);
 
                 plugin.getPlayTimeManager().addLocalPlayTime(TimeType.TOTAL_TIME, offlinePlayer.getUniqueId(),
-                        vanillaTime / 60);
+                        vanillaTime);
 
                 importedPlayers++;
             }

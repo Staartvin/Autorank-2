@@ -14,8 +14,10 @@ import org.bukkit.entity.Player;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * The command delegator for the '/ar check' command.
@@ -226,6 +228,21 @@ public class CheckCommand extends AutorankCommand {
             AutorankTools.sendColoredMessage(sender, Lang.CANNOT_CHECK_CONSOLE.getConfigValue());
         }
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+
+        // If the sender is not a player, just return all online players.
+        if (!(sender instanceof Player)) {
+            return null;
+        }
+
+        Player player = (Player) sender;
+
+        // Return the name of the paths that the player has active.
+        return plugin.getPathManager().getActivePaths(player.getUniqueId
+                ()).stream().map(Path::getDisplayName).collect(Collectors.toCollection(ArrayList::new));
     }
 
     @Override
