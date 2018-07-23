@@ -90,23 +90,6 @@ public class BlocksPlacedRequirement extends AbstractRequirement {
             progress = getStatsPlugin().getNormalStat(StatsPlugin.StatType.BLOCKS_PLACED, player.getUniqueId(),
                     AutorankTools.makeStatsInfo("world", this.getWorld(), "block", wrapper.getItem().getType()
                             .name()));
-//            if (wrapper.showShortValue()) {
-//                // Use datavalue
-//                progress = getStatsPlugin().getNormalStat(StatsPlugin.StatType.BLOCKS_PLACED, player.getUniqueId(),
-//                        AutorankTools.makeStatsInfo("world", this.getWorld(), "typeID", wrapper.getItem().getTypeId(),
-//                                "dataValue", wrapper.getItem().getDurability()));
-//            } else {
-//                if (wrapper.getItem().getType() == Material.AIR) {
-//                    // Id was not given so only check amount
-//                    progress = getStatsPlugin().getNormalStat(StatsPlugin.StatType.BLOCKS_PLACED,
-//                            player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld()));
-//                } else {
-//                    // ID was given, but no storage value
-//                    progress = getStatsPlugin().getNormalStat(StatsPlugin.StatType.BLOCKS_PLACED,
-//                            player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld(), "typeID",
-//                                    wrapper.getItem().getTypeId()));
-//                }
-//            }
         }
 
         return progress >= wrapper.getBlocksPlaced();
@@ -121,10 +104,8 @@ public class BlocksPlacedRequirement extends AbstractRequirement {
 
         String materialName = null;
         int amount = 1;
-        short data = 0;
 
         String displayName = null;
-        boolean showShortValue = false;
         boolean useDisplayName = false;
 
         if (options.length == 1) {
@@ -135,17 +116,12 @@ public class BlocksPlacedRequirement extends AbstractRequirement {
             amount = Integer.parseInt(options[1].trim());
         }
         if (options.length > 2) {
-            data = (short) AutorankTools.stringToDouble(options[2]);
-            // Short value can make a difference, thus we show it.
-            showShortValue = true;
+            // Displayname
+            displayName = options[2];
         }
         if (options.length > 3) {
-            // Displayname
-            displayName = options[3];
-        }
-        if (options.length > 4) {
             // use display name?
-            useDisplayName = (options[4].equalsIgnoreCase("true"));
+            useDisplayName = (options[3].equalsIgnoreCase("true"));
         }
 
         ItemStack itemStack = null;
@@ -165,7 +141,7 @@ public class BlocksPlacedRequirement extends AbstractRequirement {
 
         // If no material is given, the item stack is null.
 
-        wrapper = new BlocksPlacedWrapper(itemStack, displayName, showShortValue, useDisplayName);
+        wrapper = new BlocksPlacedWrapper(itemStack, displayName, false, useDisplayName);
 
         wrapper.setBlocksPlaced(amount);
 

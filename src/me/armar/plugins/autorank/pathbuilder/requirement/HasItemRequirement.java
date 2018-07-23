@@ -21,12 +21,7 @@ public class HasItemRequirement extends AbstractRequirement {
             // Show displayname instead of material name
             arg.append(neededItem.getDisplayName());
         } else {
-
             arg.append(item.getType().toString().replace("_", " ").toLowerCase());
-
-            if (neededItem.showShortValue()) {
-                arg.append(" (Dam. value: " + item.getDurability() + ")");
-            }
         }
 
         String lang = Lang.ITEM_REQUIREMENT.getConfigValue(arg.toString());
@@ -70,10 +65,6 @@ public class HasItemRequirement extends AbstractRequirement {
         if (item == null)
             return false;
 
-        for (ItemStack itemStack : player.getInventory().getContents()) {
-            System.out.println("ITEMSTACK: " + itemStack);
-        }
-
         if (!neededItem.useDisplayName()) {
             return player.getInventory().containsAtLeast(item, item.getAmount());
         } else {
@@ -88,10 +79,8 @@ public class HasItemRequirement extends AbstractRequirement {
 
         String materialName = null;
         int amount = 1;
-        short data = 0;
 
         String displayName = null;
-        boolean showShortValue = false;
         boolean useDisplayName = false;
 
         if (options.length > 0)
@@ -99,17 +88,12 @@ public class HasItemRequirement extends AbstractRequirement {
         if (options.length > 1)
             amount = (int) AutorankTools.stringToDouble(options[1]);
         if (options.length > 2) {
-            data = (short) AutorankTools.stringToDouble(options[2]);
-            // Short value can make a difference, thus we show it.
-            showShortValue = true;
+            // Displayname
+            displayName = options[2];
         }
         if (options.length > 3) {
-            // Displayname
-            displayName = options[3];
-        }
-        if (options.length > 4) {
             // use display name?
-            useDisplayName = (options[4].equalsIgnoreCase("true"));
+            useDisplayName = (options[3].equalsIgnoreCase("true"));
         }
 
         if (materialName == null) {
@@ -126,7 +110,7 @@ public class HasItemRequirement extends AbstractRequirement {
 
         final ItemStack item = new ItemStack(matchedMaterial, amount);
 
-        neededItem = new ItemWrapper(item, displayName, showShortValue, useDisplayName);
+        neededItem = new ItemWrapper(item, displayName, false, useDisplayName);
 
         if (amount <= 0) {
             this.registerWarningMessage("Amount must be strictly higher than 0");
@@ -158,12 +142,12 @@ class ItemWrapper {
         return displayName;
     }
 
-    public ItemStack getItem() {
-        return item;
-    }
-
     public void setDisplayName(final String displayName) {
         this.displayName = displayName;
+    }
+
+    public ItemStack getItem() {
+        return item;
     }
 
     public void setItem(final ItemStack item) {

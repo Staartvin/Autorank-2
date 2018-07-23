@@ -30,22 +30,6 @@ public class BlocksBrokenRequirement extends AbstractRequirement {
             }
         }
 
-
-//        if (wrapper.getDisplayName() != null) {
-//            // Show displayname instead of material name
-//            arg.append(wrapper.getDisplayName());
-//        } else {
-//            if (item.getType().toString().contains("AIR")) {
-//                arg.append("blocks");
-//            } else {
-//                arg.append(item.getType().toString().replace("_", " ").toLowerCase());
-//            }
-//
-//            if (wrapper.showShortValue()) {
-//                arg.append(" (Dam. value: " + item.getDurability() + ")");
-//            }
-//        }
-
         String lang = Lang.BROKEN_BLOCKS_REQUIREMENT.getConfigValue(arg.toString());
 
         // Check if this requirement is world-specific
@@ -91,23 +75,6 @@ public class BlocksBrokenRequirement extends AbstractRequirement {
             progress = getStatsPlugin().getNormalStat(StatsPlugin.StatType.BLOCKS_BROKEN, player.getUniqueId(),
                     AutorankTools.makeStatsInfo("world", this.getWorld(), "block", wrapper.getItem().getType()
                             .name()));
-//            if (wrapper.showShortValue()) {
-//                // Use datavalue
-//                progress = getStatsPlugin().getNormalStat(StatsPlugin.StatType.BLOCKS_PLACED, player.getUniqueId(),
-//                        AutorankTools.makeStatsInfo("world", this.getWorld(), "typeID", wrapper.getItem().getTypeId(),
-//                                "dataValue", wrapper.getItem().getDurability()));
-//            } else {
-//                if (wrapper.getItem().getType() == Material.AIR) {
-//                    // Id was not given so only check amount
-//                    progress = getStatsPlugin().getNormalStat(StatsPlugin.StatType.BLOCKS_PLACED,
-//                            player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld()));
-//                } else {
-//                    // ID was given, but no storage value
-//                    progress = getStatsPlugin().getNormalStat(StatsPlugin.StatType.BLOCKS_PLACED,
-//                            player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld(), "typeID",
-//                                    wrapper.getItem().getTypeId()));
-//                }
-//            }
         }
 
         return progress >= wrapper.getBlocksBroken();
@@ -122,10 +89,8 @@ public class BlocksBrokenRequirement extends AbstractRequirement {
 
         String materialName = null;
         int amount = 1;
-        short data = 0;
 
         String displayName = null;
-        boolean showShortValue = false;
         boolean useDisplayName = false;
 
         if (options.length == 1) {
@@ -136,17 +101,12 @@ public class BlocksBrokenRequirement extends AbstractRequirement {
             amount = Integer.parseInt(options[1].trim());
         }
         if (options.length > 2) {
-            data = (short) AutorankTools.stringToDouble(options[2]);
-            // Short value can make a difference, thus we show it.
-            showShortValue = true;
+            // Displayname
+            displayName = options[2];
         }
         if (options.length > 3) {
-            // Displayname
-            displayName = options[3];
-        }
-        if (options.length > 4) {
             // use display name?
-            useDisplayName = (options[4].equalsIgnoreCase("true"));
+            useDisplayName = (options[3].equalsIgnoreCase("true"));
         }
 
         ItemStack itemStack = null;
@@ -166,7 +126,7 @@ public class BlocksBrokenRequirement extends AbstractRequirement {
 
         // If no material is given, the item stack is null.
 
-        wrapper = new BlocksBrokenWrapper(itemStack, displayName, showShortValue, useDisplayName);
+        wrapper = new BlocksBrokenWrapper(itemStack, displayName, false, useDisplayName);
 
         wrapper.setBlocksBroken(amount);
 
