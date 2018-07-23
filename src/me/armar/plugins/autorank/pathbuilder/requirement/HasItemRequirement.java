@@ -2,6 +2,7 @@ package me.armar.plugins.autorank.pathbuilder.requirement;
 
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -69,6 +70,10 @@ public class HasItemRequirement extends AbstractRequirement {
         if (item == null)
             return false;
 
+        for (ItemStack itemStack : player.getInventory().getContents()) {
+            System.out.println("ITEMSTACK: " + itemStack);
+        }
+
         if (!neededItem.useDisplayName()) {
             return player.getInventory().containsAtLeast(item, item.getAmount());
         } else {
@@ -81,7 +86,7 @@ public class HasItemRequirement extends AbstractRequirement {
     @Override
     public boolean setOptions(final String[] options) {
 
-        int id = -1;
+        String materialName = null;
         int amount = 1;
         short data = 0;
 
@@ -90,7 +95,7 @@ public class HasItemRequirement extends AbstractRequirement {
         boolean useDisplayName = false;
 
         if (options.length > 0)
-            id = (int) AutorankTools.stringToDouble(options[0]);
+            materialName = options[0].trim().toUpperCase().replace(" ", "_");
         if (options.length > 1)
             amount = (int) AutorankTools.stringToDouble(options[1]);
         if (options.length > 2) {
@@ -107,7 +112,12 @@ public class HasItemRequirement extends AbstractRequirement {
             useDisplayName = (options[4].equalsIgnoreCase("true"));
         }
 
-        final ItemStack item = new ItemStack(id, amount, data);
+        if (materialName == null) {
+            this.registerWarningMessage("There is no material specified.");
+            return false;
+        }
+
+        final ItemStack item = new ItemStack(Material.matchMaterial(materialName), amount);
 
         neededItem = new ItemWrapper(item, displayName, showShortValue, useDisplayName);
 

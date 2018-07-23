@@ -24,7 +24,7 @@ public class EffectResult extends AbstractResult {
             return this.getCustomDescription();
         }
 
-        return Lang.EFFECT_RESULT.getConfigValue(effect.getName());
+        return Lang.EFFECT_RESULT.getConfigValue(effect.name());
     }
 
     @Override

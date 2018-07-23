@@ -46,7 +46,6 @@ public class AdvancementRequirement extends AbstractRequirement {
 
             return count + "/" + advancementCount;
         } else {
-
             if (!player.getAdvancementProgress(advancement).isDone()) {
                 return "advancement not yet obtained.";
             } else {
