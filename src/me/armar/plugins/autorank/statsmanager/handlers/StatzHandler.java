@@ -55,13 +55,11 @@ public class StatzHandler extends StatsPlugin {
                 break;
             case BLOCKS_PLACED:
             case BLOCKS_BROKEN:
-                if (!arguments.containsKey("dataValue")) {
-                    value = statzApi.getSpecificData(uuid, statType,
-                            new RowRequirement("typeid", arguments.get("typeID").toString()));
+                if (!arguments.containsKey("block")) {
+                    value = statzApi.getSpecificData(uuid, statType);
                 } else {
                     value = statzApi.getSpecificData(uuid, statType,
-                            new RowRequirement("typeid", arguments.get("typeID").toString()),
-                            new RowRequirement("datavalue", arguments.get("dataValue").toString()));
+                            new RowRequirement("block", arguments.get("block").toString()));
                 }
 
                 break;

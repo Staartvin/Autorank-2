@@ -117,19 +117,16 @@ public class HasItemRequirement extends AbstractRequirement {
             return false;
         }
 
-        final ItemStack item = new ItemStack(Material.matchMaterial(materialName), amount);
+        Material matchedMaterial = Material.matchMaterial(materialName);
+
+        if (matchedMaterial == null) {
+            this.registerWarningMessage("Material '" + materialName + "' is not a valid material.");
+            return false;
+        }
+
+        final ItemStack item = new ItemStack(matchedMaterial, amount);
 
         neededItem = new ItemWrapper(item, displayName, showShortValue, useDisplayName);
-
-        if (neededItem == null) {
-            this.registerWarningMessage("No valid item is provided");
-            return false;
-        }
-
-        if (id < 0) {
-            this.registerWarningMessage("ID value cannot be negative");
-            return false;
-        }
 
         if (amount <= 0) {
             this.registerWarningMessage("Amount must be strictly higher than 0");

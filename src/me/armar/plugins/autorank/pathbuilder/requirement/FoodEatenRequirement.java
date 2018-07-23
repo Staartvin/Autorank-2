@@ -4,6 +4,7 @@ import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.staartvin.plugins.pluginlibrary.Library;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -84,12 +85,14 @@ public class FoodEatenRequirement extends AbstractRequirement {
             foodType = options[1].trim();
         }
 
-        foodEaten = new FoodWrapper(foodType, total);
+        Material foodMaterial = Material.matchMaterial(foodType);
 
-        if (foodEaten == null) {
-            this.registerWarningMessage("No number is provided or smaller than 0.");
+        if (foodMaterial == null) {
+            this.registerWarningMessage("Food '" + foodType + "' is not a valid type of food.");
             return false;
         }
+
+        foodEaten = new FoodWrapper(foodMaterial, total);
 
         return true;
     }
@@ -100,9 +103,9 @@ class FoodWrapper {
     private int amount;
     private ItemStack foodItem;
 
-    public FoodWrapper(final String foodName, final int amount) {
+    public FoodWrapper(final Material foodMaterial, final int amount) {
         this.setAmount(amount);
-        this.setFoodItem(AutorankTools.getFoodItemFromName(foodName));
+        this.setFoodItem(new ItemStack(foodMaterial, amount));
     }
 
     public int getAmount() {
@@ -114,7 +117,7 @@ class FoodWrapper {
     }
 
     public String getFoodName() {
-        return AutorankTools.getFoodName(foodItem);
+        return foodItem.getType().name();
     }
 
     public void setAmount(final int amount) {
