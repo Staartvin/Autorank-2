@@ -92,6 +92,19 @@
     <dependencies>
 
         <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>1.13-R0.1-SNAPSHOT</version>
+            <type>jar</type>
+        </dependency>
+
+        <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>bukkit</artifactId>
+            <version>1.13-R0.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
             <groupId>EssentialsGroupManager</groupId>
             <artifactId>EssentialsGroupManager</artifactId>
             <version>2.1.11</version>
@@ -115,20 +128,6 @@
             <artifactId>PluginLibrary</artifactId>
             <version>LATEST</version>
         </dependency>
-
-        <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-            <version>1.13-pre7-R0.1-SNAPSHOT</version>
-            <type>jar</type>
-        </dependency>
-
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
-            <version>1.13-R0.1-SNAPSHOT</version>
-        </dependency>
-
 
         <dependency>
             <groupId>com.github.gustav9797</groupId>
