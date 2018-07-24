@@ -36,9 +36,9 @@ public enum Lang {
      */
     ALREADY_COMPLETED_REQUIREMENT("already-completed-requirement", "&cYou have already completed this requirement!"),
     /**
-     * &4You're already on this path!
+     * &cYou're already on this path!
      */
-    ALREADY_ON_THIS_PATH("already-on-this-path", "&4You're already on this path!"),
+    ALREADY_ON_THIS_PATH("already-on-this-path", "&cYou're already on this path!"),
     /**
      * and
      */
@@ -188,10 +188,11 @@ public enum Lang {
      */
     INVALID_FORMAT("invalid-format", "&cInvalid format, use {0}."),
     /**
-     * &4You have not specified a valid leaderboard type! &eOnly 'total',
+     * &cYou have not specified a valid leaderboard type! &eOnly 'total',
      * 'daily', 'weekly' and 'monthly' are allowed.
      */
-    INVALID_LEADERBOARD_TYPE("invalid-leaderboard-type", "&4You have not specified a valid leaderboard type! &eOnly 'total', 'daily', 'weekly' and 'monthly' are allowed."),
+    INVALID_LEADERBOARD_TYPE("invalid-leaderboard-type", "&cYou have not specified a valid leaderboard type! &eOnly " +
+            "'total', 'daily', 'weekly' and 'monthly' are allowed."),
     /**
      * &c{0} is not a valid number!
      */
@@ -285,9 +286,9 @@ public enum Lang {
      */
     NO_FURTHER_PATH_FOUND("no-further-path-found", "none (no path found)"),
     /**
-     * &4There was no ranking path found with that name.
+     * &cThere was no ranking path found with that name.
      */
-    NO_PATH_FOUND_WITH_THAT_NAME("no-path-found-with-that-name", "&4There was no ranking path found with that name."),
+    NO_PATH_FOUND_WITH_THAT_NAME("no-path-found-with-that-name", "&cThere was no ranking path found with that name."),
     /**
      * &cYou need ({0}) for that!
      */
@@ -297,10 +298,11 @@ public enum Lang {
      */
     OPTIONAL_MARKER("optional-marker", "Optional"),
     /**
-     * &4You cannot use this command as this server has not enabled partial
+     * &cYou cannot use this command as this server has not enabled partial
      * completion!
      */
-    PARTIAL_COMPLETION_NOT_ENABLED("partial-completion-not-enabled", "&4You cannot use this command as this server has not enabled partial completion!"),
+    PARTIAL_COMPLETION_NOT_ENABLED("partial-completion-not-enabled", "&cYou cannot use this command as this server " +
+            "has not enabled partial completion!"),
     /**
      * Have permission '{0}'.
      */
@@ -316,7 +318,7 @@ public enum Lang {
     /**
      * &6{0}&c has never been logged before.
      */
-    PLAYER_IS_INVALID("player-is-invalid", "&6{0}&4 has never been logged before."),
+    PLAYER_IS_INVALID("player-is-invalid", "&6{0}&c has never been logged before."),
     /**
      * Kill at least {0} player(s).
      */
@@ -324,7 +326,7 @@ public enum Lang {
     /**
      * &6{0}&c is not online!
      */
-    PLAYER_NOT_ONLINE("player-not-online", "&6{0}&4 is not online!"),
+    PLAYER_NOT_ONLINE("player-not-online", "&6{0}&c is not online!"),
     /**
      * Changed playtime of {0} to {1}.
      */
@@ -451,14 +453,14 @@ public enum Lang {
      */
     NO_PATH_LEFT_TO_CHOOSE("no-path-left-to-choose", "&2{0} has played for {1} and currently has no path. There are no paths left to choose."),
     /**
-     * &4You already completed this path before. You are not allowed to retake
+     * &cYou already completed this path before. You are not allowed to retake
      * it!
      */
-    PATH_NOT_ALLOWED_TO_RETAKE("path-not-allowed-to-retake", "&4You already completed this path before. You are not allowed to retake it!"),
+    PATH_NOT_ALLOWED_TO_RETAKE("path-not-allowed-to-retake", "&cYou already completed this path before. You are not allowed to retake it!"),
     /**
-     * &4There are no paths that you can choose.
+     * &cThere are no paths that you can choose.
      */
-    NO_PATHS_TO_CHOOSE("no-paths-to-choose", "&4There are no paths that you can choose."),
+    NO_PATHS_TO_CHOOSE("no-paths-to-choose", "&cThere are no paths that you can choose."),
     /**
      * Have at least a level of {0} in BattleLevels.
      */

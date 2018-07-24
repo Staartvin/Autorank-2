@@ -8,6 +8,7 @@ import me.armar.plugins.autorank.pathbuilder.holders.CompositeRequirement;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
 import me.armar.plugins.autorank.util.AutorankTools;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -108,107 +109,35 @@ public class CheckCommand extends AutorankCommand {
     @Override
     public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
-        if (args.length > 1) {
-            // Check a specific path or check player
+        // Possibilities:
+        // 1. /ar check
+        // 2. /ar check <player>
+        // 3. /ar check <path>
+        // 4. /ar check <player> <path>
 
-            boolean showPathsOverview = true;
+        boolean showListOfPaths = false;
+        Path targetPath = null;
+        OfflinePlayer targetPlayer = null;
 
-            String targetPlayerName;
-            String targetPathName = null;
+        // ---- Read what kind of command should be performed based on the input ----
 
-            if (args.length > 2) {
-                // Sender performed /ar check <player> <path>
-                showPathsOverview = false;
+        if (args.length == 1) {
+            // Possibility 1: /ar check.
 
-                targetPlayerName = args[1];
-                targetPathName = AutorankTools.getStringFromArgs(args, 2);
-
-            } else {
-                // Sender performed /ar check <player>
-                targetPlayerName = args[1];
-            }
-
-            // Check if console is performing this command.
-            if (targetPlayerName == null) {
-
-                if (!(sender instanceof Player)) {
-                    sender.sendMessage("You must specify a player to view path data of!");
-                    return true;
-                }
-
-                targetPlayerName = sender.getName();
-            }
-
-            // Check if the sender is allowed to view other players.
-            if (targetPlayerName != null && !targetPlayerName.equalsIgnoreCase(sender.getName())) {
-                if (!this.hasPermission(AutorankPermission.CHECK_OTHERS, sender)) {
-                    return true;
-                }
-            }
-
-            // Check to see if the player that was specified was indeed a player or whether we should check for a path.
-            if (showPathsOverview && !plugin.getServer().getOfflinePlayer(targetPlayerName).hasPlayedBefore()) {
-                // Target player is not a player, so switch to path name instead
-                targetPathName = targetPlayerName;
-                showPathsOverview = false;
-            }
-
-            // If we are showing a path overview, we need a target player.
-            if (showPathsOverview && targetPlayerName == null) {
-                targetPlayerName = sender.getName();
-            }
-
-            // Player does not exist
-            if (!showPathsOverview && !plugin.getServer().getOfflinePlayer(targetPlayerName).hasPlayedBefore()) {
-                // Player does not exist, but we are expecting a player, so be probably look for a path instead.
-                targetPlayerName = sender.getName();
-                targetPathName = AutorankTools.getStringFromArgs(args, 1);
-            }
-
-            Path targetPath = plugin.getPathManager().findPathByDisplayName(targetPathName, false);
-
-            if (!showPathsOverview && targetPath == null) {
-                sender.sendMessage(ChatColor.RED + "Path " + targetPathName + " does not exist.");
+            // Check if it is send from console.
+            if (!(sender instanceof Player)) {
+                // We cannot check paths of console.
+                sender.sendMessage(ChatColor.RED + "You should specify a player to check.");
                 return true;
             }
 
-            final Player player = plugin.getServer().getPlayer(targetPlayerName);
-
-            if (plugin.getServer().getPlayer(targetPlayerName) == null) {
-                sender.sendMessage(ChatColor.RED + "The target player must be online to view their data!");
-                return true;
-            }
-
-            if (AutorankTools.isExcludedFromRanking(player)) {
-                sender.sendMessage(ChatColor.RED + Lang.PLAYER_IS_EXCLUDED.getConfigValue(player.getName()));
-                return true;
-            }
-
-            if (!showPathsOverview && !plugin.getPathManager().hasActivePath(player.getUniqueId(), targetPath)) {
-                sender.sendMessage(ChatColor.GOLD + player.getName() + ChatColor.RED + " does not have " + ChatColor
-                        .GRAY + targetPath.getDisplayName() + ChatColor.RED + " as an active path!");
-                return true;
-            }
-
-            int time = plugin.getPlayTimeManager().getTimeOfPlayer(targetPlayerName, true);
-
-            AutorankTools.sendColoredMessage(sender,
-                    Lang.HAS_PLAYED_FOR.getConfigValue(targetPlayerName, AutorankTools.timeToString(time,
-                            AutorankTools.Time.SECONDS)));
-
-            if (showPathsOverview) {
-                this.showPathsOverview(sender, player.getName(), player.getUniqueId());
-            } else {
-                this.showSpecificPath(sender, player.getName(), player.getUniqueId(), targetPath);
-            }
-
-        } else if (sender instanceof Player) {
-            // Show overview of active paths of the sender
+            // Check if player is allowed to check their own paths
             if (!this.hasPermission(AutorankPermission.CHECK_SELF,
                     sender)) {
                 return true;
             }
 
+            // Check if player is excluded from ranking
             if (AutorankTools.isExcludedFromRanking((Player) sender)) {
                 sender.sendMessage(ChatColor.RED + Lang.PLAYER_IS_EXCLUDED.getConfigValue(sender.getName()));
                 return true;
@@ -223,10 +152,138 @@ public class CheckCommand extends AutorankCommand {
                             AutorankTools.Time.SECONDS)));
 
             this.showPathsOverview(sender, player.getName(), player.getUniqueId());
-        } else {
-            // We cannot check paths of console.
-            AutorankTools.sendColoredMessage(sender, Lang.CANNOT_CHECK_CONSOLE.getConfigValue());
+
+            return true;
         }
+
+        // Other possibilities:
+        // 2. /ar check <player>
+        // 3. /ar check <path>
+        // 4. /ar check <player> <path>
+
+        else if (args.length == 2) {
+            // Possibility 2 or 3:
+            // /ar check <player>
+            // /ar check <path> (if path is a single name)
+
+            boolean isPath = false;
+            boolean isPlayer = false;
+
+            // Check if the argument could be a player
+            targetPlayer = plugin.getServer().getOfflinePlayer(args[1].trim());
+
+            // Check if player is valid
+            if (targetPlayer.hasPlayedBefore()) {
+                isPlayer = true;
+            }
+
+            // Check if the argument could be a path
+            targetPath = plugin.getPathManager().findPathByDisplayName(args[1].trim(), false);
+
+            if (targetPath != null) {
+                isPath = true;
+            }
+
+            if (isPath) { // If it is a path, we want to specifically show that path
+
+                // If the sender is a console, we cannot check that.
+                if (!(sender instanceof Player)) {
+                    // We cannot check paths of console.
+                    AutorankTools.sendColoredMessage(sender, Lang.CANNOT_CHECK_CONSOLE.getConfigValue());
+                    return true;
+                }
+
+                showListOfPaths = false;
+                targetPlayer = (OfflinePlayer) sender;
+            } else if (isPlayer) { // If it is a player, we show an overview of the path
+                showListOfPaths = true;
+            } else {
+                // The argument was not a player and not a path
+                sender.sendMessage(ChatColor.RED + "There is no player or path named '" + args[1] + "'.");
+                return true;
+            }
+        } else if (args.length > 2) {
+            // Possibility 4:
+            // /ar check <player> <path>
+
+            showListOfPaths = false;
+
+            // Get target player
+            targetPlayer = plugin.getServer().getOfflinePlayer(args[1].trim());
+
+            // Check if player is valid
+            if (!targetPlayer.hasPlayedBefore()) {
+                sender.sendMessage(Lang.PLAYER_IS_INVALID.getConfigValue(args[1]));
+                return true;
+            }
+
+            // Get target path
+            targetPath = plugin.getPathManager().findPathByDisplayName(AutorankTools.getStringFromArgs(args, 2), false);
+
+            // Check if the path is valid
+            if (targetPath == null) {
+                sender.sendMessage(Lang.NO_PATH_FOUND_WITH_THAT_NAME.getConfigValue());
+                return true;
+            }
+        }
+
+        // ---- Perform checks after it has been decided what action should be performed ----
+
+        // Player is looking up themselves
+        if (targetPlayer.getName().equalsIgnoreCase(sender.getName())) {
+            // Check if player is allowed to check their own paths
+            if (!this.hasPermission(AutorankPermission.CHECK_SELF,
+                    sender)) {
+                return true;
+            }
+        } else {
+            // Player is looking up someone else
+
+            // Check if player is allowed to check their other paths
+            if (!this.hasPermission(AutorankPermission.CHECK_OTHERS,
+                    sender)) {
+                return true;
+            }
+
+            // Check if the target player is online
+            if (targetPlayer.getPlayer() == null) {
+                sender.sendMessage(Lang.PLAYER_NOT_ONLINE.getConfigValue(targetPlayer.getName()));
+                return true;
+            }
+        }
+
+        Player onlineTargetPlayer = targetPlayer.getPlayer();
+
+        // Check if player is excluded from ranking
+        if (AutorankTools.isExcludedFromRanking(onlineTargetPlayer)) {
+            sender.sendMessage(ChatColor.RED + Lang.PLAYER_IS_EXCLUDED.getConfigValue(onlineTargetPlayer.getName()));
+            return true;
+        }
+
+        int time = plugin.getPlayTimeManager().getTimeOfPlayer(onlineTargetPlayer.getName(), true);
+
+        AutorankTools.sendColoredMessage(sender,
+                Lang.HAS_PLAYED_FOR.getConfigValue(onlineTargetPlayer.getName(), AutorankTools.timeToString(time,
+                        AutorankTools.Time.SECONDS)));
+
+        if (showListOfPaths) {
+            // We will show a list of paths
+            // Show overview of paths
+            this.showPathsOverview(sender, onlineTargetPlayer.getName(), onlineTargetPlayer.getUniqueId());
+        } else {
+            // We will show a specific path of a player to the sender
+
+            // Check if the path the player wants to check is active
+            if (!plugin.getPathManager().hasActivePath(onlineTargetPlayer.getUniqueId(), targetPath)) {
+                sender.sendMessage(ChatColor.GOLD + onlineTargetPlayer.getName() + ChatColor.RED + " does not have "
+                        + ChatColor
+                        .GRAY + targetPath.getDisplayName() + ChatColor.RED + " as an active path!");
+                return true;
+            }
+
+            this.showSpecificPath(sender, onlineTargetPlayer.getName(), onlineTargetPlayer.getUniqueId(), targetPath);
+        }
+
         return true;
     }
 
