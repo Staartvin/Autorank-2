@@ -74,7 +74,7 @@ public class CheckCommand extends AutorankCommand {
         }
 
 
-        sender.sendMessage(ChatColor.GOLD + "To view the progress of a specific path, use /ar check <path name>.");
+        sender.sendMessage(ChatColor.GOLD + "To view the progress of a specific path, use /ar view <path name>.");
     }
 
     // Show specific requirements for a path.
