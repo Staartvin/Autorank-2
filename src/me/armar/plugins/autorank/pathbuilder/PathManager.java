@@ -279,6 +279,7 @@ public class PathManager {
      * <li>The path is not active for the player.</li>
      * <li>The player has not completed the path yet, or the path is repeatable.</li>
      * <li>The player meets the prerequisites of the path.</li>
+     * <li>The player has not deactivated the path manually.</li>
      * </ul>
      *
      * @param player Player to check
@@ -446,6 +447,13 @@ public class PathManager {
 
         for (Path path : getAllPaths()) {
             if (isPathEligible(player, path) && path.isAutomaticallyAssigned()) {
+
+                // If the path is deactivated, we will not automatically assign the path to the player again.
+                // If we did, the player would constantly need to deactivate the path again.
+                if (this.isPathDeactivated(player.getUniqueId(), path.getDisplayName())) {
+                    continue;
+                }
+
                 assignPath(player, path);
 
                 plugin.debugMessage("Assigned " + path.getDisplayName() + " to " + player.getName());
@@ -496,5 +504,25 @@ public class PathManager {
      */
     public boolean hasLeaderboardExemption(UUID uuid) {
         return this.playerDataConfig.hasLeaderboardExemption(uuid);
+    }
+
+    /**
+     * Check if a player has deactivated a path. A path is considered to be de-activated if there is progress on the
+     * path, but the status of the path is not 'active'.
+     *
+     * @param uuid     UUID of the player
+     * @param pathName Name of the path to check
+     * @return true if the path is deactivated, false otherwise.
+     */
+    public boolean isPathDeactivated(UUID uuid, String pathName) {
+        Path path = this.findPathByDisplayName(pathName, false);
+
+        // If the path is not found, it cannot be active or inactive.
+        if (path == null) {
+            return false;
+        }
+
+        // Check if the path is not active and the player has completed at least one requirement.
+        return !path.isActive(uuid) && path.getCompletedRequirements(uuid).size() > 0;
     }
 }
