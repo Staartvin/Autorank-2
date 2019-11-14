@@ -47,7 +47,7 @@ public class TrackCommand extends AutorankCommand {
         String pathName;
 
         if (args.length < 3) {
-            // If no path is given, but there is only one active path, it's not a problem to forget the path.
+            // If no path is given, but there is only one active path, it's not a problem to omit the path.
             if (plugin.getPathManager().getActivePaths(player.getUniqueId()).size() == 1) {
                 pathName = plugin.getPathManager().getActivePaths(player.getUniqueId()).get(0).getDisplayName();
             } else {

@@ -9,6 +9,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * The command delegator for the '/ar leaderboard' command.
  */
@@ -118,5 +121,11 @@ public class LeaderboardCommand extends AutorankCommand {
     @Override
     public String getUsage() {
         return "/ar leaderboard <type>";
+    }
+
+    @Override
+    public List<String> onTabComplete(final CommandSender sender, final Command cmd, final String commandLabel,
+                                      final String[] args) {
+        return Arrays.asList("total", "daily", "weekly", "monthly");
     }
 }
