@@ -473,10 +473,11 @@ public class Autorank extends JavaPlugin {
 
         // Quests (fatpigsarefat)
         RequirementBuilder.registerRequirement("quests fatpigsarefat complete quest",
-                QuestsFPAFCompleteSpecificQuestRequirement.class);
+                QuestsAlternativeCompleteSpecificQuestRequirement.class);
         RequirementBuilder.registerRequirement("quests fatpigsarefat completed quests",
-                QuestsFPAFCompletedQuestsRequirement.class);
-        RequirementBuilder.registerRequirement("quests fatpigsarefat active quests", QuestsFPAFActiveQuestsRequirement
+                QuestsAlternativeCompletedQuestsRequirement.class);
+        RequirementBuilder.registerRequirement("quests fatpigsarefat active quests",
+                QuestsAlternativeActiveQuestsRequirement
                 .class);
 
         // SavageFactions
@@ -532,7 +533,8 @@ public class Autorank extends JavaPlugin {
      */
     public boolean isDevVersion() {
         return this.getDescription().getVersion().toLowerCase().contains("dev")
-                || this.getDescription().getVersion().toLowerCase().contains("project");
+                || this.getDescription().getVersion().toLowerCase().contains("project")
+                || this.getDescription().getVersion().toLowerCase().contains("snapshot");
     }
 
     /**

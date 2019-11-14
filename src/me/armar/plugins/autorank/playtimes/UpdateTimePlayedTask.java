@@ -4,14 +4,13 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
 import me.armar.plugins.autorank.storage.TimeType;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.UUID;
 
 /**
  * This class is responsible for updating a player's play time every x minutes.
  */
-public class UpdateTimePlayedTask extends BukkitRunnable {
+public class UpdateTimePlayedTask implements Runnable {
 
     private Autorank plugin;
 
@@ -31,10 +30,6 @@ public class UpdateTimePlayedTask extends BukkitRunnable {
         // Cancel task as player is not online anymore.
         if (player == null || !player.isOnline()) {
             plugin.debugMessage("Cancelling update play time of " + uuid + " as he's not online.");
-
-            if (!this.isCancelled()) {
-                this.cancel();
-            }
 
             return;
         }

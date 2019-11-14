@@ -30,8 +30,8 @@ public class TaskManager {
             return;
         }
 
-        BukkitTask task = plugin.getServer().getScheduler().runTaskTimer(plugin, new UpdateTimePlayedTask(plugin,
-                uuid), PlayTimeManager.INTERVAL_MINUTES * AutorankTools.TICKS_PER_MINUTE, PlayTimeManager
+        BukkitTask task = plugin.getServer().getScheduler().runTaskTimer(plugin, new UpdateTimePlayedTask(plugin, uuid)
+                , PlayTimeManager.INTERVAL_MINUTES * AutorankTools.TICKS_PER_MINUTE, PlayTimeManager
                 .INTERVAL_MINUTES * AutorankTools.TICKS_PER_MINUTE);
 
         // Store taskID so we can refer to it later.
