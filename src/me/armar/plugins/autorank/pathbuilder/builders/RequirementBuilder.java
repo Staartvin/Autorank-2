@@ -151,11 +151,11 @@ public class RequirementBuilder {
                 String invalidRequirementMessage = "Could not set up requirement '%s' of %s! Autorank reported the following error: '%s'";
                 String fullString = String.format(invalidRequirementMessage, originalPathString, pathName, primaryErrorMessage);
 
-                Autorank.getInstance().getLogger().severe(fullString);
+                Autorank.getInstance().getServer().getConsoleSender().sendMessage(ChatColor.RED + fullString);
                 Autorank.getInstance().getWarningManager().registerWarning(fullString, 10);
             }
         } catch (NoClassDefFoundError e) {
-            Autorank.getInstance().getLogger().severe(String.format(dependencyNotFoundMessage, requirementType));
+            Autorank.getInstance().getServer().getConsoleSender().sendMessage(ChatColor.RED + String.format(dependencyNotFoundMessage, requirementType));
             Autorank.getInstance().getWarningManager().registerWarning(String.format(dependencyNotFoundMessage, requirementType), 10);
             return this;
         }
