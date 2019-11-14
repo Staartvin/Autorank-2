@@ -2,12 +2,12 @@ package me.armar.plugins.autorank.pathbuilder.requirement;
 
 import me.armar.plugins.autorank.language.Lang;
 import me.staartvin.plugins.pluginlibrary.Library;
-import me.staartvin.plugins.pluginlibrary.hooks.QuestsFatPigsAreFatHook;
+import me.staartvin.plugins.pluginlibrary.hooks.QuestsAlternative;
 import org.bukkit.entity.Player;
 
-public class QuestsFPAFCompletedQuestsRequirement extends AbstractRequirement {
+public class QuestsAlternativeCompletedQuestsRequirement extends AbstractRequirement {
 
-    private QuestsFatPigsAreFatHook handler = null;
+    private QuestsAlternative handler = null;
     private int completedQuests = -1;
 
     @Override
@@ -33,9 +33,9 @@ public class QuestsFPAFCompletedQuestsRequirement extends AbstractRequirement {
     public boolean setOptions(final String[] options) {
 
         // Add dependency
-        addDependency(Library.QUESTS_FATPIGSAREFAT);
+        addDependency(Library.QUESTS_ALTERNATIVE);
 
-        handler = (QuestsFatPigsAreFatHook) this.getDependencyManager().getLibraryHook(Library.QUESTS_FATPIGSAREFAT);
+        handler = (QuestsAlternative) this.getDependencyManager().getLibraryHook(Library.QUESTS_ALTERNATIVE);
 
         if (options.length > 0) {
             try {

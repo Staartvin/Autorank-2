@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>Autorank</groupId>
     <artifactId>Autorank</artifactId>
-    <version>4.2.6-Dev-${BUILD_NUMBER}</version>
+    <version>4.2.6-SNAPSHOT-${BUILD_NUMBER}</version>
     <name>Autorank</name>
     <description>Maven project for Spigot plugin Autorank</description>
     <url>https://www.spigotmc.org/resources/autorank.3239/</url>
@@ -79,8 +79,9 @@
 
     <repositories>
         <repository>
-            <id>staartvin-repo</id>
-            <url>http://62.131.38.74:8081/artifactory/ext-release-local/</url>
+            <id>Staartvins repository</id>
+            <name>jenkins-artifactory-releases</name>
+            <url>http://staartvin.com:8081/artifactory/libs-release-local</url>
         </repository>
 
         <repository>
@@ -94,27 +95,28 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.13-R0.1-SNAPSHOT</version>
+            <version>1.14.4-R0.1-SNAPSHOT</version>
             <type>jar</type>
         </dependency>
 
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>1.13-R0.1-SNAPSHOT</version>
+            <version>1.14.4-R0.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
-            <groupId>EssentialsGroupManager</groupId>
-            <artifactId>EssentialsGroupManager</artifactId>
-            <version>2.1.11</version>
-            <type>jar</type>
+            <groupId>GroupManager</groupId>
+            <artifactId>GroupManager</artifactId>
+            <version>0.2.0</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>com.platymuus</groupId>
             <artifactId>bukkit-permissions</artifactId>
             <version>2.5</version>
+            <scope>provided</scope>
             <exclusions>
                 <exclusion>
                     <artifactId>metrics</artifactId>
@@ -126,26 +128,36 @@
         <dependency>
             <groupId>me.staartvin</groupId>
             <artifactId>PluginLibrary</artifactId>
-            <version>LATEST</version>
+            <version>1.2.1-SNAPSHOT-10</version>
+            <scope>provided</scope>
         </dependency>
 
-        <dependency>
-            <groupId>com.github.gustav9797</groupId>
-            <artifactId>PowerfulPerms</artifactId>
-            <version>4.5.2</version>
-        </dependency>
+        <!--        <dependency>-->
+        <!--            <groupId>com.github.gustav9797</groupId>-->
+        <!--            <artifactId>PowerfulPerms</artifactId>-->
+        <!--            <version>4.5.2</version>-->
+        <!--            <scope>provided</scope>-->
+        <!--        </dependency>-->
 
         <dependency>
             <groupId>me.staartvin.Statz</groupId>
             <artifactId>Statz</artifactId>
-            <version>LATEST</version>
+            <version>1.5.3-SNAPSHOT-3</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>net.milkbowl.vault</groupId>
-            <artifactId>Vault</artifactId>
-            <version>1.5.6</version>
-            <type>jar</type>
+            <artifactId>VaultAPI</artifactId>
+            <version>1.7</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>me.lucko.luckperms</groupId>
+            <artifactId>luckperms-api</artifactId>
+            <version>4.1</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -173,13 +185,6 @@
                     <groupId>org.hamcrest</groupId>
                 </exclusion>
             </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>me.lucko.luckperms</groupId>
-            <artifactId>luckperms-api</artifactId>
-            <version>4.1</version>
-            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

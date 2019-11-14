@@ -1,7 +1,10 @@
 package me.armar.plugins.autorank.permissions;
 
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.permissions.handlers.*;
+import me.armar.plugins.autorank.permissions.handlers.GroupManagerHandler;
+import me.armar.plugins.autorank.permissions.handlers.LuckPermsHandler;
+import me.armar.plugins.autorank.permissions.handlers.PermissionsBukkitHandler;
+import me.armar.plugins.autorank.permissions.handlers.VaultPermissionsHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
@@ -41,10 +44,6 @@ public class PermissionsPluginManager {
             // Use PermissionsBukkit
             permissionPlugin = new PermissionsBukkitHandler(plugin);
             plugin.debugMessage("Using PermissionsBukkit as permissions plugin");
-        } else if (isPluginAvailable("PowerfulPerms")) {
-            // Use PermissionsBukkit
-            permissionPlugin = new PowerfulPermsHandler(plugin);
-            plugin.debugMessage("Using PowerfulPerms as permissions plugin");
         } else if (isPluginAvailable("LuckPerms")) {
             // Use LuckPerms
             permissionPlugin = new LuckPermsHandler(plugin);
