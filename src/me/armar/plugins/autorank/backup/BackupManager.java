@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -17,7 +18,7 @@ import java.util.Date;
  */
 public class BackupManager {
 
-    private final static DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+    public final static DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
     private final BackupDataManager backupDataManager;
     private final Autorank plugin;
 
@@ -102,7 +103,6 @@ public class BackupManager {
         plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new Runnable() {
             @Override
             public void run() {
-
                 // Older than a day
                 if ((System.currentTimeMillis() - backupDataManager.getLatestBackup("storage")) > 1000 * 60 * 60 * 24
                     /* One day (in ms)*/) {
@@ -118,6 +118,15 @@ public class BackupManager {
                 } else {
                     plugin.debugMessage("Playerdata files did not have to be backed up yet.");
                 }
+
+                // Delete old backups
+                plugin.getStorageManager().getActiveStorageProviders().forEach(providerName -> {
+
+                    int deletedBackups =
+                            plugin.getStorageManager().getActiveStorageProvider(providerName).clearBackupsBeforeDate(LocalDate.now().minusDays(14));
+
+                    plugin.debugMessage("Deleted " + deletedBackups + " backups of " + providerName);
+                });
 
                 // Save config
                 backupDataManager.saveConfig();

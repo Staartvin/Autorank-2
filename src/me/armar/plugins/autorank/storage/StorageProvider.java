@@ -3,6 +3,7 @@ package me.armar.plugins.autorank.storage;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.language.Lang;
 
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
@@ -238,6 +239,14 @@ public abstract class StorageProvider {
      * @return whether the back up succeeded.
      */
     public abstract boolean backupData();
+
+    /**
+     * Delete backups that were made before a certain date.
+     *
+     * @param date Date to delete backups.
+     * @return how many backups were deleted.
+     */
+    public abstract int clearBackupsBeforeDate(LocalDate date);
 
     /**
      * Different types of storage that a StorageProvider may use.

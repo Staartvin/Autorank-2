@@ -9,7 +9,10 @@ import org.bukkit.ChatColor;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -239,6 +242,55 @@ public class MySQLStorageProvider extends StorageProvider {
         mysqlLibrary.executeQueries(statements);
 
         return true;
+    }
+
+    @Override
+    public int clearBackupsBeforeDate(LocalDate date) {
+        DateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
+
+        List<String> tablesToDelete = new ArrayList<>();
+
+        try (ResultSet resultSet =
+                     mysqlLibrary.executeQuery("SHOW TABLES;")) {
+
+            while (resultSet != null && resultSet.next()) {
+                // Read all tables and delete the ones that are not needed.
+
+                String tableName = resultSet.getString(1);
+
+                // Check what the date of the file is.
+                String fileDateString = tableName.replaceAll("[^\\d]", "");
+
+                Date fileDate = null;
+
+                try {
+                    fileDate = df.parse(fileDateString);
+                } catch (ParseException e) {
+                    // Ignore error.
+                }
+
+                // Ignore file if date could not be parsed
+                if (fileDate == null) {
+                    continue;
+                }
+
+                if (fileDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().isBefore(date)) {
+                    // This file is from before the date, so delete it.
+                    tablesToDelete.add(tableName);
+                }
+            }
+
+            // Now remove all tables that should be deleted.
+            tablesToDelete.forEach(tableName -> {
+                mysqlLibrary.execute("DROP TABLE `" + tableName + "`;");
+            });
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return tablesToDelete.size();
     }
 
     private void loadTableNames() {

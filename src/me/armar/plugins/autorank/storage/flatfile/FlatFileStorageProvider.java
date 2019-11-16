@@ -1,6 +1,7 @@
 package me.armar.plugins.autorank.storage.flatfile;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.backup.BackupManager;
 import me.armar.plugins.autorank.config.SimpleYamlConfiguration;
 import me.armar.plugins.autorank.storage.StorageProvider;
 import me.armar.plugins.autorank.storage.TimeType;
@@ -8,7 +9,17 @@ import me.armar.plugins.autorank.util.AutorankTools;
 import org.bukkit.OfflinePlayer;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class FlatFileStorageProvider extends StorageProvider {
 
@@ -209,6 +220,57 @@ public class FlatFileStorageProvider extends StorageProvider {
         }
 
         return true;
+    }
+
+    @Override
+    public int clearBackupsBeforeDate(LocalDate date) {
+
+        String backupsFolder = plugin.getDataFolder().getAbsolutePath()
+                + File.separator + "backups";
+
+        AtomicInteger deletedFiles = new AtomicInteger();
+
+        try (Stream<Path> walk = Files.walk(Paths.get(backupsFolder))) {
+
+            List<String> result = walk.filter(Files::isRegularFile)
+                    .map(Path::toString).collect(Collectors.toList());
+
+            result.forEach(fileName -> {
+                // Check what the date of the file is.
+                String fileDateString = fileName.replaceAll("[^\\d]", "");
+
+                Date fileDate = null;
+
+                try {
+                    fileDate = BackupManager.dateFormat.parse(fileDateString);
+                } catch (ParseException e) {
+                    // Ignore error.
+                }
+
+                if (fileDate == null) {
+                    return;
+                }
+
+                if (!fileDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().isBefore(date)) {
+                    // This file is not from before the date, so skip it.
+                    return;
+                }
+
+                // Now remove the file since it is applicable for removal.
+                try {
+                    Files.deleteIfExists(Paths.get(fileName));
+                    deletedFiles.getAndIncrement();
+                } catch (IOException ignored) {
+                }
+
+            });
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        return deletedFiles.get();
     }
 
     /**
