@@ -6,6 +6,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -72,5 +74,24 @@ public abstract class AutorankCommand implements TabExecutor {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Return all arguments that were provided in the given string list. An argument is specified as a string with
+     * two dashes (--) in front of it. Note that return arguments are all lowercased and the dashes are removed.
+     *
+     * @param strings Strings provided by the onCommand() method.
+     * @return all strings that identify as an argument.
+     */
+    public List<String> getArgumentOptions(String[] strings) {
+        List<String> arguments = new ArrayList<>();
+
+        Arrays.stream(strings).forEach(string -> {
+            if (string.matches("[-]{2}[a-zA-Z_-]+")) {
+                arguments.add(string.replace("--", "").toLowerCase());
+            }
+        });
+
+        return arguments;
     }
 }
