@@ -84,6 +84,9 @@ public class WarningManager {
      * Register a new warning. Priority level will be capped if this number is
      * too high or too low.
      *
+     * You can provide your own priority level or use a default one, see
+     * {@link WarningManager#LOW_PRIORITY_WARNING}, {@link WarningManager#MEDIUM_PRIORITY_WARNING} and
+     * {@link WarningManager#HIGH_PRIORITY_WARNING}.
      * @param message  Warning message description
      * @param priority Priority level (1 - 10).
      */
@@ -96,6 +99,16 @@ public class WarningManager {
         }
 
         warnings.put(message, priority);
+    }
+
+    /**
+     * Registers a new warning with the default priority level (LOW).
+     * Also see {@link #registerWarning(String, int)}.
+     *
+     * @param message Warning message to register.
+     */
+    public void registerWarning(final String message) {
+        this.registerWarning(message, LOW_PRIORITY_WARNING);
     }
 
     public void startWarningTask() {
