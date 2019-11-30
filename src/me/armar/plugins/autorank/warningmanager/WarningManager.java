@@ -47,6 +47,10 @@ public class WarningManager {
         this.plugin = plugin;
     }
 
+    public static final int LOW_PRIORITY_WARNING = 1;
+    public static final int MEDIUM_PRIORITY_WARNING = 5;
+    public static final int HIGH_PRIORITY_WARNING = 10;
+
     private String findHighestPriorityWarning() {
         String highestWarning = null;
         int highestPriority = 0;
@@ -71,10 +75,6 @@ public class WarningManager {
     public String getHighestWarning() {
 
         final String highestWarning = findHighestPriorityWarning();
-
-        if (highestWarning == null) {
-            return null;
-        }
 
         // Return the highest one
         return highestWarning;
