@@ -40,6 +40,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Main class of Autorank
@@ -230,31 +232,61 @@ public class Autorank extends JavaPlugin {
 
         // ------------- Register storage providers -------------
 
-        // Register FlatFile storage provider
-        getStorageManager().registerStorageProvider(new FlatFileStorageProvider(this));
+        FlatFileStorageProvider flatFileStorageProvider = new FlatFileStorageProvider(this);
+
+        // Load flatfile storage
+        CompletableFuture<Void> loadFlatFileTask =
+                flatFileStorageProvider.initialiseProvider().thenAccept(loaded -> {
+                    if (!loaded) {
+                        // Something went wrong when initialising.
+                        this.getWarningManager().registerWarning("Could not initiliase flatfile " +
+                                        "storage!",
+                                WarningManager.HIGH_PRIORITY_WARNING);
+                        return;
+                    }
+
+                    // Register FlatFile storage provider
+                    getStorageManager().registerStorageProvider(flatFileStorageProvider);
+                });
 
 
+        CompletableFuture<Void> loadMySQLTask = new CompletableFuture<>();
+
+        // Load MySQL database if needed.
         if (this.getSettingsConfig().useMySQL()) {
             StorageProvider mysqlStorageProvider = new MySQLStorageProvider(this);
 
-            // Only register the mysql storage provider if it is loaded.
-            if (mysqlStorageProvider.isLoaded()) {
-                // Register MySQL storage provider
-                getStorageManager().registerStorageProvider(mysqlStorageProvider);
+            loadMySQLTask = mysqlStorageProvider.initialiseProvider().thenAccept(loaded -> {
+                // Only register the mysql storage provider if it is loaded.
+                if (loaded) {
+                    // Register MySQL storage provider
+                    getStorageManager().registerStorageProvider(mysqlStorageProvider);
 
-                // Set mysql as primary storage provider.
-                if (this.getSettingsConfig().getPrimaryStorageProvider().equalsIgnoreCase("mysql")) {
-                    getStorageManager().setPrimaryStorageProvider(mysqlStorageProvider);
+                    // Set mysql as primary storage provider.
+                    if (this.getSettingsConfig().getPrimaryStorageProvider().equalsIgnoreCase("mysql")) {
+                        getStorageManager().setPrimaryStorageProvider(mysqlStorageProvider);
+                    }
+                } else {
+                    // Admin wanted to use MySQL, but the storage provider could not be loaded. Warn the admin.
+                    this.getWarningManager().registerWarning("The MySQL storage provider could not be started. Check " +
+                            "for " +
+                            "errors!", WarningManager.HIGH_PRIORITY_WARNING);
                 }
-            } else {
-                // Admin wanted to use MySQL, but the storage provider could not be loaded. Warn the admin.
-                this.getWarningManager().registerWarning("The MySQL storage provider could not be started. Check for " +
-                        "errors!", WarningManager.HIGH_PRIORITY_WARNING);
-            }
+            });
         }
 
-        this.getLogger().info("Primary storage provider of Autorank: " + this.getStorageManager()
-                .getPrimaryStorageProvider().getName());
+        CompletableFuture<Void> finalLoadMySQLTask = loadMySQLTask;
+        this.getServer().getScheduler().runTaskAsynchronously(this, () -> {
+            try {
+                CompletableFuture.allOf(loadFlatFileTask, finalLoadMySQLTask).thenRun(() -> {
+                    this.getLogger().info("Primary storage provider of Autorank: " + this.getStorageManager()
+                            .getPrimaryStorageProvider().getName());
+                }).get();
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+        });
+
 
         // ------------- Initialize requirements and results -------------
         this.initializeReqsAndRes();

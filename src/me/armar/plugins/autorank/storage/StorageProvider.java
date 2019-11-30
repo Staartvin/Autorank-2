@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * This abstract class represents a provider that stores playtime of players. The internals ought to be implemented
@@ -76,7 +77,7 @@ public abstract class StorageProvider {
      *
      * @return whether the storage provider is initialised properly.
      */
-    public abstract boolean initialiseProvider();
+    public abstract CompletableFuture<Boolean> initialiseProvider();
 
     /**
      * Remove data about players that have not been online for at least x time. The threshold is in days.
