@@ -40,17 +40,8 @@ public class MySQLStorageProvider extends StorageProvider {
 
     private boolean isLoaded = false;
 
-    // TODO implement MySQL provider
     public MySQLStorageProvider(Autorank instance) {
         super(instance);
-
-        // Initialise provider to make it ready for use.
-        if (!this.initialiseProvider()) {
-            plugin.debugMessage("There was an error loading storage provider '" + getName() + "'.");
-            isLoaded = false;
-        }
-
-        isLoaded = true;
     }
 
     @Override
@@ -124,23 +115,33 @@ public class MySQLStorageProvider extends StorageProvider {
     }
 
     @Override
-    public boolean initialiseProvider() {
+    public CompletableFuture<Boolean> initialiseProvider() {
 
-        // Load table names
-        loadTableNames();
+        return CompletableFuture.supplyAsync(() -> {
+            // Load table names
+            loadTableNames();
 
-        // Load settings from settings file.
-        loadMySQLVariables();
+            // Load settings from settings file and initialize MySQL connection .
+            try {
+                if (!loadMySQLVariables().get()) {
+                    return false;
+                }
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+                return false;
+            }
 
-        // Check whether loading was successful.
-        if (mysqlLibrary == null) {
-            return false;
-        }
+            // Check whether loading was successful.
+            if (mysqlLibrary == null) {
+                return false;
+            }
 
-        // Load and create tables
-        createTables();
+            // Load and create tables
+            createTables();
 
-        return true;
+            isLoaded = true;
+            return true;
+        });
     }
 
     @Override
@@ -313,34 +314,34 @@ public class MySQLStorageProvider extends StorageProvider {
     /**
      * Grab the credentials defined in the Setting config and initialise connection to MySQL database.
      */
-    private void loadMySQLVariables() {
+    private CompletableFuture<Boolean> loadMySQLVariables() {
 
-        final SettingsConfig configHandler = plugin.getSettingsConfig();
+        return CompletableFuture.supplyAsync(() -> {
+            final SettingsConfig configHandler = plugin.getSettingsConfig();
 
+            if (!configHandler.useMySQL()) {
+                plugin.getLogger().warning("Autorank is trying to register a MySQL storage provider, but MySQL is " +
+                        "disabled in the settings file!");
+                return false;
+            }
 
-        if (!configHandler.useMySQL()) {
-            plugin.getLogger().warning("Autorank is trying to register a MySQL storage provider, but MySQL is " +
-                    "disabled in the settings file!");
-            return;
-        }
+            hostname = configHandler.getMySQLCredentials(SettingsConfig.MySQLCredentials.HOSTNAME);
+            username = configHandler.getMySQLCredentials(SettingsConfig.MySQLCredentials.USERNAME);
+            password = configHandler.getMySQLCredentials(SettingsConfig.MySQLCredentials.PASSWORD);
+            database = configHandler.getMySQLCredentials(SettingsConfig.MySQLCredentials.DATABASE);
 
-        hostname = configHandler.getMySQLCredentials(SettingsConfig.MySQLCredentials.HOSTNAME);
-        username = configHandler.getMySQLCredentials(SettingsConfig.MySQLCredentials.USERNAME);
-        password = configHandler.getMySQLCredentials(SettingsConfig.MySQLCredentials.PASSWORD);
-        database = configHandler.getMySQLCredentials(SettingsConfig.MySQLCredentials.DATABASE);
+            mysqlLibrary = new SQLDataStorage(hostname, username, password, database);
 
-        mysqlLibrary = new SQLDataStorage(hostname, username, password, database);
-
-        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
             if (!mysqlLibrary.connect()) {
                 mysqlLibrary = null;
                 plugin.getLogger().severe("Could not connect to " + hostname);
                 plugin.debugMessage(ChatColor.RED + "Could not connect to MYSQL!");
+                return false;
             } else {
                 plugin.debugMessage(ChatColor.RED + "Successfully established connection to " + hostname);
+                return true;
             }
         });
-
     }
 
     /**

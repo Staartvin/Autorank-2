@@ -17,6 +17,7 @@ import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -36,14 +37,6 @@ public class FlatFileStorageProvider extends StorageProvider {
 
     public FlatFileStorageProvider(Autorank instance) {
         super(instance);
-
-        // Initialise provider to make it ready for use.
-        if (!this.initialiseProvider()) {
-            plugin.debugMessage("There was an error loading storage provider '" + getName() + "'.");
-            isLoaded = false;
-        }
-
-        isLoaded = true;
     }
 
     @Override
@@ -111,18 +104,21 @@ public class FlatFileStorageProvider extends StorageProvider {
     }
 
     @Override
-    public boolean initialiseProvider() {
+    public CompletableFuture<Boolean> initialiseProvider() {
+        return CompletableFuture.supplyAsync(() -> {
+            // Load data files
+            FlatFileStorageProvider.this.loadDataFiles();
 
-        // Load data files
-        this.loadDataFiles();
+            // Register task for saving data files.
+            FlatFileStorageProvider.this.registerTasks();
 
-        // Register task for saving data files.
-        this.registerTasks();
+            // Do calendar check to reset storage files that are outdated.
+            FlatFileStorageProvider.this.doCalendarCheck();
 
-        // Do calendar check to reset storage files that are outdated.
-        this.doCalendarCheck();
+            isLoaded = true;
 
-        return true;
+            return true;
+        });
     }
 
     @Override
