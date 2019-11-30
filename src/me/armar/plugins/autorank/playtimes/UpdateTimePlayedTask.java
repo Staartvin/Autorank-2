@@ -34,6 +34,9 @@ public class UpdateTimePlayedTask implements Runnable {
             return;
         }
 
+        // Set when we last updated this player's time.
+        plugin.getTaskManager().setLastPlayTimeUpdate(uuid, System.currentTimeMillis());
+
         // Do calendar check to see if storage provider still has up-to-date info.
         plugin.getStorageManager().doCalendarCheck();
 

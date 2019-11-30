@@ -18,6 +18,7 @@ public class TaskManager {
     private Autorank plugin;
 
     private Map<UUID, Integer> updatePlayTimeTaskIds = new HashMap<>();
+    private Map<UUID, Long> lastPlayTimeUpdate = new HashMap<>();
 
     public TaskManager(Autorank plugin) {
         this.plugin = plugin;
@@ -36,6 +37,8 @@ public class TaskManager {
 
         // Store taskID so we can refer to it later.
         updatePlayTimeTaskIds.put(uuid, task.getTaskId());
+        // Register when we started the task.
+        lastPlayTimeUpdate.put(uuid, System.currentTimeMillis());
 
         plugin.debugMessage("Registered update play time task for player " + uuid + " (" + task.getTaskId() + ").");
     }
@@ -54,6 +57,25 @@ public class TaskManager {
 
         // Remove it from registry so we can re-register if we ever want to.
         updatePlayTimeTaskIds.remove(uuid);
+    }
+
+    public void setLastPlayTimeUpdate(UUID uuid, long value) {
+
+        if (value < 0) {
+            // remove the value if it's smaller than 0.
+            lastPlayTimeUpdate.remove(uuid);
+        }
+
+        lastPlayTimeUpdate.put(uuid, value);
+    }
+
+    public long getLastPlayTimeUpdate(UUID uuid) {
+
+        if (!lastPlayTimeUpdate.containsKey(uuid)) {
+            return -1;
+        }
+
+        return lastPlayTimeUpdate.get(uuid);
     }
 
 }
