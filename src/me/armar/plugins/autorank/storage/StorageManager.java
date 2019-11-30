@@ -54,7 +54,7 @@ public class StorageManager {
     }
 
     /**
-     * Get a list of active storage providers by name(or an empty list if no storage provider is active).
+     * Get a list of active storage providers by name (or an empty list if no storage provider is active).
      *
      * @return a list of names that correspond to the active storage providers
      */
@@ -165,6 +165,29 @@ public class StorageManager {
     }
 
     /**
+     * Set time of a player's for specific storage providers. This means that the player time will only
+     * be updated for a player if the storage type of the storage provider matches the given storage type.
+     *
+     * @param storageType Type of storage
+     * @param timeType    Type of time
+     * @param uuid        UUID of the player
+     * @param value       Value to set time to.
+     */
+    public void setPlayerTime(StorageProvider.StorageType storageType, TimeType timeType, UUID uuid, int value) {
+        this.getActiveStorageProviders().forEach(storageProviderName -> {
+            StorageProvider storageProvider = getActiveStorageProvider(storageProviderName);
+
+            if (storageProvider == null) return;
+
+            // Check if the storage type matches.
+            if (storageProvider.getStorageType() != storageType) return;
+
+            // Set player time to this storage type.
+            storageProvider.setPlayerTime(timeType, uuid, value);
+        });
+    }
+
+    /**
      * Add time to a player's current time (for a given time type) for all storage providers.
      *
      * @param timeType Type of time
@@ -187,6 +210,29 @@ public class StorageManager {
         for (TimeType timeType : TimeType.values()) {
             this.addPlayerTime(timeType, uuid, value);
         }
+    }
+
+    /**
+     * Add time to a player's current time for specific storage providers. This means that the player time will only
+     * be updated for a player if the storage type of the storage provider matches the given storage type.
+     *
+     * @param storageType Type of storage
+     * @param timeType    Type of time
+     * @param uuid        UUID of the player
+     * @param value       Value to add.
+     */
+    public void addPlayerTime(StorageProvider.StorageType storageType, TimeType timeType, UUID uuid, int value) {
+        this.getActiveStorageProviders().forEach(storageProviderName -> {
+            StorageProvider storageProvider = getActiveStorageProvider(storageProviderName);
+
+            if (storageProvider == null) return;
+
+            // Check if the storage type matches.
+            if (storageProvider.getStorageType() != storageType) return;
+
+            // Add player time to this storage type.
+            storageProvider.addPlayerTime(timeType, uuid, value);
+        });
     }
 
     /**
