@@ -12,6 +12,13 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.Statistic;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.YamlConfiguration;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * The command delegator for the '/ar import' command.
@@ -30,6 +37,39 @@ public class ImportCommand extends AutorankCommand {
         if (!this.hasPermission(AutorankPermission.IMPORT_DATA, sender)) {
             return true;
         }
+
+        // Get parameters specified by the user.
+        List<String> parameters = this.getArgumentOptions(args);
+
+        // Keep track of where we should write the data to.
+        // By default, we only write to the local database.
+        boolean writeToGlobalDatabase = false, writeToLocalDatabase = true;
+
+        // Keep track of what data we should override.
+        boolean overwriteGlobalDatabase = false, overwriteLocalDatabase = false;
+
+        // Check the parameters to be used later.
+
+        if (parameters.contains("db-only")) {
+            writeToGlobalDatabase = true;
+            writeToLocalDatabase = false;
+        } else if (parameters.contains("db")) {
+            writeToGlobalDatabase = true;
+        }
+
+        if (parameters.contains("overwrite-all")) {
+            overwriteGlobalDatabase = true;
+            overwriteLocalDatabase = true;
+            writeToGlobalDatabase = true;
+            writeToLocalDatabase = true;
+        } else if (parameters.contains("overwrite-flatfile")) {
+            overwriteLocalDatabase = true;
+            writeToLocalDatabase = true;
+        } else if (parameters.contains("overwrite-db")) {
+            overwriteGlobalDatabase = true;
+            writeToGlobalDatabase = true;
+        }
+
 
         // Import data from vanilla minecraft
         if (args.length > 1 && args[1] != null && args[1].equalsIgnoreCase("vanilladata")) {
@@ -55,36 +95,167 @@ public class ImportCommand extends AutorankCommand {
             return true;
         }
 
-        int supportingProviders = 0;
-
-        // Check whether there is a storage provide that supports importing
-        for (String namedStorageProvider : plugin.getStorageManager().getActiveStorageProviders()) {
-            StorageProvider storageProvider = plugin.getStorageManager().getActiveStorageProvider(namedStorageProvider);
-
-            if (storageProvider.canImportData()) {
-                supportingProviders++;
-            }
-        }
-
-        if (supportingProviders <= 0) {
-            sender.sendMessage(ChatColor.RED + "There is no active storage provider that allows importing of " +
-                    "storage, hence Autorank cannot import data.");
+        // Check if we have an active storage provider.
+        if (plugin.getStorageManager().getActiveStorageProviders().size() == 0) {
+            sender.sendMessage(ChatColor.RED + "There are no active storage providers, so I can't store the imported " +
+                    "data!");
             return true;
         }
 
-        sender.sendMessage(ChatColor.GREEN + "Started importing data for " + ChatColor.GOLD +
-                supportingProviders + ChatColor.GREEN + " active storage providers.");
+        // Check if we want to write to the global database and if there is a storage provider active that allows this.
+        if (writeToGlobalDatabase && !plugin.getStorageManager().isStorageTypeActive(StorageProvider.StorageType.DATABASE)) {
+            sender.sendMessage(ChatColor.RED + "You want to store the imported data to the global database, but no " +
+                    "database is active.");
+            return true;
+        }
 
-        plugin.getStorageManager().importDataForStorageProviders();
+        // We need final booleans for using it in a runnable
+        boolean finalWriteToLocalDatabase = writeToLocalDatabase;
+        boolean finalWriteToGlobalDatabase = writeToGlobalDatabase;
+        boolean finalOverwriteGlobalDatabase = overwriteGlobalDatabase;
+        boolean finalOverwriteLocalDatabase = overwriteLocalDatabase;
 
-        AutorankTools.sendColoredMessage(sender, Lang.DATA_IMPORTED.getConfigValue());
+        // Run task async because it might take long.
+        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+            @Override
+            public void run() {
+
+                // Read import folder and find files there.
+
+                String importFolder =
+                        plugin.getDataFolder().getAbsolutePath() + File.separator + "imports" + File.separator;
+
+                Map<String, TimeType> filesToImport = new HashMap<String, TimeType>() {
+                    {
+                        put("Total_time.yml", TimeType.TOTAL_TIME);
+                        put("Daily_time.yml", TimeType.DAILY_TIME);
+                        put("Weekly_time.yml", TimeType.WEEKLY_TIME);
+                        put("Monthly_time.yml", TimeType.MONTHLY_TIME);
+                    }
+                };
+
+                // Notify user of actions we are going to take.
+                if (finalWriteToGlobalDatabase && finalWriteToLocalDatabase) {
+
+                    if (finalOverwriteGlobalDatabase && finalOverwriteLocalDatabase) {
+                        sender.sendMessage(ChatColor.GOLD + "Importing data and overriding both the global " +
+                                "and local database.");
+                    } else {
+                        if (finalOverwriteGlobalDatabase) {
+                            sender.sendMessage(ChatColor.GOLD + "Importing data and overriding global database.");
+                        } else {
+                            sender.sendMessage(ChatColor.GOLD + "Importing data and adding to global database.");
+                        }
+
+                        if (finalOverwriteLocalDatabase) {
+                            sender.sendMessage(ChatColor.GOLD + "Importing data and overriding local database" +
+                                    ".");
+                        } else {
+                            sender.sendMessage(ChatColor.GOLD + "Importing data and adding to local database.");
+                        }
+                    }
+                } else if (finalWriteToGlobalDatabase) {
+                    if (finalOverwriteGlobalDatabase) {
+                        sender.sendMessage(ChatColor.GOLD + "Importing data and overriding global database.");
+                    } else {
+                        sender.sendMessage(ChatColor.GOLD + "Importing data and adding to global database.");
+                    }
+                } else {
+                    if (finalOverwriteLocalDatabase) {
+                        sender.sendMessage(ChatColor.GOLD + "Importing data and overriding local database.");
+                    } else {
+                        sender.sendMessage(ChatColor.GOLD + "Importing data and adding to local database.");
+                    }
+                }
+
+                for (Map.Entry<String, TimeType> fileToImport : filesToImport.entrySet()) {
+                    YamlConfiguration timeConfig = YamlConfiguration.loadConfiguration(new File(importFolder +
+                            fileToImport.getKey()));
+
+                    TimeType importedTimeType = fileToImport.getValue();
+
+                    timeConfig.getKeys(false).forEach(uuidString -> {
+                        if (uuidString == null) return;
+
+                        int importedValue = timeConfig.getInt(uuidString);
+                        UUID importedPlayer = null;
+
+                        try {
+                            importedPlayer = UUID.fromString(uuidString);
+                        } catch (IllegalArgumentException exception) {
+                            return; // We cannot parse this player.
+                        }
+
+                        if (finalWriteToLocalDatabase && finalWriteToGlobalDatabase) {
+                            // Update both local and global database.
+
+                            if (finalOverwriteGlobalDatabase && finalOverwriteLocalDatabase) {
+                                // Overwrite both databases.
+                                plugin.getStorageManager().setPlayerTime(importedTimeType, importedPlayer,
+                                        importedValue);
+                            } else {
+
+                                // Overwrite global database
+                                if (finalOverwriteGlobalDatabase) {
+                                    plugin.getStorageManager().setPlayerTime(StorageProvider.StorageType.DATABASE,
+                                            importedTimeType,
+                                            importedPlayer, importedValue);
+                                } else {
+                                    plugin.getStorageManager().addPlayerTime(StorageProvider.StorageType.DATABASE,
+                                            importedTimeType,
+                                            importedPlayer, importedValue);
+                                }
+
+                                // Overwrite local database
+                                if (finalOverwriteLocalDatabase) {
+                                    plugin.getStorageManager().setPlayerTime(StorageProvider.StorageType.FLAT_FILE,
+                                            importedTimeType,
+                                            importedPlayer, importedValue);
+                                } else {
+                                    plugin.getStorageManager().addPlayerTime(StorageProvider.StorageType.FLAT_FILE,
+                                            importedTimeType,
+                                            importedPlayer, importedValue);
+                                }
+                            }
+                        } else if (finalWriteToGlobalDatabase) {
+                            // Update only global database.
+
+                            if (finalOverwriteGlobalDatabase) {
+                                plugin.getStorageManager().setPlayerTime(StorageProvider.StorageType.DATABASE,
+                                        importedTimeType,
+                                        importedPlayer, importedValue);
+                            } else {
+                                plugin.getStorageManager().addPlayerTime(StorageProvider.StorageType.DATABASE,
+                                        importedTimeType,
+                                        importedPlayer, importedValue);
+                            }
+                        } else {
+                            // Update only local database.
+
+                            if (finalOverwriteLocalDatabase) {
+                                plugin.getStorageManager().setPlayerTime(StorageProvider.StorageType.FLAT_FILE,
+                                        importedTimeType,
+                                        importedPlayer, importedValue);
+                            } else {
+                                plugin.getStorageManager().addPlayerTime(StorageProvider.StorageType.FLAT_FILE,
+                                        importedTimeType,
+                                        importedPlayer, importedValue);
+                            }
+                        }
+
+                    });
+                }
+
+                AutorankTools.sendColoredMessage(sender, Lang.DATA_IMPORTED.getConfigValue());
+            }
+        });
 
         return true;
     }
 
     @Override
     public String getDescription() {
-        return "Import old storage.";
+        return "Import time data from your flatfiles into the system.";
     }
 
     @Override
@@ -94,6 +265,6 @@ public class ImportCommand extends AutorankCommand {
 
     @Override
     public String getUsage() {
-        return "/ar import";
+        return "/ar import <parameters>";
     }
 }

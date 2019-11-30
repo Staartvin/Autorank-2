@@ -38,6 +38,8 @@ public class MySQLStorageProvider extends StorageProvider {
     // Use a cache manager to store the cached values.
     private CacheManager cacheManager = new CacheManager();
 
+    private boolean isLoaded = false;
+
     // TODO implement MySQL provider
     public MySQLStorageProvider(Autorank instance) {
         super(instance);
@@ -45,7 +47,10 @@ public class MySQLStorageProvider extends StorageProvider {
         // Initialise provider to make it ready for use.
         if (!this.initialiseProvider()) {
             plugin.debugMessage("There was an error loading storage provider '" + getName() + "'.");
+            isLoaded = false;
         }
+
+        isLoaded = true;
     }
 
     @Override
@@ -291,6 +296,11 @@ public class MySQLStorageProvider extends StorageProvider {
         }
 
         return tablesToDelete.size();
+    }
+
+    @Override
+    public boolean isLoaded() {
+        return isLoaded;
     }
 
     private void loadTableNames() {

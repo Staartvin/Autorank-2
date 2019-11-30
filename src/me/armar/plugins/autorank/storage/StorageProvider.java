@@ -249,6 +249,13 @@ public abstract class StorageProvider {
     public abstract int clearBackupsBeforeDate(LocalDate date);
 
     /**
+     * Check whether this storage provider is loaded and ready for use.
+     *
+     * @return true if it can be used, false if not.
+     */
+    public abstract boolean isLoaded();
+
+    /**
      * Different types of storage that a StorageProvider may use.
      */
     public enum StorageType {

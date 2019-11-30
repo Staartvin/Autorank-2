@@ -237,12 +237,19 @@ public class Autorank extends JavaPlugin {
         if (this.getSettingsConfig().useMySQL()) {
             StorageProvider mysqlStorageProvider = new MySQLStorageProvider(this);
 
-            // Register MySQL storage provider
-            getStorageManager().registerStorageProvider(mysqlStorageProvider);
+            // Only register the mysql storage provider if it is loaded.
+            if (mysqlStorageProvider.isLoaded()) {
+                // Register MySQL storage provider
+                getStorageManager().registerStorageProvider(mysqlStorageProvider);
 
-            // Set mysql as primary storage provider.
-            if (this.getSettingsConfig().getPrimaryStorageProvider().equalsIgnoreCase("mysql")) {
-                getStorageManager().setPrimaryStorageProvider(mysqlStorageProvider);
+                // Set mysql as primary storage provider.
+                if (this.getSettingsConfig().getPrimaryStorageProvider().equalsIgnoreCase("mysql")) {
+                    getStorageManager().setPrimaryStorageProvider(mysqlStorageProvider);
+                }
+            } else {
+                // Admin wanted to use MySQL, but the storage provider could not be loaded. Warn the admin.
+                this.getWarningManager().registerWarning("The MySQL storage provider could not be started. Check for " +
+                        "errors!", WarningManager.HIGH_PRIORITY_WARNING);
             }
         }
 

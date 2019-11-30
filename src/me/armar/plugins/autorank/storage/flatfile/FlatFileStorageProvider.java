@@ -32,13 +32,18 @@ public class FlatFileStorageProvider extends StorageProvider {
     // Store for each time type a file to store data about players.
     private Map<TimeType, SimpleYamlConfiguration> dataFiles = new HashMap<>();
 
+    private boolean isLoaded = false;
+
     public FlatFileStorageProvider(Autorank instance) {
         super(instance);
 
         // Initialise provider to make it ready for use.
         if (!this.initialiseProvider()) {
             plugin.debugMessage("There was an error loading storage provider '" + getName() + "'.");
+            isLoaded = false;
         }
+
+        isLoaded = true;
     }
 
     @Override
@@ -271,6 +276,11 @@ public class FlatFileStorageProvider extends StorageProvider {
 
 
         return deletedFiles.get();
+    }
+
+    @Override
+    public boolean isLoaded() {
+        return isLoaded;
     }
 
     /**
