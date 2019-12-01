@@ -134,7 +134,7 @@ public class SettingsConfig extends AbstractConfig {
      * @return true if Autorank should notice all players. False otherwise.
      */
     public boolean shouldBroadcastDataReset() {
-        return this.getConfig().getBoolean("broadcast resetting of storage files", true);
+        return this.getConfig().getBoolean("broadcast resetting of data files", true);
     }
 
     /**

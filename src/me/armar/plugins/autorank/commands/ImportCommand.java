@@ -72,6 +72,7 @@ public class ImportCommand extends AutorankCommand {
 
 
         // Import data from vanilla minecraft
+        // TODO: Remove this random command and replace it with something more logical.
         if (args.length > 1 && args[1] != null && args[1].equalsIgnoreCase("vanilladata")) {
 
             int importedPlayers = 0;
