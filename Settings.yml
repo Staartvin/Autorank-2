@@ -101,3 +101,6 @@ primary storage provider: flatfile
 # Set the primary storage provider for Autorank. By default, this is the flatfile provider that stores data in the
 # /storage folder. The primary storage provider is used to get the time a player has played when for example
 # /ar times is requested. You can choose from 'flatfile' or 'mysql'.
+
+automatically remove backups if older than: 14
+# Set how old a backup must be before it will be removed (in days).

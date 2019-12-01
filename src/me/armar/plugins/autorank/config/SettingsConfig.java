@@ -235,4 +235,13 @@ public class SettingsConfig extends AbstractConfig {
         return this.getConfig().getString("primary storage provider", "flatfile");
     }
 
+    /**
+     * Get the number of days after which Autorank can remove an old backup.
+     *
+     * @return number of days from when we can remove old data.
+     */
+    public int getBackupRemovalTime() {
+        return this.getConfig().getInt("automatically remove backups if older than", 14);
+    }
+
 }

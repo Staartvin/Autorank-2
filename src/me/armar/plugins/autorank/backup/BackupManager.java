@@ -123,7 +123,7 @@ public class BackupManager {
                 plugin.getStorageManager().getActiveStorageProviders().forEach(providerName -> {
 
                     int deletedBackups =
-                            plugin.getStorageManager().getActiveStorageProvider(providerName).clearBackupsBeforeDate(LocalDate.now().minusDays(14));
+                            plugin.getStorageManager().getActiveStorageProvider(providerName).clearBackupsBeforeDate(LocalDate.now().minusDays(plugin.getSettingsConfig().getBackupRemovalTime()));
 
                     plugin.debugMessage("Deleted " + deletedBackups + " backups of " + providerName);
                 });
