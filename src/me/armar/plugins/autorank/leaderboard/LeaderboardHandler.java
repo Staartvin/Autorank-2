@@ -12,6 +12,8 @@ import org.bukkit.command.CommandSender;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 /**
  * This class is used to handle all leaderboard things. <br>
@@ -28,7 +30,7 @@ import java.util.Map.Entry;
  */
 public class LeaderboardHandler {
 
-    private static final double LEADERBOARD_TIME_VALID = 30;
+    private static final double LEADERBOARD_TIME_VALID = 30; // Leaderboard is valid for 30 minutes
     private final Autorank plugin;
     private String layout = "&6&r | &b&p - &7&d %day%, &h %hour% and &m %minute%.";
     private int leaderboardLength = 10;
@@ -39,10 +41,6 @@ public class LeaderboardHandler {
         leaderboardLength = plugin.getSettingsConfig().getLeaderboardLength();
         layout = plugin.getSettingsConfig().getLeaderboardLayout();
     }
-    // LeaderboardHandler
-    // is valid
-    // for 30
-    // minutes.
 
     /**
      * Sort a map by its values.
@@ -292,8 +290,7 @@ public class LeaderboardHandler {
      */
     private boolean shouldUpdateLeaderboard(TimeType type) {
         if (System.currentTimeMillis() - plugin.getInternalPropertiesConfig().getLeaderboardLastUpdateTime(type) >
-                (60000
-                * LEADERBOARD_TIME_VALID)) {
+                (60000 * LEADERBOARD_TIME_VALID)) {
             return true;
         } else return plugin.getInternalPropertiesConfig().getCachedLeaderboard(type).size() <= 2;
     }
@@ -327,9 +324,6 @@ public class LeaderboardHandler {
         // Store messages to make leaderboard
         final List<String> stringList = new ArrayList<String>();
 
-        // Only store the users that should appear on the leaderboard, along with their time.
-        Map<String, Integer> finalLeaderboard = getAccurateLeaderboard(type);
-
         if (type == TimeType.TOTAL_TIME) {
             stringList.add(Lang.LEADERBOARD_HEADER_ALL_TIME.getConfigValue());
         } else if (type == TimeType.DAILY_TIME) {
@@ -340,13 +334,26 @@ public class LeaderboardHandler {
             stringList.add(Lang.LEADERBOARD_HEADER_MONTHLY.getConfigValue());
         }
 
-        Iterator<Entry<String, Integer>> iterator = finalLeaderboard.entrySet().iterator();
+        // Only store the users that should appear on the leaderboard, along with their time.
+        AutorankLeaderboard finalLeaderboard = null;
+        try {
+            finalLeaderboard = getSortedLeaderboard(type).get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        // The leaderboard couldn't get created for some reason.
+        if (finalLeaderboard == null) {
+            return;
+        }
+
+        Iterator<Entry<String, Integer>> iterator = finalLeaderboard.getLeaderboard().entrySet().iterator();
 
         for (int i = 0; i < leaderboardLength && iterator.hasNext(); i++) {
 
             final Entry<String, Integer> entry = iterator.next();
 
-            Integer time = entry.getValue().intValue();
+            int time = entry.getValue();
 
             String message = layout.replace("&p", entry.getKey());
 
@@ -402,67 +409,74 @@ public class LeaderboardHandler {
     }
 
     /**
-     * Get a sorted list of all recorded players and their times.
+     * Get the sorted leaderboard of play time for a specific time type. Note that the leaderboard is limited to
+     * {@link LeaderboardHandler#leaderboardLength} entries.
      *
-     * @param type Type of time to get
-     * @return a list of sorted player times.
+     * @param type Type of time to get the leaderboard for.
+     * @return sorted leaderboard.
      */
-    private Map<String, Integer> getAccurateLeaderboard(TimeType type) {
-        Map<String, Integer> finalLeaderboard = new LinkedHashMap<>();
+    private CompletableFuture<AutorankLeaderboard> getSortedLeaderboard(TimeType type) {
+        return CompletableFuture.supplyAsync(() -> {
 
-        // If we are using Autorank as timekeeper, we can ask all UUIDs in the uuids file and sort the playtime
-        // After we sorted the playtime, we collect the playernames of the top x (leaderboard length variable).
-        if (plugin.getSettingsConfig().useTimeOf().equals(AutorankDependency.AUTORANK)) {
-            final Map<UUID, Integer> sortedPlaytimes = getSortedTimesByUUID(type);
+            AutorankLeaderboard finalLeaderboard = new AutorankLeaderboard(type);
 
-            Iterator<Entry<UUID, Integer>> itr = sortedPlaytimes.entrySet().iterator();
+            // If we are using Autorank as timekeeper, we can ask all UUIDs in the uuids file and sort the playtime
+            // After we sorted the playtime, we collect the playernames of the top x (leaderboard length variable).
+            if (plugin.getSettingsConfig().useTimeOf().equals(AutorankDependency.AUTORANK)) {
+                final Map<UUID, Integer> sortedPlaytimes = getSortedTimesByUUID(type);
 
-            plugin.debugMessage("Size leaderboard: " + sortedPlaytimes.size());
+                Iterator<Entry<UUID, Integer>> itr = sortedPlaytimes.entrySet().iterator();
 
-            for (int i = 0; i < leaderboardLength && itr.hasNext(); i++) {
-                final Entry<UUID, Integer> entry = itr.next();
+                plugin.debugMessage("Size leaderboard: " + sortedPlaytimes.size());
 
-                final UUID uuid = entry.getKey();
+                for (int i = 0; i < leaderboardLength && itr.hasNext(); i++) {
+                    final Entry<UUID, Integer> entry = itr.next();
 
-                // Grab playername from here so it doesn't load all player names
-                // ever.
-                // Get the cached value of this uuid to improve performance
-                String name = plugin.getUUIDStorage().getRealName(uuid);
+                    final UUID uuid = entry.getKey();
 
-                // UUIDManager.getPlayerFromUUID(uuid);
+                    // Grab playername from here so it doesn't load all player names
+                    // ever.
+                    // Get the cached value of this uuid to improve performance
+                    String name = plugin.getUUIDStorage().getRealName(uuid);
 
-                // There was no real name found, use cached player name
-                if (name == null) {
-                    name = plugin.getUUIDStorage().getCachedPlayerName(uuid);
+                    // UUIDManager.getPlayerFromUUID(uuid);
+
+                    // There was no real name found, use cached player name
+                    if (name == null) {
+                        name = plugin.getUUIDStorage().getCachedPlayerName(uuid);
+                    }
+
+                    // No cached name found, don't use this name.
+                    if (name == null)
+                        continue;
+
+                    finalLeaderboard.add(name, entry.getValue());
                 }
+            } else {
+                // We do not use Autorank, but some other third party plugin, so we need to get all playernames.
+                // Instead of retrieving all UUIDs and THEN convert them to playernames (which is massively slow),
+                // We ask all playernames from the uuid folder and we never have to convert to UUIDs.
+                // Performance was tested and it went from 30 minutes to 1 second for a dataset of 60.000 players.
 
-                // No cached name found, don't use this name.
-                if (name == null)
-                    continue;
+                final Map<String, Integer> sortedPlaytimes = getSortedTimesByNames(type);
 
-                finalLeaderboard.put(name, entry.getValue());
+                Iterator<Entry<String, Integer>> itr = sortedPlaytimes.entrySet().iterator();
+
+                plugin.debugMessage("Size leaderboard: " + sortedPlaytimes.size());
+
+                for (int i = 0; i < leaderboardLength && itr.hasNext(); i++) {
+
+                    final Entry<String, Integer> entry = itr.next();
+
+                    finalLeaderboard.add(entry.getKey(), entry.getValue());
+                }
             }
-        } else {
-            // We do not use Autorank, but some other third party plugin, so we need to get all playernames.
-            // Instead of retrieving all UUIDs and THEN convert them to playernames (which is massively slow),
-            // We ask all playernames from the uuid folder and we never have to convert to UUIDs.
-            // Performance was tested and it went from 30 minutes to 1 second for a dataset of 60.000 players.
 
-            final Map<String, Integer> sortedPlaytimes = getSortedTimesByNames(type);
+            // Sort the leaderboard before returning it.
+            finalLeaderboard.sortLeaderboard();
 
-            Iterator<Entry<String, Integer>> itr = sortedPlaytimes.entrySet().iterator();
-
-            plugin.debugMessage("Size leaderboard: " + sortedPlaytimes.size());
-
-            for (int i = 0; i < leaderboardLength && itr.hasNext(); i++) {
-
-                final Entry<String, Integer> entry = itr.next();
-
-                finalLeaderboard.put(entry.getKey(), entry.getValue());
-            }
-        }
-
-        return finalLeaderboard;
+            return finalLeaderboard;
+        });
     }
 
 }
