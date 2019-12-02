@@ -6,7 +6,8 @@ import me.armar.plugins.autorank.hooks.vaultapi.PluginLibraryHandler;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.armar.plugins.autorank.statsmanager.StatsPluginManager;
 import me.staartvin.plugins.pluginlibrary.Library;
-import me.staartvin.plugins.pluginlibrary.hooks.*;
+import me.staartvin.plugins.pluginlibrary.hooks.LibraryHook;
+import me.staartvin.plugins.pluginlibrary.hooks.afkmanager.AFKManager;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -88,25 +89,26 @@ public class DependencyManager {
             return false;
         }
 
-        boolean isAFK = false;
+        for (Library library : Library.values()) {
+            LibraryHook libraryHook = this.getLibraryHook(library);
 
-        if (this.isAvailable(Library.ESSENTIALSX)) {
-            plugin.debugMessage("Using EssentialsX for AFK");
-            isAFK = ((EssentialsXHook) this.getLibraryHook(Library.ESSENTIALSX)).isAFK(player.getUniqueId());
-        } else if (this.isAvailable(Library.ROYALCOMMANDS)) {
-            plugin.debugMessage("Using RoyalCommands for AFK");
-            isAFK = ((RoyalCommandsHook) this.getLibraryHook(Library.ROYALCOMMANDS)).isAFK(player);
-        } else if (this.isAvailable(Library.ULTIMATECORE)) {
-            plugin.debugMessage("Using UltimateCore for AFK");
-            isAFK = ((UltimateCoreHook) this.getLibraryHook(Library.ULTIMATECORE)).isAFK(player.getUniqueId());
-        } else if (this.isAvailable(Library.AFKTERMINATOR)) {
-            plugin.debugMessage("Using AfkTerminator for AFK");
-            isAFK = ((AFKTerminatorHook) this.getLibraryHook(Library.AFKTERMINATOR)).isAFKMachineDetected(player.getUniqueId());
+            // It seems that the library is not loaded.
+            if (libraryHook == null) continue;
+
+            // If this plugin cannot check for AFK, skip it.
+            if (!(libraryHook instanceof AFKManager)) continue;
+
+            // Check if the library is available.
+            if (!libraryHook.isAvailable()) continue;
+
+            plugin.debugMessage("Using " + library.getHumanPluginName() + " for AFK");
+
+            // We found a library that supports checking AFK, so we use it.
+            return ((AFKManager) libraryHook).isAFK(player.getUniqueId());
         }
 
-
         // No suitable plugin found
-        return isAFK;
+        return false;
     }
 
     /**
