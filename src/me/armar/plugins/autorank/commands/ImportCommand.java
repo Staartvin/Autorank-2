@@ -175,7 +175,9 @@ public class ImportCommand extends AutorankCommand {
 
                     TimeType importedTimeType = fileToImport.getValue();
 
-                    timeConfig.getKeys(false).forEach(uuidString -> {
+                    int importedPlayers = 0;
+
+                    for (String uuidString : timeConfig.getKeys(false)) {
                         if (uuidString == null) return;
 
                         int importedValue = timeConfig.getInt(uuidString);
@@ -186,6 +188,9 @@ public class ImportCommand extends AutorankCommand {
                         } catch (IllegalArgumentException exception) {
                             return; // We cannot parse this player.
                         }
+
+                        // Count how many players we imported
+                        importedPlayers++;
 
                         if (finalWriteToLocalDatabase && finalWriteToGlobalDatabase) {
                             // Update both local and global database.
@@ -243,8 +248,13 @@ public class ImportCommand extends AutorankCommand {
                                         importedPlayer, importedValue);
                             }
                         }
+                    }
 
-                    });
+                    // Give a heads up to the sender if no files were imported.
+                    if (importedPlayers == 0) {
+                        sender.sendMessage(ChatColor.RED + "Could not import any players for " + importedTimeType +
+                                "! Are you sure you put any files in the imports folder?");
+                    }
                 }
 
                 AutorankTools.sendColoredMessage(sender, Lang.DATA_IMPORTED.getConfigValue());

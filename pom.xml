@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>Autorank</groupId>
     <artifactId>Autorank</artifactId>
-    <version>4.2.7-SNAPSHOT-${BUILD_NUMBER}</version>
+    <version>4.2.8-SNAPSHOT-${BUILD_NUMBER}</version>
     <name>Autorank</name>
     <description>Maven project for Spigot plugin Autorank</description>
     <url>https://www.spigotmc.org/resources/autorank.3239/</url>
@@ -128,7 +128,7 @@
         <dependency>
             <groupId>me.staartvin</groupId>
             <artifactId>PluginLibrary</artifactId>
-            <version>1.2.1-SNAPSHOT-10</version>
+            <version>1.2.3</version>
             <scope>provided</scope>
         </dependency>
 
