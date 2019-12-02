@@ -3,6 +3,8 @@ package me.armar.plugins.autorank.commands.conversations;
 import org.bukkit.ChatColor;
 import org.bukkit.conversations.Conversable;
 import org.bukkit.conversations.ConversationAbandonedListener;
+import org.bukkit.conversations.ConversationCanceller;
+import org.bukkit.conversations.InactivityConversationCanceller;
 import org.jetbrains.annotations.NotNull;
 
 public class ConversationAbandonedEvent implements ConversationAbandonedListener {
@@ -36,7 +38,14 @@ public class ConversationAbandonedEvent implements ConversationAbandonedListener
         // Indicate to conversation that it has ended.
         conversation.conversationEnded(result);
 
+        ConversationCanceller canceller = conversationAbandonedEvent.getCanceller();
+
         // Inform the user that the conversation has ended and that the player may talk freely again.
-        conversable.sendRawMessage(ChatColor.GRAY + "This conversation has ended.");
+        if (!(canceller instanceof InactivityConversationCanceller)) {
+            conversable.sendRawMessage(ChatColor.GRAY + "This conversation has ended.");
+        } else {
+            conversable.sendRawMessage(ChatColor.GRAY + "This conversation has ended because you didn't reply in time" +
+                    ".");
+        }
     }
 }
