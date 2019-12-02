@@ -61,6 +61,7 @@ public class AutorankConversation {
                 // Attach a listener to be able to determine when the conversation is abandoned and we should call
                 // the callback.
                 .addConversationAbandonedListener(new ConversationAbandonedEvent())
+                .withTimeout(30) // Set standard timeout to 30 seconds.
                 .withLocalEcho(false); // Don't tell the user what they typed.
     }
 
