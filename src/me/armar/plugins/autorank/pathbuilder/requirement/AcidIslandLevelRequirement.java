@@ -5,8 +5,6 @@ import me.staartvin.plugins.pluginlibrary.Library;
 import me.staartvin.plugins.pluginlibrary.hooks.AcidIslandHook;
 import org.bukkit.entity.Player;
 
-import java.util.UUID;
-
 public class AcidIslandLevelRequirement extends AbstractRequirement {
 
     private AcidIslandHook handler;
@@ -28,9 +26,7 @@ public class AcidIslandLevelRequirement extends AbstractRequirement {
     @Override
     public String getProgress(final Player player) {
 
-        final UUID uuid = this.getAutorank().getUUIDStorage().getStoredUUID(player.getName());
-
-        final int islandLevel = handler.getIslandLevel(uuid);
+        final int islandLevel = handler.getIslandLevel(player.getUniqueId());
 
         return islandLevel + "/" + this.islandLevel;
     }
@@ -38,9 +34,7 @@ public class AcidIslandLevelRequirement extends AbstractRequirement {
     @Override
     public boolean meetsRequirement(final Player player) {
 
-        final UUID uuid = this.getAutorank().getUUIDStorage().getStoredUUID(player.getName());
-
-        final int islandLevel = handler.getIslandLevel(uuid);
+        final int islandLevel = handler.getIslandLevel(player.getUniqueId());
 
         return islandLevel >= this.islandLevel;
     }

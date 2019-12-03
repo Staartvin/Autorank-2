@@ -6,6 +6,7 @@ import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.storage.StorageProvider;
 import me.armar.plugins.autorank.storage.TimeType;
 import me.armar.plugins.autorank.util.AutorankTools;
+import me.armar.plugins.autorank.util.uuid.UUIDManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -154,7 +155,12 @@ public class LeaderboardHandler {
                                 uuid));
                     } else {
                         // Get the cached value of this uuid
-                        final String playerName = plugin.getUUIDStorage().getCachedPlayerName(uuid);
+                        String playerName = null;
+                        try {
+                            playerName = UUIDManager.getPlayerName(uuid).get();
+                        } catch (InterruptedException | ExecutionException e) {
+                            e.printStackTrace();
+                        }
 
                         if (playerName == null) {
                             plugin.debugMessage("Could not get cached player name of uuid '" + uuid + "'!");
@@ -196,7 +202,12 @@ public class LeaderboardHandler {
                 continue;
             }
 
-            UUID uuid = plugin.getUUIDStorage().getStoredUUID(playerName);
+            UUID uuid = null;
+            try {
+                uuid = UUIDManager.getUUID(playerName).get();
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
 
             if (uuid == null) {
                 continue;
@@ -437,13 +448,11 @@ public class LeaderboardHandler {
                     // Grab playername from here so it doesn't load all player names
                     // ever.
                     // Get the cached value of this uuid to improve performance
-                    String name = plugin.getUUIDStorage().getRealName(uuid);
-
-                    // UUIDManager.getPlayerFromUUID(uuid);
-
-                    // There was no real name found, use cached player name
-                    if (name == null) {
-                        name = plugin.getUUIDStorage().getCachedPlayerName(uuid);
+                    String name = null;
+                    try {
+                        name = UUIDManager.getPlayerName(uuid).get();
+                    } catch (InterruptedException | ExecutionException e) {
+                        e.printStackTrace();
                     }
 
                     // No cached name found, don't use this name.

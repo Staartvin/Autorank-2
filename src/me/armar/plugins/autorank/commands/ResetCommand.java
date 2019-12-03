@@ -6,6 +6,7 @@ import me.armar.plugins.autorank.commands.conversations.resetcommand.ResetConver
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
+import me.armar.plugins.autorank.util.uuid.UUIDManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -13,6 +14,7 @@ import org.bukkit.command.CommandSender;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 /**
  * The command delegator for the '/ar reset' command.
@@ -41,7 +43,12 @@ public class ResetCommand extends AutorankCommand {
             String playerName = result.getStorageString("playerName");
             String resetType = result.getStorageString(ResetConversationType.RESET_TYPE);
 
-            UUID uuid = plugin.getUUIDStorage().getStoredUUID(playerName);
+            UUID uuid = null;
+            try {
+                uuid = UUIDManager.getUUID(playerName).get();
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
 
             if (uuid == null) {
                 sender.sendMessage(Lang.PLAYER_IS_INVALID.getConfigValue(playerName));
@@ -60,7 +67,6 @@ public class ResetCommand extends AutorankCommand {
                 plugin.getPathManager().resetCompletedPaths(uuid);
                 sender.sendMessage(ChatColor.GREEN + "Removed all completed paths of " + ChatColor.YELLOW + playerName);
             }
-
 
         });
 

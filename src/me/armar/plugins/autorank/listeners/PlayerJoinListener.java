@@ -9,6 +9,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
+import java.util.concurrent.ExecutionException;
+
 /**
  * This listener will listen to players joining and perform actions based on the player.
  *
@@ -28,7 +30,11 @@ public class PlayerJoinListener implements Listener {
 
         // Refresh uuid of the player if it is outdated
         if (plugin.getUUIDStorage().isOutdated(player.getName())) {
-            plugin.getUUIDStorage().storeUUID(player.getName(), player.getUniqueId(), player.getName());
+            try {
+                plugin.getUUIDStorage().storeUUID(player.getName(), player.getUniqueId()).get();
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
         }
 
         // Save whether this player is exempted from the leaderboard.

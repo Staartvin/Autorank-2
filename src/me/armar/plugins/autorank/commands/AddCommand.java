@@ -6,10 +6,12 @@ import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
 import me.armar.plugins.autorank.storage.TimeType;
 import me.armar.plugins.autorank.util.AutorankTools;
+import me.armar.plugins.autorank.util.uuid.UUIDManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
-import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 /**
  * The command delegator for the '/ar add' command.
@@ -30,36 +32,44 @@ public class AddCommand extends AutorankCommand {
         }
 
         if (args.length < 3) {
-            sender.sendMessage(Lang.INVALID_FORMAT.getConfigValue("/ar add <player> <value>"));
+            sender.sendMessage(Lang.INVALID_FORMAT.getConfigValue(this.getUsage()));
             return true;
         }
 
-        final UUID uuid = plugin.getUUIDStorage().getStoredUUID(args[1]);
-
-        if (uuid == null) {
-            sender.sendMessage(Lang.UNKNOWN_PLAYER.getConfigValue(args[1]));
-            return true;
-        }
-
-        int value = 0;
-
-        if (args.length > 2) {
-            value = AutorankTools.readTimeInput(args, 2);
-        }
-
-        if (value >= 0) {
-
-            if (plugin.getUUIDStorage().hasRealName(uuid)) {
-                args[1] = plugin.getUUIDStorage().getRealName(uuid);
+        CompletableFuture<Void> task = UUIDManager.getUUID(args[1]).thenAccept(uuid -> {
+            if (uuid == null) {
+                sender.sendMessage(Lang.UNKNOWN_PLAYER.getConfigValue(args[1]));
+                return;
             }
 
-            plugin.getStorageManager().addPlayerTime(uuid, value);
+            int value = AutorankTools.readTimeInput(args, 2);
 
-            AutorankTools.sendColoredMessage(sender, Lang.PLAYTIME_CHANGED.getConfigValue(args[1], plugin
-                    .getStorageManager().getPrimaryStorageProvider().getPlayerTime(TimeType.TOTAL_TIME, uuid) + ""));
-        } else {
-            AutorankTools.sendColoredMessage(sender, Lang.INVALID_FORMAT.getConfigValue("/ar add [player] [value]"));
-        }
+            if (value >= 0) {
+                plugin.getStorageManager().addPlayerTime(uuid, value);
+
+                String playerName = null;
+                try {
+                    playerName = UUIDManager.getPlayerName(uuid).get();
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
+
+                AutorankTools.sendColoredMessage(sender,
+                        Lang.PLAYTIME_CHANGED.getConfigValue(playerName,
+                                plugin.getStorageManager().getPrimaryStorageProvider().getPlayerTime(TimeType.TOTAL_TIME, uuid) + ""));
+            } else {
+                AutorankTools.sendColoredMessage(sender, Lang.INVALID_FORMAT.getConfigValue("/ar add [player] " +
+                        "[value]"));
+            }
+        });
+
+        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+            try {
+                task.get();
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+        });
 
         return true;
     }

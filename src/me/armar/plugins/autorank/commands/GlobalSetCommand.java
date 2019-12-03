@@ -7,11 +7,12 @@ import me.armar.plugins.autorank.permissions.AutorankPermission;
 import me.armar.plugins.autorank.storage.StorageProvider;
 import me.armar.plugins.autorank.storage.TimeType;
 import me.armar.plugins.autorank.util.AutorankTools;
+import me.armar.plugins.autorank.util.uuid.UUIDManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
-import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * The command delegator for the '/ar gset' command.
@@ -27,10 +28,8 @@ public class GlobalSetCommand extends AutorankCommand {
     @Override
     public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
-        int value = -1;
-
         if (args.length < 3) {
-            sender.sendMessage(Lang.INVALID_FORMAT.getConfigValue("/ar gset <player> <value>"));
+            sender.sendMessage(Lang.INVALID_FORMAT.getConfigValue(this.getUsage()));
             return true;
         }
 
@@ -40,7 +39,7 @@ public class GlobalSetCommand extends AutorankCommand {
             return true;
         }
 
-        value = AutorankTools.readTimeInput(args, 2);
+        final int value = AutorankTools.readTimeInput(args, 2);
 
         if (value >= 0) {
 
@@ -48,25 +47,25 @@ public class GlobalSetCommand extends AutorankCommand {
                 return true;
             }
 
-            final UUID uuid = plugin.getUUIDStorage().getStoredUUID(args[1]);
+            CompletableFuture<Void> task = UUIDManager.getUUID(args[1]).thenAccept(uuid -> {
+                if (uuid == null) {
+                    sender.sendMessage(Lang.UNKNOWN_PLAYER.getConfigValue(args[1]));
+                    return;
+                }
 
-            if (uuid == null) {
-                sender.sendMessage(Lang.UNKNOWN_PLAYER.getConfigValue(args[1]));
-                return true;
-            }
+                for (TimeType timeType : TimeType.values()) {
+                    plugin.getPlayTimeManager().setGlobalPlayTime(timeType, uuid, value);
+                }
 
-            if (plugin.getUUIDStorage().hasRealName(uuid)) {
-                args[1] = plugin.getUUIDStorage().getRealName(uuid);
-            }
+                AutorankTools.sendColoredMessage(sender,
+                        Lang.PLAYTIME_CHANGED.getConfigValue(args[1],
+                                value + " " + Lang.MINUTE_PLURAL.getConfigValue()));
+            });
 
-            for (TimeType timeType : TimeType.values()) {
-                plugin.getPlayTimeManager().setGlobalPlayTime(timeType, uuid, value);
-            }
+            this.runCommandTask(task);
 
-            AutorankTools.sendColoredMessage(sender,
-                    Lang.PLAYTIME_CHANGED.getConfigValue(args[1], value + " " + Lang.MINUTE_PLURAL.getConfigValue()));
         } else {
-            AutorankTools.sendColoredMessage(sender, Lang.INVALID_FORMAT.getConfigValue("/ar gset <player> <value>"));
+            AutorankTools.sendColoredMessage(sender, Lang.INVALID_FORMAT.getConfigValue(this.getUsage()));
         }
 
         return true;

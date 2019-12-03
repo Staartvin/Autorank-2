@@ -6,10 +6,11 @@ import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
 import me.armar.plugins.autorank.storage.TimeType;
 import me.armar.plugins.autorank.util.AutorankTools;
+import me.armar.plugins.autorank.util.uuid.UUIDManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
-import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * The command delegator for the '/ar remove' command.
@@ -30,31 +31,30 @@ public class RemoveCommand extends AutorankCommand {
         }
 
         if (args.length < 3) {
-            sender.sendMessage(Lang.INVALID_FORMAT.getConfigValue("/ar rem <player> <value>"));
+            sender.sendMessage(Lang.INVALID_FORMAT.getConfigValue(this.getUsage()));
             return true;
         }
 
-        final UUID uuid = plugin.getUUIDStorage().getStoredUUID(args[1]);
+        CompletableFuture<Void> task = UUIDManager.getUUID(args[1]).thenAccept(uuid -> {
+            if (uuid == null) {
+                sender.sendMessage(Lang.UNKNOWN_PLAYER.getConfigValue(args[1]));
+                return;
+            }
 
-        if (uuid == null) {
-            sender.sendMessage(Lang.UNKNOWN_PLAYER.getConfigValue(args[1]));
-            return true;
-        }
+            int value = AutorankTools.readTimeInput(args, 2);
 
-        if (plugin.getUUIDStorage().hasRealName(uuid)) {
-            args[1] = plugin.getUUIDStorage().getRealName(uuid);
-        }
+            if (value >= 0) {
+                // Adding negative time
+                plugin.getStorageManager().addPlayerTime(uuid, -value);
+                AutorankTools.sendColoredMessage(sender, Lang.PLAYTIME_CHANGED.getConfigValue(args[1], plugin
+                        .getStorageManager().getPrimaryStorageProvider().getPlayerTime(TimeType.TOTAL_TIME, uuid)));
+            } else {
+                AutorankTools.sendColoredMessage(sender, Lang.INVALID_FORMAT.getConfigValue("/ar remove [player] " +
+                        "[value]"));
+            }
+        });
 
-        int value = AutorankTools.readTimeInput(args, 2);
-
-        if (value >= 0) {
-            // Adding negative time
-            plugin.getStorageManager().addPlayerTime(uuid, -value);
-            AutorankTools.sendColoredMessage(sender, Lang.PLAYTIME_CHANGED.getConfigValue(args[1], plugin
-                    .getStorageManager().getPrimaryStorageProvider().getPlayerTime(TimeType.TOTAL_TIME, uuid)));
-        } else {
-            AutorankTools.sendColoredMessage(sender, Lang.INVALID_FORMAT.getConfigValue("/ar remove [player] [value]"));
-        }
+        this.runCommandTask(task);
 
         return true;
     }

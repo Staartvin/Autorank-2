@@ -32,7 +32,7 @@ import me.armar.plugins.autorank.storage.mysql.MySQLStorageProvider;
 import me.armar.plugins.autorank.tasks.TaskManager;
 import me.armar.plugins.autorank.updater.UpdateHandler;
 import me.armar.plugins.autorank.util.AutorankTools;
-import me.armar.plugins.autorank.util.uuid.storage.UUIDStorage;
+import me.armar.plugins.autorank.util.uuid.UUIDStorage;
 import me.armar.plugins.autorank.validations.ValidateHandler;
 import me.armar.plugins.autorank.warningmanager.WarningManager;
 import org.bukkit.ChatColor;
@@ -218,7 +218,7 @@ public class Autorank extends JavaPlugin {
             @Override
             public void run() {
                 // Load UUID files
-                getUUIDStorage().createNewFiles();
+                getUUIDStorage().loadStorageFiles();
             }
         });
 
@@ -276,6 +276,7 @@ public class Autorank extends JavaPlugin {
         }
 
         CompletableFuture<Void> finalLoadMySQLTask = loadMySQLTask;
+
         this.getServer().getScheduler().runTaskAsynchronously(this, () -> {
             try {
                 CompletableFuture.allOf(loadFlatFileTask, finalLoadMySQLTask).thenRun(() -> {

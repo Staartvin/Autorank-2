@@ -14,6 +14,7 @@ import me.staartvin.plugins.pluginlibrary.hooks.OnTimeHook;
 import me.staartvin.plugins.pluginlibrary.hooks.StatsHook;
 
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 public class PlayTimeManager {
 
@@ -50,12 +51,12 @@ public class PlayTimeManager {
 
         UUID uuid = null;
 
-        // If using cache, just get the latest stored uuid
-        if (cache) {
-            uuid = plugin.getUUIDStorage().getStoredUUID(playerName);
-        } else {
-            uuid = UUIDManager.getUUIDFromPlayer(playerName);
+        try {
+            uuid = UUIDManager.getUUID(playerName).get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
         }
+
 
         // Determine what plugin to use for getting the time.
         if (timePlugin.equals(AutorankDependency.STATS)) {

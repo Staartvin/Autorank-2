@@ -8,11 +8,12 @@ import me.armar.plugins.autorank.storage.StorageProvider;
 import me.armar.plugins.autorank.storage.TimeType;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
+import me.armar.plugins.autorank.util.uuid.UUIDManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * The command delegator for the '/ar times' command.
@@ -56,34 +57,32 @@ public class TimesCommand extends AutorankCommand {
             return true;
         }
 
-        final UUID uuid = plugin.getUUIDStorage().getStoredUUID(targetName);
+        final String target = targetName;
 
-        if (uuid == null) {
-            sender.sendMessage(Lang.UNKNOWN_PLAYER.getConfigValue(targetName));
-            return true;
-        }
+        CompletableFuture<Void> task = UUIDManager.getUUID(targetName).thenAccept(uuid -> {
+            if (uuid == null) {
+                sender.sendMessage(Lang.UNKNOWN_PLAYER.getConfigValue(target));
+                return;
+            }
 
-        // Now show storage for target.
-        targetName = plugin.getUUIDStorage().getRealName(uuid);
+            StorageProvider primaryStorageProvider = plugin.getStorageManager().getPrimaryStorageProvider();
 
-        if (targetName == null) {
-            // This player has no real name stored -> use cached name
-            targetName = plugin.getUUIDStorage().getCachedPlayerName(uuid);
-        }
+            final int daily = primaryStorageProvider.getPlayerTime(TimeType.DAILY_TIME, uuid);
+            final int weekly = primaryStorageProvider.getPlayerTime(TimeType.WEEKLY_TIME, uuid);
+            final int monthly = primaryStorageProvider.getPlayerTime(TimeType.MONTHLY_TIME, uuid);
+            final int total = primaryStorageProvider.getPlayerTime(TimeType.TOTAL_TIME, uuid);
 
-        StorageProvider primaryStorageProvider = plugin.getStorageManager().getPrimaryStorageProvider();
+            sender.sendMessage(Lang.AR_TIMES_HEADER.getConfigValue(target));
+            sender.sendMessage(Lang.AR_TIMES_PLAYER_PLAYED.getConfigValue(target));
+            sender.sendMessage(Lang.AR_TIMES_TODAY.getConfigValue(AutorankTools.timeToString(daily, Time.MINUTES)));
+            sender.sendMessage(Lang.AR_TIMES_THIS_WEEK.getConfigValue(AutorankTools.timeToString(weekly,
+                    Time.MINUTES)));
+            sender.sendMessage(Lang.AR_TIMES_THIS_MONTH.getConfigValue(AutorankTools.timeToString(monthly,
+                    Time.MINUTES)));
+            sender.sendMessage(Lang.AR_TIMES_TOTAL.getConfigValue(AutorankTools.timeToString(total, Time.MINUTES)));
+        });
 
-        final int daily = primaryStorageProvider.getPlayerTime(TimeType.DAILY_TIME, uuid);
-        final int weekly = primaryStorageProvider.getPlayerTime(TimeType.WEEKLY_TIME, uuid);
-        final int monthly = primaryStorageProvider.getPlayerTime(TimeType.MONTHLY_TIME, uuid);
-        final int total = primaryStorageProvider.getPlayerTime(TimeType.TOTAL_TIME, uuid);
-
-        sender.sendMessage(Lang.AR_TIMES_HEADER.getConfigValue(targetName));
-        sender.sendMessage(Lang.AR_TIMES_PLAYER_PLAYED.getConfigValue(targetName));
-        sender.sendMessage(Lang.AR_TIMES_TODAY.getConfigValue(AutorankTools.timeToString(daily, Time.MINUTES)));
-        sender.sendMessage(Lang.AR_TIMES_THIS_WEEK.getConfigValue(AutorankTools.timeToString(weekly, Time.MINUTES)));
-        sender.sendMessage(Lang.AR_TIMES_THIS_MONTH.getConfigValue(AutorankTools.timeToString(monthly, Time.MINUTES)));
-        sender.sendMessage(Lang.AR_TIMES_TOTAL.getConfigValue(AutorankTools.timeToString(total, Time.MINUTES)));
+        this.runCommandTask(task);
 
         return true;
     }

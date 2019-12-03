@@ -59,8 +59,6 @@ public class UpdateTimePlayedTask implements Runnable {
             return;
         }
 
-        final UUID uuid = plugin.getUUIDStorage().getStoredUUID(player.getName());
-
         // Add time to a player's current time for all storage providers.
         for (final TimeType type : TimeType.values()) {
             plugin.getStorageManager().addPlayerTime(type, uuid, PlayTimeManager.INTERVAL_MINUTES);

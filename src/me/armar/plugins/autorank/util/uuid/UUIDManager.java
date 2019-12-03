@@ -5,7 +5,8 @@ import org.bukkit.Bukkit;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.Map.Entry;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 /**
  * This class allows developers to easily get UUIDs from names <br>
@@ -20,326 +21,204 @@ import java.util.Map.Entry;
  */
 public class UUIDManager {
 
-    private static Map<UUID, String> foundPlayers = new HashMap<UUID, String>();
-
-    private static Map<String, UUID> foundUUIDs = new HashMap<String, UUID>();
-
-    private static Autorank plugin;
-
     // Whether to use cache or not
     private static final boolean useCache = true;
+    //    private static Map<UUID, String> playerNameCache = new HashMap<UUID, String>(); // Store names that were
+    //    looked up
+//    private static Map<String, UUID> uuidCache = new HashMap<String, UUID>(); // Store UUIDs that were looked up.
+    private static Autorank plugin;
 
     static {
         plugin = (Autorank) Bukkit.getPluginManager().getPlugin("Autorank");
     }
 
-    public static void addCachedPlayer(final String playerName, final UUID uuid, final String realName) {
-        if (!useCache)
-            return;
+    /**
+     * Get the player name that belongs the given UUID.
+     *
+     * @param uuid UUID to get the playername for.
+     * @return the name of the player it belongs to, or null if none was found.
+     */
+    public static CompletableFuture<String> getPlayerName(final UUID uuid) {
+        return CompletableFuture.supplyAsync(() -> {
 
-        plugin.getUUIDStorage().storeUUID(playerName, uuid, realName);
+            if (uuid == null) {
+                return null;
+            }
 
+            try {
+                Map<UUID, String> names = getPlayerNames(Collections.singletonList(uuid)).get();
+
+                return names.get(uuid);
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        });
     }
 
-    private static UUID getCachedUUID(final String playerName) {
-
-        return plugin.getUUIDStorage().getStoredUUID(playerName);
-    }
 
     /**
-     * Get the Minecraft name of the player that is hooked to this Mojang
-     * account UUID. <br>
-     * It uses {@link #getPlayers(List)} to get the player's name.
+     * See {@link #getPlayerName(UUID)}, but then for a lot of uuids at once.
      *
-     * @param uuid the UUID of the Mojang account
-     * @return the name of player or null if not found.
+     * @param uuids List of UUIDs to check
+     * @return Map of key-value pairs where the key corresponds to a UUID and the value is the corresponding player
+     * name.
      */
-    public static String getPlayerFromUUID(final UUID uuid) {
-        if (uuid == null)
-            return null;
+    public static CompletableFuture<Map<UUID, String>> getPlayerNames(final List<UUID> uuids) {
 
-        final Map<UUID, String> players = getPlayers(Arrays.asList(uuid));
+        return CompletableFuture.supplyAsync(() -> {
 
-        if (players == null)
-            return null;
+            List<UUID> uuidsToSearch = new ArrayList<>(uuids);
 
-        if (players.isEmpty())
-            return null;
+            Map<UUID, String> cachedData = new HashMap<>();
 
-        if (players.get(uuid) == null) {
-            throw new NullPointerException("Could not get player from UUID " + uuid + "!");
-        }
+            // First look if we have playernames that are stored and we can use.
+            for (UUID uuid : uuids) {
 
-        return players.get(uuid);
-    }
-
-    /**
-     * Get the player names associated with this UUID. <br>
-     * This method has to run async, because it will use the lookup from the
-     * Mojang API. <br>
-     * It also takes care of already cached values. It doesn't lookup new
-     * players when it still has old, valid ones stored.
-     *
-     * @param uuids A list of uuids to get the player names of.
-     * @return A map containing every player name per UUID.
-     */
-    public static Map<UUID, String> getPlayers(final List<UUID> uuids) {
-        // Clear names first
-        foundPlayers.clear();
-
-        // A new map to store cached values
-        final HashMap<UUID, String> players = new HashMap<UUID, String>();
-
-        // This is used to check if we need to use the lookup from the mojang
-        // website.
-        boolean useInternetLookup = true;
-
-        if (useCache) {
-            // Check if we have cached values
-            for (final UUID uuid : uuids) {
-
-                String playerName = plugin.getUUIDStorage().getRealName(uuid);
+                String playerName = null;
+                try {
+                    playerName = plugin.getUUIDStorage().getUsername(uuid).get();
+                } catch (InterruptedException | ExecutionException e) {
+                    // Ignore the trace, continue looking.
+                    continue;
+                }
 
                 if (playerName == null) {
-                    // Real name was not found, use cached name.
-                    playerName = plugin.getUUIDStorage().getCachedPlayerName(uuid);
+                    continue;
                 }
 
-                // No cached value
-                if (playerName != null) {
-                    // If cached value is still valid, use it.
-                    if (!plugin.getUUIDStorage().isOutdated(playerName)) {
-                        players.put(uuid, playerName);
-                    }
-                }
+                // We found a stored player name so we put that in the cached data.
+                cachedData.put(uuid, playerName);
+                // Remove this uuid, because we don't have to search for it anymore.
+                uuidsToSearch.remove(uuid);
+
             }
 
-            // All names were retrieved from cached values
-            // So we don't need to do a lookup to the Mojang website.
-            if (players.entrySet().size() == uuids.size()) {
-                useInternetLookup = false;
-            }
-
-            // No internet lookup needed.
-            if (!useInternetLookup) {
-                // Return all cached values.
-                return players;
-            }
-
-            // From here on we know that didn't have all uuids as cached values.
-            // So we need to do a lookup.
-            // We have to make sure we only lookup the players that we haven't
-            // got cached values of yet.
-
-            // Remove uuids that don't need to be looked up anymore.
-            // Just for performance sake.
-            for (final UUID entry : players.keySet()) {
-                uuids.remove(entry);
-            }
-
-        }
-
-        // Now we need to lookup the other players
-
-        final Thread fetcherThread = new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-                final NameFetcher fetcher = new NameFetcher(uuids);
+            // For all left-overs, use the fetcher.
+            if (!uuids.isEmpty()) {
+                NameFetcher fetcher = new NameFetcher(uuidsToSearch);
 
                 Map<UUID, String> response = null;
 
                 try {
                     response = fetcher.call();
+
+                    // Store all looked-up names in the data.
+                    cachedData.putAll(response);
                 } catch (final Exception e) {
                     if (e instanceof IOException) {
                         Bukkit.getLogger().warning("Tried to contact Mojang page for UUID lookup but failed.");
-                        return;
                     }
                     e.printStackTrace();
                 }
-
-                if (response != null) {
-                    foundPlayers = response;
-                }
             }
+
+            // Before returning, make sure to cache all data.
+            //uuidCache.putAll(cachedData);
+
+            // Store retrieved data in UUID storage so we can re-use it.
+            cachedData.forEach((key, value) -> plugin.getUUIDStorage().storeUUID(value, key));
+
+            return cachedData;
         });
-
-        fetcherThread.start();
-
-        if (fetcherThread.isAlive()) {
-            try {
-                fetcherThread.join();
-            } catch (final InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-        // Update cached entries
-        for (final Entry<UUID, String> entry : foundPlayers.entrySet()) {
-            final String playerName = entry.getValue();
-            final UUID uuid = entry.getKey();
-
-            // Add found players to the list of players to return
-            players.put(uuid, playerName);
-
-            if (plugin.getUUIDStorage().isOutdated(playerName)) {
-                // Update cached values
-                addCachedPlayer(playerName, uuid, playerName);
-            } else {
-                // Do not update if it is not needed.
-                continue;
-            }
-        }
-
-        // Thread stopped now, collect results
-        return players;
     }
 
     /**
-     * Get the UUID of the Mojang account associated with this player name <br>
-     * It uses {@link #getUUIDs(List)} to get the UUID.
+     * Get the UUID corresponding to the given player name.
      *
      * @param playerName Name of the player
-     * @return UUID of the associated Mojang account or null if not found.
+     * @return UUID of the player or null if none was found.
      */
-    public static UUID getUUIDFromPlayer(final String playerName) {
-        if (playerName == null) {
-            return null;
-        }
+    public static CompletableFuture<UUID> getUUID(final String playerName) {
+        return CompletableFuture.supplyAsync(() -> {
 
-        final Map<String, UUID> uuids = getUUIDs(Arrays.asList(playerName));
-
-        if (uuids == null) {
-            return null;
-        }
-
-        if (uuids.isEmpty()) {
-            return null;
-        }
-
-        // Search case insensitive
-        for (final Entry<String, UUID> entry : uuids.entrySet()) {
-            if (entry.getKey().equalsIgnoreCase(playerName)) {
-                return entry.getValue();
+            if (playerName == null) {
+                return null;
             }
-        }
 
-        throw new NullPointerException("Could not get UUID from player " + playerName + "!");
+            try {
+                Map<String, UUID> uuids = getUUIDs(Collections.singletonList(playerName)).get();
+
+                return uuids.get(playerName);
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        });
     }
 
+
     /**
-     * Get the UUIDs of a list of players. <br>
-     * This method has to run async, because it will use the lookup from the
-     * Mojang API. <br>
-     * It also takes care of already cached values. It doesn't lookup new
-     * players when it still has old, valid ones stored.
+     * See {@link #getUUID(String)}, but then for a lot of player names at once.
      *
-     * @param names A list of playernames that you want the UUIDs of.
-     * @return A map containing every UUID per player name.
+     * @param playerNames List of player names to check
+     * @return Map of key-value pairs where the key corresponds to a player name and the value is the corresponding
+     * UUID.
      */
-    public static Map<String, UUID> getUUIDs(final List<String> names) {
+    public static CompletableFuture<Map<String, UUID>> getUUIDs(final List<String> playerNames) {
 
-        // Clear maps first
-        foundUUIDs.clear();
+        return CompletableFuture.supplyAsync(() -> {
 
-        // A new map to store cached values
-        final HashMap<String, UUID> uuids = new HashMap<String, UUID>();
+            List<String> playerNamesToSearch = new ArrayList<>(playerNames);
 
-        // This is used to check if we need to use the lookup from the mojang
-        // website.
-        boolean useInternetLookup = true;
+            Map<String, UUID> cachedData = new HashMap<>();
 
-        if (useCache) {
-            // Check if we have cached values
-            for (final String playerName : names) {
+            // First look if we have uuids that are stored and we can use.
+            for (String playerName : playerNames) {
 
-                // If cached value is still valid, use it.
-                if (!plugin.getUUIDStorage().isOutdated(playerName)) {
-                    uuids.put(playerName, getCachedUUID(playerName));
+                UUID storedUUID = null;
+                try {
+                    storedUUID = plugin.getUUIDStorage().getUUID(playerName).get();
+                } catch (InterruptedException | ExecutionException e) {
+                    // Ignore the trace, continue looking.
+                    continue;
                 }
+
+                if (storedUUID == null) {
+                    continue;
+                }
+
+                System.out.println("We got " + storedUUID + " for " + playerName + " from the local storage.");
+
+                // We found a stored UUID so we put that in the cached data.
+                cachedData.put(playerName, storedUUID);
+                // Remove this player name, because we don't have to search for it anymore.
+                playerNamesToSearch.remove(playerName);
+
             }
 
-            // All names were retrieved from cached values
-            // So we don't need to do a lookup to the Mojang website.
-            if (uuids.entrySet().size() == names.size()) {
-                useInternetLookup = false;
-            }
-
-            // No internet lookup needed.
-            if (!useInternetLookup) {
-                // Return all cached values.
-                return uuids;
-            }
-
-            // From here on we know that didn't have all uuids as cached values.
-            // So we need to do a lookup.
-            // We have to make sure we only lookup the players that we haven't
-            // got cached values of yet.
-
-            // Remove players that don't need to be looked up anymore.
-            // Just for performance sake.
-            for (final Entry<String, UUID> entry : uuids.entrySet()) {
-                names.remove(entry.getKey());
-            }
-
-        }
-
-        // Now we need to lookup the other players
-
-        final Thread fetcherThread = new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-                final UUIDFetcher fetcher = new UUIDFetcher(names);
+            // For all left-overs, use the fetcher.
+            if (!playerNamesToSearch.isEmpty()) {
+                UUIDFetcher fetcher = new UUIDFetcher(playerNamesToSearch);
 
                 Map<String, UUID> response = null;
 
                 try {
                     response = fetcher.call();
+
+                    // Store all looked-up names in the data.
+                    cachedData.putAll(response);
+
+                    System.out.println("Received " + response.size() + " uuids from Mojang.");
+
                 } catch (final Exception e) {
                     if (e instanceof IOException) {
                         Bukkit.getLogger().warning("Tried to contact Mojang page for UUID lookup but failed.");
-                        return;
                     }
                     e.printStackTrace();
                 }
-
-                if (response != null) {
-                    foundUUIDs = response;
-                }
             }
+
+            // Before returning, make sure to cache all data.
+            //uuidCache.putAll(cachedData);
+
+            // Store retrieved data in UUID storage so we can re-use it.
+            cachedData.forEach((key, value) -> plugin.getUUIDStorage().storeUUID(key, value));
+
+            return cachedData;
         });
-
-        fetcherThread.start();
-
-        if (fetcherThread.isAlive()) {
-            try {
-                fetcherThread.join();
-            } catch (final InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-        // Update cached entries
-        for (final Entry<String, UUID> entry : foundUUIDs.entrySet()) {
-            final String playerName = entry.getKey();
-            final UUID uuid = entry.getValue();
-
-            // Add found uuids to the list of uuids to return
-            uuids.put(playerName, uuid);
-
-            if (plugin.getUUIDStorage().isOutdated(playerName)) {
-                // Update cached values
-                addCachedPlayer(playerName, uuid, playerName);
-            } else {
-                // Do not update if it is not needed.
-                continue;
-            }
-        }
-
-        // Thread stopped now, collect results
-        return uuids;
     }
 
 

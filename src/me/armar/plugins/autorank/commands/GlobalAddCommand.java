@@ -7,11 +7,12 @@ import me.armar.plugins.autorank.permissions.AutorankPermission;
 import me.armar.plugins.autorank.storage.StorageProvider;
 import me.armar.plugins.autorank.storage.TimeType;
 import me.armar.plugins.autorank.util.AutorankTools;
+import me.armar.plugins.autorank.util.uuid.UUIDManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
-import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * The command delegator for the '/ar gadd' command.
@@ -32,7 +33,7 @@ public class GlobalAddCommand extends AutorankCommand {
         }
 
         if (args.length < 3) {
-            sender.sendMessage(Lang.INVALID_FORMAT.getConfigValue("/ar gadd <player> <value>"));
+            sender.sendMessage(Lang.INVALID_FORMAT.getConfigValue(this.getUsage()));
             return true;
         }
 
@@ -41,38 +42,29 @@ public class GlobalAddCommand extends AutorankCommand {
             return true;
         }
 
-        final UUID uuid = plugin.getUUIDStorage().getStoredUUID(args[1]);
-
-        if (uuid == null) {
-            sender.sendMessage(Lang.UNKNOWN_PLAYER.getConfigValue(args[1]));
-            return true;
-        }
-
-        if (plugin.getUUIDStorage().hasRealName(uuid)) {
-            args[1] = plugin.getUUIDStorage().getRealName(uuid);
-        }
-
-        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
-
-            @Override
-            public void run() {
-                int value = AutorankTools.readTimeInput(args, 2);
-
-                if (value >= 0) {
-
-                    for (TimeType timeType : TimeType.values()) {
-                        plugin.getPlayTimeManager().addGlobalPlayTime(timeType, uuid, value);
-                    }
-
-                    AutorankTools.sendColoredMessage(sender, Lang.PLAYTIME_CHANGED.getConfigValue(args[1], plugin
-                            .getPlayTimeManager().getGlobalPlayTime(TimeType.TOTAL_TIME, uuid) + value));
-                } else {
-                    AutorankTools.sendColoredMessage(sender,
-                            Lang.INVALID_FORMAT.getConfigValue("/ar gadd [player] [value]"));
-                }
+        CompletableFuture<Void> task = UUIDManager.getUUID(args[1]).thenAccept(uuid -> {
+            if (uuid == null) {
+                sender.sendMessage(Lang.UNKNOWN_PLAYER.getConfigValue(args[1]));
+                return;
             }
 
+            int value = AutorankTools.readTimeInput(args, 2);
+
+            if (value >= 0) {
+
+                for (TimeType timeType : TimeType.values()) {
+                    plugin.getPlayTimeManager().addGlobalPlayTime(timeType, uuid, value);
+                }
+
+                AutorankTools.sendColoredMessage(sender, Lang.PLAYTIME_CHANGED.getConfigValue(args[1], plugin
+                        .getPlayTimeManager().getGlobalPlayTime(TimeType.TOTAL_TIME, uuid) + value));
+            } else {
+                AutorankTools.sendColoredMessage(sender,
+                        Lang.INVALID_FORMAT.getConfigValue(this.getUsage()));
+            }
         });
+
+        this.runCommandTask(task);
 
         return true;
     }

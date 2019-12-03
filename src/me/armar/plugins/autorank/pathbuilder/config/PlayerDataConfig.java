@@ -3,9 +3,11 @@ package me.armar.plugins.autorank.pathbuilder.config;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.config.AbstractConfig;
 import me.armar.plugins.autorank.util.AutorankTools;
+import me.armar.plugins.autorank.util.uuid.UUIDManager;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 /**
  * PlayerDataConfig stores all the properties of players. Autorank needs to
@@ -187,7 +189,12 @@ public class PlayerDataConfig extends AbstractConfig {
                     if (name.contains("-"))
                         continue;
 
-                    final UUID uuid = getPlugin().getUUIDStorage().getStoredUUID(name);
+                    UUID uuid = null;
+                    try {
+                        uuid = UUIDManager.getUUID(name).get();
+                    } catch (InterruptedException | ExecutionException e) {
+                        e.printStackTrace();
+                    }
 
                     if (uuid == null)
                         continue;

@@ -1,8 +1,10 @@
-package me.armar.plugins.autorank.util.uuid.storage;
+package me.armar.plugins.autorank.util.uuid;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.util.AutorankTools;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -10,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 
 /**
@@ -24,14 +27,11 @@ import java.util.logging.Level;
  */
 public class UUIDStorage {
 
+    // Expiration date in hours
+    private static final int expirationDate = 24;
     private final HashMap<String, File> configFiles = new HashMap<String, File>();
     private final HashMap<String, FileConfiguration> configs = new HashMap<String, FileConfiguration>();
-
     private final String desFolder;
-
-    // Expiration date in hours
-    private final int expirationDate = 24;
-
     private final List<String> fileSuffixes = Arrays.asList("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l",
             "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "other");
 
@@ -51,35 +51,31 @@ public class UUIDStorage {
         }, AutorankTools.TICKS_PER_MINUTE, AutorankTools.TICKS_PER_MINUTE * 2);
     }
 
-    public void createNewFiles() {
+    public void loadStorageFiles() {
 
         plugin.getLogger().info("Loading UUID storage files...");
         long startTime = System.currentTimeMillis();
 
-        for (final String suffix : fileSuffixes) {
+        fileSuffixes.parallelStream().forEach(suffix -> {
             plugin.debugMessage("Loading uuids_" + suffix + " ...");
 
             reloadConfig(suffix);
             loadConfig(suffix);
-        }
+        });
 
         plugin.getLogger().info("Loaded UUID storage in " + (System.currentTimeMillis() - startTime) /
                 1000 + " seconds.");
     }
 
-    public FileConfiguration findCorrectConfig(String playerName) {
+    private FileConfiguration findCorrectConfig(String playerName) {
 
         // Everything is now stored in lowercase.
-        playerName = playerName.toLowerCase();
+        final String key = findMatchingKey(playerName.toLowerCase());
 
-        final String key = findMatchingKey(playerName);
-
-        final FileConfiguration config = configs.get(key);
-
-        return config;
+        return configs.get(key);
     }
 
-    public String findMatchingKey(String text) {
+    private String findMatchingKey(String text) {
         text = text.toLowerCase();
 
         for (final String key : fileSuffixes) {
@@ -97,7 +93,13 @@ public class UUIDStorage {
         return "other";
     }
 
-    public String getCachedPlayerName(final UUID uuid) {
+    /**
+     * Get the username that is stored in the local storage for the given UUID.
+     *
+     * @param uuid UUID to find the username for.
+     * @return username if found, null otherwise.
+     */
+    private String getStoredUsername(final UUID uuid) {
         for (final String suffix : fileSuffixes) {
             final FileConfiguration config = getConfig(suffix);
 
@@ -113,6 +115,15 @@ public class UUIDStorage {
                     continue;
 
                 if (fuuid.equals(uuid.toString())) {
+
+                    String realName = config.getString(fPlayerName + ".realName", null);
+
+                    // There is a real name, return it.
+                    if (realName != null) {
+                        return realName;
+                    }
+
+                    // Otherwise, we just return the lowercase name.
                     return fPlayerName;
                 }
             }
@@ -121,25 +132,7 @@ public class UUIDStorage {
         return null;
     }
 
-    public String getCachedPlayerName(final UUID uuid, final String key) {
-        final FileConfiguration config = configs.get(key);
-
-        if (config == null) {
-            return null;
-        }
-
-        for (final String fPlayerName : config.getKeys(false)) {
-            final String fuuid = config.getString(fPlayerName + ".uuid");
-
-            if (fuuid.equals(uuid.toString())) {
-                return fPlayerName;
-            }
-        }
-
-        return null;
-    }
-
-    public FileConfiguration getConfig(final String key) {
+    private FileConfiguration getConfig(final String key) {
         final FileConfiguration config = configs.get(key);
 
         if (config == null) {
@@ -149,7 +142,13 @@ public class UUIDStorage {
         return config;
     }
 
-    public int getLastUpdateTime(String playerName) {
+    /**
+     * Get how many hours have gone since the last time the playername of a UUID has been updated.
+     *
+     * @param playerName Name of the player.
+     * @return time in hours or -1 if no time was set.
+     */
+    private int getLastUpdateTime(String playerName) {
 
         // Everything is now stored in lowercase.
         playerName = playerName.toLowerCase();
@@ -168,30 +167,82 @@ public class UUIDStorage {
 
         final long difference = System.currentTimeMillis() - lastUpdateTime;
 
-        final int timeDifference = Math.round(difference / 3600000);
-
-        return timeDifference;
+        return Math.round(difference / 3600000);
     }
 
-    public String getRealName(final UUID uuid) {
-        // Returns the real name of the player, or the cached lower case name if
-        // no real name exists.
-        final String cachedName = this.getCachedPlayerName(uuid);
+    /**
+     * Get the username of the given UUID.
+     * Note that this method will do an exhaustive search for the username. It will first use the local UUID storage
+     * of Autorank, then try to look for it using Mojangs API. It could therefore take a bit of time and it's wise to
+     * call this method asynchronously.
+     *
+     * @param uuid UUID to check.
+     * @return name of the user that corresponds to the UUID. If none was found, returns null.
+     */
+    protected CompletableFuture<String> getUsername(final UUID uuid) {
 
-        if (cachedName == null)
-            return null;
+        return CompletableFuture.supplyAsync(() -> {
 
-        final FileConfiguration config = this.findCorrectConfig(cachedName);
+            // First look in the local storage.
+            final String storedUsername = this.getStoredUsername(uuid);
 
-        if (config == null)
-            return null;
+            // We found a match, so return it.
+            if (storedUsername != null)
+                return storedUsername;
 
-        final Object realNameObject = config.get(cachedName + ".realName", null);
+            // We couldn't find a match, so start looking up via Mojang API.
+            // This might block, so be careful with synchronous calls!
+            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
 
-        return (realNameObject != null ? realNameObject.toString() : null);
+            // We couldn't find a player with this uuid, so perhaps he has never played before.
+            if (offlinePlayer.getName() == null)
+                return null;
+
+            // Return the player name that we found through uuid.
+            return offlinePlayer.getName();
+        });
     }
 
-    public UUID getStoredUUID(String playerName) {
+    /**
+     * Get the UUID of a player. This call can be potentially be blocking since we access Mojang API, so make sure to
+     * run this off the main thread!
+     *
+     * @param playerName Name of the player
+     * @return UUID of the player or null if nothing could be found.
+     */
+    protected CompletableFuture<UUID> getUUID(String playerName) {
+
+        return CompletableFuture.supplyAsync(() -> {
+            // First check the stored UUIDs to see if we can find anything in the local storage.
+            UUID uuid = getStoredUUID(playerName);
+
+            // UUID is not null, so return it happily.
+            if (uuid != null) {
+                return uuid;
+            }
+
+            // The search continues..
+            // Use Bukkit to find the UUID.
+            // Potentially blocking!
+            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerName);
+
+            // We found a match!
+            if (offlinePlayer.getName() == null) {
+                return offlinePlayer.getUniqueId();
+            }
+
+            // We found nothing at all - return null.
+            return null;
+        });
+    }
+
+    /**
+     * Get the UUID that is stored in the local storage for the given name.
+     *
+     * @param playerName Name to use for finding the UUID.
+     * @return UUID that matches this player name or null if none was found.
+     */
+    protected UUID getStoredUUID(String playerName) {
 
         // Everything is now stored in lowercase.
         playerName = playerName.toLowerCase();
@@ -211,18 +262,22 @@ public class UUIDStorage {
         return UUID.fromString(uuidString);
     }
 
-    public boolean hasRealName(final UUID uuid) {
-        return getRealName(uuid) != null;
+    /**
+     * Check if a UUID is stored in the local storage of Autorank.
+     *
+     * @param uuid UUID to check
+     * @return true if it stored, false if not.
+     */
+    protected boolean isStored(final UUID uuid) {
+        return getStoredUsername(uuid) != null;
     }
 
-    public boolean isAlreadyStored(final UUID uuid) {
-        return getCachedPlayerName(uuid) != null;
-    }
-
-    public boolean isAlreadyStored(final UUID uuid, final String key) {
-        return getCachedPlayerName(uuid, key) != null;
-    }
-
+    /**
+     * Check to see if a stored playername might be outdated.
+     *
+     * @param playerName Name of the player to check.
+     * @return true if the playername is outdated, false otherwise.
+     */
     public boolean isOutdated(String playerName) {
 
         // Everything is now stored in lowercase.
@@ -277,59 +332,80 @@ public class UUIDStorage {
         }
     }
 
-    public void storeUUID(String playerName, final UUID uuid, final String realName) {
-        FileConfiguration config;
+    /**
+     * Store a playername and UUID combination. If the UUID already exists for a playername, the playername will be
+     * overwritten.
+     *
+     * @param playerName Name of the player.
+     * @param uuid       UUID of the player.
+     * @return True if the UUID could be stored. False if it couldn't be stored.
+     */
+    public CompletableFuture<Boolean> storeUUID(String playerName, final UUID uuid) {
 
-        // Everything is now stored in lowercase.
-        playerName = playerName.toLowerCase();
+        final String lowerCasePlayerName = playerName.toLowerCase();
 
-        // Remove old name and uuid because apparently name was changed.
-        if (isAlreadyStored(uuid)) {
-            // Change name to new name
-            final String oldUser = getCachedPlayerName(uuid);
+        return CompletableFuture.supplyAsync(() -> {
 
-            // Change config pointer to correct config
-            config = findCorrectConfig(oldUser);
-
-            // If this player does not have a real name yet, go add it.
-            if (this.getRealName(uuid) == null) {
-                config.set(playerName + ".realName", realName);
+            // Don't look them up.
+            if (!isOutdated(lowerCasePlayerName)) {
+                plugin.debugMessage("Not refreshing user " + lowerCasePlayerName + " because it's up-to-date.");
+                return true;
             }
 
-            // Name didn't change, it was just out of date.
-            if (oldUser.equals(playerName)) {
-                // Don't do anything besides updating updateTime.
-                config.set(playerName + ".updateTime", System.currentTimeMillis());
+            FileConfiguration config;
 
-                // plugin.debugMessage("Refreshed user '" + playerName
-                // + "' with uuid " + uuid + "!");
-                return;
+            // Remove old name and uuid because apparently name was changed.
+            if (isStored(uuid)) {
+
+                // Change name to new name
+                final String oldUser = getStoredUsername(uuid);
+
+                if (oldUser != null) {
+                    // Change config pointer to correct config
+                    config = findCorrectConfig(oldUser);
+
+                    // Name didn't change, it was just out of date.
+                    if (oldUser.equalsIgnoreCase(lowerCasePlayerName)) {
+                        // Don't do anything besides updating updateTime.
+                        config.set(lowerCasePlayerName + ".updateTime", System.currentTimeMillis());
+
+                        plugin.debugMessage("Refreshed user '" + playerName + "' with uuid " + uuid + "!");
+                        return true; // Do not do anything else.
+                    }
+
+                    // Remove the old user as it correct anymore.
+                    plugin.debugMessage("Deleting old user '" + oldUser + "'!");
+                    config.set(oldUser, null);
+                }
             }
 
-            config.set(oldUser, null);
+            config = findCorrectConfig(lowerCasePlayerName);
 
-            // plugin.debugMessage("Deleting old user '" + oldUser + "'!");
-        }
+            // Couldn't find a config for the username! (That's a bit odd though).
+            if (config == null) {
+                plugin.debugMessage("Could not store uuid " + uuid.toString() + " of player " + lowerCasePlayerName);
+                return false;
+            }
 
-        config = findCorrectConfig(playerName);
+            config.set(lowerCasePlayerName + ".uuid", uuid.toString());
+            config.set(lowerCasePlayerName + ".updateTime", System.currentTimeMillis());
 
-        if (config == null) {
-            plugin.debugMessage("Could not store uuid " + uuid.toString() + " of player " + playerName);
-            return;
-        }
+            // Look for the real name so we can easily store it.
+            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
 
-        config.set(playerName + ".uuid", uuid.toString());
-        config.set(playerName + ".updateTime", System.currentTimeMillis());
+            // There is no real name, so do not put it there.
+            if (offlinePlayer.getName() == null) {
+                return true;
+            }
 
-        if (realName != null) {
-            config.set(playerName + ".realName", realName);
-            // The real name is the name of the player with proper
-            // capitalisation.
+            // We found a real name, so store it as well.
+            // The real name is the name of the player with proper capitalisation.
             // The real name is useful for leaderboards.
-        }
+            config.set(lowerCasePlayerName + ".realName", offlinePlayer.getName());
 
-        // plugin.debugMessage("Stored user '" + playerName + "' with uuid "
-        // + uuid + "!");
+            plugin.debugMessage("Stored user '" + playerName + "' with uuid " + uuid + "!");
+            return true;
+        });
     }
 
     public void transferUUIDs() {
@@ -380,6 +456,11 @@ public class UUIDStorage {
         plugin.getInternalPropertiesConfig().hasTransferredUUIDs(true);
     }
 
+    /**
+     * Get all the player names that are stored in the local UUID storage of Autorank.
+     *
+     * @return a list of player names stored.
+     */
     public List<String> getStoredPlayerNames() {
         // Return all playernames that are stored in the UUID folders
 
@@ -388,13 +469,10 @@ public class UUIDStorage {
         for (Entry<String, FileConfiguration> entry : this.configs.entrySet()) {
             FileConfiguration config = entry.getValue();
 
-            for (String playerName : config.getKeys(false)) {
-                playerNames.add(playerName);
-            }
+            playerNames.addAll(config.getKeys(false));
         }
 
         return playerNames;
-
     }
 
 }

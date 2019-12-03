@@ -1,14 +1,18 @@
 package me.armar.plugins.autorank.commands.manager;
 
 import me.armar.plugins.autorank.language.Lang;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
+import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 /**
  * This class represents an Autorank command, such as /ar check or /ar times.
@@ -93,5 +97,23 @@ public abstract class AutorankCommand implements TabExecutor {
         });
 
         return arguments;
+    }
+
+    /**
+     * Run a task of type {@link CompletableFuture} on a separate thread. This is a convenience to easily run tasks
+     * on separate threads.
+     *
+     * @param task Task to run.
+     */
+    public void runCommandTask(CompletableFuture<?> task) {
+        Plugin plugin = Bukkit.getPluginManager().getPlugin("Autorank");
+
+        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+            try {
+                task.get();
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+        });
     }
 }

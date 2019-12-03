@@ -6,10 +6,11 @@ import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
 import me.armar.plugins.autorank.storage.TimeType;
 import me.armar.plugins.autorank.util.AutorankTools;
+import me.armar.plugins.autorank.util.uuid.UUIDManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
-import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * The command delegator for the '/ar set' command.
@@ -25,16 +26,13 @@ public class SetCommand extends AutorankCommand {
     @Override
     public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
-        int value = -1;
 
         if (args.length < 3) {
-            sender.sendMessage(Lang.INVALID_FORMAT.getConfigValue("/ar set <player> <value>"));
+            sender.sendMessage(Lang.INVALID_FORMAT.getConfigValue(this.getUsage()));
             return true;
         }
 
-        if (args.length > 2) {
-            value = AutorankTools.readTimeInput(args, 2);
-        }
+        int value = AutorankTools.readTimeInput(args, 2);
 
         if (value >= 0) {
 
@@ -42,24 +40,23 @@ public class SetCommand extends AutorankCommand {
                 return true;
             }
 
-            final UUID uuid = plugin.getUUIDStorage().getStoredUUID(args[1]);
+            CompletableFuture<Void> task = UUIDManager.getUUID(args[1]).thenAccept(uuid -> {
+                if (uuid == null) {
+                    sender.sendMessage(Lang.UNKNOWN_PLAYER.getConfigValue(args[1]));
+                    return;
+                }
 
-            if (uuid == null) {
-                sender.sendMessage(Lang.UNKNOWN_PLAYER.getConfigValue(args[1]));
-                return true;
-            }
+                plugin.getStorageManager().setPlayerTime(uuid, value);
 
-            if (plugin.getUUIDStorage().hasRealName(uuid)) {
-                args[1] = plugin.getUUIDStorage().getRealName(uuid);
-            }
+                AutorankTools.sendColoredMessage(sender,
+                        Lang.PLAYTIME_CHANGED.getConfigValue(args[1], plugin.getStorageManager()
+                                .getPrimaryStorageProvider().getPlayerTime(TimeType.TOTAL_TIME, uuid) + " " + Lang
+                                .MINUTE_PLURAL.getConfigValue
+                                        ()));
+            });
 
-            plugin.getStorageManager().setPlayerTime(uuid, value);
+            this.runCommandTask(task);
 
-            AutorankTools.sendColoredMessage(sender,
-                    Lang.PLAYTIME_CHANGED.getConfigValue(args[1], plugin.getStorageManager()
-                            .getPrimaryStorageProvider().getPlayerTime(TimeType.TOTAL_TIME, uuid) + " " + Lang
-                            .MINUTE_PLURAL.getConfigValue
-                                    ()));
         } else {
             AutorankTools.sendColoredMessage(sender, Lang.INVALID_FORMAT.getConfigValue("/ar set <player> <value>"));
         }
