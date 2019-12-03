@@ -11,6 +11,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 /**
  * The command delegator for the '/ar set' command.
@@ -46,13 +47,22 @@ public class SetCommand extends AutorankCommand {
                     return;
                 }
 
+                String playerName = args[1];
+
+                try {
+                    playerName = UUIDManager.getPlayerName(uuid).get();
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
+
                 plugin.getStorageManager().setPlayerTime(uuid, value);
 
                 AutorankTools.sendColoredMessage(sender,
-                        Lang.PLAYTIME_CHANGED.getConfigValue(args[1], plugin.getStorageManager()
-                                .getPrimaryStorageProvider().getPlayerTime(TimeType.TOTAL_TIME, uuid) + " " + Lang
-                                .MINUTE_PLURAL.getConfigValue
-                                        ()));
+                        Lang.PLAYTIME_CHANGED.getConfigValue(playerName,
+                                plugin.getStorageManager()
+                                        .getPrimaryStorageProvider().getPlayerTime(TimeType.TOTAL_TIME, uuid) + " " + Lang
+                                        .MINUTE_PLURAL.getConfigValue
+                                                ()));
             });
 
             this.runCommandTask(task);

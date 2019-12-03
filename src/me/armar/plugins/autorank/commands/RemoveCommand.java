@@ -11,6 +11,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 /**
  * The command delegator for the '/ar remove' command.
@@ -43,14 +44,23 @@ public class RemoveCommand extends AutorankCommand {
 
             int value = AutorankTools.readTimeInput(args, 2);
 
+            String playerName = args[1];
+
+            try {
+                playerName = UUIDManager.getPlayerName(uuid).get();
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+
             if (value >= 0) {
                 // Adding negative time
                 plugin.getStorageManager().addPlayerTime(uuid, -value);
-                AutorankTools.sendColoredMessage(sender, Lang.PLAYTIME_CHANGED.getConfigValue(args[1], plugin
-                        .getStorageManager().getPrimaryStorageProvider().getPlayerTime(TimeType.TOTAL_TIME, uuid)));
+                AutorankTools.sendColoredMessage(sender,
+                        Lang.PLAYTIME_CHANGED.getConfigValue(playerName, plugin
+                                .getStorageManager().getPrimaryStorageProvider().getPlayerTime(TimeType.TOTAL_TIME,
+                                        uuid)));
             } else {
-                AutorankTools.sendColoredMessage(sender, Lang.INVALID_FORMAT.getConfigValue("/ar remove [player] " +
-                        "[value]"));
+                AutorankTools.sendColoredMessage(sender, Lang.INVALID_FORMAT.getConfigValue(this.getUsage()));
             }
         });
 

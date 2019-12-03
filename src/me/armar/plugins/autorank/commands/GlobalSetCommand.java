@@ -13,6 +13,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 /**
  * The command delegator for the '/ar gset' command.
@@ -57,8 +58,16 @@ public class GlobalSetCommand extends AutorankCommand {
                     plugin.getPlayTimeManager().setGlobalPlayTime(timeType, uuid, value);
                 }
 
+                String playerName = args[1];
+
+                try {
+                    playerName = UUIDManager.getPlayerName(uuid).get();
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
+
                 AutorankTools.sendColoredMessage(sender,
-                        Lang.PLAYTIME_CHANGED.getConfigValue(args[1],
+                        Lang.PLAYTIME_CHANGED.getConfigValue(playerName,
                                 value + " " + Lang.MINUTE_PLURAL.getConfigValue()));
             });
 

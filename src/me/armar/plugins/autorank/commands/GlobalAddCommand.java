@@ -13,6 +13,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 /**
  * The command delegator for the '/ar gadd' command.
@@ -56,7 +57,15 @@ public class GlobalAddCommand extends AutorankCommand {
                     plugin.getPlayTimeManager().addGlobalPlayTime(timeType, uuid, value);
                 }
 
-                AutorankTools.sendColoredMessage(sender, Lang.PLAYTIME_CHANGED.getConfigValue(args[1], plugin
+                String playerName = args[1];
+
+                try {
+                    playerName = UUIDManager.getPlayerName(uuid).get();
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
+
+                AutorankTools.sendColoredMessage(sender, Lang.PLAYTIME_CHANGED.getConfigValue(playerName, plugin
                         .getPlayTimeManager().getGlobalPlayTime(TimeType.TOTAL_TIME, uuid) + value));
             } else {
                 AutorankTools.sendColoredMessage(sender,

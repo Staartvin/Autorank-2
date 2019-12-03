@@ -14,6 +14,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 /**
  * The command delegator for the '/ar times' command.
@@ -65,6 +66,15 @@ public class TimesCommand extends AutorankCommand {
                 return;
             }
 
+            String playerName = args[1];
+
+            try {
+                playerName = UUIDManager.getPlayerName(uuid).get();
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+
+
             StorageProvider primaryStorageProvider = plugin.getStorageManager().getPrimaryStorageProvider();
 
             final int daily = primaryStorageProvider.getPlayerTime(TimeType.DAILY_TIME, uuid);
@@ -72,8 +82,8 @@ public class TimesCommand extends AutorankCommand {
             final int monthly = primaryStorageProvider.getPlayerTime(TimeType.MONTHLY_TIME, uuid);
             final int total = primaryStorageProvider.getPlayerTime(TimeType.TOTAL_TIME, uuid);
 
-            sender.sendMessage(Lang.AR_TIMES_HEADER.getConfigValue(target));
-            sender.sendMessage(Lang.AR_TIMES_PLAYER_PLAYED.getConfigValue(target));
+            sender.sendMessage(Lang.AR_TIMES_HEADER.getConfigValue(playerName));
+            sender.sendMessage(Lang.AR_TIMES_PLAYER_PLAYED.getConfigValue(playerName));
             sender.sendMessage(Lang.AR_TIMES_TODAY.getConfigValue(AutorankTools.timeToString(daily, Time.MINUTES)));
             sender.sendMessage(Lang.AR_TIMES_THIS_WEEK.getConfigValue(AutorankTools.timeToString(weekly,
                     Time.MINUTES)));
