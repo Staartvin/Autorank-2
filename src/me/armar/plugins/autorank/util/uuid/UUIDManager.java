@@ -48,7 +48,9 @@ public class UUIDManager {
             try {
                 Map<UUID, String> names = getPlayerNames(Collections.singletonList(uuid)).get();
 
-                return names.get(uuid);
+                for (Map.Entry<UUID, String> entry : names.entrySet()) {
+                    return entry.getValue();
+                }
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
@@ -140,7 +142,9 @@ public class UUIDManager {
             try {
                 Map<String, UUID> uuids = getUUIDs(Collections.singletonList(playerName)).get();
 
-                return uuids.get(playerName);
+                for (Map.Entry<String, UUID> entry : uuids.entrySet()) {
+                    return entry.getValue();
+                }
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }

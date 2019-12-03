@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 
 /**
@@ -393,15 +394,21 @@ public class UUIDStorage {
             // Look for the real name so we can easily store it.
             OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
 
-            // There is no real name, so do not put it there.
-            if (offlinePlayer.getName() == null) {
-                return true;
+            String realName = offlinePlayer.getName();
+
+            // Couldn't find a real name, so try to look it up.
+            if (realName == null) {
+                try {
+                    realName = UUIDManager.getPlayerName(uuid).get();
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
             }
 
             // We found a real name, so store it as well.
             // The real name is the name of the player with proper capitalisation.
             // The real name is useful for leaderboards.
-            config.set(lowerCasePlayerName + ".realName", offlinePlayer.getName());
+            config.set(lowerCasePlayerName + ".realName", realName);
 
             plugin.debugMessage("Stored user '" + playerName + "' with uuid " + uuid + "!");
             return true;
