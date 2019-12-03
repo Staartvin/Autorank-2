@@ -223,7 +223,7 @@ public class SettingsConfig extends AbstractConfig {
      * @return true if it should, false otherwise.
      */
     public boolean shouldRemoveOldEntries() {
-        return this.getConfig().getBoolean("automatically archive old storage", true);
+        return this.getConfig().getBoolean("automatically archive old data", true);
     }
 
     /**
