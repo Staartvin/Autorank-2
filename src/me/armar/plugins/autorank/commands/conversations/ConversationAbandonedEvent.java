@@ -7,6 +7,11 @@ import org.bukkit.conversations.ConversationCanceller;
 import org.bukkit.conversations.InactivityConversationCanceller;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * This class is used to determine when a conversation is ended. When it's ended, we must trace back to the proper
+ * {@link AutorankConversation} object so that we can call signal that it has ended and we can call the callback.
+ * Furthermore, we'll let the conversable know that the conversation has ended (and why).
+ */
 public class ConversationAbandonedEvent implements ConversationAbandonedListener {
     @Override
     public void conversationAbandoned(org.bukkit.conversations.@NotNull ConversationAbandonedEvent conversationAbandonedEvent) {
@@ -34,6 +39,9 @@ public class ConversationAbandonedEvent implements ConversationAbandonedListener
         } else {
             result = new ConversationResult((Boolean) endedSuccesfully, conversable);
         }
+
+        // Set the conversation storage so it can be used later.
+        result.setConversationStorage(conversationAbandonedEvent.getContext().getAllSessionData());
 
         // Indicate to conversation that it has ended.
         conversation.conversationEnded(result);
