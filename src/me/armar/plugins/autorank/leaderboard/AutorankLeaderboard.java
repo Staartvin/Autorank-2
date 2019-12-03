@@ -3,7 +3,7 @@ package me.armar.plugins.autorank.leaderboard;
 import me.armar.plugins.autorank.storage.TimeType;
 
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public class AutorankLeaderboard {
 
     private TimeType timeType;
-    private HashMap<String, Integer> leaderboard = new HashMap<>();
+    private Map<String, Integer> leaderboard = new LinkedHashMap<>();
     private boolean isSorted = false; // Keep track whether we are sorted
 
     public AutorankLeaderboard(TimeType timeType) {
@@ -46,7 +46,7 @@ public class AutorankLeaderboard {
 
         // Sort the map by value and return it to the leaderboard
         leaderboard =
-                leaderboard.entrySet().stream().sorted(Map.Entry.comparingByValue()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, HashMap::new));
+                leaderboard.entrySet().stream().sorted(Map.Entry.<String, Integer>comparingByValue().reversed()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 
         isSorted = true;
     }
