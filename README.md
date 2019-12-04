@@ -14,6 +14,6 @@ When he has played for more than 10 minutes and broke at least 10 iron ore, he w
 
 Wiki: https://github.com/Staartvin/Autorank-2/wiki
 
-Development server: https://ci.staartvin.com/job/Autorank/
+Development server: http://staartvin.com:8080/job/Autorank/
 
 Javadocs: https://ci.staartvin.com/job/Autorank/javadoc/
