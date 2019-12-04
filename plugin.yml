@@ -8,120 +8,126 @@ depend: [PluginLibrary]
 description: Reward players based on their stats.
 api-version: 1.14
 commands:
-    autorank:
-        description: Master command of AutoRank
-        usage: Autorank is disabled. Check your server.log!
-        aliases: [ar]
+  autorank:
+    description: Master command of AutoRank
+    usage: Autorank is disabled. Check your server.log!
+    aliases: [ar]
 permissions:
-    autorank.check:
-        description: Allows checking the recommended rank.
-        default: true
-    autorank.checkothers:
-        description: Allows checking the recommended rank of other players.
-        default: op
-    autorank.leaderboard:
-        description: Allows looking at the leaderboards.
-        default: true
-    autorank.exclude:
-        description: Excludes groups or users from the autorank checks.
-        default: false
-    autorank.timeexclude:
-        description: Excludes groups or users from the playtime updates.
-        default: false
-    autorank.set:
-        description: Allows changing playtime of any player
-        default: op
-    autorank.add:
-        description: Allows adding to playtimes.
-        default: op
-    autorank.remove:
-        description: Allows substracting from playtimes.
-        default: op
-    autorank.debug:
-        description: Displays debugging information.
-        default: op
-    autorank.reload:
-        description: Allows reloading the config.
-        default: op
-    autorank.import:
-        description: Allows importing old storage.
-        default: op
-    autorank.archive:
-        description: Allows a player to archive old storage.
-        default: op
-    autorank.noticeonupdate:
-        description: When a new update is available, Autorank will tell all players with this permission that a new version is available.
-        default: op
-    autorank.sync:
-        description: Allows a player to do /ar sync
-        default: op
-    autorank.syncstats:
-        description: Allows a player to do /ar syncstats
-        default: op    
-    autorank.complete:
-        description: Allows a player to do /ar complete
-        default: op    
-    autorank.forcecheck:
-        description: Allows a player to forcecheck another player
-        default: op
-    autorank.noticeonwarning:
-        description: Allows a player to see warnings when problems occur with Autorank.
-        default: op
-    autorank.convert.playerdata:
-        description: Allows a player to convert the playerdata to UUID format.
-        default: op
-    autorank.convert.data:
-        description: Allows a player to convert the storage.yml to UUID format.
-        default: op
-    autorank.help:
-        description: Allows a player to view a list of commands
-        default: true
-    autorank.leaderboard.exclude:
-        description: Exempts a player from the leaderboard.
-        default: false
-    autorank.leaderboard.broadcast:
-        description: Allows a player to broadcast the leaderboard.
-        default: op
-    autorank.leaderboard.force:
-        description: Allows a player to force-update the leaderboard.
-        default: op
-    autorank.track:
-        description: Allows a player to view their requirement progress.
-        default: true
-    autorank.gset:
-        description: Allows changing global playtime of players.
-        default: op
-    autorank.hooks:
-        description: Allows viewing the available hooks for Autorank
-        default: op
-    autorank.gcheck:
-        description: Allows checking global time.
-        default: op
-    autorank.gadd:
-        description: Allows adding global time.
-        default: op
-    autorank.view:
-        description: Allows previewing ranking paths before choosing
-        default: true
-    autorank.choose:
-        description: Allows choosing ranking paths
-        default: true
-    autorank.times.self:
-        description: Allows checking your own time statistics.
-        default: true
-    autorank.times.others:
-        description: Allows checking time statistics of other players.
-        default: op
-    autorank.convert.simpleconfig:
-        description: Allows a player to convert storage from SimpleConfig to Paths
-        default: op
-    autorank.convert.advancedconfig:
-        description: Allows a player to convert storage from AdvancedConfig to Paths
-        default: op
-    autorank.backup.data:
-        description: Allows a player to backup storage files
-        default: op
-    autorank.deactivate:
-            description: Allows a player to deactivate a path
-            default: true
+  autorank.check:
+    description: Allows checking the recommended rank.
+    default: true
+  autorank.checkothers:
+    description: Allows checking the recommended rank of other players.
+    default: op
+  autorank.leaderboard:
+    description: Allows looking at the leaderboards.
+    default: true
+  autorank.exclude:
+    description: Excludes groups or users from the autorank checks.
+    default: false
+  autorank.timeexclude:
+    description: Excludes groups or users from the playtime updates.
+    default: false
+  autorank.set:
+    description: Allows changing playtime of any player
+    default: op
+  autorank.add:
+    description: Allows adding to playtimes.
+    default: op
+  autorank.remove:
+    description: Allows substracting from playtimes.
+    default: op
+  autorank.debug:
+    description: Displays debugging information.
+    default: op
+  autorank.reload:
+    description: Allows reloading the config.
+    default: op
+  autorank.import:
+    description: Allows importing old storage.
+    default: op
+  autorank.archive:
+    description: Allows a player to archive old storage.
+    default: op
+  autorank.noticeonupdate:
+    description: When a new update is available, Autorank will tell all players with this permission that a new version is available.
+    default: op
+  autorank.sync:
+    description: Allows a player to do /ar sync
+    default: op
+  autorank.syncstats:
+    description: Allows a player to do /ar syncstats
+    default: op
+  autorank.complete:
+    description: Allows a player to do /ar complete
+    default: op
+  autorank.forcecheck:
+    description: Allows a player to forcecheck another player
+    default: op
+  autorank.noticeonwarning:
+    description: Allows a player to see warnings when problems occur with Autorank.
+    default: op
+  autorank.convert.playerdata:
+    description: Allows a player to convert the playerdata to UUID format.
+    default: op
+  autorank.convert.data:
+    description: Allows a player to convert the storage.yml to UUID format.
+    default: op
+  autorank.help:
+    description: Allows a player to view a list of commands
+    default: true
+  autorank.leaderboard.exclude:
+    description: Exempts a player from the leaderboard.
+    default: false
+  autorank.leaderboard.broadcast:
+    description: Allows a player to broadcast the leaderboard.
+    default: op
+  autorank.leaderboard.force:
+    description: Allows a player to force-update the leaderboard.
+    default: op
+  autorank.track:
+    description: Allows a player to view their requirement progress.
+    default: true
+  autorank.gset:
+    description: Allows changing global playtime of players.
+    default: op
+  autorank.hooks:
+    description: Allows viewing the available hooks for Autorank
+    default: op
+  autorank.gcheck:
+    description: Allows checking global time.
+    default: op
+  autorank.gadd:
+    description: Allows adding global time.
+    default: op
+  autorank.view:
+    description: Allows previewing ranking paths before choosing
+    default: true
+  autorank.choose:
+    description: Allows choosing ranking paths
+    default: true
+  autorank.times.self:
+    description: Allows checking your own time statistics.
+    default: true
+  autorank.times.others:
+    description: Allows checking time statistics of other players.
+    default: op
+  autorank.convert.simpleconfig:
+    description: Allows a player to convert storage from SimpleConfig to Paths
+    default: op
+  autorank.convert.advancedconfig:
+    description: Allows a player to convert storage from AdvancedConfig to Paths
+    default: op
+  autorank.backup.data:
+    description: Allows a player to backup storage files
+    default: op
+  autorank.deactivate:
+    description: Allows a player to deactivate a path
+    default: true
+  autorank.info.self:
+    description: Allows a player to view their own info.
+    default: true
+  autorank.info.others:
+    description: Allows a player to view info of other players.
+    default: op
     
