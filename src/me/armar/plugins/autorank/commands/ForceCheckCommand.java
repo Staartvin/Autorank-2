@@ -28,7 +28,7 @@ public class ForceCheckCommand extends AutorankCommand {
             return true;
 
         if (args.length != 2) {
-            sender.sendMessage(Lang.INVALID_FORMAT.getConfigValue("/ar forcecheck <player>"));
+            sender.sendMessage(Lang.INVALID_FORMAT.getConfigValue(this.getUsage()));
             return true;
         }
 

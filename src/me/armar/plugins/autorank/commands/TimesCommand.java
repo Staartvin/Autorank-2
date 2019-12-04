@@ -66,14 +66,13 @@ public class TimesCommand extends AutorankCommand {
                 return;
             }
 
-            String playerName = args[1];
+            String playerName = target;
 
             try {
                 playerName = UUIDManager.getPlayerName(uuid).get();
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
-
 
             StorageProvider primaryStorageProvider = plugin.getStorageManager().getPrimaryStorageProvider();
 
