@@ -1,6 +1,9 @@
 package me.armar.plugins.autorank.commands;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.commands.conversations.AutorankConversation;
+import me.armar.plugins.autorank.commands.conversations.prompts.ConfirmPrompt;
+import me.armar.plugins.autorank.commands.conversations.prompts.ConfirmPromptCallback;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
@@ -169,95 +172,110 @@ public class ImportCommand extends AutorankCommand {
                     }
                 }
 
-                for (Map.Entry<String, TimeType> fileToImport : filesToImport.entrySet()) {
-                    YamlConfiguration timeConfig = YamlConfiguration.loadConfiguration(new File(importFolder +
-                            fileToImport.getKey()));
+                // Ask user for confirmation.
 
-                    TimeType importedTimeType = fileToImport.getValue();
+                AutorankConversation.fromFirstPrompt(new ConfirmPrompt(null, new ConfirmPromptCallback() {
+                    @Override
+                    public void promptConfirmed() {
+                        // User confirmed import operation.
 
-                    int importedPlayers = 0;
+                        for (Map.Entry<String, TimeType> fileToImport : filesToImport.entrySet()) {
+                            YamlConfiguration timeConfig = YamlConfiguration.loadConfiguration(new File(importFolder +
+                                    fileToImport.getKey()));
 
-                    for (String uuidString : timeConfig.getKeys(false)) {
-                        if (uuidString == null) return;
+                            TimeType importedTimeType = fileToImport.getValue();
 
-                        int importedValue = timeConfig.getInt(uuidString);
-                        UUID importedPlayer = null;
+                            int importedPlayers = 0;
 
-                        try {
-                            importedPlayer = UUID.fromString(uuidString);
-                        } catch (IllegalArgumentException exception) {
-                            return; // We cannot parse this player.
-                        }
+                            for (String uuidString : timeConfig.getKeys(false)) {
+                                if (uuidString == null) return;
 
-                        // Count how many players we imported
-                        importedPlayers++;
+                                int importedValue = timeConfig.getInt(uuidString);
+                                UUID importedPlayer = null;
 
-                        if (finalWriteToLocalDatabase && finalWriteToGlobalDatabase) {
-                            // Update both local and global database.
-
-                            if (finalOverwriteGlobalDatabase && finalOverwriteLocalDatabase) {
-                                // Overwrite both databases.
-                                plugin.getStorageManager().setPlayerTime(importedTimeType, importedPlayer,
-                                        importedValue);
-                            } else {
-
-                                // Overwrite global database
-                                if (finalOverwriteGlobalDatabase) {
-                                    plugin.getStorageManager().setPlayerTime(StorageProvider.StorageType.DATABASE,
-                                            importedTimeType,
-                                            importedPlayer, importedValue);
-                                } else {
-                                    plugin.getStorageManager().addPlayerTime(StorageProvider.StorageType.DATABASE,
-                                            importedTimeType,
-                                            importedPlayer, importedValue);
+                                try {
+                                    importedPlayer = UUID.fromString(uuidString);
+                                } catch (IllegalArgumentException exception) {
+                                    return; // We cannot parse this player.
                                 }
 
-                                // Overwrite local database
-                                if (finalOverwriteLocalDatabase) {
-                                    plugin.getStorageManager().setPlayerTime(StorageProvider.StorageType.FLAT_FILE,
-                                            importedTimeType,
-                                            importedPlayer, importedValue);
+                                // Count how many players we imported
+                                importedPlayers++;
+
+                                if (finalWriteToLocalDatabase && finalWriteToGlobalDatabase) {
+                                    // Update both local and global database.
+
+                                    if (finalOverwriteGlobalDatabase && finalOverwriteLocalDatabase) {
+                                        // Overwrite both databases.
+                                        plugin.getStorageManager().setPlayerTime(importedTimeType, importedPlayer,
+                                                importedValue);
+                                    } else {
+
+                                        // Overwrite global database
+                                        if (finalOverwriteGlobalDatabase) {
+                                            plugin.getStorageManager().setPlayerTime(StorageProvider.StorageType.DATABASE,
+                                                    importedTimeType,
+                                                    importedPlayer, importedValue);
+                                        } else {
+                                            plugin.getStorageManager().addPlayerTime(StorageProvider.StorageType.DATABASE,
+                                                    importedTimeType,
+                                                    importedPlayer, importedValue);
+                                        }
+
+                                        // Overwrite local database
+                                        if (finalOverwriteLocalDatabase) {
+                                            plugin.getStorageManager().setPlayerTime(StorageProvider.StorageType.FLAT_FILE,
+                                                    importedTimeType,
+                                                    importedPlayer, importedValue);
+                                        } else {
+                                            plugin.getStorageManager().addPlayerTime(StorageProvider.StorageType.FLAT_FILE,
+                                                    importedTimeType,
+                                                    importedPlayer, importedValue);
+                                        }
+                                    }
+                                } else if (finalWriteToGlobalDatabase) {
+                                    // Update only global database.
+
+                                    if (finalOverwriteGlobalDatabase) {
+                                        plugin.getStorageManager().setPlayerTime(StorageProvider.StorageType.DATABASE,
+                                                importedTimeType,
+                                                importedPlayer, importedValue);
+                                    } else {
+                                        plugin.getStorageManager().addPlayerTime(StorageProvider.StorageType.DATABASE,
+                                                importedTimeType,
+                                                importedPlayer, importedValue);
+                                    }
                                 } else {
-                                    plugin.getStorageManager().addPlayerTime(StorageProvider.StorageType.FLAT_FILE,
-                                            importedTimeType,
-                                            importedPlayer, importedValue);
+                                    // Update only local database.
+
+                                    if (finalOverwriteLocalDatabase) {
+                                        plugin.getStorageManager().setPlayerTime(StorageProvider.StorageType.FLAT_FILE,
+                                                importedTimeType,
+                                                importedPlayer, importedValue);
+                                    } else {
+                                        plugin.getStorageManager().addPlayerTime(StorageProvider.StorageType.FLAT_FILE,
+                                                importedTimeType,
+                                                importedPlayer, importedValue);
+                                    }
                                 }
                             }
-                        } else if (finalWriteToGlobalDatabase) {
-                            // Update only global database.
 
-                            if (finalOverwriteGlobalDatabase) {
-                                plugin.getStorageManager().setPlayerTime(StorageProvider.StorageType.DATABASE,
-                                        importedTimeType,
-                                        importedPlayer, importedValue);
-                            } else {
-                                plugin.getStorageManager().addPlayerTime(StorageProvider.StorageType.DATABASE,
-                                        importedTimeType,
-                                        importedPlayer, importedValue);
-                            }
-                        } else {
-                            // Update only local database.
-
-                            if (finalOverwriteLocalDatabase) {
-                                plugin.getStorageManager().setPlayerTime(StorageProvider.StorageType.FLAT_FILE,
-                                        importedTimeType,
-                                        importedPlayer, importedValue);
-                            } else {
-                                plugin.getStorageManager().addPlayerTime(StorageProvider.StorageType.FLAT_FILE,
-                                        importedTimeType,
-                                        importedPlayer, importedValue);
+                            // Give a heads up to the sender if no files were imported.
+                            if (importedPlayers == 0) {
+                                sender.sendMessage(ChatColor.RED + "Could not import any players for " + importedTimeType +
+                                        "! Are you sure you put any files in the imports folder?");
                             }
                         }
+
+                        AutorankTools.sendColoredMessage(sender, Lang.DATA_IMPORTED.getConfigValue());
                     }
 
-                    // Give a heads up to the sender if no files were imported.
-                    if (importedPlayers == 0) {
-                        sender.sendMessage(ChatColor.RED + "Could not import any players for " + importedTimeType +
-                                "! Are you sure you put any files in the imports folder?");
+                    @Override
+                    public void promptDenied() {
+                        // Prompt denied.
+                        sender.sendMessage(ChatColor.RED + "Import operation cancelled by user.");
                     }
-                }
-
-                AutorankTools.sendColoredMessage(sender, Lang.DATA_IMPORTED.getConfigValue());
+                })).startConversationAsSender(sender);
             }
         });
 

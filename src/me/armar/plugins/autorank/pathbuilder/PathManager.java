@@ -126,17 +126,6 @@ public class PathManager {
     }
 
     /**
-     * Check whether a player has a path set as active.
-     *
-     * @param uuid UUID of the player
-     * @param path Path to check
-     * @return true if the given path is active for the given player. False otherwise.
-     */
-    public boolean hasActivePath(UUID uuid, Path path) {
-        return getActivePaths(uuid).contains(path);
-    }
-
-    /**
      * Reset the completed requirements of all active paths of a player.
      *
      * @param uuid UUID of the player.
@@ -230,17 +219,6 @@ public class PathManager {
     }
 
     /**
-     * Check whether a player has completed a path.
-     *
-     * @param uuid UUID of the player
-     * @param path Path to check
-     * @return true when the player has completed a path, false otherwise.
-     */
-    public boolean hasCompletedPath(UUID uuid, Path path) {
-        return getCompletedPaths(uuid).contains(path);
-    }
-
-    /**
      * Get a list of all paths that are defined in the paths.yml file.
      *
      * @return a list of {@link Path} objects.
@@ -262,7 +240,7 @@ public class PathManager {
         for (Path path : this.getAllPaths()) {
 
             // The path is not eligible, so skip it.
-            if (!isPathEligible(player, path)) {
+            if (!path.isEligible(player)) {
                 continue;
             }
 
@@ -273,33 +251,7 @@ public class PathManager {
         return possibilities;
     }
 
-    /**
-     * Check whether a path is eligible for a player. A path is eligible for a player if all of the following apply:
-     * <ul>
-     * <li>The path is not active for the player.</li>
-     * <li>The player has not completed the path yet, or the path is repeatable.</li>
-     * <li>The player meets the prerequisites of the path.</li>
-     * <li>The player has not deactivated the path manually.</li>
-     * </ul>
-     *
-     * @param player Player to check
-     * @param path   Path to check
-     * @return true if the path is eligible for the given player.
-     */
-    public boolean isPathEligible(Player player, Path path) {
-        // A path is not eligible when a player has already has it as active.
-        if (hasActivePath(player.getUniqueId(), path)) {
-            return false;
-        }
 
-        // If a path has been completed and cannot be repeated, the player cannot take this path again.
-        if (hasCompletedPath(player.getUniqueId(), path) && !path.isRepeatable()) {
-            return false;
-        }
-
-        // If a path does not meet the prerequisites of a path, the player cannot take the path.
-        return path.meetsPrerequisites(player);
-    }
 
     /**
      * Initialise paths from paths.yml file.
@@ -378,15 +330,15 @@ public class PathManager {
 
     /**
      * Assign a path to a player. This means that the path is now set to active for a player. A path can only be
-     * assigned to the player if it is eligible ({@link #isPathEligible(Player, Path)}) for the player.
+     * assigned to the player if it is eligible ({@link Path#isEligible(Player)}) for the player.
      *
      * @param player Player to assign path to
      * @param path   Path to check
-     * @throws IllegalArgumentException if the path is not eligible (see {@link #isPathEligible(Player, Path)}).
+     * @throws IllegalArgumentException if the path is not eligible (see {@link Path#isEligible(Player)}).
      */
     public void assignPath(Player player, Path path) throws IllegalArgumentException {
 
-        if (!isPathEligible(player, path)) {
+        if (!path.isEligible(player)) {
             throw new IllegalArgumentException("Path is not eligible, so cannot be assigned to the player!");
         }
 
@@ -420,7 +372,7 @@ public class PathManager {
     public void deassignPath(UUID uuid, Path path) {
 
         // We can't deassign a path if it is not active.
-        if (!this.hasActivePath(uuid, path)) {
+        if (!path.isActive(uuid)) {
             return;
         }
 
@@ -446,11 +398,11 @@ public class PathManager {
         List<Path> assignedPaths = new ArrayList<>();
 
         for (Path path : getAllPaths()) {
-            if (isPathEligible(player, path) && path.isAutomaticallyAssigned()) {
+            if (path.isEligible(player) && path.isAutomaticallyAssigned()) {
 
                 // If the path is deactivated, we will not automatically assign the path to the player again.
                 // If we did, the player would constantly need to deactivate the path again.
-                if (this.isPathDeactivated(player.getUniqueId(), path.getDisplayName())) {
+                if (path.isDeactivated(player.getUniqueId())) {
                     continue;
                 }
 
@@ -507,22 +459,11 @@ public class PathManager {
     }
 
     /**
-     * Check if a player has deactivated a path. A path is considered to be de-activated if there is progress on the
-     * path, but the status of the path is not 'active'.
+     * Get the storage of player data regarding paths and requirements.
      *
-     * @param uuid     UUID of the player
-     * @param pathName Name of the path to check
-     * @return true if the path is deactivated, false otherwise.
+     * @return {@link PlayerDataConfig} object.
      */
-    public boolean isPathDeactivated(UUID uuid, String pathName) {
-        Path path = this.findPathByDisplayName(pathName, false);
-
-        // If the path is not found, it cannot be active or inactive.
-        if (path == null) {
-            return false;
-        }
-
-        // Check if the path is not active and the player has completed at least one requirement.
-        return !path.isActive(uuid) && path.getCompletedRequirements(uuid).size() > 0;
+    protected PlayerDataConfig getPlayerDataStorage() {
+        return this.playerDataConfig;
     }
 }

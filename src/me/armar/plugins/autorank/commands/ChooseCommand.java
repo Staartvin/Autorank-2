@@ -63,7 +63,7 @@ public class ChooseCommand extends AutorankCommand {
         }
 
         // Check if player can retake this path if it has already been completed before.
-        if (plugin.getPathManager().hasCompletedPath(player.getUniqueId(), targetPath) && !targetPath.isRepeatable()) {
+        if (targetPath.hasCompletedPath(player.getUniqueId()) && !targetPath.isRepeatable()) {
             sender.sendMessage(Lang.PATH_NOT_ALLOWED_TO_RETAKE.getConfigValue());
             return true;
         }

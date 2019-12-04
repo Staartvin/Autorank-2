@@ -35,8 +35,7 @@ public class AutorankActivePathsRequirement extends AbstractRequirement {
             findMatchingPath();
         }
 
-        return "has " + requiredPath.getDisplayName() + " as active: " + getAutorank().getPathManager().hasActivePath
-                (player.getUniqueId(), requiredPath);
+        return "has " + requiredPath.getDisplayName() + " as active: " + requiredPath.isActive(player.getUniqueId());
     }
 
     @Override
@@ -50,7 +49,7 @@ public class AutorankActivePathsRequirement extends AbstractRequirement {
             findMatchingPath();
         }
 
-        return getAutorank().getPathManager().hasActivePath(player.getUniqueId(), requiredPath);
+        return requiredPath.isActive(player.getUniqueId());
     }
 
     @Override

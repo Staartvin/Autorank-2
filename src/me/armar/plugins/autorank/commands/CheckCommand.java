@@ -59,10 +59,7 @@ public class CheckCommand extends AutorankCommand {
             StringBuilder message = new StringBuilder(ChatColor.GRAY + "Progress of '" + ChatColor.BLUE + activePath
                     .getDisplayName() + ChatColor.GRAY + "': ");
 
-            int totalRequirements = activePath.getRequirements().size();
-            int completedRequirements = activePath.getCompletedRequirements(uuid).size();
-
-            double completeRatio = completedRequirements * 1.0 / totalRequirements * 1.0;
+            double completeRatio = activePath.getProgress(uuid);
 
             message.append(ChatColor.GRAY + "[");
 
@@ -304,7 +301,7 @@ public class CheckCommand extends AutorankCommand {
             // We will show a specific path of a player to the sender
 
             // Check if the path the player wants to check is active
-            if (!plugin.getPathManager().hasActivePath(targetUUID, targetPath)) {
+            if (targetPath != null && !targetPath.isActive(targetUUID)) {
                 sender.sendMessage(ChatColor.GOLD + targetPlayerName + ChatColor.RED + " does not have "
                         + ChatColor
                         .GRAY + targetPath.getDisplayName() + ChatColor.RED + " as an active path!");

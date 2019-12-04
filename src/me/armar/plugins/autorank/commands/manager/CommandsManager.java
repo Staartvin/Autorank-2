@@ -70,6 +70,7 @@ public class CommandsManager implements TabExecutor {
         registeredCommands.put(Arrays.asList("times", "time"), new TimesCommand(plugin));
         registeredCommands.put(Arrays.asList("reset"), new ResetCommand(plugin));
         registeredCommands.put(Arrays.asList("backup"), new BackupCommand(plugin));
+        registeredCommands.put(Arrays.asList("info"), new InfoCommand(plugin));
     }
 
     /**

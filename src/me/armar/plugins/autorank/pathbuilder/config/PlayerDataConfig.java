@@ -421,6 +421,23 @@ public class PlayerDataConfig extends AbstractConfig {
         section.set(pathName, null);
     }
 
+    /**
+     * Get the number of times a path has been completed by a user.
+     *
+     * @param uuid     UUID of the player
+     * @param pathName Name of the path
+     * @return number of times a path has been completed, or zero if it hasn't been completed before.
+     */
+    public int getTimesCompletedPath(final UUID uuid, String pathName) {
+        ConfigurationSection completedPathSection = getCompletedPathSection(uuid, pathName);
+
+        if (completedPathSection != null) {
+            return completedPathSection.getInt("completed", 0);
+        } else {
+            return 0;
+        }
+    }
+
     // ------------LEADERBOARD EXEMPTION ------------
 
     /**

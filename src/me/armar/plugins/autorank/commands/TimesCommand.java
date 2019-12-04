@@ -30,11 +30,6 @@ public class TimesCommand extends AutorankCommand {
     @Override
     public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
-        // No player specified
-        if (args.length == 1) {
-
-        }
-
         String targetName = "";
 
         // A player specified a target

@@ -35,8 +35,7 @@ public class AutorankCompletedPathsRequirement extends AbstractRequirement {
             findMatchingPath();
         }
 
-        return "has completed " + requiredPath.getDisplayName() + ": " + getAutorank().getPathManager()
-                .hasCompletedPath(player.getUniqueId(), requiredPath);
+        return "has completed " + requiredPath.getDisplayName() + ": " + requiredPath.hasCompletedPath(player.getUniqueId());
     }
 
     @Override
@@ -50,7 +49,7 @@ public class AutorankCompletedPathsRequirement extends AbstractRequirement {
             findMatchingPath();
         }
 
-        return getAutorank().getPathManager().hasCompletedPath(player.getUniqueId(), requiredPath);
+        return requiredPath.hasCompletedPath(player.getUniqueId());
     }
 
     @Override

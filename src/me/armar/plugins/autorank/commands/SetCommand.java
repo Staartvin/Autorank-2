@@ -68,7 +68,7 @@ public class SetCommand extends AutorankCommand {
             this.runCommandTask(task);
 
         } else {
-            AutorankTools.sendColoredMessage(sender, Lang.INVALID_FORMAT.getConfigValue("/ar set <player> <value>"));
+            AutorankTools.sendColoredMessage(sender, Lang.INVALID_FORMAT.getConfigValue(this.getUsage()));
         }
 
         return true;

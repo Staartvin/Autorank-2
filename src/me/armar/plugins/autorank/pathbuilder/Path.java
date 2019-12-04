@@ -495,7 +495,7 @@ public class Path {
      * @return true if the path is active for the given player. False otherwise.
      */
     public boolean isActive(UUID uuid) {
-        return plugin.getPathManager().hasActivePath(uuid, this);
+        return plugin.getPathManager().getPlayerDataStorage().isActivePath(uuid, this.getInternalName());
     }
 
     /**
@@ -511,7 +511,7 @@ public class Path {
 
     /**
      * Whether this path is automatically assigned to a player if the path is eligible. See
-     * {@link PathManager#isPathEligible(Player, Path)}.
+     * {@link Path#isEligible(Player)}.
      *
      * @return true when this path can automatically be assigned to a player/
      */
@@ -565,5 +565,74 @@ public class Path {
      */
     public void setStoreProgressOnDeactivation(boolean storeProgressOnDeactivation) {
         this.storeProgressOnDeactivation = storeProgressOnDeactivation;
+    }
+
+    /**
+     * Get the progress of this path for a given player in percentage (0 means no requirements completed, 1 means
+     * all requirements completed).
+     *
+     * @param uuid UUID to check
+     * @return progress on this path or 0 if it hasn't been started.
+     */
+    public double getProgress(UUID uuid) {
+        return this.getCompletedRequirements(uuid).size() * 1.0d / this.getRequirements().size();
+    }
+
+    /**
+     * Get how many times a player has completed this path.
+     *
+     * @return number of times that this path has been completed by the given player.
+     */
+    public int getTimesCompleted(UUID uuid) {
+        return plugin.getPathManager().getPlayerDataStorage().getTimesCompletedPath(uuid, this.getInternalName());
+    }
+
+    /**
+     * Get whether a player has completed this path.
+     *
+     * @param uuid UUID of the player
+     * @return true if it has, false otherwise.
+     */
+    public boolean hasCompletedPath(UUID uuid) {
+        return this.getTimesCompleted(uuid) > 0;
+    }
+
+    /**
+     * Check if a player has deactivated this path. A path is considered to be de-activated if there is progress on the
+     * path, but the status of the path is not 'active'.
+     *
+     * @param uuid UUID of the player
+     * @return true if the path is deactivated, false otherwise.
+     */
+    public boolean isDeactivated(UUID uuid) {
+        // Check if the path is not active and the player has completed at least one requirement.
+        return !this.isActive(uuid) && this.getCompletedRequirements(uuid).size() > 0;
+    }
+
+    /**
+     * Check whether this path is eligible for a player. A path is eligible for a player if all of the following apply:
+     * <ul>
+     * <li>The path is not active for the player.</li>
+     * <li>The player has not completed the path yet, or the path is repeatable.</li>
+     * <li>The player meets the prerequisites of the path.</li>
+     * <li>The player has not deactivated the path manually.</li>
+     * </ul>
+     *
+     * @param player Player to check
+     * @return true if the path is eligible for the given player.
+     */
+    public boolean isEligible(Player player) {
+        // A path is not eligible when a player has already has it as active.
+        if (isActive(player.getUniqueId())) {
+            return false;
+        }
+
+        // If a path has been completed and cannot be repeated, the player cannot take this path again.
+        if (this.hasCompletedPath(player.getUniqueId()) && !this.isRepeatable()) {
+            return false;
+        }
+
+        // If a path does not meet the prerequisites of a path, the player cannot take the path.
+        return this.meetsPrerequisites(player);
     }
 }
