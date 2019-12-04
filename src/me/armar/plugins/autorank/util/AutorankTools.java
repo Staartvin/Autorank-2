@@ -37,7 +37,6 @@ public class AutorankTools {
         }
 
         return player.hasPermission(AutorankPermission.EXCLUDE_FROM_PATHING);
-
     }
 
     public static int TICKS_PER_SECOND = 20, TICKS_PER_MINUTE = TICKS_PER_SECOND * 60;
@@ -77,7 +76,7 @@ public class AutorankTools {
     }
 
     public static String createStringFromList(final Collection<?> c) {
-        final StringBuilder builder = new StringBuilder("");
+        final StringBuilder builder = new StringBuilder();
 
         final Object[] array = c.toArray();
 
@@ -210,7 +209,7 @@ public class AutorankTools {
     }
 
     public static String getStringFromArgs(final String[] args, final int startArg) {
-        final StringBuilder string = new StringBuilder("");
+        final StringBuilder string = new StringBuilder();
 
         for (int i = startArg; i < args.length; i++) {
 
@@ -413,7 +412,7 @@ public class AutorankTools {
         if (array.length == 0)
             return null;
 
-        final StringBuilder string = new StringBuilder("");
+        final StringBuilder string = new StringBuilder();
 
         for (int i = 0; i < array.length; i++) {
 
