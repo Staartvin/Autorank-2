@@ -71,10 +71,15 @@ public class TimesCommand extends AutorankCommand {
 
             StorageProvider primaryStorageProvider = plugin.getStorageManager().getPrimaryStorageProvider();
 
-            final int daily = primaryStorageProvider.getPlayerTime(TimeType.DAILY_TIME, uuid);
-            final int weekly = primaryStorageProvider.getPlayerTime(TimeType.WEEKLY_TIME, uuid);
-            final int monthly = primaryStorageProvider.getPlayerTime(TimeType.MONTHLY_TIME, uuid);
-            final int total = primaryStorageProvider.getPlayerTime(TimeType.TOTAL_TIME, uuid);
+            int daily = 0, weekly = 0, monthly = 0, total = 0;
+            try {
+                daily = primaryStorageProvider.getPlayerTime(TimeType.DAILY_TIME, uuid).get();
+                weekly = primaryStorageProvider.getPlayerTime(TimeType.WEEKLY_TIME, uuid).get();
+                monthly = primaryStorageProvider.getPlayerTime(TimeType.MONTHLY_TIME, uuid).get();
+                total = primaryStorageProvider.getPlayerTime(TimeType.TOTAL_TIME, uuid).get();
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
 
             sender.sendMessage(Lang.AR_TIMES_HEADER.getConfigValue(playerName));
             sender.sendMessage(Lang.AR_TIMES_PLAYER_PLAYED.getConfigValue(playerName));

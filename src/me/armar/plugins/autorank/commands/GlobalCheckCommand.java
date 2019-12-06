@@ -53,6 +53,7 @@ public class GlobalCheckCommand extends AutorankCommand {
 
                 try {
                     uuid = UUIDManager.getUUID(args[1]).get();
+                    playerName = UUIDManager.getPlayerName(uuid).get();
                 } catch (InterruptedException | ExecutionException e) {
                     e.printStackTrace();
                 }
@@ -90,15 +91,20 @@ public class GlobalCheckCommand extends AutorankCommand {
                 return;
             }
 
-            final int minutes = plugin.getPlayTimeManager().getGlobalPlayTime(TimeType.TOTAL_TIME, uuid);
+            int globalPlayTime = 0;
+            try {
+                globalPlayTime = plugin.getPlayTimeManager().getGlobalPlayTime(TimeType.TOTAL_TIME, uuid).get();
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
 
-            if (minutes < 0) {
+            if (globalPlayTime < 0) {
                 sender.sendMessage(Lang.PLAYER_IS_INVALID.getConfigValue(playerName));
                 return;
             }
 
             AutorankTools.sendColoredMessage(sender, playerName + " has played for "
-                    + AutorankTools.timeToString(minutes, Time.MINUTES) + " across all servers.");
+                    + AutorankTools.timeToString(globalPlayTime, Time.MINUTES) + " across all servers.");
 
         });
 

@@ -12,6 +12,7 @@ import org.bukkit.command.CommandSender;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 /**
  * The command delegator for the '/ar sync' command.
@@ -74,7 +75,12 @@ public class SyncCommand extends AutorankCommand {
 
                     // For each uuid, set its time to that of the database.
                     for (UUID uuid : storedUUIDsFlatfile) {
-                        int databaseValue = databaseStorageProvider.getPlayerTime(timeType, uuid);
+                        int databaseValue = 0;
+                        try {
+                            databaseValue = databaseStorageProvider.getPlayerTime(timeType, uuid).get();
+                        } catch (InterruptedException | ExecutionException e) {
+                            e.printStackTrace();
+                        }
 
                         // Skip entries that are empty.
                         if (databaseValue <= 0) {
@@ -103,7 +109,12 @@ public class SyncCommand extends AutorankCommand {
 
                     // For each uuid, get the flatfile value and update the MYSQL database.
                     for (UUID uuid : storedUUIDsFlatfile) {
-                        int flatfileValue = flatfileStorageProvider.getPlayerTime(timeType, uuid);
+                        int flatfileValue = 0;
+                        try {
+                            flatfileValue = flatfileStorageProvider.getPlayerTime(timeType, uuid).get();
+                        } catch (InterruptedException | ExecutionException e) {
+                            e.printStackTrace();
+                        }
 
                         // Skip entries that are empty.
                         if (flatfileValue <= 0) {

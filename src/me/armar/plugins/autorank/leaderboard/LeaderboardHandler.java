@@ -146,13 +146,21 @@ public class LeaderboardHandler {
                 if (plugin.getSettingsConfig().useGlobalTimeInLeaderboard() && plugin.getStorageManager()
                         .isStorageTypeActive(StorageProvider.StorageType.DATABASE)) {
 
-                    times.put(uuid, plugin.getPlayTimeManager().getGlobalPlayTime(type, uuid));
+                    try {
+                        times.put(uuid, plugin.getPlayTimeManager().getGlobalPlayTime(type, uuid).get());
+                    } catch (InterruptedException | ExecutionException e) {
+                        e.printStackTrace();
+                    }
                 } else {
 
                     // If we are using Autorank, we do not need the player name.
                     if (plugin.getPlayTimeManager().getUsedTimePlugin().equals(AutorankDependency.AUTORANK)) {
-                        times.put(uuid, primaryStorageProvider.getPlayerTime(type,
-                                uuid));
+                        try {
+                            times.put(uuid, primaryStorageProvider.getPlayerTime(type,
+                                    uuid).get());
+                        } catch (InterruptedException | ExecutionException e) {
+                            e.printStackTrace();
+                        }
                     } else {
                         // Get the cached value of this uuid
                         String playerName = null;
@@ -171,14 +179,17 @@ public class LeaderboardHandler {
                     }
                 }
             } else {
-                times.put(uuid, primaryStorageProvider.getPlayerTime(type, uuid));
+                try {
+                    times.put(uuid, primaryStorageProvider.getPlayerTime(type, uuid).get());
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
         // Sort all values
-        final Map<UUID, Integer> sortedMap = LeaderboardHandler.sortByValue(times);
 
-        return sortedMap;
+        return LeaderboardHandler.sortByValue(times);
     }
 
     private Map<String, Integer> getSortedTimesByNames(final TimeType type) {
@@ -234,18 +245,30 @@ public class LeaderboardHandler {
                 if (plugin.getSettingsConfig().useGlobalTimeInLeaderboard() && plugin.getStorageManager()
                         .isStorageTypeActive(StorageProvider.StorageType.DATABASE)) {
 
-                    times.put(playerName, plugin.getPlayTimeManager().getGlobalPlayTime(type, uuid));
+                    try {
+                        times.put(playerName, plugin.getPlayTimeManager().getGlobalPlayTime(type, uuid).get());
+                    } catch (InterruptedException | ExecutionException e) {
+                        e.printStackTrace();
+                    }
                 } else {
 
                     // If we are using Autorank, we do not need the player name.
                     if (plugin.getPlayTimeManager().getUsedTimePlugin().equals(AutorankDependency.AUTORANK)) {
-                        times.put(playerName, primaryStorageProvider.getPlayerTime(type, uuid));
+                        try {
+                            times.put(playerName, primaryStorageProvider.getPlayerTime(type, uuid).get());
+                        } catch (InterruptedException | ExecutionException e) {
+                            e.printStackTrace();
+                        }
                     } else {
                         times.put(playerName, (plugin.getPlayTimeManager().getTimeOfPlayer(playerName, true) / 60));
                     }
                 }
             } else {
-                times.put(playerName, primaryStorageProvider.getPlayerTime(type, uuid));
+                try {
+                    times.put(playerName, primaryStorageProvider.getPlayerTime(type, uuid).get());
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
             }
         }
 

@@ -25,7 +25,8 @@ public class TimeRequirement extends AbstractRequirement {
 
         final int playtime = (getAutorank().getPlayTimeManager().getTimeOfPlayer(player.getName(), true) / 60);
 
-        return playtime + " min/" + timeNeeded + " min";
+        return AutorankTools.timeToString(playtime, Time.MINUTES) + "/" + AutorankTools.timeToString(timeNeeded,
+                Time.MINUTES);
     }
 
     @Override
@@ -33,9 +34,9 @@ public class TimeRequirement extends AbstractRequirement {
         // Use getTimeOf so that when switched to another time, it'll still
         // work.
         // getTimeOfPlayer() is in seconds, so convert.
-        final double playtime = this.getAutorank().getPlayTimeManager().getTimeOfPlayer(player.getName(), true) / 60;
+        final int playTime = this.getAutorank().getPlayTimeManager().getTimeOfPlayer(player.getName(), true) / 60;
 
-        return timeNeeded != -1 && playtime >= timeNeeded;
+        return timeNeeded != -1 && playTime >= timeNeeded;
     }
 
     @Override

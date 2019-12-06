@@ -14,6 +14,7 @@ import me.staartvin.plugins.pluginlibrary.hooks.OnTimeHook;
 import me.staartvin.plugins.pluginlibrary.hooks.StatsHook;
 
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 public class PlayTimeManager {
@@ -73,7 +74,7 @@ public class PlayTimeManager {
 
                 // Stats not found, using Autorank's system.
                 playTime = plugin.getStorageManager().getPrimaryStorageProvider().getPlayerTime(TimeType.TOTAL_TIME,
-                        uuid) * 60;
+                        uuid).getNow(0) * 60;
             }
         } else if (timePlugin.equals(AutorankDependency.ONTIME)) {
             playTime = (int) (((OnTimeHook) plugin.getDependencyManager().getLibraryHook(Library.ONTIME))
@@ -89,7 +90,7 @@ public class PlayTimeManager {
 
             // Use internal system of Autorank.
             playTime = plugin.getStorageManager().getPrimaryStorageProvider().getPlayerTime(TimeType.TOTAL_TIME,
-                    uuid) * 60;
+                    uuid).getNow(0) * 60;
         }
 
         return playTime;
@@ -111,9 +112,10 @@ public class PlayTimeManager {
      * @param uuid     UUID of player
      * @return global time of a player or -1 if no active storage provider supports global time.
      */
-    public int getGlobalPlayTime(TimeType timeType, UUID uuid) {
+    public CompletableFuture<Integer> getGlobalPlayTime(TimeType timeType, UUID uuid) {
+
         if (!plugin.getStorageManager().isStorageTypeActive(StorageProvider.StorageType.DATABASE)) {
-            return -1;
+            return CompletableFuture.completedFuture(-1);
         }
 
         return plugin.getStorageManager().getStorageProvider(StorageProvider.StorageType.DATABASE).getPlayerTime
@@ -159,9 +161,9 @@ public class PlayTimeManager {
      * @param uuid     UUID of player
      * @return value of time or -1 if no data could be found for the given player
      */
-    public int getLocalPlayTime(TimeType timeType, UUID uuid) {
+    public CompletableFuture<Integer> getLocalPlayTime(TimeType timeType, UUID uuid) {
         if (!plugin.getStorageManager().isStorageTypeActive(StorageProvider.StorageType.FLAT_FILE)) {
-            return -1;
+            return CompletableFuture.completedFuture(-1);
         }
 
         return plugin.getStorageManager().getStorageProvider(StorageProvider.StorageType.FLAT_FILE).getPlayerTime

@@ -75,8 +75,14 @@ public class InfoCommand extends AutorankCommand {
 
             boolean isExemptedFromLeaderboard = plugin.getPathManager().hasLeaderboardExemption(uuid);
 
-            int localTotalTime = plugin.getPlayTimeManager().getLocalPlayTime(TimeType.TOTAL_TIME, uuid);
-            int globalTotalTime = plugin.getPlayTimeManager().getGlobalPlayTime(TimeType.TOTAL_TIME, uuid);
+            int localTotalTime = 0, globalTotalTime = 0;
+            try {
+                localTotalTime = plugin.getPlayTimeManager().getLocalPlayTime(TimeType.TOTAL_TIME, uuid).get();
+                globalTotalTime = plugin.getPlayTimeManager().getGlobalPlayTime(TimeType.TOTAL_TIME, uuid).get();
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+
 
             StringBuilder activePathsString = new StringBuilder();
 

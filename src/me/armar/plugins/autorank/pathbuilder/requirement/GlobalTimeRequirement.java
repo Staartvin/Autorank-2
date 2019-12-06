@@ -8,6 +8,7 @@ import me.armar.plugins.autorank.util.AutorankTools.Time;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 /**
  * This requirement checks for global playtime Date created: 13:49:53 15 jan.
@@ -27,19 +28,31 @@ public class GlobalTimeRequirement extends AbstractRequirement {
     @Override
     public String getProgress(final Player player) {
 
-        final int playtime = getAutorank().getPlayTimeManager().getGlobalPlayTime(TimeType.TOTAL_TIME, player
-                .getUniqueId());
+        int playTime = 0;
+        try {
+            playTime = getAutorank().getPlayTimeManager().getGlobalPlayTime(TimeType.TOTAL_TIME, player
+                    .getUniqueId()).get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
 
-        return playtime + "/" + globalTime;
+        return AutorankTools.timeToString(playTime, Time.MINUTES) + "/" + AutorankTools.timeToString(globalTime,
+                Time.MINUTES);
     }
 
     @Override
     public boolean meetsRequirement(final Player player) {
         final UUID uuid = player.getUniqueId();
 
-        final double playtime = this.getAutorank().getPlayTimeManager().getGlobalPlayTime(TimeType.TOTAL_TIME, uuid);
+        int playTime = 0;
 
-        return globalTime != -1 && playtime >= globalTime;
+        try {
+            playTime = this.getAutorank().getPlayTimeManager().getGlobalPlayTime(TimeType.TOTAL_TIME, uuid).get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        return globalTime != -1 && playTime >= globalTime;
     }
 
     @Override

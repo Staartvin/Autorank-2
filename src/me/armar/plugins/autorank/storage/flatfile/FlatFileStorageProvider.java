@@ -18,6 +18,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -49,11 +50,11 @@ public class FlatFileStorageProvider extends StorageProvider {
     }
 
     @Override
-    public int getPlayerTime(TimeType timeType, UUID uuid) {
+    public CompletableFuture<Integer> getPlayerTime(TimeType timeType, UUID uuid) {
         // Get time of a player with specific type
         final SimpleYamlConfiguration data = this.getDataFile(timeType);
 
-        return data.getInt(uuid.toString(), 0);
+        return CompletableFuture.completedFuture(data.getInt(uuid.toString(), 0));
     }
 
     @Override
@@ -89,13 +90,22 @@ public class FlatFileStorageProvider extends StorageProvider {
 
     @Override
     public void addPlayerTime(TimeType timeType, UUID uuid, int timeToAdd) {
-        int time = this.getPlayerTime(timeType, uuid);
+        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+            int time = 0;
 
-        if (time < 0) {
-            time = 0;
-        }
+            try {
+                time = this.getPlayerTime(timeType, uuid).get();
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
 
-        this.setPlayerTime(timeType, uuid, time + timeToAdd);
+            if (time < 0) {
+                time = 0;
+            }
+
+            this.setPlayerTime(timeType, uuid, time + timeToAdd);
+        });
+
     }
 
     @Override
@@ -156,8 +166,8 @@ public class FlatFileStorageProvider extends StorageProvider {
     }
 
     @Override
-    public int getNumberOfStoredPlayers(TimeType timeType) {
-        return getStoredPlayers(timeType).size();
+    public CompletableFuture<Integer> getNumberOfStoredPlayers(TimeType timeType) {
+        return CompletableFuture.completedFuture(getStoredPlayers(timeType).size());
     }
 
     @Override
@@ -338,7 +348,13 @@ public class FlatFileStorageProvider extends StorageProvider {
         final SimpleYamlConfiguration data = this.getDataFile(TimeType.TOTAL_TIME);
 
         for (final UUID uuid : getStoredPlayers(TimeType.TOTAL_TIME)) {
-            final int time = this.getPlayerTime(TimeType.TOTAL_TIME, uuid);
+
+            int time = 0;
+            try {
+                time = this.getPlayerTime(TimeType.TOTAL_TIME, uuid).get();
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
 
             // Found a record to be archived
             if (time < minimum) {

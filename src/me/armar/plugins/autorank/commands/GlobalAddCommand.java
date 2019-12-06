@@ -65,8 +65,19 @@ public class GlobalAddCommand extends AutorankCommand {
                     e.printStackTrace();
                 }
 
-                AutorankTools.sendColoredMessage(sender, Lang.PLAYTIME_CHANGED.getConfigValue(playerName, plugin
-                        .getPlayTimeManager().getGlobalPlayTime(TimeType.TOTAL_TIME, uuid) + value));
+                int globalPlayTime = 0;
+
+                try {
+                    globalPlayTime = plugin
+                            .getPlayTimeManager().getGlobalPlayTime(TimeType.TOTAL_TIME, uuid).get();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+
+                AutorankTools.sendColoredMessage(sender, Lang.PLAYTIME_CHANGED.getConfigValue(playerName,
+                        globalPlayTime + value));
             } else {
                 AutorankTools.sendColoredMessage(sender,
                         Lang.INVALID_FORMAT.getConfigValue(this.getUsage()));
