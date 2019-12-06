@@ -51,4 +51,9 @@ public class PermissionRequirement extends AbstractRequirement {
 
         return true;
     }
+
+    @Override
+    public boolean needsOnlinePlayer() {
+        return true;
+    }
 }

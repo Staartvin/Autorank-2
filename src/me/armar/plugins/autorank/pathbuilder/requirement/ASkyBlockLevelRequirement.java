@@ -5,6 +5,8 @@ import me.staartvin.plugins.pluginlibrary.Library;
 import me.staartvin.plugins.pluginlibrary.hooks.ASkyBlockHook;
 import org.bukkit.entity.Player;
 
+import java.util.UUID;
+
 public class ASkyBlockLevelRequirement extends AbstractRequirement {
 
     private ASkyBlockHook handler;
@@ -32,11 +34,8 @@ public class ASkyBlockLevelRequirement extends AbstractRequirement {
     }
 
     @Override
-    public boolean meetsRequirement(final Player player) {
-
-        final int islandLevel = handler.getIslandLevel(player.getUniqueId());
-
-        return islandLevel >= this.islandLevel;
+    public boolean meetsRequirement(UUID uuid) {
+        return handler.getIslandLevel(uuid) >= this.islandLevel;
     }
 
     @Override
@@ -66,5 +65,10 @@ public class ASkyBlockLevelRequirement extends AbstractRequirement {
         }
 
         return true;
+    }
+
+    @Override
+    public boolean needsOnlinePlayer() {
+        return false;
     }
 }

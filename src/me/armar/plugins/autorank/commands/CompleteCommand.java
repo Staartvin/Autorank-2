@@ -94,7 +94,7 @@ public class CompleteCommand extends AutorankCommand {
         }
 
         // Rank player as he has fulfilled all requirements
-        if (targetPath.getFailedRequirements(player, true).size() == 0) {
+        if (targetPath.getFailedRequirements(player.getUniqueId(), true).size() == 0) {
             player.sendMessage(ChatColor.GREEN + "You don't have any requirements left.");
             return true;
         }
@@ -114,7 +114,7 @@ public class CompleteCommand extends AutorankCommand {
             return true;
         }
 
-        if (holder.meetsRequirement(player)) {
+        if (holder.meetsRequirement(player.getUniqueId())) {
             targetPath.completeRequirement(player, holder.getRequirementId());
         } else {
             // player does not meet requirements
@@ -141,7 +141,8 @@ public class CompleteCommand extends AutorankCommand {
 
             // For all active paths, get the id of the requirements that they have not completed yet.
             for (Path activePath : plugin.getPathManager().getActivePaths(((Player) sender).getUniqueId())) {
-                for (CompositeRequirement requirement : activePath.getFailedRequirements((Player) sender, true)) {
+                for (CompositeRequirement requirement :
+                        activePath.getFailedRequirements(((Player) sender).getUniqueId(), true)) {
                     suggestedIds.add("" + (requirement.getRequirementId() + 1));
                 }
             }

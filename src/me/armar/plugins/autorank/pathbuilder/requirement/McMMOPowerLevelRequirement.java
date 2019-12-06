@@ -57,4 +57,9 @@ public class McMMOPowerLevelRequirement extends AbstractRequirement {
 
         return true;
     }
+
+    @Override
+    public boolean needsOnlinePlayer() {
+        return true;
+    }
 }

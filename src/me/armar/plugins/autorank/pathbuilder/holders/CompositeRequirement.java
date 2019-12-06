@@ -1,14 +1,13 @@
 package me.armar.plugins.autorank.pathbuilder.holders;
 
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.api.events.RequirementCompleteEvent;
 import me.armar.plugins.autorank.pathbuilder.requirement.AbstractRequirement;
 import me.armar.plugins.autorank.pathbuilder.result.AbstractResult;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Since a requirement in Autorank's config can have multiple real requirements,
@@ -241,18 +240,18 @@ public class CompositeRequirement {
     /**
      * Check whether a player has completed any of the requirements in this CompositeRequirement.
      *
-     * @param player Player to check.
+     * @param uuid Player to check.
      * @return true if the player meets any of the requirements.
      */
     // Check if the player meets any of the requirements
     // Using OR logic.
     // If any of the requirements is true, you can return true since were using
     // OR logic.
-    public boolean meetsRequirement(final Player player) {
+    public boolean meetsRequirement(UUID uuid) {
 
         for (final AbstractRequirement r : this.getRequirements()) {
 
-            if (r.meetsRequirement(player)) {
+            if (r.isMet(uuid)) {
                 return true;
             }
 
@@ -285,17 +284,6 @@ public class CompositeRequirement {
      * @param player Player to run it for.
      */
     public void runResults(final Player player) {
-
-        // Fire event so it can be cancelled
-        // Create the event here
-        final RequirementCompleteEvent event = new RequirementCompleteEvent(player, this);
-        // Call the event
-        Bukkit.getServer().getPluginManager().callEvent(event);
-
-        // Check if event is cancelled.
-        if (event.isCancelled())
-            return;
-
         // Apply result
         for (final AbstractResult realAbstractResult : this.getResults()) {
             realAbstractResult.applyResult(player);

@@ -55,11 +55,12 @@ public class AdvancementRequirement extends AbstractRequirement {
     }
 
     @Override
-    public boolean meetsRequirement(final Player player) {
+    protected boolean meetsRequirement(Player player) {
 
         // Check if this requirement is world-specific
         if (this.isWorldSpecific()) {
             // Is player in the same world as specified
+
             if (!this.getWorld().equals(player.getWorld().getName()))
                 return false;
         }
@@ -145,6 +146,11 @@ public class AdvancementRequirement extends AbstractRequirement {
             }
         }
 
+        return true;
+    }
+
+    @Override
+    public boolean needsOnlinePlayer() {
         return true;
     }
 }

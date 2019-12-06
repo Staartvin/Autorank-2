@@ -79,4 +79,9 @@ public class MoneyRequirement extends AbstractRequirement {
 
         return true;
     }
+
+    @Override
+    public boolean needsOnlinePlayer() {
+        return true;
+    }
 }

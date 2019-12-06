@@ -69,4 +69,9 @@ public class RPGMeSkillLevelRequirement extends AbstractRequirement {
 
         return true;
     }
+
+    @Override
+    public boolean needsOnlinePlayer() {
+        return true;
+    }
 }

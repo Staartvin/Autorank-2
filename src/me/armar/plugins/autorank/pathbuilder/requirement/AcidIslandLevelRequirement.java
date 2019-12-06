@@ -5,6 +5,8 @@ import me.staartvin.plugins.pluginlibrary.Library;
 import me.staartvin.plugins.pluginlibrary.hooks.AcidIslandHook;
 import org.bukkit.entity.Player;
 
+import java.util.UUID;
+
 public class AcidIslandLevelRequirement extends AbstractRequirement {
 
     private AcidIslandHook handler;
@@ -32,11 +34,8 @@ public class AcidIslandLevelRequirement extends AbstractRequirement {
     }
 
     @Override
-    public boolean meetsRequirement(final Player player) {
-
-        final int islandLevel = handler.getIslandLevel(player.getUniqueId());
-
-        return islandLevel >= this.islandLevel;
+    protected boolean meetsRequirement(UUID uuid) {
+        return handler.getIslandLevel(uuid) >= this.islandLevel;
     }
 
     @Override
@@ -66,5 +65,10 @@ public class AcidIslandLevelRequirement extends AbstractRequirement {
         }
 
         return true;
+    }
+
+    @Override
+    public boolean needsOnlinePlayer() {
+        return false;
     }
 }

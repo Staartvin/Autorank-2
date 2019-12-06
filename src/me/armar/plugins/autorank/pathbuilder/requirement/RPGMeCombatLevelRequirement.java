@@ -59,4 +59,9 @@ public class RPGMeCombatLevelRequirement extends AbstractRequirement {
 
         return true;
     }
+
+    @Override
+    public boolean needsOnlinePlayer() {
+        return true;
+    }
 }

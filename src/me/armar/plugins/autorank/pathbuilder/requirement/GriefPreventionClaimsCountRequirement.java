@@ -5,6 +5,8 @@ import me.staartvin.plugins.pluginlibrary.Library;
 import me.staartvin.plugins.pluginlibrary.hooks.GriefPreventionHook;
 import org.bukkit.entity.Player;
 
+import java.util.UUID;
+
 public class GriefPreventionClaimsCountRequirement extends AbstractRequirement {
 
     int claimsCount = -1;
@@ -23,14 +25,12 @@ public class GriefPreventionClaimsCountRequirement extends AbstractRequirement {
     }
 
     @Override
-    public boolean meetsRequirement(final Player player) {
+    protected boolean meetsRequirement(UUID uuid) {
 
         if (!handler.isAvailable())
             return false;
 
-        final int level = handler.getNumberOfClaims(player.getUniqueId());
-
-        return level >= claimsCount;
+        return handler.getNumberOfClaims(uuid) >= claimsCount;
     }
 
     @Override

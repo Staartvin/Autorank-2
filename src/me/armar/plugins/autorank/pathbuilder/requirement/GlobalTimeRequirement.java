@@ -41,9 +41,7 @@ public class GlobalTimeRequirement extends AbstractRequirement {
     }
 
     @Override
-    public boolean meetsRequirement(final Player player) {
-        final UUID uuid = player.getUniqueId();
-
+    protected boolean meetsRequirement(UUID uuid) {
         int playTime = 0;
 
         try {

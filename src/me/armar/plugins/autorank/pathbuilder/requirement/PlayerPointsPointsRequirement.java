@@ -5,6 +5,8 @@ import me.staartvin.plugins.pluginlibrary.Library;
 import me.staartvin.plugins.pluginlibrary.hooks.PlayerPointsHook;
 import org.bukkit.entity.Player;
 
+import java.util.UUID;
+
 public class PlayerPointsPointsRequirement extends AbstractRequirement {
 
     private PlayerPointsHook handler = null;
@@ -21,12 +23,12 @@ public class PlayerPointsPointsRequirement extends AbstractRequirement {
     }
 
     @Override
-    public boolean meetsRequirement(final Player player) {
+    protected boolean meetsRequirement(UUID uuid) {
 
         if (!handler.isAvailable())
             return false;
 
-        return handler.getPlayerPoints(player.getUniqueId()) >= requiredPoints;
+        return handler.getPlayerPoints(uuid) >= requiredPoints;
     }
 
     @Override

@@ -7,9 +7,7 @@ import me.armar.plugins.autorank.pathbuilder.requirement.AbstractRequirement;
 import me.armar.plugins.autorank.pathbuilder.result.AbstractResult;
 import me.armar.plugins.autorank.storage.StorageProvider;
 import me.armar.plugins.autorank.storage.TimeType;
-import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -151,24 +149,13 @@ public class API {
     }
 
     /**
-     * Get the paths that a player has started but not yet completed.
-     *
-     * @param uuid UUID of the player
-     * @return a list of {@link Path} objects
-     */
-    @Deprecated
-    public List<Path> getStartedPaths(UUID uuid) {
-        return new ArrayList<>();
-    }
-
-    /**
      * Get all the paths that a player is allowed to start.
      *
-     * @param player Player to check paths for.
+     * @param uuid Player to check paths for.
      * @return a list of paths the player is able to start.
      */
-    public List<Path> getEligiblePaths(Player player) {
-        return plugin.getPathManager().getEligiblePaths(player);
+    public List<Path> getEligiblePaths(UUID uuid) {
+        return plugin.getPathManager().getEligiblePaths(uuid);
     }
 
     /**

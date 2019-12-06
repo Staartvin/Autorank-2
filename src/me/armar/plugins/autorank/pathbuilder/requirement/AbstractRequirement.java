@@ -5,10 +5,13 @@ import me.armar.plugins.autorank.hooks.DependencyManager;
 import me.armar.plugins.autorank.pathbuilder.result.AbstractResult;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.staartvin.plugins.pluginlibrary.Library;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Whenever you want to create a new requirement, you'll have to extend this
@@ -152,6 +155,42 @@ public abstract class AbstractRequirement {
         return world != null;
     }
 
+
+    /**
+     * Check whether this requirement is met by a player. If a requirement needs the player to be online (see
+     * {@link #needsOnlinePlayer()}) and the given player is not online, this method will always return false.
+     *
+     * @param uuid UUID of the player.
+     * @return true if it is met, false otherwise.
+     */
+    public boolean isMet(UUID uuid) {
+        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
+
+        // Check whether this requirement needs an online player. If it does, we'll try to provide it.
+        if (this.needsOnlinePlayer()) {
+            if (offlinePlayer.isOnline()) {
+                return this.meetsRequirement(offlinePlayer.getPlayer());
+            } else {
+                // If the player is not online and we need him online, we'll always return false because we can't
+                // check whether he meets the requirement.
+                return false;
+            }
+        } else {
+            return this.meetsRequirement(uuid);
+        }
+    }
+
+    /**
+     * Check whether a player meets this requirement. If a requirement is optional,
+     * a player will always meet the requirement.
+     *
+     * @param uuid UUID of the player to check
+     * @return true if the requirement is met, false otherwise.
+     */
+    protected boolean meetsRequirement(UUID uuid) {
+        return false;
+    }
+
     /**
      * Check whether a player meets this requirement. If a requirement is
      * optional, a player will always meet the requirement.
@@ -159,7 +198,9 @@ public abstract class AbstractRequirement {
      * @param player Player to check for
      * @return true if it meets the requirements; false otherwise
      */
-    public abstract boolean meetsRequirement(Player player);
+    protected boolean meetsRequirement(Player player) {
+        return false;
+    }
 
     /**
      * Set whether this requirement auto completes itself
@@ -286,4 +327,14 @@ public abstract class AbstractRequirement {
     public void setCustomDescription(String description) {
         this.customDescription = description;
     }
+
+    /**
+     * Whether this requirement needs a player to be online to be able to check if he meets the requirement. If a
+     * requirement needs an online player, but he is not online when checking, it will always tell you that the
+     * requirement is not met.
+     *
+     * @return true if the player needs to be online to check this requirement. False otherwise.
+     */
+    public boolean needsOnlinePlayer() {
+        return false;}
 }

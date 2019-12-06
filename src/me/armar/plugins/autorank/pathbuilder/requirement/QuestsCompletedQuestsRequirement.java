@@ -5,6 +5,8 @@ import me.staartvin.plugins.pluginlibrary.Library;
 import me.staartvin.plugins.pluginlibrary.hooks.QuestsHook;
 import org.bukkit.entity.Player;
 
+import java.util.UUID;
+
 public class QuestsCompletedQuestsRequirement extends AbstractRequirement {
 
     private QuestsHook handler = null;
@@ -21,12 +23,12 @@ public class QuestsCompletedQuestsRequirement extends AbstractRequirement {
     }
 
     @Override
-    public boolean meetsRequirement(final Player player) {
+    protected boolean meetsRequirement(UUID uuid) {
 
         if (!handler.isAvailable())
             return false;
 
-        return handler.getNumberOfCompletedQuests(player.getUniqueId()) >= completedQuests;
+        return handler.getNumberOfCompletedQuests(uuid) >= completedQuests;
     }
 
     @Override

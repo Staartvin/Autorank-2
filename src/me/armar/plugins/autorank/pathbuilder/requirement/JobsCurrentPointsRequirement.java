@@ -5,6 +5,8 @@ import me.staartvin.plugins.pluginlibrary.Library;
 import me.staartvin.plugins.pluginlibrary.hooks.JobsHook;
 import org.bukkit.entity.Player;
 
+import java.util.UUID;
+
 public class JobsCurrentPointsRequirement extends AbstractRequirement {
 
     int currentPoints = -1;
@@ -38,14 +40,14 @@ public class JobsCurrentPointsRequirement extends AbstractRequirement {
     }
 
     @Override
-    public boolean meetsRequirement(final Player player) {
+    protected boolean meetsRequirement(UUID uuid) {
 
         double points = -1;
 
         if (jobsHandler == null || !jobsHandler.isAvailable()) {
             points = -1;
         } else {
-            points = jobsHandler.getCurrentPoints(player.getUniqueId());
+            points = jobsHandler.getCurrentPoints(uuid);
         }
 
         return points >= currentPoints;

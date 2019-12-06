@@ -4,6 +4,8 @@ import me.armar.plugins.autorank.language.Lang;
 import me.staartvin.plugins.pluginlibrary.Library;
 import org.bukkit.entity.Player;
 
+import java.util.UUID;
+
 public class QuestsAlternativeActiveQuestsRequirement extends AbstractRequirement {
 
     private me.staartvin.plugins.pluginlibrary.hooks.QuestsAlternative handler = null;
@@ -20,12 +22,12 @@ public class QuestsAlternativeActiveQuestsRequirement extends AbstractRequiremen
     }
 
     @Override
-    public boolean meetsRequirement(final Player player) {
+    protected boolean meetsRequirement(UUID uuid) {
 
         if (!handler.isAvailable())
             return false;
 
-        return handler.getNumberOfActiveQuests(player.getUniqueId()) >= activeQuests;
+        return handler.getNumberOfActiveQuests(uuid) >= activeQuests;
     }
 
     @Override

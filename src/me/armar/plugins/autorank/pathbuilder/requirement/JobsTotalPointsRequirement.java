@@ -5,6 +5,8 @@ import me.staartvin.plugins.pluginlibrary.Library;
 import me.staartvin.plugins.pluginlibrary.hooks.JobsHook;
 import org.bukkit.entity.Player;
 
+import java.util.UUID;
+
 public class JobsTotalPointsRequirement extends AbstractRequirement {
 
     private JobsHook jobsHandler;
@@ -38,7 +40,7 @@ public class JobsTotalPointsRequirement extends AbstractRequirement {
     }
 
     @Override
-    public boolean meetsRequirement(final Player player) {
+    protected boolean meetsRequirement(UUID uuid) {
 
         // Add dependency
         addDependency(Library.JOBS);
@@ -48,7 +50,7 @@ public class JobsTotalPointsRequirement extends AbstractRequirement {
         if (jobsHandler == null || !jobsHandler.isAvailable()) {
             points = -1;
         } else {
-            points = jobsHandler.getTotalPoints(player.getUniqueId());
+            points = jobsHandler.getTotalPoints(uuid);
         }
 
         return points >= totalPoints;
@@ -78,4 +80,6 @@ public class JobsTotalPointsRequirement extends AbstractRequirement {
 
         return true;
     }
+
+
 }

@@ -5,6 +5,8 @@ import me.staartvin.plugins.pluginlibrary.Library;
 import me.staartvin.plugins.pluginlibrary.hooks.BattleLevelsHook;
 import org.bukkit.entity.Player;
 
+import java.util.UUID;
+
 public class BattleLevelsKDRRequirement extends AbstractRequirement {
 
     private BattleLevelsHook handler = null;
@@ -21,12 +23,12 @@ public class BattleLevelsKDRRequirement extends AbstractRequirement {
     }
 
     @Override
-    public boolean meetsRequirement(final Player player) {
+    protected boolean meetsRequirement(UUID uuid) {
 
         if (!handler.isAvailable())
             return false;
 
-        return handler.getKillDeathRatio(player.getUniqueId()) >= neededKillDeathRatio;
+        return handler.getKillDeathRatio(uuid) >= neededKillDeathRatio;
     }
 
     @Override
@@ -52,5 +54,10 @@ public class BattleLevelsKDRRequirement extends AbstractRequirement {
         }
 
         return true;
+    }
+
+    @Override
+    public boolean needsOnlinePlayer() {
+        return false;
     }
 }

@@ -112,4 +112,9 @@ public class LocationRequirement extends AbstractRequirement {
 
         return this.radius != -1;
     }
+
+    @Override
+    public boolean needsOnlinePlayer() {
+        return true;
+    }
 }

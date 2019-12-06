@@ -8,6 +8,8 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.UUID;
+
 public class FoodEatenRequirement extends AbstractRequirement {
 
     FoodWrapper foodEaten = null;
@@ -58,7 +60,7 @@ public class FoodEatenRequirement extends AbstractRequirement {
     }
 
     @Override
-    public boolean meetsRequirement(final Player player) {
+    protected boolean meetsRequirement(UUID uuid) {
 
         if (!this.getStatsPlugin().isEnabled())
             return false;
@@ -67,7 +69,7 @@ public class FoodEatenRequirement extends AbstractRequirement {
         final String foodType = foodEaten.getFoodName();
 
         final int totalFoodEaten = getStatsPlugin().getNormalStat(StatsPlugin.StatType.FOOD_EATEN,
-                player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld(), "foodType", foodType));
+                uuid, AutorankTools.makeStatsInfo("world", this.getWorld(), "foodType", foodType));
 
         return totalFoodEaten >= amount;
     }

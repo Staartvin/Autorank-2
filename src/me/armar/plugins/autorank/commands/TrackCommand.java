@@ -137,9 +137,11 @@ public class TrackCommand extends AutorankCommand {
         // Player has not entered a second argument yet.
         if (args.length == 2 && args[args.length - 1].trim().equals("")) {
 
+            UUID uuid = ((Player) sender).getUniqueId();
+
             // For all active paths, get the id of the requirements that they have not completed yet.
-            for (Path activePath : plugin.getPathManager().getActivePaths(((Player) sender).getUniqueId())) {
-                for (CompositeRequirement requirement : activePath.getFailedRequirements((Player) sender, true)) {
+            for (Path activePath : plugin.getPathManager().getActivePaths(uuid)) {
+                for (CompositeRequirement requirement : activePath.getFailedRequirements(uuid, true)) {
                     suggestedIds.add("" + (requirement.getRequirementId() + 1));
                 }
             }

@@ -5,6 +5,8 @@ import me.staartvin.plugins.pluginlibrary.Library;
 import me.staartvin.plugins.pluginlibrary.hooks.EssentialsXHook;
 import org.bukkit.entity.Player;
 
+import java.util.UUID;
+
 public class EssentialsGeoIPRequirement extends AbstractRequirement {
 
     private EssentialsXHook essHandler = null;
@@ -24,8 +26,8 @@ public class EssentialsGeoIPRequirement extends AbstractRequirement {
     }
 
     @Override
-    public boolean meetsRequirement(final Player player) {
-        final String realLocation = essHandler.getGeoIPLocation(player.getUniqueId());
+    protected boolean meetsRequirement(UUID uuid) {
+        final String realLocation = essHandler.getGeoIPLocation(uuid);
 
         if (realLocation == null)
             return false;

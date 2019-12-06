@@ -5,6 +5,8 @@ import me.staartvin.plugins.pluginlibrary.Library;
 import me.staartvin.plugins.pluginlibrary.hooks.GriefPreventionHook;
 import org.bukkit.entity.Player;
 
+import java.util.UUID;
+
 public class GriefPreventionBonusBlocksRequirement extends AbstractRequirement {
 
     int bonusBlocks = -1;
@@ -23,14 +25,12 @@ public class GriefPreventionBonusBlocksRequirement extends AbstractRequirement {
     }
 
     @Override
-    public boolean meetsRequirement(final Player player) {
+    protected boolean meetsRequirement(UUID uuid) {
 
         if (!handler.isAvailable())
             return false;
 
-        final int level = handler.getNumberOfBonusBlocks(player.getUniqueId());
-
-        return level >= bonusBlocks;
+        return handler.getNumberOfBonusBlocks(uuid) >= bonusBlocks;
     }
 
     @Override

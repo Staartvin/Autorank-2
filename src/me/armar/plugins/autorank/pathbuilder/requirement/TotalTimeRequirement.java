@@ -3,7 +3,11 @@ package me.armar.plugins.autorank.pathbuilder.requirement;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+
+import java.util.UUID;
 
 /**
  * This requirement checks for the total time on the server
@@ -37,9 +41,14 @@ public class TotalTimeRequirement extends AbstractRequirement {
     }
 
     @Override
-    public boolean meetsRequirement(final Player player) {
+    protected boolean meetsRequirement(UUID uuid) {
+
+        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
+
+        if (offlinePlayer.hasPlayedBefore()) return false;
+
         // the time he first joined the server
-        final long joinTime = player.getFirstPlayed();
+        final long joinTime = offlinePlayer.getFirstPlayed();
 
         final long currentTime = System.currentTimeMillis();
 

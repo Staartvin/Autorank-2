@@ -4,6 +4,8 @@ import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.pathbuilder.Path;
 import org.bukkit.entity.Player;
 
+import java.util.UUID;
+
 public class AutorankActivePathsRequirement extends AbstractRequirement {
 
     private int requiredPaths = -1;
@@ -39,17 +41,17 @@ public class AutorankActivePathsRequirement extends AbstractRequirement {
     }
 
     @Override
-    public boolean meetsRequirement(final Player player) {
+    protected boolean meetsRequirement(UUID uuid) {
 
         if (requiredPaths > 0) {
-            return getAutorank().getPathManager().getActivePaths(player.getUniqueId()).size() >= requiredPaths;
+            return getAutorank().getPathManager().getActivePaths(uuid).size() >= requiredPaths;
         }
 
         if (requiredPath == null) {
             findMatchingPath();
         }
 
-        return requiredPath.isActive(player.getUniqueId());
+        return requiredPath.isActive(uuid);
     }
 
     @Override
@@ -75,6 +77,11 @@ public class AutorankActivePathsRequirement extends AbstractRequirement {
         }
 
         return true;
+    }
+
+    @Override
+    public boolean needsOnlinePlayer() {
+        return false;
     }
 
     private void findMatchingPath() {

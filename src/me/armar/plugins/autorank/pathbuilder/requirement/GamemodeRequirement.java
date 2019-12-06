@@ -23,14 +23,11 @@ public class GamemodeRequirement extends AbstractRequirement {
 
     @Override
     public String getProgress(final Player player) {
-
-        @SuppressWarnings("deprecation") final int gamemode = player.getGameMode().getValue();
-
-        return gamemode + "/" + gameMode;
+        return player.getGameMode().getValue() + "/" + gameMode;
     }
 
     @Override
-    public boolean meetsRequirement(final Player player) {
+    protected boolean meetsRequirement(final Player player) {
 
         // Check if this requirement is world-specific
         if (this.isWorldSpecific()) {
@@ -39,9 +36,7 @@ public class GamemodeRequirement extends AbstractRequirement {
                 return false;
         }
 
-        @SuppressWarnings("deprecation") final int gamemode = player.getGameMode().getValue();
-
-        return gamemode == gameMode;
+        return player.getGameMode().getValue() == gameMode;
     }
 
     @Override
@@ -55,6 +50,11 @@ public class GamemodeRequirement extends AbstractRequirement {
             return false;
         }
 
+        return true;
+    }
+
+    @Override
+    public boolean needsOnlinePlayer() {
         return true;
     }
 }

@@ -69,7 +69,7 @@ public class ChooseCommand extends AutorankCommand {
         }
 
         // Check if the path is eligible.
-        if (!targetPath.meetsPrerequisites(player)) {
+        if (!targetPath.meetsPrerequisites(player.getUniqueId())) {
             sender.sendMessage(ChatColor.RED + "You do not meet the prerequisites of this path!");
             sender.sendMessage(ChatColor.RED + "Type " + ChatColor.GOLD + "/ar view "
                     + targetPath.getDisplayName() + ChatColor.RED + " to see a list of prerequisites.");
@@ -112,7 +112,7 @@ public class ChooseCommand extends AutorankCommand {
         final Player player = (Player) sender;
 
         // Return the name of the paths that the player has active.
-        return plugin.getPathManager().getEligiblePaths(player).stream().map(Path::getDisplayName).collect(Collectors
+        return plugin.getPathManager().getEligiblePaths(player.getUniqueId()).stream().map(Path::getDisplayName).collect(Collectors
                 .toList());
     }
 

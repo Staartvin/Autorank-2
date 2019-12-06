@@ -231,16 +231,16 @@ public class PathManager {
      * Get paths that a player can choose. A player can choose a path if he
      * meets the prerequisites of that path.
      *
-     * @param player Player
+     * @param uuid UUID of player.
      * @return List of paths that a player can choose.
      */
-    public List<Path> getEligiblePaths(Player player) {
+    public List<Path> getEligiblePaths(UUID uuid) {
         List<Path> possibilities = new ArrayList<>();
 
         for (Path path : this.getAllPaths()) {
 
             // The path is not eligible, so skip it.
-            if (!path.isEligible(player)) {
+            if (!path.isEligible(uuid)) {
                 continue;
             }
 
@@ -330,15 +330,15 @@ public class PathManager {
 
     /**
      * Assign a path to a player. This means that the path is now set to active for a player. A path can only be
-     * assigned to the player if it is eligible ({@link Path#isEligible(Player)}) for the player.
+     * assigned to the player if it is eligible ({@link Path#isEligible(UUID)}) for the player.
      *
      * @param player Player to assign path to
      * @param path   Path to check
-     * @throws IllegalArgumentException if the path is not eligible (see {@link Path#isEligible(Player)}).
+     * @throws IllegalArgumentException if the path is not eligible (see {@link Path#isEligible(UUID)}).
      */
     public void assignPath(Player player, Path path) throws IllegalArgumentException {
 
-        if (!path.isEligible(player)) {
+        if (!path.isEligible(player.getUniqueId())) {
             throw new IllegalArgumentException("Path is not eligible, so cannot be assigned to the player!");
         }
 
@@ -398,7 +398,7 @@ public class PathManager {
         List<Path> assignedPaths = new ArrayList<>();
 
         for (Path path : getAllPaths()) {
-            if (path.isEligible(player) && path.isAutomaticallyAssigned()) {
+            if (path.isEligible(player.getUniqueId()) && path.isAutomaticallyAssigned()) {
 
                 // If the path is deactivated, we will not automatically assign the path to the player again.
                 // If we did, the player would constantly need to deactivate the path again.

@@ -6,6 +6,7 @@ import me.staartvin.plugins.pluginlibrary.hooks.SavageFactionsHook;
 import org.bukkit.entity.Player;
 
 import java.text.DecimalFormat;
+import java.util.UUID;
 
 public class SavageFactionsPowerRequirement extends AbstractRequirement {
 
@@ -34,18 +35,9 @@ public class SavageFactionsPowerRequirement extends AbstractRequirement {
     }
 
     @Override
-    public boolean meetsRequirement(final Player player) {
+    protected boolean meetsRequirement(UUID uuid) {
 
-        // Check if this requirement is world-specific
-        if (this.isWorldSpecific()) {
-            // Is player in the same world as specified
-            if (!this.getWorld().equals(player.getWorld().getName()))
-                return false;
-        }
-
-        final double factionPower = handler.getFactionPower(player.getUniqueId());
-
-        return factionPower >= this.factionPower;
+        return handler.getFactionPower(uuid) >= this.factionPower;
     }
 
     @Override
@@ -76,4 +68,6 @@ public class SavageFactionsPowerRequirement extends AbstractRequirement {
 
         return true;
     }
+
+
 }

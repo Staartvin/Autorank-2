@@ -1,9 +1,11 @@
 package me.armar.plugins.autorank.pathbuilder;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.api.events.RequirementCompleteEvent;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.pathbuilder.holders.CompositeRequirement;
 import me.armar.plugins.autorank.pathbuilder.result.AbstractResult;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -170,19 +172,18 @@ public class Path {
     /**
      * Get the requirements that a player does not meet
      *
-     * @param player Player to check for.
+     * @param uuid          Player to check for.
      * @param checkProgress whether to take into account the progress of a player (already completed requirements)
      * @return a list of RequirementHolders that the player has failed.
      */
-    public List<CompositeRequirement> getFailedRequirements(final Player player, boolean checkProgress) {
+    public List<CompositeRequirement> getFailedRequirements(UUID uuid, boolean checkProgress) {
         final List<CompositeRequirement> failedRequirements = new ArrayList<CompositeRequirement>();
 
         for (final CompositeRequirement holder : this.getRequirements()) {
-            if (!holder.meetsRequirement(player)) {
+            if (!holder.meetsRequirement(uuid)) {
 
                 // If we care about progress of a player, we should check if he completed the requirement already.
-                if (checkProgress && hasCompletedRequirement(player.getUniqueId(), holder
-                        .getRequirementId())) {
+                if (checkProgress && hasCompletedRequirement(uuid, holder.getRequirementId())) {
                     continue;
                 }
 
@@ -195,6 +196,7 @@ public class Path {
 
     /**
      * Get the requirements of this path that a player has completed.
+     *
      * @param uuid UUID of the player
      * @return list of requirements.
      */
@@ -276,7 +278,7 @@ public class Path {
         // check if a player completed all requirements or not.
         if (!this.allowPartialCompletion()) {
             for (final CompositeRequirement holder : this.getRequirements()) {
-                if (!holder.meetsRequirement(player)) {
+                if (!holder.meetsRequirement(player.getUniqueId())) {
                     // If player does not meet the requirement, we can immediately return false.
                     return false;
                 }
@@ -296,7 +298,7 @@ public class Path {
                 continue;
             }
 
-            if (holder.meetsRequirement(player)) {
+            if (holder.meetsRequirement(player.getUniqueId())) {
                 // Optional requirements can only be completed by performing /ar complete, so don't perform them
                 // automatically.
                 if (holder.isOptional()) {
@@ -331,6 +333,16 @@ public class Path {
                 ChatColor.GREEN + Lang.SUCCESSFULLY_COMPLETED_REQUIREMENT.getConfigValue(reqId + ""));
         player.sendMessage(ChatColor.AQUA + requirement.getDescription());
 
+        // Fire event so it can be cancelled
+        // Create the event here
+        final RequirementCompleteEvent event = new RequirementCompleteEvent(player, requirement);
+        // Call the event
+        Bukkit.getServer().getPluginManager().callEvent(event);
+
+        // Check if event is cancelled.
+        if (event.isCancelled())
+            return;
+
         // Run results
         requirement.runResults(player);
 
@@ -341,15 +353,15 @@ public class Path {
     /**
      * Check whether a player meets all prerequisites of this path.
      *
-     * @param player Player to check
+     * @param uuid Player to check
      * @return true if the player meets all prerequisites. False otherwise.
      */
-    public boolean meetsPrerequisites(Player player) {
+    public boolean meetsPrerequisites(UUID uuid) {
 
         List<CompositeRequirement> preRequisites = this.getPrerequisites();
 
         for (CompositeRequirement preRequisite : preRequisites) {
-            if (!preRequisite.meetsRequirement(player)) {
+            if (!preRequisite.meetsRequirement(uuid)) {
                 // If one of the prerequisites does not hold, a player does not
                 // meet all the prerequisites.
                 return false;
@@ -511,7 +523,7 @@ public class Path {
 
     /**
      * Whether this path is automatically assigned to a player if the path is eligible. See
-     * {@link Path#isEligible(Player)}.
+     * {@link Path#isEligible(UUID)}.
      *
      * @return true when this path can automatically be assigned to a player/
      */
@@ -618,21 +630,21 @@ public class Path {
      * <li>The player has not deactivated the path manually.</li>
      * </ul>
      *
-     * @param player Player to check
+     * @param uuid Player to check
      * @return true if the path is eligible for the given player.
      */
-    public boolean isEligible(Player player) {
+    public boolean isEligible(UUID uuid) {
         // A path is not eligible when a player has already has it as active.
-        if (isActive(player.getUniqueId())) {
+        if (isActive(uuid)) {
             return false;
         }
 
         // If a path has been completed and cannot be repeated, the player cannot take this path again.
-        if (this.hasCompletedPath(player.getUniqueId()) && !this.isRepeatable()) {
+        if (this.hasCompletedPath(uuid) && !this.isRepeatable()) {
             return false;
         }
 
         // If a path does not meet the prerequisites of a path, the player cannot take the path.
-        return this.meetsPrerequisites(player);
+        return this.meetsPrerequisites(uuid);
     }
 }

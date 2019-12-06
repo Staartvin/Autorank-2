@@ -59,7 +59,7 @@ public class ViewCommand extends AutorankCommand {
 
             // Loop through all paths and check if we can show it or not.
             for (Path path : plugin.getPathManager().getAllPaths()) {
-                if (isPlayer && path.onlyShowIfPrerequisitesMet() && path.meetsPrerequisites((Player) sender)) {
+                if (isPlayer && path.onlyShowIfPrerequisitesMet() && path.meetsPrerequisites(((Player) sender).getUniqueId())) {
                     continue;
                 }
 

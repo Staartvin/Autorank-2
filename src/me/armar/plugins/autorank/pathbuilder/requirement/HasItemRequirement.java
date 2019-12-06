@@ -119,6 +119,11 @@ public class HasItemRequirement extends AbstractRequirement {
 
         return true;
     }
+
+    @Override
+    public boolean needsOnlinePlayer() {
+        return true;
+    }
 }
 
 class ItemWrapper {

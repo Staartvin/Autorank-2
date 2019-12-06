@@ -6,6 +6,8 @@ import me.armar.plugins.autorank.util.AutorankTools;
 import me.staartvin.plugins.pluginlibrary.Library;
 import org.bukkit.entity.Player;
 
+import java.util.UUID;
+
 public class ItemsCraftedRequirement extends AbstractRequirement {
 
     int itemsCrafted = -1;
@@ -32,13 +34,13 @@ public class ItemsCraftedRequirement extends AbstractRequirement {
     }
 
     @Override
-    public boolean meetsRequirement(final Player player) {
+    protected boolean meetsRequirement(UUID uuid) {
 
         if (!getStatsPlugin().isEnabled())
             return false;
 
         final int realItemsCrafted = this.getStatsPlugin().getNormalStat(StatsPlugin.StatType.ITEMS_CRAFTED,
-                player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld()));
+                uuid, AutorankTools.makeStatsInfo("world", this.getWorld()));
 
         return realItemsCrafted >= itemsCrafted;
     }

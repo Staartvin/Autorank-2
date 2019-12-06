@@ -7,6 +7,8 @@ import me.staartvin.plugins.pluginlibrary.Library;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
+import java.util.UUID;
+
 public class MobKillsRequirement extends AbstractRequirement {
 
     private String mobType = null;
@@ -48,12 +50,12 @@ public class MobKillsRequirement extends AbstractRequirement {
     }
 
     @Override
-    public boolean meetsRequirement(final Player player) {
+    protected boolean meetsRequirement(UUID uuid) {
 
         if (!this.getStatsPlugin().isEnabled())
             return false;
 
-        final int killed = getStatsPlugin().getNormalStat(StatsPlugin.StatType.MOBS_KILLED, player.getUniqueId(),
+        final int killed = getStatsPlugin().getNormalStat(StatsPlugin.StatType.MOBS_KILLED, uuid,
                 AutorankTools.makeStatsInfo("world", this.getWorld(), "mobType", mobType));
 
         return killed >= totalMobsKilled;

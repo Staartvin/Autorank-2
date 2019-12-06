@@ -71,4 +71,9 @@ public class McMMOSkillLevelRequirement extends AbstractRequirement {
 
         return true;
     }
+
+    @Override
+    public boolean needsOnlinePlayer() {
+        return true;
+    }
 }

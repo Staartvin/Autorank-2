@@ -5,6 +5,8 @@ import me.staartvin.plugins.pluginlibrary.Library;
 import me.staartvin.plugins.pluginlibrary.hooks.BattleLevelsHook;
 import org.bukkit.entity.Player;
 
+import java.util.UUID;
+
 public class BattleLevelsLevelRequirement extends AbstractRequirement {
 
     private BattleLevelsHook handler = null;
@@ -27,12 +29,12 @@ public class BattleLevelsLevelRequirement extends AbstractRequirement {
     }
 
     @Override
-    public boolean meetsRequirement(final Player player) {
+    protected boolean meetsRequirement(UUID uuid) {
 
         if (!handler.isAvailable())
             return false;
 
-        return handler.getLevel(player.getUniqueId()) >= neededLevel;
+        return handler.getLevel(uuid) >= neededLevel;
     }
 
     @Override
@@ -58,5 +60,10 @@ public class BattleLevelsLevelRequirement extends AbstractRequirement {
         }
 
         return true;
+    }
+
+    @Override
+    public boolean needsOnlinePlayer() {
+        return false;
     }
 }

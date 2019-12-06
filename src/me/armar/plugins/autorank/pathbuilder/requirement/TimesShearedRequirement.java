@@ -6,6 +6,8 @@ import me.armar.plugins.autorank.util.AutorankTools;
 import me.staartvin.plugins.pluginlibrary.Library;
 import org.bukkit.entity.Player;
 
+import java.util.UUID;
+
 public class TimesShearedRequirement extends AbstractRequirement {
 
     int timesShorn = -1;
@@ -31,11 +33,11 @@ public class TimesShearedRequirement extends AbstractRequirement {
     }
 
     @Override
-    public boolean meetsRequirement(final Player player) {
+    protected boolean meetsRequirement(UUID uuid) {
         if (!getStatsPlugin().isEnabled())
             return false;
 
-        return this.getStatsPlugin().getNormalStat(StatsPlugin.StatType.TIMES_SHEARED, player.getUniqueId(),
+        return this.getStatsPlugin().getNormalStat(StatsPlugin.StatType.TIMES_SHEARED, uuid,
                 AutorankTools.makeStatsInfo("world", this.getWorld())) >= timesShorn;
     }
 
