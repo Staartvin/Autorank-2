@@ -47,7 +47,7 @@ public abstract class StorageProvider {
      * @param uuid     UUID of the player.
      * @return (Possibly cached) value of requested type of time for a player.
      */
-    public abstract int getPlayerTime(TimeType timeType, UUID uuid);
+    public abstract CompletableFuture<Integer> getPlayerTime(TimeType timeType, UUID uuid);
 
     /**
      * Reset data for a given type of time, setting all times (for the given time type) to zero for all players.
@@ -103,7 +103,7 @@ public abstract class StorageProvider {
      * @param timeType Type of time
      * @return number of players stored for this time type.
      */
-    public abstract int getNumberOfStoredPlayers(TimeType timeType);
+    public abstract CompletableFuture<Integer> getNumberOfStoredPlayers(TimeType timeType);
 
     /**
      * Get a list of players that have been stored for a given type of time
