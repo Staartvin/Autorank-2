@@ -3,7 +3,6 @@ package me.armar.plugins.autorank.api;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.addons.AddOnManager;
 import me.armar.plugins.autorank.pathbuilder.Path;
-import me.armar.plugins.autorank.pathbuilder.holders.CompositeRequirement;
 import me.armar.plugins.autorank.pathbuilder.requirement.AbstractRequirement;
 import me.armar.plugins.autorank.pathbuilder.result.AbstractResult;
 import me.armar.plugins.autorank.storage.StorageProvider;
@@ -13,6 +12,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * <b>Autorank's API class:</b>
@@ -44,44 +44,6 @@ public class API {
     }
 
     /**
-     * Get all {@linkplain CompositeRequirement}s for a player at the exact
-     * moment. This does not consider already finished requirement but just
-     * mirrors the Paths.yml file.
-     *
-     * @param player Player to get the requirements from.
-     * @return a list of {@linkplain CompositeRequirement}s; An empty list when
-     * none are found.
-     */
-    @Deprecated
-    public List<CompositeRequirement> getAllRequirements(final Player player) {
-        return new ArrayList<>();
-    }
-
-    /**
-     * Get all {@linkplain CompositeRequirement}s that are not yet completed.
-     *
-     * @param player Player to get the failed requirements for.
-     * @return list of {@linkplain CompositeRequirement}s that still have to be
-     * completed.
-     */
-    @Deprecated
-    public List<CompositeRequirement> getFailedRequirements(final Player player) {
-        return new ArrayList<>();
-    }
-
-    /**
-     * Get all {@linkplain CompositeRequirement}s that the player has already completed.
-     * If the player does not have a current path, it will return an empty list.
-     *
-     * @param player Player to get completed requirements for.
-     * @return a list of completed requirements.
-     */
-    @Deprecated
-    public List<CompositeRequirement> getCompletedRequirements(final Player player) {
-        return new ArrayList<>();
-    }
-
-    /**
      * Get the global play time (playtime across all servers with the same MySQL
      * database linked) of a player.
      * <p>
@@ -89,9 +51,9 @@ public class API {
      * @param uuid UUID of the player
      * @return play time of a player. 0 if no entry was found.
      */
-    public int getGlobalPlayTime(final UUID uuid) {
+    public CompletableFuture<Integer> getGlobalPlayTime(final UUID uuid) {
         if (!plugin.getStorageManager().isStorageTypeActive(StorageProvider.StorageType.DATABASE)) {
-            return 0;
+            return CompletableFuture.completedFuture(0);
         }
 
         return plugin.getStorageManager().getStorageProvider(StorageProvider.StorageType.DATABASE).getPlayerTime
@@ -107,7 +69,7 @@ public class API {
      * @param uuid UUID of the player
      * @return play time of this player or 0 if not found.
      */
-    public int getLocalPlayTime(final UUID uuid) {
+    public CompletableFuture<Integer> getLocalPlayTime(final UUID uuid) {
         return getPlayTime(TimeType.TOTAL_TIME, uuid);
     }
 
@@ -118,7 +80,7 @@ public class API {
      * @param uuid     UUID of the player
      * @return play time of a player (in minutes).
      */
-    public int getPlayTime(TimeType timeType, UUID uuid) {
+    public CompletableFuture<Integer> getPlayTime(TimeType timeType, UUID uuid) {
         return plugin.getStorageManager().getPrimaryStorageProvider().getPlayerTime(timeType, uuid);
     }
 
@@ -129,11 +91,11 @@ public class API {
      * The time is always given in seconds.
      * <p>
      *
-     * @param player Player to get the time for
+     * @param playerName Name of the player
      * @return play time of a player. 0 when has never played before.
      */
-    public int getTimeOfPlayer(final Player player) {
-        return plugin.getPlayTimeManager().getTimeOfPlayer(player.getName(), true);
+    public int getTimeOfPlayer(String playerName) {
+        return plugin.getPlayTimeManager().getTimeOfPlayer(playerName, true);
     }
 
     /**
@@ -207,5 +169,18 @@ public class API {
      */
     public List<Path> getEligiblePaths(Player player) {
         return plugin.getPathManager().getEligiblePaths(player);
+    }
+
+    /**
+     * Get the path with the given name. Note that this can either be the display name of the path (as shown to
+     * players) or the internal name (as provided in the configuration file of Autorank).
+     *
+     * @param pathName Name of the path.
+     * @return {@link Path} object if found, otherwise null.
+     */
+    public Path getPath(String pathName) {
+        return plugin.getPathManager().getAllPaths().parallelStream()
+                .filter(path -> path.getDisplayName().equalsIgnoreCase(pathName) || path.getInternalName().equalsIgnoreCase(pathName))
+                .findFirst().orElse(null);
     }
 }
