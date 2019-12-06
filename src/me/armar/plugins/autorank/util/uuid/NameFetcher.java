@@ -92,6 +92,14 @@ public class NameFetcher implements Callable<Map<UUID, String>> {
                 if (error != null && error.length() > 0) {
                     throw new IllegalStateException(errorMessage);
                 }
+            } catch (IOException e) {
+                if (e.getMessage().contains("response code") && e.getMessage().contains("429")) {
+                    System.out.println("[Autorank] Sent too many request to the Mojang API server, so couldn't " +
+                            "retrieve name of " + uuid.toString());
+                    continue;
+                }
+
+                e.printStackTrace();
             } finally {
                 if (name == null || response == null) {
                     System.out.print("[Autorank] Could not find name of account with uuid: '" + uuid.toString() + "'");
