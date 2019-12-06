@@ -4,6 +4,7 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.config.SettingsConfig;
 import me.armar.plugins.autorank.storage.StorageProvider;
 import me.armar.plugins.autorank.storage.TimeType;
+import me.armar.plugins.autorank.util.AutorankTools;
 import org.bukkit.ChatColor;
 
 import java.sql.ResultSet;
@@ -38,10 +39,40 @@ public class MySQLStorageProvider extends StorageProvider {
     // Use a cache manager to store the cached values.
     private CacheManager cacheManager = new CacheManager();
 
+    // How many minutes can a cached entry be cached before it is considered to be expired.
+    public static int CACHE_EXPIRY_TIME = 2;
+
     private boolean isLoaded = false;
 
     public MySQLStorageProvider(Autorank instance) {
         super(instance);
+
+        // Run task to update time in cache periodically.
+        instance.getServer().getScheduler().runTaskTimerAsynchronously(instance, () -> {
+
+            // Find all UUIDS that are in the cache.
+            cacheManager.getCachedUUIDs().forEach(cachedUUID -> {
+                // Loop over all time types and see if they should be updated.
+                for (TimeType timeType : TimeType.values()) {
+                    if (cacheManager.shouldUpdateCachedEntry(timeType, cachedUUID)) {
+
+                        plugin.debugMessage("Refreshing cached global time of " + cachedUUID);
+
+                        // Get their global playtime
+                        int playTime = 0;
+                        try {
+                            playTime = getFreshPlayerTime(timeType, cachedUUID).get();
+                        } catch (InterruptedException | ExecutionException e) {
+                            e.printStackTrace();
+                        }
+
+                        // Put the freshly acquired data in the cache.
+                        cacheManager.registerCachedTime(timeType, cachedUUID, playTime);
+                    }
+                }
+            });
+
+        }, 0L, (CACHE_EXPIRY_TIME * AutorankTools.TICKS_PER_MINUTE) / 2);
     }
 
     @Override
@@ -51,40 +82,46 @@ public class MySQLStorageProvider extends StorageProvider {
 
     @Override
     public void setPlayerTime(TimeType timeType, UUID uuid, int time) {
-
-        plugin.debugMessage("Setting time (" + timeType + ") of '" + uuid.toString() + "' to " + time);
-
-        // Check if connection is still alive
-        if (mysqlLibrary.isClosed()) {
-            mysqlLibrary.connect();
-        }
-
-        String tableName = tableNames.get(timeType);
-
-        final String statement = "INSERT INTO " + tableName + " VALUES ('" + uuid.toString() + "', " + time
-                + ", CURRENT_TIMESTAMP) " + "ON DUPLICATE KEY UPDATE " + "time=" + time;
-
-        // Update cache with new value
-        cacheManager.registerCachedTime(timeType, uuid, time);
-
         // Run async to prevent load issues.
-        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> mysqlLibrary.execute(statement));
+        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
 
+            plugin.debugMessage("Setting time (" + timeType + ") of '" + uuid.toString() + "' to " + time);
 
+            // Check if connection is still alive
+            if (mysqlLibrary.isClosed()) {
+                mysqlLibrary.connect();
+            }
+
+            String tableName = tableNames.get(timeType);
+
+            final String statement = "INSERT INTO " + tableName + " VALUES ('" + uuid.toString() + "', " + time
+                    + ", CURRENT_TIMESTAMP) " + "ON DUPLICATE KEY UPDATE " + "time=" + time;
+
+            // Update cache with new value
+            cacheManager.registerCachedTime(timeType, uuid, time);
+
+            mysqlLibrary.execute(statement);
+        });
     }
 
     @Override
-    public int getPlayerTime(TimeType timeType, UUID uuid) {
+    public CompletableFuture<Integer> getPlayerTime(TimeType timeType, UUID uuid) {
 
-        // If we have a cached time value, use that instead of quering the database.
-        if (cacheManager.hasCachedTime(timeType, uuid)) {
-            plugin.debugMessage("Getting cached time (" + timeType + ") of '" + uuid.toString() + "'");
-            return cacheManager.getCachedTime(timeType, uuid);
-        }
+        return CompletableFuture.supplyAsync(() -> {
+            // If we have a cached time value, use that instead of quering the database.
+            if (cacheManager.hasCachedTime(timeType, uuid)) {
+                plugin.debugMessage("Getting cached time (" + timeType + ") of '" + uuid.toString() + "'");
+                return cacheManager.getCachedTime(timeType, uuid);
+            }
 
-        plugin.debugMessage("Obtaining fresh time (" + timeType + ") of '" + uuid.toString() + "'");
+            try {
+                return getFreshPlayerTime(timeType, uuid).get();
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
 
-        return getFreshPlayerTime(timeType, uuid);
+            return 0;
+        });
     }
 
     @Override
@@ -96,16 +133,27 @@ public class MySQLStorageProvider extends StorageProvider {
 
         // Run clean statement async so it won't bother main thread.
         plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> mysqlLibrary.execute(statement));
-
-        return;
     }
 
     @Override
     public void addPlayerTime(TimeType timeType, UUID uuid, int timeToAdd) {
-        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
-            int currentTimeValue = getFreshPlayerTime(timeType, uuid);
 
-            setPlayerTime(timeType, uuid, currentTimeValue + timeToAdd);
+        // Run async to prevent load issues.
+        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+
+            plugin.debugMessage("Adding " + timeToAdd + " minutes of (" + timeType + ") to '" + uuid.toString() + "'");
+
+            // Check if connection is still alive
+            if (mysqlLibrary.isClosed()) {
+                mysqlLibrary.connect();
+            }
+
+            String tableName = tableNames.get(timeType);
+
+            final String statement = "INSERT INTO " + tableName + " VALUES ('" + uuid.toString() + "', " + timeToAdd
+                    + ", CURRENT_TIMESTAMP) " + "ON DUPLICATE KEY UPDATE " + "time=time+" + timeToAdd;
+
+            mysqlLibrary.execute(statement);
         });
     }
 
@@ -151,29 +199,31 @@ public class MySQLStorageProvider extends StorageProvider {
     }
 
     @Override
-    public int getNumberOfStoredPlayers(TimeType timeType) {
+    public CompletableFuture<Integer> getNumberOfStoredPlayers(TimeType timeType) {
 
-        String tableName = tableNames.get(timeType);
+        return CompletableFuture.supplyAsync(() -> {
+            String tableName = tableNames.get(timeType);
 
-        String statement = "SELECT COUNT(uuid) FROM " + tableName;
+            String statement = "SELECT COUNT(uuid) FROM " + tableName;
 
-        ResultSet rs = mysqlLibrary.executeQuery(statement);
+            ResultSet rs = mysqlLibrary.executeQuery(statement);
 
-        if (rs == null)
-            return 0;
+            if (rs == null)
+                return 0;
 
-        try {
-            if (rs.next()) {
-                return rs.getInt(1);
+            try {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+
+            } catch (final SQLException e) {
+                System.out.println("SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
             }
 
-        } catch (final SQLException e) {
-            System.out.println("SQLException: " + e.getMessage());
-            System.out.println("SQLState: " + e.getSQLState());
-            System.out.println("VendorError: " + e.getErrorCode());
-        }
-
-        return 0;
+            return 0;
+        });
     }
 
     @Override
@@ -371,40 +421,44 @@ public class MySQLStorageProvider extends StorageProvider {
      * @param uuid     UUID of the player
      * @return value of time for a player
      */
-    private int getFreshPlayerTime(TimeType timeType, UUID uuid) {
-        // Check if connection is still alive
-        if (mysqlLibrary.isClosed()) {
-            mysqlLibrary.connect();
-        }
+    private CompletableFuture<Integer> getFreshPlayerTime(TimeType timeType, UUID uuid) {
 
-        String tableName = this.tableNames.get(timeType);
+        return CompletableFuture.supplyAsync(() -> {
+            // Check if connection is still alive
+            if (mysqlLibrary.isClosed()) {
+                mysqlLibrary.connect();
+            }
 
-        // Initialise new callable class
-        final Callable<Integer> callable = new GrabPlayerTimeTask(mysqlLibrary, uuid, tableName);
+            String tableName = this.tableNames.get(timeType);
 
-        // Sumbit callable
-        final Future<Integer> futureValue = executor.submit(callable);
+            // Initialise new callable class
+            final Callable<Integer> callable = new GrabPlayerTimeTask(mysqlLibrary, uuid, tableName);
 
-        // Grab value, will block thread.
-        // That's why you need to run this async.
-        int value = 0;
+            // Sumbit callable
+            final Future<Integer> futureValue = executor.submit(callable);
 
-        try {
-            plugin.debugMessage("Fresh Gcheck performed "
-                    + (Thread.currentThread().getName().contains("Server thread") ? "not ASYNC" : "ASYNC") + " ("
-                    + Thread.currentThread().getName() + ")");
-            value = futureValue.get();
-        } catch (final InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
+            // Grab value, will block thread.
+            // That's why you need to run this async.
+            int value = 0;
 
-        // Cache value so we don't grab it again.
-        cacheManager.registerCachedTime(timeType, uuid, value);
+            try {
+                plugin.debugMessage("Checking global time "
+                        + (Thread.currentThread().getName().contains("Server thread") ? "not asynchronously" :
+                        "asynchronously"));
+                value = futureValue.get();
+            } catch (final InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
 
-        plugin.debugMessage("Obtained fresh global time (" + timeType + ") of '" + uuid.toString() + "' with value" +
-                " " + value);
+            // Cache value so we don't grab it again.
+            cacheManager.registerCachedTime(timeType, uuid, value);
 
-        return value;
+            plugin.debugMessage("Obtained fresh global time (" + timeType + ") of '" + uuid.toString() + "' with " +
+                    "value" +
+                    " " + value);
+
+            return value;
+        });
     }
 
     /**

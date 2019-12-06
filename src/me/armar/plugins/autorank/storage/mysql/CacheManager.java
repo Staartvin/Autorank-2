@@ -4,6 +4,7 @@ import me.armar.plugins.autorank.storage.TimeType;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -13,7 +14,7 @@ import java.util.UUID;
 public class CacheManager {
 
     // Store cached values in map
-    private Map<ComposedKey, Integer> cachedTimeValues = new HashMap<>();
+    private Map<UUID, CachedEntry> cachedTimeValues = new HashMap<>();
 
     /**
      * Register a new cached value for a player.
@@ -22,7 +23,16 @@ public class CacheManager {
      * @param value Value to cache
      */
     public void registerCachedTime(TimeType timeType, UUID uuid, int value) {
-        this.cachedTimeValues.put(new ComposedKey(uuid, timeType), value);
+
+        CachedEntry entry = cachedTimeValues.get(uuid);
+
+        if (entry != null) {
+            entry.setCachedTime(timeType, value);
+        } else {
+            entry = new CachedEntry(timeType, value);
+        }
+
+        this.cachedTimeValues.put(uuid, entry);
     }
 
     /**
@@ -32,7 +42,14 @@ public class CacheManager {
      * @return cached time value of a player
      */
     public int getCachedTime(TimeType timeType, UUID uuid) {
-        return this.cachedTimeValues.get(new ComposedKey(uuid, timeType));
+
+        CachedEntry entry = this.cachedTimeValues.get(uuid);
+
+        if (entry == null) {
+            return 0;
+        }
+
+        return entry.getCachedTime(timeType);
     }
 
     /**
@@ -42,43 +59,66 @@ public class CacheManager {
      * @return true if the player has a cached time value, false otherwise.
      */
     public boolean hasCachedTime(TimeType timeType, UUID uuid) {
-        ComposedKey composedKey = new ComposedKey(uuid, timeType);
+        return this.cachedTimeValues.containsKey(uuid) && this.cachedTimeValues.get(uuid) != null;
+    }
 
-        return this.cachedTimeValues.containsKey(composedKey) && this.cachedTimeValues.get(composedKey) != null;
+    /**
+     * Check whether the current time that is cached for a player is outdated.
+     *
+     * @param timeType Type of time to check for
+     * @param uuid     UUID of the player
+     * @return true if the cached time is outdated, false otherwise.
+     */
+    public boolean shouldUpdateCachedEntry(TimeType timeType, UUID uuid) {
+        return hasCachedTime(timeType, uuid) && this.cachedTimeValues.get(uuid).isCachedTimeOutdated(timeType);
+    }
+
+    public Set<UUID> getCachedUUIDs() {
+        return this.cachedTimeValues.keySet();
     }
 }
 
-/**
- * Since we want to keep track of a player's time for each time type, we can't have a map with only a singleton key.
- * Hence, I create a temporary ComposedKey object that stores both the UUID and the TimeType. Hence, it acts as a
- * single key, while being composed of two objects.
- */
-class ComposedKey {
-    private UUID uuid;
-    private TimeType timeType;
+class CachedEntry {
+    private Map<TimeType, Integer> timePerTimeType = new HashMap<>();
+    private Map<TimeType, Long> lastUpdatedPerTimeType = new HashMap<>();
 
-    ComposedKey(UUID uuid, TimeType timeType) {
-        this.uuid = uuid;
-        this.timeType = timeType;
+    public CachedEntry() {
     }
 
-    @Override
-    public boolean equals(Object comparedKey) {
+    public CachedEntry(TimeType timeType, int value) {
+        this.setCachedTime(timeType, value);
+    }
 
-        if (!(comparedKey instanceof ComposedKey)) {
-            return false;
+    public long getMinutesSinceLastUpdated(TimeType timeType) {
+
+        Long lastUpdatedTime = lastUpdatedPerTimeType.get(timeType);
+
+        if (lastUpdatedTime == null) {
+            return Long.MAX_VALUE;
         }
 
-        return ((ComposedKey) comparedKey).uuid.equals(uuid) && ((ComposedKey) comparedKey).timeType.equals(timeType);
+        return (System.currentTimeMillis() - lastUpdatedTime) / 60000;
+    }
+
+    public void setCachedTime(TimeType timeType, int time) {
+        timePerTimeType.put(timeType, time);
+        lastUpdatedPerTimeType.put(timeType, System.currentTimeMillis());
+    }
+
+    public int getCachedTime(TimeType timeType) {
+        return timePerTimeType.get(timeType);
+    }
+
+    public boolean hasCachedTime(TimeType timeType) {
+        return timePerTimeType.containsKey(timeType);
+    }
+
+    public boolean isCachedTimeOutdated(TimeType timeType) {
+        return hasCachedTime(timeType) && getCachedTime(timeType) >= MySQLStorageProvider.CACHE_EXPIRY_TIME;
     }
 
     @Override
     public int hashCode() {
-        return (uuid.toString() + timeType.toString()).hashCode();
-    }
-
-    @Override
-    public String toString() {
-        return "ComposedKey(" + uuid + ", " + timeType + ")";
+        return (timePerTimeType.toString() + lastUpdatedPerTimeType.toString()).hashCode();
     }
 }
