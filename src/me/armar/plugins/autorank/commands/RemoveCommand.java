@@ -45,9 +45,13 @@ public class RemoveCommand extends AutorankCommand {
             int value = AutorankTools.readTimeInput(args, 2);
 
             String playerName = args[1];
+            int newPlayerTime = 0;
 
             try {
                 playerName = UUIDManager.getPlayerName(uuid).get();
+                newPlayerTime = plugin
+                        .getStorageManager().getPrimaryStorageProvider().getPlayerTime(TimeType.TOTAL_TIME,
+                                uuid).get();
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
@@ -56,9 +60,8 @@ public class RemoveCommand extends AutorankCommand {
                 // Adding negative time
                 plugin.getStorageManager().addPlayerTime(uuid, -value);
                 AutorankTools.sendColoredMessage(sender,
-                        Lang.PLAYTIME_CHANGED.getConfigValue(playerName, plugin
-                                .getStorageManager().getPrimaryStorageProvider().getPlayerTime(TimeType.TOTAL_TIME,
-                                        uuid)));
+                        Lang.PLAYTIME_CHANGED.getConfigValue(playerName, AutorankTools.timeToString(newPlayerTime,
+                                AutorankTools.Time.MINUTES)));
             } else {
                 AutorankTools.sendColoredMessage(sender, Lang.INVALID_FORMAT.getConfigValue(this.getUsage()));
             }

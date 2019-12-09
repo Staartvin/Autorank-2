@@ -57,12 +57,19 @@ public class SetCommand extends AutorankCommand {
 
                 plugin.getStorageManager().setPlayerTime(uuid, value);
 
+                int newPlayerTime = 0;
+                try {
+                    newPlayerTime = plugin.getStorageManager()
+                            .getPrimaryStorageProvider().getPlayerTime(TimeType.TOTAL_TIME, uuid).get();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+
                 AutorankTools.sendColoredMessage(sender,
                         Lang.PLAYTIME_CHANGED.getConfigValue(playerName,
-                                plugin.getStorageManager()
-                                        .getPrimaryStorageProvider().getPlayerTime(TimeType.TOTAL_TIME, uuid) + " " + Lang
-                                        .MINUTE_PLURAL.getConfigValue
-                                                ()));
+                                AutorankTools.timeToString(newPlayerTime, AutorankTools.Time.MINUTES)));
             });
 
             this.runCommandTask(task);

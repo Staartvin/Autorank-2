@@ -48,15 +48,19 @@ public class AddCommand extends AutorankCommand {
                 plugin.getStorageManager().addPlayerTime(uuid, value);
 
                 String playerName = null;
+                int newPlayerTime = 0;
                 try {
                     playerName = UUIDManager.getPlayerName(uuid).get();
+                    newPlayerTime =
+                            plugin.getStorageManager().getPrimaryStorageProvider().getPlayerTime(TimeType.TOTAL_TIME,
+                                    uuid).get();
                 } catch (InterruptedException | ExecutionException e) {
                     e.printStackTrace();
                 }
 
                 AutorankTools.sendColoredMessage(sender,
                         Lang.PLAYTIME_CHANGED.getConfigValue(playerName,
-                                plugin.getStorageManager().getPrimaryStorageProvider().getPlayerTime(TimeType.TOTAL_TIME, uuid) + ""));
+                                AutorankTools.timeToString(newPlayerTime, AutorankTools.Time.MINUTES)));
             } else {
                 AutorankTools.sendColoredMessage(sender, Lang.INVALID_FORMAT.getConfigValue("/ar add [player] " +
                         "[value]"));
