@@ -94,6 +94,10 @@ public class SimpleYamlConfiguration extends YamlConfiguration {
             this.save(file);
         } catch (final ConcurrentModificationException e) {
             saveFile();
+        } catch (NullPointerException npe) {
+            Autorank.getInstance().debugMessage("Save file thrown NPE:" + npe.getMessage());
+            Autorank.getInstance().debugMessage("FILE TO SAVE: " + file);
+            npe.printStackTrace();
         } catch (final IOException e) {
             e.printStackTrace();
         }
