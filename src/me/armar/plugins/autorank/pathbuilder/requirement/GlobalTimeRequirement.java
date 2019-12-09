@@ -54,7 +54,7 @@ public class GlobalTimeRequirement extends AbstractRequirement {
     }
 
     @Override
-    public boolean setOptions(final String[] options) {
+    public boolean initRequirement(final String[] options) {
 
         globalTime = AutorankTools.stringToTime(options[0], Time.MINUTES);
 

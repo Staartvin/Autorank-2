@@ -45,7 +45,7 @@ public class InGroupRequirement extends AbstractRequirement {
     }
 
     @Override
-    public boolean setOptions(final String[] options) {
+    public boolean initRequirement(final String[] options) {
         if (options.length > 0) {
             group = options[0].trim();
         }

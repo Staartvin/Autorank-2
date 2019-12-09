@@ -75,7 +75,7 @@ public class HasItemRequirement extends AbstractRequirement {
 
     @SuppressWarnings("deprecation")
     @Override
-    public boolean setOptions(final String[] options) {
+    public boolean initRequirement(final String[] options) {
 
         String materialName = null;
         int amount = 1;

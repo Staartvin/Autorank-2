@@ -44,7 +44,7 @@ public class ExpRequirement extends AbstractRequirement {
     }
 
     @Override
-    public boolean setOptions(final String[] options) {
+    public boolean initRequirement(final String[] options) {
 
         minExp = (int) AutorankTools.stringToDouble(options[0]);
 

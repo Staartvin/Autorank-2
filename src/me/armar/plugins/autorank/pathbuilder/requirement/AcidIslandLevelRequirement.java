@@ -39,7 +39,7 @@ public class AcidIslandLevelRequirement extends AbstractRequirement {
     }
 
     @Override
-    public boolean setOptions(final String[] options) {
+    public boolean initRequirement(final String[] options) {
 
         // Add ACIDISLAND Dependency
         addDependency(Library.ACIDISLAND);

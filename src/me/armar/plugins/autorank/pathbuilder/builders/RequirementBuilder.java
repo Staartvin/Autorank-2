@@ -141,15 +141,17 @@ public class RequirementBuilder {
         String dependencyNotFoundMessage = "Requirement '%s' relies on a third-party plugin being installed, but that plugin is not installed!";
         try {
             // Initialize the result with options.
-            if (!requirement.setOptions(options)) {
+            if (!requirement.initRequirement(options)) {
                 String primaryErrorMessage = "unknown error (check wiki)";
 
                 if (requirement.getErrorMessages().size() > 0) {
                     primaryErrorMessage = requirement.getErrorMessages().get(0);
                 }
 
-                String invalidRequirementMessage = "Could not set up requirement '%s' of %s! Autorank reported the following error: '%s'";
-                String fullString = String.format(invalidRequirementMessage, originalPathString, pathName, primaryErrorMessage);
+                String invalidRequirementMessage = "Could not set up requirement '%s' of %s! Autorank reported the " +
+                        "following error: '%s'";
+                String fullString = String.format(invalidRequirementMessage, originalPathString, pathName,
+                        primaryErrorMessage);
 
                 Autorank.getInstance().getServer().getConsoleSender().sendMessage(ChatColor.RED + fullString);
                 Autorank.getInstance().getWarningManager().registerWarning(fullString, 10);

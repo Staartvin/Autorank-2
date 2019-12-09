@@ -40,7 +40,7 @@ public class GamemodeRequirement extends AbstractRequirement {
     }
 
     @Override
-    public boolean setOptions(final String[] options) {
+    public boolean initRequirement(final String[] options) {
 
         if (options.length > 0)
             gameMode = (int) AutorankTools.stringToDouble(options[0]);

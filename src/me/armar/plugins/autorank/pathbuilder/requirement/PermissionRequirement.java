@@ -40,7 +40,7 @@ public class PermissionRequirement extends AbstractRequirement {
     }
 
     @Override
-    public boolean setOptions(final String[] options) {
+    public boolean initRequirement(final String[] options) {
 
         permission = options[0];
 

@@ -41,7 +41,7 @@ public class SavageFactionsPowerRequirement extends AbstractRequirement {
     }
 
     @Override
-    public boolean setOptions(final String[] options) {
+    public boolean initRequirement(final String[] options) {
 
         // Add dependency
         addDependency(Library.SAVAGE_FACTIONS);

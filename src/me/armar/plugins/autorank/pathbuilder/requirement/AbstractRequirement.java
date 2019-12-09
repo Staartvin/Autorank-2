@@ -212,16 +212,16 @@ public abstract class AbstractRequirement {
     }
 
     /**
-     * Set up a requirement. You should initiliaze the requirement with an empty constructor.
-     * Secondly, the {@link #setOptions(String[])} method must be called to supply the requirement with storage.
-     * Lastly, you can use {@link #meetsRequirement(Player)} to check whether a player meets the requirement.
+     * Set up a requirement. You should initialize the requirement with an empty constructor.
+     * Secondly, this method must be called to supply the requirement with storage.
+     * Lastly, you can use {@link #isMet(UUID)} to check whether a player meets the requirement.
      * <p>
      * The options parameter is an array that will contain the string as passed through the Paths.yml
      *
      * @param options Each element is an element supplied by the config.
      * @return true if everything was setup correctly; false otherwise
      */
-    public abstract boolean setOptions(String[] options);
+    public abstract boolean initRequirement(String[] options);
 
     @Override
     public String toString() {
@@ -274,8 +274,9 @@ public abstract class AbstractRequirement {
 
     /**
      * Get the error messages that were registered by the requirement.
-     * Note that, usually, error messages are only registered after the {@link #setOptions(String[])} method is called.
-     * Hence, calling {@link #getErrorMessages()} before calling {@link #setOptions(String[])} is useless.
+     * Note that, usually, error messages are only registered after the {@link #initRequirement(String[])} method is
+     * called.
+     * Hence, calling this before calling {@link #initRequirement(String[])} is useless.
      *
      * @return a list of error messages.
      */

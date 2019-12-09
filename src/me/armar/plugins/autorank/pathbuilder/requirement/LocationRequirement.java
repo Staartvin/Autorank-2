@@ -75,7 +75,7 @@ public class LocationRequirement extends AbstractRequirement {
     }
 
     @Override
-    public boolean setOptions(final String[] options) {
+    public boolean initRequirement(final String[] options) {
 
         // Location = x;y;z;world;radius
         if (options.length != 5) {

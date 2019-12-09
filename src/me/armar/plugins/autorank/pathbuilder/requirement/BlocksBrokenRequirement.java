@@ -84,7 +84,7 @@ public class BlocksBrokenRequirement extends AbstractRequirement {
 
     @SuppressWarnings("deprecation")
     @Override
-    public boolean setOptions(final String[] options) {
+    public boolean initRequirement(final String[] options) {
 
         // Add dependency
         addDependency(Library.STATZ);

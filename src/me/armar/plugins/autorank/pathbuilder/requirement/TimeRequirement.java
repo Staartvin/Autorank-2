@@ -40,7 +40,7 @@ public class TimeRequirement extends AbstractRequirement {
     }
 
     @Override
-    public boolean setOptions(final String[] options) {
+    public boolean initRequirement(final String[] options) {
 
         if (options.length > 0) {
             timeNeeded = AutorankTools.stringToTime(options[0], Time.MINUTES);

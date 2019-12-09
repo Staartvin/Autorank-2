@@ -32,7 +32,7 @@ public class QuestsAlternativeCompletedQuestsRequirement extends AbstractRequire
     }
 
     @Override
-    public boolean setOptions(final String[] options) {
+    public boolean initRequirement(final String[] options) {
 
         // Add dependency
         addDependency(Library.QUESTS_ALTERNATIVE);

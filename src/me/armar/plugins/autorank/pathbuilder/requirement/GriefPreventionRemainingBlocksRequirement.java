@@ -34,7 +34,7 @@ public class GriefPreventionRemainingBlocksRequirement extends AbstractRequireme
     }
 
     @Override
-    public boolean setOptions(final String[] options) {
+    public boolean initRequirement(final String[] options) {
 
         // Add dependency
         addDependency(Library.GRIEFPREVENTION);

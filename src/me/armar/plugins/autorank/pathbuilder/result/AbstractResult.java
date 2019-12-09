@@ -33,7 +33,7 @@ public abstract class AbstractResult {
 
     /**
      * Initialize the options of this result. For more info, see
-     * {@link AbstractRequirement#setOptions(String[] options)}.
+     * {@link AbstractRequirement#initRequirement(String[] options)}.
      *
      * @param options Options to set for this result
      * @return true if successfully updated for this result, false otherwise
