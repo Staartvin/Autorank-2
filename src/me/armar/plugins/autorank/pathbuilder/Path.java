@@ -323,6 +323,8 @@ public class Path {
      * @param player Player to run results for.
      * @param reqId  Id of requirement that is met.
      */
+    // TODO Make it so that a player doesn't have to be online to complete a requirement.
+    // TODO I.e. give him delayed results (results that only fire when the player comes back online).
     public void completeRequirement(Player player, int reqId) {
 
         CompositeRequirement requirement = this.getRequirements().stream().filter(compositeRequirement ->
@@ -333,21 +335,24 @@ public class Path {
                 ChatColor.GREEN + Lang.SUCCESSFULLY_COMPLETED_REQUIREMENT.getConfigValue(reqId + ""));
         player.sendMessage(ChatColor.AQUA + requirement.getDescription());
 
-        // Fire event so it can be cancelled
-        // Create the event here
-        final RequirementCompleteEvent event = new RequirementCompleteEvent(player, requirement);
-        // Call the event
-        Bukkit.getServer().getPluginManager().callEvent(event);
+        // Fire event on main thread.
+        plugin.getServer().getScheduler().runTask(plugin, () -> {
+            // Fire event so it can be cancelled
+            // Create the event here
+            final RequirementCompleteEvent event = new RequirementCompleteEvent(player, requirement);
+            // Call the event
+            Bukkit.getServer().getPluginManager().callEvent(event);
 
-        // Check if event is cancelled.
-        if (event.isCancelled())
-            return;
+            // Check if event is cancelled.
+            if (event.isCancelled())
+                return;
 
-        // Run results
-        requirement.runResults(player);
+            // Run results
+            requirement.runResults(player);
 
-        // Log that a player has passed this requirement
-        plugin.getPathManager().addCompletedRequirement(player.getUniqueId(), this, reqId);
+            // Log that a player has passed this requirement
+            plugin.getPathManager().addCompletedRequirement(player.getUniqueId(), this, reqId);
+        });
     }
 
     /**
