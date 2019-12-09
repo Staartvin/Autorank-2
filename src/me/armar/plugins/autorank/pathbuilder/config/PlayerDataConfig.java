@@ -1,5 +1,6 @@
 package me.armar.plugins.autorank.pathbuilder.config;
 
+import io.reactivex.annotations.NonNull;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.config.AbstractConfig;
 import me.armar.plugins.autorank.util.AutorankTools;
@@ -438,6 +439,64 @@ public class PlayerDataConfig extends AbstractConfig {
         }
     }
 
+    // ------------ COMPLETED PATHS WHERE RESULTS ARE NOT PERFORMED YET ------------
+
+    /**
+     * Get all paths that a player has completed but the results have not been performed yet, as the player was not
+     * online.
+     *
+     * @param uuid UUID of the player
+     * @return a list of path names.
+     */
+    public List<String> getCompletedPathsMissingResults(@NonNull UUID uuid) {
+        ConfigurationSection section = this.getResultsNotPerformedSection(uuid);
+
+        return section.getStringList("completed paths");
+    }
+
+    /**
+     * Add a path that was completed by a player but where the results have not yet been performed as the player was
+     * not online.
+     *
+     * @param uuid     UUID of the player
+     * @param pathName Name of the path that was completed.
+     */
+    public void addCompletedPathMissingResults(@NonNull UUID uuid, @NonNull String pathName) {
+        List<String> completedPaths = getCompletedPathsMissingResults(uuid);
+
+        completedPaths.add(pathName);
+
+        this.getResultsNotPerformedSection(uuid).set("completed paths", completedPaths);
+    }
+
+    /**
+     * Remove a path that was completed by a player but where the results have not yet been performed as the player
+     * was not online.
+     *
+     * @param uuid     UUID of the player
+     * @param pathName Name of the path to remove.
+     */
+    public void removeCompletedPathMissingResults(@NonNull UUID uuid, @NonNull String pathName) {
+        List<String> completedPaths = getCompletedPathsMissingResults(uuid);
+
+        completedPaths.remove(pathName);
+
+        this.getResultsNotPerformedSection(uuid).set("completed paths", completedPaths);
+    }
+
+    /**
+     * Check whether a path was completed by a player but where the results have not yet been performed, as the
+     * player was not yet online.
+     *
+     * @param uuid     UUID of the player
+     * @param pathName Name of the path to check.
+     * @return true if the path was completed but the results are not performed yet, false otherwise.
+     */
+    public boolean isCompletedPathsMissingResults(@NonNull UUID uuid, @NonNull String pathName) {
+        return getCompletedPathsMissingResults(uuid).contains(pathName);
+    }
+
+
     // ------------LEADERBOARD EXEMPTION ------------
 
     /**
@@ -526,5 +585,17 @@ public class PlayerDataConfig extends AbstractConfig {
         ConfigurationSection section = getProgressOnPathsSection(uuid);
 
         return section.getConfigurationSection(pathName);
+    }
+
+    private ConfigurationSection getResultsNotPerformedSection(UUID uuid) {
+        ConfigurationSection section = getPlayerSection(uuid);
+
+        ConfigurationSection returnValue = section.getConfigurationSection("results not performed");
+
+        if (returnValue == null) {
+            returnValue = section.createSection("results not performed");
+        }
+
+        return returnValue;
     }
 }
