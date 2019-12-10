@@ -7,11 +7,13 @@ import me.armar.plugins.autorank.pathbuilder.holders.CompositeRequirement;
 import me.armar.plugins.autorank.pathbuilder.result.AbstractResult;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
 import me.armar.plugins.autorank.util.AutorankTools;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /*
  * PlayerChecker is where the magic happens :P It has a RankChangeBuilder that reads
@@ -32,25 +34,23 @@ public class PlayerChecker {
         this.plugin = plugin;
     }
 
-    public boolean checkPlayer(final Player player) {
+    public boolean checkPlayer(UUID uuid) {
 
         // Do not rank a player when he is excluded
-        if (AutorankTools.isExcludedFromRanking(player))
+        if (plugin.getPlayerChecker().isExemptedFromAutomaticChecking(uuid))
             return false;
 
         // Try to assign paths to a player automatically.
-        plugin.getPathManager().autoAssignPaths(player);
+        plugin.getPathManager().autoAssignPaths(uuid);
 
         // Get active paths
-        List<Path> activePaths = plugin.getPathManager().getActivePaths(player.getUniqueId());
+        List<Path> activePaths = plugin.getPathManager().getActivePaths(uuid);
 
         boolean result = false;
 
         // For all paths, check the progress of the player.
         for (Path activePath : activePaths) {
-            boolean completedPath = activePath.checkPathProgress(player);
-
-            if (completedPath) {
+            if (activePath.checkPathProgress(uuid)) {
                 result = true;
             }
         }
@@ -58,9 +58,77 @@ public class PlayerChecker {
         return result;
     }
 
+    public void doOfflineExemptionChecks(Player player) {
+        this.doLeaderboardExemptCheck(player);
+        this.doAutomaticCheckingExemptionCheck(player);
+        this.doTimeAdditionExemptionCheck(player);
+    }
+
     public void doLeaderboardExemptCheck(final Player player) {
-        plugin.getPathManager().setLeaderboardExemption(player.getUniqueId(),
+        plugin.getPlayerData().setLeaderboardExemption(player.getUniqueId(),
                 player.hasPermission(AutorankPermission.EXCLUDE_FROM_LEADERBOARD));
+    }
+
+    public void doAutomaticCheckingExemptionCheck(Player player) {
+        plugin.getPlayerData().setAutoCheckingExemption(player.getUniqueId(),
+                AutorankTools.isExcludedFromRanking(player));
+    }
+
+    public void doTimeAdditionExemptionCheck(Player player) {
+        plugin.getPlayerData().setTimeAdditionExemption(player.getUniqueId(),
+                player.hasPermission(AutorankPermission.EXCLUDE_FROM_TIME_UPDATES));
+    }
+
+    /**
+     * Check whether a player is exempted from showing up on the leaderboard.
+     *
+     * @param uuid UUID of the player
+     * @return true if the player should not be shown on the leaderboard, false otherwise.
+     */
+    public boolean isExemptedFromLeaderboard(UUID uuid) {
+        Player player = Bukkit.getOfflinePlayer(uuid).getPlayer();
+
+        // If player is online, check their permission.
+        if (player != null) {
+            return player.hasPermission(AutorankPermission.EXCLUDE_FROM_LEADERBOARD);
+        }
+
+        return plugin.getPlayerData().hasLeaderboardExemption(uuid);
+    }
+
+    /**
+     * Check whether a player is exempted from checking (both automatic and manual) of paths and the progress.
+     *
+     * @param uuid UUID of the player
+     * @return true if the player is excluded and hence may not be checked., false otherwise.
+     */
+    public boolean isExemptedFromAutomaticChecking(UUID uuid) {
+        Player player = Bukkit.getOfflinePlayer(uuid).getPlayer();
+
+        // If player is online, check their permission.
+        if (player != null) {
+            return AutorankTools.isExcludedFromRanking(player);
+        }
+
+        return plugin.getPlayerData().hasAutoCheckingExemption(uuid);
+    }
+
+    /**
+     * Check whether a player is exempted from obtaining any time. If this method returns true, Autorank will not
+     * (automatically) add time to the player.
+     *
+     * @param uuid UUID of the player
+     * @return true if the player will not gain any time, false otherwise.
+     */
+    public boolean isExemptedFromTimeAddition(UUID uuid) {
+        Player player = Bukkit.getOfflinePlayer(uuid).getPlayer();
+
+        // If player is online, check their permission.
+        if (player != null) {
+            return player.hasPermission(AutorankPermission.EXCLUDE_FROM_TIME_UPDATES);
+        }
+
+        return plugin.getPlayerData().hasTimeAdditionExemption(uuid);
     }
 
     public List<String> formatRequirementsToList(final List<CompositeRequirement> holders,
@@ -119,112 +187,4 @@ public class PlayerChecker {
         return messages;
 
     }
-
-//    /**
-//     * Get a list of Requirements that the player completed, given a set of Requirements.
-//     * The {@link #getCompletedRequirementsHolders(Player)} uses this method with the requirements of the player's
-//     * current path.
-//     *
-//     * @param holders A list of holders to check.
-//     * @param player  Player to check holders for.
-//     * @return a subset of the given list of holders that the player completed.
-//     */
-//    public List<CompositeRequirement> getMetRequirementsHolders(final List<CompositeRequirement> holders, final
-//    Player player) {
-//        final List<CompositeRequirement> metRequirements = new ArrayList<>();
-//
-//        boolean onlyOptional = true;
-//
-//        // Check if we only have optional requirements
-//        for (final CompositeRequirement holder : holders) {
-//            if (!holder.isOptional())
-//                onlyOptional = false;
-//        }
-//
-//        if (onlyOptional) {
-//
-//            for (final CompositeRequirement holder : holders) {
-//                metRequirements.add(holder);
-//            }
-//
-//            return metRequirements;
-//        }
-//
-//        for (final CompositeRequirement holder : holders) {
-//            final int reqID = holder.getRequirementId();
-//
-//            // Use auto completion
-//            if (holder.useAutoCompletion()) {
-//                // Do auto complete
-//                if (holder.meetsRequirement(player, false)) {
-//                    // Player meets the requirement -> give him results
-//
-//                    // Doesn't need to check whether this requirement was
-//                    // already done
-//                    if (!plugin.getSettingsConfig().usePartialCompletion())
-//                        continue;
-//
-//                    metRequirements.add(holder);
-//                    continue;
-//                } else {
-//
-//                    // Only check if player has done this when partial
-//                    // completion is used
-//                    if (plugin.getSettingsConfig().usePartialCompletion()) {
-//                        // Player does not meet requirements, but has done this
-//                        // already
-//                        if (plugin.getPlayerDataConfig().hasCompletedRequirement(reqID, player.getUniqueId())) {
-//                            metRequirements.add(holder);
-//                            continue;
-//                        }
-//                    }
-//
-//                    // If requirement is optional, we do not check.
-//                    if (holder.isOptional()) {
-//                        continue;
-//                    }
-//
-//                    // Player does not meet requirements -> do nothing
-//                    continue;
-//                }
-//            } else {
-//
-//                if (!plugin.getSettingsConfig().usePartialCompletion()) {
-//
-//                    // Doesn't auto complete and doesn't meet requirement, then
-//                    // continue searching
-//                    if (!holder.meetsRequirement(player, false)) {
-//
-//                        // If requirement is optional, we do not check.
-//                        if (holder.isOptional()) {
-//                            continue;
-//                        }
-//
-//                        continue;
-//                    } else {
-//                        // Player does meet requirement, continue searching
-//                        continue;
-//                    }
-//
-//                }
-//
-//                // Do not auto complete
-//                if (plugin.getPlayerDataConfig().hasCompletedRequirement(reqID, player.getUniqueId())) {
-//                    // Player has completed requirement already
-//                    metRequirements.add(holder);
-//                    continue;
-//                } else {
-//
-//                    // If requirement is optional, we do not check.
-//                    if (holder.isOptional()) {
-//                        continue;
-//                    }
-//
-//                    continue;
-//                }
-//            }
-//        }
-//
-//        return metRequirements;
-//    }
 }

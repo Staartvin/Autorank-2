@@ -1,10 +1,11 @@
 package me.armar.plugins.autorank.api.events;
 
 import me.armar.plugins.autorank.pathbuilder.holders.CompositeRequirement;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+
+import java.util.UUID;
 
 /**
  * This event is called when a player meets the requirement for a path and
@@ -21,7 +22,7 @@ public class RequirementCompleteEvent extends Event implements Cancellable {
     }
 
     private boolean isCancelled;
-    private final Player player;
+    private final UUID uuid;
 
     private final CompositeRequirement reqHolder;
 
@@ -29,11 +30,11 @@ public class RequirementCompleteEvent extends Event implements Cancellable {
      * Create a new RequirementCompleteEvent. This event represents a
      * requirement that is completed by a player.
      *
-     * @param player    Player that completed the requirement
+     * @param uuid      UUID of the player that completed the requirement
      * @param reqHolder {@linkplain CompositeRequirement} that was completed
      */
-    public RequirementCompleteEvent(final Player player, final CompositeRequirement reqHolder) {
-        this.player = player;
+    public RequirementCompleteEvent(final UUID uuid, final CompositeRequirement reqHolder) {
+        this.uuid = uuid;
         this.reqHolder = reqHolder;
     }
 
@@ -43,12 +44,13 @@ public class RequirementCompleteEvent extends Event implements Cancellable {
     }
 
     /**
-     * Gets the player involved in this event.
+     * Gets the player involved in this event. Note that the player does not have to be online for a requirement to
+     * be completed.
      *
      * @return player object
      */
-    public Player getPlayer() {
-        return player;
+    public UUID getPlayer() {
+        return uuid;
     }
 
     /**

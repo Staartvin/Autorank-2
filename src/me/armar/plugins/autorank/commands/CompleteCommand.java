@@ -115,7 +115,7 @@ public class CompleteCommand extends AutorankCommand {
         }
 
         if (holder.meetsRequirement(player.getUniqueId())) {
-            targetPath.completeRequirement(player, holder.getRequirementId());
+            targetPath.completeRequirement(player.getUniqueId(), holder.getRequirementId());
         } else {
             // player does not meet requirements
             player.sendMessage(ChatColor.RED + Lang.DO_NOT_MEET_REQUIREMENTS_FOR.getConfigValue(completionID + ""));

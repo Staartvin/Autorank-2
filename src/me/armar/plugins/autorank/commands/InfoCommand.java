@@ -73,7 +73,9 @@ public class InfoCommand extends AutorankCommand {
             List<Path> activePaths = plugin.getPathManager().getActivePaths(uuid);
             List<Path> completedPaths = plugin.getPathManager().getCompletedPaths(uuid);
 
-            boolean isExemptedFromLeaderboard = plugin.getPathManager().hasLeaderboardExemption(uuid);
+            boolean isExemptedFromLeaderboard = plugin.getPlayerChecker().isExemptedFromLeaderboard(uuid);
+            boolean isExemptedFromAutomaticChecking = plugin.getPlayerChecker().isExemptedFromAutomaticChecking(uuid);
+            boolean isExemptedFromTimeAddition = plugin.getPlayerChecker().isExemptedFromTimeAddition(uuid);
 
             int localTotalTime = 0, globalTotalTime = 0;
             try {
@@ -136,6 +138,10 @@ public class InfoCommand extends AutorankCommand {
 
             sender.sendMessage(ChatColor.LIGHT_PURPLE + "Is exempted from leaderboard: " + (isExemptedFromLeaderboard
                     ? ChatColor.GREEN : ChatColor.RED) + isExemptedFromLeaderboard);
+            sender.sendMessage(ChatColor.LIGHT_PURPLE + "Is exempted from checking: " + (isExemptedFromAutomaticChecking
+                    ? ChatColor.GREEN : ChatColor.RED) + isExemptedFromAutomaticChecking);
+            sender.sendMessage(ChatColor.LIGHT_PURPLE + "Is exempted from obtaining time: " + (isExemptedFromTimeAddition
+                    ? ChatColor.GREEN : ChatColor.RED) + isExemptedFromTimeAddition);
 
             sender.sendMessage(ChatColor.LIGHT_PURPLE + "Local playtime: " + ChatColor.GOLD +
                     (localTotalTime <= 0 ? "none" : AutorankTools.timeToString(localTotalTime,

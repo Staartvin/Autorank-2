@@ -43,9 +43,8 @@ public class UpdateTimePlayedTask implements Runnable {
         // Provide debug message so we know what's going on
         plugin.debugMessage("Updating play time of " + player.getName());
 
-        // Check for leaderboard exempt permission -> updates value of
-        // leaderboard exemption
-        plugin.getPlayerChecker().doLeaderboardExemptCheck(player);
+        // Do checks for offline exemptions
+        plugin.getPlayerChecker().doOfflineExemptionChecks(player);
 
         // Don't add extra time to the player when he is excluded from time updates.
         if (player.hasPermission(AutorankPermission.EXCLUDE_FROM_TIME_UPDATES)) {
@@ -65,12 +64,12 @@ public class UpdateTimePlayedTask implements Runnable {
         }
 
         // Auto assign path (if possible)
-        plugin.getPathManager().autoAssignPaths(player);
+        plugin.getPathManager().autoAssignPaths(player.getUniqueId());
 
         // Only check a player if it is not disabled in the Settings.yml
         if (!plugin.getSettingsConfig().isAutomaticPathDisabled()) {
             // Check if player meets requirements
-            plugin.getPlayerChecker().checkPlayer(player);
+            plugin.getPlayerChecker().checkPlayer(player.getUniqueId());
         }
     }
 }

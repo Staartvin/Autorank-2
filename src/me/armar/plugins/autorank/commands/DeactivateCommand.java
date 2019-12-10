@@ -62,7 +62,7 @@ public class DeactivateCommand extends AutorankCommand {
             return true;
         }
 
-        plugin.getPathManager().deassignPath(player.getUniqueId(), targetPath);
+        plugin.getPathManager().deassignPath(targetPath, player.getUniqueId());
 
         if (!targetPath.shouldStoreProgressOnDeactivation()) {
             sender.sendMessage(ChatColor.GREEN + "Path '" + targetPath.getDisplayName() + "' is deactivated " +

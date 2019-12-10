@@ -492,12 +492,132 @@ public class PlayerDataConfig extends AbstractConfig {
      * @param pathName Name of the path to check.
      * @return true if the path was completed but the results are not performed yet, false otherwise.
      */
-    public boolean isCompletedPathsMissingResults(@NonNull UUID uuid, @NonNull String pathName) {
+    public boolean hasCompletedPathMissingResults(@NonNull UUID uuid, @NonNull String pathName) {
         return getCompletedPathsMissingResults(uuid).contains(pathName);
     }
 
+    // ------------ COMPLETED REQUIREMENTS WHERE RESULTS ARE NOT PERFORMED YET ------------
 
-    // ------------LEADERBOARD EXEMPTION ------------
+    /**
+     * Get all requirements of a path that were completed by a player but where the results have not been performed
+     * yet as the player was not online.
+     *
+     * @param uuid     UUID of the player
+     * @param pathName Name of the path to get the requirements for.
+     * @return list of requirement ids that the player completed in the given path
+     */
+    public List<Integer> getCompletedRequirementsMissingResults(@NonNull UUID uuid, @NonNull String pathName) {
+        ConfigurationSection section = this.getCompletedRequirementsMissingResultsSection(uuid);
+
+        return section.getIntegerList(pathName);
+    }
+
+    /**
+     * Add a requirement that was completed by a player but where the results have not yet been performed as the player
+     * was not online.
+     *
+     * @param uuid          UUID of the player
+     * @param pathName      Name of the path that was completed.
+     * @param requirementId ID of the requirement that was completed.
+     */
+    public void addCompletedRequirementMissingResults(@NonNull UUID uuid, @NonNull String pathName,
+                                                      @NonNull int requirementId) {
+        List<Integer> completedRequirements = getCompletedRequirementsMissingResults(uuid, pathName);
+
+        completedRequirements.add(requirementId);
+
+        this.getCompletedRequirementsMissingResultsSection(uuid).set(pathName, completedRequirements);
+    }
+
+    /**
+     * Remove a requirement that was completed by a player but where the results have not yet been performed as the
+     * player was not online.
+     *
+     * @param uuid          UUID of the player
+     * @param pathName      Name of the path to remove.
+     * @param requirementId ID of the requirement that was completed
+     */
+    public void removeCompletedRequirementMissingResults(@NonNull UUID uuid, @NonNull String pathName,
+                                                         @NonNull int requirementId) {
+        List<Integer> completedRequirements = getCompletedRequirementsMissingResults(uuid, pathName);
+
+        completedRequirements.remove((Integer) requirementId);
+
+        this.getCompletedRequirementsMissingResultsSection(uuid).set(pathName, completedRequirements);
+    }
+
+    /**
+     * Check whether a requirement was completed by a player but where the results have not yet been performed, as the
+     * player was not yet online.
+     *
+     * @param uuid          UUID of the player
+     * @param pathName      Name of the path to check.
+     * @param requirementId ID of the requirement to check.
+     * @return true if the path was completed but the results are not performed yet, false otherwise.
+     */
+    public boolean hasCompletedRequirementMissingResults(@NonNull UUID uuid, @NonNull String pathName,
+                                                         @NonNull int requirementId) {
+        return getCompletedRequirementsMissingResults(uuid, pathName).contains(requirementId);
+    }
+
+    // ------------ CHOSEN PATHS WHERE RESULTS (UPON CHOOSING) ARE NOT PERFORMED YET ------------
+
+    /**
+     * Get all paths that a player has chosen but the results have not been performed yet, as the player was not
+     * online.
+     *
+     * @param uuid UUID of the player
+     * @return a list of path names.
+     */
+    public List<String> getChosenPathsMissingResults(@NonNull UUID uuid) {
+        ConfigurationSection section = this.getResultsNotPerformedSection(uuid);
+
+        return section.getStringList("chosen paths");
+    }
+
+    /**
+     * Add a path that was chosen by a player but where the results have not yet been performed as the player was
+     * not online.
+     *
+     * @param uuid     UUID of the player
+     * @param pathName Name of the path that was chosen.
+     */
+    public void addChosenPathMissingResults(@NonNull UUID uuid, @NonNull String pathName) {
+        List<String> chosenPaths = getChosenPathsMissingResults(uuid);
+
+        chosenPaths.add(pathName);
+
+        this.getResultsNotPerformedSection(uuid).set("chosen paths", chosenPaths);
+    }
+
+    /**
+     * Remove a path that was chosen by a player but where the results have not yet been performed as the player
+     * was not online.
+     *
+     * @param uuid     UUID of the player
+     * @param pathName Name of the path to remove.
+     */
+    public void removeChosenPathMissingResults(@NonNull UUID uuid, @NonNull String pathName) {
+        List<String> chosenPaths = getChosenPathsMissingResults(uuid);
+
+        chosenPaths.remove(pathName);
+
+        this.getResultsNotPerformedSection(uuid).set("chosen paths", chosenPaths);
+    }
+
+    /**
+     * Check whether a path was chosen by a player but where the results have not yet been performed, as the
+     * player was not yet online.
+     *
+     * @param uuid     UUID of the player
+     * @param pathName Name of the path to check.
+     * @return true if the path was chosen but the results are not performed yet, false otherwise.
+     */
+    public boolean hasChosenPathMissingResults(@NonNull UUID uuid, @NonNull String pathName) {
+        return getChosenPathsMissingResults(uuid).contains(pathName);
+    }
+
+    // ------------PERMISSION EXEMPTIONS ------------
 
     /**
      * Check whether a player is exempted from appearing on any leaderboard.
@@ -516,8 +636,49 @@ public class PlayerDataConfig extends AbstractConfig {
      * @param uuid  UUID of the player
      * @param value Value to set the exemption status to.
      */
-    public void hasLeaderboardExemption(final UUID uuid, final boolean value) {
+    public void setLeaderboardExemption(final UUID uuid, final boolean value) {
         getPlayerSection(uuid).set("exempt leaderboard", value);
+    }
+
+    /**
+     * Check whether a player is exempted from checking their progress on paths. This means both automated and manual
+     * checks (using /ar check).
+     *
+     * @param uuid UUID of the player
+     * @return true if the given player is not allowed to be checked by Autorank.
+     */
+    public boolean hasAutoCheckingExemption(final UUID uuid) {
+        return getPlayerSection(uuid).getBoolean("exempted from checking", false);
+    }
+
+    /**
+     * Set whether a player is exempted from automatic and manual checking of paths.
+     *
+     * @param uuid  UUID of the player
+     * @param value Value to set the exemption status to.
+     */
+    public void setAutoCheckingExemption(final UUID uuid, final boolean value) {
+        getPlayerSection(uuid).set("exempted from checking", value);
+    }
+
+    /**
+     * Check whether a player is exempted from building up time. If he is, Autorank will not count any of their time.
+     *
+     * @param uuid UUID of the player
+     * @return true if the given player's time is not counted.
+     */
+    public boolean hasTimeAdditionExemption(final UUID uuid) {
+        return getPlayerSection(uuid).getBoolean("exempted from time addition", false);
+    }
+
+    /**
+     * Set whether a player is exempted from building up time.
+     *
+     * @param uuid  UUID of the player
+     * @param value Value to set the exemption status to.
+     */
+    public void setTimeAdditionExemption(final UUID uuid, final boolean value) {
+        getPlayerSection(uuid).set("exempted from time addition", value);
     }
 
     // ------------ CONFIGURATION SECTIONS ------------
@@ -594,6 +755,18 @@ public class PlayerDataConfig extends AbstractConfig {
 
         if (returnValue == null) {
             returnValue = section.createSection("results not performed");
+        }
+
+        return returnValue;
+    }
+
+    private ConfigurationSection getCompletedRequirementsMissingResultsSection(UUID uuid) {
+        ConfigurationSection section = getResultsNotPerformedSection(uuid);
+
+        ConfigurationSection returnValue = section.getConfigurationSection("completed requirements");
+
+        if (returnValue == null) {
+            returnValue = section.createSection("completed requirements");
         }
 
         return returnValue;

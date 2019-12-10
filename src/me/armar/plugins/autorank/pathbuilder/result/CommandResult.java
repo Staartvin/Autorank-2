@@ -16,12 +16,10 @@ public class CommandResult extends AbstractResult {
     @Override
     public boolean applyResult(final Player player) {
         if (server != null) {
-            this.getAutorank().getServer().getScheduler().runTask(this.getAutorank(), new Runnable() {
-                public void run() {
-                    for (final String command : commands) {
-                        final String cmd = command.replace("&p", player.getName());
-                        server.dispatchCommand(server.getConsoleSender(), cmd);
-                    }
+            this.getAutorank().getServer().getScheduler().runTask(this.getAutorank(), () -> {
+                for (final String command : commands) {
+                    final String cmd = command.replace("&p", player.getName());
+                    server.dispatchCommand(server.getConsoleSender(), cmd);
                 }
             });
         }

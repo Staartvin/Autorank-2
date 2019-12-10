@@ -4,11 +4,13 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
-import me.armar.plugins.autorank.util.AutorankTools;
+import me.armar.plugins.autorank.util.uuid.UUIDManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 /**
  * The command delegator for the '/ar fcheck' command.
@@ -33,23 +35,34 @@ public class ForceCheckCommand extends AutorankCommand {
         }
 
         final String target = args[1];
-        final Player targetPlayer = plugin.getServer().getPlayer(target);
 
-        if (targetPlayer == null) {
-            sender.sendMessage(Lang.PLAYER_NOT_ONLINE.getConfigValue(target));
-            return true;
-        }
+        CompletableFuture<Void> task = UUIDManager.getUUID(target).thenAccept(uuid -> {
 
-        if (AutorankTools.isExcludedFromRanking(targetPlayer)) {
-            sender.sendMessage(Lang.PLAYER_IS_EXCLUDED.getConfigValue(targetPlayer.getName()));
-            return true;
-        }
+            if (uuid == null) {
+                sender.sendMessage(Lang.UNKNOWN_PLAYER.getConfigValue(target));
+                return;
+            }
+            String playerName = null;
 
-        // Check the player
-        plugin.getPlayerChecker().checkPlayer(targetPlayer);
+            try {
+                playerName = UUIDManager.getPlayerName(uuid).get();
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
 
-        // Let checker know that we checked.
-        sender.sendMessage(ChatColor.GREEN + targetPlayer.getName() + " checked!");
+            if (plugin.getPlayerChecker().isExemptedFromAutomaticChecking(uuid)) {
+                sender.sendMessage(Lang.PLAYER_IS_EXCLUDED.getConfigValue(playerName));
+                return;
+            }
+
+            // Check the player
+            plugin.getPlayerChecker().checkPlayer(uuid);
+
+            // Let checker know that we checked.
+            sender.sendMessage(ChatColor.GREEN + playerName + " checked!");
+        });
+
+        this.runCommandTask(task);
 
         return true;
     }

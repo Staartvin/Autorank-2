@@ -36,12 +36,8 @@ public class CheckCommand extends AutorankCommand {
     // Show an overview of paths.
     public void showPathsOverview(CommandSender sender, String playerName, UUID uuid) {
 
-        Player player = plugin.getServer().getPlayer(uuid);
-
-        // First assign paths to the player if the player is online.
-        if (player != null) {
-            plugin.getPathManager().autoAssignPaths(player);
-        }
+        // First try to assign paths to the player.
+        plugin.getPathManager().autoAssignPaths(uuid);
 
         List<Path> activePaths = plugin.getPathManager().getActivePaths(uuid);
 
@@ -84,13 +80,8 @@ public class CheckCommand extends AutorankCommand {
     // Show specific requirements for a path.
     public void showSpecificPath(CommandSender sender, String playerName, UUID uuid, Path path) {
 
-        Player player = plugin.getServer().getPlayer(uuid);
-
-        // Check player if he's online
-        if (player != null) {
-            // Check player first.
-            plugin.getPlayerChecker().checkPlayer(player);
-        }
+        // Check whether the player completed any current paths.
+        plugin.getPlayerChecker().checkPlayer(uuid);
 
         sender.sendMessage(ChatColor.DARK_AQUA + "-----------------------");
 
@@ -147,7 +138,7 @@ public class CheckCommand extends AutorankCommand {
             }
 
             // Check if player is excluded from ranking
-            if (AutorankTools.isExcludedFromRanking((Player) sender)) {
+            if (plugin.getPlayerChecker().isExemptedFromAutomaticChecking(((Player) sender).getUniqueId())) {
                 sender.sendMessage(ChatColor.RED + Lang.PLAYER_IS_EXCLUDED.getConfigValue(sender.getName()));
                 return true;
             }
@@ -267,7 +258,7 @@ public class CheckCommand extends AutorankCommand {
             Player onlineTargetPlayer = targetPlayer.getPlayer();
 
             // Check if player is excluded from ranking
-            if (AutorankTools.isExcludedFromRanking(onlineTargetPlayer)) {
+            if (plugin.getPlayerChecker().isExemptedFromAutomaticChecking(onlineTargetPlayer.getUniqueId())) {
                 sender.sendMessage(ChatColor.RED + Lang.PLAYER_IS_EXCLUDED.getConfigValue(onlineTargetPlayer.getName()));
                 return true;
             }

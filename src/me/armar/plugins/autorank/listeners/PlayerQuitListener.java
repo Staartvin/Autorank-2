@@ -48,5 +48,8 @@ public class PlayerQuitListener implements Listener {
                 plugin.getTaskManager().setLastPlayTimeUpdate(uuid, -1);
             }
         }
+
+        // Check any of the exemptions and store them so when the user is offline, we can still check them.
+        plugin.getPlayerChecker().doOfflineExemptionChecks(event.getPlayer());
     }
 }

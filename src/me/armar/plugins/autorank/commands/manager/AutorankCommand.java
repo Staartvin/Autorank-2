@@ -108,7 +108,7 @@ public abstract class AutorankCommand implements TabExecutor {
     public void runCommandTask(CompletableFuture<?> task) {
         Plugin plugin = Bukkit.getPluginManager().getPlugin("Autorank");
 
-        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+        Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
             try {
                 task.get();
             } catch (InterruptedException | ExecutionException e) {

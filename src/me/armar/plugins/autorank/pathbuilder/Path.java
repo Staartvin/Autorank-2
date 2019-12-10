@@ -7,6 +7,7 @@ import me.armar.plugins.autorank.pathbuilder.holders.CompositeRequirement;
 import me.armar.plugins.autorank.pathbuilder.result.AbstractResult;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -137,17 +138,19 @@ public class Path {
      * Check the progress of a player for this path. When all requirements are met, the path is marked as complete
      * and the results are performed.
      *
-     * @param player Player to check.
+     * @param uuid Player to check.
      * @return true when the player has completed this path, false otherwise.
      */
-    public boolean checkPathProgress(Player player) {
+    public boolean checkPathProgress(UUID uuid) {
         // Player does not meet all requirements, so don't do anything.
-        if (!this.meetsAllRequirements(player)) {
+        if (!this.meetsAllRequirements(uuid)) {
             return false;
         }
 
         // Player meets all requirements, so complete this path.
-        return plugin.getPathManager().completePath(this, player);
+        plugin.getPathManager().completePath(this, uuid);
+
+        return true;
     }
 
     /**
@@ -260,12 +263,10 @@ public class Path {
     /**
      * Check whether a player meets all requirements for this path.
      *
-     * @param player Player to check
+     * @param uuid Player to check
      * @return true when a player has completed all requirements at least once.
      */
-    public boolean meetsAllRequirements(final Player player) {
-
-        UUID uuid = player.getUniqueId();
+    public boolean meetsAllRequirements(final UUID uuid) {
 
         // Path is never met if it is not active.
         if (!this.isActive(uuid)) {
@@ -278,7 +279,7 @@ public class Path {
         // check if a player completed all requirements or not.
         if (!this.allowPartialCompletion()) {
             for (final CompositeRequirement holder : this.getRequirements()) {
-                if (!holder.meetsRequirement(player.getUniqueId())) {
+                if (!holder.meetsRequirement(uuid)) {
                     // If player does not meet the requirement, we can immediately return false.
                     return false;
                 }
@@ -293,12 +294,12 @@ public class Path {
                 return false;
 
             // Skip completed requirements.
-            if (this.hasCompletedRequirement(player.getUniqueId(), holder
+            if (this.hasCompletedRequirement(uuid, holder
                     .getRequirementId())) {
                 continue;
             }
 
-            if (holder.meetsRequirement(player.getUniqueId())) {
+            if (holder.meetsRequirement(uuid)) {
                 // Optional requirements can only be completed by performing /ar complete, so don't perform them
                 // automatically.
                 if (holder.isOptional()) {
@@ -306,7 +307,7 @@ public class Path {
                 }
 
                 // Meets requirement, so perform results
-                this.completeRequirement(player, holder.getRequirementId());
+                this.completeRequirement(uuid, holder.getRequirementId());
             } else {
                 meetAllRequirements = false;
             }
@@ -320,26 +321,38 @@ public class Path {
     /**
      * Mark a requirement as complete.
      *
-     * @param player Player to run results for.
-     * @param reqId  Id of requirement that is met.
+     * @param uuid  UUID of the player.
+     * @param reqId Id of requirement that is met.
      */
-    // TODO Make it so that a player doesn't have to be online to complete a requirement.
-    // TODO I.e. give him delayed results (results that only fire when the player comes back online).
-    public void completeRequirement(Player player, int reqId) {
+    public void completeRequirement(UUID uuid, int reqId) {
 
         CompositeRequirement requirement = this.getRequirements().stream().filter(compositeRequirement ->
-                compositeRequirement.getRequirementId() == reqId).findFirst().get();
+                compositeRequirement.getRequirementId() == reqId).findFirst().orElse(null);
 
-        // Notify player.
-        player.sendMessage(
-                ChatColor.GREEN + Lang.SUCCESSFULLY_COMPLETED_REQUIREMENT.getConfigValue(reqId + ""));
-        player.sendMessage(ChatColor.AQUA + requirement.getDescription());
+        if (requirement == null) return;
+
+        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
+
+        Player player = offlinePlayer.getPlayer();
+
+        // Check whether the user is online or not.
+        if (player == null) {
+            // The user is not online, so we register that they will get their results when they come back online.
+            this.plugin.getPathManager().getPlayerDataStorage().addCompletedRequirementMissingResults(uuid,
+                    this.getInternalName(), reqId);
+        } else {
+            // Notify player.
+            player.sendMessage(
+                    ChatColor.GREEN + Lang.SUCCESSFULLY_COMPLETED_REQUIREMENT.getConfigValue(reqId + ""));
+            player.sendMessage(ChatColor.AQUA + requirement.getDescription());
+        }
+
 
         // Fire event on main thread.
         plugin.getServer().getScheduler().runTask(plugin, () -> {
             // Fire event so it can be cancelled
             // Create the event here
-            final RequirementCompleteEvent event = new RequirementCompleteEvent(player, requirement);
+            final RequirementCompleteEvent event = new RequirementCompleteEvent(uuid, requirement);
             // Call the event
             Bukkit.getServer().getPluginManager().callEvent(event);
 
@@ -348,10 +361,12 @@ public class Path {
                 return;
 
             // Run results
-            requirement.runResults(player);
+            if (player != null) {
+                requirement.runResults(player);
+            }
 
             // Log that a player has passed this requirement
-            plugin.getPathManager().addCompletedRequirement(player.getUniqueId(), this, reqId);
+            plugin.getPathManager().addCompletedRequirement(uuid, this, reqId);
         });
     }
 

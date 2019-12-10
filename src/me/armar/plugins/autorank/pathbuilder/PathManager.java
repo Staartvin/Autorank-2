@@ -6,6 +6,8 @@ import me.armar.plugins.autorank.pathbuilder.builders.PathBuilder;
 import me.armar.plugins.autorank.pathbuilder.config.PlayerDataConfig;
 import me.armar.plugins.autorank.pathbuilder.holders.CompositeRequirement;
 import me.armar.plugins.autorank.pathbuilder.result.AbstractResult;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -23,17 +25,10 @@ public class PathManager {
     private me.armar.plugins.autorank.pathbuilder.builders.PathBuilder builder;
     // A list of paths any player is able to take
     private List<Path> paths = new ArrayList<Path>();
-    // PlayerDataConfig keeps track of what paths are active for a player.
-    private PlayerDataConfig playerDataConfig;
 
     public PathManager(final Autorank plugin) {
         this.plugin = plugin;
         setBuilder(new me.armar.plugins.autorank.pathbuilder.builders.PathBuilder(plugin));
-
-        // Initialize player data config.
-        playerDataConfig = new PlayerDataConfig(plugin);
-
-        playerDataConfig.loadConfig();
     }
 
     /**
@@ -108,7 +103,7 @@ public class PathManager {
      * @return paths that a player has chosen and is currently on.
      */
     public List<Path> getActivePaths(UUID uuid) {
-        Collection<String> activePathNames = this.playerDataConfig.getActivePaths(uuid);
+        Collection<String> activePathNames = plugin.getPlayerData().getActivePaths(uuid);
 
         List<Path> activePaths = new ArrayList<>();
 
@@ -131,7 +126,7 @@ public class PathManager {
      * @param uuid UUID of the player.
      */
     public void resetProgressOnActivePaths(UUID uuid) {
-        this.playerDataConfig.setActivePaths(uuid, new ArrayList<>());
+        plugin.getPlayerData().setActivePaths(uuid, new ArrayList<>());
     }
 
     /**
@@ -141,9 +136,9 @@ public class PathManager {
      * @param uuid UUID of the player
      * @param path Path to reset progress of.
      */
-    public void resetProgressOfPath(UUID uuid, Path path) {
-        this.playerDataConfig.setCompletedPrerequisites(uuid, path.getInternalName(), new ArrayList<>());
-        this.playerDataConfig.setCompletedRequirements(uuid, path.getInternalName(), new ArrayList<>());
+    public void resetProgressOfPath(Path path, UUID uuid) {
+        plugin.getPlayerData().setCompletedPrerequisites(uuid, path.getInternalName(), new ArrayList<>());
+        plugin.getPlayerData().setCompletedRequirements(uuid, path.getInternalName(), new ArrayList<>());
     }
 
     /**
@@ -152,8 +147,8 @@ public class PathManager {
      * @param uuid UUID of the player
      */
     public void resetActivePaths(UUID uuid) {
-        for (String activePathName : this.playerDataConfig.getActivePaths(uuid)) {
-            this.playerDataConfig.removeActivePath(uuid, activePathName);
+        for (String activePathName : plugin.getPlayerData().getActivePaths(uuid)) {
+            plugin.getPlayerData().removeActivePath(uuid, activePathName);
         }
     }
 
@@ -166,7 +161,7 @@ public class PathManager {
      * @return a list of paths a player has completed.
      */
     public List<Path> getCompletedPaths(UUID uuid) {
-        Collection<String> completedPathsNames = this.playerDataConfig.getCompletedPaths(uuid);
+        Collection<String> completedPathsNames = plugin.getPlayerData().getCompletedPaths(uuid);
 
         List<Path> completedPaths = new ArrayList<>();
 
@@ -189,8 +184,8 @@ public class PathManager {
      * @param uuid UUID of the player
      */
     public void resetCompletedPaths(UUID uuid) {
-        for (String completedPath : this.playerDataConfig.getCompletedPaths(uuid)) {
-            this.playerDataConfig.removeCompletedPath(uuid, completedPath);
+        for (String completedPath : plugin.getPlayerData().getCompletedPaths(uuid)) {
+            plugin.getPlayerData().removeCompletedPath(uuid, completedPath);
         }
     }
 
@@ -203,7 +198,7 @@ public class PathManager {
      * @param reqId Id of the requirement.
      */
     public void addCompletedRequirement(UUID uuid, Path path, int reqId) {
-        this.playerDataConfig.addCompletedRequirement(uuid, path.getInternalName(), reqId);
+        plugin.getPlayerData().addCompletedRequirement(uuid, path.getInternalName(), reqId);
     }
 
     /**
@@ -215,7 +210,7 @@ public class PathManager {
      * @return true if the player has completed the requirement, false otherwise.
      */
     public boolean hasCompletedRequirement(UUID uuid, Path path, int reqId) {
-        return this.playerDataConfig.hasCompletedRequirement(uuid, path.getInternalName(), reqId);
+        return plugin.getPlayerData().hasCompletedRequirement(uuid, path.getInternalName(), reqId);
     }
 
     /**
@@ -332,34 +327,39 @@ public class PathManager {
      * Assign a path to a player. This means that the path is now set to active for a player. A path can only be
      * assigned to the player if it is eligible ({@link Path#isEligible(UUID)}) for the player.
      *
-     * @param player Player to assign path to
-     * @param path   Path to check
+     * @param uuid Player to assign path to
+     * @param path Path to check
      * @throws IllegalArgumentException if the path is not eligible (see {@link Path#isEligible(UUID)}).
      */
-    public void assignPath(Player player, Path path) throws IllegalArgumentException {
+    public void assignPath(Path path, UUID uuid) throws IllegalArgumentException {
 
-        if (!path.isEligible(player.getUniqueId())) {
+        if (!path.isEligible(uuid)) {
             throw new IllegalArgumentException("Path is not eligible, so cannot be assigned to the player!");
         }
-
-        UUID uuid = player.getUniqueId();
 
         String internalName = path.getInternalName();
 
         // Add path as an active path.
-        this.playerDataConfig.addActivePath(player.getUniqueId(), internalName);
+        plugin.getPlayerData().addActivePath(uuid, internalName);
 
         // Only reset progress if there was no progress stored.
         if (!path.shouldStoreProgressOnDeactivation()) {
             // Reset progress of requirements
-            this.playerDataConfig.setCompletedRequirements(player.getUniqueId(), internalName, new ArrayList<>());
+            plugin.getPlayerData().setCompletedRequirements(uuid, internalName, new ArrayList<>());
 
             // Reset progress of prerequisites for a path.
-            this.playerDataConfig.setCompletedPrerequisites(uuid, internalName, new ArrayList<>());
+            plugin.getPlayerData().setCompletedPrerequisites(uuid, internalName, new ArrayList<>());
         }
 
-        // Perform results upon choosing this path.
-        path.performResultsUponChoosing(player);
+        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
+
+        if (offlinePlayer.getPlayer() == null) {
+            // The player is not online, so store the result so that they can performed at a later time.
+            this.getPlayerDataStorage().addChosenPathMissingResults(uuid, internalName);
+        } else {
+            // Perform results upon choosing this path.
+            path.performResultsUponChoosing(offlinePlayer.getPlayer());
+        }
     }
 
     /**
@@ -369,7 +369,7 @@ public class PathManager {
      * @param uuid UUID of the player
      * @param path Path to deactivate.
      */
-    public void deassignPath(UUID uuid, Path path) {
+    public void deassignPath(Path path, UUID uuid) {
 
         // We can't deassign a path if it is not active.
         if (!path.isActive(uuid)) {
@@ -378,40 +378,46 @@ public class PathManager {
 
         // Remove progress of a player if necessary
         if (!path.shouldStoreProgressOnDeactivation()) {
-            plugin.getPathManager().resetProgressOfPath(uuid, path);
+            plugin.getPathManager().resetProgressOfPath(path, uuid);
         }
 
         // Remove active path of a player.
-        this.playerDataConfig.removeActivePath(uuid, path.getInternalName());
+        plugin.getPlayerData().removeActivePath(uuid, path.getInternalName());
     }
 
     /**
      * Try to automatically assign paths to a player.
      *
-     * @param player Player to assign paths to.
+     * @param uuid Player to assign paths to.
      * @return a list of paths that have been been assigned to the player.
      */
-    public List<Path> autoAssignPaths(Player player) {
+    public List<Path> autoAssignPaths(UUID uuid) {
 
-        plugin.debugMessage("Trying to assign paths to " + player.getName());
+        plugin.debugMessage("Trying to assign paths to " + uuid);
 
         List<Path> assignedPaths = new ArrayList<>();
 
         for (Path path : getAllPaths()) {
-            if (path.isEligible(player.getUniqueId()) && path.isAutomaticallyAssigned()) {
+            if (path.isEligible(uuid) && path.isAutomaticallyAssigned()) {
 
                 // If the path is deactivated, we will not automatically assign the path to the player again.
                 // If we did, the player would constantly need to deactivate the path again.
-                if (path.isDeactivated(player.getUniqueId())) {
+                if (path.isDeactivated(uuid)) {
                     continue;
                 }
 
-                assignPath(player, path);
+                assignPath(path, uuid);
 
-                plugin.debugMessage("Assigned " + path.getDisplayName() + " to " + player.getName());
+                OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
 
-                // Send message to player
-                player.sendMessage(Lang.AUTOMATICALLY_ASSIGNED_PATH.getConfigValue(path.getDisplayName()));
+                Player onlinePlayer = offlinePlayer.getPlayer();
+
+                if (onlinePlayer != null) {
+                    plugin.debugMessage("Assigned " + path.getDisplayName() + " to " + onlinePlayer.getName());
+
+                    // Send message to player if they are online.
+                    onlinePlayer.sendMessage(Lang.AUTOMATICALLY_ASSIGNED_PATH.getConfigValue(path.getDisplayName()));
+                }
 
                 assignedPaths.add(path);
             }
@@ -424,38 +430,36 @@ public class PathManager {
      * Complete a path for a player and run the results of the path.
      *
      * @param path   Path to complete
-     * @param player Player to complete it for
+     * @param uuid UUID of the player to complete this path for.
      * @return true when all results of the given path are executed successfully.
      */
-    public boolean completePath(Path path, Player player) {
+    public boolean completePath(Path path, UUID uuid) {
 
         // Add progress of completed requirements
-        this.playerDataConfig.addCompletedPath(player.getUniqueId(), path.getInternalName());
+        plugin.getPlayerData().addCompletedPath(uuid, path.getInternalName());
 
         // Remove path from active paths.
-        this.playerDataConfig.removeActivePath(player.getUniqueId(), path.getInternalName());
+        plugin.getPlayerData().removeActivePath(uuid, path.getInternalName());
 
-        // Perform results on completion
-        boolean result = path.performResults(player);
+        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
+
+        Player player = offlinePlayer.getPlayer();
+
+        boolean result = false;
+
+        // If the player is not online, we will store the results in the 'to be performed' section, so we know to
+        // perform them when the player comes online.
+        if (player == null) {
+            this.getPlayerDataStorage().addCompletedPathMissingResults(uuid, path.getInternalName());
+        } else {
+            // Perform results on completion
+            result = path.performResults(player);
+        }
 
         // Try to assign new paths to a player
-        plugin.getPathManager().autoAssignPaths(player);
+        plugin.getPathManager().autoAssignPaths(uuid);
 
         return result;
-    }
-
-    public void setLeaderboardExemption(UUID uuid, boolean value) {
-        this.playerDataConfig.hasLeaderboardExemption(uuid, value);
-    }
-
-    /**
-     * Check whether a player is exempted from the leaderboard or not.
-     *
-     * @param uuid UUID of the player
-     * @return true if the player is exempted from the leaderboard.
-     */
-    public boolean hasLeaderboardExemption(UUID uuid) {
-        return this.playerDataConfig.hasLeaderboardExemption(uuid);
     }
 
     /**
@@ -464,6 +468,6 @@ public class PathManager {
      * @return {@link PlayerDataConfig} object.
      */
     protected PlayerDataConfig getPlayerDataStorage() {
-        return this.playerDataConfig;
+        return plugin.getPlayerData();
     }
 }

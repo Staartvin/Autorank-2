@@ -18,6 +18,7 @@ import me.armar.plugins.autorank.listeners.PlayerQuitListener;
 import me.armar.plugins.autorank.pathbuilder.PathManager;
 import me.armar.plugins.autorank.pathbuilder.builders.RequirementBuilder;
 import me.armar.plugins.autorank.pathbuilder.builders.ResultBuilder;
+import me.armar.plugins.autorank.pathbuilder.config.PlayerDataConfig;
 import me.armar.plugins.autorank.pathbuilder.requirement.*;
 import me.armar.plugins.autorank.pathbuilder.result.*;
 import me.armar.plugins.autorank.permissions.PermissionsPluginManager;
@@ -77,7 +78,7 @@ public class Autorank extends JavaPlugin {
     private PermissionsPluginManager permPlugHandler;
     private UpdateHandler updateHandler;
 
-    // Miscalleaneous
+    // Miscellaneous
     private PlayerChecker playerChecker;
     private PlayTimeManager playTimeManager;
     private DataConverter dataConverter;
@@ -95,6 +96,7 @@ public class Autorank extends JavaPlugin {
     private InternalPropertiesConfig internalPropertiesConfig;
     private PathsConfig pathsConfig;
     private DefaultBehaviorConfig defaultBehaviorConfig;
+    private PlayerDataConfig playerDataConfig;
 
     public static Autorank getInstance() {
         return autorank;
@@ -147,12 +149,14 @@ public class Autorank extends JavaPlugin {
         setSettingsConfig(new SettingsConfig(this));
         setInternalPropertiesConfig(new InternalPropertiesConfig(this));
         setDefaultBehaviorConfig(new DefaultBehaviorConfig((this)));
+        setPlayerData(new PlayerDataConfig(this));
 
         // Create new configs
         this.getDefaultBehaviorConfig().loadConfig();
         this.getPathsConfig().loadConfig();
         this.getSettingsConfig().loadConfig();
         this.getInternalPropertiesConfig().loadConfig();
+        this.getPlayerData().loadConfig();
 
         // ------------- Initialize managers -------------
 
@@ -785,5 +789,13 @@ public class Autorank extends JavaPlugin {
 
     public void setTaskManager(TaskManager taskManager) {
         this.taskManager = taskManager;
+    }
+
+    public PlayerDataConfig getPlayerData() {
+        return playerDataConfig;
+    }
+
+    public void setPlayerData(PlayerDataConfig playerDataConfig) {
+        this.playerDataConfig = playerDataConfig;
     }
 }

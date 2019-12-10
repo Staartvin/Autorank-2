@@ -126,7 +126,7 @@ public class LeaderboardHandler {
             }
 
             // If player is exempted
-            if (plugin.getPathManager().hasLeaderboardExemption(uuid)) {
+            if (plugin.getPlayerChecker().isExemptedFromLeaderboard(uuid)) {
                 continue;
             }
 
@@ -225,7 +225,7 @@ public class LeaderboardHandler {
             }
 
             // If player is exempted
-            if (plugin.getPathManager().hasLeaderboardExemption(uuid)) {
+            if (plugin.getPlayerChecker().isExemptedFromLeaderboard(uuid)) {
                 continue;
             }
 

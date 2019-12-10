@@ -38,46 +38,35 @@ public class PlayerJoinListener implements Listener {
         }
 
         // Save whether this player is exempted from the leaderboard.
-        plugin.getPlayerChecker().doLeaderboardExemptCheck(player);
+        plugin.getPlayerChecker().doOfflineExemptionChecks(player);
 
         // Try to automatically assign a path to a player.
-        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
-            public void run() {
+        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
 
-                // Try to auto assign path to a player
-                plugin.getPathManager().autoAssignPaths(player);
+            // Try to auto assign path to a player
+            plugin.getPathManager().autoAssignPaths(player.getUniqueId());
 
-                // Perform check for player on login
-                plugin.getPlayerChecker().checkPlayer(player);
-            }
+            // Perform check for player on login
+            plugin.getPlayerChecker().checkPlayer(player.getUniqueId());
         });
 
         // Only display 'update available' message to users with correct permissions.
         if (player.hasPermission(AutorankPermission.NOTICE_ON_UPDATE_AVAILABLE)) {
 
             // Run check async so server doesn't lag.
-            plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+            plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+                if (plugin.getUpdateHandler().isUpdateAvailable()) {
 
-                @Override
-                public void run() {
-                    if (plugin.getUpdateHandler().isUpdateAvailable()) {
+                    // Schedule it later so it will appear at the bottom
+                    plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
+                        player.sendMessage(
+                                ChatColor.GREEN + plugin.getName() + " " + plugin.getUpdateHandler()
+                                        .getUpdater().getLatestVersion() + ChatColor.GOLD + " is now " +
+                                        "available for download!");
 
-                        // Schedule it later so it will appear at the bottom
-                        plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
-
-                            @Override
-                            public void run() {
-                                player.sendMessage(
-                                        ChatColor.GREEN + plugin.getName() + " " + plugin.getUpdateHandler()
-                                                .getUpdater().getLatestVersion() + ChatColor.GOLD + " is now " +
-                                                "available for download!");
-
-                                player.sendMessage(ChatColor.GREEN + "Available at: " + ChatColor.GOLD
-                                        + plugin.getUpdateHandler().getUpdater().getResourceURL());
-                            }
-
-                        }, 10L);
-                    }
+                        player.sendMessage(ChatColor.GREEN + "Available at: " + ChatColor.GOLD
+                                + plugin.getUpdateHandler().getUpdater().getResourceURL());
+                    }, 10L);
                 }
             });
 
@@ -88,14 +77,8 @@ public class PlayerJoinListener implements Listener {
 
             if (plugin.getWarningManager().getHighestWarning() != null) {
                 // Schedule it later so it will appear at the bottom
-                plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
-
-                    @Override
-                    public void run() {
-                        plugin.getWarningManager().sendWarnings(player);
-                    }
-
-                }, 10L);
+                plugin.getServer().getScheduler().runTaskLater(plugin,
+                        () -> plugin.getWarningManager().sendWarnings(player), 10L);
             }
         }
 
