@@ -1,5 +1,6 @@
 package me.armar.plugins.autorank.api;
 
+import io.reactivex.annotations.NonNull;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.addons.AddOnManager;
 import me.armar.plugins.autorank.pathbuilder.Path;
@@ -7,10 +8,12 @@ import me.armar.plugins.autorank.pathbuilder.requirement.AbstractRequirement;
 import me.armar.plugins.autorank.pathbuilder.result.AbstractResult;
 import me.armar.plugins.autorank.storage.StorageProvider;
 import me.armar.plugins.autorank.storage.TimeType;
+import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 /**
  * <b>Autorank's API class:</b>
@@ -88,12 +91,28 @@ public class API {
      * <br>
      * The time is always given in seconds.
      * <p>
+     * <p>
+     * Deprecated, use {@link #getTimeOfPlayer(UUID)} instead.
      *
      * @param playerName Name of the player
      * @return play time of a player. 0 when has never played before.
      */
-    public int getTimeOfPlayer(String playerName) {
-        return plugin.getPlayTimeManager().getTimeOfPlayer(playerName, true);
+    @Deprecated
+    public int getTimeOfPlayer(@NonNull String playerName) {
+
+        UUID uuid = null;
+
+        try {
+            uuid = UUIDManager.getUUID(playerName).get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        return this.getTimeOfPlayer(uuid);
+    }
+
+    public int getTimeOfPlayer(@NonNull UUID uuid) {
+        return plugin.getPlayTimeManager().getTimeOfPlayer(uuid, true);
     }
 
     /**

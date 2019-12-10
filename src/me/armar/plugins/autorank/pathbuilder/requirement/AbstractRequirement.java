@@ -337,5 +337,6 @@ public abstract class AbstractRequirement {
      * @return true if the player needs to be online to check this requirement. False otherwise.
      */
     public boolean needsOnlinePlayer() {
-        return false;}
+        return false;
+    }
 }

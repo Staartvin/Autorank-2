@@ -408,9 +408,7 @@ public class PathManager {
 
                 assignPath(path, uuid);
 
-                OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
-
-                Player onlinePlayer = offlinePlayer.getPlayer();
+                Player onlinePlayer = Bukkit.getOfflinePlayer(uuid).getPlayer();
 
                 if (onlinePlayer != null) {
                     plugin.debugMessage("Assigned " + path.getDisplayName() + " to " + onlinePlayer.getName());

@@ -145,7 +145,7 @@ public class CheckCommand extends AutorankCommand {
 
             final Player player = (Player) sender;
 
-            int time = plugin.getPlayTimeManager().getTimeOfPlayer(player.getName(), true);
+            int time = plugin.getPlayTimeManager().getTimeOfPlayer(player.getUniqueId(), true);
 
             AutorankTools.sendColoredMessage(sender,
                     Lang.HAS_PLAYED_FOR.getConfigValue(player.getName(), AutorankTools.timeToString(time,
@@ -278,7 +278,7 @@ public class CheckCommand extends AutorankCommand {
             targetPlayerName = targetPlayer.getName();
         }
 
-        int time = plugin.getPlayTimeManager().getTimeOfPlayer(targetPlayerName, true);
+        int time = plugin.getPlayTimeManager().getTimeOfPlayer(targetUUID, true);
 
         AutorankTools.sendColoredMessage(sender,
                 Lang.HAS_PLAYED_FOR.getConfigValue(targetPlayerName, AutorankTools.timeToString(time,

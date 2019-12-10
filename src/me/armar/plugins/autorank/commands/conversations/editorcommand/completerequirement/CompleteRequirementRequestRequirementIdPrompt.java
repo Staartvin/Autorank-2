@@ -1,7 +1,6 @@
 package me.armar.plugins.autorank.commands.conversations.editorcommand.completerequirement;
 
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.commands.conversations.editorcommand.EditorMenuPrompt;
 import me.armar.plugins.autorank.commands.conversations.editorcommand.SelectPlayerPrompt;
 import me.armar.plugins.autorank.pathbuilder.Path;
 import org.bukkit.ChatColor;
@@ -35,11 +34,17 @@ public class CompleteRequirementRequestRequirementIdPrompt extends StringPrompt 
         UUID uuid = (UUID) conversationContext.getSessionData(SelectPlayerPrompt.KEY_UUID);
         String playerName = (String) conversationContext.getSessionData(SelectPlayerPrompt.KEY_PLAYERNAME);
 
+        // Check if the requirement id is valid
+        if (requirementId < 0 || requirementId >= path.getRequirements().size()) {
+            conversable.sendRawMessage(ChatColor.RED + "That requirement id does not exist for " + ChatColor.GRAY + path.getDisplayName());
+            return this;
+        }
+
         // Check if the requirement has already been completed.
         if (path.hasCompletedRequirement(uuid, requirementId)) {
             conversable.sendRawMessage(ChatColor.GRAY + playerName + ChatColor.RED + " has already completed this " +
                     "requirement");
-            return new EditorMenuPrompt();
+            return this;
         }
 
         // Store the requirement we want to complete.

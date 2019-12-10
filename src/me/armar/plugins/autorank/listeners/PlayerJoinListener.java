@@ -1,6 +1,7 @@
 package me.armar.plugins.autorank.listeners;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.pathbuilder.Path;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -9,6 +10,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -84,5 +86,56 @@ public class PlayerJoinListener implements Listener {
 
         // Register new task that updates the play time of a player
         plugin.getTaskManager().startUpdatePlayTimeTask(player.getUniqueId());
+
+        // Perform results that were not performed.
+        this.performPendingResults(player);
+    }
+
+    private void performPendingResults(Player player) {
+        // First perform all results when the player has joined a path
+        List<String> joinedPaths = plugin.getPlayerData().getChosenPathsMissingResults(player.getUniqueId());
+
+        for (String pathName : joinedPaths) {
+            Path path = plugin.getPathManager().findPathByInternalName(pathName, false);
+
+            if (path != null) {
+                path.performResultsUponChoosing(player);
+            }
+
+            plugin.getPlayerData().removeChosenPathMissingResults(player.getUniqueId(), pathName);
+        }
+
+        // Then perform results when a player has completed a requirement.
+        for (Path path : plugin.getPathManager().getAllPaths()) {
+            List<Integer> completedRequirements =
+                    plugin.getPlayerData().getCompletedRequirementsMissingResults(player.getUniqueId(),
+                            path.getInternalName());
+
+            for (int requirementId : completedRequirements) {
+                path.completeRequirement(player.getUniqueId(), requirementId);
+
+                plugin.getPlayerData().removeCompletedRequirementMissingResults(player.getUniqueId(),
+                        path.getInternalName(), requirementId);
+            }
+        }
+
+
+        // Lastly perform results when a player has completed a path.
+        List<String> completedPaths =
+                plugin.getPlayerData().getCompletedPathsMissingResults(player.getUniqueId());
+
+        for (String pathName : completedPaths) {
+            Path path = plugin.getPathManager().findPathByInternalName(pathName, false);
+
+            if (path != null) {
+                path.performResults(player);
+            }
+
+            System.out.println("Performing result of path " + pathName);
+
+            plugin.getPlayerData().removeCompletedPathMissingResults(player.getUniqueId(), pathName);
+        }
+
+
     }
 }

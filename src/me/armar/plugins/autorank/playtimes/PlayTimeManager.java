@@ -42,18 +42,18 @@ public class PlayTimeManager {
      * This depends on what plugin is used to get the time from. <br>
      * Time in seconds.
      *
-     * @param playerName Player to get the time for
-     * @param cache      whether to only use cache or use real time values.
+     * @param uuid  Player to get the time for
+     * @param cache whether to only use cache or use real time values.
      * @return play time of given player or 0 if not found.
      */
-    public int getTimeOfPlayer(final String playerName, final boolean cache) {
+    public int getTimeOfPlayer(UUID uuid, final boolean cache) {
 
         int playTime = 0;
 
-        UUID uuid = null;
+        String playerName = null;
 
         try {
-            uuid = UUIDManager.getUUID(playerName).get();
+            playerName = UUIDManager.getPlayerName(uuid).get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
@@ -85,12 +85,15 @@ public class PlayTimeManager {
             playTime = playTime * 60;
         } else {
 
-            if (uuid == null)
+            if (uuid == null) {
                 return playTime;
+            }
 
             // Use internal system of Autorank.
             playTime = plugin.getStorageManager().getPrimaryStorageProvider().getPlayerTime(TimeType.TOTAL_TIME,
                     uuid).getNow(0) * 60;
+            System.out.println("PLAYTIME: " + plugin.getStorageManager().getPrimaryStorageProvider().getPlayerTime(TimeType.TOTAL_TIME, uuid).getNow(0));
+            System.out.println("* 60: " + (plugin.getStorageManager().getPrimaryStorageProvider().getPlayerTime(TimeType.TOTAL_TIME, uuid).getNow(0) * 60));
         }
 
         return playTime;

@@ -5,6 +5,8 @@ import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
 import org.bukkit.entity.Player;
 
+import java.util.UUID;
+
 /**
  * This requirement checks for local play time Date created: 13:49:33 15 jan.
  * 2014
@@ -23,18 +25,18 @@ public class TimeRequirement extends AbstractRequirement {
     @Override
     public String getProgress(final Player player) {
 
-        final int playtime = (getAutorank().getPlayTimeManager().getTimeOfPlayer(player.getName(), true) / 60);
+        final int playtime = (getAutorank().getPlayTimeManager().getTimeOfPlayer(player.getUniqueId(), true) / 60);
 
         return AutorankTools.timeToString(playtime, Time.MINUTES) + "/" + AutorankTools.timeToString(timeNeeded,
                 Time.MINUTES);
     }
 
     @Override
-    public boolean meetsRequirement(final Player player) {
+    protected boolean meetsRequirement(UUID uuid) {
         // Use getTimeOf so that when switched to another time, it'll still
         // work.
         // getTimeOfPlayer() is in seconds, so convert.
-        final int playTime = this.getAutorank().getPlayTimeManager().getTimeOfPlayer(player.getName(), true) / 60;
+        final int playTime = this.getAutorank().getPlayTimeManager().getTimeOfPlayer(uuid, true) / 60;
 
         return timeNeeded != -1 && playTime >= timeNeeded;
     }
@@ -51,11 +53,6 @@ public class TimeRequirement extends AbstractRequirement {
             return false;
         }
 
-        return true;
-    }
-
-    @Override
-    public boolean needsOnlinePlayer() {
         return true;
     }
 }

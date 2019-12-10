@@ -175,7 +175,7 @@ public class LeaderboardHandler {
                             continue;
                         }
 
-                        times.put(uuid, (plugin.getPlayTimeManager().getTimeOfPlayer(playerName, true) / 60));
+                        times.put(uuid, (plugin.getPlayTimeManager().getTimeOfPlayer(uuid, true) / 60));
                     }
                 }
             } else {
@@ -260,7 +260,7 @@ public class LeaderboardHandler {
                             e.printStackTrace();
                         }
                     } else {
-                        times.put(playerName, (plugin.getPlayTimeManager().getTimeOfPlayer(playerName, true) / 60));
+                        times.put(playerName, (plugin.getPlayTimeManager().getTimeOfPlayer(uuid, true) / 60));
                     }
                 }
             } else {
