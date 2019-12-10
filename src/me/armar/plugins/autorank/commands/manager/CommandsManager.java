@@ -71,6 +71,7 @@ public class CommandsManager implements TabExecutor {
         registeredCommands.put(Arrays.asList("reset"), new ResetCommand(plugin));
         registeredCommands.put(Arrays.asList("backup"), new BackupCommand(plugin));
         registeredCommands.put(Arrays.asList("info"), new InfoCommand(plugin));
+        registeredCommands.put(Arrays.asList("editor"), new EditorCommand(plugin));
     }
 
     /**

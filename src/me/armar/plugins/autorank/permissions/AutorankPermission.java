@@ -47,6 +47,11 @@ public final class AutorankPermission {
     public static final String DEACTIVATE_PATH = "autorank.deactivate";
     public static final String VIEW_INFO_SELF = "autorank.info.self";
     public static final String VIEW_INFO_OTHERS = "autorank.info.others";
+    public static final String EDITOR_ASSIGN_PATH = "autorank.editor.path.assign";
+    public static final String EDITOR_ASSIGN_PATH_FORCE = "autorank.editor.path.assign.force";
+    public static final String EDITOR_UNASSIGN_PATH = "autorank.editor.path.unassign";
+    public static final String EDITOR_COMPLETE_REQUIREMENT = "autorank.editor.complete.requirement";
+    public static final String EDITOR_COMPLETE_PATH = "autorank.editor.complete.path";
 
     private AutorankPermission() {
     }

@@ -19,8 +19,8 @@ import org.jetbrains.annotations.Nullable;
  */
 public class ConfirmPrompt extends FixedSetPrompt {
 
-    private String message = ChatColor.GOLD + "Please " + ChatColor.GREEN + "confirm"
-            + ChatColor.GOLD + " or " + ChatColor.RED + "deny" + ChatColor.GOLD + " this action.";
+    private String message = ChatColor.GOLD + "Are you sure you want to perform this action? Type " + ChatColor.GREEN +
+            "yes" + ChatColor.GOLD + " or " + ChatColor.RED + "no" + ChatColor.GOLD + ".";
     private Prompt confirmPrompt;
     private Prompt denyPrompt;
 
@@ -37,7 +37,7 @@ public class ConfirmPrompt extends FixedSetPrompt {
      */
     public ConfirmPrompt(String message, @NonNull Prompt confirmPrompt, @NonNull Prompt denyPrompt,
                          ConfirmPromptCallback callback) {
-        super("confirm", "deny");
+        super("yes", "no");
 
         // Override default message if something was given.
         if (message != null) {
@@ -88,7 +88,7 @@ public class ConfirmPrompt extends FixedSetPrompt {
     protected @Nullable Prompt acceptValidatedInput(@NotNull ConversationContext conversationContext,
                                                     @NotNull String s) {
 
-        if (s.equals("confirm")) {
+        if (s.equals("yes")) {
 
             if (callback != null) {
                 callback.promptConfirmed();

@@ -130,4 +130,18 @@ permissions:
   autorank.info.others:
     description: Allows a player to view info of other players.
     default: op
-    
+  autorank.editor.path.assign:
+    description: Allows a player to assign a path to another player
+    default: op
+  autorank.editor.path.assign.force:
+    description: Allows a player to assign a path to another player by force
+    default: op
+  autorank.editor.path.unassign:
+    description: Allows a player to unassign a path from another player
+    default: op
+  autorank.editor.complete.requirement:
+    description: Allows a player to complete a requirement for a path from another player.
+    default: op
+  autorank.editor.complete.path:
+    description: Allows a player to complete a path for another player.
+    default: op
