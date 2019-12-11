@@ -30,9 +30,8 @@ public class WorldGuardRegionRequirement extends AbstractRequirement {
     }
 
     @Override
-    public String getProgress(final Player player) {
-        final String progress = "Cannot show progress";
-        return progress;
+    public String getProgressString(final Player player) {
+        return "Cannot show progress";
     }
 
     @Override

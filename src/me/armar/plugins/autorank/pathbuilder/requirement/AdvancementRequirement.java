@@ -38,7 +38,7 @@ public class AdvancementRequirement extends AbstractRequirement {
     }
 
     @Override
-    public String getProgress(final Player player) {
+    public String getProgressString(final Player player) {
 
         if (advancementCount != -1) {
 

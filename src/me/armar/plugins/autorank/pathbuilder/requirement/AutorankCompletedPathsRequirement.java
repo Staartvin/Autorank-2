@@ -2,7 +2,6 @@ package me.armar.plugins.autorank.pathbuilder.requirement;
 
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.pathbuilder.Path;
-import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
@@ -27,17 +26,17 @@ public class AutorankCompletedPathsRequirement extends AbstractRequirement {
     }
 
     @Override
-    public String getProgress(final Player player) {
+    public String getProgressString(UUID uuid) {
 
         if (requiredPaths > 0) {
-            return getAutorank().getPathManager().getCompletedPaths(player.getUniqueId()).size() + "/" + requiredPaths;
+            return getAutorank().getPathManager().getCompletedPaths(uuid).size() + "/" + requiredPaths;
         }
 
         if (requiredPath == null) {
             findMatchingPath();
         }
 
-        return "has completed " + requiredPath.getDisplayName() + ": " + requiredPath.hasCompletedPath(player.getUniqueId());
+        return "has completed " + requiredPath.getDisplayName() + ": " + requiredPath.hasCompletedPath(uuid);
     }
 
     @Override

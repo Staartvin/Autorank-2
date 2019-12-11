@@ -35,7 +35,7 @@ public class HasItemRequirement extends AbstractRequirement {
     }
 
     @Override
-    public String getProgress(final Player player) {
+    public String getProgressString(final Player player) {
 
         final ItemStack item = neededItem.getItem();
 

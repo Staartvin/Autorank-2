@@ -21,7 +21,7 @@ public class InBiomeRequirement extends AbstractRequirement {
     }
 
     @Override
-    public String getProgress(final Player player) {
+    public String getProgressString(final Player player) {
         final String currentBiome = player.getLocation().getBlock().getBiome().toString();
 
         return currentBiome + "/" + biome;

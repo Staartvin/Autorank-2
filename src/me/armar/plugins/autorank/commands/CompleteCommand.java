@@ -120,7 +120,7 @@ public class CompleteCommand extends AutorankCommand {
             // player does not meet requirements
             player.sendMessage(ChatColor.RED + Lang.DO_NOT_MEET_REQUIREMENTS_FOR.getConfigValue(completionID + ""));
             player.sendMessage(ChatColor.AQUA + holder.getDescription());
-            player.sendMessage(ChatColor.GREEN + "Current: " + ChatColor.GOLD + holder.getProgress(player));
+            player.sendMessage(ChatColor.GREEN + "Current: " + ChatColor.GOLD + holder.getProgress(player.getUniqueId()));
         }
 
         return true;

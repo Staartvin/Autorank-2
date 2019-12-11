@@ -17,7 +17,7 @@ public class RPGMeCombatLevelRequirement extends AbstractRequirement {
     }
 
     @Override
-    public String getProgress(final Player player) {
+    public String getProgressString(final Player player) {
 
         int level = 0;
 

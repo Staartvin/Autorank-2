@@ -2,7 +2,6 @@ package me.armar.plugins.autorank.pathbuilder.requirement;
 
 import me.armar.plugins.autorank.language.Lang;
 import me.staartvin.plugins.pluginlibrary.Library;
-import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
@@ -17,8 +16,8 @@ public class QuestsAlternativeActiveQuestsRequirement extends AbstractRequiremen
     }
 
     @Override
-    public String getProgress(final Player player) {
-        return handler.getNumberOfActiveQuests(player.getUniqueId()) + "/" + activeQuests;
+    public String getProgressString(UUID uuid) {
+        return handler.getNumberOfActiveQuests(uuid) + "/" + activeQuests;
     }
 
     @Override

@@ -4,7 +4,6 @@ import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.staartvin.plugins.pluginlibrary.Library;
-import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
@@ -25,9 +24,9 @@ public class TimesShearedRequirement extends AbstractRequirement {
     }
 
     @Override
-    public String getProgress(final Player player) {
+    public String getProgressString(UUID uuid) {
         final int progressBar = this.getStatsPlugin().getNormalStat(StatsPlugin.StatType.TIMES_SHEARED,
-                player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld()));
+                uuid, AutorankTools.makeStatsInfo("world", this.getWorld()));
 
         return progressBar + "/" + timesShorn;
     }

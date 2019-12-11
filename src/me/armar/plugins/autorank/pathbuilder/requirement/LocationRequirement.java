@@ -22,7 +22,7 @@ public class LocationRequirement extends AbstractRequirement {
     }
 
     @Override
-    public String getProgress(final Player player) {
+    public String getProgressString(final Player player) {
         // Distance between two points:
         // d = sqrt((x2 - x1)^2 + (y2 - y1)^2 + (z2 - z1)^2)
         // See for info:

@@ -27,7 +27,7 @@ public class JavaScriptRequirement extends AbstractRequirement {
     }
 
     @Override
-    public String getProgress(final Player player) {
+    public String getProgressString(final Player player) {
 
         // Unknown progress of Javascript engine.
         return "unknown";

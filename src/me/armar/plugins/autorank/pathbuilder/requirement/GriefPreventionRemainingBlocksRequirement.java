@@ -3,7 +3,6 @@ package me.armar.plugins.autorank.pathbuilder.requirement;
 import me.armar.plugins.autorank.language.Lang;
 import me.staartvin.plugins.pluginlibrary.Library;
 import me.staartvin.plugins.pluginlibrary.hooks.GriefPreventionHook;
-import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
@@ -18,10 +17,8 @@ public class GriefPreventionRemainingBlocksRequirement extends AbstractRequireme
     }
 
     @Override
-    public String getProgress(final Player player) {
-        final int level = handler.getNumberOfRemainingBlocks(player.getUniqueId());
-
-        return level + "/" + remainingBlocks;
+    public String getProgressString(UUID uuid) {
+        return handler.getNumberOfRemainingBlocks(uuid) + "/" + remainingBlocks;
     }
 
     @Override

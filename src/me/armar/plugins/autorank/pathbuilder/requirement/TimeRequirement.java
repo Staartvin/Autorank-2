@@ -3,7 +3,6 @@ package me.armar.plugins.autorank.pathbuilder.requirement;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
-import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
@@ -23,9 +22,9 @@ public class TimeRequirement extends AbstractRequirement {
     }
 
     @Override
-    public String getProgress(final Player player) {
+    public String getProgressString(UUID uuid) {
 
-        final int playtime = (getAutorank().getPlayTimeManager().getTimeOfPlayer(player.getUniqueId(), true) / 60);
+        final int playtime = (getAutorank().getPlayTimeManager().getTimeOfPlayer(uuid, true) / 60);
 
         return AutorankTools.timeToString(playtime, Time.MINUTES) + "/" + AutorankTools.timeToString(timeNeeded,
                 Time.MINUTES);

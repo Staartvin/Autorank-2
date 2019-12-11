@@ -5,7 +5,6 @@ import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.staartvin.plugins.pluginlibrary.Library;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
@@ -35,9 +34,9 @@ public class MobKillsRequirement extends AbstractRequirement {
     }
 
     @Override
-    public String getProgress(final Player player) {
+    public String getProgressString(UUID uuid) {
 
-        final int killed = getStatsPlugin().getNormalStat(StatsPlugin.StatType.MOBS_KILLED, player.getUniqueId(),
+        final int killed = getStatsPlugin().getNormalStat(StatsPlugin.StatType.MOBS_KILLED, uuid,
                 AutorankTools.makeStatsInfo("world", this.getWorld(), "mobType", mobType));
 
         String entityType = mobType;

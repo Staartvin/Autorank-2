@@ -3,6 +3,7 @@ package me.armar.plugins.autorank.pathbuilder.holders;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.pathbuilder.requirement.AbstractRequirement;
 import me.armar.plugins.autorank.pathbuilder.result.AbstractResult;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -136,7 +137,7 @@ public class CompositeRequirement {
      * @param player Player to check
      * @return progress string in the format as {@link #getDescription()}.
      */
-    public String getProgress(final Player player) {
+    public String getProgress(UUID uuid) {
         final StringBuilder builder = new StringBuilder();
 
         final List<AbstractRequirement> reqs = this.getRequirements();
@@ -144,23 +145,45 @@ public class CompositeRequirement {
 
         if (size == 0) {
             return "";
-        } else if (size == 1) {
-            return reqs.get(0).getProgress(player);
         }
 
-        final String original = reqs.get(0).getProgress(player);
+        String startingString = "";
+
+        boolean needsPlayerOnline = reqs.get(0).needsOnlinePlayer();
+        boolean isPlayerOnline;
+        Player player = null;
+
+        // Check if we need the player to be online to check progress
+        if (needsPlayerOnline) {
+            player = Bukkit.getOfflinePlayer(uuid).getPlayer();
+
+            isPlayerOnline = player != null;
+
+            // Check if the player is online
+            if (isPlayerOnline) {
+                // Player is online, so we get the progress of the requirement.
+                startingString = reqs.get(0).getProgressString(player);
+            } else {
+                // The player is not online, but should be so we just immediately return this as result.
+                return "The player should be online to display progress.";
+            }
+
+        } else {
+            // We don't need the player to be online, so we can just use the uuid instead.
+            startingString = reqs.get(0).getProgressString(uuid);
+        }
 
         for (int i = 0; i < size; i++) {
             final AbstractRequirement r = reqs.get(i);
 
-            String progress = r.getProgress(player);
+            String progress = needsPlayerOnline ? r.getProgressString(player) : r.getProgressString(uuid);
 
             if (i == 0) {
                 // First index
                 builder.append(progress).append(" or ");
             } else {
 
-                final int difIndex = this.getDifferenceIndex(original, progress);
+                final int difIndex = this.getDifferenceIndex(startingString, progress);
 
                 progress = progress.substring(difIndex);
 

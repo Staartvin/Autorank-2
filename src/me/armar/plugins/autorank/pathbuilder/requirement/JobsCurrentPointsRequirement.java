@@ -3,7 +3,6 @@ package me.armar.plugins.autorank.pathbuilder.requirement;
 import me.armar.plugins.autorank.language.Lang;
 import me.staartvin.plugins.pluginlibrary.Library;
 import me.staartvin.plugins.pluginlibrary.hooks.JobsHook;
-import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
@@ -26,14 +25,14 @@ public class JobsCurrentPointsRequirement extends AbstractRequirement {
     }
 
     @Override
-    public String getProgress(final Player player) {
+    public String getProgressString(UUID uuid) {
 
         double points = -1;
 
         if (jobsHandler == null || !jobsHandler.isAvailable()) {
             points = -1;
         } else {
-            points = jobsHandler.getCurrentPoints(player.getUniqueId());
+            points = jobsHandler.getCurrentPoints(uuid);
         }
 
         return points + "/" + currentPoints;

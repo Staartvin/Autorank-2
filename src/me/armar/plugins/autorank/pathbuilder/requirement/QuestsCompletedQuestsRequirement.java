@@ -3,7 +3,6 @@ package me.armar.plugins.autorank.pathbuilder.requirement;
 import me.armar.plugins.autorank.language.Lang;
 import me.staartvin.plugins.pluginlibrary.Library;
 import me.staartvin.plugins.pluginlibrary.hooks.QuestsHook;
-import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
@@ -18,8 +17,8 @@ public class QuestsCompletedQuestsRequirement extends AbstractRequirement {
     }
 
     @Override
-    public String getProgress(final Player player) {
-        return handler.getNumberOfCompletedQuests(player.getUniqueId()) + "/" + completedQuests;
+    public String getProgressString(UUID uuid) {
+        return handler.getNumberOfCompletedQuests(uuid) + "/" + completedQuests;
     }
 
     @Override

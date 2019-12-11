@@ -20,9 +20,10 @@ public class InGroupRequirement extends AbstractRequirement {
     }
 
     @Override
-    public String getProgress(final Player player) {
+    public String getProgressString(final Player player) {
 
-        Collection<String> groups = this.getAutorank().getPermPlugHandler().getPermissionPlugin().getPlayerGroups(player);
+        Collection<String> groups =
+                this.getAutorank().getPermPlugHandler().getPermissionPlugin().getPlayerGroups(player);
 
         for (String groupString : groups) {
             if (groupString.equalsIgnoreCase(group)) {

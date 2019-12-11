@@ -1,5 +1,6 @@
 package me.armar.plugins.autorank.pathbuilder.requirement;
 
+import io.reactivex.annotations.NonNull;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.DependencyManager;
 import me.armar.plugins.autorank.pathbuilder.result.AbstractResult;
@@ -17,7 +18,8 @@ import java.util.UUID;
  * Whenever you want to create a new requirement, you'll have to extend this
  * class.
  * <p>
- * A requirement can be seen as a task a player has to complete. A path consists of multiple requirements that should all be met to complete the path.
+ * A requirement can be seen as a task a player has to complete. A path consists of multiple requirements that should
+ * all be met to complete the path.
  *
  * @author Staartvin
  */
@@ -56,12 +58,27 @@ public abstract class AbstractRequirement {
     public abstract String getDescription();
 
     /**
-     * Get the current progress of a player on a certain requirement.
+     * Get the current progress of a player on this requirement.
      *
      * @param player Player to check for
      * @return String containing the progress
      */
-    public abstract String getProgress(Player player);
+    public String getProgressString(@NonNull Player player) {
+        return "No progress provided";
+    }
+
+    /**
+     * Get the current progress of a player on this requirement.
+     * <p>
+     * Note that requirements that do need a player to be online to check their progress (see
+     * {@link #needsOnlinePlayer()}), use {@link #getProgressString(Player)}.
+     *
+     * @param uuid UUID of the player
+     * @return String containing the progress.
+     */
+    public String getProgressString(@NonNull UUID uuid) {
+        return "No progress provided";
+    }
 
     /**
      * Get the id of this requirement. This should get assigned automatically at
@@ -199,8 +216,7 @@ public abstract class AbstractRequirement {
      * @return true if it meets the requirements; false otherwise
      */
     protected boolean meetsRequirement(Player player) {
-        return false;
-    }
+        return false; }
 
     /**
      * Set whether this requirement auto completes itself

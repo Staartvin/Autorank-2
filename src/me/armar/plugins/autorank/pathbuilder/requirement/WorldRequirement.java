@@ -13,9 +13,8 @@ public class WorldRequirement extends AbstractRequirement {
     }
 
     @Override
-    public String getProgress(final Player player) {
-        final String world = player.getWorld().getName();
-        return world + "/" + worldName;
+    public String getProgressString(final Player player) {
+        return player.getWorld().getName() + "/" + worldName;
     }
 
     @Override
@@ -23,7 +22,7 @@ public class WorldRequirement extends AbstractRequirement {
 
         final String world = player.getWorld().getName();
 
-        return (worldName != null && world.equals(worldName));
+        return world.equals(worldName);
     }
 
     @Override

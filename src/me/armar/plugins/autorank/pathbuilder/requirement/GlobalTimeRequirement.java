@@ -5,7 +5,6 @@ import me.armar.plugins.autorank.storage.StorageProvider;
 import me.armar.plugins.autorank.storage.TimeType;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
-import org.bukkit.entity.Player;
 
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
@@ -26,12 +25,11 @@ public class GlobalTimeRequirement extends AbstractRequirement {
     }
 
     @Override
-    public String getProgress(final Player player) {
+    public String getProgressString(UUID uuid) {
 
         int playTime = 0;
         try {
-            playTime = getAutorank().getPlayTimeManager().getGlobalPlayTime(TimeType.TOTAL_TIME, player
-                    .getUniqueId()).get();
+            playTime = getAutorank().getPlayTimeManager().getGlobalPlayTime(TimeType.TOTAL_TIME, uuid).get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }

@@ -5,7 +5,6 @@ import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.staartvin.plugins.pluginlibrary.Library;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
@@ -38,7 +37,7 @@ public class FoodEatenRequirement extends AbstractRequirement {
     }
 
     @Override
-    public String getProgress(final Player player) {
+    public String getProgressString(UUID uuid) {
 
         String progress = "";
 
@@ -46,7 +45,7 @@ public class FoodEatenRequirement extends AbstractRequirement {
         String foodType = foodEaten.getFoodName();
 
         final int totalFoodEaten = getStatsPlugin().getNormalStat(StatsPlugin.StatType.FOOD_EATEN,
-                player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld(), "foodType", foodType));
+                uuid, AutorankTools.makeStatsInfo("world", this.getWorld(), "foodType", foodType));
 
         if (foodType == null) {
             foodType = "food";

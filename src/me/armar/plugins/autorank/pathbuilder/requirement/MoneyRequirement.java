@@ -29,7 +29,7 @@ public class MoneyRequirement extends AbstractRequirement {
     }
 
     @Override
-    public String getProgress(final Player player) {
+    public String getProgressString(final Player player) {
 
         double money = 0;
         String currencyName = "";

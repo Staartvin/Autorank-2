@@ -4,7 +4,6 @@ import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.staartvin.plugins.pluginlibrary.Library;
-import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
@@ -26,8 +25,8 @@ public class TotalVotesRequirement extends AbstractRequirement {
     }
 
     @Override
-    public String getProgress(final Player player) {
-        final int votes = getStatsPlugin().getNormalStat(StatsPlugin.StatType.VOTES, player.getUniqueId(),
+    public String getProgressString(UUID uuid) {
+        final int votes = getStatsPlugin().getNormalStat(StatsPlugin.StatType.VOTES, uuid,
                 AutorankTools.makeStatsInfo("world", this.getWorld()));
 
         return votes + "/" + totalVotes;

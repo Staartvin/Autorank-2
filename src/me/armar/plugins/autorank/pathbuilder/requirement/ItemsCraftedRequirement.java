@@ -4,7 +4,6 @@ import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.staartvin.plugins.pluginlibrary.Library;
-import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
@@ -26,9 +25,9 @@ public class ItemsCraftedRequirement extends AbstractRequirement {
     }
 
     @Override
-    public String getProgress(final Player player) {
+    public String getProgressString(UUID uuid) {
         final int progressBar = this.getStatsPlugin().getNormalStat(StatsPlugin.StatType.ITEMS_CRAFTED,
-                player.getUniqueId(), AutorankTools.makeStatsInfo("world", this.getWorld()));
+                uuid, AutorankTools.makeStatsInfo("world", this.getWorld()));
 
         return progressBar + "/" + itemsCrafted;
     }

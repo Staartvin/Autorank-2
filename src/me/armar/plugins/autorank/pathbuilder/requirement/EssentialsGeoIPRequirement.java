@@ -3,7 +3,6 @@ package me.armar.plugins.autorank.pathbuilder.requirement;
 import me.armar.plugins.autorank.language.Lang;
 import me.staartvin.plugins.pluginlibrary.Library;
 import me.staartvin.plugins.pluginlibrary.hooks.EssentialsXHook;
-import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
@@ -18,11 +17,8 @@ public class EssentialsGeoIPRequirement extends AbstractRequirement {
     }
 
     @Override
-    public String getProgress(final Player player) {
-
-        final String realLocation = essHandler.getGeoIPLocation(player.getUniqueId());
-
-        return realLocation + "/" + location;
+    public String getProgressString(UUID uuid) {
+        return essHandler.getGeoIPLocation(uuid) + "/" + location;
     }
 
     @Override

@@ -3,7 +3,6 @@ package me.armar.plugins.autorank.pathbuilder.requirement;
 import me.armar.plugins.autorank.language.Lang;
 import me.staartvin.plugins.pluginlibrary.Library;
 import me.staartvin.plugins.pluginlibrary.hooks.BattleLevelsHook;
-import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
@@ -19,8 +18,8 @@ public class BattleLevelsScoreRequirement extends AbstractRequirement {
     }
 
     @Override
-    public String getProgress(final Player player) {
-        return handler.getScore(player.getUniqueId()) + "/" + neededScore;
+    public String getProgressString(UUID uuid) {
+        return handler.getScore(uuid) + "/" + neededScore;
     }
 
     @Override

@@ -3,7 +3,6 @@ package me.armar.plugins.autorank.pathbuilder.requirement;
 import me.armar.plugins.autorank.language.Lang;
 import me.staartvin.plugins.pluginlibrary.Library;
 import me.staartvin.plugins.pluginlibrary.hooks.SavageFactionsHook;
-import org.bukkit.entity.Player;
 
 import java.text.DecimalFormat;
 import java.util.UUID;
@@ -27,9 +26,9 @@ public class SavageFactionsPowerRequirement extends AbstractRequirement {
     }
 
     @Override
-    public String getProgress(final Player player) {
+    public String getProgressString(UUID uuid) {
         final DecimalFormat df = new DecimalFormat("#.##");
-        final String doubleRounded = df.format(handler.getFactionPower(player.getUniqueId()));
+        final String doubleRounded = df.format(handler.getFactionPower(uuid));
 
         return doubleRounded + "/" + factionPower;
     }

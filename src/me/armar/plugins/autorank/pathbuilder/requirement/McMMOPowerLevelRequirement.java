@@ -16,7 +16,7 @@ public class McMMOPowerLevelRequirement extends AbstractRequirement {
     }
 
     @Override
-    public String getProgress(final Player player) {
+    public String getProgressString(final Player player) {
         final int level = handler.getPowerLevel(player);
 
         return level + "/" + powerLevel;

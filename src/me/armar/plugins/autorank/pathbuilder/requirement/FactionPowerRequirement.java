@@ -26,7 +26,7 @@ public class FactionPowerRequirement extends AbstractRequirement {
     }
 
     @Override
-    public String getProgress(final Player player) {
+    public String getProgressString(final Player player) {
         final DecimalFormat df = new DecimalFormat("#.##");
         final String doubleRounded = df.format(handler.getFactionPower(player.getUniqueId()));
 

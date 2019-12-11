@@ -5,7 +5,6 @@ import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.staartvin.plugins.pluginlibrary.Library;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
@@ -44,16 +43,16 @@ public class BlocksBrokenRequirement extends AbstractRequirement {
 
     @SuppressWarnings("deprecation")
     @Override
-    public String getProgress(final Player player) {
+    public String getProgressString(UUID uuid) {
 
         int progress = 0;
 
         if (wrapper.getItem() == null) {
             // No material was given, so only check the number of blocks broken.
-            progress = getStatsPlugin().getNormalStat(StatsPlugin.StatType.TOTAL_BLOCKS_BROKEN, player.getUniqueId(),
+            progress = getStatsPlugin().getNormalStat(StatsPlugin.StatType.TOTAL_BLOCKS_BROKEN, uuid,
                     AutorankTools.makeStatsInfo("world", this.getWorld()));
         } else {
-            progress = getStatsPlugin().getNormalStat(StatsPlugin.StatType.BLOCKS_BROKEN, player.getUniqueId(),
+            progress = getStatsPlugin().getNormalStat(StatsPlugin.StatType.BLOCKS_BROKEN, uuid,
                     AutorankTools.makeStatsInfo("world", this.getWorld(), "block", wrapper.getItem().getType()
                             .name()));
         }

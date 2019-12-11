@@ -119,7 +119,7 @@ public class TrackCommand extends AutorankCommand {
 
         player.sendMessage(ChatColor.RED + Lang.REQUIREMENT_PROGRESS.getConfigValue(completionID + ""));
         player.sendMessage(ChatColor.AQUA + holder.getDescription());
-        player.sendMessage(ChatColor.GREEN + "Current: " + ChatColor.GOLD + holder.getProgress(player));
+        player.sendMessage(ChatColor.GREEN + "Current: " + ChatColor.GOLD + holder.getProgress(player.getUniqueId()));
 
         return true;
     }

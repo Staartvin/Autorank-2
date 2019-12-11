@@ -21,7 +21,7 @@ public class PermissionRequirement extends AbstractRequirement {
     }
 
     @Override
-    public String getProgress(final Player player) {
+    public String getProgressString(final Player player) {
         final String progress = "unknown";
         return progress;
     }

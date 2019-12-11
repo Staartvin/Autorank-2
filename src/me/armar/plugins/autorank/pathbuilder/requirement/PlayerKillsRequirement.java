@@ -4,7 +4,6 @@ import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.staartvin.plugins.pluginlibrary.Library;
-import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
@@ -25,8 +24,8 @@ public class PlayerKillsRequirement extends AbstractRequirement {
     }
 
     @Override
-    public String getProgress(final Player player) {
-        final int killed = getStatsPlugin().getNormalStat(StatsPlugin.StatType.PLAYERS_KILLED, player.getUniqueId(),
+    public String getProgressString(UUID uuid) {
+        final int killed = getStatsPlugin().getNormalStat(StatsPlugin.StatType.PLAYERS_KILLED, uuid,
                 AutorankTools.makeStatsInfo("world", this.getWorld()));
 
         return killed + "/" + totalPlayersKilled + " player(s)";

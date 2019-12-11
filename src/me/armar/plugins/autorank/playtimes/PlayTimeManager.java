@@ -92,8 +92,6 @@ public class PlayTimeManager {
             // Use internal system of Autorank.
             playTime = plugin.getStorageManager().getPrimaryStorageProvider().getPlayerTime(TimeType.TOTAL_TIME,
                     uuid).getNow(0) * 60;
-            System.out.println("PLAYTIME: " + plugin.getStorageManager().getPrimaryStorageProvider().getPlayerTime(TimeType.TOTAL_TIME, uuid).getNow(0));
-            System.out.println("* 60: " + (plugin.getStorageManager().getPrimaryStorageProvider().getPlayerTime(TimeType.TOTAL_TIME, uuid).getNow(0) * 60));
         }
 
         return playTime;

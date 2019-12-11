@@ -22,7 +22,7 @@ public class McMMOSkillLevelRequirement extends AbstractRequirement {
     }
 
     @Override
-    public String getProgress(final Player player) {
+    public String getProgressString(final Player player) {
         int level = 0;
 
         if (skillName.equalsIgnoreCase("all")) {

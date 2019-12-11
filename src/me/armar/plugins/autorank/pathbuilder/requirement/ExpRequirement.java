@@ -22,7 +22,7 @@ public class ExpRequirement extends AbstractRequirement {
     }
 
     @Override
-    public String getProgress(final Player player) {
+    public String getProgressString(final Player player) {
         final int expLevel = player.getLevel();
 
         return expLevel + "/" + minExp;

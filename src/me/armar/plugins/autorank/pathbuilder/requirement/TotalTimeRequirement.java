@@ -5,7 +5,6 @@ import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
@@ -27,10 +26,10 @@ public class TotalTimeRequirement extends AbstractRequirement {
     }
 
     @Override
-    public String getProgress(final Player player) {
+    public String getProgressString(UUID uuid) {
 
         // the time he first joined the server
-        final long joinTime = player.getFirstPlayed();
+        final long joinTime = Bukkit.getOfflinePlayer(uuid).getFirstPlayed();
 
         final long currentTime = System.currentTimeMillis();
 

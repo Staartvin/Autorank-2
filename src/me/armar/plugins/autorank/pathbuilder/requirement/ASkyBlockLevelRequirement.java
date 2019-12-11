@@ -3,7 +3,6 @@ package me.armar.plugins.autorank.pathbuilder.requirement;
 import me.armar.plugins.autorank.language.Lang;
 import me.staartvin.plugins.pluginlibrary.Library;
 import me.staartvin.plugins.pluginlibrary.hooks.ASkyBlockHook;
-import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
@@ -26,11 +25,8 @@ public class ASkyBlockLevelRequirement extends AbstractRequirement {
     }
 
     @Override
-    public String getProgress(final Player player) {
-
-        final int islandLevel = handler.getIslandLevel(player.getUniqueId());
-
-        return islandLevel + "/" + this.islandLevel;
+    public String getProgressString(UUID uuid) {
+        return handler.getIslandLevel(uuid) + "/" + this.islandLevel;
     }
 
     @Override

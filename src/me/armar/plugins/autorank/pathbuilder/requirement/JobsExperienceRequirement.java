@@ -25,7 +25,7 @@ public class JobsExperienceRequirement extends AbstractRequirement {
     }
 
     @Override
-    public String getProgress(final Player player) {
+    public String getProgressString(final Player player) {
 
         double points = -1;
 
