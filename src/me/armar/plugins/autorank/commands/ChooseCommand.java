@@ -77,7 +77,7 @@ public class ChooseCommand extends AutorankCommand {
         }
 
         // Assign path to the player.
-        plugin.getPathManager().assignPath(targetPath, player.getUniqueId());
+        plugin.getPathManager().assignPath(targetPath, player.getUniqueId(), false);
 
         // Give player confirmation message.
         sender.sendMessage(Lang.CHOSEN_PATH.getConfigValue(targetPath.getDisplayName()));

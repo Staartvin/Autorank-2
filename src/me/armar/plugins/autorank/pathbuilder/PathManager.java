@@ -327,13 +327,14 @@ public class PathManager {
      * Assign a path to a player. This means that the path is now set to active for a player. A path can only be
      * assigned to the player if it is eligible ({@link Path#isEligible(UUID)}) for the player.
      *
-     * @param uuid Player to assign path to
-     * @param path Path to check
+     * @param uuid    Player to assign path to
+     * @param path    Path to check
+     * @param byForce Whether we force the path to the player, even if it is not eligible.
      * @throws IllegalArgumentException if the path is not eligible (see {@link Path#isEligible(UUID)}).
      */
-    public void assignPath(Path path, UUID uuid) throws IllegalArgumentException {
+    public void assignPath(Path path, UUID uuid, boolean byForce) throws IllegalArgumentException {
 
-        if (!path.isEligible(uuid)) {
+        if (!path.isEligible(uuid) && !byForce) {
             throw new IllegalArgumentException("Path is not eligible, so cannot be assigned to the player!");
         }
 
@@ -406,7 +407,7 @@ public class PathManager {
                     continue;
                 }
 
-                assignPath(path, uuid);
+                assignPath(path, uuid, false);
 
                 Player onlinePlayer = Bukkit.getOfflinePlayer(uuid).getPlayer();
 

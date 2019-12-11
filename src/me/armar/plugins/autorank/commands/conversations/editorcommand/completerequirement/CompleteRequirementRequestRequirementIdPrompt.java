@@ -35,7 +35,7 @@ public class CompleteRequirementRequestRequirementIdPrompt extends StringPrompt 
         String playerName = (String) conversationContext.getSessionData(SelectPlayerPrompt.KEY_PLAYERNAME);
 
         // Check if the requirement id is valid
-        if (requirementId < 0 || requirementId >= path.getRequirements().size()) {
+        if (path.getRequirement(requirementId) == null) {
             conversable.sendRawMessage(ChatColor.RED + "That requirement id does not exist for " + ChatColor.GRAY + path.getDisplayName());
             return this;
         }

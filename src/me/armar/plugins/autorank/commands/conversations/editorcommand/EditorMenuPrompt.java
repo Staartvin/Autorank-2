@@ -50,6 +50,7 @@ public class EditorMenuPrompt extends FixedSetPrompt {
 
     @Override
     public @NotNull String getPromptText(@NotNull ConversationContext conversationContext) {
+        conversationContext.setSessionData(KEY_ACTION_TYPE, null);
         return ChatColor.GOLD + "What type of edit do you want to make? " + ChatColor.LIGHT_PURPLE + this.formatFixedSet();
     }
 }

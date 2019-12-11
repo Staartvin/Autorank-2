@@ -326,8 +326,7 @@ public class Path {
      */
     public void completeRequirement(UUID uuid, int reqId) {
 
-        CompositeRequirement requirement = this.getRequirements().stream().filter(compositeRequirement ->
-                compositeRequirement.getRequirementId() == reqId).findFirst().orElse(null);
+        CompositeRequirement requirement = this.getRequirement(reqId);
 
         if (requirement == null) return;
 
@@ -666,5 +665,16 @@ public class Path {
 
         // If a path does not meet the prerequisites of a path, the player cannot take the path.
         return this.meetsPrerequisites(uuid);
+    }
+
+    /**
+     * Get the requirement that corresponds to the given requirement id.
+     *
+     * @param id ID of the requirement to find.
+     * @return Requirement if found, otherwise null.
+     */
+    public CompositeRequirement getRequirement(int id) {
+        return this.getRequirements().stream().filter(compositeRequirement ->
+                compositeRequirement.getRequirementId() == id).findFirst().orElse(null);
     }
 }

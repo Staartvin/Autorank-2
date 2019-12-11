@@ -13,6 +13,7 @@ public class ConversationResult {
 
     private final boolean endedSuccessfully;
     private final Conversable conversable;
+    private boolean endedByKeyword;
 
     private Map<Object, Object> conversationStorage = new HashMap<>();
 
@@ -71,5 +72,47 @@ public class ConversationResult {
         }
 
         return object.toString();
+    }
+
+    /**
+     * Convenience method to get a boolean from the conversation storage.
+     * Also see {@link #getStorageObject(Object)}.
+     *
+     * @param key Key to get the data of.
+     * @return false if no object was stored with this key, otherwise the boolean value is returned.
+     */
+    public boolean getStorageBoolean(Object key) {
+        Object object = getStorageObject(key);
+
+        if (object == null) {
+            return false;
+        }
+
+        return (boolean) object;
+    }
+
+    /**
+     * Convenience method to get an Integer from the conversation storage.
+     * Also see {@link #getStorageObject(Object)}.
+     *
+     * @param key Key to get the data of.
+     * @return the integer that was stored for the given key, or null if nothing was stored.
+     */
+    public Integer getStorageInteger(Object key) {
+        Object object = getStorageObject(key);
+
+        if (object == null) {
+            return null;
+        }
+
+        return (Integer) object;
+    }
+
+    public boolean isEndedByKeyword() {
+        return endedByKeyword;
+    }
+
+    public void setEndedByKeyword(boolean endedByKeyword) {
+        this.endedByKeyword = endedByKeyword;
     }
 }

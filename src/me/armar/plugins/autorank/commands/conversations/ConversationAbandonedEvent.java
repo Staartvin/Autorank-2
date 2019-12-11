@@ -1,10 +1,7 @@
 package me.armar.plugins.autorank.commands.conversations;
 
 import org.bukkit.ChatColor;
-import org.bukkit.conversations.Conversable;
-import org.bukkit.conversations.ConversationAbandonedListener;
-import org.bukkit.conversations.ConversationCanceller;
-import org.bukkit.conversations.InactivityConversationCanceller;
+import org.bukkit.conversations.*;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -43,17 +40,20 @@ public class ConversationAbandonedEvent implements ConversationAbandonedListener
         // Set the conversation storage so it can be used later.
         result.setConversationStorage(conversationAbandonedEvent.getContext().getAllSessionData());
 
-        // Indicate to conversation that it has ended.
-        conversation.conversationEnded(result);
-
         ConversationCanceller canceller = conversationAbandonedEvent.getCanceller();
 
         // Inform the user that the conversation has ended and that the player may talk freely again.
-        if (!(canceller instanceof InactivityConversationCanceller)) {
-            conversable.sendRawMessage(ChatColor.GRAY + "This conversation has ended.");
-        } else {
+        if (canceller instanceof InactivityConversationCanceller) {
             conversable.sendRawMessage(ChatColor.GRAY + "This conversation has ended because you didn't reply in time" +
                     ".");
+        } else if (canceller instanceof ExactMatchConversationCanceller) {
+            conversable.sendRawMessage(ChatColor.GRAY + "This conversation has been abandoned by you.");
+            result.setEndedByKeyword(true);
+        } else {
+            conversable.sendRawMessage(ChatColor.GRAY + "This conversation has ended.");
         }
+
+        // Indicate to conversation that it has ended.
+        conversation.conversationEnded(result);
     }
 }
