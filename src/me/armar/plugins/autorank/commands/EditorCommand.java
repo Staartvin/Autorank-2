@@ -13,6 +13,7 @@ import me.armar.plugins.autorank.commands.conversations.editorcommand.completere
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.pathbuilder.Path;
 import me.armar.plugins.autorank.pathbuilder.holders.CompositeRequirement;
+import me.armar.plugins.autorank.permissions.AutorankPermission;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -44,9 +45,6 @@ public class EditorCommand extends AutorankCommand {
             UUID uuid = (UUID) callback.getStorageObject(SelectPlayerPrompt.KEY_UUID);
             String playerName = callback.getStorageString(SelectPlayerPrompt.KEY_PLAYERNAME);
 
-            System.out.println("ACTIONTYPE: " + actionType);
-            System.out.println("ENDED BY KEYWORD: " + callback.isEndedByKeyword());
-
             // Don't do anything when no action type is selected.
             if (actionType == null || callback.isEndedByKeyword()) {
                 return;
@@ -56,6 +54,10 @@ public class EditorCommand extends AutorankCommand {
 
                 boolean assignedByForce =
                         callback.getStorageBoolean(AssignPathByForcePrompt.KEY_ASSIGN_PATH_BY_FORCE);
+
+                // Check for the correct permissions.
+                if (!this.hasPermission(assignedByForce ? AutorankPermission.EDITOR_ASSIGN_PATH_FORCE :
+                        AutorankPermission.EDITOR_ASSIGN_PATH, sender)) return;
 
                 String pathToAssign = callback.getStorageString(AssignPathPrompt.KEY_PATH_TO_BE_ASSIGNED);
 
@@ -79,6 +81,9 @@ public class EditorCommand extends AutorankCommand {
                 }
             } else if (actionType.equals(EditorMenuPrompt.ACTION_TYPE_UNASSIGN_PATH)) {
 
+                // Check for the correct permission.
+                if (!this.hasPermission(AutorankPermission.EDITOR_UNASSIGN_PATH, sender)) return;
+
                 String pathToUnAssign = callback.getStorageString(UnAssignPathPrompt.KEY_PATH_TO_BE_UNASSIGNED);
 
                 if (pathToUnAssign == null) {
@@ -95,6 +100,10 @@ public class EditorCommand extends AutorankCommand {
                 plugin.getPathManager().deassignPath(path, uuid);
                 sender.sendMessage(ChatColor.GREEN + "Unassigned '" + ChatColor.GOLD + path.getDisplayName() + ChatColor.GREEN + "' from " + playerName);
             } else if (actionType.equals(EditorMenuPrompt.ACTION_TYPE_COMPLETE_PATH)) {
+
+                // Check for the correct permission.
+                if (!this.hasPermission(AutorankPermission.EDITOR_COMPLETE_PATH, sender)) return;
+
                 String pathToComplete = callback.getStorageString(CompletePathPrompt.KEY_PATH_TO_BE_COMPLETED);
 
                 if (pathToComplete == null) {
@@ -111,6 +120,10 @@ public class EditorCommand extends AutorankCommand {
                 plugin.getPathManager().completePath(path, uuid);
 
             } else if (actionType.equals(EditorMenuPrompt.ACTION_TYPE_COMPLETE_REQUIREMENT)) {
+
+                // Check for the correct permission.
+                if (!this.hasPermission(AutorankPermission.EDITOR_COMPLETE_REQUIREMENT, sender)) return;
+
                 String pathOfRequirement = callback.getStorageString(CompleteRequirementPrompt.KEY_PATH_OF_REQUIREMENT);
 
                 if (pathOfRequirement == null) {

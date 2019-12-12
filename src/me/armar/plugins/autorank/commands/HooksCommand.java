@@ -25,6 +25,8 @@ public class HooksCommand extends AutorankCommand {
     @Override
     public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
+        if (!this.hasPermission(getPermission(), sender)) return true;
+
         if (!plugin.getDependencyManager().getDependency(AutorankDependency.PLUGINLIBRARY).isAvailable()) {
             sender.sendMessage(ChatColor.RED + "Cannot show dependencies as PluginLibrary is not installed");
             return true;

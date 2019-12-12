@@ -62,8 +62,7 @@ public class AddCommand extends AutorankCommand {
                         Lang.PLAYTIME_CHANGED.getConfigValue(playerName,
                                 AutorankTools.timeToString(newPlayerTime, AutorankTools.Time.MINUTES)));
             } else {
-                AutorankTools.sendColoredMessage(sender, Lang.INVALID_FORMAT.getConfigValue("/ar add [player] " +
-                        "[value]"));
+                AutorankTools.sendColoredMessage(sender, Lang.INVALID_FORMAT.getConfigValue(this.getUsage()));
             }
         });
 

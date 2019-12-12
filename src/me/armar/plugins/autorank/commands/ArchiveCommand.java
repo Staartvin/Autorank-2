@@ -32,7 +32,7 @@ public class ArchiveCommand extends AutorankCommand {
 
         if (args.length != 2) {
 
-            sender.sendMessage(Lang.INVALID_FORMAT.getConfigValue("/ar archive <minimum>"));
+            sender.sendMessage(Lang.INVALID_FORMAT.getConfigValue(this.getUsage()));
             return true;
         }
 

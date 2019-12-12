@@ -29,7 +29,7 @@ public class DeactivateCommand extends AutorankCommand {
     public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 
         // This command will give a preview of a certain path of ranking.
-        if (!this.hasPermission(AutorankPermission.DEACTIVATE_PATH, sender)) {
+        if (!this.hasPermission(getPermission(), sender)) {
             return true;
         }
 
