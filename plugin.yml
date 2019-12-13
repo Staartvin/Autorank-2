@@ -6,7 +6,7 @@ authors: [Staartvin, Armarr]
 softdepend: [Vault, GroupManager, Privileges, bPermissions, PermissionsEx, PermissionsBukkit, DroxPerms, PowerfulPerms, Statz]
 depend: [PluginLibrary]
 description: Reward players based on their stats.
-api-version: 1.14
+api-version: 1.13
 commands:
   autorank:
     description: Master command of AutoRank
