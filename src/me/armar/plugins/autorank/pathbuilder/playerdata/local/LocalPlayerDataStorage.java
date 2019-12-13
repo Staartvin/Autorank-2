@@ -1,4 +1,4 @@
-package me.armar.plugins.autorank.pathbuilder.config;
+package me.armar.plugins.autorank.pathbuilder.playerdata.local;
 
 import io.reactivex.annotations.NonNull;
 import me.armar.plugins.autorank.Autorank;
@@ -19,11 +19,11 @@ import java.util.concurrent.ExecutionException;
  *
  * @author Staartvin
  */
-public class PlayerDataConfig extends AbstractConfig {
+public class LocalPlayerDataStorage extends AbstractConfig {
 
     private boolean convertingData = false;
 
-    public PlayerDataConfig(final Autorank instance) {
+    public LocalPlayerDataStorage(final Autorank instance) {
         setPlugin(instance);
         setFileName("/playerdata/PlayerData.yml");
 

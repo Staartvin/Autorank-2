@@ -93,7 +93,8 @@ public class PlayerJoinListener implements Listener {
 
     private void performPendingResults(Player player) {
         // First perform all results when the player has joined a path
-        List<String> joinedPaths = plugin.getPlayerData().getChosenPathsMissingResults(player.getUniqueId());
+        List<String> joinedPaths =
+                plugin.getLocalPlayerDataStorage().getChosenPathsMissingResults(player.getUniqueId());
 
         for (String pathName : joinedPaths) {
             Path path = plugin.getPathManager().findPathByInternalName(pathName, false);
@@ -102,19 +103,19 @@ public class PlayerJoinListener implements Listener {
                 path.performResultsUponChoosing(player);
             }
 
-            plugin.getPlayerData().removeChosenPathMissingResults(player.getUniqueId(), pathName);
+            plugin.getLocalPlayerDataStorage().removeChosenPathMissingResults(player.getUniqueId(), pathName);
         }
 
         // Then perform results when a player has completed a requirement.
         for (Path path : plugin.getPathManager().getAllPaths()) {
             List<Integer> completedRequirements =
-                    plugin.getPlayerData().getCompletedRequirementsMissingResults(player.getUniqueId(),
+                    plugin.getLocalPlayerDataStorage().getCompletedRequirementsMissingResults(player.getUniqueId(),
                             path.getInternalName());
 
             for (int requirementId : completedRequirements) {
                 path.completeRequirement(player.getUniqueId(), requirementId);
 
-                plugin.getPlayerData().removeCompletedRequirementMissingResults(player.getUniqueId(),
+                plugin.getLocalPlayerDataStorage().removeCompletedRequirementMissingResults(player.getUniqueId(),
                         path.getInternalName(), requirementId);
             }
         }
@@ -122,7 +123,7 @@ public class PlayerJoinListener implements Listener {
 
         // Lastly perform results when a player has completed a path.
         List<String> completedPaths =
-                plugin.getPlayerData().getCompletedPathsMissingResults(player.getUniqueId());
+                plugin.getLocalPlayerDataStorage().getCompletedPathsMissingResults(player.getUniqueId());
 
         for (String pathName : completedPaths) {
             Path path = plugin.getPathManager().findPathByInternalName(pathName, false);
@@ -133,7 +134,7 @@ public class PlayerJoinListener implements Listener {
 
             System.out.println("Performing result of path " + pathName);
 
-            plugin.getPlayerData().removeCompletedPathMissingResults(player.getUniqueId(), pathName);
+            plugin.getLocalPlayerDataStorage().removeCompletedPathMissingResults(player.getUniqueId(), pathName);
         }
 
 

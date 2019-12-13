@@ -12,11 +12,29 @@ import me.armar.plugins.autorank.hooks.DependencyManager.AutorankDependency;
 public class SettingsConfig extends AbstractConfig {
 
     /**
-     * The different type of credentials that is used to connect to a MySQL
-     * database.
+     * Get the value of a specific MySQL credential.
+     *
+     * @param option Type of credential
+     * @return the value for the given MySQL credential.
      */
-    public enum MySQLCredentials {
-        DATABASE, HOSTNAME, PASSWORD, TABLE, USERNAME
+    public String getMySQLCredentials(final MySQLCredentials option) {
+        switch (option) {
+            case HOSTNAME:
+                return this.getConfig().getString("sql.hostname");
+            case USERNAME:
+                return this.getConfig().getString("sql.username");
+            case PASSWORD:
+                return this.getConfig().getString("sql.password");
+            case DATABASE:
+                return this.getConfig().getString("sql.database");
+            case SERVER_NAME:
+                return this.getConfig().getString("sql.server name", "")
+                        .replace("%ip%", getPlugin().getServer().getIp())
+                        .replace("%port%", getPlugin().getServer().getPort() + "")
+                        .replace("%name%", getPlugin().getServer().getName());
+            default:
+                throw new IllegalArgumentException(option + " is not a valid MySQL credential option");
+        }
     }
 
     public SettingsConfig(final Autorank instance) {
@@ -85,26 +103,13 @@ public class SettingsConfig extends AbstractConfig {
     }
 
     /**
-     * Get the value of a specific MySQL credential.
+     * Check whether Autorank should broadcast a message to all online players
+     * when a {@link me.armar.plugins.autorank.storage.TimeType} file is reset.
      *
-     * @param option Type of credential
-     * @return the value for the given MySQL credential.
+     * @return true if Autorank should notice all players. False otherwise.
      */
-    public String getMySQLCredentials(final MySQLCredentials option) {
-        switch (option) {
-            case HOSTNAME:
-                return this.getConfig().getString("sql.hostname");
-            case USERNAME:
-                return this.getConfig().getString("sql.username");
-            case PASSWORD:
-                return this.getConfig().getString("sql.password");
-            case DATABASE:
-                return this.getConfig().getString("sql.database");
-            case TABLE:
-                return this.getConfig().getString("sql.table");
-            default:
-                throw new IllegalArgumentException(option + " is not a valid MySQL credential option");
-        }
+    public boolean shouldBroadcastDataReset() {
+        return this.getConfig().getBoolean("broadcast resetting of data files", true);
     }
 
     /**
@@ -128,13 +133,11 @@ public class SettingsConfig extends AbstractConfig {
     }
 
     /**
-     * Check whether Autorank should broadcast a message to all online players
-     * when a {@link TimeType} file is reset.
-     *
-     * @return true if Autorank should notice all players. False otherwise.
+     * The different type of credentials that is used to connect to a MySQL
+     * database.
      */
-    public boolean shouldBroadcastDataReset() {
-        return this.getConfig().getBoolean("broadcast resetting of data files", true);
+    public enum MySQLCredentials {
+        DATABASE, HOSTNAME, PASSWORD, SERVER_NAME, USERNAME
     }
 
     /**

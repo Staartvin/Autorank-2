@@ -3,8 +3,8 @@ package me.armar.plugins.autorank.pathbuilder;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.pathbuilder.builders.PathBuilder;
-import me.armar.plugins.autorank.pathbuilder.config.PlayerDataConfig;
 import me.armar.plugins.autorank.pathbuilder.holders.CompositeRequirement;
+import me.armar.plugins.autorank.pathbuilder.playerdata.local.LocalPlayerDataStorage;
 import me.armar.plugins.autorank.pathbuilder.result.AbstractResult;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -103,7 +103,7 @@ public class PathManager {
      * @return paths that a player has chosen and is currently on.
      */
     public List<Path> getActivePaths(UUID uuid) {
-        Collection<String> activePathNames = plugin.getPlayerData().getActivePaths(uuid);
+        Collection<String> activePathNames = plugin.getLocalPlayerDataStorage().getActivePaths(uuid);
 
         List<Path> activePaths = new ArrayList<>();
 
@@ -126,7 +126,7 @@ public class PathManager {
      * @param uuid UUID of the player.
      */
     public void resetProgressOnActivePaths(UUID uuid) {
-        plugin.getPlayerData().setActivePaths(uuid, new ArrayList<>());
+        plugin.getLocalPlayerDataStorage().setActivePaths(uuid, new ArrayList<>());
     }
 
     /**
@@ -137,8 +137,8 @@ public class PathManager {
      * @param path Path to reset progress of.
      */
     public void resetProgressOfPath(Path path, UUID uuid) {
-        plugin.getPlayerData().setCompletedPrerequisites(uuid, path.getInternalName(), new ArrayList<>());
-        plugin.getPlayerData().setCompletedRequirements(uuid, path.getInternalName(), new ArrayList<>());
+        plugin.getLocalPlayerDataStorage().setCompletedPrerequisites(uuid, path.getInternalName(), new ArrayList<>());
+        plugin.getLocalPlayerDataStorage().setCompletedRequirements(uuid, path.getInternalName(), new ArrayList<>());
     }
 
     /**
@@ -147,8 +147,8 @@ public class PathManager {
      * @param uuid UUID of the player
      */
     public void resetActivePaths(UUID uuid) {
-        for (String activePathName : plugin.getPlayerData().getActivePaths(uuid)) {
-            plugin.getPlayerData().removeActivePath(uuid, activePathName);
+        for (String activePathName : plugin.getLocalPlayerDataStorage().getActivePaths(uuid)) {
+            plugin.getLocalPlayerDataStorage().removeActivePath(uuid, activePathName);
         }
     }
 
@@ -161,7 +161,7 @@ public class PathManager {
      * @return a list of paths a player has completed.
      */
     public List<Path> getCompletedPaths(UUID uuid) {
-        Collection<String> completedPathsNames = plugin.getPlayerData().getCompletedPaths(uuid);
+        Collection<String> completedPathsNames = plugin.getLocalPlayerDataStorage().getCompletedPaths(uuid);
 
         List<Path> completedPaths = new ArrayList<>();
 
@@ -184,8 +184,8 @@ public class PathManager {
      * @param uuid UUID of the player
      */
     public void resetCompletedPaths(UUID uuid) {
-        for (String completedPath : plugin.getPlayerData().getCompletedPaths(uuid)) {
-            plugin.getPlayerData().removeCompletedPath(uuid, completedPath);
+        for (String completedPath : plugin.getLocalPlayerDataStorage().getCompletedPaths(uuid)) {
+            plugin.getLocalPlayerDataStorage().removeCompletedPath(uuid, completedPath);
         }
     }
 
@@ -198,7 +198,7 @@ public class PathManager {
      * @param reqId Id of the requirement.
      */
     public void addCompletedRequirement(UUID uuid, Path path, int reqId) {
-        plugin.getPlayerData().addCompletedRequirement(uuid, path.getInternalName(), reqId);
+        plugin.getLocalPlayerDataStorage().addCompletedRequirement(uuid, path.getInternalName(), reqId);
     }
 
     /**
@@ -210,7 +210,7 @@ public class PathManager {
      * @return true if the player has completed the requirement, false otherwise.
      */
     public boolean hasCompletedRequirement(UUID uuid, Path path, int reqId) {
-        return plugin.getPlayerData().hasCompletedRequirement(uuid, path.getInternalName(), reqId);
+        return plugin.getLocalPlayerDataStorage().hasCompletedRequirement(uuid, path.getInternalName(), reqId);
     }
 
     /**
@@ -341,15 +341,15 @@ public class PathManager {
         String internalName = path.getInternalName();
 
         // Add path as an active path.
-        plugin.getPlayerData().addActivePath(uuid, internalName);
+        plugin.getLocalPlayerDataStorage().addActivePath(uuid, internalName);
 
         // Only reset progress if there was no progress stored.
         if (!path.shouldStoreProgressOnDeactivation()) {
             // Reset progress of requirements
-            plugin.getPlayerData().setCompletedRequirements(uuid, internalName, new ArrayList<>());
+            plugin.getLocalPlayerDataStorage().setCompletedRequirements(uuid, internalName, new ArrayList<>());
 
             // Reset progress of prerequisites for a path.
-            plugin.getPlayerData().setCompletedPrerequisites(uuid, internalName, new ArrayList<>());
+            plugin.getLocalPlayerDataStorage().setCompletedPrerequisites(uuid, internalName, new ArrayList<>());
         }
 
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
@@ -383,7 +383,7 @@ public class PathManager {
         }
 
         // Remove active path of a player.
-        plugin.getPlayerData().removeActivePath(uuid, path.getInternalName());
+        plugin.getLocalPlayerDataStorage().removeActivePath(uuid, path.getInternalName());
     }
 
     /**
@@ -435,10 +435,10 @@ public class PathManager {
     public boolean completePath(Path path, UUID uuid) {
 
         // Add progress of completed requirements
-        plugin.getPlayerData().addCompletedPath(uuid, path.getInternalName());
+        plugin.getLocalPlayerDataStorage().addCompletedPath(uuid, path.getInternalName());
 
         // Remove path from active paths.
-        plugin.getPlayerData().removeActivePath(uuid, path.getInternalName());
+        plugin.getLocalPlayerDataStorage().removeActivePath(uuid, path.getInternalName());
 
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
 
@@ -464,9 +464,9 @@ public class PathManager {
     /**
      * Get the storage of player data regarding paths and requirements.
      *
-     * @return {@link PlayerDataConfig} object.
+     * @return {@link LocalPlayerDataStorage} object.
      */
-    protected PlayerDataConfig getPlayerDataStorage() {
-        return plugin.getPlayerData();
+    protected LocalPlayerDataStorage getPlayerDataStorage() {
+        return plugin.getLocalPlayerDataStorage();
     }
 }

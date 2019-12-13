@@ -50,7 +50,7 @@ sql:
     username: root
     password: ''
     database: minecraft
-    table: autorank
+    server name: '%name%-default'
 # All these options are for configuring your MySQL database with Autorank.
 # Hostname has to include a port, but doesn't have to be port 3306.
 

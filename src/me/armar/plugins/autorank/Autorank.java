@@ -18,7 +18,8 @@ import me.armar.plugins.autorank.listeners.PlayerQuitListener;
 import me.armar.plugins.autorank.pathbuilder.PathManager;
 import me.armar.plugins.autorank.pathbuilder.builders.RequirementBuilder;
 import me.armar.plugins.autorank.pathbuilder.builders.ResultBuilder;
-import me.armar.plugins.autorank.pathbuilder.config.PlayerDataConfig;
+import me.armar.plugins.autorank.pathbuilder.playerdata.global.GlobalPlayerDataStorage;
+import me.armar.plugins.autorank.pathbuilder.playerdata.local.LocalPlayerDataStorage;
 import me.armar.plugins.autorank.pathbuilder.requirement.*;
 import me.armar.plugins.autorank.pathbuilder.result.*;
 import me.armar.plugins.autorank.permissions.PermissionsPluginManager;
@@ -96,7 +97,10 @@ public class Autorank extends JavaPlugin {
     private InternalPropertiesConfig internalPropertiesConfig;
     private PathsConfig pathsConfig;
     private DefaultBehaviorConfig defaultBehaviorConfig;
-    private PlayerDataConfig playerDataConfig;
+
+    // Data storage
+    private LocalPlayerDataStorage localPlayerDataStorage;
+    private GlobalPlayerDataStorage globalPlayerDataStorage;
 
     public static Autorank getInstance() {
         return autorank;
@@ -149,14 +153,17 @@ public class Autorank extends JavaPlugin {
         setSettingsConfig(new SettingsConfig(this));
         setInternalPropertiesConfig(new InternalPropertiesConfig(this));
         setDefaultBehaviorConfig(new DefaultBehaviorConfig((this)));
-        setPlayerData(new PlayerDataConfig(this));
+
+        // Load data storages
+        setLocalPlayerDataStorage(new LocalPlayerDataStorage(this));
+//        setGlobalPlayerDataStorage(new GlobalPlayerDataStorage(this));
 
         // Create new configs
         this.getDefaultBehaviorConfig().loadConfig();
         this.getPathsConfig().loadConfig();
         this.getSettingsConfig().loadConfig();
         this.getInternalPropertiesConfig().loadConfig();
-        this.getPlayerData().loadConfig();
+        this.getLocalPlayerDataStorage().loadConfig();
 
         // ------------- Initialize managers -------------
 
@@ -791,11 +798,19 @@ public class Autorank extends JavaPlugin {
         this.taskManager = taskManager;
     }
 
-    public PlayerDataConfig getPlayerData() {
-        return playerDataConfig;
+    public LocalPlayerDataStorage getLocalPlayerDataStorage() {
+        return localPlayerDataStorage;
     }
 
-    public void setPlayerData(PlayerDataConfig playerDataConfig) {
-        this.playerDataConfig = playerDataConfig;
+    public void setLocalPlayerDataStorage(LocalPlayerDataStorage localPlayerDataStorage) {
+        this.localPlayerDataStorage = localPlayerDataStorage;
+    }
+
+    public GlobalPlayerDataStorage getGlobalPlayerDataStorage() {
+        return globalPlayerDataStorage;
+    }
+
+    public void setGlobalPlayerDataStorage(GlobalPlayerDataStorage globalPlayerDataStorage) {
+        this.globalPlayerDataStorage = globalPlayerDataStorage;
     }
 }

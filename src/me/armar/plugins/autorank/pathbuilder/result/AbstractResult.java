@@ -9,6 +9,8 @@ import org.bukkit.entity.Player;
  */
 public abstract class AbstractResult {
 
+    private boolean isGlobal = false;
+
     // Used to check if this result has a custom description
     private String customDescription;
 
@@ -66,10 +68,28 @@ public abstract class AbstractResult {
     /**
      * Set the custom description of this result
      *
-     * @param value the description to set it to.
+     * @param description the description to set it to.
      */
     public void setCustomDescription(String description) {
         this.customDescription = description;
     }
 
+    /**
+     * Check whether this result is global. When a result is global, it will only be performed if it hasn't been
+     * performed on any other server that is linked to the same database as this instance of Autorank.
+     *
+     * @return true if this result is global, false otherwise.
+     */
+    public boolean isGlobal() {
+        return isGlobal;
+    }
+
+    /**
+     * Set whether this result is global. See {@link #isGlobal()} for more details.
+     *
+     * @param global Whether this result is global.
+     */
+    public void setGlobal(boolean global) {
+        isGlobal = global;
+    }
 }
