@@ -1,11 +1,9 @@
 package me.armar.plugins.autorank.storage.mysql;
 
+import io.reactivex.annotations.NonNull;
 import me.armar.plugins.autorank.storage.TimeType;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * This class is responsible for caching time values for the MySQLStorageProvider. It only stores time for this
@@ -22,7 +20,7 @@ public class CacheManager {
      * @param uuid  UUID of player
      * @param value Value to cache
      */
-    public void registerCachedTime(TimeType timeType, UUID uuid, int value) {
+    public void registerCachedTime(@NonNull TimeType timeType, @NonNull UUID uuid, int value) {
 
         CachedEntry entry = cachedTimeValues.get(uuid);
 
@@ -41,7 +39,7 @@ public class CacheManager {
      * @param uuid UUID of the player
      * @return cached time value of a player
      */
-    public int getCachedTime(TimeType timeType, UUID uuid) {
+    public int getCachedTime(@NonNull TimeType timeType, @NonNull UUID uuid) {
 
         CachedEntry entry = this.cachedTimeValues.get(uuid);
 
@@ -49,7 +47,7 @@ public class CacheManager {
             return 0;
         }
 
-        return entry.getCachedTime(timeType);
+        return entry.getCachedTime(timeType).orElse(0);
     }
 
     /**
@@ -58,7 +56,7 @@ public class CacheManager {
      * @param uuid UUID of the player
      * @return true if the player has a cached time value, false otherwise.
      */
-    public boolean hasCachedTime(TimeType timeType, UUID uuid) {
+    public boolean hasCachedTime(@NonNull TimeType timeType, @NonNull UUID uuid) {
         return this.cachedTimeValues.containsKey(uuid) && this.cachedTimeValues.get(uuid) != null;
     }
 
@@ -69,7 +67,7 @@ public class CacheManager {
      * @param uuid     UUID of the player
      * @return true if the cached time is outdated, false otherwise.
      */
-    public boolean shouldUpdateCachedEntry(TimeType timeType, UUID uuid) {
+    public boolean shouldUpdateCachedEntry(@NonNull TimeType timeType, @NonNull UUID uuid) {
         return hasCachedTime(timeType, uuid) && this.cachedTimeValues.get(uuid).isCachedTimeOutdated(timeType);
     }
 
@@ -85,36 +83,37 @@ class CachedEntry {
     public CachedEntry() {
     }
 
-    public CachedEntry(TimeType timeType, int value) {
+    public CachedEntry(@NonNull TimeType timeType, int value) {
         this.setCachedTime(timeType, value);
     }
 
-    public long getMinutesSinceLastUpdated(TimeType timeType) {
+    public Optional<Long> getMinutesSinceLastUpdated(@NonNull TimeType timeType) {
 
         Long lastUpdatedTime = lastUpdatedPerTimeType.get(timeType);
 
         if (lastUpdatedTime == null) {
-            return Long.MAX_VALUE;
+            return Optional.empty();
         }
 
-        return (System.currentTimeMillis() - lastUpdatedTime) / 60000;
+        return Optional.of((System.currentTimeMillis() - lastUpdatedTime) / 60000);
     }
 
-    public void setCachedTime(TimeType timeType, int time) {
+    public void setCachedTime(@NonNull TimeType timeType, int time) {
         timePerTimeType.put(timeType, time);
         lastUpdatedPerTimeType.put(timeType, System.currentTimeMillis());
     }
 
-    public int getCachedTime(TimeType timeType) {
-        return timePerTimeType.get(timeType);
+    public Optional<Integer> getCachedTime(@NonNull TimeType timeType) {
+        return Optional.ofNullable(timePerTimeType.get(timeType));
     }
 
-    public boolean hasCachedTime(TimeType timeType) {
+    public boolean hasCachedTime(@NonNull TimeType timeType) {
         return timePerTimeType.containsKey(timeType);
     }
 
-    public boolean isCachedTimeOutdated(TimeType timeType) {
-        return hasCachedTime(timeType) && getCachedTime(timeType) >= MySQLStorageProvider.CACHE_EXPIRY_TIME;
+    public boolean isCachedTimeOutdated(@NonNull TimeType timeType) {
+        return hasCachedTime(timeType) && getCachedTime(timeType)
+                .orElseGet(() -> MySQLStorageProvider.CACHE_EXPIRY_TIME) >= MySQLStorageProvider.CACHE_EXPIRY_TIME;
     }
 
     @Override
