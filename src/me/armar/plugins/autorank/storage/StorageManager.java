@@ -1,9 +1,13 @@
 package me.armar.plugins.autorank.storage;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.language.Lang;
 
+import java.time.LocalDate;
+import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 /**
@@ -76,13 +80,7 @@ public class StorageManager {
      * @return StorageProvider that matches the requested name
      */
     public StorageProvider getActiveStorageProvider(String providerName) {
-        for (StorageProvider storageProvider : activeStorageProviders) {
-            if (storageProvider.getName().equalsIgnoreCase(providerName)) {
-                return storageProvider;
-            }
-        }
-
-        return null;
+        return this.activeStorageProviders.stream().filter(provider -> provider.getName().equalsIgnoreCase(providerName)).findFirst().orElseGet(() -> null);
     }
 
     /**
@@ -134,9 +132,10 @@ public class StorageManager {
      * Do a calendar check for all storage providers to see whether a certain storage file is outdated.
      */
     public void doCalendarCheck() {
-        for (StorageProvider storageProvider : activeStorageProviders) {
-            storageProvider.doCalendarCheck();
-        }
+
+        plugin.debugMessage("Performing a calendar check!");
+
+        this.checkDataIsUpToDate();
     }
 
     /**
@@ -302,6 +301,93 @@ public class StorageManager {
         }
 
         return successfulBackup;
+    }
+
+    /**
+     * Check whether all the storage files are still up-to-date or if they should be
+     * reset. Autorank stores what values were previously found for the day,
+     * week and month and compares these to the current values. If a new day has
+     * arrived, the daily time file has to be reset.
+     * <br>
+     * <br>
+     * Also see {@link #isDataFileOutdated(TimeType)} for more info.
+     */
+    public void checkDataIsUpToDate() {
+        // Check if all storage files are still up to date.
+        // Check if daily, weekly or monthly files should be reset.
+
+        LocalDate today = LocalDate.now();
+
+        for (final TimeType type : TimeType.values()) {
+            // If data file is not outdated, leave it be.
+            if (!this.isDataFileOutdated(type)) {
+                continue;
+            }
+
+            // We should reset it now, it has expired.
+            activeStorageProviders.forEach(provider -> provider.resetData(type));
+
+            int value = 0;
+
+            String broadcastMessage = "";
+
+            if (type == TimeType.DAILY_TIME) {
+                value = today.getDayOfWeek().getValue();
+                broadcastMessage = Lang.RESET_DAILY_TIME.getConfigValue();
+            } else if (type == TimeType.WEEKLY_TIME) {
+                value = today.get(WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear());
+                broadcastMessage = Lang.RESET_WEEKLY_TIME.getConfigValue();
+            } else if (type == TimeType.MONTHLY_TIME) {
+                value = today.getMonthValue();
+                broadcastMessage = Lang.RESET_MONTHLY_TIME.getConfigValue();
+            }
+
+            if (plugin.getSettingsConfig().shouldBroadcastDataReset()) {
+                // Should we broadcast the reset?
+                plugin.getServer().broadcastMessage(broadcastMessage);
+            }
+
+            // Update tracked storage type
+            plugin.getInternalPropertiesConfig().setTrackedTimeType(type, value);
+            // We reset leaderboard time so it refreshes again.
+            plugin.getInternalPropertiesConfig().setLeaderboardLastUpdateTime(type, 0);
+
+            // Update leaderboard of reset time
+            plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+                public void run() {
+                    plugin.getLeaderboardManager().updateLeaderboard(type);
+                }
+            });
+
+        }
+
+    }
+
+    /**
+     * Check whether a storage file for a given time type is outdated. Autorank stores players' time in different
+     * categories: daily, weekly, monthly and total. The daily time should be reset every day, as it only records
+     * data of one day. The same logic applies to weekly and monthly data. A data file is outdated when its
+     * expiration date has been reached (a day, week or month respectively).
+     *
+     * @param timeType Type of time
+     * @return true if the file is outdated, false otherwise.
+     */
+    public boolean isDataFileOutdated(TimeType timeType) {
+        // Should we reset a specific storage file?
+        // Compare date to last date in internal properties
+        LocalDate today = LocalDate.now();
+
+        int trackedTimeType = plugin.getInternalPropertiesConfig().getTrackedTimeType(timeType);
+
+        if (timeType == TimeType.DAILY_TIME) {
+            return trackedTimeType != today.getDayOfWeek().getValue();
+        } else if (timeType == TimeType.WEEKLY_TIME) {
+            return trackedTimeType != today.get(WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear());
+        } else if (timeType == TimeType.MONTHLY_TIME) {
+            return trackedTimeType != today.getMonthValue();
+        }
+
+        return false;
     }
 
 }

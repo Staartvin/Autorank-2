@@ -1,10 +1,8 @@
 package me.armar.plugins.autorank.storage;
 
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.language.Lang;
 
 import java.time.LocalDate;
-import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -112,101 +110,6 @@ public abstract class StorageProvider {
      * @return a list of uuids that represent players that have been stored
      */
     public abstract List<UUID> getStoredPlayers(TimeType timeType);
-
-    /**
-     * Check whether all the storage files are still up-to-date or if they should be
-     * reset. Autorank stores what values were previously found for the day,
-     * week and month and compares these to the current values. If a new day has
-     * arrived, the daily time file has to be reset.
-     * <br>
-     * <br>
-     * Also see {@link #isDataFileOutdated(TimeType)} for more info.
-     */
-    public void doCalendarCheck() {
-        // Check if all storage files are still up to date.
-        // Check if daily, weekly or monthly files should be reset.
-
-        final Calendar cal = Calendar.getInstance();
-        cal.setFirstDayOfWeek(Calendar.MONDAY);
-
-        for (final TimeType type : TimeType.values()) {
-            // If data file is not outdated, leave it be.
-            if (!this.isDataFileOutdated(type)) {
-                continue;
-            }
-
-            // We should reset it now, it has expired.
-            this.resetData(type);
-
-            int value = 0;
-
-            if (type == TimeType.DAILY_TIME) {
-                value = cal.get(Calendar.DAY_OF_WEEK);
-
-                if (plugin.getSettingsConfig().shouldBroadcastDataReset()) {
-                    // Should we broadcast the reset?
-                    plugin.getServer().broadcastMessage(Lang.RESET_DAILY_TIME.getConfigValue());
-                }
-
-            } else if (type == TimeType.WEEKLY_TIME) {
-                value = cal.get(Calendar.WEEK_OF_YEAR);
-
-                if (plugin.getSettingsConfig().shouldBroadcastDataReset()) {
-                    // Should we broadcast the reset?
-
-                    plugin.getServer().broadcastMessage(Lang.RESET_WEEKLY_TIME.getConfigValue());
-                }
-            } else if (type == TimeType.MONTHLY_TIME) {
-                value = cal.get(Calendar.MONTH);
-
-                if (plugin.getSettingsConfig().shouldBroadcastDataReset()) {
-                    // Should we broadcast the reset?
-
-                    plugin.getServer().broadcastMessage(Lang.RESET_MONTHLY_TIME.getConfigValue());
-                }
-            }
-
-            // Update tracked storage type
-            plugin.getInternalPropertiesConfig().setTrackedTimeType(type, value);
-            // We reset leaderboard time so it refreshes again.
-            plugin.getInternalPropertiesConfig().setLeaderboardLastUpdateTime(type, 0);
-
-            // Update leaderboard of reset time
-            plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
-                public void run() {
-                    plugin.getLeaderboardManager().updateLeaderboard(type);
-                }
-            });
-
-        }
-
-    }
-
-    /**
-     * Check whether a storage file for a given time type is outdated. Autorank stores players' time in different
-     * categories: daily, weekly, monthly and total. The daily time should be reset every day, as it only records
-     * data of one day. The same logic applies to weekly and monthly data. A data file is outdated when its
-     * expiration date has been reached (a day, week or month respectively).
-     *
-     * @param timeType Type of time
-     * @return true if the file is outdated, false otherwise.
-     */
-    public boolean isDataFileOutdated(TimeType timeType) {
-        // Should we reset a specific storage file?
-        // Compare date to last date in internal properties
-        final Calendar cal = Calendar.getInstance();
-        cal.setFirstDayOfWeek(Calendar.MONDAY);
-
-        if (timeType == TimeType.DAILY_TIME) {
-            return cal.get(Calendar.DAY_OF_WEEK) != plugin.getInternalPropertiesConfig().getTrackedTimeType(timeType);
-        } else if (timeType == TimeType.WEEKLY_TIME) {
-            return cal.get(Calendar.WEEK_OF_YEAR) != plugin.getInternalPropertiesConfig().getTrackedTimeType(timeType);
-        } else if (timeType == TimeType.MONTHLY_TIME) {
-            return cal.get(Calendar.MONTH) != plugin.getInternalPropertiesConfig().getTrackedTimeType(timeType);
-        }
-
-        return false;
-    }
 
     /**
      * Force save all data that the storage provider is currently using.

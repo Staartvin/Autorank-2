@@ -126,7 +126,6 @@ public class MySQLStorageProvider extends StorageProvider {
 
     @Override
     public void resetData(TimeType timeType) {
-
         String tableName = this.tableNames.get(timeType);
 
         String statement = "TRUNCATE TABLE " + tableName;
