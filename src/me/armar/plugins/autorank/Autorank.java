@@ -290,10 +290,10 @@ public class Autorank extends JavaPlugin {
 
         this.getServer().getScheduler().runTaskAsynchronously(this, () -> {
             try {
-                CompletableFuture.allOf(loadFlatFileTask, finalLoadMySQLTask).thenRun(() -> {
+                loadFlatFileTask.thenCompose(v -> finalLoadMySQLTask.thenRun(() -> {
                     this.getLogger().info("Primary storage provider of Autorank: " + this.getStorageManager()
                             .getPrimaryStorageProvider().getName());
-                }).get();
+                })).get();
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
@@ -403,10 +403,6 @@ public class Autorank extends JavaPlugin {
         // Convert all UUIDS to lowercase.
         this.getUUIDStorage().transferUUIDs();
 
-        // TODO: implement that all storage providers do calendar checks themselves periodically.
-        // Check whether the storage files are still up to date.
-        this.getStorageManager().doCalendarCheck();
-
         // ------------- Say Welcome! -------------
         getLogger().info(String.format("Autorank %s has been enabled!", getDescription().getVersion()));
 
@@ -421,6 +417,12 @@ public class Autorank extends JavaPlugin {
                 }
             }
         }, AutorankTools.TICKS_PER_SECOND * 5);
+
+        // Do calendar check periodically.
+        getServer().getScheduler().runTaskTimerAsynchronously(this, () -> {
+            // Do calendar check to see if we should reset playtime of players.
+            this.getStorageManager().doCalendarCheck();
+        }, AutorankTools.TICKS_PER_MINUTE * 1, AutorankTools.TICKS_PER_MINUTE * 10);
     }
 
     // ---------- CONVENIENCE METHODS ---------- \\
