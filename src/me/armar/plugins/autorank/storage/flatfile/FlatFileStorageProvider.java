@@ -122,9 +122,6 @@ public class FlatFileStorageProvider extends StorageProvider {
             // Register task for saving data files.
             FlatFileStorageProvider.this.registerTasks();
 
-            // Do calendar check to reset storage files that are outdated.
-            FlatFileStorageProvider.this.doCalendarCheck();
-
             isLoaded = true;
 
             return true;
