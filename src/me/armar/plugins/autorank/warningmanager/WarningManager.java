@@ -140,4 +140,11 @@ public class WarningManager {
 
         }
     }
+
+    /**
+     * Clear all active warnings.
+     */
+    public void clearWarnings() {
+        this.warnings.clear();
+    }
 }

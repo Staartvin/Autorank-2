@@ -26,6 +26,9 @@ public class ReloadCommand extends AutorankCommand {
             return true;
         }
 
+        // Clear all warnings when reloading, as they are not necessarily up-to-date anymore.
+        plugin.getWarningManager().clearWarnings();
+
         // Reload files
         plugin.getPathsConfig().reloadConfig();
         plugin.getSettingsConfig().reloadConfig();
