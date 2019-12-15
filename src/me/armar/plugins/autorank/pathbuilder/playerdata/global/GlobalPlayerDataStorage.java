@@ -1,10 +1,14 @@
 package me.armar.plugins.autorank.pathbuilder.playerdata.global;
 
+import io.reactivex.annotations.NonNull;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.config.SettingsConfig;
 import me.armar.plugins.autorank.warningmanager.WarningManager;
 import org.bukkit.ChatColor;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -12,8 +16,11 @@ public class GlobalPlayerDataStorage {
 
     static String TABLE_PLAYERDATA_STORAGE_COMPLETED_PATHS = "playerdata_completed_paths";
     static String TABLE_SERVER_REGISTER = "servers";
+
     private Autorank plugin;
     private SQLConnection connection;
+
+    private PlayerDataCache playerDataCache = new PlayerDataCache();
 
     public GlobalPlayerDataStorage(Autorank instance) {
         this.plugin = instance;
@@ -103,7 +110,54 @@ public class GlobalPlayerDataStorage {
 
         plugin.debugMessage("Loaded online playerdata storage.");
 
+        this.loadPlayerDataInCache();
+
     }
 
+    private void loadPlayerDataInCache() {
+        ResultSet resultSet =
+                getConnection().performQuery("SELECT * FROM " + TABLE_PLAYERDATA_STORAGE_COMPLETED_PATHS + " ORDER BY" +
+                        " uuid");
+
+        while (true) {
+            try {
+                if (!resultSet.next()) break;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            String serverName = null, completedPath = null;
+            UUID uuid = null;
+
+            try {
+                serverName = resultSet.getString("server_name");
+                uuid = UUID.fromString(resultSet.getString("uuid"));
+                completedPath = resultSet.getString("completed_path");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            if (uuid == null || serverName == null || completedPath == null) {
+                continue;
+            }
+
+            System.out.println("Loaded UUID " + uuid.toString() + " on server " + serverName + " for path " + completedPath);
+
+            CachedPlayerData cachedPlayerData = this.playerDataCache.getCachedPlayerData(uuid);
+
+            cachedPlayerData.addCachedEntry(completedPath, serverName);
+        }
+    }
+
+    /**
+     * Check whether a player has completed a given path globally.
+     *
+     * @param uuid          UUID of the player
+     * @param completedPath Path to check
+     * @return true if the path has been completed, false otherwise.
+     */
+    public boolean hasCompletedPath(@NonNull UUID uuid, @NonNull String completedPath) {
+        return this.playerDataCache.getCachedPlayerData(uuid).getCachedEntriesByPath(completedPath).size() > 0;
+    }
 
 }

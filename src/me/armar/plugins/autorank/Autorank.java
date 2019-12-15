@@ -156,7 +156,7 @@ public class Autorank extends JavaPlugin {
 
         // Load data storages
         setLocalPlayerDataStorage(new LocalPlayerDataStorage(this));
-//        setGlobalPlayerDataStorage(new GlobalPlayerDataStorage(this));
+        //setGlobalPlayerDataStorage(new GlobalPlayerDataStorage(this));
 
         // Create new configs
         this.getDefaultBehaviorConfig().loadConfig();
