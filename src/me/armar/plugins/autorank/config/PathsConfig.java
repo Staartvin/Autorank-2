@@ -226,7 +226,13 @@ public class PathsConfig extends AbstractConfig {
      * @return a list of names as results.
      */
     public List<String> getResults(String pathName) {
-        return new ArrayList<>(getConfig().getConfigurationSection(pathName + ".results").getKeys(false));
+        ConfigurationSection section = getConfig().getConfigurationSection(pathName + ".results");
+
+        if (section != null) {
+            return new ArrayList<>(section.getKeys(false));
+        } else {
+            return new ArrayList<>();
+        }
     }
 
     /**
