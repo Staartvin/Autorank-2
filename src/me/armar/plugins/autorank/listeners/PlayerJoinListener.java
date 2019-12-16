@@ -2,6 +2,7 @@ package me.armar.plugins.autorank.listeners;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.pathbuilder.Path;
+import me.armar.plugins.autorank.pathbuilder.playerdata.PlayerDataStorage;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -10,7 +11,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -92,9 +94,14 @@ public class PlayerJoinListener implements Listener {
     }
 
     private void performPendingResults(Player player) {
+
+        Optional<PlayerDataStorage> playerDataStorage = plugin.getPlayerDataManager().getPrimaryDataStorage();
+
+        if (!playerDataStorage.isPresent()) return;
+
         // First perform all results when the player has joined a path
-        List<String> joinedPaths =
-                plugin.getLocalPlayerDataStorage().getChosenPathsMissingResults(player.getUniqueId());
+        Collection<String> joinedPaths =
+                playerDataStorage.get().getChosenPathsWithMissingResults(player.getUniqueId());
 
         for (String pathName : joinedPaths) {
             Path path = plugin.getPathManager().findPathByInternalName(pathName, false);
@@ -103,27 +110,27 @@ public class PlayerJoinListener implements Listener {
                 path.performResultsUponChoosing(player);
             }
 
-            plugin.getLocalPlayerDataStorage().removeChosenPathMissingResults(player.getUniqueId(), pathName);
+            playerDataStorage.get().removeChosenPathWithMissingResults(player.getUniqueId(), pathName);
         }
 
         // Then perform results when a player has completed a requirement.
         for (Path path : plugin.getPathManager().getAllPaths()) {
-            List<Integer> completedRequirements =
-                    plugin.getLocalPlayerDataStorage().getCompletedRequirementsMissingResults(player.getUniqueId(),
+            Collection<Integer> completedRequirements =
+                    playerDataStorage.get().getCompletedRequirementsWithMissingResults(player.getUniqueId(),
                             path.getInternalName());
 
             for (int requirementId : completedRequirements) {
                 path.completeRequirement(player.getUniqueId(), requirementId);
 
-                plugin.getLocalPlayerDataStorage().removeCompletedRequirementMissingResults(player.getUniqueId(),
+                playerDataStorage.get().removeCompletedRequirementWithMissingResults(player.getUniqueId(),
                         path.getInternalName(), requirementId);
             }
         }
 
 
         // Lastly perform results when a player has completed a path.
-        List<String> completedPaths =
-                plugin.getLocalPlayerDataStorage().getCompletedPathsMissingResults(player.getUniqueId());
+        Collection<String> completedPaths =
+                playerDataStorage.get().getCompletedPathsWithMissingResults(player.getUniqueId());
 
         for (String pathName : completedPaths) {
             Path path = plugin.getPathManager().findPathByInternalName(pathName, false);
@@ -132,7 +139,7 @@ public class PlayerJoinListener implements Listener {
                 path.performResults(player);
             }
 
-            plugin.getLocalPlayerDataStorage().removeCompletedPathMissingResults(player.getUniqueId(), pathName);
+            playerDataStorage.get().removeCompletedPathWithMissingResults(player.getUniqueId(), pathName);
         }
 
 

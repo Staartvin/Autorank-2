@@ -65,18 +65,18 @@ public class PlayerChecker {
     }
 
     public void doLeaderboardExemptCheck(final Player player) {
-        plugin.getLocalPlayerDataStorage().setLeaderboardExemption(player.getUniqueId(),
-                player.hasPermission(AutorankPermission.EXCLUDE_FROM_LEADERBOARD));
+        plugin.getPlayerDataManager().getPrimaryDataStorage().ifPresent(s -> s.setLeaderboardExemption(player.getUniqueId(),
+                player.hasPermission(AutorankPermission.EXCLUDE_FROM_LEADERBOARD)));
     }
 
     public void doAutomaticCheckingExemptionCheck(Player player) {
-        plugin.getLocalPlayerDataStorage().setAutoCheckingExemption(player.getUniqueId(),
-                AutorankTools.isExcludedFromRanking(player));
+        plugin.getPlayerDataManager().getPrimaryDataStorage().ifPresent(s -> s.setAutoCheckingExemption(player.getUniqueId(),
+                AutorankTools.isExcludedFromRanking(player)));
     }
 
     public void doTimeAdditionExemptionCheck(Player player) {
-        plugin.getLocalPlayerDataStorage().setTimeAdditionExemption(player.getUniqueId(),
-                player.hasPermission(AutorankPermission.EXCLUDE_FROM_TIME_UPDATES));
+        plugin.getPlayerDataManager().getPrimaryDataStorage().ifPresent(s -> s.setTimeAdditionExemption(player.getUniqueId(),
+                player.hasPermission(AutorankPermission.EXCLUDE_FROM_TIME_UPDATES)));
     }
 
     /**
@@ -93,7 +93,7 @@ public class PlayerChecker {
             return player.hasPermission(AutorankPermission.EXCLUDE_FROM_LEADERBOARD);
         }
 
-        return plugin.getLocalPlayerDataStorage().hasLeaderboardExemption(uuid);
+        return plugin.getPlayerDataManager().getPrimaryDataStorage().map(s -> s.hasLeaderboardExemption(uuid)).orElse(false);
     }
 
     /**
@@ -110,7 +110,7 @@ public class PlayerChecker {
             return AutorankTools.isExcludedFromRanking(player);
         }
 
-        return plugin.getLocalPlayerDataStorage().hasAutoCheckingExemption(uuid);
+        return plugin.getPlayerDataManager().getPrimaryDataStorage().map(s -> s.hasAutoCheckingExemption(uuid)).orElse(false);
     }
 
     /**
@@ -128,7 +128,7 @@ public class PlayerChecker {
             return player.hasPermission(AutorankPermission.EXCLUDE_FROM_TIME_UPDATES);
         }
 
-        return plugin.getLocalPlayerDataStorage().hasTimeAdditionExemption(uuid);
+        return plugin.getPlayerDataManager().getPrimaryDataStorage().map(s -> s.hasTimeAdditionExemption(uuid)).orElse(false);
     }
 
     public List<String> formatRequirementsToList(final List<CompositeRequirement> holders,

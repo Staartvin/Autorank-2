@@ -3,11 +3,17 @@ package me.armar.plugins.autorank.pathbuilder.playerdata.local;
 import io.reactivex.annotations.NonNull;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.config.AbstractConfig;
+import me.armar.plugins.autorank.pathbuilder.playerdata.PlayerDataManager;
+import me.armar.plugins.autorank.pathbuilder.playerdata.PlayerDataStorage;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
 import org.bukkit.configuration.ConfigurationSection;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -19,7 +25,7 @@ import java.util.concurrent.ExecutionException;
  *
  * @author Staartvin
  */
-public class LocalPlayerDataStorage extends AbstractConfig {
+public class LocalPlayerDataStorage extends AbstractConfig implements PlayerDataStorage {
 
     private boolean convertingData = false;
 
@@ -34,17 +40,14 @@ public class LocalPlayerDataStorage extends AbstractConfig {
 
         this.getPlugin().getServer().getScheduler().runTaskLater(this.getPlugin(),
                 this::convertFormatToSupportMultiplePathsFormat, 20 * 10);
+
+        // Load the config full of player data.
+        this.loadConfig();
     }
 
     // ------------ COMPLETED REQUIREMENTS ------------
 
-    /**
-     * Get a list of completed requirements of a player for a given path. <br>
-     * This list is reset when a player completes the path.
-     *
-     * @param uuid UUID of the player
-     * @return a list of requirements a player has completed for a given path.
-     */
+
     public Collection<Integer> getCompletedRequirements(final UUID uuid, String pathName) {
         ConfigurationSection section = this.getProgressOnPathSection(uuid, pathName);
 
@@ -55,26 +58,12 @@ public class LocalPlayerDataStorage extends AbstractConfig {
         return section.getIntegerList("completed requirements");
     }
 
-    /**
-     * Check whether a player completed a specific requirement of a given path.
-     *
-     * @param uuid     UUID of the player
-     * @param pathName Name of the path.
-     * @param reqId    ID of requirement
-     * @return true if the player completed the given requirement. False
-     * otherwise.
-     */
+
     public boolean hasCompletedRequirement(UUID uuid, String pathName, int reqId) {
         return getCompletedRequirements(uuid, pathName).contains(reqId);
     }
 
-    /**
-     * Add a completed requirement of a path for a given player.
-     *
-     * @param uuid     UUID of the player
-     * @param pathName Name of the path
-     * @param reqId    Id of the requirement that has been completed.
-     */
+
     public void addCompletedRequirement(UUID uuid, String pathName, int reqId) {
         // Player has already completed this requirement
         if (hasCompletedRequirement(uuid, pathName, reqId)) {
@@ -88,26 +77,14 @@ public class LocalPlayerDataStorage extends AbstractConfig {
         setCompletedRequirements(uuid, pathName, completedRequirements);
     }
 
-    /**
-     * Set the completed requirements of a player for a path.
-     *
-     * @param uuid         UUID of the player
-     * @param pathName     Name of the path
-     * @param requirements Requirements ids to set as completed.
-     */
+
     public void setCompletedRequirements(UUID uuid, String pathName, Collection<Integer> requirements) {
         getProgressOnPathsSection(uuid).set(pathName + ".completed requirements", requirements);
     }
 
     // ------------ COMPLETED PREREQUISITES ------------
 
-    /**
-     * Get a list of completed prerequisites of a player for a given path. <br>
-     * This list is reset when a player chooses the path.
-     *
-     * @param uuid UUID of the player
-     * @return a list of prerequisites a player has completed for a given path.
-     */
+
     public Collection<Integer> getCompletedPrerequisites(final UUID uuid, String pathName) {
         ConfigurationSection section = this.getProgressOnPathSection(uuid, pathName);
 
@@ -118,26 +95,11 @@ public class LocalPlayerDataStorage extends AbstractConfig {
         return section.getIntegerList("completed prerequisites");
     }
 
-    /**
-     * Check whether a player completed a specific prerequisite of a given path..
-     *
-     * @param uuid     UUID of the player
-     * @param pathName Name of the path.
-     * @param preReqId ID of prerequisite
-     * @return true if the player completed the given prerequisite. False
-     * otherwise.
-     */
+
     public boolean hasCompletedPrerequisite(UUID uuid, String pathName, int preReqId) {
         return getCompletedPrerequisites(uuid, pathName).contains(preReqId);
     }
 
-    /**
-     * Add a completed prerequisite of a path for a given player.
-     *
-     * @param uuid     UUID of the player
-     * @param pathName Name of the path
-     * @param preReqId Id of the prerequisite that has been completed.
-     */
     public void addCompletedPrerequisite(UUID uuid, String pathName, int preReqId) {
         // Player has already completed this prerequisite
         if (hasCompletedPrerequisite(uuid, pathName, preReqId)) {
@@ -151,13 +113,6 @@ public class LocalPlayerDataStorage extends AbstractConfig {
         setCompletedPrerequisites(uuid, pathName, completedPrerequisites);
     }
 
-    /**
-     * Set the completed prerequisites of a player for a path.
-     *
-     * @param uuid          UUID of the player
-     * @param pathName      Name of the path
-     * @param prerequisites Prerequisites ids to set as completed.
-     */
     public void setCompletedPrerequisites(UUID uuid, String pathName, Collection<Integer> prerequisites) {
         getProgressOnPathsSection(uuid).set(pathName + ".completed prerequisites", prerequisites);
     }
@@ -275,44 +230,22 @@ public class LocalPlayerDataStorage extends AbstractConfig {
 
     // ------------ ACTIVE PATHS ------------
 
-    /**
-     * Get active paths for a player
-     *
-     * @param uuid UUID of the player
-     * @return collection of paths that are active for the given player.
-     */
     public Collection<String> getActivePaths(final UUID uuid) {
 
         ConfigurationSection section = this.getActivePathsSection(uuid);
 
-        if (section == null) {
-            return new HashSet<>();
-        }
-
         return section.getKeys(false);
     }
 
-    /**
-     * Check whether a path is active for a player.
-     *
-     * @param uuid     UUID of the player
-     * @param pathName Name of path
-     * @return true if the given path is active for the given player.
-     */
-    public boolean isActivePath(final UUID uuid, final String pathName) {
+    @Override
+    public boolean hasActivePath(UUID uuid, String pathName) {
         return getActivePaths(uuid).contains(pathName);
     }
 
-    /**
-     * Add a path that a player is active.
-     *
-     * @param uuid     UUID of the player
-     * @param pathName Name of the path that is active.
-     */
     public void addActivePath(final UUID uuid, String pathName) {
 
         // This path is already active, so we don't add it again.
-        if (isActivePath(uuid, pathName)) {
+        if (hasActivePath(uuid, pathName)) {
             return;
         }
 
@@ -321,12 +254,7 @@ public class LocalPlayerDataStorage extends AbstractConfig {
         activePathsSection.set(pathName + ".started", System.currentTimeMillis());
     }
 
-    /**
-     * Set the paths that are active for a player.
-     *
-     * @param uuid  UUID of the player
-     * @param paths Paths that are set to active.
-     */
+
     public void setActivePaths(final UUID uuid, Collection<String> paths) {
         ConfigurationSection activePathsSection = getActivePathsSection(uuid);
 
@@ -335,16 +263,11 @@ public class LocalPlayerDataStorage extends AbstractConfig {
         }
     }
 
-    /**
-     * Remove an active path from a player.
-     *
-     * @param uuid     UUID of the player
-     * @param pathName Name of the path that is active.
-     */
+
     public void removeActivePath(final UUID uuid, String pathName) {
 
         // This path is not active, so we don't remove it.
-        if (!isActivePath(uuid, pathName)) {
+        if (!hasActivePath(uuid, pathName)) {
             return;
         }
 
@@ -355,41 +278,20 @@ public class LocalPlayerDataStorage extends AbstractConfig {
 
     // ------------ COMPLETED PATHS ------------
 
-    /**
-     * Get a list of paths that a player completed.
-     *
-     * @param uuid UUID of the player
-     * @return a list of path names that the given player completed.
-     */
+
     public Collection<String> getCompletedPaths(final UUID uuid) {
 
         ConfigurationSection section = getCompletedPathsSection(uuid);
 
-        if (section == null) {
-            return new ArrayList<>();
-        }
-
         return section.getKeys(false);
     }
 
-    /**
-     * Check whether a player has completed a specific path.
-     *
-     * @param uuid     UUID of the player
-     * @param pathName Name of path
-     * @return true if the given player has completed the given path. False
-     * otherwise.
-     */
+
     public boolean hasCompletedPath(final UUID uuid, final String pathName) {
         return getCompletedPaths(uuid).contains(pathName);
     }
 
-    /**
-     * Add a path that a player has completed.
-     *
-     * @param uuid     UUID of the player
-     * @param pathName Name of the path that was completed.
-     */
+
     public void addCompletedPath(final UUID uuid, String pathName) {
         ConfigurationSection completedPathSection = getCompletedPathSection(uuid, pathName);
 
@@ -401,11 +303,6 @@ public class LocalPlayerDataStorage extends AbstractConfig {
         }
     }
 
-    /**
-     * Remove a completed path from the list of completed paths.
-     *
-     * @param uuid UUID of the player
-     */
     public void removeCompletedPath(final UUID uuid, String pathName) {
 
         // Don't remove anything when it is not present.
@@ -415,20 +312,21 @@ public class LocalPlayerDataStorage extends AbstractConfig {
 
         ConfigurationSection section = getCompletedPathsSection(uuid);
 
-        if (section == null) {
-            return;
-        }
-
         section.set(pathName, null);
     }
 
-    /**
-     * Get the number of times a path has been completed by a user.
-     *
-     * @param uuid     UUID of the player
-     * @param pathName Name of the path
-     * @return number of times a path has been completed, or zero if it hasn't been completed before.
-     */
+    @Override
+    public void setCompletedPaths(UUID uuid, Collection<String> paths) {
+        ConfigurationSection section = getCompletedPathsSection(uuid);
+
+        // First remove the paths that were already there.
+        getCompletedPaths(uuid).forEach(completedPath -> section.set(completedPath, null));
+
+        // Add all paths that are on the given list.
+        paths.forEach(completedPath -> this.addCompletedPath(uuid, completedPath));
+    }
+
+
     public int getTimesCompletedPath(final UUID uuid, String pathName) {
         ConfigurationSection completedPathSection = getCompletedPathSection(uuid, pathName);
 
@@ -441,249 +339,144 @@ public class LocalPlayerDataStorage extends AbstractConfig {
 
     // ------------ COMPLETED PATHS WHERE RESULTS ARE NOT PERFORMED YET ------------
 
-    /**
-     * Get all paths that a player has completed but the results have not been performed yet, as the player was not
-     * online.
-     *
-     * @param uuid UUID of the player
-     * @return a list of path names.
-     */
-    public List<String> getCompletedPathsMissingResults(@NonNull UUID uuid) {
+
+    public Collection<String> getCompletedPathsWithMissingResults(@NonNull UUID uuid) {
         ConfigurationSection section = this.getResultsNotPerformedSection(uuid);
 
         return section.getStringList("completed paths");
     }
 
-    /**
-     * Add a path that was completed by a player but where the results have not yet been performed as the player was
-     * not online.
-     *
-     * @param uuid     UUID of the player
-     * @param pathName Name of the path that was completed.
-     */
-    public void addCompletedPathMissingResults(@NonNull UUID uuid, @NonNull String pathName) {
-        List<String> completedPaths = getCompletedPathsMissingResults(uuid);
+
+    public void addCompletedPathWithMissingResults(@NonNull UUID uuid, @NonNull String pathName) {
+        Collection<String> completedPaths = getCompletedPathsWithMissingResults(uuid);
 
         completedPaths.add(pathName);
 
         this.getResultsNotPerformedSection(uuid).set("completed paths", completedPaths);
     }
 
-    /**
-     * Remove a path that was completed by a player but where the results have not yet been performed as the player
-     * was not online.
-     *
-     * @param uuid     UUID of the player
-     * @param pathName Name of the path to remove.
-     */
-    public void removeCompletedPathMissingResults(@NonNull UUID uuid, @NonNull String pathName) {
-        List<String> completedPaths = getCompletedPathsMissingResults(uuid);
+
+    public void removeCompletedPathWithMissingResults(@NonNull UUID uuid, @NonNull String pathName) {
+        Collection<String> completedPaths = getCompletedPathsWithMissingResults(uuid);
 
         completedPaths.remove(pathName);
 
         this.getResultsNotPerformedSection(uuid).set("completed paths", completedPaths);
     }
 
-    /**
-     * Check whether a path was completed by a player but where the results have not yet been performed, as the
-     * player was not yet online.
-     *
-     * @param uuid     UUID of the player
-     * @param pathName Name of the path to check.
-     * @return true if the path was completed but the results are not performed yet, false otherwise.
-     */
-    public boolean hasCompletedPathMissingResults(@NonNull UUID uuid, @NonNull String pathName) {
-        return getCompletedPathsMissingResults(uuid).contains(pathName);
+
+    public boolean hasCompletedPathWithMissingResults(@NonNull UUID uuid, @NonNull String pathName) {
+        return getCompletedPathsWithMissingResults(uuid).contains(pathName);
     }
 
     // ------------ COMPLETED REQUIREMENTS WHERE RESULTS ARE NOT PERFORMED YET ------------
 
-    /**
-     * Get all requirements of a path that were completed by a player but where the results have not been performed
-     * yet as the player was not online.
-     *
-     * @param uuid     UUID of the player
-     * @param pathName Name of the path to get the requirements for.
-     * @return list of requirement ids that the player completed in the given path
-     */
-    public List<Integer> getCompletedRequirementsMissingResults(@NonNull UUID uuid, @NonNull String pathName) {
+
+    public List<Integer> getCompletedRequirementsWithMissingResults(@NonNull UUID uuid, @NonNull String pathName) {
         ConfigurationSection section = this.getCompletedRequirementsMissingResultsSection(uuid);
 
         return section.getIntegerList(pathName);
     }
 
-    /**
-     * Add a requirement that was completed by a player but where the results have not yet been performed as the player
-     * was not online.
-     *
-     * @param uuid          UUID of the player
-     * @param pathName      Name of the path that was completed.
-     * @param requirementId ID of the requirement that was completed.
-     */
-    public void addCompletedRequirementMissingResults(@NonNull UUID uuid, @NonNull String pathName,
-                                                      @NonNull int requirementId) {
-        List<Integer> completedRequirements = getCompletedRequirementsMissingResults(uuid, pathName);
+
+    public void addCompletedRequirementWithMissingResults(@NonNull UUID uuid, @NonNull String pathName,
+                                                          @NonNull int requirementId) {
+        List<Integer> completedRequirements = getCompletedRequirementsWithMissingResults(uuid, pathName);
 
         completedRequirements.add(requirementId);
 
         this.getCompletedRequirementsMissingResultsSection(uuid).set(pathName, completedRequirements);
     }
 
-    /**
-     * Remove a requirement that was completed by a player but where the results have not yet been performed as the
-     * player was not online.
-     *
-     * @param uuid          UUID of the player
-     * @param pathName      Name of the path to remove.
-     * @param requirementId ID of the requirement that was completed
-     */
-    public void removeCompletedRequirementMissingResults(@NonNull UUID uuid, @NonNull String pathName,
-                                                         @NonNull int requirementId) {
-        List<Integer> completedRequirements = getCompletedRequirementsMissingResults(uuid, pathName);
+
+    public void removeCompletedRequirementWithMissingResults(@NonNull UUID uuid, @NonNull String pathName,
+                                                             @NonNull int requirementId) {
+        List<Integer> completedRequirements = getCompletedRequirementsWithMissingResults(uuid, pathName);
 
         completedRequirements.remove((Integer) requirementId);
 
         this.getCompletedRequirementsMissingResultsSection(uuid).set(pathName, completedRequirements);
     }
 
-    /**
-     * Check whether a requirement was completed by a player but where the results have not yet been performed, as the
-     * player was not yet online.
-     *
-     * @param uuid          UUID of the player
-     * @param pathName      Name of the path to check.
-     * @param requirementId ID of the requirement to check.
-     * @return true if the path was completed but the results are not performed yet, false otherwise.
-     */
-    public boolean hasCompletedRequirementMissingResults(@NonNull UUID uuid, @NonNull String pathName,
-                                                         @NonNull int requirementId) {
-        return getCompletedRequirementsMissingResults(uuid, pathName).contains(requirementId);
+
+    public boolean hasCompletedRequirementWithMissingResults(@NonNull UUID uuid, @NonNull String pathName,
+                                                             @NonNull int requirementId) {
+        return getCompletedRequirementsWithMissingResults(uuid, pathName).contains(requirementId);
     }
 
     // ------------ CHOSEN PATHS WHERE RESULTS (UPON CHOOSING) ARE NOT PERFORMED YET ------------
 
-    /**
-     * Get all paths that a player has chosen but the results have not been performed yet, as the player was not
-     * online.
-     *
-     * @param uuid UUID of the player
-     * @return a list of path names.
-     */
-    public List<String> getChosenPathsMissingResults(@NonNull UUID uuid) {
+
+    public Collection<String> getChosenPathsWithMissingResults(@NonNull UUID uuid) {
         ConfigurationSection section = this.getResultsNotPerformedSection(uuid);
 
         return section.getStringList("chosen paths");
     }
 
-    /**
-     * Add a path that was chosen by a player but where the results have not yet been performed as the player was
-     * not online.
-     *
-     * @param uuid     UUID of the player
-     * @param pathName Name of the path that was chosen.
-     */
-    public void addChosenPathMissingResults(@NonNull UUID uuid, @NonNull String pathName) {
-        List<String> chosenPaths = getChosenPathsMissingResults(uuid);
+
+    public void addChosenPathWithMissingResults(@NonNull UUID uuid, @NonNull String pathName) {
+        Collection<String> chosenPaths = getChosenPathsWithMissingResults(uuid);
 
         chosenPaths.add(pathName);
 
         this.getResultsNotPerformedSection(uuid).set("chosen paths", chosenPaths);
     }
 
-    /**
-     * Remove a path that was chosen by a player but where the results have not yet been performed as the player
-     * was not online.
-     *
-     * @param uuid     UUID of the player
-     * @param pathName Name of the path to remove.
-     */
-    public void removeChosenPathMissingResults(@NonNull UUID uuid, @NonNull String pathName) {
-        List<String> chosenPaths = getChosenPathsMissingResults(uuid);
+
+    public void removeChosenPathWithMissingResults(@NonNull UUID uuid, @NonNull String pathName) {
+        Collection<String> chosenPaths = getChosenPathsWithMissingResults(uuid);
 
         chosenPaths.remove(pathName);
 
         this.getResultsNotPerformedSection(uuid).set("chosen paths", chosenPaths);
     }
 
-    /**
-     * Check whether a path was chosen by a player but where the results have not yet been performed, as the
-     * player was not yet online.
-     *
-     * @param uuid     UUID of the player
-     * @param pathName Name of the path to check.
-     * @return true if the path was chosen but the results are not performed yet, false otherwise.
-     */
-    public boolean hasChosenPathMissingResults(@NonNull UUID uuid, @NonNull String pathName) {
-        return getChosenPathsMissingResults(uuid).contains(pathName);
+
+    public boolean hasChosenPathWithMissingResults(@NonNull UUID uuid, @NonNull String pathName) {
+        return getChosenPathsWithMissingResults(uuid).contains(pathName);
     }
 
     // ------------PERMISSION EXEMPTIONS ------------
 
-    /**
-     * Check whether a player is exempted from appearing on any leaderboard.
-     *
-     * @param uuid UUID of the player
-     * @return true if the given player is not allowed to be shown on any
-     * leaderboard. False otherwise.
-     */
+
     public boolean hasLeaderboardExemption(final UUID uuid) {
         return getPlayerSection(uuid).getBoolean("exempt leaderboard", false);
     }
 
-    /**
-     * Set whether a player is exempted from appearing on any leaderboard.
-     *
-     * @param uuid  UUID of the player
-     * @param value Value to set the exemption status to.
-     */
+
     public void setLeaderboardExemption(final UUID uuid, final boolean value) {
         getPlayerSection(uuid).set("exempt leaderboard", value);
     }
 
-    /**
-     * Check whether a player is exempted from checking their progress on paths. This means both automated and manual
-     * checks (using /ar check).
-     *
-     * @param uuid UUID of the player
-     * @return true if the given player is not allowed to be checked by Autorank.
-     */
+
     public boolean hasAutoCheckingExemption(final UUID uuid) {
         return getPlayerSection(uuid).getBoolean("exempted from checking", false);
     }
 
-    /**
-     * Set whether a player is exempted from automatic and manual checking of paths.
-     *
-     * @param uuid  UUID of the player
-     * @param value Value to set the exemption status to.
-     */
+
     public void setAutoCheckingExemption(final UUID uuid, final boolean value) {
         getPlayerSection(uuid).set("exempted from checking", value);
     }
 
-    /**
-     * Check whether a player is exempted from building up time. If he is, Autorank will not count any of their time.
-     *
-     * @param uuid UUID of the player
-     * @return true if the given player's time is not counted.
-     */
+
     public boolean hasTimeAdditionExemption(final UUID uuid) {
         return getPlayerSection(uuid).getBoolean("exempted from time addition", false);
     }
 
-    /**
-     * Set whether a player is exempted from building up time.
-     *
-     * @param uuid  UUID of the player
-     * @param value Value to set the exemption status to.
-     */
+
     public void setTimeAdditionExemption(final UUID uuid, final boolean value) {
         getPlayerSection(uuid).set("exempted from time addition", value);
     }
 
+    @Override
+    public PlayerDataManager.PlayerDataStorageType getDataStorageType() {
+        return PlayerDataManager.PlayerDataStorageType.LOCAL;
+    }
+
     // ------------ CONFIGURATION SECTIONS ------------
 
-    private ConfigurationSection getPlayerSection(UUID uuid) {
+    @NotNull
+    private ConfigurationSection getPlayerSection(@NotNull UUID uuid) {
 
         ConfigurationSection playerSection = this.getConfig().getConfigurationSection(uuid.toString());
 
@@ -694,6 +487,7 @@ public class LocalPlayerDataStorage extends AbstractConfig {
         return playerSection;
     }
 
+    @NotNull
     private ConfigurationSection getActivePathsSection(UUID uuid) {
         ConfigurationSection playerSection = getPlayerSection(uuid);
 
@@ -712,6 +506,7 @@ public class LocalPlayerDataStorage extends AbstractConfig {
         return section.getConfigurationSection(pathName);
     }
 
+    @NotNull
     private ConfigurationSection getCompletedPathsSection(UUID uuid) {
         ConfigurationSection playerSection = getPlayerSection(uuid);
 
@@ -730,6 +525,7 @@ public class LocalPlayerDataStorage extends AbstractConfig {
         return section.getConfigurationSection(pathName);
     }
 
+    @NotNull
     private ConfigurationSection getProgressOnPathsSection(UUID uuid) {
         ConfigurationSection playerSection = getPlayerSection(uuid);
 
@@ -748,6 +544,7 @@ public class LocalPlayerDataStorage extends AbstractConfig {
         return section.getConfigurationSection(pathName);
     }
 
+    @NotNull
     private ConfigurationSection getResultsNotPerformedSection(UUID uuid) {
         ConfigurationSection section = getPlayerSection(uuid);
 
@@ -760,6 +557,7 @@ public class LocalPlayerDataStorage extends AbstractConfig {
         return returnValue;
     }
 
+    @NotNull
     private ConfigurationSection getCompletedRequirementsMissingResultsSection(UUID uuid) {
         ConfigurationSection section = getResultsNotPerformedSection(uuid);
 

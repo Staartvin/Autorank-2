@@ -24,7 +24,7 @@ public class ResultBuilder {
     private boolean isValid = false;
 
     // Extra metadata for the associated abstractResult.
-    private String pathName, resultName;
+    private String pathName, resultName, originalResultString;
 
     public final Autorank getAutorank() {
         return Autorank.getInstance();
@@ -76,7 +76,7 @@ public class ResultBuilder {
 
         this.pathName = pathName;
 
-        String originalResType = resultType;
+        this.originalResultString = resultType;
 
         resultType = AutorankTools.findMatchingResultName(resultType);
 
@@ -85,7 +85,7 @@ public class ResultBuilder {
         if (resultType == null) {
             Autorank.getInstance().getWarningManager().registerWarning(
                     String.format("You are using a '%s' result in path '%s', but that result doesn't " +
-                                    "exist!", originalResType,
+                                    "exist!", originalResultString,
                             pathName),
                     10);
             return this;
@@ -100,7 +100,8 @@ public class ResultBuilder {
             }
         } else {
             Bukkit.getServer().getConsoleSender()
-                    .sendMessage("[Autorank] " + ChatColor.RED + "Result '" + originalResType + "' is not a valid " +
+                    .sendMessage("[Autorank] " + ChatColor.RED + "Result '" + originalResultString + "' is not a " +
+                            "valid " +
                             "result type!");
         }
         return this;
@@ -125,10 +126,13 @@ public class ResultBuilder {
         abstractResult.setOptions(stringValue.split(";"));
 
         // Check if there is a custom description set for this result, if so, set it.
-        if (getAutorank().getPathsConfig().hasCustomResultDescription(this.pathName, this.resultName)) {
+        if (getAutorank().getPathsConfig().hasCustomResultDescription(this.pathName, this.originalResultString)) {
             abstractResult.setCustomDescription(getAutorank().getPathsConfig().getCustomResultDescription(this
-                    .pathName, this.resultName));
+                    .pathName, this.originalResultString));
         }
+
+        abstractResult.setGlobal(getAutorank().getPathsConfig().isResultGlobal(this.pathName,
+                this.originalResultString));
 
         // AbstractResult is non-null and populated with storage, so valid.
         isValid = true;
@@ -144,7 +148,8 @@ public class ResultBuilder {
      */
     public AbstractResult finish() throws IllegalStateException {
         if (!isValid || abstractResult == null) {
-            throw new IllegalStateException("Result '" + resultName + "' of '" + pathName + "' was not valid" +
+            throw new IllegalStateException("Result '" + originalResultString + "' of '" + pathName + "' was not " +
+                    "valid" +
                     " and could not be finished.");
         }
 

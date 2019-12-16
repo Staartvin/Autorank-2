@@ -3,16 +3,22 @@ package me.armar.plugins.autorank.pathbuilder.playerdata.global;
 import io.reactivex.annotations.NonNull;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.config.SettingsConfig;
+import me.armar.plugins.autorank.pathbuilder.playerdata.PlayerDataManager;
+import me.armar.plugins.autorank.pathbuilder.playerdata.PlayerDataStorage;
+import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.warningmanager.WarningManager;
+import org.apache.commons.lang.Validate;
 import org.bukkit.ChatColor;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-public class GlobalPlayerDataStorage {
+public class GlobalPlayerDataStorage implements PlayerDataStorage {
 
     static String TABLE_PLAYERDATA_STORAGE_COMPLETED_PATHS = "playerdata_completed_paths";
     static String TABLE_SERVER_REGISTER = "servers";
@@ -41,8 +47,15 @@ public class GlobalPlayerDataStorage {
             }
         });
 
+        // Periodically run update to load data in cache.
+        plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, () -> {
+            if (getConnection() != null && !getConnection().isClosed()) {
+                this.updateCacheFromRemote();
+            }
+        }, AutorankTools.TICKS_PER_SECOND * 30, AutorankTools.TICKS_PER_SECOND * 30);
     }
 
+    @NotNull
     private CompletableFuture<Boolean> loadDatabaseConnection() {
 
         return CompletableFuture.supplyAsync(() -> {
@@ -63,7 +76,7 @@ public class GlobalPlayerDataStorage {
 
             if (connection.connect()) {
                 plugin.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "Successfully attached to your " +
-                        "MySQL dratabase to retrieve playerdata");
+                        "MySQL database to retrieve playerdata");
                 return true;
             } else {
                 plugin.getServer().getConsoleSender().sendMessage(ChatColor.RED + "Could not attach to your " +
@@ -110,11 +123,11 @@ public class GlobalPlayerDataStorage {
 
         plugin.debugMessage("Loaded online playerdata storage.");
 
-        this.loadPlayerDataInCache();
+        this.updateCacheFromRemote();
 
     }
 
-    private void loadPlayerDataInCache() {
+    private void updateCacheFromRemote() {
         ResultSet resultSet =
                 getConnection().performQuery("SELECT * FROM " + TABLE_PLAYERDATA_STORAGE_COMPLETED_PATHS + " ORDER BY" +
                         " uuid");
@@ -147,6 +160,116 @@ public class GlobalPlayerDataStorage {
         }
     }
 
+    @Override
+    public Collection<Integer> getCompletedRequirements(UUID uuid, String pathName) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean hasCompletedRequirement(UUID uuid, String pathName, int requirementId) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void addCompletedRequirement(UUID uuid, String pathName, int requirementId) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void setCompletedRequirements(UUID uuid, String pathName, Collection<Integer> requirements) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Collection<Integer> getCompletedRequirementsWithMissingResults(UUID uuid, String pathName) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void addCompletedRequirementWithMissingResults(UUID uuid, String pathName, int requirementId) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void removeCompletedRequirementWithMissingResults(UUID uuid, String pathName, int requirementId) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean hasCompletedRequirementWithMissingResults(UUID uuid, String pathName, int requirementId) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Collection<Integer> getCompletedPrerequisites(UUID uuid, String pathName) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean hasCompletedPrerequisite(UUID uuid, String pathName, int prerequisiteId) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void addCompletedPrerequisite(UUID uuid, String pathName, int prerequisiteId) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void setCompletedPrerequisites(UUID uuid, String pathName, Collection<Integer> prerequisites) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Collection<String> getChosenPathsWithMissingResults(UUID uuid) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void addChosenPathWithMissingResults(UUID uuid, String pathName) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void removeChosenPathWithMissingResults(UUID uuid, String pathName) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean hasChosenPathWithMissingResults(UUID uuid, String pathName) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Collection<String> getActivePaths(UUID uuid) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean hasActivePath(UUID uuid, String pathName) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void addActivePath(UUID uuid, String pathName) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void removeActivePath(UUID uuid, String pathName) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void setActivePaths(UUID uuid, Collection<String> paths) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Collection<String> getCompletedPaths(UUID uuid) {
+        return null;
+    }
+
     /**
      * Check whether a player has completed a given path globally.
      *
@@ -156,6 +279,109 @@ public class GlobalPlayerDataStorage {
      */
     public boolean hasCompletedPath(@NonNull UUID uuid, @NonNull String completedPath) {
         return this.playerDataCache.getCachedPlayerData(uuid).getCachedEntriesByPath(completedPath).size() > 0;
+    }
+
+    /**
+     * Add a completed path to the storage.
+     *
+     * @param uuid          UUID of the player that completed the path
+     * @param completedPath Name of the path that was completed.
+     */
+    public void addCompletedPath(@NonNull UUID uuid, @NonNull String completedPath) {
+        Validate.notNull(uuid);
+        Validate.notNull(completedPath);
+
+        String serverName = plugin.getSettingsConfig().getMySQLCredentials(SettingsConfig.MySQLCredentials.SERVER_NAME);
+
+        // Add item to indicate that a path has been completed.
+        getConnection().performUpdate("INSERT INTO " + TABLE_PLAYERDATA_STORAGE_COMPLETED_PATHS + " VALUES ('" + serverName + "', '" + uuid.toString() + "', '" + completedPath + "') ON " +
+                "DUPLICATE KEY UPDATE uuid=uuid;");
+
+        // Update the last time a server has updated values.
+        getConnection().performUpdate("UPDATE " + TABLE_SERVER_REGISTER + " SET last_updated = CURRENT_TIMESTAMP " +
+                "WHERE server_name = '" + serverName + "';");
+
+    }
+
+    @Override
+    public void removeCompletedPath(UUID uuid, String pathName) {
+        String serverName = plugin.getSettingsConfig().getMySQLCredentials(SettingsConfig.MySQLCredentials.SERVER_NAME);
+
+        // Remove path that matches the name of the path.
+        getConnection().performUpdate("DELETE FROM " + TABLE_PLAYERDATA_STORAGE_COMPLETED_PATHS + " WHERE uuid='"
+                + uuid.toString() + "' AND server_name='" + serverName + "' AND completed_path='" + pathName + "';");
+    }
+
+    @Override
+    public void setCompletedPaths(UUID uuid, Collection<String> paths) {
+        String serverName = plugin.getSettingsConfig().getMySQLCredentials(SettingsConfig.MySQLCredentials.SERVER_NAME);
+
+        // First remove all paths that are currently stored there.
+        getConnection().performUpdate("DELETE FROM " + TABLE_PLAYERDATA_STORAGE_COMPLETED_PATHS + " WHERE uuid='"
+                + uuid.toString() + "' AND server_name='" + serverName + "';");
+
+        // For each path, add them again.
+        paths.forEach(completedPath -> this.addCompletedPath(uuid, completedPath));
+    }
+
+    @Override
+    public int getTimesCompletedPath(UUID uuid, String pathName) {
+        return hasCompletedPath(uuid, pathName) ? 1 : 0;
+    }
+
+    @Override
+    public Collection<String> getCompletedPathsWithMissingResults(UUID uuid) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void addCompletedPathWithMissingResults(UUID uuid, String pathName) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void removeCompletedPathWithMissingResults(UUID uuid, String pathName) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean hasCompletedPathWithMissingResults(UUID uuid, String pathName) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean hasLeaderboardExemption(UUID uuid) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void setLeaderboardExemption(UUID uuid, boolean value) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean hasAutoCheckingExemption(UUID uuid) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void setAutoCheckingExemption(UUID uuid, boolean value) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean hasTimeAdditionExemption(UUID uuid) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void setTimeAdditionExemption(UUID uuid, boolean value) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public PlayerDataManager.PlayerDataStorageType getDataStorageType() {
+        return PlayerDataManager.PlayerDataStorageType.GLOBAL;
     }
 
 }

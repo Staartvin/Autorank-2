@@ -63,7 +63,7 @@ class CachedPlayerDataEntry {
     private String serverName;
     private String completedPath;
 
-    public CachedPlayerDataEntry(String serverName, String completedPath) {
+    public CachedPlayerDataEntry(@NonNull String serverName, @NonNull String completedPath) {
         this.serverName = serverName;
         this.completedPath = completedPath;
     }

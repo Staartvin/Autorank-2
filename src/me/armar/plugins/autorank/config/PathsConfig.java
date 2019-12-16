@@ -2,6 +2,7 @@ package me.armar.plugins.autorank.config;
 
 import com.google.common.collect.Lists;
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.pathbuilder.result.AbstractResult;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.ArrayList;
@@ -73,7 +74,7 @@ public class PathsConfig extends AbstractConfig {
      * @param reqName  Name of the requirement
      * @return requirement id or -1 if none was found.
      */
-    public int getReqId(final String pathName, final String reqName, boolean isPreRequisite) {
+    public int getRequirementId(final String pathName, final String reqName, boolean isPreRequisite) {
         final Object[] reqs = getRequirements(pathName, isPreRequisite).toArray();
 
         for (int i = 0; i < reqs.length; i++) {
@@ -476,5 +477,17 @@ public class PathsConfig extends AbstractConfig {
         return this.getConfig().getBoolean(pathName + ".options.store progress on deactivation", this.getPlugin()
                 .getDefaultBehaviorConfig().getDefaultBooleanBehaviorOfOption(DefaultBehaviorOption
                         .STORE_PROGRESS_ON_DEACTIVATION));
+    }
+
+    /**
+     * Check whether a result of a path is global. See
+     * {@link AbstractResult#isGlobal()} for more info about global results.
+     *
+     * @param pathName   Name of the path
+     * @param resultName Name of the result
+     * @return true if the result is global, false by default.
+     */
+    public boolean isResultGlobal(String pathName, String resultName) {
+        return this.getConfig().getBoolean(pathName + ".results." + resultName + ".options.global", false);
     }
 }

@@ -18,6 +18,7 @@ import me.armar.plugins.autorank.listeners.PlayerQuitListener;
 import me.armar.plugins.autorank.pathbuilder.PathManager;
 import me.armar.plugins.autorank.pathbuilder.builders.RequirementBuilder;
 import me.armar.plugins.autorank.pathbuilder.builders.ResultBuilder;
+import me.armar.plugins.autorank.pathbuilder.playerdata.PlayerDataManager;
 import me.armar.plugins.autorank.pathbuilder.playerdata.global.GlobalPlayerDataStorage;
 import me.armar.plugins.autorank.pathbuilder.playerdata.local.LocalPlayerDataStorage;
 import me.armar.plugins.autorank.pathbuilder.requirement.*;
@@ -99,8 +100,8 @@ public class Autorank extends JavaPlugin {
     private DefaultBehaviorConfig defaultBehaviorConfig;
 
     // Data storage
-    private LocalPlayerDataStorage localPlayerDataStorage;
-    private GlobalPlayerDataStorage globalPlayerDataStorage;
+    private PlayerDataManager playerDataManager;
+
 
     public static Autorank getInstance() {
         return autorank;
@@ -154,16 +155,16 @@ public class Autorank extends JavaPlugin {
         setInternalPropertiesConfig(new InternalPropertiesConfig(this));
         setDefaultBehaviorConfig(new DefaultBehaviorConfig((this)));
 
-        // Load data storages
-        setLocalPlayerDataStorage(new LocalPlayerDataStorage(this));
-        //setGlobalPlayerDataStorage(new GlobalPlayerDataStorage(this));
+        setPlayerDataManager(new PlayerDataManager(this));
 
         // Create new configs
         this.getDefaultBehaviorConfig().loadConfig();
         this.getPathsConfig().loadConfig();
         this.getSettingsConfig().loadConfig();
         this.getInternalPropertiesConfig().loadConfig();
-        this.getLocalPlayerDataStorage().loadConfig();
+
+        // Load data storages
+        getPlayerDataManager().addDataStorage(new LocalPlayerDataStorage(this));
 
         // ------------- Initialize managers -------------
 
@@ -267,6 +268,9 @@ public class Autorank extends JavaPlugin {
         if (this.getSettingsConfig().useMySQL()) {
             StorageProvider mysqlStorageProvider = new MySQLStorageProvider(this);
 
+            // Enable global player data storage.
+            getPlayerDataManager().addDataStorage(new GlobalPlayerDataStorage(this));
+
             loadMySQLTask = mysqlStorageProvider.initialiseProvider().thenAccept(loaded -> {
                 // Only register the mysql storage provider if it is loaded.
                 if (loaded) {
@@ -280,8 +284,7 @@ public class Autorank extends JavaPlugin {
                 } else {
                     // Admin wanted to use MySQL, but the storage provider could not be loaded. Warn the admin.
                     this.getWarningManager().registerWarning("The MySQL storage provider could not be started. Check " +
-                            "for " +
-                            "errors!", WarningManager.HIGH_PRIORITY_WARNING);
+                            "for errors!", WarningManager.HIGH_PRIORITY_WARNING);
                 }
             });
         }
@@ -531,7 +534,7 @@ public class Autorank extends JavaPlugin {
                 QuestsAlternativeCompletedQuestsRequirement.class);
         RequirementBuilder.registerRequirement("quests fatpigsarefat active quests",
                 QuestsAlternativeActiveQuestsRequirement
-                .class);
+                        .class);
 
         // SavageFactions
         RequirementBuilder.registerRequirement("savagefactions faction power",
@@ -728,6 +731,7 @@ public class Autorank extends JavaPlugin {
     public void setDependencyManager(final DependencyManager dependencyManager) {
         this.dependencyManager = dependencyManager;
     }
+
     public InternalPropertiesConfig getInternalPropertiesConfig() {
         return internalPropertiesConfig;
     }
@@ -800,19 +804,11 @@ public class Autorank extends JavaPlugin {
         this.taskManager = taskManager;
     }
 
-    public LocalPlayerDataStorage getLocalPlayerDataStorage() {
-        return localPlayerDataStorage;
+    public PlayerDataManager getPlayerDataManager() {
+        return playerDataManager;
     }
 
-    public void setLocalPlayerDataStorage(LocalPlayerDataStorage localPlayerDataStorage) {
-        this.localPlayerDataStorage = localPlayerDataStorage;
-    }
-
-    public GlobalPlayerDataStorage getGlobalPlayerDataStorage() {
-        return globalPlayerDataStorage;
-    }
-
-    public void setGlobalPlayerDataStorage(GlobalPlayerDataStorage globalPlayerDataStorage) {
-        this.globalPlayerDataStorage = globalPlayerDataStorage;
+    public void setPlayerDataManager(PlayerDataManager playerDataManager) {
+        this.playerDataManager = playerDataManager;
     }
 }

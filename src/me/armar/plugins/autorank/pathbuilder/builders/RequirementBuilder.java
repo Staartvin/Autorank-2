@@ -189,7 +189,8 @@ public class RequirementBuilder {
         // Set whether this requirement should auto complete.
         requirement.setAutoComplete(Autorank.getInstance().getPathsConfig().useAutoCompletion(pathName, requirementType, isPreRequisite));
 
-        int requirementId = Autorank.getInstance().getPathsConfig().getReqId(pathName, requirementType, isPreRequisite);
+        int requirementId = Autorank.getInstance().getPathsConfig().getRequirementId(pathName, requirementType,
+                isPreRequisite);
 
         // Do sanity check
         if (requirementId < 0) {

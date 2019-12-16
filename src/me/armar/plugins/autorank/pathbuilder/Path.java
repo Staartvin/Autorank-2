@@ -4,6 +4,7 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.api.events.RequirementCompleteEvent;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.pathbuilder.holders.CompositeRequirement;
+import me.armar.plugins.autorank.pathbuilder.playerdata.PlayerDataManager;
 import me.armar.plugins.autorank.pathbuilder.result.AbstractResult;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -337,8 +338,8 @@ public class Path {
         // Check whether the user is online or not.
         if (player == null) {
             // The user is not online, so we register that they will get their results when they come back online.
-            this.plugin.getPathManager().getPlayerDataStorage().addCompletedRequirementMissingResults(uuid,
-                    this.getInternalName(), reqId);
+            this.plugin.getPlayerDataManager().getPrimaryDataStorage().ifPresent(s ->
+                    s.addCompletedRequirementWithMissingResults(uuid, this.getInternalName(), reqId));
         } else {
             // Notify player.
             player.sendMessage(
@@ -400,6 +401,16 @@ public class Path {
         boolean success = true;
 
         for (AbstractResult r : this.getResultsUponChoosing()) {
+
+            if (r.isGlobal()) {
+                boolean hasCompletedPathGlobally =
+                        plugin.getPlayerDataManager().getDataStorage(PlayerDataManager.PlayerDataStorageType.GLOBAL)
+                                .map(s -> s.hasCompletedPath(player.getUniqueId(), this.getInternalName())).orElse(false);
+
+                // Don't perform this result if the path has already been completed on another server.
+                if (hasCompletedPathGlobally) continue;
+            }
+
             if (!r.applyResult(player)) {
                 success = false;
             }
@@ -418,6 +429,16 @@ public class Path {
         boolean success = true;
 
         for (AbstractResult r : this.getResults()) {
+
+            if (r.isGlobal()) {
+                boolean hasCompletedPathGlobally =
+                        plugin.getPlayerDataManager().getDataStorage(PlayerDataManager.PlayerDataStorageType.GLOBAL)
+                                .map(s -> s.hasCompletedPath(player.getUniqueId(), this.getInternalName())).orElse(false);
+
+                // Don't perform this result if the path has already been completed on another server.
+                if (hasCompletedPathGlobally) continue;
+            }
+
             if (!r.applyResult(player)) {
                 success = false;
             }
@@ -526,7 +547,8 @@ public class Path {
      * @return true if the path is active for the given player. False otherwise.
      */
     public boolean isActive(UUID uuid) {
-        return plugin.getPathManager().getPlayerDataStorage().isActivePath(uuid, this.getInternalName());
+        return plugin.getPlayerDataManager().getPrimaryDataStorage().map(storage -> storage.hasActivePath(uuid,
+                this.getInternalName())).orElse(false);
     }
 
     /**
@@ -615,7 +637,8 @@ public class Path {
      * @return number of times that this path has been completed by the given player.
      */
     public int getTimesCompleted(UUID uuid) {
-        return plugin.getPathManager().getPlayerDataStorage().getTimesCompletedPath(uuid, this.getInternalName());
+        return plugin.getPlayerDataManager().getPrimaryDataStorage().map(s -> s.getTimesCompletedPath(uuid,
+                this.getInternalName())).orElse(0);
     }
 
     /**
