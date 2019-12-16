@@ -57,7 +57,14 @@ public class CacheManager {
      * @return true if the player has a cached time value, false otherwise.
      */
     public boolean hasCachedTime(@NonNull TimeType timeType, @NonNull UUID uuid) {
-        return this.cachedTimeValues.containsKey(uuid) && this.cachedTimeValues.get(uuid) != null;
+
+        if (!this.cachedTimeValues.containsKey(uuid)) return false;
+
+        CachedEntry entry = this.cachedTimeValues.get(uuid);
+
+        if (entry == null) return false;
+
+        return entry.hasCachedTime(timeType);
     }
 
     /**

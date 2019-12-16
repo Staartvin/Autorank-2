@@ -141,8 +141,6 @@ public class GlobalPlayerDataStorage {
                 continue;
             }
 
-            System.out.println("Loaded UUID " + uuid.toString() + " on server " + serverName + " for path " + completedPath);
-
             CachedPlayerData cachedPlayerData = this.playerDataCache.getCachedPlayerData(uuid);
 
             cachedPlayerData.addCachedEntry(completedPath, serverName);

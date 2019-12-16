@@ -132,8 +132,6 @@ public class PlayerJoinListener implements Listener {
                 path.performResults(player);
             }
 
-            System.out.println("Performing result of path " + pathName);
-
             plugin.getLocalPlayerDataStorage().removeCompletedPathMissingResults(player.getUniqueId(), pathName);
         }
 

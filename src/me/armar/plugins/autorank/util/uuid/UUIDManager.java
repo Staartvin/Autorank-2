@@ -184,8 +184,6 @@ public class UUIDManager {
                     continue;
                 }
 
-                System.out.println("We got " + storedUUID + " for " + playerName + " from the local storage.");
-
                 // We found a stored UUID so we put that in the cached data.
                 cachedData.put(playerName, storedUUID);
                 // Remove this player name, because we don't have to search for it anymore.
@@ -204,8 +202,6 @@ public class UUIDManager {
 
                     // Store all looked-up names in the data.
                     cachedData.putAll(response);
-
-                    System.out.println("Received " + response.size() + " uuids from Mojang.");
 
                 } catch (final Exception e) {
                     if (e instanceof IOException) {

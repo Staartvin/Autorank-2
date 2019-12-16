@@ -73,8 +73,12 @@ public class PlayTimeManager {
                     return playTime;
 
                 // Stats not found, using Autorank's system.
-                playTime = plugin.getStorageManager().getPrimaryStorageProvider().getPlayerTime(TimeType.TOTAL_TIME,
-                        uuid).getNow(0) * 60;
+                try {
+                    playTime = plugin.getStorageManager().getPrimaryStorageProvider().getPlayerTime(TimeType.TOTAL_TIME,
+                            uuid).get() * 60;
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
             }
         } else if (timePlugin.equals(AutorankDependency.ONTIME)) {
             playTime = (int) (((OnTimeHook) plugin.getDependencyManager().getLibraryHook(Library.ONTIME))
@@ -90,8 +94,12 @@ public class PlayTimeManager {
             }
 
             // Use internal system of Autorank.
-            playTime = plugin.getStorageManager().getPrimaryStorageProvider().getPlayerTime(TimeType.TOTAL_TIME,
-                    uuid).getNow(0) * 60;
+            try {
+                playTime = plugin.getStorageManager().getPrimaryStorageProvider().getPlayerTime(TimeType.TOTAL_TIME,
+                        uuid).get() * 60;
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
         }
 
         return playTime;
