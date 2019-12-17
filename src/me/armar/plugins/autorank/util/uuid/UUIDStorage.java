@@ -349,7 +349,6 @@ public class UUIDStorage {
 
             // Don't look them up.
             if (!isOutdated(lowerCasePlayerName)) {
-                plugin.debugMessage("Not refreshing user " + lowerCasePlayerName + " because it's up-to-date.");
                 return true;
             }
 
@@ -370,7 +369,6 @@ public class UUIDStorage {
                         // Don't do anything besides updating updateTime.
                         config.set(lowerCasePlayerName + ".updateTime", System.currentTimeMillis());
 
-                        plugin.debugMessage("Refreshed user '" + playerName + "' with uuid " + uuid + "!");
                         return true; // Do not do anything else.
                     }
 

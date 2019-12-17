@@ -50,15 +50,6 @@ public class PlayTimeManager {
 
         int playTime = 0;
 
-        String playerName = null;
-
-        try {
-            playerName = UUIDManager.getPlayerName(uuid).get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
-
-
         // Determine what plugin to use for getting the time.
         if (timePlugin.equals(AutorankDependency.STATS)) {
             final StatsPlugin stats = plugin.getHookedStatsPlugin();
@@ -81,6 +72,14 @@ public class PlayTimeManager {
                 }
             }
         } else if (timePlugin.equals(AutorankDependency.ONTIME)) {
+            String playerName = null;
+
+            try {
+                playerName = UUIDManager.getPlayerName(uuid).get();
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+
             playTime = (int) (((OnTimeHook) plugin.getDependencyManager().getLibraryHook(Library.ONTIME))
                     .getPlayerData(playerName, "TOTALPLAY") / 1000);
         } else if (timePlugin.equals(AutorankDependency.STATZ)) {

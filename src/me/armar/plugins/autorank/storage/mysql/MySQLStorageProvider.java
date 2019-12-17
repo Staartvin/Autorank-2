@@ -243,9 +243,8 @@ public class MySQLStorageProvider extends StorageProvider {
             // Loop over all rows to get all UUIDs.
             while (rs.next()) {
                 String uuidString = rs.getString("uuid");
-                UUID uuid = UUID.fromString(uuidString);
 
-                uuids.add(uuid);
+                uuids.add(UUID.fromString(uuidString));
             }
 
         } catch (final SQLException e) {

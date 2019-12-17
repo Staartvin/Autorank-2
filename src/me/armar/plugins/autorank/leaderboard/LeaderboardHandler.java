@@ -154,29 +154,29 @@ public class LeaderboardHandler {
                 } else {
 
                     // If we are using Autorank, we do not need the player name.
-                    if (plugin.getPlayTimeManager().getUsedTimePlugin().equals(AutorankDependency.AUTORANK)) {
-                        try {
-                            times.put(uuid, primaryStorageProvider.getPlayerTime(type,
-                                    uuid).get());
-                        } catch (InterruptedException | ExecutionException e) {
-                            e.printStackTrace();
-                        }
-                    } else {
-                        // Get the cached value of this uuid
-                        String playerName = null;
-                        try {
-                            playerName = UUIDManager.getPlayerName(uuid).get();
-                        } catch (InterruptedException | ExecutionException e) {
-                            e.printStackTrace();
-                        }
+//                    if (plugin.getPlayTimeManager().getUsedTimePlugin().equals(AutorankDependency.AUTORANK)) {
+//                        try {
+//                            times.put(uuid, primaryStorageProvider.getPlayerTime(type,
+//                                    uuid).get());
+//                        } catch (InterruptedException | ExecutionException e) {
+//                            e.printStackTrace();
+//                        }
+//                    } else {
+//                        // Get the cached value of this uuid
+//                        String playerName = null;
+//                        try {
+//                            playerName = UUIDManager.getPlayerName(uuid).get();
+//                        } catch (InterruptedException | ExecutionException e) {
+//                            e.printStackTrace();
+//                        }
+//
+//                        if (playerName == null) {
+//                            plugin.debugMessage("Could not get cached player name of uuid '" + uuid + "'!");
+//                            continue;
+//                        }
 
-                        if (playerName == null) {
-                            plugin.debugMessage("Could not get cached player name of uuid '" + uuid + "'!");
-                            continue;
-                        }
-
-                        times.put(uuid, (plugin.getPlayTimeManager().getTimeOfPlayer(uuid, true) / 60));
-                    }
+                    times.put(uuid, (plugin.getPlayTimeManager().getTimeOfPlayer(uuid, true) / 60));
+//                    }
                 }
             } else {
                 try {
@@ -253,15 +253,15 @@ public class LeaderboardHandler {
                 } else {
 
                     // If we are using Autorank, we do not need the player name.
-                    if (plugin.getPlayTimeManager().getUsedTimePlugin().equals(AutorankDependency.AUTORANK)) {
-                        try {
-                            times.put(playerName, primaryStorageProvider.getPlayerTime(type, uuid).get());
-                        } catch (InterruptedException | ExecutionException e) {
-                            e.printStackTrace();
-                        }
-                    } else {
-                        times.put(playerName, (plugin.getPlayTimeManager().getTimeOfPlayer(uuid, true) / 60));
-                    }
+//                    if (plugin.getPlayTimeManager().getUsedTimePlugin().equals(AutorankDependency.AUTORANK)) {
+//                        try {
+//                            times.put(playerName, primaryStorageProvider.getPlayerTime(type, uuid).get());
+//                        } catch (InterruptedException | ExecutionException e) {
+//                            e.printStackTrace();
+//                        }
+//                    } else {
+                    times.put(playerName, (plugin.getPlayTimeManager().getTimeOfPlayer(uuid, true) / 60));
+//                    }
                 }
             } else {
                 try {
