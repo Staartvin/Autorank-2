@@ -46,6 +46,7 @@ public class GrabPlayerTimeTask implements Callable<Integer> {
         try {
             if (rs.next()) {
                 time = rs.getInt(2);
+                rs.close();
             } else {
                 return time;
             }

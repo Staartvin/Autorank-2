@@ -51,7 +51,9 @@ public class MySQLStorageProvider extends StorageProvider {
         instance.getServer().getScheduler().runTaskTimerAsynchronously(instance, () -> {
 
             // Find all UUIDS that are in the cache.
-            cacheManager.getCachedUUIDs().forEach(cachedUUID -> {
+            Set<UUID> cachedUUIDs = cacheManager.getCachedUUIDs();
+
+            for (UUID cachedUUID : cachedUUIDs) {
                 // Loop over all time types and see if they should be updated.
                 for (TimeType timeType : TimeType.values()) {
                     if (cacheManager.shouldUpdateCachedEntry(timeType, cachedUUID)) {
@@ -70,7 +72,7 @@ public class MySQLStorageProvider extends StorageProvider {
                         cacheManager.registerCachedTime(timeType, cachedUUID, playTime);
                     }
                 }
-            });
+            }
 
         }, 0L, (CACHE_EXPIRY_TIME * AutorankTools.TICKS_PER_MINUTE) / 2);
     }
