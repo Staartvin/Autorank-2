@@ -208,20 +208,7 @@ public class AutorankTools {
         return null;
     }
 
-    public static String getStringFromArgs(final String[] args, final int startArg) {
-        final StringBuilder string = new StringBuilder();
 
-        for (int i = startArg; i < args.length; i++) {
-
-            if (i == startArg) {
-                string.append(args[i]);
-            } else {
-                string.append(" " + args[i]);
-            }
-        }
-
-        return string.toString();
-    }
 
     /**
      * Split a string with .split() and then get the given element in the array.

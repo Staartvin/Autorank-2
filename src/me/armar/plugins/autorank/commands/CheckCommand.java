@@ -16,7 +16,6 @@ import org.bukkit.entity.Player;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
@@ -187,11 +186,11 @@ public class CheckCommand extends AutorankCommand {
             if (isPlayer && args.length > 2) {
                 // Check if the argument could be a path
                 targetPath = plugin.getPathManager().findPathByDisplayName(
-                        AutorankTools.getStringFromArgs(args, 2).trim(), false);
+                        AutorankCommand.getStringFromArgs(args, 2).trim(), false);
             } else {
                 // We must have a path.
                 targetPath =
-                        plugin.getPathManager().findPathByDisplayName(AutorankTools.getStringFromArgs(args, 1).trim(),
+                        plugin.getPathManager().findPathByDisplayName(AutorankCommand.getStringFromArgs(args, 1).trim(),
                                 false);
             }
 
@@ -315,9 +314,13 @@ public class CheckCommand extends AutorankCommand {
 
         Player player = (Player) sender;
 
+        String typedPath = AutorankCommand.getStringFromArgs(args, 1);
+
+        List<String> suggestedPaths =
+                plugin.getPathManager().getActivePaths(player.getUniqueId()).stream().map(Path::getDisplayName).collect(Collectors.toList());
+
         // Return the name of the paths that the player has active.
-        return plugin.getPathManager().getActivePaths(player.getUniqueId
-                ()).stream().map(Path::getDisplayName).collect(Collectors.toCollection(ArrayList::new));
+        return AutorankCommand.getOptionsStartingWith(suggestedPaths, typedPath);
     }
 
     @Override

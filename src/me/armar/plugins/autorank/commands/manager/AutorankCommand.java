@@ -10,9 +10,11 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 /**
  * This class represents an Autorank command, such as /ar check or /ar times.
@@ -87,7 +89,7 @@ public abstract class AutorankCommand implements TabExecutor {
      * @param strings Strings provided by the onCommand() method.
      * @return all strings that identify as an argument.
      */
-    public List<String> getArgumentOptions(String[] strings) {
+    public static List<String> getArgumentOptions(String[] strings) {
         List<String> arguments = new ArrayList<>();
 
         Arrays.stream(strings).forEach(string -> {
@@ -115,5 +117,39 @@ public abstract class AutorankCommand implements TabExecutor {
                 e.printStackTrace();
             }
         });
+    }
+
+    /**
+     * Get a list of string options that match the start of a given string.
+     * This method will return all strings in the given options that start with the given string.
+     *
+     * @param options Options to check
+     * @param started String to start with
+     * @return list of strings, a subset of the given options.
+     */
+    public static List<String> getOptionsStartingWith(Collection<String> options, String started) {
+        return options.stream().filter(s -> s.toLowerCase().startsWith(started.toLowerCase())).collect(Collectors.toList());
+    }
+
+    /**
+     * Construct a single string from an array of strings, starting from a given position in the array.
+     *
+     * @param args     String array to stitch together
+     * @param startArg Position to start stitching from.
+     * @return a single string.
+     */
+    public static String getStringFromArgs(final String[] args, final int startArg) {
+        final StringBuilder string = new StringBuilder();
+
+        for (int i = startArg; i < args.length; i++) {
+
+            if (i == startArg) {
+                string.append(args[i]);
+            } else {
+                string.append(" ").append(args[i]);
+            }
+        }
+
+        return string.toString();
     }
 }

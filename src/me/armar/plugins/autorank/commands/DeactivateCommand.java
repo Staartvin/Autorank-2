@@ -5,7 +5,6 @@ import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.pathbuilder.Path;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
-import me.armar.plugins.autorank.util.AutorankTools;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -45,7 +44,7 @@ public class DeactivateCommand extends AutorankCommand {
 
         final Player player = (Player) sender;
 
-        final String pathName = AutorankTools.getStringFromArgs(args, 1);
+        final String pathName = AutorankCommand.getStringFromArgs(args, 1);
 
         // Try to find path that matches given name
         Path targetPath = plugin.getPathManager().findPathByDisplayName(pathName, false);
@@ -95,8 +94,11 @@ public class DeactivateCommand extends AutorankCommand {
 
         final Player player = (Player) sender;
 
-        return plugin.getPathManager().getActivePaths(player.getUniqueId()).stream().map(Path::getDisplayName)
-                .collect(Collectors.toList());
+        String typedPath = AutorankCommand.getStringFromArgs(args, 1);
+
+        // Return the name of the paths that the player has active.
+        return AutorankCommand.getOptionsStartingWith(plugin.getPathManager().getActivePaths(player.getUniqueId()).stream().map(Path::getDisplayName).collect(Collectors
+                .toList()), typedPath);
     }
 
     @Override

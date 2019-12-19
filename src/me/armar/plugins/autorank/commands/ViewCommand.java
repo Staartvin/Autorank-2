@@ -50,7 +50,7 @@ public class ViewCommand extends AutorankCommand {
         }
 
         // /ar view list (or a name of a path)
-        pathName = AutorankTools.getStringFromArgs(args, 1);
+        pathName = AutorankCommand.getStringFromArgs(args, 1);
 
         // Get a list of possible paths that a player can take?
         if (pathName.equals("list")) {

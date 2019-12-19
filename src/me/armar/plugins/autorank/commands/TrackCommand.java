@@ -6,13 +6,13 @@ import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.pathbuilder.Path;
 import me.armar.plugins.autorank.pathbuilder.holders.CompositeRequirement;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
-import me.armar.plugins.autorank.util.AutorankTools;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * The command delegator for the '/ar track' command.
@@ -56,7 +56,7 @@ public class TrackCommand extends AutorankCommand {
                 return true;
             }
         } else {
-            pathName = AutorankTools.getStringFromArgs(args, 2);
+            pathName = AutorankCommand.getStringFromArgs(args, 2);
         }
 
         reqIdString = args[1];
@@ -147,6 +147,16 @@ public class TrackCommand extends AutorankCommand {
             }
 
             return new ArrayList<>(suggestedIds);
+        } else if (args.length >= 3) {
+
+            UUID uuid = ((Player) sender).getUniqueId();
+
+            Collection<String> suggestedPaths =
+                    plugin.getPathManager().getActivePaths(uuid).stream().map(Path::getDisplayName).collect(Collectors.toList());
+
+            String typedPath = AutorankCommand.getStringFromArgs(args, 2);
+
+            return AutorankCommand.getOptionsStartingWith(suggestedPaths, typedPath);
         }
 
         return null;
