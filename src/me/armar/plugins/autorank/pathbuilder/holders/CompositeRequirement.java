@@ -134,7 +134,7 @@ public class CompositeRequirement {
     /**
      * Get the progress for a player for this CompositeRequirement. For more info, see {@link #getDescription()}.
      *
-     * @param player Player to check
+     * @param uuid Player to check
      * @return progress string in the format as {@link #getDescription()}.
      */
     public String getProgress(UUID uuid) {
@@ -180,7 +180,11 @@ public class CompositeRequirement {
 
             if (i == 0) {
                 // First index
-                builder.append(progress).append(" or ");
+                builder.append(progress);
+
+                if (i != (size - 1)) {
+                    builder.append(" or ");
+                }
             } else {
 
                 final int difIndex = this.getDifferenceIndex(startingString, progress);
