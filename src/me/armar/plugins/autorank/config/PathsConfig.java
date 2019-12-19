@@ -25,6 +25,11 @@ public class PathsConfig extends AbstractConfig {
         setFileName("Paths.yml");
     }
 
+    @Override
+    public void reloadConfig() {
+        this.loadConfig();
+    }
+
     /**
      * Check whether a path can be completed more than once.
      *

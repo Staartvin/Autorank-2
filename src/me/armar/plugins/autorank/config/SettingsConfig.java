@@ -42,6 +42,11 @@ public class SettingsConfig extends AbstractConfig {
         this.setPlugin(instance);
     }
 
+    @Override
+    public void reloadConfig() {
+        this.loadConfig();
+    }
+
     /**
      * Check whether Autorank should display only the commands that a player is
      * able to perform when showing the help pages.
