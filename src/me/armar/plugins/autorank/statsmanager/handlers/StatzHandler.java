@@ -3,9 +3,11 @@ package me.armar.plugins.autorank.statsmanager.handlers;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.statzapi.StatzAPIHandler;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
+import me.armar.plugins.autorank.statsmanager.query.StatisticQuery;
+import me.armar.plugins.autorank.statsmanager.query.parameter.ParameterType;
+import me.armar.plugins.autorank.statsmanager.query.parameter.implementation.MovementTypeParameter;
 import me.staartvin.statz.database.datatype.RowRequirement;
 
-import java.util.HashMap;
 import java.util.UUID;
 
 public class StatzHandler extends StatsPlugin {
@@ -21,14 +23,10 @@ public class StatzHandler extends StatsPlugin {
     }
 
     @Override
-    public int getNormalStat(StatType statType, final UUID uuid, final HashMap<String, Object> arguments) {
+    public int getNormalStat(StatType statType, final UUID uuid, StatisticQuery query) {
         // First argument is the world (or null)
 
-        String worldName = null;
-
-        if (arguments.containsKey("world")) {
-            worldName = (arguments.get("world") != null ? arguments.get("world").toString() : null);
-        }
+        String worldName = query.getParameterValue(ParameterType.WORLD).orElse(null);
 
         double value = 0;
 
@@ -45,51 +43,47 @@ public class StatzHandler extends StatsPlugin {
                 value = statzApi.getTotalOf(uuid, statType, worldName);
                 break;
             case MOBS_KILLED:
-                if (!arguments.containsKey("mobType")) {
+                if (!query.hasParameter(ParameterType.MOB_TYPE)) {
                     value = statzApi.getSpecificData(uuid, statType);
                 } else {
                     value = statzApi.getSpecificData(uuid, statType,
-                            new RowRequirement("mob", arguments.get("mobType").toString()));
+                            new RowRequirement("mob", query.getParameterValue(ParameterType.MOB_TYPE).orElse(null)));
                 }
 
                 break;
             case BLOCKS_PLACED:
             case BLOCKS_BROKEN:
-                if (!arguments.containsKey("block")) {
+                if (!query.hasParameter(ParameterType.BLOCK_TYPE)) {
                     value = statzApi.getSpecificData(uuid, statType);
                 } else {
-                    value = statzApi.getSpecificData(uuid, statType,
-                            new RowRequirement("block", arguments.get("block").toString()));
+                    value = statzApi.getSpecificData(uuid,
+                            statType, new RowRequirement("block",
+                                    query.getParameterValue(ParameterType.BLOCK_TYPE).orElse(null)));
                 }
 
                 break;
             case BLOCKS_MOVED:
-                String moveType = "";
+                String moveTypeString =
+                        query.getParameterValue(ParameterType.MOVEMENT_TYPE).orElse(MovementTypeParameter.MovementType.WALK.toString());
 
-                int moveTypeInt = (Integer) arguments.get("moveType");
+                MovementTypeParameter.MovementType movementType =
+                        MovementTypeParameter.MovementType.valueOf(moveTypeString);
 
-                if (moveTypeInt == 1) {
-                    moveType = "BOAT";
-                } else if (moveTypeInt == 2) {
-                    moveType = "MINECART";
-                } else if (moveTypeInt == 3) {
-                    moveType = "PIG";
-                } else if (moveTypeInt == 4) {
-                    moveType = "PIG IN MINECART";
-                } else if (moveTypeInt == 5) {
-                    moveType = "HORSE";
+                if (movementType == MovementTypeParameter.MovementType.FOOT) {
+                    moveTypeString = "WALK";
                 } else {
-                    moveType = "WALK";
+                    moveTypeString = moveTypeString.replace("_", " ");
                 }
 
-                value = statzApi.getSpecificData(uuid, statType, new RowRequirement("moveType", moveType));
+                value = statzApi.getSpecificData(uuid, statType, new RowRequirement("moveType", moveTypeString));
                 break;
             case FOOD_EATEN:
-                if (!arguments.containsKey("foodType")) {
+                if (!query.hasParameter(ParameterType.FOOD_TYPE)) {
                     value = statzApi.getSpecificData(uuid, statType);
                 } else {
                     value = statzApi.getSpecificData(uuid, statType,
-                            new RowRequirement("foodEaten", arguments.get("foodType").toString()));
+                            new RowRequirement("foodEaten",
+                                    query.getParameterValue(ParameterType.FOOD_TYPE).orElse(null)));
                 }
                 break;
             default:

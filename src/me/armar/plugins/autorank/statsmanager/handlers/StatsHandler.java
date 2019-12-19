@@ -2,9 +2,9 @@ package me.armar.plugins.autorank.statsmanager.handlers;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
+import me.armar.plugins.autorank.statsmanager.query.StatisticQuery;
 import me.staartvin.plugins.pluginlibrary.hooks.StatsHook;
 
-import java.util.HashMap;
 import java.util.UUID;
 
 public class StatsHandler extends StatsPlugin {
@@ -20,16 +20,16 @@ public class StatsHandler extends StatsPlugin {
     }
 
     @Override
-    public int getNormalStat(StatType statType, final UUID uuid, final HashMap<String, Object> arguments) {
+    public int getNormalStat(StatType statType, final UUID uuid, StatisticQuery query) {
         // First argument is the world (or null)
 
         String worldName = null;
 
-        if (arguments != null) {
-            if (arguments.containsKey("world")) {
-                worldName = (arguments.get("world") != null ? arguments.get("world").toString() : null);
-            }
-        }
+//        if (arguments != null) {
+//            if (arguments.containsKey("world")) {
+//                worldName = (arguments.get("world") != null ? arguments.get("world").toString() : null);
+//            }
+//        }
 
         int value = -1;
 

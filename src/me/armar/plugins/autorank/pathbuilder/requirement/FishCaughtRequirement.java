@@ -2,7 +2,8 @@ package me.armar.plugins.autorank.pathbuilder.requirement;
 
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
-import me.armar.plugins.autorank.util.AutorankTools;
+import me.armar.plugins.autorank.statsmanager.query.StatisticQuery;
+import me.armar.plugins.autorank.statsmanager.query.parameter.ParameterType;
 import me.staartvin.plugins.pluginlibrary.Library;
 
 import java.util.UUID;
@@ -27,7 +28,7 @@ public class FishCaughtRequirement extends AbstractRequirement {
     @Override
     public String getProgressString(UUID uuid) {
         final int progressBar = this.getStatsPlugin().getNormalStat(StatsPlugin.StatType.FISH_CAUGHT,
-                uuid, AutorankTools.makeStatsInfo("world", this.getWorld()));
+                uuid, StatisticQuery.makeStatisticQuery(ParameterType.WORLD.getKey(), this.getWorld()));
 
         return progressBar + "/" + fishCaught;
     }
@@ -39,7 +40,7 @@ public class FishCaughtRequirement extends AbstractRequirement {
             return false;
 
         final int fish = this.getStatsPlugin().getNormalStat(StatsPlugin.StatType.FISH_CAUGHT, uuid,
-                AutorankTools.makeStatsInfo("world", this.getWorld()));
+                StatisticQuery.makeStatisticQuery(ParameterType.WORLD.getKey(), this.getWorld()));
 
         return fish >= fishCaught;
     }

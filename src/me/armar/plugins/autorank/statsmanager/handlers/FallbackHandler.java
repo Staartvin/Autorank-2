@@ -1,8 +1,8 @@
 package me.armar.plugins.autorank.statsmanager.handlers;
 
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
+import me.armar.plugins.autorank.statsmanager.query.StatisticQuery;
 
-import java.util.HashMap;
 import java.util.UUID;
 
 /**
@@ -14,7 +14,7 @@ import java.util.UUID;
 public class FallbackHandler extends StatsPlugin {
 
     @Override
-    public int getNormalStat(StatType statType, final UUID uuid, HashMap<String, Object> arguments) {
+    public int getNormalStat(StatType statType, UUID uuid, StatisticQuery query) {
         return 0;
     }
 

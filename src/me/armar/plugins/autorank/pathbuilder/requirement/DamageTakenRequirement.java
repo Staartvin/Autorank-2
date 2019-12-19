@@ -2,7 +2,8 @@ package me.armar.plugins.autorank.pathbuilder.requirement;
 
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
-import me.armar.plugins.autorank.util.AutorankTools;
+import me.armar.plugins.autorank.statsmanager.query.StatisticQuery;
+import me.armar.plugins.autorank.statsmanager.query.parameter.ParameterType;
 import me.staartvin.plugins.pluginlibrary.Library;
 
 import java.util.UUID;
@@ -27,7 +28,7 @@ public class DamageTakenRequirement extends AbstractRequirement {
     @Override
     public String getProgressString(UUID uuid) {
         final int damTaken = getStatsPlugin().getNormalStat(StatsPlugin.StatType.DAMAGE_TAKEN, uuid,
-                AutorankTools.makeStatsInfo("world", this.getWorld()));
+                StatisticQuery.makeStatisticQuery(ParameterType.WORLD.getKey(), this.getWorld()));
 
         return damTaken + "/" + damageTaken;
     }
@@ -39,7 +40,7 @@ public class DamageTakenRequirement extends AbstractRequirement {
             return false;
 
         final int damTaken = getStatsPlugin().getNormalStat(StatsPlugin.StatType.DAMAGE_TAKEN, uuid,
-                AutorankTools.makeStatsInfo("world", this.getWorld()));
+                StatisticQuery.makeStatisticQuery(ParameterType.WORLD.getKey(), this.getWorld()));
 
         return damTaken >= damageTaken;
     }

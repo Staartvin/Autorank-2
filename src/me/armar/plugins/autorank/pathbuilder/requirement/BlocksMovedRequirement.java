@@ -2,7 +2,9 @@ package me.armar.plugins.autorank.pathbuilder.requirement;
 
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
-import me.armar.plugins.autorank.util.AutorankTools;
+import me.armar.plugins.autorank.statsmanager.query.StatisticQuery;
+import me.armar.plugins.autorank.statsmanager.query.parameter.ParameterType;
+import me.armar.plugins.autorank.statsmanager.query.parameter.implementation.MovementTypeParameter;
 import me.staartvin.plugins.pluginlibrary.Library;
 
 import java.util.UUID;
@@ -29,7 +31,9 @@ public class BlocksMovedRequirement extends AbstractRequirement {
     public String getProgressString(UUID uuid) {
 
         final int progressBar = getStatsPlugin().getNormalStat(StatsPlugin.StatType.BLOCKS_MOVED,
-                uuid, AutorankTools.makeStatsInfo("world", this.getWorld(), "moveType", wrapper.getRawMovementType()));
+                uuid,
+                StatisticQuery.makeStatisticQuery(ParameterType.WORLD.getKey(), this.getWorld(),
+                        ParameterType.MOVEMENT_TYPE.getKey(), wrapper.getRawMovementType()));
 
         return progressBar + "/" + wrapper.getBlocksMoved() + " (" + wrapper.getMovementType() + ")";
     }
@@ -42,7 +46,8 @@ public class BlocksMovedRequirement extends AbstractRequirement {
         }
 
         final int count = getStatsPlugin().getNormalStat(StatsPlugin.StatType.BLOCKS_MOVED, uuid,
-                AutorankTools.makeStatsInfo("world", this.getWorld(), "moveType", wrapper.getRawMovementType()));
+                StatisticQuery.makeStatisticQuery(ParameterType.WORLD.getKey(), this.getWorld(),
+                        ParameterType.MOVEMENT_TYPE.getKey(), wrapper.getRawMovementType()));
 
         return count >= wrapper.getBlocksMoved();
     }
@@ -92,8 +97,6 @@ class BlocksMovedWrapper {
 
     private String getMovementString(final int moveType) {
         switch (moveType) {
-            case 0:
-                return "by foot";
             case 1:
                 return "by boat";
             case 2:
@@ -113,7 +116,20 @@ class BlocksMovedWrapper {
         return movementType;
     }
 
-    public int getRawMovementType() {
-        return rawMovementType;
+    public MovementTypeParameter.MovementType getRawMovementType() {
+        switch (rawMovementType) {
+            case 1:
+                return MovementTypeParameter.MovementType.BOAT;
+            case 2:
+                return MovementTypeParameter.MovementType.MINECART;
+            case 3:
+                return MovementTypeParameter.MovementType.PIG;
+            case 4:
+                return MovementTypeParameter.MovementType.PIG_IN_MINECART;
+            case 5:
+                return MovementTypeParameter.MovementType.HORSE;
+            default:
+                return MovementTypeParameter.MovementType.FOOT;
+        }
     }
 }

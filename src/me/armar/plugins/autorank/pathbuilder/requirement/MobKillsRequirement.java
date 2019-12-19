@@ -2,7 +2,8 @@ package me.armar.plugins.autorank.pathbuilder.requirement;
 
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
-import me.armar.plugins.autorank.util.AutorankTools;
+import me.armar.plugins.autorank.statsmanager.query.StatisticQuery;
+import me.armar.plugins.autorank.statsmanager.query.parameter.ParameterType;
 import me.staartvin.plugins.pluginlibrary.Library;
 import org.bukkit.entity.EntityType;
 
@@ -37,7 +38,9 @@ public class MobKillsRequirement extends AbstractRequirement {
     public String getProgressString(UUID uuid) {
 
         final int killed = getStatsPlugin().getNormalStat(StatsPlugin.StatType.MOBS_KILLED, uuid,
-                AutorankTools.makeStatsInfo("world", this.getWorld(), "mobType", mobType));
+                StatisticQuery.makeStatisticQuery(
+                        ParameterType.WORLD.getKey(), this.getWorld(),
+                        ParameterType.MOB_TYPE.getKey(), mobType));
 
         String entityType = mobType;
 
@@ -55,7 +58,9 @@ public class MobKillsRequirement extends AbstractRequirement {
             return false;
 
         final int killed = getStatsPlugin().getNormalStat(StatsPlugin.StatType.MOBS_KILLED, uuid,
-                AutorankTools.makeStatsInfo("world", this.getWorld(), "mobType", mobType));
+                StatisticQuery.makeStatisticQuery(
+                        ParameterType.WORLD.getKey(), this.getWorld(),
+                        ParameterType.MOB_TYPE.getKey(), mobType));
 
         return killed >= totalMobsKilled;
     }
