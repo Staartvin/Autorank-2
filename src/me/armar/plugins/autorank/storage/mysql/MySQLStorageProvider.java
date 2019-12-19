@@ -431,33 +431,38 @@ public class MySQLStorageProvider extends StorageProvider {
 
             String tableName = this.tableNames.get(timeType);
 
-            // Initialise new callable class
-            final Callable<Integer> callable = new GrabPlayerTimeTask(mysqlLibrary, uuid, tableName);
+            int time = -1;
 
-            // Sumbit callable
-            final Future<Integer> futureValue = executor.submit(callable);
+            plugin.debugMessage("Checking global time "
+                    + (Thread.currentThread().getName().contains("Server thread") ? "not asynchronously" :
+                    "asynchronously"));
 
-            // Grab value, will block thread.
-            // That's why you need to run this async.
-            int value = 0;
+            final String statement = "SELECT * FROM " + tableName + " WHERE uuid='" + uuid.toString() + "'";
 
-            try {
-                plugin.debugMessage("Checking global time "
-                        + (Thread.currentThread().getName().contains("Server thread") ? "not asynchronously" :
-                        "asynchronously"));
-                value = futureValue.get();
-            } catch (final InterruptedException | ExecutionException e) {
-                e.printStackTrace();
+            try (ResultSet rs = this.mysqlLibrary.executeQuery(statement)) {
+
+                if (rs == null)
+                    return time;
+
+                if (rs.next()) {
+                    time = rs.getInt(2);
+                    rs.close();
+                }
+
+            } catch (SQLException e) {
+                System.out.println("SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
             }
 
             // Cache value so we don't grab it again.
-            cacheManager.registerCachedTime(timeType, uuid, value);
+            cacheManager.registerCachedTime(timeType, uuid, time);
 
             plugin.debugMessage("Obtained fresh global time (" + timeType + ") of '" + uuid.toString() + "' with " +
                     "value" +
-                    " " + value);
+                    " " + time);
 
-            return value;
+            return time;
         });
     }
 
