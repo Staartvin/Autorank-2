@@ -131,8 +131,6 @@ public class SQLDataStorage {
             System.out.println("SQLException: " + ex.getMessage());
             System.out.println("SQLState: " + ex.getSQLState());
             System.out.println("VendorError: " + ex.getErrorCode());
-        } finally {
-            this.close(null, stmt, null);
         }
 
         return rs;
