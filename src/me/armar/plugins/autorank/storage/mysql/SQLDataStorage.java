@@ -1,6 +1,12 @@
 package me.armar.plugins.autorank.storage.mysql;
 
-import java.sql.*;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Collection;
 
 /**
@@ -11,12 +17,11 @@ import java.util.Collection;
  */
 public class SQLDataStorage {
 
-    private Connection conn = null;
     private final String database;
     private final String hostname;
     private final String password;
-
     private final String username;
+    private HikariDataSource dataSource = null;
 
     /**
      * Create a new MySQL Connection
@@ -38,12 +43,8 @@ public class SQLDataStorage {
      * happen.
      */
     public void closeConnection() {
-        try {
-            if (conn != null) {
-                conn.close();
-            }
-        } catch (final SQLException e) {
-            e.printStackTrace();
+        if (dataSource != null && !dataSource.isClosed()) {
+            dataSource.close();
         }
     }
 
@@ -53,23 +54,22 @@ public class SQLDataStorage {
      * @return true if connection was successfully set up.
      */
     public boolean connect() {
-        try {
-            final String url = "jdbc:mysql://" + hostname + "/" + database + "?useSSL=false";
+        HikariConfig config = new HikariConfig();
 
-            conn = DriverManager.getConnection(url, username, password);
+        config.setJdbcUrl("jdbc:mysql://" + this.hostname + "/" + this.database);
+//        config.setDriverClassName("com.mysql.jdbc.Driver");
+        config.setUsername(this.username);
+        config.setPassword(this.password);
+        config.addDataSourceProperty("cachePrepStmts", "true");
+        config.addDataSourceProperty("prepStmtCacheSize", "250");
+        config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+        config.addDataSourceProperty("useServerPrepStmts", "true");
+        config.addDataSourceProperty("rewriteBatchedStatements", "true");
+        config.addDataSourceProperty("maintainTimeStats", "false");
 
-        } catch (final SQLException ex) {
-            System.out.println("SQLDataStorage.connect");
-            System.out.println("SQLException: " + ex.getMessage());
-            System.out.println("SQLState: " + ex.getSQLState());
-            System.out.println("VendorError: " + ex.getErrorCode());
+        this.dataSource = new HikariDataSource(config);
 
-            return false;
-        } catch (final Exception e) {
-
-            e.printStackTrace();
-        }
-        return conn != null;
+        return true;
     }
 
     /**
@@ -79,31 +79,24 @@ public class SQLDataStorage {
      * @param sql Query to execute
      */
     public void execute(final String sql) {
-        Statement stmt = null;
 
-        if (conn != null) {
-            try {
+        PreparedStatement stmt = null;
 
-                stmt = conn.createStatement();
-                stmt.execute(sql);
+        try (Connection connection = this.getConnection()) {
 
-            } catch (final SQLException ex) {
-                System.out.println("SQLDataStorage.execute");
-                System.out.println("SQLException: " + ex.getMessage());
-                System.out.println("SQLState: " + ex.getSQLState());
-                System.out.println("VendorError: " + ex.getErrorCode());
-            } finally {
+            stmt = connection.prepareStatement(sql);
+            stmt.executeUpdate();
 
-                if (stmt != null) {
-                    try {
-                        stmt.close();
-                    } catch (final SQLException sqlEx) {
-                    }
+        } catch (final SQLException ex) {
+            System.out.println("SQLDataStorage.execute");
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());
+        } finally {
 
-                    stmt = null;
-                }
-            }
+            this.close(null, stmt, null);
         }
+
     }
 
     /**
@@ -125,23 +118,23 @@ public class SQLDataStorage {
      * @return ResultSet if successfully performed, null if an error occured.
      */
     public ResultSet executeQuery(final String sql) {
-        Statement stmt = null;
         ResultSet rs = null;
+        PreparedStatement stmt = null;
 
-        if (conn != null) {
-            try {
+        try (Connection connection = this.getConnection()) {
 
-                stmt = conn.createStatement();
-                rs = stmt.executeQuery(sql);
+            stmt = connection.prepareStatement(sql);
+            rs = stmt.executeQuery();
 
-            } catch (final SQLException ex) {
-                System.out.println("SQLDataStorage.executeQuery");
-                System.out.println("SQLException: " + ex.getMessage());
-                System.out.println("SQLState: " + ex.getSQLState());
-                System.out.println("VendorError: " + ex.getErrorCode());
-
-            }
+        } catch (final SQLException ex) {
+            System.out.println("SQLDataStorage.execute");
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());
+        } finally {
+            this.close(null, stmt, null);
         }
+
         return rs;
     }
 
@@ -151,15 +144,25 @@ public class SQLDataStorage {
      * @return true if closed, false if open.
      */
     public boolean isClosed() {
+        return dataSource.isClosed();
+    }
 
-        if (conn == null)
-            return true;
+    public Connection getConnection() throws SQLException {
+        return dataSource.getConnection();
+    }
 
-        try {
-            return conn.isClosed();
-        } catch (final SQLException e) {
-            e.printStackTrace();
-            return true;
+    public void close(Connection conn, PreparedStatement ps, ResultSet res) {
+        if (conn != null) try {
+            conn.close();
+        } catch (SQLException ignored) {
+        }
+        if (ps != null) try {
+            ps.close();
+        } catch (SQLException ignored) {
+        }
+        if (res != null) try {
+            res.close();
+        } catch (SQLException ignored) {
         }
     }
 

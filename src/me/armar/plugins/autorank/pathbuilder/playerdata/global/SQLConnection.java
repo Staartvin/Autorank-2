@@ -78,13 +78,13 @@ public class SQLConnection {
      * @param sql Query to execute
      */
     public void performUpdate(final String sql) {
-        Statement stmt = null;
+        PreparedStatement stmt = null;
 
         if (conn != null) {
             try {
 
-                stmt = conn.createStatement();
-                stmt.execute(sql);
+                stmt = conn.prepareStatement(sql);
+                stmt.executeUpdate();
 
             } catch (final SQLException ex) {
                 System.out.println("SQLDataStorage.execute");
@@ -124,14 +124,14 @@ public class SQLConnection {
      * @return ResultSet if successfully performed, null if an error occured.
      */
     public ResultSet performQuery(final String sql) {
-        Statement stmt = null;
+        PreparedStatement stmt = null;
         ResultSet rs = null;
 
         if (conn != null) {
             try {
 
-                stmt = conn.createStatement();
-                rs = stmt.executeQuery(sql);
+                stmt = conn.prepareStatement(sql);
+                rs = stmt.executeQuery();
 
             } catch (final SQLException ex) {
                 System.out.println("SQLDataStorage.executeQuery");

@@ -24,24 +24,18 @@ import java.util.concurrent.*;
  */
 public class MySQLStorageProvider extends StorageProvider {
 
-    // Thread pool for saving and retrieving storage.
-    private ExecutorService executor = Executors.newSingleThreadExecutor();
-
-    // Variables to connect to database.
-    private String hostname, username, password, database;
-
-    // Store table names for different time types
-    private Map<TimeType, String> tableNames = new HashMap<>();
-
-    // Use library to handle connections to MySQL database.
-    private SQLDataStorage mysqlLibrary;
-
-    // Use a cache manager to store the cached values.
-    private CacheManager cacheManager = new CacheManager();
-
     // How many minutes can a cached entry be cached before it is considered to be expired.
     public static int CACHE_EXPIRY_TIME = 2;
-
+    // Thread pool for saving and retrieving storage.
+    private ExecutorService executor = Executors.newSingleThreadExecutor();
+    // Variables to connect to database.
+    private String hostname, username, password, database;
+    // Store table names for different time types
+    private Map<TimeType, String> tableNames = new HashMap<>();
+    // Use library to handle connections to MySQL database.
+    private SQLDataStorage mysqlLibrary;
+    // Use a cache manager to store the cached values.
+    private CacheManager cacheManager = new CacheManager();
     private boolean isLoaded = false;
 
     public MySQLStorageProvider(Autorank instance) {
@@ -433,10 +427,6 @@ public class MySQLStorageProvider extends StorageProvider {
 
             int time = -1;
 
-            plugin.debugMessage("Checking global time "
-                    + (Thread.currentThread().getName().contains("Server thread") ? "not asynchronously" :
-                    "asynchronously"));
-
             final String statement = "SELECT * FROM " + tableName + " WHERE uuid='" + uuid.toString() + "'";
 
             try (ResultSet rs = this.mysqlLibrary.executeQuery(statement)) {
@@ -458,9 +448,10 @@ public class MySQLStorageProvider extends StorageProvider {
             // Cache value so we don't grab it again.
             cacheManager.registerCachedTime(timeType, uuid, time);
 
-            plugin.debugMessage("Obtained fresh global time (" + timeType + ") of '" + uuid.toString() + "' with " +
-                    "value" +
-                    " " + time);
+            plugin.debugMessage("("
+                    + (Thread.currentThread().getName().contains("Server thread") ? "not async" : "async") +
+                    ") Obtained fresh global time (" + timeType + ") of '" + uuid.toString() + "'" +
+                    " with value " + time);
 
             return time;
         });

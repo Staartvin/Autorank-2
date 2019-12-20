@@ -38,7 +38,7 @@ public class LocalPlayerDataStorage extends AbstractConfig implements PlayerData
         this.getPlugin().getServer().getScheduler().runTaskTimerAsynchronously(this.getPlugin(), this::saveConfig,
                 AutorankTools.TICKS_PER_SECOND * 30, AutorankTools.TICKS_PER_SECOND * 30);
 
-        this.getPlugin().getServer().getScheduler().runTaskLater(this.getPlugin(),
+        this.getPlugin().getServer().getScheduler().runTaskLaterAsynchronously(this.getPlugin(),
                 this::convertFormatToSupportMultiplePathsFormat, 20 * 10);
 
         // Load the config full of player data.
