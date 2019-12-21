@@ -119,8 +119,8 @@ class CachedEntry {
     }
 
     public boolean isCachedTimeOutdated(@NonNull TimeType timeType) {
-        return hasCachedTime(timeType) && getCachedTime(timeType)
-                .orElseGet(() -> MySQLStorageProvider.CACHE_EXPIRY_TIME) >= MySQLStorageProvider.CACHE_EXPIRY_TIME;
+        return hasCachedTime(timeType) && getMinutesSinceLastUpdated(timeType)
+                .orElseGet(() -> (long) MySQLStorageProvider.CACHE_EXPIRY_TIME) >= MySQLStorageProvider.CACHE_EXPIRY_TIME;
     }
 
     @Override

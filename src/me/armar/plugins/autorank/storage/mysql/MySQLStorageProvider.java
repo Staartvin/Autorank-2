@@ -33,13 +33,15 @@ public class MySQLStorageProvider extends StorageProvider {
     // Store table names for different time types
     private Map<TimeType, String> tableNames = new HashMap<>();
     // Use library to handle connections to MySQL database.
-    private SQLDataStorage mysqlLibrary;
+    private SQLConnection mysqlLibrary;
     // Use a cache manager to store the cached values.
     private CacheManager cacheManager = new CacheManager();
     private boolean isLoaded = false;
 
     public MySQLStorageProvider(Autorank instance) {
         super(instance);
+
+        CACHE_EXPIRY_TIME = plugin.getSettingsConfig().getIntervalTime();
 
         // Run task to update time in cache periodically.
         instance.getServer().getScheduler().runTaskTimerAsynchronously(instance, () -> {
@@ -68,7 +70,7 @@ public class MySQLStorageProvider extends StorageProvider {
                 }
             }
 
-        }, 0L, (CACHE_EXPIRY_TIME * AutorankTools.TICKS_PER_MINUTE) / 2);
+        }, AutorankTools.TICKS_PER_MINUTE, (CACHE_EXPIRY_TIME * AutorankTools.TICKS_PER_MINUTE) / 2);
     }
 
     @Override
@@ -374,7 +376,7 @@ public class MySQLStorageProvider extends StorageProvider {
             password = configHandler.getMySQLCredentials(SettingsConfig.MySQLCredentials.PASSWORD);
             database = configHandler.getMySQLCredentials(SettingsConfig.MySQLCredentials.DATABASE);
 
-            mysqlLibrary = new SQLDataStorage(hostname, username, password, database);
+            mysqlLibrary = new SQLConnection(hostname, username, password, database);
 
             if (!mysqlLibrary.connect()) {
                 mysqlLibrary = null;
@@ -425,7 +427,7 @@ public class MySQLStorageProvider extends StorageProvider {
 
             String tableName = this.tableNames.get(timeType);
 
-            int time = -1;
+            int time = 0;
 
             final String statement = "SELECT * FROM " + tableName + " WHERE uuid='" + uuid.toString() + "'";
 

@@ -102,7 +102,8 @@ public class NameFetcher implements Callable<Map<UUID, String>> {
                 e.printStackTrace();
             } finally {
                 if (name == null || response == null) {
-                    System.out.print("[Autorank] Could not find name of account with uuid: '" + uuid.toString() + "'");
+                    System.out.println("[Autorank] Could not find name of account with uuid: '" + uuid.toString() +
+                            "'");
                 }
             }
 

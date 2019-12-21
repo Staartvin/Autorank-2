@@ -15,7 +15,7 @@ import java.util.Collection;
  *
  * @author Staartvin
  */
-public class SQLDataStorage {
+public class SQLConnection {
 
     private final String database;
     private final String hostname;
@@ -31,7 +31,7 @@ public class SQLDataStorage {
      * @param password Password
      * @param database Database
      */
-    public SQLDataStorage(final String hostname, final String username, final String password, final String database) {
+    public SQLConnection(final String hostname, final String username, final String password, final String database) {
         this.hostname = hostname;
         this.username = username;
         this.password = password;

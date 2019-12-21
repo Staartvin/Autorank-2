@@ -5,6 +5,7 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.config.SettingsConfig;
 import me.armar.plugins.autorank.pathbuilder.playerdata.PlayerDataManager;
 import me.armar.plugins.autorank.pathbuilder.playerdata.PlayerDataStorage;
+import me.armar.plugins.autorank.storage.mysql.SQLConnection;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.warningmanager.WarningManager;
 import org.apache.commons.lang.Validate;
@@ -96,11 +97,11 @@ public class GlobalPlayerDataStorage implements PlayerDataStorage {
         // Load the table that has all the server names registered in it.
 
         // Create table if it does not exist.
-        getConnection().performUpdate("CREATE TABLE IF NOT EXISTS " + TABLE_SERVER_REGISTER +
+        getConnection().execute("CREATE TABLE IF NOT EXISTS " + TABLE_SERVER_REGISTER +
                 "(server_name varchar(36) NOT NULL, hostname varchar(55) NOT NULL, last_updated timestamp DEFAULT " +
                 "CURRENT_TIMESTAMP, UNIQUE(server_name, hostname))");
 
-        getConnection().performUpdate("INSERT INTO " + TABLE_SERVER_REGISTER + " VALUES ('" +
+        getConnection().execute("INSERT INTO " + TABLE_SERVER_REGISTER + " VALUES ('" +
                 plugin.getSettingsConfig().getMySQLCredentials(SettingsConfig.MySQLCredentials.SERVER_NAME) + "', " +
                 "'" + getHostname() + "', " +
                 "CURRENT_TIMESTAMP) ON DUPLICATE KEY UPDATE last_updated=CURRENT_TIMESTAMP");
@@ -117,7 +118,7 @@ public class GlobalPlayerDataStorage implements PlayerDataStorage {
         // Load the table that stores all the player data.
 
         // Create table if it does not exist.
-        getConnection().performUpdate("CREATE TABLE IF NOT EXISTS " + TABLE_PLAYERDATA_STORAGE_COMPLETED_PATHS +
+        getConnection().execute("CREATE TABLE IF NOT EXISTS " + TABLE_PLAYERDATA_STORAGE_COMPLETED_PATHS +
                 "(server_name varchar(36) NOT NULL, uuid varchar(36) NOT NULL, completed_path varchar(36) NOT NULL, " +
                 "UNIQUE(server_name, uuid, completed_path))");
 
@@ -129,7 +130,7 @@ public class GlobalPlayerDataStorage implements PlayerDataStorage {
 
     private void updateCacheFromRemote() {
         ResultSet resultSet =
-                getConnection().performQuery("SELECT * FROM " + TABLE_PLAYERDATA_STORAGE_COMPLETED_PATHS + " ORDER BY" +
+                getConnection().executeQuery("SELECT * FROM " + TABLE_PLAYERDATA_STORAGE_COMPLETED_PATHS + " ORDER BY" +
                         " uuid");
 
         while (true) {
@@ -158,6 +159,8 @@ public class GlobalPlayerDataStorage implements PlayerDataStorage {
 
             cachedPlayerData.addCachedEntry(completedPath, serverName);
         }
+
+        getConnection().close(null, null, resultSet);
     }
 
     @Override
@@ -294,11 +297,11 @@ public class GlobalPlayerDataStorage implements PlayerDataStorage {
         String serverName = plugin.getSettingsConfig().getMySQLCredentials(SettingsConfig.MySQLCredentials.SERVER_NAME);
 
         // Add item to indicate that a path has been completed.
-        getConnection().performUpdate("INSERT INTO " + TABLE_PLAYERDATA_STORAGE_COMPLETED_PATHS + " VALUES ('" + serverName + "', '" + uuid.toString() + "', '" + completedPath + "') ON " +
+        getConnection().execute("INSERT INTO " + TABLE_PLAYERDATA_STORAGE_COMPLETED_PATHS + " VALUES ('" + serverName + "', '" + uuid.toString() + "', '" + completedPath + "') ON " +
                 "DUPLICATE KEY UPDATE uuid=uuid;");
 
         // Update the last time a server has updated values.
-        getConnection().performUpdate("UPDATE " + TABLE_SERVER_REGISTER + " SET last_updated = CURRENT_TIMESTAMP " +
+        getConnection().execute("UPDATE " + TABLE_SERVER_REGISTER + " SET last_updated = CURRENT_TIMESTAMP " +
                 "WHERE server_name = '" + serverName + "';");
 
     }
@@ -308,7 +311,7 @@ public class GlobalPlayerDataStorage implements PlayerDataStorage {
         String serverName = plugin.getSettingsConfig().getMySQLCredentials(SettingsConfig.MySQLCredentials.SERVER_NAME);
 
         // Remove path that matches the name of the path.
-        getConnection().performUpdate("DELETE FROM " + TABLE_PLAYERDATA_STORAGE_COMPLETED_PATHS + " WHERE uuid='"
+        getConnection().execute("DELETE FROM " + TABLE_PLAYERDATA_STORAGE_COMPLETED_PATHS + " WHERE uuid='"
                 + uuid.toString() + "' AND server_name='" + serverName + "' AND completed_path='" + pathName + "';");
     }
 
@@ -317,7 +320,7 @@ public class GlobalPlayerDataStorage implements PlayerDataStorage {
         String serverName = plugin.getSettingsConfig().getMySQLCredentials(SettingsConfig.MySQLCredentials.SERVER_NAME);
 
         // First remove all paths that are currently stored there.
-        getConnection().performUpdate("DELETE FROM " + TABLE_PLAYERDATA_STORAGE_COMPLETED_PATHS + " WHERE uuid='"
+        getConnection().execute("DELETE FROM " + TABLE_PLAYERDATA_STORAGE_COMPLETED_PATHS + " WHERE uuid='"
                 + uuid.toString() + "' AND server_name='" + serverName + "';");
 
         // For each path, add them again.
