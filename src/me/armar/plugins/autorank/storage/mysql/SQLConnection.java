@@ -67,9 +67,12 @@ public class SQLConnection {
         config.addDataSourceProperty("rewriteBatchedStatements", "true");
         config.addDataSourceProperty("maintainTimeStats", "false");
 
-        this.dataSource = new HikariDataSource(config);
-
-        return true;
+        try {
+            this.dataSource = new HikariDataSource(config);
+            return this.dataSource != null;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     /**
@@ -142,6 +145,7 @@ public class SQLConnection {
      * @return true if closed, false if open.
      */
     public boolean isClosed() {
+        if (dataSource == null) return true;
         return dataSource.isClosed();
     }
 
