@@ -35,7 +35,8 @@ public class SpawnFireworkResult extends AbstractResult {
 
         fw.setFireworkMeta(fwm);
 
-        player.teleport(location);
+        fw.detonate();
+
         return location != null;
     }
 
