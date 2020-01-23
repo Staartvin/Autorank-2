@@ -145,3 +145,6 @@ permissions:
   autorank.editor.complete.path:
     description: Allows a player to complete a path for another player.
     default: op
+  autorank.migrate:
+    description: Allows a player to migrate data from another plugin to Autorank
+    default: op

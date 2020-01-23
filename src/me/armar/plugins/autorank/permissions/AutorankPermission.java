@@ -52,6 +52,7 @@ public final class AutorankPermission {
     public static final String EDITOR_UNASSIGN_PATH = "autorank.editor.path.unassign";
     public static final String EDITOR_COMPLETE_REQUIREMENT = "autorank.editor.complete.requirement";
     public static final String EDITOR_COMPLETE_PATH = "autorank.editor.complete.path";
+    public static final String MIGRATE_TIME = "autorank.migrate";
 
     private AutorankPermission() {
     }

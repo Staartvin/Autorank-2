@@ -18,7 +18,7 @@ interval check: 5
 
 use time of: Autorank
 # You can specify what time plugin Autorank will use to calculate the time that a player has played.
-# This only changes the local time. 
+# This only changes the local time.
 # A list to choose from:
 # 1. Autorank
 # 2. Stats

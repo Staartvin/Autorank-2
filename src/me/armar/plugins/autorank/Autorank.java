@@ -16,6 +16,7 @@ import me.armar.plugins.autorank.language.LanguageHandler;
 import me.armar.plugins.autorank.leaderboard.LeaderboardHandler;
 import me.armar.plugins.autorank.listeners.PlayerJoinListener;
 import me.armar.plugins.autorank.listeners.PlayerQuitListener;
+import me.armar.plugins.autorank.migration.MigrationManager;
 import me.armar.plugins.autorank.pathbuilder.PathManager;
 import me.armar.plugins.autorank.pathbuilder.builders.RequirementBuilder;
 import me.armar.plugins.autorank.pathbuilder.builders.ResultBuilder;
@@ -85,6 +86,7 @@ public class Autorank extends JavaPlugin {
     private PlayerChecker playerChecker;
     private PlayTimeManager playTimeManager;
     private DataConverter dataConverter;
+    private MigrationManager migrationManager;
     // UUID storage
     private UUIDStorage uuidStorage;
     private StorageManager storageManager;
@@ -319,44 +321,41 @@ public class Autorank extends JavaPlugin {
         // ------------- Schedule tasks -------------
 
         // Load all third party dependencies
-        getServer().getScheduler().runTaskLater(this, new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    // Load dependencies
-                    dependencyManager.loadDependencies();
+        getServer().getScheduler().runTaskLater(this, () -> {
+            try {
+                // Load dependencies
+                dependencyManager.loadDependencies();
 
-                } catch (final Throwable t) {
+            } catch (final Throwable t) {
 
-                    // When an error occurred!
+                // When an error occurred!
 
-                    getLogger().severe("Could not hook into a dependency: \nCause: ");
-                    t.printStackTrace();
-                }
-
-                // After dependencies, load paths
-                // Initialize paths
-                getPathManager().initialiseFromConfigs();
-
-                // Validate paths                
-                if (!getValidateHandler().startValidation()) {
-                    getServer().getConsoleSender().sendMessage("[Autorank] " + ChatColor.RED + "Detected errors in " +
-                            "your Paths.yml file. Log in to your server to see the problems!");
-                }
-
-                // Show warnings (if there are any)
-
-                HashMap<String, Integer> warnings = getWarningManager().getWarnings();
-
-                if (warnings.size() > 0) {
-                    getLogger().warning("Autorank has some warnings for you: ");
-                }
-
-                for (Entry<String, Integer> entry : warnings.entrySet()) {
-                    getLogger().warning("(Priority " + entry.getValue() + ") '" + entry.getKey() + "'");
-                }
-
+                getLogger().severe("Could not hook into a dependency: \nCause: ");
+                t.printStackTrace();
             }
+
+            // After dependencies, load paths
+            // Initialize paths
+            getPathManager().initialiseFromConfigs();
+
+            // Validate paths
+            if (!getValidateHandler().startValidation()) {
+                getServer().getConsoleSender().sendMessage("[Autorank] " + ChatColor.RED + "Detected errors in " +
+                        "your Paths.yml file. Log in to your server to see the problems!");
+            }
+
+            // Show warnings (if there are any)
+
+            HashMap<String, Integer> warnings = getWarningManager().getWarnings();
+
+            if (warnings.size() > 0) {
+                getLogger().warning("Autorank has some warnings for you: ");
+            }
+
+            for (Entry<String, Integer> entry : warnings.entrySet()) {
+                getLogger().warning("(Priority " + entry.getValue() + ") '" + entry.getKey() + "'");
+            }
+
         }, 1L);
 
         // Run task that updates storage providers if something changed.
@@ -378,6 +377,9 @@ public class Autorank extends JavaPlugin {
 
         // Register command
         getCommand("autorank").setExecutor(getCommandsManager());
+
+        // Add the migration manager so we can start migrating when a player requests it.
+        this.setMigrationManager(new MigrationManager(this));
 
         // ------------- Log messages -------------
 
@@ -821,5 +823,13 @@ public class Autorank extends JavaPlugin {
 
     public void setPlayerDataManager(PlayerDataManager playerDataManager) {
         this.playerDataManager = playerDataManager;
+    }
+
+    public MigrationManager getMigrationManager() {
+        return migrationManager;
+    }
+
+    public void setMigrationManager(MigrationManager migrationManager) {
+        this.migrationManager = migrationManager;
     }
 }

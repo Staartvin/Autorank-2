@@ -209,7 +209,7 @@ public class DependencyManager {
             return false;
         }
 
-        return hook.isAvailable();
+        return hook.isAvailable() && LibraryHook.isPluginAvailable(library);
     }
 
 }
