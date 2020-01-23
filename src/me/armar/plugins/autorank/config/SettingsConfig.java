@@ -1,7 +1,6 @@
 package me.armar.plugins.autorank.config;
 
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.hooks.DependencyManager.AutorankDependency;
 
 /**
  * This class is used to access the properties of the Settings.yml file. All
@@ -201,28 +200,6 @@ public class SettingsConfig extends AbstractConfig {
      */
     public boolean useMySQL() {
         return this.getConfig().getBoolean("sql.enabled");
-    }
-
-    /**
-     * Get the plugin that is used to get the local play time of player. This is
-     * only accounted for the local time. The global time is still calculated by
-     * Autorank.
-     *
-     * @return {@link me.armar.plugins.autorank.hooks.DependencyManager.AutorankDependency}
-     * AutorankDependency that is used
-     */
-    public AutorankDependency useTimeOf() {
-
-        final String timePlugin = this.getConfig().getString("use time of", "Autorank");
-
-        if (timePlugin.equalsIgnoreCase("Stats"))
-            return AutorankDependency.STATS;
-        else if (timePlugin.equalsIgnoreCase("OnTime"))
-            return AutorankDependency.ONTIME;
-        else if (timePlugin.equals("Statz"))
-            return AutorankDependency.STATZ;
-        else
-            return AutorankDependency.AUTORANK;
     }
 
     /**

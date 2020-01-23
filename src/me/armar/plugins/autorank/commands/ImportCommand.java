@@ -7,7 +7,7 @@ import me.armar.plugins.autorank.commands.conversations.prompts.ConfirmPromptCal
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
-import me.armar.plugins.autorank.storage.StorageProvider;
+import me.armar.plugins.autorank.storage.PlayTimeStorageProvider;
 import me.armar.plugins.autorank.storage.TimeType;
 import me.armar.plugins.autorank.util.AutorankTools;
 import org.bukkit.ChatColor;
@@ -42,7 +42,7 @@ public class ImportCommand extends AutorankCommand {
         }
 
         // Get parameters specified by the user.
-        List<String> parameters = this.getArgumentOptions(args);
+        List<String> parameters = getArgumentOptions(args);
 
         // Keep track of where we should write the data to.
         // By default, we only write to the local database.
@@ -100,14 +100,14 @@ public class ImportCommand extends AutorankCommand {
         }
 
         // Check if we have an active storage provider.
-        if (plugin.getStorageManager().getActiveStorageProviders().size() == 0) {
+        if (plugin.getPlayTimeStorageManager().getActiveStorageProviders().size() == 0) {
             sender.sendMessage(ChatColor.RED + "There are no active storage providers, so I can't store the imported " +
                     "data!");
             return true;
         }
 
         // Check if we want to write to the global database and if there is a storage provider active that allows this.
-        if (writeToGlobalDatabase && !plugin.getStorageManager().isStorageTypeActive(StorageProvider.StorageType.DATABASE)) {
+        if (writeToGlobalDatabase && !plugin.getPlayTimeStorageManager().isStorageTypeActive(PlayTimeStorageProvider.StorageType.DATABASE)) {
             sender.sendMessage(ChatColor.RED + "You want to store the imported data to the global database, but no " +
                     "database is active.");
             return true;
@@ -207,28 +207,29 @@ public class ImportCommand extends AutorankCommand {
 
                                     if (finalOverwriteGlobalDatabase && finalOverwriteLocalDatabase) {
                                         // Overwrite both databases.
-                                        plugin.getStorageManager().setPlayerTime(importedTimeType, importedPlayer,
+                                        plugin.getPlayTimeStorageManager().setPlayerTime(importedTimeType,
+                                                importedPlayer,
                                                 importedValue);
                                     } else {
 
                                         // Overwrite global database
                                         if (finalOverwriteGlobalDatabase) {
-                                            plugin.getStorageManager().setPlayerTime(StorageProvider.StorageType.DATABASE,
+                                            plugin.getPlayTimeStorageManager().setPlayerTime(PlayTimeStorageProvider.StorageType.DATABASE,
                                                     importedTimeType,
                                                     importedPlayer, importedValue);
                                         } else {
-                                            plugin.getStorageManager().addPlayerTime(StorageProvider.StorageType.DATABASE,
+                                            plugin.getPlayTimeStorageManager().addPlayerTime(PlayTimeStorageProvider.StorageType.DATABASE,
                                                     importedTimeType,
                                                     importedPlayer, importedValue);
                                         }
 
                                         // Overwrite local database
                                         if (finalOverwriteLocalDatabase) {
-                                            plugin.getStorageManager().setPlayerTime(StorageProvider.StorageType.FLAT_FILE,
+                                            plugin.getPlayTimeStorageManager().setPlayerTime(PlayTimeStorageProvider.StorageType.FLAT_FILE,
                                                     importedTimeType,
                                                     importedPlayer, importedValue);
                                         } else {
-                                            plugin.getStorageManager().addPlayerTime(StorageProvider.StorageType.FLAT_FILE,
+                                            plugin.getPlayTimeStorageManager().addPlayerTime(PlayTimeStorageProvider.StorageType.FLAT_FILE,
                                                     importedTimeType,
                                                     importedPlayer, importedValue);
                                         }
@@ -237,11 +238,11 @@ public class ImportCommand extends AutorankCommand {
                                     // Update only global database.
 
                                     if (finalOverwriteGlobalDatabase) {
-                                        plugin.getStorageManager().setPlayerTime(StorageProvider.StorageType.DATABASE,
+                                        plugin.getPlayTimeStorageManager().setPlayerTime(PlayTimeStorageProvider.StorageType.DATABASE,
                                                 importedTimeType,
                                                 importedPlayer, importedValue);
                                     } else {
-                                        plugin.getStorageManager().addPlayerTime(StorageProvider.StorageType.DATABASE,
+                                        plugin.getPlayTimeStorageManager().addPlayerTime(PlayTimeStorageProvider.StorageType.DATABASE,
                                                 importedTimeType,
                                                 importedPlayer, importedValue);
                                     }
@@ -249,11 +250,11 @@ public class ImportCommand extends AutorankCommand {
                                     // Update only local database.
 
                                     if (finalOverwriteLocalDatabase) {
-                                        plugin.getStorageManager().setPlayerTime(StorageProvider.StorageType.FLAT_FILE,
+                                        plugin.getPlayTimeStorageManager().setPlayerTime(PlayTimeStorageProvider.StorageType.FLAT_FILE,
                                                 importedTimeType,
                                                 importedPlayer, importedValue);
                                     } else {
-                                        plugin.getStorageManager().addPlayerTime(StorageProvider.StorageType.FLAT_FILE,
+                                        plugin.getPlayTimeStorageManager().addPlayerTime(PlayTimeStorageProvider.StorageType.FLAT_FILE,
                                                 importedTimeType,
                                                 importedPlayer, importedValue);
                                     }

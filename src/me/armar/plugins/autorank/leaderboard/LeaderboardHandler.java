@@ -1,9 +1,8 @@
 package me.armar.plugins.autorank.leaderboard;
 
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.hooks.DependencyManager.AutorankDependency;
 import me.armar.plugins.autorank.language.Lang;
-import me.armar.plugins.autorank.storage.StorageProvider;
+import me.armar.plugins.autorank.storage.PlayTimeStorageProvider;
 import me.armar.plugins.autorank.storage.TimeType;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
@@ -105,7 +104,7 @@ public class LeaderboardHandler {
      */
     private Map<UUID, Integer> getSortedTimesByUUID(final TimeType type) {
 
-        StorageProvider primaryStorageProvider = plugin.getStorageManager().getPrimaryStorageProvider();
+        PlayTimeStorageProvider primaryStorageProvider = plugin.getPlayTimeStorageManager().getPrimaryStorageProvider();
 
         final List<UUID> uuids = primaryStorageProvider.getStoredPlayers(type);
 
@@ -143,8 +142,8 @@ public class LeaderboardHandler {
             // uuids in existence.
             if (type == TimeType.TOTAL_TIME) {
 
-                if (plugin.getSettingsConfig().useGlobalTimeInLeaderboard() && plugin.getStorageManager()
-                        .isStorageTypeActive(StorageProvider.StorageType.DATABASE)) {
+                if (plugin.getSettingsConfig().useGlobalTimeInLeaderboard() && plugin.getPlayTimeStorageManager()
+                        .isStorageTypeActive(PlayTimeStorageProvider.StorageType.DATABASE)) {
 
                     try {
                         times.put(uuid, plugin.getPlayTimeManager().getGlobalPlayTime(type, uuid).get());
@@ -153,30 +152,11 @@ public class LeaderboardHandler {
                     }
                 } else {
 
-                    // If we are using Autorank, we do not need the player name.
-//                    if (plugin.getPlayTimeManager().getUsedTimePlugin().equals(AutorankDependency.AUTORANK)) {
-//                        try {
-//                            times.put(uuid, primaryStorageProvider.getPlayerTime(type,
-//                                    uuid).get());
-//                        } catch (InterruptedException | ExecutionException e) {
-//                            e.printStackTrace();
-//                        }
-//                    } else {
-//                        // Get the cached value of this uuid
-//                        String playerName = null;
-//                        try {
-//                            playerName = UUIDManager.getPlayerName(uuid).get();
-//                        } catch (InterruptedException | ExecutionException e) {
-//                            e.printStackTrace();
-//                        }
-//
-//                        if (playerName == null) {
-//                            plugin.debugMessage("Could not get cached player name of uuid '" + uuid + "'!");
-//                            continue;
-//                        }
-
-                    times.put(uuid, (plugin.getPlayTimeManager().getTimeOfPlayer(uuid, true) / 60));
-//                    }
+                    try {
+                        times.put(uuid, primaryStorageProvider.getPlayerTime(type, uuid).get());
+                    } catch (InterruptedException | ExecutionException e) {
+                        e.printStackTrace();
+                    }
                 }
             } else {
                 try {
@@ -194,7 +174,7 @@ public class LeaderboardHandler {
 
     private Map<String, Integer> getSortedTimesByNames(final TimeType type) {
 
-        StorageProvider primaryStorageProvider = plugin.getStorageManager().getPrimaryStorageProvider();
+        PlayTimeStorageProvider primaryStorageProvider = plugin.getPlayTimeStorageManager().getPrimaryStorageProvider();
 
         final List<String> playerNames = plugin.getUUIDStorage().getStoredPlayerNames();
 
@@ -242,8 +222,8 @@ public class LeaderboardHandler {
             // uuids in existence.
             if (type == TimeType.TOTAL_TIME) {
 
-                if (plugin.getSettingsConfig().useGlobalTimeInLeaderboard() && plugin.getStorageManager()
-                        .isStorageTypeActive(StorageProvider.StorageType.DATABASE)) {
+                if (plugin.getSettingsConfig().useGlobalTimeInLeaderboard() && plugin.getPlayTimeStorageManager()
+                        .isStorageTypeActive(PlayTimeStorageProvider.StorageType.DATABASE)) {
 
                     try {
                         times.put(playerName, plugin.getPlayTimeManager().getGlobalPlayTime(type, uuid).get());
@@ -251,17 +231,11 @@ public class LeaderboardHandler {
                         e.printStackTrace();
                     }
                 } else {
-
-                    // If we are using Autorank, we do not need the player name.
-//                    if (plugin.getPlayTimeManager().getUsedTimePlugin().equals(AutorankDependency.AUTORANK)) {
-//                        try {
-//                            times.put(playerName, primaryStorageProvider.getPlayerTime(type, uuid).get());
-//                        } catch (InterruptedException | ExecutionException e) {
-//                            e.printStackTrace();
-//                        }
-//                    } else {
-                    times.put(playerName, (plugin.getPlayTimeManager().getTimeOfPlayer(uuid, true) / 60));
-//                    }
+                    try {
+                        times.put(playerName, primaryStorageProvider.getPlayerTime(type, uuid).get());
+                    } catch (InterruptedException | ExecutionException e) {
+                        e.printStackTrace();
+                    }
                 }
             } else {
                 try {
@@ -454,55 +428,36 @@ public class LeaderboardHandler {
 
             AutorankLeaderboard finalLeaderboard = new AutorankLeaderboard(type);
 
-            // If we are using Autorank as timekeeper, we can ask all UUIDs in the uuids file and sort the playtime
+            // We can ask all UUIDs in the uuids file and sort the playtime
             // After we sorted the playtime, we collect the playernames of the top x (leaderboard length variable).
-            if (plugin.getSettingsConfig().useTimeOf().equals(AutorankDependency.AUTORANK)) {
-                final Map<UUID, Integer> sortedPlaytimes = getSortedTimesByUUID(type);
+            final Map<UUID, Integer> sortedPlaytimes = getSortedTimesByUUID(type);
 
-                Iterator<Entry<UUID, Integer>> itr = sortedPlaytimes.entrySet().iterator();
+            Iterator<Entry<UUID, Integer>> itr = sortedPlaytimes.entrySet().iterator();
 
-                plugin.debugMessage("Size leaderboard: " + sortedPlaytimes.size());
+            plugin.debugMessage("Size leaderboard: " + sortedPlaytimes.size());
 
-                for (int i = 0; i < leaderboardLength && itr.hasNext(); i++) {
-                    final Entry<UUID, Integer> entry = itr.next();
+            for (int i = 0; i < leaderboardLength && itr.hasNext(); i++) {
+                final Entry<UUID, Integer> entry = itr.next();
 
-                    final UUID uuid = entry.getKey();
+                final UUID uuid = entry.getKey();
 
-                    // Grab playername from here so it doesn't load all player names
-                    // ever.
-                    // Get the cached value of this uuid to improve performance
-                    String name = null;
-                    try {
-                        name = UUIDManager.getPlayerName(uuid).get();
-                    } catch (InterruptedException | ExecutionException e) {
-                        e.printStackTrace();
-                    }
-
-                    // No cached name found, don't use this name.
-                    if (name == null)
-                        continue;
-
-                    finalLeaderboard.add(name, entry.getValue());
+                // Grab playername from here so it doesn't load all player names
+                // ever.
+                // Get the cached value of this uuid to improve performance
+                String name = null;
+                try {
+                    name = UUIDManager.getPlayerName(uuid).get();
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
                 }
-            } else {
-                // We do not use Autorank, but some other third party plugin, so we need to get all playernames.
-                // Instead of retrieving all UUIDs and THEN convert them to playernames (which is massively slow),
-                // We ask all playernames from the uuid folder and we never have to convert to UUIDs.
-                // Performance was tested and it went from 30 minutes to 1 second for a dataset of 60.000 players.
 
-                final Map<String, Integer> sortedPlaytimes = getSortedTimesByNames(type);
+                // No cached name found, don't use this name.
+                if (name == null)
+                    continue;
 
-                Iterator<Entry<String, Integer>> itr = sortedPlaytimes.entrySet().iterator();
-
-                plugin.debugMessage("Size leaderboard: " + sortedPlaytimes.size());
-
-                for (int i = 0; i < leaderboardLength && itr.hasNext(); i++) {
-
-                    final Entry<String, Integer> entry = itr.next();
-
-                    finalLeaderboard.add(entry.getKey(), entry.getValue());
-                }
+                finalLeaderboard.add(name, entry.getValue());
             }
+
 
             // Sort the leaderboard before returning it.
             finalLeaderboard.sortLeaderboard();

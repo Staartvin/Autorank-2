@@ -30,8 +30,8 @@ import me.armar.plugins.autorank.playerchecker.PlayerChecker;
 import me.armar.plugins.autorank.playtimes.PlayTimeManager;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.armar.plugins.autorank.statsmanager.handlers.FallbackHandler;
-import me.armar.plugins.autorank.storage.StorageManager;
-import me.armar.plugins.autorank.storage.StorageProvider;
+import me.armar.plugins.autorank.storage.PlayTimeStorageManager;
+import me.armar.plugins.autorank.storage.PlayTimeStorageProvider;
 import me.armar.plugins.autorank.storage.flatfile.FlatFileStorageProvider;
 import me.armar.plugins.autorank.storage.mysql.MySQLStorageProvider;
 import me.armar.plugins.autorank.tasks.TaskManager;
@@ -89,7 +89,7 @@ public class Autorank extends JavaPlugin {
     private MigrationManager migrationManager;
     // UUID storage
     private UUIDStorage uuidStorage;
-    private StorageManager storageManager;
+    private PlayTimeStorageManager playTimeStorageManager;
     // Managing periodic tasks
     private TaskManager taskManager;
     // Validation & Warning
@@ -130,7 +130,7 @@ public class Autorank extends JavaPlugin {
 
         // ------------- Save files and databases -------------
 
-        this.getStorageManager().saveAllStorageProviders();
+        this.getPlayTimeStorageManager().saveAllStorageProviders();
 
         getUUIDStorage().saveAllFiles();
 
@@ -178,7 +178,7 @@ public class Autorank extends JavaPlugin {
         setWarningManager(new WarningManager(this));
 
         // Create Storage Manager
-        setStorageManager(new StorageManager(this));
+        setPlayTimeStorageManager(new PlayTimeStorageManager(this));
 
         // Load AutorankDependency manager
         setDependencyManager(new DependencyManager(this));
@@ -261,7 +261,7 @@ public class Autorank extends JavaPlugin {
                     }
 
                     // Register FlatFile storage provider
-                    getStorageManager().registerStorageProvider(flatFileStorageProvider);
+                    getPlayTimeStorageManager().registerStorageProvider(flatFileStorageProvider);
                 });
 
 
@@ -269,7 +269,7 @@ public class Autorank extends JavaPlugin {
 
         // Load MySQL database if needed.
         if (this.getSettingsConfig().useMySQL()) {
-            StorageProvider mysqlStorageProvider = new MySQLStorageProvider(this);
+            PlayTimeStorageProvider mysqlStorageProvider = new MySQLStorageProvider(this);
 
             // Enable global player data storage.
             getPlayerDataManager().addDataStorage(new GlobalPlayerDataStorage(this));
@@ -278,11 +278,11 @@ public class Autorank extends JavaPlugin {
                 // Only register the mysql storage provider if it is loaded.
                 if (loaded) {
                     // Register MySQL storage provider
-                    getStorageManager().registerStorageProvider(mysqlStorageProvider);
+                    getPlayTimeStorageManager().registerStorageProvider(mysqlStorageProvider);
 
                     // Set mysql as primary storage provider.
                     if (this.getSettingsConfig().getPrimaryStorageProvider().equalsIgnoreCase("mysql")) {
-                        getStorageManager().setPrimaryStorageProvider(mysqlStorageProvider);
+                        getPlayTimeStorageManager().setPrimaryStorageProvider(mysqlStorageProvider);
                     }
                 } else {
                     // Admin wanted to use MySQL, but the storage provider could not be loaded. Warn the admin.
@@ -297,7 +297,7 @@ public class Autorank extends JavaPlugin {
         this.getServer().getScheduler().runTaskAsynchronously(this, () -> {
             try {
                 loadFlatFileTask.thenCompose(v -> finalLoadMySQLTask.thenRun(() -> {
-                    this.getLogger().info("Primary storage provider of Autorank: " + this.getStorageManager()
+                    this.getLogger().info("Primary storage provider of Autorank: " + this.getPlayTimeStorageManager()
                             .getPrimaryStorageProvider().getName());
                 })).get();
             } catch (InterruptedException | ExecutionException e) {
@@ -367,7 +367,7 @@ public class Autorank extends JavaPlugin {
                 if (!getInternalPropertiesConfig().isConvertedToNewFormat()) return;
 
                 // Remove old entries
-                int removed = getStorageManager().getPrimaryStorageProvider().purgeOldEntries();
+                int removed = getPlayTimeStorageManager().getPrimaryStorageProvider().purgeOldEntries();
 
                 getLogger().info("Removed " + removed + " old storage entries from database!");
             }
@@ -382,9 +382,6 @@ public class Autorank extends JavaPlugin {
         this.setMigrationManager(new MigrationManager(this));
 
         // ------------- Log messages -------------
-
-        // Debug message telling what plugin is used for timing.
-        getLogger().info("Using timings of: " + getSettingsConfig().useTimeOf().toString().toLowerCase());
 
         debugMessage("Autorank debug is turned on!");
 
@@ -427,7 +424,7 @@ public class Autorank extends JavaPlugin {
         // Do calendar check periodically.
         getServer().getScheduler().runTaskTimerAsynchronously(this, () -> {
             // Do calendar check to see if we should reset playtime of players.
-            this.getStorageManager().doCalendarCheck();
+            this.getPlayTimeStorageManager().doCalendarCheck();
         }, AutorankTools.TICKS_PER_MINUTE * 1, AutorankTools.TICKS_PER_MINUTE * 10);
 
         // Download PluginLibrary if it wasn't installed yet.
@@ -801,12 +798,12 @@ public class Autorank extends JavaPlugin {
         this.defaultBehaviorConfig = defaultBehaviorConfig;
     }
 
-    public StorageManager getStorageManager() {
-        return storageManager;
+    public PlayTimeStorageManager getPlayTimeStorageManager() {
+        return playTimeStorageManager;
     }
 
-    public void setStorageManager(StorageManager storageManager) {
-        this.storageManager = storageManager;
+    public void setPlayTimeStorageManager(PlayTimeStorageManager playTimeStorageManager) {
+        this.playTimeStorageManager = playTimeStorageManager;
     }
 
     public TaskManager getTaskManager() {

@@ -6,6 +6,7 @@ import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.pathbuilder.Path;
 import me.armar.plugins.autorank.pathbuilder.holders.CompositeRequirement;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
+import me.armar.plugins.autorank.storage.TimeType;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
 import org.bukkit.ChatColor;
@@ -18,6 +19,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
@@ -144,13 +146,17 @@ public class CheckCommand extends AutorankCommand {
 
             final Player player = (Player) sender;
 
-            int time = plugin.getPlayTimeManager().getTimeOfPlayer(player.getUniqueId(), true);
+            CompletableFuture<Void> task = plugin.getPlayTimeManager().getPlayTime(TimeType.TOTAL_TIME,
+                    player.getUniqueId()).thenAccept(playTime -> {
 
-            AutorankTools.sendColoredMessage(sender,
-                    Lang.HAS_PLAYED_FOR.getConfigValue(player.getName(), AutorankTools.timeToString(time,
-                            AutorankTools.Time.SECONDS)));
+                AutorankTools.sendColoredMessage(sender,
+                        Lang.HAS_PLAYED_FOR.getConfigValue(player.getName(), AutorankTools.timeToString(playTime,
+                                AutorankTools.Time.SECONDS)));
 
-            this.showPathsOverview(sender, player.getName(), player.getUniqueId());
+                this.showPathsOverview(sender, player.getName(), player.getUniqueId());
+            });
+
+            this.runCommandTask(task);
 
             return true;
         }
@@ -277,29 +283,39 @@ public class CheckCommand extends AutorankCommand {
             targetPlayerName = targetPlayer.getName();
         }
 
-        int time = plugin.getPlayTimeManager().getTimeOfPlayer(targetUUID, true);
+        String finalTargetPlayerName = targetPlayerName;
+        boolean finalShowListOfPaths = showListOfPaths;
 
-        AutorankTools.sendColoredMessage(sender,
-                Lang.HAS_PLAYED_FOR.getConfigValue(targetPlayerName, AutorankTools.timeToString(time,
-                        AutorankTools.Time.SECONDS)));
+        UUID finalTargetUUID = targetUUID;
+        Path finalTargetPath = targetPath;
 
-        if (showListOfPaths) {
-            // We will show a list of paths
-            // Show overview of paths
-            this.showPathsOverview(sender, targetPlayerName, targetUUID);
-        } else {
-            // We will show a specific path of a player to the sender
+        CompletableFuture<Void> task = plugin.getPlayTimeManager().getPlayTime(TimeType.TOTAL_TIME,
+                targetUUID).thenAccept(playTime -> {
 
-            // Check if the path the player wants to check is active
-            if (targetPath != null && !targetPath.isActive(targetUUID)) {
-                sender.sendMessage(ChatColor.GOLD + targetPlayerName + ChatColor.RED + " does not have "
-                        + ChatColor
-                        .GRAY + targetPath.getDisplayName() + ChatColor.RED + " as an active path!");
-                return true;
+            AutorankTools.sendColoredMessage(sender,
+                    Lang.HAS_PLAYED_FOR.getConfigValue(finalTargetPlayerName, AutorankTools.timeToString(playTime,
+                            AutorankTools.Time.SECONDS)));
+
+            if (finalShowListOfPaths) {
+                // We will show a list of paths
+                // Show overview of paths
+                this.showPathsOverview(sender, finalTargetPlayerName, finalTargetUUID);
+            } else {
+                // We will show a specific path of a player to the sender
+
+                // Check if the path the player wants to check is active
+                if (finalTargetPath != null && !finalTargetPath.isActive(finalTargetUUID)) {
+                    sender.sendMessage(ChatColor.GOLD + finalTargetPlayerName + ChatColor.RED + " does not have "
+                            + ChatColor
+                            .GRAY + finalTargetPath.getDisplayName() + ChatColor.RED + " as an active path!");
+                    return;
+                }
+
+                this.showSpecificPath(sender, finalTargetPlayerName, finalTargetUUID, finalTargetPath);
             }
+        });
 
-            this.showSpecificPath(sender, targetPlayerName, targetUUID, targetPath);
-        }
+        this.runCommandTask(task);
 
         return true;
     }

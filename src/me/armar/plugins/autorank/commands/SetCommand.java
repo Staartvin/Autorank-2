@@ -55,15 +55,12 @@ public class SetCommand extends AutorankCommand {
                     e.printStackTrace();
                 }
 
-                plugin.getStorageManager().setPlayerTime(uuid, value);
+                plugin.getPlayTimeStorageManager().setPlayerTime(uuid, value);
 
                 int newPlayerTime = 0;
                 try {
-                    newPlayerTime = plugin.getStorageManager()
-                            .getPrimaryStorageProvider().getPlayerTime(TimeType.TOTAL_TIME, uuid).get();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (ExecutionException e) {
+                    newPlayerTime = plugin.getPlayTimeManager().getPlayTime(TimeType.TOTAL_TIME, uuid).get();
+                } catch (InterruptedException | ExecutionException e) {
                     e.printStackTrace();
                 }
 

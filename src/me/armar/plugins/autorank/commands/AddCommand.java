@@ -45,14 +45,14 @@ public class AddCommand extends AutorankCommand {
             int value = AutorankTools.readTimeInput(args, 2);
 
             if (value >= 0) {
-                plugin.getStorageManager().addPlayerTime(uuid, value);
+                plugin.getPlayTimeStorageManager().addPlayerTime(uuid, value);
 
                 String playerName = null;
                 int newPlayerTime = 0;
                 try {
                     playerName = UUIDManager.getPlayerName(uuid).get();
                     newPlayerTime =
-                            plugin.getStorageManager().getPrimaryStorageProvider().getPlayerTime(TimeType.TOTAL_TIME,
+                            plugin.getPlayTimeManager().getPlayTime(TimeType.TOTAL_TIME,
                                     uuid).get();
                 } catch (InterruptedException | ExecutionException e) {
                     e.printStackTrace();

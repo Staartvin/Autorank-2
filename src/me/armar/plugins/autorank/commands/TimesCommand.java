@@ -4,7 +4,7 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
-import me.armar.plugins.autorank.storage.StorageProvider;
+import me.armar.plugins.autorank.playtimes.PlayTimeManager;
 import me.armar.plugins.autorank.storage.TimeType;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
@@ -69,14 +69,14 @@ public class TimesCommand extends AutorankCommand {
                 e.printStackTrace();
             }
 
-            StorageProvider primaryStorageProvider = plugin.getStorageManager().getPrimaryStorageProvider();
+            PlayTimeManager playTimeManager = plugin.getPlayTimeManager();
 
             int daily = 0, weekly = 0, monthly = 0, total = 0;
             try {
-                daily = primaryStorageProvider.getPlayerTime(TimeType.DAILY_TIME, uuid).get();
-                weekly = primaryStorageProvider.getPlayerTime(TimeType.WEEKLY_TIME, uuid).get();
-                monthly = primaryStorageProvider.getPlayerTime(TimeType.MONTHLY_TIME, uuid).get();
-                total = primaryStorageProvider.getPlayerTime(TimeType.TOTAL_TIME, uuid).get();
+                daily = playTimeManager.getPlayTime(TimeType.DAILY_TIME, uuid).get();
+                weekly = playTimeManager.getPlayTime(TimeType.WEEKLY_TIME, uuid).get();
+                monthly = playTimeManager.getPlayTime(TimeType.MONTHLY_TIME, uuid).get();
+                total = playTimeManager.getPlayTime(TimeType.TOTAL_TIME, uuid).get();
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }

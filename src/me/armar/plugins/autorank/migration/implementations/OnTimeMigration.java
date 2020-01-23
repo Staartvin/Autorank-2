@@ -64,10 +64,14 @@ public class OnTimeMigration extends MigrationablePlugin {
                 long weekPlayed = onTimeHook.getPlayerData(playerName, "WEEKPLAY");
                 long monthPlayed = onTimeHook.getPlayerData(playerName, "MONTHPLAY");
 
-                getPlugin().getStorageManager().addPlayerTime(TimeType.TOTAL_TIME, uuid, (int) (totalPlayed / 60000));
-                getPlugin().getStorageManager().addPlayerTime(TimeType.DAILY_TIME, uuid, (int) (todayPlayed / 60000));
-                getPlugin().getStorageManager().addPlayerTime(TimeType.WEEKLY_TIME, uuid, (int) (weekPlayed / 60000));
-                getPlugin().getStorageManager().addPlayerTime(TimeType.MONTHLY_TIME, uuid, (int) (monthPlayed / 60000));
+                getPlugin().getPlayTimeStorageManager().addPlayerTime(TimeType.TOTAL_TIME, uuid,
+                        (int) (totalPlayed / 60000));
+                getPlugin().getPlayTimeStorageManager().addPlayerTime(TimeType.DAILY_TIME, uuid,
+                        (int) (todayPlayed / 60000));
+                getPlugin().getPlayTimeStorageManager().addPlayerTime(TimeType.WEEKLY_TIME, uuid,
+                        (int) (weekPlayed / 60000));
+                getPlugin().getPlayTimeStorageManager().addPlayerTime(TimeType.MONTHLY_TIME, uuid,
+                        (int) (monthPlayed / 60000));
 
                 playersImported++;
             }

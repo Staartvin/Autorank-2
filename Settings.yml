@@ -16,16 +16,6 @@ interval check: 5
 # This is the interval between checks of Autorank (in minutes).
 # Lowering this number will increase accuracy but will also increase server lag.
 
-use time of: Autorank
-# You can specify what time plugin Autorank will use to calculate the time that a player has played.
-# This only changes the local time.
-# A list to choose from:
-# 1. Autorank
-# 2. Stats
-# 3. OnTime
-# 4. Statz
-# If no valid time plugin was found, it defaults to Autorank
-
 leaderboard layout: '&6&r | &b&p - &7&d %day%, &h %hour% and &m %minute%.'
 leaderboard length: 5
 # changes the appearance of the /ar leaderboard command

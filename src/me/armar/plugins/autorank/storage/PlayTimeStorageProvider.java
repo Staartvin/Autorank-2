@@ -13,7 +13,7 @@ import java.util.concurrent.CompletableFuture;
  * <p>
  * A storage provider can be identified by its name.
  */
-public abstract class StorageProvider {
+public abstract class PlayTimeStorageProvider {
 
     public Autorank plugin;
 
@@ -24,7 +24,7 @@ public abstract class StorageProvider {
      */
     public abstract StorageType getStorageType();
 
-    public StorageProvider(Autorank instance) {
+    public PlayTimeStorageProvider(Autorank instance) {
         this.plugin = instance;
     }
 

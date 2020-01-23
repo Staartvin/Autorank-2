@@ -2,7 +2,7 @@ package me.armar.plugins.autorank.storage.mysql;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.config.SettingsConfig;
-import me.armar.plugins.autorank.storage.StorageProvider;
+import me.armar.plugins.autorank.storage.PlayTimeStorageProvider;
 import me.armar.plugins.autorank.storage.TimeType;
 import me.armar.plugins.autorank.util.AutorankTools;
 import org.bukkit.ChatColor;
@@ -22,7 +22,7 @@ import java.util.concurrent.*;
  * storage provider uses a cache manager to control for the time-consuming tasks of connecting and querying the MySQL
  * database.
  */
-public class MySQLStorageProvider extends StorageProvider {
+public class MySQLStorageProvider extends PlayTimeStorageProvider {
 
     // How many minutes can a cached entry be cached before it is considered to be expired.
     public static int CACHE_EXPIRY_TIME = 2;

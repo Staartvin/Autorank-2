@@ -76,7 +76,7 @@ public class BackupManager {
             plugin.debugMessage(ChatColor.GREEN + "Making a backup of all storage files!");
 
             // Try to backup all storage providers
-            plugin.getStorageManager().backupStorageProviders();
+            plugin.getPlayTimeStorageManager().backupStorageProviders();
 
             // Update latest backup time so backup manager does not backup again within 24 hours.
             backupDataManager.getConfig().set("storage", System.currentTimeMillis());
@@ -120,10 +120,10 @@ public class BackupManager {
                 }
 
                 // Delete old backups
-                plugin.getStorageManager().getActiveStorageProviders().forEach(providerName -> {
+                plugin.getPlayTimeStorageManager().getActiveStorageProviders().forEach(providerName -> {
 
                     int deletedBackups =
-                            plugin.getStorageManager().getActiveStorageProvider(providerName).clearBackupsBeforeDate(LocalDate.now().minusDays(plugin.getSettingsConfig().getBackupRemovalTime()));
+                            plugin.getPlayTimeStorageManager().getActiveStorageProvider(providerName).clearBackupsBeforeDate(LocalDate.now().minusDays(plugin.getSettingsConfig().getBackupRemovalTime()));
 
                     plugin.debugMessage("Deleted " + deletedBackups + " backups of " + providerName);
                 });

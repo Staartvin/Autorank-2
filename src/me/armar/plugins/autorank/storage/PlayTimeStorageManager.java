@@ -20,17 +20,17 @@ import java.util.UUID;
  * data of a specific storage provider, but just want the data of 'most trustworthy' storage provider,
  * you can use the primary storage provider.
  */
-public class StorageManager {
+public class PlayTimeStorageManager {
 
     // Keep track of what storage providers we are using
-    private List<StorageProvider> activeStorageProviders = new ArrayList<>();
+    private List<PlayTimeStorageProvider> activeStorageProviders = new ArrayList<>();
 
     // Store what storage provider acts as the primary storage provider.
-    private StorageProvider primaryStorageProvider = null;
+    private PlayTimeStorageProvider primaryStorageProvider = null;
 
     private Autorank plugin;
 
-    public StorageManager(Autorank instance) {
+    public PlayTimeStorageManager(Autorank instance) {
         this.plugin = instance;
     }
 
@@ -39,7 +39,7 @@ public class StorageManager {
      *
      * @return primary storage provider
      */
-    public StorageProvider getPrimaryStorageProvider() {
+    public PlayTimeStorageProvider getPrimaryStorageProvider() {
         return this.primaryStorageProvider;
     }
 
@@ -49,7 +49,7 @@ public class StorageManager {
      * @param storageProvider Storage provider to set as primary
      * @throws IllegalArgumentException if provided storage provider is null
      */
-    public void setPrimaryStorageProvider(StorageProvider storageProvider) throws IllegalArgumentException {
+    public void setPrimaryStorageProvider(PlayTimeStorageProvider storageProvider) throws IllegalArgumentException {
         if (storageProvider == null) {
             throw new IllegalArgumentException("StorageProvider cannot be null.");
         }
@@ -65,7 +65,7 @@ public class StorageManager {
     public List<String> getActiveStorageProviders() {
         List<String> storageProviders = new ArrayList<>();
 
-        for (StorageProvider storageProvider : activeStorageProviders) {
+        for (PlayTimeStorageProvider storageProvider : activeStorageProviders) {
             storageProviders.add(storageProvider.getName());
         }
 
@@ -79,7 +79,7 @@ public class StorageManager {
      * @param providerName Name of the storage provider to retrieve.
      * @return StorageProvider that matches the requested name
      */
-    public StorageProvider getActiveStorageProvider(String providerName) {
+    public PlayTimeStorageProvider getActiveStorageProvider(String providerName) {
         return this.activeStorageProviders.stream().filter(provider -> provider.getName().equalsIgnoreCase(providerName)).findFirst().orElseGet(() -> null);
     }
 
@@ -89,7 +89,7 @@ public class StorageManager {
      * @param storageProvider StorageProvider to register
      * @throws IllegalArgumentException if provided storage provider object is null
      */
-    public void registerStorageProvider(StorageProvider storageProvider) throws IllegalArgumentException {
+    public void registerStorageProvider(PlayTimeStorageProvider storageProvider) throws IllegalArgumentException {
         if (storageProvider == null) {
             throw new IllegalArgumentException("StorageProvider cannot be null.");
         }
@@ -111,7 +111,7 @@ public class StorageManager {
      * @param storageProvider StorageProvider object to deregister
      * @throws IllegalArgumentException if provided storage provider object is null
      */
-    public void deRegisterStorageProvider(StorageProvider storageProvider) throws IllegalArgumentException {
+    public void deRegisterStorageProvider(PlayTimeStorageProvider storageProvider) throws IllegalArgumentException {
         if (storageProvider == null) {
             throw new IllegalArgumentException("StorageProvider cannot be null.");
         }
@@ -123,7 +123,7 @@ public class StorageManager {
      * Force a save on all storage providers so they have no in-memory changes that are not saved.
      */
     public void saveAllStorageProviders() {
-        for (StorageProvider storageProvider : activeStorageProviders) {
+        for (PlayTimeStorageProvider storageProvider : activeStorageProviders) {
             storageProvider.saveData();
         }
     }
@@ -146,7 +146,7 @@ public class StorageManager {
      * @param value    value to set the player time to
      */
     public void setPlayerTime(TimeType timeType, UUID uuid, int value) {
-        for (StorageProvider storageProvider : activeStorageProviders) {
+        for (PlayTimeStorageProvider storageProvider : activeStorageProviders) {
             storageProvider.setPlayerTime(timeType, uuid, value);
         }
     }
@@ -172,9 +172,10 @@ public class StorageManager {
      * @param uuid        UUID of the player
      * @param value       Value to set time to.
      */
-    public void setPlayerTime(StorageProvider.StorageType storageType, TimeType timeType, UUID uuid, int value) {
+    public void setPlayerTime(PlayTimeStorageProvider.StorageType storageType, TimeType timeType, UUID uuid,
+                              int value) {
         this.getActiveStorageProviders().forEach(storageProviderName -> {
-            StorageProvider storageProvider = getActiveStorageProvider(storageProviderName);
+            PlayTimeStorageProvider storageProvider = getActiveStorageProvider(storageProviderName);
 
             if (storageProvider == null) return;
 
@@ -194,7 +195,7 @@ public class StorageManager {
      * @param value    time to add.
      */
     public void addPlayerTime(TimeType timeType, UUID uuid, int value) {
-        for (StorageProvider storageProvider : activeStorageProviders) {
+        for (PlayTimeStorageProvider storageProvider : activeStorageProviders) {
             storageProvider.addPlayerTime(timeType, uuid, value);
         }
     }
@@ -220,9 +221,10 @@ public class StorageManager {
      * @param uuid        UUID of the player
      * @param value       Value to add.
      */
-    public void addPlayerTime(StorageProvider.StorageType storageType, TimeType timeType, UUID uuid, int value) {
+    public void addPlayerTime(PlayTimeStorageProvider.StorageType storageType, TimeType timeType, UUID uuid,
+                              int value) {
         this.getActiveStorageProviders().forEach(storageProviderName -> {
-            StorageProvider storageProvider = getActiveStorageProvider(storageProviderName);
+            PlayTimeStorageProvider storageProvider = getActiveStorageProvider(storageProviderName);
 
             if (storageProvider == null) return;
 
@@ -240,8 +242,8 @@ public class StorageManager {
      * @param storageType Storage type to search
      * @return true if there is an active storage provider that is using the given storage type.
      */
-    public boolean isStorageTypeActive(StorageProvider.StorageType storageType) {
-        for (StorageProvider storageProvider : activeStorageProviders) {
+    public boolean isStorageTypeActive(PlayTimeStorageProvider.StorageType storageType) {
+        for (PlayTimeStorageProvider storageProvider : activeStorageProviders) {
             if (storageProvider.getStorageType() == storageType) {
                 return true;
             }
@@ -257,8 +259,8 @@ public class StorageManager {
      * @param storageType Type of storage that the storage provider must use
      * @return first found active storage provider that uses the requested storage type (or null if none was found).
      */
-    public StorageProvider getStorageProvider(StorageProvider.StorageType storageType) {
-        for (StorageProvider storageProvider : activeStorageProviders) {
+    public PlayTimeStorageProvider getStorageProvider(PlayTimeStorageProvider.StorageType storageType) {
+        for (PlayTimeStorageProvider storageProvider : activeStorageProviders) {
             if (storageProvider.getStorageType() == storageType) {
                 return storageProvider;
             }
@@ -271,7 +273,7 @@ public class StorageManager {
      * Import data for all active storage providers (if they allow importing).
      */
     public void importDataForStorageProviders() {
-        for (StorageProvider storageProvider : activeStorageProviders) {
+        for (PlayTimeStorageProvider storageProvider : activeStorageProviders) {
             if (!storageProvider.canImportData()) {
                 continue;
             }
@@ -288,7 +290,7 @@ public class StorageManager {
     public boolean backupStorageProviders() {
         boolean successfulBackup = true;
 
-        for (StorageProvider storageProvider : activeStorageProviders) {
+        for (PlayTimeStorageProvider storageProvider : activeStorageProviders) {
             if (!storageProvider.canBackupData()) {
                 continue;
             }

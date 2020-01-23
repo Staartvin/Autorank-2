@@ -1,19 +1,16 @@
 package me.armar.plugins.autorank.api;
 
-import io.reactivex.annotations.NonNull;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.addons.AddOnManager;
 import me.armar.plugins.autorank.pathbuilder.Path;
 import me.armar.plugins.autorank.pathbuilder.requirement.AbstractRequirement;
 import me.armar.plugins.autorank.pathbuilder.result.AbstractResult;
-import me.armar.plugins.autorank.storage.StorageProvider;
+import me.armar.plugins.autorank.storage.PlayTimeStorageProvider;
 import me.armar.plugins.autorank.storage.TimeType;
-import me.armar.plugins.autorank.util.uuid.UUIDManager;
 
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 /**
  * <b>Autorank's API class:</b>
@@ -53,11 +50,11 @@ public class API {
      * @return play time of a player. 0 if no entry was found.
      */
     public CompletableFuture<Integer> getGlobalPlayTime(final UUID uuid) {
-        if (!plugin.getStorageManager().isStorageTypeActive(StorageProvider.StorageType.DATABASE)) {
+        if (!plugin.getPlayTimeStorageManager().isStorageTypeActive(PlayTimeStorageProvider.StorageType.DATABASE)) {
             return CompletableFuture.completedFuture(0);
         }
 
-        return plugin.getStorageManager().getStorageProvider(StorageProvider.StorageType.DATABASE).getPlayerTime
+        return plugin.getPlayTimeStorageManager().getStorageProvider(PlayTimeStorageProvider.StorageType.DATABASE).getPlayerTime
                 (TimeType.TOTAL_TIME, uuid);
     }
 
@@ -82,37 +79,7 @@ public class API {
      * @return play time of a player (in minutes).
      */
     public CompletableFuture<Integer> getPlayTime(TimeType timeType, UUID uuid) {
-        return plugin.getStorageManager().getPrimaryStorageProvider().getPlayerTime(timeType, uuid);
-    }
-
-    /**
-     * Get the local play time (play time on this server) of a player. The
-     * returned time depends on what plugin is used for keeping track of time.
-     * <br>
-     * The time is always given in seconds.
-     * <p>
-     * <p>
-     * Deprecated, use {@link #getTimeOfPlayer(UUID)} instead.
-     *
-     * @param playerName Name of the player
-     * @return play time of a player. 0 when has never played before.
-     */
-    @Deprecated
-    public int getTimeOfPlayer(@NonNull String playerName) {
-
-        UUID uuid = null;
-
-        try {
-            uuid = UUIDManager.getUUID(playerName).get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
-
-        return this.getTimeOfPlayer(uuid);
-    }
-
-    public int getTimeOfPlayer(@NonNull UUID uuid) {
-        return plugin.getPlayTimeManager().getTimeOfPlayer(uuid, true);
+        return plugin.getPlayTimeManager().getPlayTime(timeType, uuid);
     }
 
     /**

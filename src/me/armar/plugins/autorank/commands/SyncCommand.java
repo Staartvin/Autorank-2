@@ -4,7 +4,7 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
-import me.armar.plugins.autorank.storage.StorageProvider;
+import me.armar.plugins.autorank.storage.PlayTimeStorageProvider;
 import me.armar.plugins.autorank.storage.TimeType;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -51,17 +51,19 @@ public class SyncCommand extends AutorankCommand {
         }
 
         // Check if Flatfile is active
-        if (!plugin.getStorageManager().isStorageTypeActive(StorageProvider.StorageType.FLAT_FILE)) {
+        if (!plugin.getPlayTimeStorageManager().isStorageTypeActive(PlayTimeStorageProvider.StorageType.FLAT_FILE)) {
             sender.sendMessage(ChatColor.RED + "There is no active storage provider that supports flatfile data.");
             return true;
         }
 
         sender.sendMessage(ChatColor.RED + "You do not have to use this command regularly.");
 
-        StorageProvider flatfileStorageProvider = plugin.getStorageManager().getStorageProvider(StorageProvider
+        PlayTimeStorageProvider flatfileStorageProvider =
+                plugin.getPlayTimeStorageManager().getStorageProvider(PlayTimeStorageProvider
                 .StorageType.FLAT_FILE);
 
-        StorageProvider databaseStorageProvider = plugin.getStorageManager().getStorageProvider(StorageProvider
+        PlayTimeStorageProvider databaseStorageProvider =
+                plugin.getPlayTimeStorageManager().getStorageProvider(PlayTimeStorageProvider
                 .StorageType.DATABASE);
 
         if (reverse) {

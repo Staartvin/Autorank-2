@@ -38,7 +38,7 @@ public class SyncStatsCommand extends AutorankCommand {
         int count = 0;
 
         // Sync playtime of every player
-        for (final UUID uuid : plugin.getStorageManager().getPrimaryStorageProvider().getStoredPlayers(TimeType
+        for (final UUID uuid : plugin.getPlayTimeStorageManager().getPrimaryStorageProvider().getStoredPlayers(TimeType
                 .TOTAL_TIME)) {
 
             final OfflinePlayer p = plugin.getServer().getOfflinePlayer(uuid);
@@ -52,7 +52,7 @@ public class SyncStatsCommand extends AutorankCommand {
             }
 
             // Update time
-            plugin.getStorageManager().setPlayerTime(TimeType.TOTAL_TIME, uuid, Math.round(statsPlayTime / 60));
+            plugin.getPlayTimeStorageManager().setPlayerTime(TimeType.TOTAL_TIME, uuid, Math.round(statsPlayTime / 60));
 
             // Increment count
             count++;

@@ -3,7 +3,7 @@ package me.armar.plugins.autorank.storage.flatfile;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.backup.BackupManager;
 import me.armar.plugins.autorank.config.SimpleYamlConfiguration;
-import me.armar.plugins.autorank.storage.StorageProvider;
+import me.armar.plugins.autorank.storage.PlayTimeStorageProvider;
 import me.armar.plugins.autorank.storage.TimeType;
 import me.armar.plugins.autorank.util.AutorankTools;
 import org.bukkit.OfflinePlayer;
@@ -23,7 +23,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class FlatFileStorageProvider extends StorageProvider {
+public class FlatFileStorageProvider extends PlayTimeStorageProvider {
 
     private final String pathTotalTimeFile = "/data/Total_time.yml";
     private final String pathDailyTimeFile = "/data/Daily_time.yml";

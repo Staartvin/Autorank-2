@@ -1,7 +1,7 @@
 package me.armar.plugins.autorank.pathbuilder.requirement;
 
 import me.armar.plugins.autorank.language.Lang;
-import me.armar.plugins.autorank.storage.StorageProvider;
+import me.armar.plugins.autorank.storage.PlayTimeStorageProvider;
 import me.armar.plugins.autorank.storage.TimeType;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
@@ -61,7 +61,7 @@ public class GlobalTimeRequirement extends AbstractRequirement {
             return false;
         }
 
-        if (!getAutorank().getStorageManager().isStorageTypeActive(StorageProvider.StorageType.DATABASE)) {
+        if (!getAutorank().getPlayTimeStorageManager().isStorageTypeActive(PlayTimeStorageProvider.StorageType.DATABASE)) {
             this.registerWarningMessage("There is no active storage provider that supports global time!");
             return false;
         }

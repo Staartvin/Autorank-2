@@ -78,7 +78,7 @@ public class VanillaMigration extends MigrationablePlugin {
 
                     if (ticksPlayed <= 0) continue;
 
-                    getPlugin().getStorageManager().addPlayerTime(TimeType.TOTAL_TIME, uuid,
+                    getPlugin().getPlayTimeStorageManager().addPlayerTime(TimeType.TOTAL_TIME, uuid,
                             (int) (ticksPlayed / 1200));
 
                     playersImported++;

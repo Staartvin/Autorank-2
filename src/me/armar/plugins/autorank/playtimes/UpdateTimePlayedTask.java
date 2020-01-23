@@ -57,7 +57,7 @@ public class UpdateTimePlayedTask implements Runnable {
 
         // Add time to a player's current time for all storage providers.
         for (final TimeType type : TimeType.values()) {
-            plugin.getStorageManager().addPlayerTime(type, uuid, PlayTimeManager.INTERVAL_MINUTES);
+            plugin.getPlayTimeStorageManager().addPlayerTime(type, uuid, PlayTimeManager.INTERVAL_MINUTES);
         }
 
         // Auto assign path (if possible)

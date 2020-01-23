@@ -42,7 +42,7 @@ public class PlayerQuitListener implements Listener {
                 int roundedDiff = (int) Math.round(difference);
 
                 // Add the 'lost' time to the player's current time.
-                plugin.getStorageManager().addPlayerTime(uuid, roundedDiff);
+                plugin.getPlayTimeStorageManager().addPlayerTime(uuid, roundedDiff);
 
                 // Remove the old time.
                 plugin.getTaskManager().setLastPlayTimeUpdate(uuid, -1);

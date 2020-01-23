@@ -65,7 +65,8 @@ public class MigrateCommand extends AutorankCommand {
             return true;
         }
 
-        List<UUID> uuids = plugin.getStorageManager().getPrimaryStorageProvider().getStoredPlayers(TimeType.TOTAL_TIME);
+        List<UUID> uuids =
+                plugin.getPlayTimeStorageManager().getPrimaryStorageProvider().getStoredPlayers(TimeType.TOTAL_TIME);
 
         CompletableFuture<Void> task = migrationablePlugin.migratePlayTime(uuids).thenAccept(migratedPlayers -> {
             sender.sendMessage(ChatColor.GREEN + "" + migratedPlayers + " players have been migrated to Autorank.");

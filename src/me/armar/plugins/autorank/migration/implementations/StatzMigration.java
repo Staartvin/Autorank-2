@@ -43,7 +43,7 @@ public class StatzMigration extends MigrationablePlugin {
                     continue;
                 }
 
-                getPlugin().getStorageManager().addPlayerTime(TimeType.TOTAL_TIME, uuid,
+                getPlugin().getPlayTimeStorageManager().addPlayerTime(TimeType.TOTAL_TIME, uuid,
                         (int) Math.round(minutesPlayed));
 
                 playersImported++;

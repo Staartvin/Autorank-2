@@ -1,10 +1,12 @@
 package me.armar.plugins.autorank.pathbuilder.requirement;
 
 import me.armar.plugins.autorank.language.Lang;
+import me.armar.plugins.autorank.storage.TimeType;
 import me.armar.plugins.autorank.util.AutorankTools;
 import me.armar.plugins.autorank.util.AutorankTools.Time;
 
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 /**
  * This requirement checks for local play time Date created: 13:49:33 15 jan.
@@ -24,7 +26,13 @@ public class TimeRequirement extends AbstractRequirement {
     @Override
     public String getProgressString(UUID uuid) {
 
-        final int playtime = (getAutorank().getPlayTimeManager().getTimeOfPlayer(uuid, true) / 60);
+        int playtime = 0;
+
+        try {
+            playtime = (getAutorank().getPlayTimeManager().getPlayTime(TimeType.TOTAL_TIME, uuid).get());
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
 
         return AutorankTools.timeToString(playtime, Time.MINUTES) + "/" + AutorankTools.timeToString(timeNeeded,
                 Time.MINUTES);
@@ -32,10 +40,13 @@ public class TimeRequirement extends AbstractRequirement {
 
     @Override
     protected boolean meetsRequirement(UUID uuid) {
-        // Use getTimeOf so that when switched to another time, it'll still
-        // work.
-        // getTimeOfPlayer() is in seconds, so convert.
-        final int playTime = this.getAutorank().getPlayTimeManager().getTimeOfPlayer(uuid, true) / 60;
+        int playTime = 0;
+
+        try {
+            playTime = (getAutorank().getPlayTimeManager().getPlayTime(TimeType.TOTAL_TIME, uuid).get());
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
 
         return timeNeeded != -1 && playTime >= timeNeeded;
     }
