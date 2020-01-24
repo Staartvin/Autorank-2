@@ -43,8 +43,9 @@ public class HelpCommand extends AutorankCommand {
     }
 
     private void showHelpPages(final CommandSender sender, int page) {
-        List<AutorankCommand> commands = new ArrayList<AutorankCommand>(
-                plugin.getCommandsManager().getRegisteredCommands().values());
+        List<AutorankCommand> commands = new ArrayList<>(plugin.getCommandsManager().getRegisteredCommands().values())
+                .stream().sorted(Comparator.comparing(AutorankCommand::getUsage))
+                .collect(Collectors.toList());
 
         // Change commands list
         if (plugin.getSettingsConfig().doBaseHelpPageOnPermissions()) {
@@ -57,8 +58,8 @@ public class HelpCommand extends AutorankCommand {
 
                 // Check if player has permission to do this, before
                 // presenting this command
-                commands = commands.stream().filter(cmd -> sender.hasPermission(cmd.getPermission()))
-                        .sorted(Comparator.comparing(AutorankCommand::getUsage))
+                commands = commands.stream()
+                        .filter(cmd -> sender.hasPermission(cmd.getPermission()))
                         .collect(Collectors.toList());
 
             }
