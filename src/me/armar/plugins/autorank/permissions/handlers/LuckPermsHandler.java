@@ -2,13 +2,18 @@ package me.armar.plugins.autorank.permissions.handlers;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.permissions.PermissionsHandler;
-import me.lucko.luckperms.LuckPerms;
-import me.lucko.luckperms.api.LuckPermsApi;
-import me.lucko.luckperms.api.Node;
-import me.lucko.luckperms.api.User;
+import net.luckperms.api.LuckPerms;
+import net.luckperms.api.model.group.Group;
+import net.luckperms.api.model.user.User;
+import net.luckperms.api.node.types.InheritanceNode;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.RegisteredServiceProvider;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.stream.Collectors;
 
 /**
  * @author Staartvin This is a special permission handler that handles all work
@@ -16,7 +21,7 @@ import java.util.*;
  */
 public class LuckPermsHandler extends PermissionsHandler {
 
-    private LuckPermsApi luckPermsApi;
+    private LuckPerms luckPermsApi;
 
     public LuckPermsHandler(final Autorank plugin) {
         super(plugin);
@@ -78,14 +83,9 @@ public class LuckPermsHandler extends PermissionsHandler {
      */
     @Override
     public Collection<String> getGroups() {
-
-        List<String> groupNames = new ArrayList<>();
-
-        for (me.lucko.luckperms.api.Group luckPermGroup : luckPermsApi.getGroups()) {
-            groupNames.add(luckPermGroup.getName());
-        }
-
-        return Collections.unmodifiableCollection(groupNames);
+        return Collections.unmodifiableCollection(
+                luckPermsApi.getGroupManager().getLoadedGroups().stream()
+                        .map(Group::getName).collect(Collectors.toList()));
     }
 
     /*
@@ -100,58 +100,23 @@ public class LuckPermsHandler extends PermissionsHandler {
 
     @Override
     public Collection<String> getPlayerGroups(final Player player) {
-        User user = luckPermsApi.getUser(player.getUniqueId());
+
+        User user = luckPermsApi.getUserManager().getUser(player.getUniqueId());
 
         if (user == null) {
             return new ArrayList<>();
         }
 
-        List<String> groupNames = new ArrayList<>();
-
-        for (Node luckPermsNode : user.getAllNodes()) {
-            if (luckPermsNode.isGroupNode()) {
-                groupNames.add(luckPermsNode.getGroupName());
-            }
-        }
-
-        return Collections.unmodifiableCollection(groupNames);
+        return Collections.unmodifiableCollection(user.getDistinctNodes().parallelStream()
+                .filter(node -> node instanceof InheritanceNode)
+                .map(node -> ((InheritanceNode) node).getGroupName())
+                .collect(Collectors.toList()));
     }
 
     @Override
     public Collection<String> getWorldGroups(final Player player, final String world) {
-        User user = luckPermsApi.getUser(player.getUniqueId());
-
-        if (user == null) {
-            return new ArrayList<>();
-        }
-
-        List<String> groupNames = new ArrayList<>();
-
-        for (Node luckPermsNode : user.getAllNodes()) {
-            if (luckPermsNode.isGroupNode()) {
-
-                // If group is not world specific, it also applies to the given world and hence should be added.
-                if (!luckPermsNode.isWorldSpecific()) {
-                    groupNames.add(luckPermsNode.getGroupName());
-                    continue;
-                }
-
-                Optional<String> validOnWorld = luckPermsNode.getWorld();
-
-                // World is unknown and so not world specific.
-                if (!validOnWorld.isPresent()) {
-                    groupNames.add(luckPermsNode.getGroupName());
-                } else {
-                    // World is not unknown and we should check if it matches the given world.
-                    if (validOnWorld.get().equals(world)) {
-                        groupNames.add(luckPermsNode.getGroupName());
-                    }
-                }
-
-            }
-        }
-
-        return Collections.unmodifiableCollection(groupNames);
+        // The API is not very clear on how to check for world groups, so I'm ignoring that for now.
+        return this.getPlayerGroups(player);
     }
 
 
@@ -163,9 +128,9 @@ public class LuckPermsHandler extends PermissionsHandler {
 
     @Override
     public boolean setupPermissionsHandler() {
-        Optional<LuckPermsApi> optional = LuckPerms.getApiSafe();
+        RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
 
-        optional.ifPresent(luckPermsApi1 -> luckPermsApi = luckPermsApi1);
+        if (provider != null) luckPermsApi = provider.getProvider();
 
         return luckPermsApi != null;
     }
