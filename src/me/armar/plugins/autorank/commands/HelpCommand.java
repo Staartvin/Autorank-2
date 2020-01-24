@@ -9,7 +9,9 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * The command delegator for the '/ar help' command.
@@ -53,17 +55,12 @@ public class HelpCommand extends AutorankCommand {
             // refactor.
             if (!sender.isOp()) {
 
-                final List<AutorankCommand> newList = new ArrayList<AutorankCommand>();
+                // Check if player has permission to do this, before
+                // presenting this command
+                commands = commands.stream().filter(cmd -> sender.hasPermission(cmd.getPermission()))
+                        .sorted(Comparator.comparing(AutorankCommand::getUsage))
+                        .collect(Collectors.toList());
 
-                for (final AutorankCommand cmd : commands) {
-                    // Check if player has permission to do this, before
-                    // presenting this command
-                    if (sender.hasPermission(cmd.getPermission())) {
-                        newList.add(cmd);
-                    }
-                }
-
-                commands = newList;
             }
         }
 
