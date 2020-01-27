@@ -76,9 +76,7 @@ public class MobKillsRequirement extends AbstractRequirement {
         if (options.length > 1) {
             mobType = options[1].trim().replace(" ", "_");
 
-            if (mobType.equalsIgnoreCase("wither_skeleton")) {
-                mobType = "WITHER SKELETON";
-            } else if (mobType.equalsIgnoreCase("charged_creeper")) {
+            if (mobType.equalsIgnoreCase("charged_creeper")) {
                 mobType = "POWERED CREEPER";
             } else if (mobType.equalsIgnoreCase("spider_jockey")) {
                 mobType = "SPIDER JOCKEY";
@@ -86,10 +84,8 @@ public class MobKillsRequirement extends AbstractRequirement {
                 mobType = "CHICKEN JOCKEY";
             } else if (mobType.equalsIgnoreCase("killer_rabbit")) {
                 mobType = "KILLER RABBIT";
-            } else if (mobType.equalsIgnoreCase("elder_guardian")) {
-                mobType = "ELDER GUARDIAN";
             } else {
-                mobType = EntityType.valueOf(mobType.toUpperCase()).toString();
+                mobType = EntityType.valueOf(mobType.toUpperCase()).name();
             }
         }
 
