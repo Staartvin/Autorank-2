@@ -8,6 +8,9 @@ import org.bukkit.conversations.Prompt;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * This class is a convenience class for showing a confirmation prompt easily.
  * If no message is provided, a default message is shown to the user to confirm or deny the current action.
@@ -24,6 +27,10 @@ public class ConfirmPrompt extends FixedSetPrompt {
     private Prompt confirmPrompt;
     private Prompt denyPrompt;
 
+    private static List<String> confirmWords = Arrays.asList("yes", "confirm", "allow");
+    private List<String> denyWords = Arrays.asList("no", "deny", "disallow");
+
+
     // A callback that should be performed when the prompt has finished.
     private ConfirmPromptCallback callback;
 
@@ -37,7 +44,7 @@ public class ConfirmPrompt extends FixedSetPrompt {
      */
     public ConfirmPrompt(String message, @NonNull Prompt confirmPrompt, @NonNull Prompt denyPrompt,
                          ConfirmPromptCallback callback) {
-        super("yes", "no");
+        super("yes", "confirm", "allow", "no", "deny", "disallow");
 
         // Override default message if something was given.
         if (message != null) {
@@ -88,7 +95,8 @@ public class ConfirmPrompt extends FixedSetPrompt {
     protected @Nullable Prompt acceptValidatedInput(@NotNull ConversationContext conversationContext,
                                                     @NotNull String s) {
 
-        if (s.equals("yes")) {
+        // Check if it's a confirming word
+        if (confirmWords.stream().anyMatch(confirmWord -> confirmWord.equalsIgnoreCase(s))) {
 
             if (callback != null) {
                 callback.promptConfirmed();
