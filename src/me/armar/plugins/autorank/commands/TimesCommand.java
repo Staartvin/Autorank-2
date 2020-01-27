@@ -7,7 +7,6 @@ import me.armar.plugins.autorank.permissions.AutorankPermission;
 import me.armar.plugins.autorank.playtimes.PlayTimeManager;
 import me.armar.plugins.autorank.storage.TimeType;
 import me.armar.plugins.autorank.util.AutorankTools;
-import me.armar.plugins.autorank.util.AutorankTools.Time;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -15,6 +14,7 @@ import org.bukkit.entity.Player;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * The command delegator for the '/ar times' command.
@@ -83,12 +83,12 @@ public class TimesCommand extends AutorankCommand {
 
             sender.sendMessage(Lang.AR_TIMES_HEADER.getConfigValue(playerName));
             sender.sendMessage(Lang.AR_TIMES_PLAYER_PLAYED.getConfigValue(playerName));
-            sender.sendMessage(Lang.AR_TIMES_TODAY.getConfigValue(AutorankTools.timeToString(daily, Time.MINUTES)));
+            sender.sendMessage(Lang.AR_TIMES_TODAY.getConfigValue(AutorankTools.timeToString(daily, TimeUnit.MINUTES)));
             sender.sendMessage(Lang.AR_TIMES_THIS_WEEK.getConfigValue(AutorankTools.timeToString(weekly,
-                    Time.MINUTES)));
+                    TimeUnit.MINUTES)));
             sender.sendMessage(Lang.AR_TIMES_THIS_MONTH.getConfigValue(AutorankTools.timeToString(monthly,
-                    Time.MINUTES)));
-            sender.sendMessage(Lang.AR_TIMES_TOTAL.getConfigValue(AutorankTools.timeToString(total, Time.MINUTES)));
+                    TimeUnit.MINUTES)));
+            sender.sendMessage(Lang.AR_TIMES_TOTAL.getConfigValue(AutorankTools.timeToString(total, TimeUnit.MINUTES)));
         });
 
         this.runCommandTask(task);

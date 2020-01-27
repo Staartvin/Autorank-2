@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -151,7 +152,7 @@ public class CheckCommand extends AutorankCommand {
 
                 AutorankTools.sendColoredMessage(sender,
                         Lang.HAS_PLAYED_FOR.getConfigValue(player.getName(), AutorankTools.timeToString(playTime,
-                                AutorankTools.Time.SECONDS)));
+                                TimeUnit.MINUTES)));
 
                 this.showPathsOverview(sender, player.getName(), player.getUniqueId());
             });
@@ -294,7 +295,7 @@ public class CheckCommand extends AutorankCommand {
 
             AutorankTools.sendColoredMessage(sender,
                     Lang.HAS_PLAYED_FOR.getConfigValue(finalTargetPlayerName, AutorankTools.timeToString(playTime,
-                            AutorankTools.Time.SECONDS)));
+                            TimeUnit.MINUTES)));
 
             if (finalShowListOfPaths) {
                 // We will show a list of paths

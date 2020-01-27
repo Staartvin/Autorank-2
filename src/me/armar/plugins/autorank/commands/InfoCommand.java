@@ -16,6 +16,7 @@ import org.bukkit.entity.Player;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * The command delegator for the '/ar info' command.
@@ -144,11 +145,9 @@ public class InfoCommand extends AutorankCommand {
                     ? ChatColor.GREEN : ChatColor.RED) + isExemptedFromTimeAddition);
 
             sender.sendMessage(ChatColor.LIGHT_PURPLE + "Local playtime: " + ChatColor.GOLD +
-                    (localTotalTime <= 0 ? "none" : AutorankTools.timeToString(localTotalTime,
-                            AutorankTools.Time.MINUTES)));
+                    (localTotalTime <= 0 ? "none" : AutorankTools.timeToString(localTotalTime, TimeUnit.MINUTES)));
             sender.sendMessage(ChatColor.LIGHT_PURPLE + "Global playtime: " + ChatColor.GOLD +
-                    (globalTotalTime <= 0 ? "none" : AutorankTools.timeToString(globalTotalTime,
-                            AutorankTools.Time.MINUTES)));
+                    (globalTotalTime <= 0 ? "none" : AutorankTools.timeToString(globalTotalTime, TimeUnit.MINUTES)));
 
         });
 

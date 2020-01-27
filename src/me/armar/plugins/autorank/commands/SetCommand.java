@@ -12,6 +12,7 @@ import org.bukkit.command.CommandSender;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * The command delegator for the '/ar set' command.
@@ -66,7 +67,7 @@ public class SetCommand extends AutorankCommand {
 
                 AutorankTools.sendColoredMessage(sender,
                         Lang.PLAYTIME_CHANGED.getConfigValue(playerName,
-                                AutorankTools.timeToString(newPlayerTime, AutorankTools.Time.MINUTES)));
+                                AutorankTools.timeToString(newPlayerTime, TimeUnit.MINUTES)));
             });
 
             this.runCommandTask(task);

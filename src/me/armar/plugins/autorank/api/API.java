@@ -2,15 +2,19 @@ package me.armar.plugins.autorank.api;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.addons.AddOnManager;
+import me.armar.plugins.autorank.api.services.RequirementManager;
+import me.armar.plugins.autorank.api.services.RequirementService;
+import me.armar.plugins.autorank.api.services.ResultManager;
+import me.armar.plugins.autorank.api.services.ResultService;
 import me.armar.plugins.autorank.pathbuilder.Path;
-import me.armar.plugins.autorank.pathbuilder.requirement.AbstractRequirement;
-import me.armar.plugins.autorank.pathbuilder.result.AbstractResult;
 import me.armar.plugins.autorank.storage.PlayTimeStorageProvider;
 import me.armar.plugins.autorank.storage.TimeType;
+import org.bukkit.plugin.ServicePriority;
 
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <b>Autorank's API class:</b>
@@ -28,6 +32,18 @@ public class API {
 
     public API(final Autorank instance) {
         plugin = instance;
+
+        // Register requirement service.
+        plugin.getServer().getServicesManager().register(RequirementManager.class, new RequirementService(instance),
+                instance, ServicePriority.Normal);
+
+        plugin.getLogger().info("Registered requirement service for adding custom requirements!");
+
+        // Register result service.
+        plugin.getServer().getServicesManager().register(ResultManager.class, new ResultService(instance),
+                instance, ServicePriority.Normal);
+
+        plugin.getLogger().info("Registered result service for adding custom results!");
     }
 
     /**
@@ -72,45 +88,30 @@ public class API {
     }
 
     /**
-     * Get the play time of a player for a given type of time (daily, weekly, monthly).
+     * Get the play time of a player for a given type of time (daily, weekly, monthly). For info on the different
+     * types of play time, see {@link me.armar.plugins.autorank.playtimes.PlayTimeManager}.
      *
      * @param timeType Type of time
      * @param uuid     UUID of the player
      * @return play time of a player (in minutes).
+     * @deprecated You should use {@link #getPlayTime(TimeType, UUID, TimeUnit)} instead.
      */
+    @Deprecated
     public CompletableFuture<Integer> getPlayTime(TimeType timeType, UUID uuid) {
         return plugin.getPlayTimeManager().getPlayTime(timeType, uuid);
     }
 
     /**
-     * Register a requirement that can be used in the Paths.yml file. The name
-     * should be unique as that is the way Autorank will identify the
-     * requirement.
-     * <p>
-     * The name will be the name that is used in the config.
+     * Get the play time of a player for a given type of time (daily, weekly, monthly). For info on the different
+     * types of play time, see {@link me.armar.plugins.autorank.playtimes.PlayTimeManager}.
      *
-     * @param uniqueName Unique name identifier for the requirement
-     * @param clazz      AbstractRequirement class that does all the logic
+     * @param timeType Type of time
+     * @param uuid     UUID of the player
+     * @param timeUnit Unit of time that should be returned
+     * @return play time of a player (in given unit).
      */
-    public void registerRequirement(final String uniqueName, final Class<? extends AbstractRequirement> clazz) {
-        plugin.getLogger().info("Loaded custom requirement: " + uniqueName);
-
-        plugin.registerRequirement(uniqueName, clazz);
-    }
-
-    /**
-     * Register a result that can be used in the Paths.yml file. The name should
-     * be unique as that is the way Autorank will identify the result.
-     * <p>
-     * The name will be the name that is used in the config.
-     *
-     * @param uniqueName Unique name identifier for the result
-     * @param clazz      AbstractResult class that does all the logic
-     */
-    public void registerResult(final String uniqueName, final Class<? extends AbstractResult> clazz) {
-        plugin.getLogger().info("Loaded custom result: " + uniqueName);
-
-        plugin.registerResult(uniqueName, clazz);
+    public CompletableFuture<Long> getPlayTime(TimeType timeType, UUID uuid, TimeUnit timeUnit) {
+        return plugin.getPlayTimeManager().getPlayTime(timeType, uuid, timeUnit);
     }
 
     /**

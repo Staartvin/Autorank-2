@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -244,7 +245,7 @@ public class AutorankTools {
      * @param time   the time type of the output
      * @return the integer representing the number of seconds/minutes/hours/days
      */
-    public static int stringToTime(String string, final Time time) {
+    public static int stringToTime(String string, final TimeUnit time) {
         int res = 0;
 
         string = string.trim();
@@ -290,13 +291,13 @@ public class AutorankTools {
 
         // Res time is in minutes
 
-        if (time.equals(Time.SECONDS)) {
+        if (time.equals(TimeUnit.SECONDS)) {
             return res * 60;
-        } else if (time.equals(Time.MINUTES)) {
+        } else if (time.equals(TimeUnit.MINUTES)) {
             return res;
-        } else if (time.equals(Time.HOURS)) {
+        } else if (time.equals(TimeUnit.HOURS)) {
             return res / 60;
-        } else if (time.equals(Time.DAYS)) {
+        } else if (time.equals(TimeUnit.DAYS)) {
             return res / 1440;
         } else {
             return 0;
@@ -438,10 +439,6 @@ public class AutorankTools {
         return res;
     }
 
-    public enum Time {
-        DAYS, HOURS, MINUTES, SECONDS
-    }
-
     /**
      * Convert an integer to a time string. <br>
      * Format of the returned string: <b>x days, y hours, z minutes and r
@@ -452,18 +449,18 @@ public class AutorankTools {
      *              SECONDS)
      * @return string in given format
      */
-    public static String timeToString(int count, final Time time) {
+    public static String timeToString(int count, final TimeUnit time) {
         final StringBuilder b = new StringBuilder();
 
         int days = 0, hours = 0, minutes = 0, seconds = 0;
 
-        if (time.equals(Time.DAYS)) {
+        if (time.equals(TimeUnit.DAYS)) {
             days = count;
-        } else if (time.equals(Time.HOURS)) {
+        } else if (time.equals(TimeUnit.HOURS)) {
             days = count / 24;
 
             hours = count - (days * 24);
-        } else if (time.equals(Time.MINUTES)) {
+        } else if (time.equals(TimeUnit.MINUTES)) {
             days = count / 1440;
 
             count = count - (days * 1440);
@@ -471,7 +468,7 @@ public class AutorankTools {
             hours = count / 60;
 
             minutes = count - (hours * 60);
-        } else if (time.equals(Time.SECONDS)) {
+        } else if (time.equals(TimeUnit.SECONDS)) {
             days = count / 86400;
 
             count = count - (days * 86400);
@@ -596,7 +593,7 @@ public class AutorankTools {
                 return -1;
             }
 
-            value = AutorankTools.stringToTime(builder.toString(), Time.MINUTES);
+            value = AutorankTools.stringToTime(builder.toString(), TimeUnit.MINUTES);
         }
 
         return value;

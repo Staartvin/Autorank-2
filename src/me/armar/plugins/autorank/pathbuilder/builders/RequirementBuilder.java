@@ -9,10 +9,7 @@ import me.staartvin.plugins.pluginlibrary.Library;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class RequirementBuilder {
 
@@ -47,6 +44,41 @@ public class RequirementBuilder {
 
         // Add type to the list of AutorankTools so it can use the correct name.
         AutorankTools.registerRequirement(type);
+    }
+
+    /**
+     * Remove a registered requirement with the given type.
+     *
+     * @param type Identifier of the requirement
+     * @return true if it was removed, false if there was no element with the given identifier.
+     */
+    public static boolean unRegisterRequirement(String type) {
+        if (!reqs.containsKey(type)) {
+            return false;
+        }
+
+        reqs.remove(type);
+
+        return true;
+    }
+
+    /**
+     * Get all requirements that are registered.
+     *
+     * @return A collection of requirement classes that are registered.
+     */
+    public static List<Class<? extends AbstractRequirement>> getRegisteredRequirements() {
+        return new ArrayList<>(reqs.values());
+    }
+
+    /**
+     * Get the requirement that is registered with the given type.
+     *
+     * @param type Identifier of the requirement.
+     * @return requirement if found, or null.
+     */
+    public static Optional<Class<? extends AbstractRequirement>> getRegisteredRequirement(String type) {
+        return Optional.ofNullable(reqs.getOrDefault(type, null));
     }
 
     /**
@@ -254,12 +286,6 @@ public class RequirementBuilder {
         }
 
         return requirement;
-    }
-
-    public boolean areDependenciesAvailable(AbstractRequirement requirement) {
-
-
-        return true;
     }
 
 }

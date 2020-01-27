@@ -7,7 +7,6 @@ import me.armar.plugins.autorank.permissions.AutorankPermission;
 import me.armar.plugins.autorank.storage.PlayTimeStorageProvider;
 import me.armar.plugins.autorank.storage.TimeType;
 import me.armar.plugins.autorank.util.AutorankTools;
-import me.armar.plugins.autorank.util.AutorankTools.Time;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -17,6 +16,7 @@ import org.bukkit.entity.Player;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * The command delegator for the '/ar gcheck' command.
@@ -104,7 +104,7 @@ public class GlobalCheckCommand extends AutorankCommand {
             }
 
             AutorankTools.sendColoredMessage(sender, playerName + " has played for "
-                    + AutorankTools.timeToString(globalPlayTime, Time.MINUTES) + " across all servers.");
+                    + AutorankTools.timeToString(globalPlayTime, TimeUnit.MINUTES) + " across all servers.");
 
         });
 

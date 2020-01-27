@@ -6,8 +6,7 @@ import me.armar.plugins.autorank.util.AutorankTools;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This class is used to create a new AbstractResult. It uses the Factory Method Design Pattern.
@@ -41,6 +40,41 @@ public class ResultBuilder {
 
         // Add type to the list of AutorankTools so it can use the correct name.
         AutorankTools.registerResult(type);
+    }
+
+    /**
+     * Remove a registered result with the given type.
+     *
+     * @param type Identifier of the result
+     * @return true if it was removed, false if there was no element with the given identifier.
+     */
+    public static boolean unRegisterResult(String type) {
+        if (!results.containsKey(type)) {
+            return false;
+        }
+
+        results.remove(type);
+
+        return true;
+    }
+
+    /**
+     * Get all results that are registered.
+     *
+     * @return A collection of result classes that are registered.
+     */
+    public static List<Class<? extends AbstractResult>> getRegisteredResults() {
+        return new ArrayList<>(results.values());
+    }
+
+    /**
+     * Get the result that is registered with the given type.
+     *
+     * @param type Identifier of the result.
+     * @return result if found, or null.
+     */
+    public static Optional<Class<? extends AbstractResult>> getRegisteredResult(String type) {
+        return Optional.ofNullable(results.getOrDefault(type, null));
     }
 
     /**

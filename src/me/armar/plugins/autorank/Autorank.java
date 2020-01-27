@@ -77,6 +77,8 @@ public class Autorank extends JavaPlugin {
     private DependencyManager dependencyManager;
     private LeaderboardHandler leaderboardManager;
 
+    private API api;
+
     // Handlers
     private LanguageHandler languageHandler;
     private PermissionsPluginManager permPlugHandler;
@@ -406,6 +408,8 @@ public class Autorank extends JavaPlugin {
         // Convert all UUIDS to lowercase.
         this.getUUIDStorage().transferUUIDs();
 
+        this.api = new API(this);
+
         // ------------- Say Welcome! -------------
         getLogger().info(String.format("Autorank %s has been enabled!", getDescription().getVersion()));
 
@@ -707,7 +711,7 @@ public class Autorank extends JavaPlugin {
     }
 
     public API getAPI() {
-        return new API(this);
+        return api;
     }
 
     public BackupManager getBackupManager() {

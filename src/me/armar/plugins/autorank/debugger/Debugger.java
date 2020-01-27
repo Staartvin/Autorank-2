@@ -1,6 +1,10 @@
 package me.armar.plugins.autorank.debugger;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.pathbuilder.builders.RequirementBuilder;
+import me.armar.plugins.autorank.pathbuilder.builders.ResultBuilder;
+import me.armar.plugins.autorank.pathbuilder.requirement.AbstractRequirement;
+import me.armar.plugins.autorank.pathbuilder.result.AbstractResult;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -60,10 +64,12 @@ public class Debugger {
         // write stuff
         try {
             out.write(
-                    "This is a debug file of Autorank. You should give this to an author or ticket manager of Autorank.");
+                    "This is a debug file of Autorank. You should give this to an author or ticket manager of " +
+                            "Autorank.");
             out.newLine();
             out.write(
-                    "You can go to http://pastebin.com/ and paste this file. Then, give the link and state the problems you're having in a ticket on the Autorank page.");
+                    "You can go to http://pastebin.com/ and paste this file. Then, give the link and state the " +
+                            "problems you're having in a ticket on the Autorank page.");
             out.newLine();
             out.write("");
             out.newLine();
@@ -93,7 +99,7 @@ public class Debugger {
             out.write("");
             out.newLine();
 
-            out.write("Ranks defined: ");
+            out.write("Paths defined: ");
             out.newLine();
             out.write("");
             out.newLine();
@@ -135,6 +141,29 @@ public class Debugger {
             out.newLine();
             out.write("");
             out.newLine();
+
+            out.write("Requirements registered: ");
+            out.newLine();
+            for (Class<? extends AbstractRequirement> requirement :
+                    RequirementBuilder.getRegisteredRequirements()) {
+                out.write(requirement.getName());
+                out.newLine();
+            }
+
+            out.write("");
+            out.newLine();
+
+            out.write("Results registered: ");
+            out.newLine();
+            for (Class<? extends AbstractResult> result :
+                    ResultBuilder.getRegisteredResults()) {
+                out.write(result.getName());
+                out.newLine();
+            }
+
+            out.write("");
+            out.newLine();
+
 
         } catch (final IOException e) {
             e.printStackTrace();

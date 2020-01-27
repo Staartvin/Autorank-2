@@ -91,6 +91,12 @@ public class SimpleYamlConfiguration extends YamlConfiguration {
      */
     public void saveFile() {
         try {
+
+            if (file == null) {
+                Autorank.getInstance().debugMessage("Can't save file, because it's null!");
+                return;
+            }
+
             this.save(file);
         } catch (final ConcurrentModificationException e) {
             saveFile();

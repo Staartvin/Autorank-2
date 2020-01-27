@@ -3,10 +3,10 @@ package me.armar.plugins.autorank.pathbuilder.requirement;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.storage.TimeType;
 import me.armar.plugins.autorank.util.AutorankTools;
-import me.armar.plugins.autorank.util.AutorankTools.Time;
 
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * This requirement checks for local play time Date created: 13:49:33 15 jan.
@@ -20,7 +20,7 @@ public class TimeRequirement extends AbstractRequirement {
 
     @Override
     public String getDescription() {
-        return Lang.TIME_REQUIREMENT.getConfigValue(AutorankTools.timeToString(timeNeeded, Time.MINUTES));
+        return Lang.TIME_REQUIREMENT.getConfigValue(AutorankTools.timeToString(timeNeeded, TimeUnit.MINUTES));
     }
 
     @Override
@@ -34,8 +34,8 @@ public class TimeRequirement extends AbstractRequirement {
             e.printStackTrace();
         }
 
-        return AutorankTools.timeToString(playtime, Time.MINUTES) + "/" + AutorankTools.timeToString(timeNeeded,
-                Time.MINUTES);
+        return AutorankTools.timeToString(playtime, TimeUnit.MINUTES) + "/" + AutorankTools.timeToString(timeNeeded,
+                TimeUnit.MINUTES);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class TimeRequirement extends AbstractRequirement {
     public boolean initRequirement(final String[] options) {
 
         if (options.length > 0) {
-            timeNeeded = AutorankTools.stringToTime(options[0], Time.MINUTES);
+            timeNeeded = AutorankTools.stringToTime(options[0], TimeUnit.MINUTES);
         }
 
         if (timeNeeded < 0) {

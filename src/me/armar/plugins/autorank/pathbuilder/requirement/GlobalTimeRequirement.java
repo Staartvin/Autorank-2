@@ -4,10 +4,10 @@ import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.storage.PlayTimeStorageProvider;
 import me.armar.plugins.autorank.storage.TimeType;
 import me.armar.plugins.autorank.util.AutorankTools;
-import me.armar.plugins.autorank.util.AutorankTools.Time;
 
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * This requirement checks for global playtime Date created: 13:49:53 15 jan.
@@ -21,7 +21,7 @@ public class GlobalTimeRequirement extends AbstractRequirement {
 
     @Override
     public String getDescription() {
-        return Lang.GLOBAL_TIME_REQUIREMENT.getConfigValue(AutorankTools.timeToString(globalTime, Time.MINUTES));
+        return Lang.GLOBAL_TIME_REQUIREMENT.getConfigValue(AutorankTools.timeToString(globalTime, TimeUnit.MINUTES));
     }
 
     @Override
@@ -34,8 +34,8 @@ public class GlobalTimeRequirement extends AbstractRequirement {
             e.printStackTrace();
         }
 
-        return AutorankTools.timeToString(playTime, Time.MINUTES) + "/" + AutorankTools.timeToString(globalTime,
-                Time.MINUTES);
+        return AutorankTools.timeToString(playTime, TimeUnit.MINUTES) + "/" + AutorankTools.timeToString(globalTime,
+                TimeUnit.MINUTES);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class GlobalTimeRequirement extends AbstractRequirement {
     @Override
     public boolean initRequirement(final String[] options) {
 
-        globalTime = AutorankTools.stringToTime(options[0], Time.MINUTES);
+        globalTime = AutorankTools.stringToTime(options[0], TimeUnit.MINUTES);
 
         if (globalTime < 0) {
             this.registerWarningMessage("No number is provided or smaller than 0.");

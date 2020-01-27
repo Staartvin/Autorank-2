@@ -5,10 +5,11 @@ import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
 import me.armar.plugins.autorank.util.AutorankTools;
-import me.armar.plugins.autorank.util.AutorankTools.Time;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * The command delegator for the '/ar archive' command.
@@ -36,7 +37,7 @@ public class ArchiveCommand extends AutorankCommand {
             return true;
         }
 
-        rate = AutorankTools.stringToTime(args[1], Time.MINUTES);
+        rate = AutorankTools.stringToTime(args[1], TimeUnit.MINUTES);
 
         if (rate <= 0) {
             sender.sendMessage(ChatColor.RED + Lang.INVALID_FORMAT.getConfigValue("/ar archive 10d/10h/10m"));

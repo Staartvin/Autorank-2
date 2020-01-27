@@ -6,7 +6,24 @@ import me.armar.plugins.autorank.storage.TimeType;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
+/**
+ * This manager is the access point for getting play times of players. Note that there are three ways to get the time
+ * of a player and that they (may) give different values. Autorank keeps track of the local time (time played on this
+ * server) and global time (time played across all servers that are sharing the same database).
+ * <p></p>
+ * These times are kept by the {@link PlayTimeStorageProvider}s. Each storage provider is either a local or global
+ * time keeper. However, only one of them can be the primary storage provider. The admin indicates the primary
+ * storage provider. The primary time (time of the primary storage provider) is hence either local or global and
+ * will be used for showing leaderboards, checking time requirements and in the commands.
+ *
+ * <p></p>
+ * To get the local time, use {@link #getLocalPlayTime(TimeType, UUID)}. Evidently, to get the global time of a
+ * player (if it is being tracked), see {@link #getGlobalPlayTime(TimeType, UUID)}. To get the primary time of the
+ * player (either local or global time, use {@link #getPlayTime(TimeType, UUID, TimeUnit)}.
+ */
 public class PlayTimeManager {
 
     // How often do we check whether a player is still online? (in minutes)
@@ -122,14 +139,44 @@ public class PlayTimeManager {
     /**
      * Get the play time of a player based on the primary storage provider. Note that this may take some time and
      * therefore it is recommended to create a callback based on this method.
+     * <p>
+     * Note that this method is deprecated. Use {@link #getPlayTime(TimeType, UUID, TimeUnit)} instead.
      *
      * @param timeType Type of playtime to get.
      * @param uuid     UUID of the player
      * @return the play time (in minutes).
      */
+    @Deprecated
     public CompletableFuture<Integer> getPlayTime(TimeType timeType, UUID uuid) {
         return plugin.getPlayTimeStorageManager().getPrimaryStorageProvider().getPlayerTime
                 (timeType, uuid);
+    }
+
+    /**
+     * Get the play time of a player based on the primary storage provider. Note that this may take some time and
+     * therefore it is recommended to create a callback based on this method.
+     *
+     * @param timeType Type of time you want to get
+     * @param uuid     UUID of the player to get the time from
+     * @param timeUnit Unit you want the player time in.
+     * @return time played in the specified time unit.
+     */
+    public CompletableFuture<Long> getPlayTime(TimeType timeType, UUID uuid, TimeUnit timeUnit) {
+        // This is in units
+
+        return CompletableFuture.supplyAsync(() -> {
+
+            int minutes = 0;
+
+            try {
+                minutes = plugin.getPlayTimeStorageManager().getPrimaryStorageProvider().getPlayerTime(timeType,
+                        uuid).get();
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+
+            return timeUnit.convert(minutes, TimeUnit.MINUTES);
+        });
     }
 
 }

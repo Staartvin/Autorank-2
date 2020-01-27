@@ -2,11 +2,11 @@ package me.armar.plugins.autorank.pathbuilder.requirement;
 
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
-import me.armar.plugins.autorank.util.AutorankTools.Time;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 /**
  * This requirement checks for the total time on the server
@@ -22,7 +22,7 @@ public class TotalTimeRequirement extends AbstractRequirement {
 
     @Override
     public String getDescription() {
-        return Lang.TOTAL_TIME_REQUIREMENT.getConfigValue(AutorankTools.timeToString(totalTime, Time.MINUTES));
+        return Lang.TOTAL_TIME_REQUIREMENT.getConfigValue(AutorankTools.timeToString(totalTime, TimeUnit.MINUTES));
     }
 
     @Override
@@ -60,7 +60,7 @@ public class TotalTimeRequirement extends AbstractRequirement {
     @Override
     public boolean initRequirement(final String[] options) {
         if (options.length > 0) {
-            totalTime = AutorankTools.stringToTime(options[0], Time.MINUTES);
+            totalTime = AutorankTools.stringToTime(options[0], TimeUnit.MINUTES);
         } else {
             this.registerWarningMessage("An invalid number is provided");
             return false;

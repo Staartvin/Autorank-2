@@ -20,6 +20,9 @@ import java.util.UUID;
  * <p>
  * A requirement can be seen as a task a player has to complete. A path consists of multiple requirements that should
  * all be met to complete the path.
+ * </p>
+ *
+ * <p>Note that a requirement has many different options that can be configured.</p>
  *
  * @author Staartvin
  */
@@ -39,7 +42,7 @@ public abstract class AbstractRequirement {
     }
 
     /**
-     * Get the Dependencymanager of Autorank that is used to connect to other
+     * Get the {@link DependencyManager} of Autorank that is used to connect to other
      * plugins. <br>
      * Can be used to get information from other plugins.
      *
