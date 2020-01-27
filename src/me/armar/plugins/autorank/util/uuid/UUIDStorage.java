@@ -292,6 +292,11 @@ public class UUIDStorage {
 
         final FileConfiguration config = configs.get(key);
 
+        if (config == null) {
+            plugin.getLogger().severe("Can't find UUID storage file for " + key);
+            return;
+        }
+
         config.options().header("This file stores all uuids of players that Autorank has looked up before."
                 + "\nEach file stores accounts with the starting letter of the player's name.");
 
