@@ -1,10 +1,7 @@
 package me.armar.plugins.autorank.permissions;
 
 import me.armar.plugins.autorank.Autorank;
-import me.armar.plugins.autorank.permissions.handlers.GroupManagerHandler;
-import me.armar.plugins.autorank.permissions.handlers.LuckPermsHandler;
-import me.armar.plugins.autorank.permissions.handlers.PermissionsBukkitHandler;
-import me.armar.plugins.autorank.permissions.handlers.VaultPermissionsHandler;
+import me.armar.plugins.autorank.permissions.handlers.*;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
@@ -19,8 +16,8 @@ import org.bukkit.plugin.Plugin;
  */
 public class PermissionsPluginManager {
 
-    private PermissionsHandler permissionPlugin;
     private final Autorank plugin;
+    private PermissionsHandler permissionPlugin;
 
     public PermissionsPluginManager(final Autorank plugin) {
         this.plugin = plugin;
@@ -35,23 +32,57 @@ public class PermissionsPluginManager {
         return permissionPlugin;
     }
 
-    public void searchPermPlugin() {
+    public boolean searchPermPlugin() {
+        boolean loadedPermPlugin = false;
+
         if (isPluginAvailable("GroupManager")) {
             // use Groupmanager
-            permissionPlugin = new GroupManagerHandler(plugin);
-            plugin.debugMessage("Using GroupManager as permissions plugin");
+            try {
+                permissionPlugin = new GroupManagerHandler(plugin);
+                plugin.debugMessage("Using GroupManager as permissions plugin");
+                loadedPermPlugin = true;
+            } catch (Throwable t) {
+                t.printStackTrace();
+            }
         } else if (isPluginAvailable("PermissionsBukkit")) {
             // Use PermissionsBukkit
-            permissionPlugin = new PermissionsBukkitHandler(plugin);
-            plugin.debugMessage("Using PermissionsBukkit as permissions plugin");
+            try {
+                permissionPlugin = new PermissionsBukkitHandler(plugin);
+                plugin.debugMessage("Using PermissionsBukkit as permissions plugin");
+                loadedPermPlugin = true;
+            } catch (Throwable t) {
+                t.printStackTrace();
+            }
         } else if (isPluginAvailable("LuckPerms")) {
             // Use LuckPerms
-            permissionPlugin = new LuckPermsHandler(plugin);
-            plugin.debugMessage("Using LuckPerms as permissions plugin");
+            try {
+                permissionPlugin = new LuckPermsHandler(plugin);
+                plugin.debugMessage("Using LuckPerms as permissions plugin");
+                loadedPermPlugin = true;
+            } catch (Throwable t) {
+                t.printStackTrace();
+            }
         } else {
             // use Vault
-            permissionPlugin = new VaultPermissionsHandler(plugin);
-            plugin.debugMessage("Using Vault as permissions plugin");
+            try {
+                permissionPlugin = new VaultPermissionsHandler(plugin);
+                plugin.debugMessage("Using Vault as permissions plugin");
+                loadedPermPlugin = true;
+            } catch (Throwable t) {
+                t.printStackTrace();
+            }
         }
+
+        if (!loadedPermPlugin) {
+            // We could not load a permissions plugin so we provide fallback support to a dummy handler.
+            permissionPlugin = new DummyPermissionsHandler(plugin);
+            plugin.debugMessage("Using DummyPermissions handler.");
+
+            // Let admins know something is up.
+            plugin.getLogger().severe("Could not find a permissions handler. Are you sure you have a compatible " +
+                    "permissions plugin installed?");
+        }
+
+        return loadedPermPlugin;
     }
 }
