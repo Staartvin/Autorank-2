@@ -390,7 +390,8 @@ public enum Lang {
     /**
      * You have successfully completed requirement #{0}:
      */
-    SUCCESSFULLY_COMPLETED_REQUIREMENT("successfully-completed-requirement", "You have successfully completed requirement &6{0}&a:"),
+    SUCCESSFULLY_COMPLETED_REQUIREMENT("successfully-completed-requirement", "You have successfully completed " +
+            "requirement &6{0}&a:"),
     /**
      * Get teleported to {0}.
      */
@@ -399,6 +400,18 @@ public enum Lang {
      * Play for at least {0}.
      */
     TIME_REQUIREMENT("time-requirement", "Play for at least {0}"),
+    /**
+     * Play for at least {0} in a single day.
+     */
+    TIME_DAILY_REQUIREMENT("time-daily-requirement", " Play for at least {0} in a single day."),
+    /**
+     * Play for at least {0} in a week.
+     */
+    TIME_WEEKLY_REQUIREMENT("time-weekly-requirement", " Play for at least {0} in a week."),
+    /**
+     * Play for at least {0} in a month.
+     */
+    TIME_MONTHLY_REQUIREMENT("time-monthly-requirement", " Play for at least {0} in a month."),
     /**
      * Shear at least {0} sheep.
      */

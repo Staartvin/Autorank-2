@@ -460,6 +460,9 @@ public class Autorank extends JavaPlugin {
         RequirementBuilder.registerRequirement("world", WorldRequirement.class);
         RequirementBuilder.registerRequirement("permission", PermissionRequirement.class);
         RequirementBuilder.registerRequirement("time", TimeRequirement.class);
+        RequirementBuilder.registerRequirement("daily time", TimeDailyRequirement.class);
+        RequirementBuilder.registerRequirement("weekly time", TimeWeeklyRequirement.class);
+        RequirementBuilder.registerRequirement("monthly time", TimeMonthlyRequirement.class);
         RequirementBuilder.registerRequirement("in biome", InBiomeRequirement.class);
         RequirementBuilder.registerRequirement("has advancement", AdvancementRequirement.class);
         RequirementBuilder.registerRequirement("in group", InGroupRequirement.class);
@@ -607,18 +610,10 @@ public class Autorank extends JavaPlugin {
                 || this.getDescription().getVersion().toLowerCase().contains("snapshot");
     }
 
-    /**
-     * @see me.armar.plugins.autorank.api.API#registerRequirement(String, Class)
-     * registerRequirement()
-     */
     public void registerRequirement(final String name, final Class<? extends AbstractRequirement> requirement) {
         RequirementBuilder.registerRequirement(name, requirement);
     }
 
-    /**
-     * @see me.armar.plugins.autorank.api.API#registerResult(String, Class)
-     * registerResult()
-     */
     public void registerResult(final String name, final Class<? extends AbstractResult> result) {
         ResultBuilder.registerResult(name, result);
     }
