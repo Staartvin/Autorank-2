@@ -459,10 +459,10 @@ public class Autorank extends JavaPlugin {
         RequirementBuilder.registerRequirement("total time", TotalTimeRequirement.class);
         RequirementBuilder.registerRequirement("world", WorldRequirement.class);
         RequirementBuilder.registerRequirement("permission", PermissionRequirement.class);
-        RequirementBuilder.registerRequirement("time", TimeRequirement.class);
         RequirementBuilder.registerRequirement("daily time", TimeDailyRequirement.class);
         RequirementBuilder.registerRequirement("weekly time", TimeWeeklyRequirement.class);
         RequirementBuilder.registerRequirement("monthly time", TimeMonthlyRequirement.class);
+        RequirementBuilder.registerRequirement("time", TimeRequirement.class);
         RequirementBuilder.registerRequirement("in biome", InBiomeRequirement.class);
         RequirementBuilder.registerRequirement("has advancement", AdvancementRequirement.class);
         RequirementBuilder.registerRequirement("in group", InGroupRequirement.class);
