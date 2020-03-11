@@ -2,6 +2,7 @@ package me.armar.plugins.autorank.storage.mysql;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import me.armar.plugins.autorank.config.SettingsConfig;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,11 +17,13 @@ import java.util.Collection;
  * @author Staartvin
  */
 public class SQLConnection {
+    private static SQLConnection instance;
 
     private final String database;
     private final String hostname;
     private final String password;
     private final String username;
+
     private HikariDataSource dataSource = null;
 
     /**
@@ -31,11 +34,29 @@ public class SQLConnection {
      * @param password Password
      * @param database Database
      */
-    public SQLConnection(final String hostname, final String username, final String password, final String database) {
+    private SQLConnection(final String hostname, final String username, final String password, final String database) {
         this.hostname = hostname;
         this.username = username;
         this.password = password;
         this.database = database;
+    }
+
+    /**
+     * Get a singleton instance of the MySQL connection
+     * @param configHandler The SettingsConfig to read the configuration from
+     * @return The SQLConnection singleton instance
+     */
+    public static synchronized SQLConnection getInstance(SettingsConfig configHandler) {
+        if(instance == null) {
+            String hostname = configHandler.getMySQLSetting(SettingsConfig.MySQLSettings.HOSTNAME);
+            String username = configHandler.getMySQLSetting(SettingsConfig.MySQLSettings.USERNAME);
+            String password = configHandler.getMySQLSetting(SettingsConfig.MySQLSettings.PASSWORD);
+            String database = configHandler.getMySQLSetting(SettingsConfig.MySQLSettings.DATABASE);
+
+            instance = new SQLConnection(hostname, username, password, database);
+        }
+
+        return instance;
     }
 
     /**
@@ -56,10 +77,12 @@ public class SQLConnection {
     public boolean connect() {
         HikariConfig config = new HikariConfig();
 
+        config.setPoolName("autorank-hikari");
         config.setJdbcUrl("jdbc:mysql://" + this.hostname + "/" + this.database);
 //        config.setDriverClassName("com.mysql.jdbc.Driver");
         config.setUsername(this.username);
         config.setPassword(this.password);
+
         config.addDataSourceProperty("cachePrepStmts", "true");
         config.addDataSourceProperty("prepStmtCacheSize", "250");
         config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
@@ -67,9 +90,16 @@ public class SQLConnection {
         config.addDataSourceProperty("rewriteBatchedStatements", "true");
         config.addDataSourceProperty("maintainTimeStats", "false");
 
+        config.setMaximumPoolSize(10);
+        config.setMinimumIdle(10);
+        config.setIdleTimeout(300000);
+        config.setMaxLifetime(600000);
+        config.setConnectionTimeout(5000);
+        config.setInitializationFailTimeout(-1);
+
         try {
             this.dataSource = new HikariDataSource(config);
-            return this.dataSource != null;
+            return true;
         } catch (Exception e) {
             return false;
         }

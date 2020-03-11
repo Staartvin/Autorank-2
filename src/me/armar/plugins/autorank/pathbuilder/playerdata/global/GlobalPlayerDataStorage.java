@@ -21,8 +21,8 @@ import java.util.concurrent.ExecutionException;
 
 public class GlobalPlayerDataStorage implements PlayerDataStorage {
 
-    static String TABLE_PLAYERDATA_STORAGE_COMPLETED_PATHS = "playerdata_completed_paths";
-    static String TABLE_SERVER_REGISTER = "servers";
+    private String tablePlayerdataStorageCompletedPaths;
+    private String tableServerRegister;
 
     private Autorank plugin;
     private SQLConnection connection;
@@ -48,6 +48,10 @@ public class GlobalPlayerDataStorage implements PlayerDataStorage {
             }
         });
 
+        String prefix = plugin.getSettingsConfig().getMySQLSetting(SettingsConfig.MySQLSettings.TABLE_PREFIX);
+        tablePlayerdataStorageCompletedPaths = prefix + "playerdata_completed_paths";
+        tableServerRegister = prefix + "servers";
+
         // Periodically run update to load data in cache.
         plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, () -> {
             if (getConnection() != null && !getConnection().isClosed()) {
@@ -68,12 +72,7 @@ public class GlobalPlayerDataStorage implements PlayerDataStorage {
                 return false;
             }
 
-            String hostname = configHandler.getMySQLCredentials(SettingsConfig.MySQLCredentials.HOSTNAME);
-            String username = configHandler.getMySQLCredentials(SettingsConfig.MySQLCredentials.USERNAME);
-            String password = configHandler.getMySQLCredentials(SettingsConfig.MySQLCredentials.PASSWORD);
-            String database = configHandler.getMySQLCredentials(SettingsConfig.MySQLCredentials.DATABASE);
-
-            connection = new SQLConnection(hostname, username, password, database);
+            connection = SQLConnection.getInstance(configHandler);
 
             if (connection.connect()) {
                 plugin.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "Successfully attached to your " +
@@ -97,12 +96,12 @@ public class GlobalPlayerDataStorage implements PlayerDataStorage {
         // Load the table that has all the server names registered in it.
 
         // Create table if it does not exist.
-        getConnection().execute("CREATE TABLE IF NOT EXISTS " + TABLE_SERVER_REGISTER +
+        getConnection().execute("CREATE TABLE IF NOT EXISTS " + tableServerRegister +
                 "(server_name varchar(36) NOT NULL, hostname varchar(55) NOT NULL, last_updated timestamp DEFAULT " +
                 "CURRENT_TIMESTAMP, UNIQUE(server_name, hostname))");
 
-        getConnection().execute("INSERT INTO " + TABLE_SERVER_REGISTER + " VALUES ('" +
-                plugin.getSettingsConfig().getMySQLCredentials(SettingsConfig.MySQLCredentials.SERVER_NAME) + "', " +
+        getConnection().execute("INSERT INTO " + tableServerRegister + " VALUES ('" +
+                plugin.getSettingsConfig().getMySQLSetting(SettingsConfig.MySQLSettings.SERVER_NAME) + "', " +
                 "'" + getHostname() + "', " +
                 "CURRENT_TIMESTAMP) ON DUPLICATE KEY UPDATE last_updated=CURRENT_TIMESTAMP");
 
@@ -118,7 +117,7 @@ public class GlobalPlayerDataStorage implements PlayerDataStorage {
         // Load the table that stores all the player data.
 
         // Create table if it does not exist.
-        getConnection().execute("CREATE TABLE IF NOT EXISTS " + TABLE_PLAYERDATA_STORAGE_COMPLETED_PATHS +
+        getConnection().execute("CREATE TABLE IF NOT EXISTS " + tablePlayerdataStorageCompletedPaths +
                 "(server_name varchar(36) NOT NULL, uuid varchar(36) NOT NULL, completed_path varchar(36) NOT NULL, " +
                 "UNIQUE(server_name, uuid, completed_path))");
 
@@ -130,7 +129,7 @@ public class GlobalPlayerDataStorage implements PlayerDataStorage {
 
     private void updateCacheFromRemote() {
         ResultSet resultSet =
-                getConnection().executeQuery("SELECT * FROM " + TABLE_PLAYERDATA_STORAGE_COMPLETED_PATHS + " ORDER BY" +
+                getConnection().executeQuery("SELECT * FROM " + tablePlayerdataStorageCompletedPaths + " ORDER BY" +
                         " uuid");
 
         while (true) {
@@ -294,33 +293,33 @@ public class GlobalPlayerDataStorage implements PlayerDataStorage {
         Validate.notNull(uuid);
         Validate.notNull(completedPath);
 
-        String serverName = plugin.getSettingsConfig().getMySQLCredentials(SettingsConfig.MySQLCredentials.SERVER_NAME);
+        String serverName = plugin.getSettingsConfig().getMySQLSetting(SettingsConfig.MySQLSettings.SERVER_NAME);
 
         // Add item to indicate that a path has been completed.
-        getConnection().execute("INSERT INTO " + TABLE_PLAYERDATA_STORAGE_COMPLETED_PATHS + " VALUES ('" + serverName + "', '" + uuid.toString() + "', '" + completedPath + "') ON " +
+        getConnection().execute("INSERT INTO " + tablePlayerdataStorageCompletedPaths + " VALUES ('" + serverName + "', '" + uuid.toString() + "', '" + completedPath + "') ON " +
                 "DUPLICATE KEY UPDATE uuid=uuid;");
 
         // Update the last time a server has updated values.
-        getConnection().execute("UPDATE " + TABLE_SERVER_REGISTER + " SET last_updated = CURRENT_TIMESTAMP " +
+        getConnection().execute("UPDATE " + tableServerRegister + " SET last_updated = CURRENT_TIMESTAMP " +
                 "WHERE server_name = '" + serverName + "';");
 
     }
 
     @Override
     public void removeCompletedPath(UUID uuid, String pathName) {
-        String serverName = plugin.getSettingsConfig().getMySQLCredentials(SettingsConfig.MySQLCredentials.SERVER_NAME);
+        String serverName = plugin.getSettingsConfig().getMySQLSetting(SettingsConfig.MySQLSettings.SERVER_NAME);
 
         // Remove path that matches the name of the path.
-        getConnection().execute("DELETE FROM " + TABLE_PLAYERDATA_STORAGE_COMPLETED_PATHS + " WHERE uuid='"
+        getConnection().execute("DELETE FROM " + tablePlayerdataStorageCompletedPaths + " WHERE uuid='"
                 + uuid.toString() + "' AND server_name='" + serverName + "' AND completed_path='" + pathName + "';");
     }
 
     @Override
     public void setCompletedPaths(UUID uuid, Collection<String> paths) {
-        String serverName = plugin.getSettingsConfig().getMySQLCredentials(SettingsConfig.MySQLCredentials.SERVER_NAME);
+        String serverName = plugin.getSettingsConfig().getMySQLSetting(SettingsConfig.MySQLSettings.SERVER_NAME);
 
         // First remove all paths that are currently stored there.
-        getConnection().execute("DELETE FROM " + TABLE_PLAYERDATA_STORAGE_COMPLETED_PATHS + " WHERE uuid='"
+        getConnection().execute("DELETE FROM " + tablePlayerdataStorageCompletedPaths + " WHERE uuid='"
                 + uuid.toString() + "' AND server_name='" + serverName + "';");
 
         // For each path, add them again.

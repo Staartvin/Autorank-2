@@ -28,8 +28,6 @@ public class MySQLStorageProvider extends PlayTimeStorageProvider {
     public static int CACHE_EXPIRY_TIME = 2;
     // Thread pool for saving and retrieving storage.
     private ExecutorService executor = Executors.newSingleThreadExecutor();
-    // Variables to connect to database.
-    private String hostname, username, password, database;
     // Store table names for different time types
     private Map<TimeType, String> tableNames = new HashMap<>();
     // Use library to handle connections to MySQL database.
@@ -351,10 +349,12 @@ public class MySQLStorageProvider extends PlayTimeStorageProvider {
     }
 
     private void loadTableNames() {
-        tableNames.put(TimeType.TOTAL_TIME, "totalTime");
-        tableNames.put(TimeType.DAILY_TIME, "dailyTime");
-        tableNames.put(TimeType.WEEKLY_TIME, "weeklyTime");
-        tableNames.put(TimeType.MONTHLY_TIME, "monthlyTime");
+        String prefix = plugin.getSettingsConfig().getMySQLSetting(SettingsConfig.MySQLSettings.TABLE_PREFIX);
+
+        tableNames.put(TimeType.TOTAL_TIME, prefix + "totalTime");
+        tableNames.put(TimeType.DAILY_TIME, prefix + "dailyTime");
+        tableNames.put(TimeType.WEEKLY_TIME, prefix + "weeklyTime");
+        tableNames.put(TimeType.MONTHLY_TIME, prefix + "monthlyTime");
     }
 
     /**
@@ -371,20 +371,15 @@ public class MySQLStorageProvider extends PlayTimeStorageProvider {
                 return false;
             }
 
-            hostname = configHandler.getMySQLCredentials(SettingsConfig.MySQLCredentials.HOSTNAME);
-            username = configHandler.getMySQLCredentials(SettingsConfig.MySQLCredentials.USERNAME);
-            password = configHandler.getMySQLCredentials(SettingsConfig.MySQLCredentials.PASSWORD);
-            database = configHandler.getMySQLCredentials(SettingsConfig.MySQLCredentials.DATABASE);
-
-            mysqlLibrary = new SQLConnection(hostname, username, password, database);
+            mysqlLibrary = SQLConnection.getInstance(configHandler);
 
             if (!mysqlLibrary.connect()) {
                 mysqlLibrary = null;
-                plugin.getLogger().severe("Could not connect to " + hostname);
-                plugin.debugMessage(ChatColor.RED + "Could not connect to MYSQL!");
+                plugin.getLogger().severe("Could not connect to MySQL!");
+                plugin.debugMessage(ChatColor.RED + "Could not connect to MySQL!");
                 return false;
             } else {
-                plugin.debugMessage(ChatColor.RED + "Successfully established connection to " + hostname);
+                plugin.debugMessage(ChatColor.RED + "Successfully established connection to MySQL");
                 return true;
             }
         });
