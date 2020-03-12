@@ -16,6 +16,7 @@ import me.armar.plugins.autorank.language.LanguageHandler;
 import me.armar.plugins.autorank.leaderboard.LeaderboardHandler;
 import me.armar.plugins.autorank.listeners.PlayerJoinListener;
 import me.armar.plugins.autorank.listeners.PlayerQuitListener;
+import me.armar.plugins.autorank.logger.LoggerManager;
 import me.armar.plugins.autorank.migration.MigrationManager;
 import me.armar.plugins.autorank.pathbuilder.PathManager;
 import me.armar.plugins.autorank.pathbuilder.builders.RequirementBuilder;
@@ -107,6 +108,9 @@ public class Autorank extends JavaPlugin {
     // Data storage
     private PlayerDataManager playerDataManager;
 
+    // Logging
+    private LoggerManager loggerManager;
+
 
     public static Autorank getInstance() {
         return autorank;
@@ -139,6 +143,8 @@ public class Autorank extends JavaPlugin {
         // ------------- Say bye-bye -------------
 
         getLogger().info(String.format("Autorank %s has been disabled!", getDescription().getVersion()));
+
+        this.getLoggerManager().logMessage("Stopped Autorank");
     }
 
     /*
@@ -153,6 +159,8 @@ public class Autorank extends JavaPlugin {
         autorank = this;
 
         // ------------- Create files & folders -------------
+
+        setLoggerManager(new LoggerManager(this));
 
         // Register configs
         setPathsConfig(new PathsConfig(this));
@@ -440,6 +448,8 @@ public class Autorank extends JavaPlugin {
                 System.out.println("Loaded PluginLibrary!");
             }
         });
+
+        this.getLoggerManager().logMessage("Started Autorank");
     }
 
     // ---------- CONVENIENCE METHODS ---------- \\
@@ -827,5 +837,13 @@ public class Autorank extends JavaPlugin {
 
     public void setMigrationManager(MigrationManager migrationManager) {
         this.migrationManager = migrationManager;
+    }
+
+    public LoggerManager getLoggerManager() {
+        return loggerManager;
+    }
+
+    public void setLoggerManager(LoggerManager loggerManager) {
+        this.loggerManager = loggerManager;
     }
 }

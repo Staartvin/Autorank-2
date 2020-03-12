@@ -379,6 +379,11 @@ public class PlayTimeStorageManager {
         // Compare date to last date in internal properties
         LocalDate today = LocalDate.now();
 
+        // Total time file is never outdated.
+        if (timeType == TimeType.TOTAL_TIME) {
+            return false;
+        }
+
         int trackedTimeType = plugin.getInternalPropertiesConfig().getTrackedTimeType(timeType);
 
         if (timeType == TimeType.DAILY_TIME) {

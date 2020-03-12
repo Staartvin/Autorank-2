@@ -44,6 +44,11 @@ public class FlatFileStorageProvider extends PlayTimeStorageProvider {
     public void setPlayerTime(TimeType timeType, UUID uuid, int time) {
         // Set time of a player of a specific type
 
+        plugin.debugMessage("Setting time of " + uuid.toString() + " to " + time + " (" + timeType.name() + ").");
+
+        // Setting time of a player
+        plugin.getLoggerManager().logMessage("Setting " + timeType.name() + " of " + uuid.toString() + " to: " + time);
+
         final SimpleYamlConfiguration data = this.getDataFile(timeType);
 
         data.set(uuid.toString(), time);
@@ -74,15 +79,23 @@ public class FlatFileStorageProvider extends PlayTimeStorageProvider {
 
         // Create a new file so it's empty
         if (timeType == TimeType.DAILY_TIME) {
+            plugin.getLoggerManager().logMessage("Resetting daily time file");
+
             dataFiles.put(TimeType.DAILY_TIME,
                     new SimpleYamlConfiguration(plugin, dataTypePaths.get(TimeType.DAILY_TIME), "Daily storage"));
         } else if (timeType == TimeType.WEEKLY_TIME) {
+            plugin.getLoggerManager().logMessage("Resetting weekly time file");
+
             dataFiles.put(TimeType.WEEKLY_TIME,
                     new SimpleYamlConfiguration(plugin, dataTypePaths.get(TimeType.WEEKLY_TIME), "Weekly storage"));
         } else if (timeType == TimeType.MONTHLY_TIME) {
+            plugin.getLoggerManager().logMessage("Resetting monthly time file");
+
             dataFiles.put(TimeType.MONTHLY_TIME,
                     new SimpleYamlConfiguration(plugin, dataTypePaths.get(TimeType.MONTHLY_TIME), "Monthly storage"));
         } else if (timeType == TimeType.TOTAL_TIME) {
+            plugin.getLoggerManager().logMessage("Resetting total time file");
+
             dataFiles.put(TimeType.TOTAL_TIME,
                     new SimpleYamlConfiguration(plugin, dataTypePaths.get(TimeType.TOTAL_TIME), "Total storage"));
         }
@@ -90,22 +103,25 @@ public class FlatFileStorageProvider extends PlayTimeStorageProvider {
 
     @Override
     public void addPlayerTime(TimeType timeType, UUID uuid, int timeToAdd) {
-        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
-            int time = 0;
+        int time = 0;
 
-            try {
-                time = this.getPlayerTime(timeType, uuid).get();
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
-            }
+        plugin.debugMessage("Adding " + timeToAdd + " to " + uuid.toString() + " (" + timeType.name() + ")");
 
-            if (time < 0) {
-                time = 0;
-            }
+        try {
+            time = this.getPlayerTime(timeType, uuid).get();
+            plugin.debugMessage("Player " + uuid.toString() + " already has " + time + " for (" + timeType.name() +
+                    ")");
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
 
-            this.setPlayerTime(timeType, uuid, time + timeToAdd);
-        });
+        if (time < 0) {
+            time = 0;
+        }
 
+        plugin.debugMessage("New time of " + uuid.toString() + " will be " + (time + timeToAdd) + " (" + timeType.name() + ")");
+
+        this.setPlayerTime(timeType, uuid, time + timeToAdd);
     }
 
     @Override
@@ -324,11 +340,8 @@ public class FlatFileStorageProvider extends PlayTimeStorageProvider {
      */
     private void registerTasks() {
         // Run save task every 30 seconds
-        this.plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new Runnable() {
-            public void run() {
-                saveData();
-            }
-        }, AutorankTools.TICKS_PER_SECOND, AutorankTools.TICKS_PER_MINUTE);
+        this.plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, this::saveData,
+                AutorankTools.TICKS_PER_SECOND, AutorankTools.TICKS_PER_MINUTE);
     }
 
     /**
