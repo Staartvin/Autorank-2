@@ -570,6 +570,11 @@ public class Autorank extends JavaPlugin {
         // PlayerPoints
         RequirementBuilder.registerRequirement("playerpoints points", PlayerPointsPointsRequirement.class);
 
+        // UHCStats
+        RequirementBuilder.registerRequirement("uhcstats kills", UhcStatsKillsRequirement.class);
+        RequirementBuilder.registerRequirement("uhcstats deaths", UhcStatsDeathsRequirement.class);
+        RequirementBuilder.registerRequirement("uhcstats wins", UhcStatsWinsRequirement.class);
+
 
         // Register 'main' results
         ResultBuilder.registerResult("command", CommandResult.class);

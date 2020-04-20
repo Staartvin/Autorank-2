@@ -2,7 +2,6 @@ package me.armar.plugins.autorank.commands.conversations;
 
 import org.bukkit.ChatColor;
 import org.bukkit.conversations.*;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * This class is used to determine when a conversation is ended. When it's ended, we must trace back to the proper
@@ -11,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class ConversationAbandonedEvent implements ConversationAbandonedListener {
     @Override
-    public void conversationAbandoned(org.bukkit.conversations.@NotNull ConversationAbandonedEvent conversationAbandonedEvent) {
+    public void conversationAbandoned(org.bukkit.conversations.ConversationAbandonedEvent conversationAbandonedEvent) {
         Object conversationObject =
                 conversationAbandonedEvent.getContext().getSessionData(AutorankConversation.CONVERSATION_IDENTIFIER);
 

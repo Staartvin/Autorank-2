@@ -541,7 +541,20 @@ public enum Lang {
     /**
      * Have completed path '{0}'.
      */
-    AUTORANK_SPECIFIC_COMPLETED_PATH_REQUIREMENT("Have completed path '{0}'."),;
+    AUTORANK_SPECIFIC_COMPLETED_PATH_REQUIREMENT("Have completed path '{0}'."),
+    /**
+     * Get at least {0} kills
+     */
+    UHC_STATS_KILLS_REQUIREMENT("Get at least {0} kills."),
+    /**
+     * Get at least {0} deaths
+     */
+    UHC_STATS_DEATHS_REQUIREMENT("Get at least {0} deaths."),
+    /**
+     * Get at least {0} wins
+     */
+    UHC_STATS_WINS_REQUIREMENT("Get at least {0} wins."),
+    ;
 
     private static FileConfiguration LANG;
 
@@ -560,7 +573,8 @@ public enum Lang {
         this.def = string;
     }
 
-    private String path, def;
+    private final String def;
+    private String path;
 
     /**
      * Set the {@code FileConfiguration} to use.
