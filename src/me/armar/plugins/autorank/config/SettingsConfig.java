@@ -11,12 +11,12 @@ import me.armar.plugins.autorank.Autorank;
 public class SettingsConfig extends AbstractConfig {
 
     /**
-     * Get the value of a specific MySQL credential.
+     * Get the value of a specific MySQL setting.
      *
-     * @param option Type of credential
-     * @return the value for the given MySQL credential.
+     * @param option Type of setting
+     * @return the value for the given MySQL setting.
      */
-    public String getMySQLCredentials(final MySQLCredentials option) {
+    public String getMySQLSetting(final MySQLSettings option) {
         switch (option) {
             case HOSTNAME:
                 return this.getConfig().getString("sql.hostname");
@@ -26,13 +26,15 @@ public class SettingsConfig extends AbstractConfig {
                 return this.getConfig().getString("sql.password");
             case DATABASE:
                 return this.getConfig().getString("sql.database");
+            case TABLE_PREFIX:
+                return this.getConfig().getString("sql.table prefix");
             case SERVER_NAME:
                 return this.getConfig().getString("sql.server name", "")
                         .replace("%ip%", getPlugin().getServer().getIp())
                         .replace("%port%", getPlugin().getServer().getPort() + "")
                         .replace("%name%", getPlugin().getServer().getName());
             default:
-                throw new IllegalArgumentException(option + " is not a valid MySQL credential option");
+                throw new IllegalArgumentException(option + " is not a valid MySQL settings option");
         }
     }
 
@@ -137,11 +139,11 @@ public class SettingsConfig extends AbstractConfig {
     }
 
     /**
-     * The different type of credentials that is used to connect to a MySQL
+     * The different types of settings that are used to connect to a MySQL
      * database.
      */
-    public enum MySQLCredentials {
-        DATABASE, HOSTNAME, PASSWORD, SERVER_NAME, USERNAME
+    public enum MySQLSettings {
+        DATABASE, HOSTNAME, PASSWORD, SERVER_NAME, TABLE_PREFIX, USERNAME
     }
 
     /**
