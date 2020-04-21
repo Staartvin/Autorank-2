@@ -6,6 +6,12 @@
     <name>Autorank</name>
     <description>Maven project for Spigot plugin Autorank</description>
     <url>https://www.spigotmc.org/resources/autorank.3239/</url>
+
+    <properties> <!-- Fix encoding warnings -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <dir>${project.build.directory}</dir>
+    </properties>
+
     <build>
 
         <sourceDirectory>src</sourceDirectory>
@@ -83,6 +89,7 @@
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
+                    <outputDirectory>${dir}</outputDirectory>
                     <appendAssemblyId>false</appendAssemblyId>
                 </configuration>
                 <executions>
@@ -100,9 +107,6 @@
 
     </build>
 
-    <properties> <!-- Fix encoding warnings -->
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
 
     <repositories>
         <repository>
