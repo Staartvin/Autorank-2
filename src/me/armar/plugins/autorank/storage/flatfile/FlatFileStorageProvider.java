@@ -30,9 +30,9 @@ public class FlatFileStorageProvider extends PlayTimeStorageProvider {
     private final String pathWeeklyTimeFile = "/data/Weekly_time.yml";
     private final String pathMonthlyTimeFile = "/data/Monthly_time.yml";
     // Store where the file for each time type is saved.
-    private Map<TimeType, String> dataTypePaths = new HashMap<>();
+    private final Map<TimeType, String> dataTypePaths = new HashMap<>();
     // Store for each time type a file to store data about players.
-    private Map<TimeType, SimpleYamlConfiguration> dataFiles = new HashMap<>();
+    private final Map<TimeType, SimpleYamlConfiguration> dataFiles = new HashMap<>();
 
     private boolean isLoaded = false;
 
@@ -47,7 +47,8 @@ public class FlatFileStorageProvider extends PlayTimeStorageProvider {
         plugin.debugMessage("Setting time of " + uuid.toString() + " to " + time + " (" + timeType.name() + ").");
 
         // Setting time of a player
-        plugin.getLoggerManager().logMessage("Setting " + timeType.name() + " of " + uuid.toString() + " to: " + time);
+        plugin.getLoggerManager().logMessage("Setting (Flatfile) " + timeType.name() + " of " + uuid.toString() + " " +
+                "to: " + time);
 
         final SimpleYamlConfiguration data = this.getDataFile(timeType);
 

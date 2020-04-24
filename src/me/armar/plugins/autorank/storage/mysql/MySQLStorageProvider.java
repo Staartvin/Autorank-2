@@ -27,13 +27,13 @@ public class MySQLStorageProvider extends PlayTimeStorageProvider {
     // How many minutes can a cached entry be cached before it is considered to be expired.
     public static int CACHE_EXPIRY_TIME = 2;
     // Thread pool for saving and retrieving storage.
-    private ExecutorService executor = Executors.newSingleThreadExecutor();
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
     // Store table names for different time types
-    private Map<TimeType, String> tableNames = new HashMap<>();
+    private final Map<TimeType, String> tableNames = new HashMap<>();
     // Use library to handle connections to MySQL database.
     private SQLConnection mysqlLibrary;
     // Use a cache manager to store the cached values.
-    private CacheManager cacheManager = new CacheManager();
+    private final CacheManager cacheManager = new CacheManager();
     private boolean isLoaded = false;
 
     public MySQLStorageProvider(Autorank instance) {
@@ -90,6 +90,9 @@ public class MySQLStorageProvider extends PlayTimeStorageProvider {
 
             String tableName = tableNames.get(timeType);
 
+            plugin.getLoggerManager().logMessage("Setting (MySQL) " + timeType.name() + " of " + uuid.toString() + " " +
+                    "to: " + time);
+
             final String statement = "INSERT INTO " + tableName + " VALUES ('" + uuid.toString() + "', " + time
                     + ", CURRENT_TIMESTAMP) " + "ON DUPLICATE KEY UPDATE " + "time=" + time;
 
@@ -107,14 +110,28 @@ public class MySQLStorageProvider extends PlayTimeStorageProvider {
             // If we have a cached time value, use that instead of quering the database.
             if (cacheManager.hasCachedTime(timeType, uuid)) {
                 plugin.debugMessage("Getting cached time (" + timeType + ") of '" + uuid.toString() + "'");
-                return cacheManager.getCachedTime(timeType, uuid);
+
+                int cachedTime = cacheManager.getCachedTime(timeType, uuid);
+
+                plugin.getLoggerManager().logMessage("Retrieved cached time (MySQL) " + timeType.name() + " of " + uuid.toString() +
+                        ": " + cachedTime + " minutes");
+
+                return cachedTime;
             }
 
             try {
-                return getFreshPlayerTime(timeType, uuid).get();
+
+                int freshPlayerTime = getFreshPlayerTime(timeType, uuid).get();
+
+                plugin.getLoggerManager().logMessage("Retrieved fresh time (MySQL) " + timeType.name() + " of " + uuid.toString() +
+                        ": " + freshPlayerTime + " minutes");
+
+                return freshPlayerTime;
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
+
+            plugin.getLoggerManager().logMessage("Couldn't retrieve data (MySQL) " + timeType.name() + " of " + uuid.toString());
 
             return 0;
         });
@@ -144,6 +161,9 @@ public class MySQLStorageProvider extends PlayTimeStorageProvider {
             }
 
             String tableName = tableNames.get(timeType);
+
+            plugin.getLoggerManager().logMessage("Adding (MySQL) " + timeType.name() + " of " + uuid.toString() + " " +
+                    "time: " + timeToAdd + " minutes");
 
             final String statement = "INSERT INTO " + tableName + " VALUES ('" + uuid.toString() + "', " + timeToAdd
                     + ", CURRENT_TIMESTAMP) " + "ON DUPLICATE KEY UPDATE " + "time=time+" + timeToAdd;
@@ -441,6 +461,9 @@ public class MySQLStorageProvider extends PlayTimeStorageProvider {
                 System.out.println("SQLState: " + e.getSQLState());
                 System.out.println("VendorError: " + e.getErrorCode());
             }
+
+            plugin.getLoggerManager().logMessage("Fetched fresh (MySQL) " + timeType.name() + " of " + uuid.toString() +
+                    ": " + time + " minutes");
 
             // Cache value so we don't grab it again.
             cacheManager.registerCachedTime(timeType, uuid, time);
