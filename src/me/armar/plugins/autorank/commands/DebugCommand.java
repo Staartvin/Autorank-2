@@ -28,8 +28,8 @@ public class DebugCommand extends AutorankCommand {
             return true;
         }
 
-        // Enable debugger because we may need it. -- Note that Autorank will now output debug messages.
-        Debugger.debuggerEnabled = true;
+        // Toggle debugger because we may need it. -- Note that Autorank will now output debug messages.
+        Debugger.debuggerEnabled = !Debugger.debuggerEnabled;
 
         plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
             final String fileName = plugin.getDebugger().createDebugFile();
