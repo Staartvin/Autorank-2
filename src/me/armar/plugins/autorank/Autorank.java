@@ -350,8 +350,8 @@ public class Autorank extends JavaPlugin {
 
             // Validate paths
             if (!getValidateHandler().startValidation()) {
-                getServer().getConsoleSender().sendMessage("[Autorank] " + ChatColor.RED + "Detected errors in " +
-                        "your Paths.yml file. Log in to your server to see the problems!");
+                getServer().getConsoleSender().sendMessage("[Autorank] " + ChatColor.RED + "Detected errors in your " +
+                        "Autorank configuration. Log in to your server to see the problems!");
             }
 
             // Show warnings (if there are any)
@@ -369,18 +369,15 @@ public class Autorank extends JavaPlugin {
         }, 1L);
 
         // Run task that updates storage providers if something changed.
-        getServer().getScheduler().runTaskTimerAsynchronously(this, new Runnable() {
-            @Override
-            public void run() {
-                if (!getSettingsConfig().shouldRemoveOldEntries()) return;
+        getServer().getScheduler().runTaskTimerAsynchronously(this, () -> {
+            if (!getSettingsConfig().shouldRemoveOldEntries()) return;
 
-                if (!getInternalPropertiesConfig().isConvertedToNewFormat()) return;
+            if (!getInternalPropertiesConfig().isConvertedToNewFormat()) return;
 
-                // Remove old entries
-                int removed = getPlayTimeStorageManager().getPrimaryStorageProvider().purgeOldEntries();
+            // Remove old entries
+            int removed = getPlayTimeStorageManager().getPrimaryStorageProvider().purgeOldEntries();
 
-                getLogger().info("Removed " + removed + " old storage entries from database!");
-            }
+            getLogger().info("Removed " + removed + " old storage entries from database!");
         }, 0, (long) AutorankTools.TICKS_PER_MINUTE * 60 * 24);
 
         // ------------- Register commands -------------

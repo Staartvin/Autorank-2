@@ -1,6 +1,7 @@
 package me.armar.plugins.autorank.validations;
 
 import me.armar.plugins.autorank.Autorank;
+import me.armar.plugins.autorank.config.SettingsConfig;
 import me.armar.plugins.autorank.pathbuilder.Path;
 import me.armar.plugins.autorank.pathbuilder.holders.CompositeRequirement;
 import me.armar.plugins.autorank.pathbuilder.requirement.AbstractRequirement;
@@ -22,7 +23,7 @@ public class ValidateHandler {
 
         boolean correctSetup = false;
 
-        correctSetup = this.validatePermGroups();
+        correctSetup = this.validatePermGroups() && this.validateSettingsConfig();
 
         return correctSetup;
     }
@@ -83,11 +84,32 @@ public class ValidateHandler {
             }
 
             if (!found) {
-                plugin.getWarningManager().registerWarning("You used the '" + group + "' group, but it was not recognized in your permission plugin!", 10);
+                plugin.getWarningManager().registerWarning("You used the '" + group + "' group, but it was not " +
+                        "recognized in your permission plugin!", 10);
                 return false;
             }
         }
 
+
+        return true;
+    }
+
+    /**
+     * Check the Settings.yml config and see if there are options that are not used anymore.
+     *
+     * @return true if the settings config is fine, false otherwise.
+     */
+    public boolean validateSettingsConfig() {
+
+        SettingsConfig config = plugin.getSettingsConfig();
+
+        if (config == null || config.getConfig() == null) return true;
+
+        if (config.getConfig().get("use time of") != null) {
+            plugin.getWarningManager().registerWarning("You are using the 'use time of' setting in the Settings.yml " +
+                    "but it doesn't work anymore. Please remove it!");
+            return false;
+        }
 
         return true;
     }

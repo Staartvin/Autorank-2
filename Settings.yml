@@ -83,7 +83,7 @@ disable automatic path checking: false
 # By default, Autorank will check whether a player meets all requirements for its path every x minutes.
 # If you want to disable this feature and let players manually check whether they completed all requirements, set this to true.
 
-automatically archive old data: true
+automatically archive old data: truew
 # This is turned on by default. When this is set to true, Autorank will archive storage of players that haven't seen been online for some time.
 
 primary storage provider: flatfile
