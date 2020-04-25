@@ -65,4 +65,12 @@ public class TotalVotesRequirement extends AbstractRequirement {
 
         return true;
     }
+
+    @Override
+    public double getProgressPercentage(UUID uuid) {
+        final int votes = getStatsPlugin().getNormalStat(StatsPlugin.StatType.VOTES, uuid,
+                StatisticQuery.makeStatisticQuery(ParameterType.WORLD.getKey(), this.getWorld()));
+
+        return votes * 1.0d / totalVotes;
+    }
 }

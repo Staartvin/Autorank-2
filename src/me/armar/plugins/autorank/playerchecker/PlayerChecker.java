@@ -145,14 +145,14 @@ public class PlayerChecker {
             if (holder != null) {
                 final StringBuilder message = new StringBuilder("     " + ChatColor.GOLD + (i + 1) + ". ");
                 if (metRequirements.contains(holder)) {
-                    message.append(ChatColor.GREEN + holder.getDescription() + ChatColor.DARK_AQUA + " ("
-                            + Lang.DONE_MARKER.getConfigValue() + ")");
+                    message.append(ChatColor.GREEN).append(holder.getDescription()).append(ChatColor.DARK_AQUA)
+                            .append(" (").append(Lang.DONE_MARKER.getConfigValue()).append(")");
                 } else {
-                    message.append(ChatColor.RED + holder.getDescription());
+                    message.append(ChatColor.RED).append(holder.getDescription());
                 }
 
                 if (holder.isOptional()) {
-                    message.append(ChatColor.AQUA + " (" + Lang.OPTIONAL_MARKER.getConfigValue() + ")");
+                    message.append(ChatColor.AQUA + " (").append(Lang.OPTIONAL_MARKER.getConfigValue()).append(")");
                 }
 
                 messages.add(message.toString());

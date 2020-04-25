@@ -32,10 +32,10 @@ public abstract class AbstractRequirement {
     private int reqId;
     private List<AbstractResult> abstractResults = new ArrayList<AbstractResult>();
     private String world, customDescription;
-    private List<String> errorMessages = new ArrayList<>();
+    private final List<String> errorMessages = new ArrayList<>();
 
     // A list of third-party plugins that are needed to use this requirement.
-    private List<Library> dependencies = new ArrayList<>();
+    private final List<Library> dependencies = new ArrayList<>();
 
     public final Autorank getAutorank() {
         return Autorank.getInstance();
@@ -357,5 +357,29 @@ public abstract class AbstractRequirement {
      */
     public boolean needsOnlinePlayer() {
         return false;
+    }
+
+    /**
+     * Get the progress of a player on this requirement.
+     * The progress is defined as a double between 0.0 and 1.0 (both inclusive), where 1.0 indicates that the
+     * requirement is met. Note that some requirements cannot check progress and hence will always return 0.0 (unless
+     * they are met).
+     *
+     * @param uuid UUID of the player.
+     * @return double indicating progress of completing this requirement for the given player.
+     */
+    public double getProgressPercentage(UUID uuid) {
+
+        // If this requirement is met, we always return 1.0
+        if (this.isMet(uuid)) {
+            return 1.0;
+        }
+
+        return getProgressInPercentage(uuid);
+    }
+
+    // This method can be overridden by a class implementing this abstract class.
+    private double getProgressInPercentage(UUID uuid) {
+        return 0.0;
     }
 }

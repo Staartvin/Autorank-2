@@ -43,7 +43,7 @@ public class Path {
     // A CompositeRequirement is a holder for one or more requirements that can
     // be met simultaneously.
     // A prerequisite is a requirement that needs to be met before a player can choose this path.
-    private List<CompositeRequirement> prerequisites = new ArrayList<>();
+    private final List<CompositeRequirement> prerequisites = new ArrayList<>();
 
     // Requirements need to be met by a player to complete this path.
     private List<CompositeRequirement> requirements = new ArrayList<CompositeRequirement>();
@@ -628,7 +628,14 @@ public class Path {
      * @return progress on this path or 0 if it hasn't been started.
      */
     public double getProgress(UUID uuid) {
-        return this.getCompletedRequirements(uuid).size() * 1.0d / this.getRequirements().size();
+        double progressSum = 0.0;
+
+        for (CompositeRequirement requirement : this.getRequirements()) {
+            progressSum += requirement.getProgressPercentage(uuid);
+        }
+
+        // Take arithmetic mean of progress
+        return progressSum / requirements.size();
     }
 
     /**

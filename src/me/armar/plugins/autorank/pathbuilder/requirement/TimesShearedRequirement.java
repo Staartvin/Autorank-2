@@ -62,4 +62,10 @@ public class TimesShearedRequirement extends AbstractRequirement {
 
         return true;
     }
+
+    @Override
+    public double getProgressPercentage(UUID uuid) {
+        return this.getStatsPlugin().getNormalStat(StatsPlugin.StatType.TIMES_SHEARED, uuid,
+                StatisticQuery.makeStatisticQuery(ParameterType.WORLD.getKey(), this.getWorld())) * 1.0d / timesShorn;
+    }
 }

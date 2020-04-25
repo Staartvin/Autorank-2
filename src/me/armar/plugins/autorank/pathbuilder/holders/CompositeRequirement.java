@@ -331,4 +331,25 @@ public class CompositeRequirement {
 
         return false;
     }
+
+    /**
+     * Get the progress of this set of requirements for the given player.
+     * Note that some requirements cannot check progress and hence will always return 0.0
+     *
+     * @param uuid UUID of the player
+     * @return Value between 0.0 and 1.0 (both inclusive) indicating how close the player is to completing the goal.
+     */
+    public double getProgressPercentage(UUID uuid) {
+        double biggestPercentage = 0.0;
+
+        for (AbstractRequirement requirement : this.requirements) {
+            double progressPercentage = requirement.getProgressPercentage(uuid);
+
+            // Update the biggest percentage if the current percentage is higher than the stored one.
+            biggestPercentage = Math.max(progressPercentage, biggestPercentage);
+        }
+
+        // Return the requirement that has the highest percentage of completion.
+        return biggestPercentage;
+    }
 }

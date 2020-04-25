@@ -64,4 +64,17 @@ public class TimeDailyRequirement extends AbstractRequirement {
 
         return true;
     }
+
+    @Override
+    public double getProgressPercentage(UUID uuid) {
+        int playTime = 0;
+
+        try {
+            playTime = (getAutorank().getPlayTimeManager().getPlayTime(TimeType.DAILY_TIME, uuid).get());
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        return playTime * 1.0d / timeNeeded;
+    }
 }

@@ -120,17 +120,18 @@ public class InfoCommand extends AutorankCommand {
 
             for (int i = 0; i < completedPaths.size(); i++) {
 
-                String progressString = ChatColor.YELLOW + "" + completedPaths.get(i).getTimesCompleted(uuid);
+                String progressString = ChatColor.YELLOW + "" + completedPaths.get(i).getTimesCompleted(uuid) + "x";
 
                 if (i == (completedPaths.size() - 1)) {
-                    completedPathsString.append(ChatColor.DARK_AQUA + completedPaths.get(i).toString() + " (" + progressString +
-                            ChatColor.DARK_AQUA + ")");
+                    completedPathsString.append(ChatColor.DARK_AQUA).append(completedPaths.get(i).toString()).append(
+                            " (").append(progressString).append(ChatColor.DARK_AQUA).append(")");
                 } else if (i == (completedPaths.size() - 2)) {
                     // Second last
-                    completedPathsString.append(ChatColor.DARK_AQUA + completedPaths.get(i).toString() + " (" + progressString + ChatColor.DARK_AQUA + ")" + " and ");
+                    completedPathsString.append(ChatColor.DARK_AQUA).append(completedPaths.get(i).toString()).append(
+                            " (").append(progressString).append(ChatColor.DARK_AQUA).append(")").append(" and ");
                 } else {
-                    completedPathsString.append(ChatColor.DARK_AQUA + completedPaths.get(i).toString() + " (" + progressString + ChatColor.DARK_AQUA +
-                            "), ");
+                    completedPathsString.append(ChatColor.DARK_AQUA).append(completedPaths.get(i).toString()).append(
+                            " (").append(progressString).append(ChatColor.DARK_AQUA).append("), ");
                 }
             }
 

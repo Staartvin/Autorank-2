@@ -73,4 +73,16 @@ public class TotalTimeRequirement extends AbstractRequirement {
 
         return true;
     }
+
+    @Override
+    public double getProgressPercentage(UUID uuid) {
+        final long joinTime = Bukkit.getOfflinePlayer(uuid).getFirstPlayed();
+
+        final long currentTime = System.currentTimeMillis();
+
+        // Difference in minutes
+        final long difference = (currentTime - joinTime) / 60000;
+
+        return difference * 1.0d / totalTime;
+    }
 }

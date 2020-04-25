@@ -65,4 +65,18 @@ public class TimeRequirement extends AbstractRequirement {
 
         return true;
     }
+
+    @Override
+    public double getProgressPercentage(UUID uuid) {
+
+        int playtime = 0;
+
+        try {
+            playtime = (getAutorank().getPlayTimeManager().getPlayTime(TimeType.TOTAL_TIME, uuid).get());
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        return playtime * 1.0d / timeNeeded;
+    }
 }
