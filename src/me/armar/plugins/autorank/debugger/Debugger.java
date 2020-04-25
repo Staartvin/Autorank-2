@@ -29,6 +29,9 @@ public class Debugger {
     private final static DateFormat humanDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private final Autorank plugin;
 
+    // Store a variable to override during run time when we want to enable the debugger on the fly
+    public static boolean debuggerEnabled = false;
+
     public Debugger(final Autorank instance) {
         plugin = instance;
     }

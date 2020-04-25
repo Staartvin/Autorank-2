@@ -593,7 +593,12 @@ public class Autorank extends JavaPlugin {
         // Don't put out debug message when it is not needed.
 
         // Settings file not loaded yet.
-        if (this.getSettingsConfig().getConfig() == null || !this.getSettingsConfig().useDebugOutput()) {
+        if (this.getSettingsConfig().getConfig() == null) {
+            return;
+        }
+
+        // Check if debug is not enabled (and also not overridden)
+        if (!this.getSettingsConfig().useDebugOutput() && !Debugger.debuggerEnabled) {
             return;
         }
 

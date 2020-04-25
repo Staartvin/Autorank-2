@@ -2,6 +2,7 @@ package me.armar.plugins.autorank.commands;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
+import me.armar.plugins.autorank.debugger.Debugger;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -27,13 +28,13 @@ public class DebugCommand extends AutorankCommand {
             return true;
         }
 
-        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
-            @Override
-            public void run() {
-                final String fileName = plugin.getDebugger().createDebugFile();
+        // Enable debugger because we may need it. -- Note that Autorank will now output debug messages.
+        Debugger.debuggerEnabled = true;
 
-                sender.sendMessage(ChatColor.GREEN + "Debug file '" + fileName + "' created!");
-            }
+        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+            final String fileName = plugin.getDebugger().createDebugFile();
+
+            sender.sendMessage(ChatColor.GREEN + "Debug file '" + fileName + "' created!");
         });
 
         return true;
