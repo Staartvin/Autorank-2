@@ -74,10 +74,8 @@ public class WarningManager {
      */
     public String getHighestWarning() {
 
-        final String highestWarning = findHighestPriorityWarning();
-
         // Return the highest one
-        return highestWarning;
+        return findHighestPriorityWarning();
     }
 
     /**
@@ -97,6 +95,9 @@ public class WarningManager {
         } else if (priority < 1) {
             priority = 1;
         }
+
+        // Log a warning when it occurs.
+        plugin.getLoggerManager().logMessage("Warning occurred: " + message);
 
         warnings.put(message, priority);
     }
