@@ -31,6 +31,13 @@ public class DebugCommand extends AutorankCommand {
         // Toggle debugger because we may need it. -- Note that Autorank will now output debug messages.
         Debugger.debuggerEnabled = !Debugger.debuggerEnabled;
 
+        // Let user know whether debug mode has been enabled or disabled.
+        if (Debugger.debuggerEnabled) {
+            sender.sendMessage(ChatColor.GOLD + "Debug mode of Autorank has been " + ChatColor.GREEN + "enabled");
+        } else {
+            sender.sendMessage(ChatColor.GOLD + "Debug mode of Autorank has been " + ChatColor.RED + "disabled");
+        }
+
         plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
             final String fileName = plugin.getDebugger().createDebugFile();
 
