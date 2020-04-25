@@ -9,7 +9,7 @@ import java.time.format.DateTimeFormatter;
 public class LoggerManager {
 
     public final static DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    private Autorank autorank;
+    private final Autorank autorank;
     private LogFile logFile;
 
     public LoggerManager(Autorank autorank) {
@@ -58,9 +58,6 @@ public class LoggerManager {
      */
     private void generateNewLogFile() {
         LocalDate logFileDate = LocalDate.now();
-
-        System.out.println(autorank.getDataFolder().getAbsolutePath() + File.separator
-                + "logging" + File.separator + "log-" + dateFormat.format(logFileDate) + ".txt");
 
         logFile = new LogFile(autorank.getDataFolder().getAbsolutePath() + File.separator
                 + "logging" + File.separator + "log-" + dateFormat.format(logFileDate) + ".txt");
