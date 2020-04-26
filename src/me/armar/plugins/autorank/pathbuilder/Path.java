@@ -631,7 +631,14 @@ public class Path {
         double progressSum = 0.0;
 
         for (CompositeRequirement requirement : this.getRequirements()) {
-            progressSum += requirement.getProgressPercentage(uuid);
+
+            // If this requirement has already been completed, don't request the progress (as it will be incorrect)
+            if (this.hasCompletedRequirement(uuid, requirement.getRequirementId())) {
+                progressSum += 1;
+            } else {
+                // Else, we just request the progress like normal
+                progressSum += requirement.getProgressPercentage(uuid);
+            }
         }
 
         // Take arithmetic mean of progress

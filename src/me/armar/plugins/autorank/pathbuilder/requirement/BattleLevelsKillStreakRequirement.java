@@ -56,7 +56,7 @@ public class BattleLevelsKillStreakRequirement extends AbstractRequirement {
     }
 
     @Override
-    public boolean needsOnlinePlayer() {
-        return false;
+    public double getProgressPercentage(UUID uuid) {
+        return handler.getKillStreak(uuid) * 1.0d / neededKillstreak;
     }
 }

@@ -54,4 +54,9 @@ public class PlayerPointsPointsRequirement extends AbstractRequirement {
 
         return true;
     }
+
+    @Override
+    public double getProgressPercentage(UUID uuid) {
+        return handler.getPlayerPoints(uuid) * 1.0d / requiredPoints;
+    }
 }

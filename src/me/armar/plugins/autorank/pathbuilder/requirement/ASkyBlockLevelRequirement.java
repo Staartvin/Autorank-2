@@ -64,7 +64,7 @@ public class ASkyBlockLevelRequirement extends AbstractRequirement {
     }
 
     @Override
-    public boolean needsOnlinePlayer() {
-        return false;
+    public double getProgressPercentage(UUID uuid) {
+        return handler.getIslandLevel(uuid) * 1.0d / this.islandLevel;
     }
 }

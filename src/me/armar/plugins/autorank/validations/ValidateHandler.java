@@ -6,6 +6,7 @@ import me.armar.plugins.autorank.pathbuilder.Path;
 import me.armar.plugins.autorank.pathbuilder.holders.CompositeRequirement;
 import me.armar.plugins.autorank.pathbuilder.requirement.AbstractRequirement;
 import me.armar.plugins.autorank.pathbuilder.requirement.InGroupRequirement;
+import me.armar.plugins.autorank.warningmanager.WarningManager;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -105,9 +106,17 @@ public class ValidateHandler {
 
         if (config == null || config.getConfig() == null) return true;
 
+        // Check if the 'use time of' parameter is being used
         if (config.getConfig().get("use time of") != null) {
             plugin.getWarningManager().registerWarning("You are using the 'use time of' setting in the Settings.yml " +
                     "but it doesn't work anymore. Please remove it!");
+            return false;
+        }
+
+        // Check whether the interval time is valid
+        if (config.getIntervalTime() < 1) {
+            plugin.getWarningManager().registerWarning("The time between time checks is less than 1, which is " +
+                    "illegal!", WarningManager.HIGH_PRIORITY_WARNING);
             return false;
         }
 

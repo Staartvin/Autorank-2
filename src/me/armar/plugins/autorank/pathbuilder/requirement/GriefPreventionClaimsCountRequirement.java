@@ -60,4 +60,9 @@ public class GriefPreventionClaimsCountRequirement extends AbstractRequirement {
 
         return true;
     }
+
+    @Override
+    public double getProgressPercentage(UUID uuid) {
+        return handler.getNumberOfClaims(uuid) * 1.0d / claimsCount;
+    }
 }

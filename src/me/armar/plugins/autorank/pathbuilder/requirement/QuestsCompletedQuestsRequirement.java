@@ -54,4 +54,9 @@ public class QuestsCompletedQuestsRequirement extends AbstractRequirement {
 
         return true;
     }
+
+    @Override
+    public double getProgressPercentage(UUID uuid) {
+        return handler.getNumberOfCompletedQuests(uuid) * 1.0d / completedQuests;
+    }
 }

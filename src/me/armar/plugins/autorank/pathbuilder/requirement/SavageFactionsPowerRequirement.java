@@ -68,5 +68,8 @@ public class SavageFactionsPowerRequirement extends AbstractRequirement {
         return true;
     }
 
-
+    @Override
+    public double getProgressPercentage(UUID uuid) {
+        return handler.getFactionPower(uuid) * 1.0d / this.factionPower;
+    }
 }

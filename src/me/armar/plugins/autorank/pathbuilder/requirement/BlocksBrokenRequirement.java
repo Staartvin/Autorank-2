@@ -42,7 +42,6 @@ public class BlocksBrokenRequirement extends AbstractRequirement {
         return lang;
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public String getProgressString(UUID uuid) {
 
@@ -62,7 +61,6 @@ public class BlocksBrokenRequirement extends AbstractRequirement {
         return progress + "/" + wrapper.getBlocksBroken();
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public boolean meetsRequirement(UUID uuid) {
         if (!getStatsPlugin().isEnabled())
@@ -84,7 +82,6 @@ public class BlocksBrokenRequirement extends AbstractRequirement {
         return progress >= wrapper.getBlocksBroken();
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public boolean initRequirement(final String[] options) {
 
@@ -145,6 +142,24 @@ public class BlocksBrokenRequirement extends AbstractRequirement {
         }
 
         return true;
+    }
+
+    @Override
+    public double getProgressPercentage(UUID uuid) {
+        int progress = 0;
+
+        if (wrapper.getItem() == null) {
+            // No material was given, so only check the number of blocks broken.
+            progress = getStatsPlugin().getNormalStat(StatsPlugin.StatType.TOTAL_BLOCKS_BROKEN, uuid,
+                    StatisticQuery.makeStatisticQuery(ParameterType.WORLD.getKey(), this.getWorld()));
+        } else {
+            progress = getStatsPlugin().getNormalStat(StatsPlugin.StatType.BLOCKS_BROKEN, uuid,
+                    StatisticQuery.makeStatisticQuery(ParameterType.WORLD.getKey(), this.getWorld(),
+                            ParameterType.BLOCK_TYPE.getKey(), wrapper.getItem().getType()
+                                    .name()));
+        }
+
+        return progress * 1.0d / wrapper.getBlocksBroken();
     }
 }
 

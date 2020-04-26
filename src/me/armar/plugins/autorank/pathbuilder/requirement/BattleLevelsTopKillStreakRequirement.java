@@ -55,4 +55,9 @@ public class BattleLevelsTopKillStreakRequirement extends AbstractRequirement {
 
         return true;
     }
+
+    @Override
+    public double getProgressPercentage(UUID uuid) {
+        return handler.getTopKillStreak(uuid) * 1.0d / neededTopKillstreak;
+    }
 }

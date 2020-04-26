@@ -55,8 +55,9 @@ public class BattleLevelsKDRRequirement extends AbstractRequirement {
         return true;
     }
 
+
     @Override
-    public boolean needsOnlinePlayer() {
-        return false;
+    public double getProgressPercentage(UUID uuid) {
+        return handler.getKillDeathRatio(uuid) * 1.0d / neededKillDeathRatio;
     }
 }

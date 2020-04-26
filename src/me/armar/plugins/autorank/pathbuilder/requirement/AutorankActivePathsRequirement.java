@@ -78,11 +78,6 @@ public class AutorankActivePathsRequirement extends AbstractRequirement {
         return true;
     }
 
-    @Override
-    public boolean needsOnlinePlayer() {
-        return false;
-    }
-
     private void findMatchingPath() {
         // Try internal name instead
         requiredPath = getAutorank().getPathManager().findPathByDisplayName(requiredPathName, false);

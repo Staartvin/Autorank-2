@@ -57,7 +57,7 @@ public class BattleLevelsKillsRequirement extends AbstractRequirement {
     }
 
     @Override
-    public boolean needsOnlinePlayer() {
-        return false;
+    public double getProgressPercentage(UUID uuid) {
+        return handler.getKills(uuid) * 1.0d / numberOfKills;
     }
 }

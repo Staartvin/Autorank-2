@@ -79,4 +79,15 @@ public class JobsCurrentPointsRequirement extends AbstractRequirement {
 
         return true;
     }
+
+    @Override
+    public double getProgressPercentage(UUID uuid) {
+        double points = 0;
+
+        if (jobsHandler != null && jobsHandler.isAvailable()) {
+            points = jobsHandler.getCurrentPoints(uuid);
+        }
+
+        return points / this.currentPoints;
+    }
 }

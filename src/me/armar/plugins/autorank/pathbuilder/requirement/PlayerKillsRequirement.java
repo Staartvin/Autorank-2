@@ -63,4 +63,12 @@ public class PlayerKillsRequirement extends AbstractRequirement {
 
         return true;
     }
+
+    @Override
+    public double getProgressPercentage(UUID uuid) {
+        final int killed = getStatsPlugin().getNormalStat(StatsPlugin.StatType.PLAYERS_KILLED, uuid,
+                StatisticQuery.makeStatisticQuery(ParameterType.WORLD.getKey(), this.getWorld()));
+
+        return killed * 1.0d / this.totalPlayersKilled;
+    }
 }

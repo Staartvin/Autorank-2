@@ -27,11 +27,9 @@ public class JobsExperienceRequirement extends AbstractRequirement {
     @Override
     public String getProgressString(final Player player) {
 
-        double points = -1;
+        double points = 0;
 
-        if (jobsHandler == null || !jobsHandler.isAvailable()) {
-            points = -1;
-        } else {
+        if (jobsHandler != null && jobsHandler.isAvailable()) {
             points = jobsHandler.getCurrentXP(player, jobName);
         }
 

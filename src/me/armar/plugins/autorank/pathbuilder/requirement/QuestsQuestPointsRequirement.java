@@ -54,4 +54,9 @@ public class QuestsQuestPointsRequirement extends AbstractRequirement {
 
         return true;
     }
+
+    @Override
+    public double getProgressPercentage(UUID uuid) {
+        return handler.getQuestsPoints(uuid) * 1.0d / questPoints;
+    }
 }

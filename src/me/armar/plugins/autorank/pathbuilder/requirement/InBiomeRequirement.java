@@ -63,6 +63,5 @@ public class InBiomeRequirement extends AbstractRequirement {
     @Override
     public boolean needsOnlinePlayer() {
         return true;
-
     }
 }

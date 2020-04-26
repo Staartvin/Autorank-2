@@ -54,4 +54,9 @@ public class UhcStatsWinsRequirement extends AbstractRequirement {
 
         return true;
     }
+
+    @Override
+    public double getProgressPercentage(UUID uuid) {
+        return handler.getNumberOfWins(uuid) * 1.0d / requiredWins;
+    }
 }

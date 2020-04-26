@@ -27,7 +27,7 @@ public class JobsTotalPointsRequirement extends AbstractRequirement {
     @Override
     public String getProgressString(UUID uuid) {
 
-        double points = -1;
+        double points = 0;
 
         if (jobsHandler != null && !jobsHandler.isAvailable()) {
             points = jobsHandler.getTotalPoints(uuid);
@@ -78,5 +78,14 @@ public class JobsTotalPointsRequirement extends AbstractRequirement {
         return true;
     }
 
+    @Override
+    public double getProgressPercentage(UUID uuid) {
+        double points = 0;
 
+        if (jobsHandler != null && !jobsHandler.isAvailable()) {
+            points = jobsHandler.getTotalPoints(uuid);
+        }
+
+        return points / this.totalPoints;
+    }
 }

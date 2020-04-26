@@ -57,7 +57,7 @@ public class BattleLevelsLevelRequirement extends AbstractRequirement {
     }
 
     @Override
-    public boolean needsOnlinePlayer() {
-        return false;
+    public double getProgressPercentage(UUID uuid) {
+        return handler.getLevel(uuid) * 1.0d / neededLevel;
     }
 }

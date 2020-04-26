@@ -60,4 +60,9 @@ public class GriefPreventionBonusBlocksRequirement extends AbstractRequirement {
 
         return true;
     }
+
+    @Override
+    public double getProgressPercentage(UUID uuid) {
+        return handler.getNumberOfBonusBlocks(uuid) * 1.0d / bonusBlocks;
+    }
 }

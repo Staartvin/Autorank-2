@@ -68,4 +68,16 @@ public class GlobalTimeRequirement extends AbstractRequirement {
 
         return true;
     }
+
+    @Override
+    public double getProgressPercentage(UUID uuid) {
+        int playTime = 0;
+        try {
+            playTime = getAutorank().getPlayTimeManager().getGlobalPlayTime(TimeType.TOTAL_TIME, uuid).get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        return playTime * 1.0d / globalTime;
+    }
 }

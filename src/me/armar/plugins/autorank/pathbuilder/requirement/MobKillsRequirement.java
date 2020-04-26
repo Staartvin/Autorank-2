@@ -96,4 +96,14 @@ public class MobKillsRequirement extends AbstractRequirement {
 
         return true;
     }
+
+    @Override
+    public double getProgressPercentage(UUID uuid) {
+        final int killed = getStatsPlugin().getNormalStat(StatsPlugin.StatType.MOBS_KILLED, uuid,
+                StatisticQuery.makeStatisticQuery(
+                        ParameterType.WORLD.getKey(), this.getWorld(),
+                        ParameterType.MOB_TYPE.getKey(), mobType));
+
+        return killed * 1.0d / this.totalMobsKilled;
+    }
 }

@@ -54,4 +54,9 @@ public class UhcStatsKillsRequirement extends AbstractRequirement {
 
         return true;
     }
+
+    @Override
+    public double getProgressPercentage(UUID uuid) {
+        return handler.getNumberOfKills(uuid) * 1.0d / requiredKills;
+    }
 }

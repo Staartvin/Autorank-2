@@ -77,6 +77,16 @@ public class BlocksMovedRequirement extends AbstractRequirement {
 
         return true;
     }
+
+    @Override
+    public double getProgressPercentage(UUID uuid) {
+        final int progressBar = getStatsPlugin().getNormalStat(StatsPlugin.StatType.BLOCKS_MOVED,
+                uuid,
+                StatisticQuery.makeStatisticQuery(ParameterType.WORLD.getKey(), this.getWorld(),
+                        ParameterType.MOVEMENT_TYPE.getKey(), wrapper.getRawMovementType()));
+
+        return progressBar * 1.0d / wrapper.getBlocksMoved();
+    }
 }
 
 class BlocksMovedWrapper {

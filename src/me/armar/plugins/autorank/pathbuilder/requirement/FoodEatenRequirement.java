@@ -103,6 +103,16 @@ public class FoodEatenRequirement extends AbstractRequirement {
 
         return true;
     }
+
+    @Override
+    public double getProgressPercentage(UUID uuid) {
+        final int totalFoodEaten = getStatsPlugin().getNormalStat(StatsPlugin.StatType.FOOD_EATEN,
+                uuid, StatisticQuery.makeStatisticQuery(
+                        ParameterType.WORLD.getKey(), this.getWorld(),
+                        ParameterType.FOOD_TYPE.getKey(), foodEaten.getFoodName()));
+
+        return totalFoodEaten * 1.0d / foodEaten.getAmount();
+    }
 }
 
 class FoodWrapper {
