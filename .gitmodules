@@ -1,0 +1,3 @@
+[submodule "PluginLibrary"]
+	path = PluginLibrary
+	url = https://github.com/Staartvin/PluginLibrary.git
