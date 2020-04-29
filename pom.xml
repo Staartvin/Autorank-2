@@ -12,6 +12,13 @@
         <dir>${project.build.directory}</dir>
     </properties>
 
+    <parent>
+        <artifactId>PluginLibrary</artifactId>
+        <groupId>me.staartvin</groupId>
+        <version>1.2.4</version>
+        <relativePath>PluginLibrary</relativePath>
+    </parent>
+
     <build>
 
         <sourceDirectory>src</sourceDirectory>
@@ -31,6 +38,25 @@
         </resources>
 
         <plugins>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>1.5</version>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>PluginLibrary/src</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -166,13 +192,6 @@
             <artifactId>HikariCP</artifactId>
             <version>3.4.1</version>
             <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>me.staartvin</groupId>
-            <artifactId>PluginLibrary</artifactId>
-            <version>1.2.4-SNAPSHOT-28</version>
-            <scope>provided</scope>
         </dependency>
 
         <!--        <dependency>-->

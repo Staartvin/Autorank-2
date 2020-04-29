@@ -2,12 +2,12 @@ package me.armar.plugins.autorank.hooks;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.statzapi.StatzAPIHandler;
-import me.armar.plugins.autorank.hooks.vaultapi.PluginLibraryHandler;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.armar.plugins.autorank.statsmanager.StatsPluginManager;
-import me.staartvin.plugins.pluginlibrary.Library;
-import me.staartvin.plugins.pluginlibrary.hooks.LibraryHook;
-import me.staartvin.plugins.pluginlibrary.hooks.afkmanager.AFKManager;
+import me.staartvin.utils.pluginlibrary.Library;
+import me.staartvin.utils.pluginlibrary.PluginLibrary;
+import me.staartvin.utils.pluginlibrary.hooks.LibraryHook;
+import me.staartvin.utils.pluginlibrary.hooks.afkmanager.AFKManager;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -30,26 +30,28 @@ public class DependencyManager {
      * @author Staartvin
      */
     public enum AutorankDependency {
-
         AUTORANK,
         ONTIME,
         STATS,
         STATZ,
-        PLUGINLIBRARY,
     }
 
-    private final HashMap<AutorankDependency, DependencyHandler> handlers = new HashMap<AutorankDependency, DependencyHandler>();
+    private final HashMap<AutorankDependency, DependencyHandler> handlers = new HashMap<AutorankDependency,
+            DependencyHandler>();
 
     private final Autorank plugin;
 
     private final StatsPluginManager statsPluginManager;
+
+    private PluginLibrary pluginLibrary;
 
     public DependencyManager(final Autorank instance) {
         plugin = instance;
 
         // Register handlers
         handlers.put(AutorankDependency.STATZ, new StatzAPIHandler(instance));
-        handlers.put(AutorankDependency.PLUGINLIBRARY, new PluginLibraryHandler());
+
+        this.loadPluginLibrary();
 
         statsPluginManager = new StatsPluginManager(instance);
     }
@@ -172,17 +174,11 @@ public class DependencyManager {
      * @return hook used by PluginLibrary (if available) or null if not found.
      */
     public LibraryHook getLibraryHook(Library library) {
-        if (!this.isAvailable(AutorankDependency.PLUGINLIBRARY)) return null;
-
         if (library == null) return null;
 
-        PluginLibraryHandler handler = (PluginLibraryHandler) getDependency(AutorankDependency.PLUGINLIBRARY);
+        if (!this.isPluginLibraryLoaded()) return null;
 
-        if (handler == null) {
-            return null;
-        }
-
-        return handler.getLibraryHook(library);
+        return PluginLibrary.getLibrary(library);
     }
 
     /**
@@ -193,23 +189,27 @@ public class DependencyManager {
      */
     public boolean isAvailable(Library library) {
 
-        if (!this.isAvailable(AutorankDependency.PLUGINLIBRARY)) return false;
+        if (!isPluginLibraryLoaded()) return false;
 
         if (library == null) return false;
 
-        PluginLibraryHandler handler = (PluginLibraryHandler) getDependency(AutorankDependency.PLUGINLIBRARY);
-
-        if (handler == null) {
-            return false;
-        }
-
-        LibraryHook hook = handler.getLibraryHook(library);
+        LibraryHook hook = this.getLibraryHook(library);
 
         if (hook == null) {
             return false;
         }
 
         return hook.isAvailable() && LibraryHook.isPluginAvailable(library);
+    }
+
+    private boolean loadPluginLibrary() {
+        pluginLibrary = new PluginLibrary();
+
+        return pluginLibrary.enablePluginLibrary(this.plugin) > 0;
+    }
+
+    public boolean isPluginLibraryLoaded() {
+        return pluginLibrary != null;
     }
 
 }

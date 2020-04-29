@@ -1,8 +1,8 @@
 package me.armar.plugins.autorank.pathbuilder.requirement;
 
 import me.armar.plugins.autorank.language.Lang;
-import me.staartvin.plugins.pluginlibrary.Library;
-import me.staartvin.plugins.pluginlibrary.hooks.EssentialsXHook;
+import me.staartvin.utils.pluginlibrary.Library;
+import me.staartvin.utils.pluginlibrary.hooks.EssentialsXHook;
 
 import java.util.UUID;
 

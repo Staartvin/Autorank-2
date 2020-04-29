@@ -2,11 +2,10 @@ package me.armar.plugins.autorank.commands;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
-import me.armar.plugins.autorank.hooks.DependencyManager.AutorankDependency;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
-import me.staartvin.plugins.pluginlibrary.Library;
-import me.staartvin.plugins.pluginlibrary.hooks.AutorankHook;
-import me.staartvin.plugins.pluginlibrary.hooks.LibraryHook;
+import me.staartvin.utils.pluginlibrary.Library;
+import me.staartvin.utils.pluginlibrary.hooks.AutorankHook;
+import me.staartvin.utils.pluginlibrary.hooks.LibraryHook;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -27,7 +26,7 @@ public class HooksCommand extends AutorankCommand {
 
         if (!this.hasPermission(getPermission(), sender)) return true;
 
-        if (!plugin.getDependencyManager().getDependency(AutorankDependency.PLUGINLIBRARY).isAvailable()) {
+        if (!plugin.getDependencyManager().isPluginLibraryLoaded()) {
             sender.sendMessage(ChatColor.RED + "Cannot show dependencies as PluginLibrary is not installed");
             return true;
         }

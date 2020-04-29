@@ -4,7 +4,7 @@ import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.armar.plugins.autorank.statsmanager.query.StatisticQuery;
 import me.armar.plugins.autorank.statsmanager.query.parameter.ParameterType;
-import me.staartvin.plugins.pluginlibrary.Library;
+import me.staartvin.utils.pluginlibrary.Library;
 import org.bukkit.entity.EntityType;
 
 import java.util.UUID;

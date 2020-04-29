@@ -6,8 +6,8 @@ import me.armar.plugins.autorank.hooks.statzapi.StatzAPIHandler;
 import me.armar.plugins.autorank.statsmanager.handlers.FallbackHandler;
 import me.armar.plugins.autorank.statsmanager.handlers.StatsHandler;
 import me.armar.plugins.autorank.statsmanager.handlers.StatzHandler;
-import me.staartvin.plugins.pluginlibrary.Library;
-import me.staartvin.plugins.pluginlibrary.hooks.StatsHook;
+import me.staartvin.utils.pluginlibrary.Library;
+import me.staartvin.utils.pluginlibrary.hooks.StatsHook;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
@@ -56,7 +56,8 @@ public class StatsPluginManager {
 
             if (!statsPlugin.isEnabled()) {
                 plugin.getLogger().info(
-                        "Couldn't hook into Stats! Make sure the version is correct and Stats properly connects to your MySQL database.");
+                        "Couldn't hook into Stats! Make sure the version is correct and Stats properly connects to " +
+                                "your MySQL database.");
                 return;
             }
 

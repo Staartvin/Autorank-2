@@ -1,13 +1,14 @@
 package me.armar.plugins.autorank.pathbuilder.requirement;
 
 import me.armar.plugins.autorank.language.Lang;
-import me.staartvin.plugins.pluginlibrary.Library;
+import me.staartvin.utils.pluginlibrary.Library;
+import me.staartvin.utils.pluginlibrary.hooks.QuestsAlternative;
 
 import java.util.UUID;
 
 public class QuestsAlternativeActiveQuestsRequirement extends AbstractRequirement {
 
-    private me.staartvin.plugins.pluginlibrary.hooks.QuestsAlternative handler = null;
+    private QuestsAlternative handler = null;
     private int activeQuests = -1;
 
     @Override
@@ -35,8 +36,7 @@ public class QuestsAlternativeActiveQuestsRequirement extends AbstractRequiremen
         // Add dependency
         addDependency(Library.QUESTS_ALTERNATIVE);
 
-        handler =
-                (me.staartvin.plugins.pluginlibrary.hooks.QuestsAlternative) this.getDependencyManager().getLibraryHook(Library.QUESTS_ALTERNATIVE);
+        handler = (QuestsAlternative) this.getDependencyManager().getLibraryHook(Library.QUESTS_ALTERNATIVE);
 
         if (options.length > 0) {
             try {

@@ -3,7 +3,7 @@ package me.armar.plugins.autorank.statsmanager.handlers;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.armar.plugins.autorank.statsmanager.query.StatisticQuery;
-import me.staartvin.plugins.pluginlibrary.hooks.StatsHook;
+import me.staartvin.utils.pluginlibrary.hooks.StatsHook;
 
 import java.util.UUID;
 

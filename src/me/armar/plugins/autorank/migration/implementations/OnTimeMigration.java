@@ -4,8 +4,8 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.migration.MigrationablePlugin;
 import me.armar.plugins.autorank.storage.TimeType;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
-import me.staartvin.plugins.pluginlibrary.Library;
-import me.staartvin.plugins.pluginlibrary.hooks.OnTimeHook;
+import me.staartvin.utils.pluginlibrary.Library;
+import me.staartvin.utils.pluginlibrary.hooks.OnTimeHook;
 
 import java.util.List;
 import java.util.UUID;

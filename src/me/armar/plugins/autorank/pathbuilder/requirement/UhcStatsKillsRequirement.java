@@ -1,8 +1,8 @@
 package me.armar.plugins.autorank.pathbuilder.requirement;
 
 import me.armar.plugins.autorank.language.Lang;
-import me.staartvin.plugins.pluginlibrary.Library;
-import me.staartvin.plugins.pluginlibrary.hooks.UHCStatsHook;
+import me.staartvin.utils.pluginlibrary.Library;
+import me.staartvin.utils.pluginlibrary.hooks.UHCStatsHook;
 
 import java.util.UUID;
 
@@ -36,7 +36,8 @@ public class UhcStatsKillsRequirement extends AbstractRequirement {
         // Add dependency
         addDependency(Library.UHCSTATS);
 
-        handler = (UHCStatsHook) this.getDependencyManager().getLibraryHook(Library.UHCSTATS);
+        handler =
+                (me.staartvin.utils.pluginlibrary.hooks.UHCStatsHook) this.getDependencyManager().getLibraryHook(Library.UHCSTATS);
 
         if (options.length > 0) {
             try {
