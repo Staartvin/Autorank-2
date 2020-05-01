@@ -7,6 +7,7 @@ import me.armar.plugins.autorank.storage.PlayTimeStorageProvider;
 import me.armar.plugins.autorank.storage.TimeType;
 import me.armar.plugins.autorank.util.AutorankTools;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.configuration.InvalidConfigurationException;
 
 import java.io.File;
 import java.io.IOException;
@@ -82,23 +83,40 @@ public class FlatFileStorageProvider extends PlayTimeStorageProvider {
         if (timeType == TimeType.DAILY_TIME) {
             plugin.getLoggerManager().logMessage("Resetting daily time file");
 
-            dataFiles.put(TimeType.DAILY_TIME,
-                    new SimpleYamlConfiguration(plugin, dataTypePaths.get(TimeType.DAILY_TIME), "Daily storage"));
+            try {
+                dataFiles.put(TimeType.DAILY_TIME,
+                        new SimpleYamlConfiguration(plugin, dataTypePaths.get(TimeType.DAILY_TIME), "Daily storage"));
+            } catch (InvalidConfigurationException e) {
+                e.printStackTrace();
+            }
         } else if (timeType == TimeType.WEEKLY_TIME) {
             plugin.getLoggerManager().logMessage("Resetting weekly time file");
 
-            dataFiles.put(TimeType.WEEKLY_TIME,
-                    new SimpleYamlConfiguration(plugin, dataTypePaths.get(TimeType.WEEKLY_TIME), "Weekly storage"));
+            try {
+                dataFiles.put(TimeType.WEEKLY_TIME,
+                        new SimpleYamlConfiguration(plugin, dataTypePaths.get(TimeType.WEEKLY_TIME), "Weekly storage"));
+            } catch (InvalidConfigurationException e) {
+                e.printStackTrace();
+            }
         } else if (timeType == TimeType.MONTHLY_TIME) {
             plugin.getLoggerManager().logMessage("Resetting monthly time file");
 
-            dataFiles.put(TimeType.MONTHLY_TIME,
-                    new SimpleYamlConfiguration(plugin, dataTypePaths.get(TimeType.MONTHLY_TIME), "Monthly storage"));
+            try {
+                dataFiles.put(TimeType.MONTHLY_TIME,
+                        new SimpleYamlConfiguration(plugin, dataTypePaths.get(TimeType.MONTHLY_TIME), "Monthly " +
+                                "storage"));
+            } catch (InvalidConfigurationException e) {
+                e.printStackTrace();
+            }
         } else if (timeType == TimeType.TOTAL_TIME) {
             plugin.getLoggerManager().logMessage("Resetting total time file");
 
-            dataFiles.put(TimeType.TOTAL_TIME,
-                    new SimpleYamlConfiguration(plugin, dataTypePaths.get(TimeType.TOTAL_TIME), "Total storage"));
+            try {
+                dataFiles.put(TimeType.TOTAL_TIME,
+                        new SimpleYamlConfiguration(plugin, dataTypePaths.get(TimeType.TOTAL_TIME), "Total storage"));
+            } catch (InvalidConfigurationException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -325,14 +343,19 @@ public class FlatFileStorageProvider extends PlayTimeStorageProvider {
         dataTypePaths.put(TimeType.MONTHLY_TIME, pathMonthlyTimeFile);
 
         // Create new files for the time type.
-        dataFiles.put(TimeType.TOTAL_TIME,
-                new SimpleYamlConfiguration(plugin, dataTypePaths.get(TimeType.TOTAL_TIME), "Total storage"));
-        dataFiles.put(TimeType.DAILY_TIME,
-                new SimpleYamlConfiguration(plugin, dataTypePaths.get(TimeType.DAILY_TIME), "Daily storage"));
-        dataFiles.put(TimeType.WEEKLY_TIME,
-                new SimpleYamlConfiguration(plugin, dataTypePaths.get(TimeType.WEEKLY_TIME), "Weekly storage"));
-        dataFiles.put(TimeType.MONTHLY_TIME,
-                new SimpleYamlConfiguration(plugin, dataTypePaths.get(TimeType.MONTHLY_TIME), "Monthly storage"));
+        try {
+            dataFiles.put(TimeType.TOTAL_TIME,
+                    new SimpleYamlConfiguration(plugin, dataTypePaths.get(TimeType.TOTAL_TIME), "Total storage"));
+            dataFiles.put(TimeType.DAILY_TIME,
+                    new SimpleYamlConfiguration(plugin, dataTypePaths.get(TimeType.DAILY_TIME), "Daily storage"));
+            dataFiles.put(TimeType.WEEKLY_TIME,
+                    new SimpleYamlConfiguration(plugin, dataTypePaths.get(TimeType.WEEKLY_TIME), "Weekly storage"));
+            dataFiles.put(TimeType.MONTHLY_TIME,
+                    new SimpleYamlConfiguration(plugin, dataTypePaths.get(TimeType.MONTHLY_TIME), "Monthly storage"));
+        } catch (InvalidConfigurationException e) {
+            e.printStackTrace();
+        }
+
     }
 
 

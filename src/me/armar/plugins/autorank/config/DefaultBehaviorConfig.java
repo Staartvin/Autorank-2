@@ -38,8 +38,8 @@ enum DefaultBehaviorOption {
      */
     STORE_PROGRESS_ON_DEACTIVATION(Boolean.class, false);
 
-    private Class classType;
-    private Object defaultValue;
+    private final Class classType;
+    private final Object defaultValue;
 
     /**
      * DefaultBehavior option for a path.
@@ -78,9 +78,11 @@ public class DefaultBehaviorConfig extends AbstractConfig {
     }
 
     @Override
-    public void loadConfig() {
+    public boolean loadConfig() {
 
-        super.loadConfig();
+        boolean loaded = super.loadConfig();
+
+        if (!loaded) return false;
 
         this.getConfig().options().header("This file allows you to change the default behavior of a path. " +
                 "\nFor example, if you change 'ALLOW_INFINITE_PATHING' to true, " +
@@ -98,6 +100,8 @@ public class DefaultBehaviorConfig extends AbstractConfig {
         this.getConfig().options().copyDefaults(true);
 
         saveConfig();
+
+        return true;
     }
 
     // ------------------------ Specific methods for DefaultBehavior.yml from here. ------------------------------

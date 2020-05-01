@@ -161,6 +161,9 @@ public class Autorank extends JavaPlugin {
 
         setLoggerManager(new LoggerManager(this));
 
+        // Create warning manager
+        setWarningManager(new WarningManager(this));
+
         // Register configs
         setPathsConfig(new PathsConfig(this));
         setSettingsConfig(new SettingsConfig(this));
@@ -171,8 +174,16 @@ public class Autorank extends JavaPlugin {
 
         // Create new configs
         this.getDefaultBehaviorConfig().loadConfig();
-        this.getPathsConfig().loadConfig();
-        this.getSettingsConfig().loadConfig();
+        if (!this.getPathsConfig().loadConfig()) {
+            this.getWarningManager().registerWarning("Paths.yml file could not be loaded! Please check your syntax.",
+                    WarningManager.HIGH_PRIORITY_WARNING);
+        }
+
+        if (!this.getSettingsConfig().loadConfig()) {
+            this.getWarningManager().registerWarning("Settings.yml file could not be loaded! Please check your syntax.",
+                    WarningManager.HIGH_PRIORITY_WARNING);
+        }
+
         this.getInternalPropertiesConfig().loadConfig();
 
         // Load data storages
@@ -182,9 +193,6 @@ public class Autorank extends JavaPlugin {
 
         // Create backup manager
         setBackupManager(new BackupManager(this));
-
-        // Create warning manager
-        setWarningManager(new WarningManager(this));
 
         // Create Storage Manager
         setPlayTimeStorageManager(new PlayTimeStorageManager(this));

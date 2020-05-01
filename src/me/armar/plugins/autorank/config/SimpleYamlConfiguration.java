@@ -26,8 +26,9 @@ public class SimpleYamlConfiguration extends YamlConfiguration {
      * @param plugin   Plugin to create it for.
      * @param fileName Path of the file.
      * @param name     Name of the file that is used to show in the console.
+     * @throws InvalidConfigurationException Thrown when this file could not be loaded.
      */
-    public SimpleYamlConfiguration(final Autorank plugin, final String fileName, final String name) {
+    public SimpleYamlConfiguration(final Autorank plugin, final String fileName, final String name) throws InvalidConfigurationException {
         /*
          * accepts null as configDefaults -> check for resource and copies it if
          * found, makes an empty config if nothing is found
@@ -42,7 +43,7 @@ public class SimpleYamlConfiguration extends YamlConfiguration {
                 try {
                     this.load(file);
                 } catch (final Exception e) {
-                    e.printStackTrace();
+                    throw new InvalidConfigurationException(e.getMessage());
                 }
             }
         } else {
@@ -50,7 +51,7 @@ public class SimpleYamlConfiguration extends YamlConfiguration {
                 this.load(file);
                 plugin.debugMessage(name + " file loaded");
             } catch (final Exception e) {
-                e.printStackTrace();
+                throw new InvalidConfigurationException(e.getMessage());
             }
         }
 

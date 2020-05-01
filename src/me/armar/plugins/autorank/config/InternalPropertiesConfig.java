@@ -92,14 +92,19 @@ public class InternalPropertiesConfig extends AbstractConfig {
 
     /**
      * Load the internalprops.yml file.
+     *
+     * @return
      */
     @Override
-    public void loadConfig() {
+    public boolean loadConfig() {
 
-        super.loadConfig();
+        boolean loaded = super.loadConfig();
+
+        if (!loaded) return false;
 
         this.getConfig().options()
-                .header("This is the internal properties file of Autorank. \nYou should not touch any values here, unless instructed by a developer."
+                .header("This is the internal properties file of Autorank. \nYou should not touch any values here, " +
+                        "unless instructed by a developer."
                         + "\nAutorank uses these to keep track of certain aspects of the plugin.");
 
         this.getConfig().addDefault("leaderboard last updated", 0); // When was the
@@ -135,6 +140,8 @@ public class InternalPropertiesConfig extends AbstractConfig {
         this.getConfig().options().copyDefaults(true);
 
         this.saveConfig();
+
+        return true;
     }
 
     /**

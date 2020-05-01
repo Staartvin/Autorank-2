@@ -3,6 +3,7 @@ package me.armar.plugins.autorank.converter;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.config.SimpleYamlConfiguration;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.InvalidConfigurationException;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import java.util.Map.Entry;
 
 public class DataConverter {
 
-    private Autorank plugin;
+    private final Autorank plugin;
 
     public DataConverter(Autorank instance) {
         this.plugin = instance;
@@ -102,12 +103,22 @@ public class DataConverter {
      */
     public boolean convertSimpleConfigToPaths() {
 
-        SimpleYamlConfiguration simpleConfig = new SimpleYamlConfiguration(plugin, "SimpleConfig.yml", "SimpleConfig");
+        SimpleYamlConfiguration simpleConfig = null;
+        try {
+            simpleConfig = new SimpleYamlConfiguration(plugin, "SimpleConfig.yml", "SimpleConfig");
+        } catch (InvalidConfigurationException e) {
+            e.printStackTrace();
+        }
 
         String newPathsFileName = "Paths_from_SimpleConfig.yml";
 
-        SimpleYamlConfiguration newPathsFile = new SimpleYamlConfiguration(plugin, newPathsFileName,
-                "Converted paths file");
+        SimpleYamlConfiguration newPathsFile = null;
+        try {
+            newPathsFile = new SimpleYamlConfiguration(plugin, newPathsFileName,
+                    "Converted paths file");
+        } catch (InvalidConfigurationException e) {
+            e.printStackTrace();
+        }
 
         Map<String, String> paths = new HashMap<>();
 
@@ -172,13 +183,23 @@ public class DataConverter {
      */
     public boolean convertAdvancedConfigToPaths() {
 
-        SimpleYamlConfiguration advancedConfig = new SimpleYamlConfiguration(plugin, "AdvancedConfig.yml",
-                "AdvancedConfig");
+        SimpleYamlConfiguration advancedConfig = null;
+        try {
+            advancedConfig = new SimpleYamlConfiguration(plugin, "AdvancedConfig.yml",
+                    "AdvancedConfig");
+        } catch (InvalidConfigurationException e) {
+            e.printStackTrace();
+        }
 
         String newPathsFileName = "Paths_from_AdvancedConfig.yml";
 
-        SimpleYamlConfiguration newPathsFile = new SimpleYamlConfiguration(plugin, newPathsFileName,
-                "Converted paths file");
+        SimpleYamlConfiguration newPathsFile = null;
+        try {
+            newPathsFile = new SimpleYamlConfiguration(plugin, newPathsFileName,
+                    "Converted paths file");
+        } catch (InvalidConfigurationException e) {
+            e.printStackTrace();
+        }
 
         List<ConvertiblePath> paths = new ArrayList<>();
 
@@ -297,9 +318,9 @@ class ConvertiblePath {
 
     private String fromGroup;
 
-    private Map<String, String> requirements = new HashMap<>();
+    private final Map<String, String> requirements = new HashMap<>();
 
-    private Map<String, String> results = new HashMap<>();
+    private final Map<String, String> results = new HashMap<>();
 
     public String getPathName() {
         return pathName;
