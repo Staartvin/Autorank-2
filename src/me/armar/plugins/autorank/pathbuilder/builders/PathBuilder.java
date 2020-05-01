@@ -32,6 +32,11 @@ public class PathBuilder {
     public List<Path> initialisePaths() {
         List<Path> paths = new ArrayList<>();
 
+        // If the paths file could not be loaded, we don't start reading paths.
+        if (!plugin.getPathsConfig().isLoaded()) {
+            return paths;
+        }
+
         for (String pathName : plugin.getPathsConfig().getPaths()) {
 
             // Add a path object to this pathName
