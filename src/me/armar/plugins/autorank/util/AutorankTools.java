@@ -20,6 +20,10 @@ import java.util.regex.Pattern;
 
 public class AutorankTools {
 
+    public static final int TICKS_PER_SECOND = 20, TICKS_PER_MINUTE = TICKS_PER_SECOND * 60;
+    private static final Set<String> reqTypes = new HashSet<>();
+    private static final Set<String> resTypes = new HashSet<>();
+
     /**
      * Elaborate method to check whether a player is excluded from ranking.
      * <p>
@@ -39,11 +43,6 @@ public class AutorankTools {
 
         return player.hasPermission(AutorankPermission.EXCLUDE_FROM_PATHING);
     }
-
-    public static int TICKS_PER_SECOND = 20, TICKS_PER_MINUTE = TICKS_PER_SECOND * 60;
-
-    private static Set<String> reqTypes = new HashSet<>();
-    private static Set<String> resTypes = new HashSet<>();
 
     public static boolean containsAtLeast(final Player player, final ItemStack item, final int amount,
                                           String displayName) {
@@ -210,7 +209,6 @@ public class AutorankTools {
     }
 
 
-
     /**
      * Split a string with .split() and then get the given element in the array.
      *
@@ -314,20 +312,23 @@ public class AutorankTools {
             extraSpace = "";
         }
 
-        String progress = "";
+        StringBuilder progress = new StringBuilder();
 
         for (int i = 0; i < c.size(); i++) {
 
-            final String object = array[i].toString();
+            String object = array[i].toString();
 
             if (i == 0) {
-                progress += currentValue + extraSpace + wordBetween + "/" + object + extraSpace + wordBetween;
+                progress.append(currentValue).append(extraSpace).append(wordBetween)
+                        .append("/").append(object).append(extraSpace).append(wordBetween);
             } else {
-                progress += " or " + currentValue + extraSpace + wordBetween + "/" + object + extraSpace + wordBetween;
+                progress.append(" or ")
+                        .append(currentValue).append(extraSpace).append(wordBetween)
+                        .append("/").append(object).append(extraSpace).append(wordBetween);
             }
         }
 
-        return progress;
+        return progress.toString();
     }
 
     public static HashMap<String, Object> makeStatsInfo(Object... strings) {
