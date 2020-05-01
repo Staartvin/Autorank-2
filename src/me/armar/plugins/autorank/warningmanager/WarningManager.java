@@ -3,7 +3,7 @@ package me.armar.plugins.autorank.warningmanager;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.util.AutorankTools;
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
+import org.bukkit.command.CommandSender;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -123,7 +123,7 @@ public class WarningManager {
         return warnings;
     }
 
-    public void sendWarnings(Player player) {
+    public void sendWarnings(CommandSender sender) {
         for (Entry<String, Integer> warning : this.getWarnings().entrySet()) {
 
             String priorityString = "Low";
@@ -136,7 +136,7 @@ public class WarningManager {
                 priorityString = "High";
             }
 
-            player.sendMessage(String.format(ChatColor.DARK_AQUA + "<Autorank warning> " + ChatColor.RED + "(%s " +
+            sender.sendMessage(String.format(ChatColor.DARK_AQUA + "<Autorank warning> " + ChatColor.RED + "(%s " +
                     "priority): " + ChatColor.GREEN + "%s ", priorityString, warning.getKey()));
 
         }
