@@ -23,12 +23,12 @@ import java.util.UUID;
 public class PlayTimeStorageManager {
 
     // Keep track of what storage providers we are using
-    private List<PlayTimeStorageProvider> activeStorageProviders = new ArrayList<>();
+    private final List<PlayTimeStorageProvider> activeStorageProviders = new ArrayList<>();
 
     // Store what storage provider acts as the primary storage provider.
     private PlayTimeStorageProvider primaryStorageProvider = null;
 
-    private Autorank plugin;
+    private final Autorank plugin;
 
     public PlayTimeStorageManager(Autorank instance) {
         this.plugin = instance;
@@ -318,52 +318,49 @@ public class PlayTimeStorageManager {
         // Check if all storage files are still up to date.
         // Check if daily, weekly or monthly files should be reset.
 
-        LocalDate today = LocalDate.now();
+        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+            LocalDate today = LocalDate.now();
 
-        for (final TimeType type : TimeType.values()) {
-            // If data file is not outdated, leave it be.
-            if (!this.isDataFileOutdated(type)) {
-                continue;
-            }
-
-            // We should reset it now, it has expired.
-            activeStorageProviders.forEach(provider -> provider.resetData(type));
-
-            int value = 0;
-
-            String broadcastMessage = "";
-
-            if (type == TimeType.DAILY_TIME) {
-                value = today.getDayOfWeek().getValue();
-                broadcastMessage = Lang.RESET_DAILY_TIME.getConfigValue();
-            } else if (type == TimeType.WEEKLY_TIME) {
-                value = today.get(WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear());
-                broadcastMessage = Lang.RESET_WEEKLY_TIME.getConfigValue();
-            } else if (type == TimeType.MONTHLY_TIME) {
-                value = today.getMonthValue();
-                broadcastMessage = Lang.RESET_MONTHLY_TIME.getConfigValue();
-            }
-
-            if (plugin.getSettingsConfig().shouldBroadcastDataReset()) {
-                // Should we broadcast the reset?
-                plugin.getServer().broadcastMessage(broadcastMessage);
-            }
-
-            // Update tracked storage type
-            plugin.getInternalPropertiesConfig().setTrackedTimeType(type, value);
-            // We reset leaderboard time so it refreshes again.
-            plugin.getInternalPropertiesConfig().setLeaderboardLastUpdateTime(type, 0);
-
-            // Update leaderboard of reset time
-            plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
-                public void run() {
-                    plugin.getLeaderboardManager().updateLeaderboard(type);
+            for (final TimeType type : TimeType.values()) {
+                // If data file is not outdated, leave it be.
+                if (!PlayTimeStorageManager.this.isDataFileOutdated(type)) {
+                    continue;
                 }
-            });
 
-        }
+                // We should reset it now, it has expired.
+                activeStorageProviders.forEach(provider -> provider.resetData(type));
 
+                int value = 0;
+
+                String broadcastMessage = "";
+
+                if (type == TimeType.DAILY_TIME) {
+                    value = today.getDayOfWeek().getValue();
+                    broadcastMessage = Lang.RESET_DAILY_TIME.getConfigValue();
+                } else if (type == TimeType.WEEKLY_TIME) {
+                    value = today.get(WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear());
+                    broadcastMessage = Lang.RESET_WEEKLY_TIME.getConfigValue();
+                } else if (type == TimeType.MONTHLY_TIME) {
+                    value = today.getMonthValue();
+                    broadcastMessage = Lang.RESET_MONTHLY_TIME.getConfigValue();
+                }
+
+                if (plugin.getSettingsConfig().shouldBroadcastDataReset()) {
+                    // Should we broadcast the reset?
+                    plugin.getServer().broadcastMessage(broadcastMessage);
+                }
+
+                // Update tracked storage type
+                plugin.getInternalPropertiesConfig().setTrackedTimeType(type, value);
+                // We reset leaderboard time so it refreshes again.
+                plugin.getInternalPropertiesConfig().setLeaderboardLastUpdateTime(type, 0);
+
+                // Update leaderboard of reset time
+                plugin.getLeaderboardManager().updateLeaderboard(type);
+            }
+        });
     }
+
 
     /**
      * Check whether a storage file for a given time type is outdated. Autorank stores players' time in different
