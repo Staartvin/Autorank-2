@@ -203,9 +203,9 @@ public class DependencyManager {
     }
 
     private boolean loadPluginLibrary() {
-        pluginLibrary = new PluginLibrary();
+        pluginLibrary = PluginLibrary.getPluginLibrary(this.plugin);
 
-        return pluginLibrary.enablePluginLibrary(this.plugin) > 0;
+        return pluginLibrary.enablePluginLibrary() > 0;
     }
 
     public boolean isPluginLibraryLoaded() {
