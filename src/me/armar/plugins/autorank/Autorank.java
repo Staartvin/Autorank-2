@@ -11,7 +11,6 @@ import me.armar.plugins.autorank.config.SettingsConfig;
 import me.armar.plugins.autorank.converter.DataConverter;
 import me.armar.plugins.autorank.debugger.Debugger;
 import me.armar.plugins.autorank.hooks.DependencyManager;
-import me.armar.plugins.autorank.hooks.download.DependencyDownloader;
 import me.armar.plugins.autorank.language.LanguageHandler;
 import me.armar.plugins.autorank.leaderboard.LeaderboardHandler;
 import me.armar.plugins.autorank.listeners.PlayerJoinListener;
@@ -437,14 +436,14 @@ public class Autorank extends JavaPlugin {
         }, AutorankTools.TICKS_PER_MINUTE * 1, AutorankTools.TICKS_PER_MINUTE * 10);
 
         // Download PluginLibrary if it wasn't installed yet.
-        getServer().getScheduler().runTaskAsynchronously(this, () -> {
-            DependencyDownloader downloader = new DependencyDownloader(this);
-            downloader.downloadDependency("PluginLibrary", "17645");
-            //Has the downloader loaded any resource?
-            if (downloader.hasLoaded()) {
-                System.out.println("Loaded PluginLibrary!");
-            }
-        });
+//        getServer().getScheduler().runTaskAsynchronously(this, () -> {
+//            DependencyDownloader downloader = new DependencyDownloader(this);
+//            downloader.downloadDependency("PluginLibrary", "17645");
+//            //Has the downloader loaded any resource?
+//            if (downloader.hasLoaded()) {
+//                System.out.println("Loaded PluginLibrary!");
+//            }
+//        });
 
         this.getLoggerManager().logMessage("Started Autorank");
     }

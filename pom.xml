@@ -12,13 +12,6 @@
         <dir>${project.build.directory}</dir>
     </properties>
 
-    <parent>
-        <artifactId>PluginLibrary</artifactId>
-        <groupId>me.staartvin</groupId>
-        <version>1.2.4</version>
-        <relativePath>PluginLibrary</relativePath>
-    </parent>
-
     <build>
 
         <sourceDirectory>src</sourceDirectory>
@@ -148,6 +141,11 @@
             <id>Spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
         </repository>
+
+        <repository>
+            <id>sk89q-repo</id>
+            <url>https://maven.enginehub.org/repo/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -221,6 +219,185 @@
             <version>5.0</version>
             <scope>provided</scope>
         </dependency>
+
+        <!-- Libraries for PluginLibrary -->
+
+        <dependency>
+            <groupId>com.savagefactions</groupId>
+            <artifactId>SavageFactions</artifactId>
+            <version>2.5</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.massivecraft.massivecore</groupId>
+            <artifactId>MassiveCore</artifactId>
+            <version>2.14.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.massivecraft.factions</groupId>
+            <artifactId>Factions</artifactId>
+            <version>2.14.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>Jobs</groupId>
+            <artifactId>jobs</artifactId>
+            <version>4.14.3</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>afkTerminator</groupId>
+            <artifactId>afkTerminator</artifactId>
+            <version>3.0.8</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.gmail.nossr50.mcMMO</groupId>
+            <artifactId>mcMMO</artifactId>
+            <version>2.1.111</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.wasteofplastic</groupId>
+            <artifactId>acidisland</artifactId>
+            <version>3.0.9.4</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.wasteofplastic</groupId>
+            <artifactId>askyblock</artifactId>
+            <version>3.0.9.4</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>BattleLevels</groupId>
+            <artifactId>BattleLevels</artifactId>
+            <version>8.2.2</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>net.ess3</groupId>
+            <artifactId>EssentialsX</artifactId>
+            <version>2.17.1</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>nl.lolmewn.stats</groupId>
+            <artifactId>Stats</artifactId>
+            <version>5.3.3</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>RPGme</groupId>
+            <artifactId>RPGme</artifactId>
+            <version>1.0.2</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>RoyalCommands</groupId>
+            <artifactId>RoyalCommands</artifactId>
+            <version>4.1.1</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>me.ryanhamshire</groupId>
+            <artifactId>GriefPrevention</artifactId>
+            <version>16.12.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>OnTime</groupId>
+            <artifactId>OnTime</artifactId>
+            <version>4.1.4</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.hm.achievement</groupId>
+            <artifactId>advanced-achievements-plugin</artifactId>
+            <version>5.13.1</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sk89q.worldguard</groupId>
+            <artifactId>worldguard-bukkit</artifactId>
+            <version>7.0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sk89q.worldedit</groupId>
+            <artifactId>worldedit-bukkit</artifactId>
+            <version>7.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.rlf</groupId>
+            <artifactId>uSkyBlock-API</artifactId>
+            <version>2.8.5</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>me.blackvein.quests</groupId>
+            <artifactId>quests-main</artifactId>
+            <version>3.8.1</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.leonardobishop</groupId>
+            <artifactId>quests</artifactId>
+            <version>2.6</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.black_ixx</groupId>
+            <artifactId>PlayerPoints</artifactId>
+            <version>2.1.5</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.vexsoftware</groupId>
+            <artifactId>nuvotifier</artifactId>
+            <version>2.5.3</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.Zrips.CMI</groupId>
+            <artifactId>CMI</artifactId>
+            <version>7.1.3.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.gmail.mezymc</groupId>
+            <artifactId>UhcStats</artifactId>
+            <version>1.4</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Test dependencies -->
 
         <dependency>
             <groupId>junit</groupId>
