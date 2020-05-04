@@ -143,10 +143,16 @@ public class Path {
      * @return true when the player has completed this path, false otherwise.
      */
     public boolean checkPathProgress(UUID uuid) {
+
+        plugin.debugMessage("Checking progress of '" + uuid + "' on path " + this.getDisplayName());
+
         // Player does not meet all requirements, so don't do anything.
         if (!this.meetsAllRequirements(uuid)) {
+            plugin.debugMessage("User '" + uuid + "' does not meet all requirements of path " + this.getDisplayName());
             return false;
         }
+
+        plugin.debugMessage("User '" + uuid + "' meets all requirements of path " + this.getDisplayName());
 
         // Player meets all requirements, so complete this path.
         plugin.getPathManager().completePath(this, uuid);
@@ -279,8 +285,10 @@ public class Path {
         // If we do not allow partial completion, we do not run any intermediary results of requirements. We only
         // check if a player completed all requirements or not.
         if (!this.allowPartialCompletion()) {
+            plugin.debugMessage("User '" + uuid + "' cannot use partial completion on path '" + this.getDisplayName() + "'");
             for (final CompositeRequirement holder : this.getRequirements()) {
                 if (!holder.meetsRequirement(uuid)) {
+                    plugin.debugMessage("User '" + uuid + "' does not meet requirement '" + holder.getDescription() + "'");
                     // If player does not meet the requirement, we can immediately return false.
                     return false;
                 }
@@ -290,6 +298,8 @@ public class Path {
             return true;
         }
 
+        plugin.debugMessage("User '" + uuid + "' will use partial completion on path '" + this.getDisplayName() + "'");
+
         for (final CompositeRequirement holder : this.getRequirements()) {
             if (holder == null)
                 return false;
@@ -297,6 +307,7 @@ public class Path {
             // Skip completed requirements.
             if (this.hasCompletedRequirement(uuid, holder
                     .getRequirementId())) {
+                plugin.debugMessage("User '" + uuid + "' has already completed '" + holder.getDescription() + "'");
                 continue;
             }
 
@@ -304,12 +315,17 @@ public class Path {
                 // Optional requirements can only be completed by performing /ar complete, so don't perform them
                 // automatically.
                 if (holder.isOptional()) {
+                    plugin.debugMessage("User '" + uuid + "' meets requirement '" + holder.getDescription() + "', but" +
+                            " it is optional.");
                     continue;
                 }
+                plugin.debugMessage("User '" + uuid + "' meets requirement '" + holder.getDescription() + "' and " +
+                        "the results of the requirement are now applied.");
 
                 // Meets requirement, so perform results
                 this.completeRequirement(uuid, holder.getRequirementId());
             } else {
+                plugin.debugMessage("User '" + uuid + "' does not meet requirement '" + holder.getDescription() + "'");
                 meetAllRequirements = false;
             }
 

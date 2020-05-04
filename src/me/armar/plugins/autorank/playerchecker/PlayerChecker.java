@@ -37,8 +37,11 @@ public class PlayerChecker {
     public boolean checkPlayer(UUID uuid) {
 
         // Do not rank a player when he is excluded
-        if (plugin.getPlayerChecker().isExemptedFromAutomaticChecking(uuid))
+        if (plugin.getPlayerChecker().isExemptedFromAutomaticChecking(uuid)) {
+            plugin.debugMessage("Player '" + uuid.toString() + "' is exempted from automated checking, so we don't " +
+                    "check their path progress!");
             return false;
+        }
 
         // Try to assign paths to a player automatically.
         plugin.getPathManager().autoAssignPaths(uuid);
@@ -52,6 +55,8 @@ public class PlayerChecker {
         for (Path activePath : activePaths) {
             if (activePath.checkPathProgress(uuid)) {
                 result = true;
+            } else {
+
             }
         }
 
