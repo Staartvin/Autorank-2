@@ -44,7 +44,10 @@ public class TotalTimeRequirement extends AbstractRequirement {
 
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
 
-        if (offlinePlayer.hasPlayedBefore()) return false;
+        if (offlinePlayer.hasPlayedBefore()) {
+            getAutorank().debugMessage("User has not played before, so does not meet '" + this.getDescription() + "'.");
+            return false;
+        }
 
         // the time he first joined the server
         final long joinTime = offlinePlayer.getFirstPlayed();
@@ -53,6 +56,9 @@ public class TotalTimeRequirement extends AbstractRequirement {
 
         // Difference in minutes
         final long difference = (currentTime - joinTime) / 60000;
+
+        System.out.println("Difference is: " + difference);
+        System.out.println("Total time is: " + totalTime);
 
         return difference >= totalTime;
     }

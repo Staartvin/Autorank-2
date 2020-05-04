@@ -28,14 +28,13 @@ import java.util.UUID;
  */
 public abstract class AbstractRequirement {
 
+    private final List<String> errorMessages = new ArrayList<>();
+    // A list of third-party plugins that are needed to use this requirement.
+    private final List<Library> dependencies = new ArrayList<>();
     private boolean optional = false, autoComplete = false, isPreRequisite = false;
     private int reqId;
     private List<AbstractResult> abstractResults = new ArrayList<AbstractResult>();
     private String world, customDescription;
-    private final List<String> errorMessages = new ArrayList<>();
-
-    // A list of third-party plugins that are needed to use this requirement.
-    private final List<Library> dependencies = new ArrayList<>();
 
     public final Autorank getAutorank() {
         return Autorank.getInstance();
@@ -186,17 +185,43 @@ public abstract class AbstractRequirement {
     public boolean isMet(UUID uuid) {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
 
+        this.getAutorank().debugMessage("Checking if user '" + uuid + "' meets requirement '" + this.getDescription() + "'.");
+
         // Check whether this requirement needs an online player. If it does, we'll try to provide it.
         if (this.needsOnlinePlayer()) {
+
+            this.getAutorank().debugMessage("User needs to be online for requirement to check.");
+
             if (offlinePlayer.isOnline()) {
-                return this.meetsRequirement(offlinePlayer.getPlayer());
+                boolean meetsRequirement = this.meetsRequirement(offlinePlayer.getPlayer());
+
+                if (meetsRequirement) {
+                    this.getAutorank().debugMessage("User is online and meets requirement.");
+                } else {
+                    this.getAutorank().debugMessage("User is online, but does not meet requirement.");
+                }
+
+                return meetsRequirement;
             } else {
+                this.getAutorank().debugMessage("User needed to be online for requirement to check, but he was not " +
+                        "online.");
                 // If the player is not online and we need him online, we'll always return false because we can't
                 // check whether he meets the requirement.
                 return false;
             }
         } else {
-            return this.meetsRequirement(uuid);
+
+            boolean meetsRequirement = this.meetsRequirement(uuid);
+
+            this.getAutorank().debugMessage("User does not need to be online");
+
+            if (meetsRequirement) {
+                this.getAutorank().debugMessage("User meets requirement");
+            } else {
+                this.getAutorank().debugMessage("User doesn't meet requirement");
+            }
+
+            return meetsRequirement;
         }
     }
 
@@ -219,7 +244,8 @@ public abstract class AbstractRequirement {
      * @return true if it meets the requirements; false otherwise
      */
     protected boolean meetsRequirement(Player player) {
-        return false; }
+        return false;
+    }
 
     /**
      * Set whether this requirement auto completes itself
