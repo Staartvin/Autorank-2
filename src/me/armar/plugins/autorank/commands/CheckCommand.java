@@ -38,6 +38,9 @@ public class CheckCommand extends AutorankCommand {
     // Show an overview of paths.
     public void showPathsOverview(CommandSender sender, String playerName, UUID uuid) {
 
+        // Make sure to check a player's progress on paths.
+        plugin.getPlayerChecker().checkPlayer(uuid);
+
         // First try to assign paths to the player.
         plugin.getPathManager().autoAssignPaths(uuid);
 
