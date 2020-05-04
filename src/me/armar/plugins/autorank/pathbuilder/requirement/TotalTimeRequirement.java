@@ -57,9 +57,6 @@ public class TotalTimeRequirement extends AbstractRequirement {
         // Difference in minutes
         final long difference = (currentTime - joinTime) / 60000;
 
-        System.out.println("Difference is: " + difference);
-        System.out.println("Total time is: " + totalTime);
-
         return difference >= totalTime;
     }
 
