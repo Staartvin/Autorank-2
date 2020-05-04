@@ -343,7 +343,7 @@ public class CompositeRequirement {
         double biggestPercentage = 0.0;
 
         for (AbstractRequirement requirement : this.requirements) {
-            double progressPercentage = requirement.getProgressPercentage(uuid);
+            double progressPercentage = Math.min(requirement.getProgressPercentage(uuid), 1.0);
 
             // Update the biggest percentage if the current percentage is higher than the stored one.
             biggestPercentage = Math.max(progressPercentage, biggestPercentage);
