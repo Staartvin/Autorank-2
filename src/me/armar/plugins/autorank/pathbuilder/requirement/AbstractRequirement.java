@@ -211,9 +211,9 @@ public abstract class AbstractRequirement {
             }
         } else {
 
-            boolean meetsRequirement = this.meetsRequirement(uuid);
-
             this.getAutorank().debugMessage("User does not need to be online");
+
+            boolean meetsRequirement = this.meetsRequirement(uuid);
 
             if (meetsRequirement) {
                 this.getAutorank().debugMessage("User meets requirement");

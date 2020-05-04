@@ -44,7 +44,7 @@ public class TotalTimeRequirement extends AbstractRequirement {
 
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
 
-        if (offlinePlayer.hasPlayedBefore()) {
+        if (!offlinePlayer.hasPlayedBefore()) {
             getAutorank().debugMessage("User has not played before, so does not meet '" + this.getDescription() + "'.");
             return false;
         }
