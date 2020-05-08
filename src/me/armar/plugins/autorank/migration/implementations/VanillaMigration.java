@@ -28,7 +28,7 @@ public class VanillaMigration extends MigrationablePlugin {
 
     @Override
     public CompletableFuture<Integer> migratePlayTime(List<UUID> uuids) {
-        if (uuids.isEmpty() || !this.isReady()) {
+        if (!this.isReady()) {
             return CompletableFuture.completedFuture(0);
         }
 
@@ -43,10 +43,32 @@ public class VanillaMigration extends MigrationablePlugin {
 
                 File worldFolder = new File(world.getWorldFolder(), "stats");
 
-                for (UUID uuid : uuids) {
-                    File playerStatistics = new File(worldFolder, uuid.toString() + ".json");
+                // We don't care about the given players. Instead, we want to find all players that are stored on disk.
+
+                // Get all files in this folder (each file is a player)
+                File[] playerFiles = worldFolder.listFiles();
+
+                if (playerFiles == null) continue;
+
+                for (File playerStatistics : playerFiles) {
+
+                    UUID uuid = null;
 
                     if (!playerStatistics.exists()) continue;
+
+                    try {
+                        uuid = UUID.fromString(
+                                playerStatistics.getName()
+                                        .replace("[Conflict]", "")
+                                        .replace(".json", "")
+                        );
+                    } catch (IllegalArgumentException e) {
+                        getPlugin().debugMessage("Couldn't read statistics file '" + playerStatistics.getName() + "' " +
+                                "on world " + world.getName());
+                        continue;
+                    }
+
+                    if (uuid == null) continue;
 
                     JSONParser parser = new JSONParser();
                     JSONObject jsonObject = null;
@@ -77,6 +99,9 @@ public class VanillaMigration extends MigrationablePlugin {
                     }
 
                     if (ticksPlayed <= 0) continue;
+
+                    getPlugin().debugMessage("Migrating vanilla data of '" + uuid.toString() + "' " +
+                            "on world " + world.getName());
 
                     getPlugin().getPlayTimeStorageManager().addPlayerTime(TimeType.TOTAL_TIME, uuid,
                             (int) (ticksPlayed / 1200));

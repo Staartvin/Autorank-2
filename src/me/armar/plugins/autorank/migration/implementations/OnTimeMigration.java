@@ -20,7 +20,7 @@ public class OnTimeMigration extends MigrationablePlugin {
 
     @Override
     public boolean isReady() {
-        return getPlugin().getDependencyManager().isAvailable(Library.ONTIME);
+        return getPlugin().getDependencyManager().getLibraryHook(Library.ONTIME).isHooked();
     }
 
     @Override
