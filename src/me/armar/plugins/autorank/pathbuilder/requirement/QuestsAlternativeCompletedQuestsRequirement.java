@@ -24,7 +24,7 @@ public class QuestsAlternativeCompletedQuestsRequirement extends AbstractRequire
     @Override
     protected boolean meetsRequirement(UUID uuid) {
 
-        if (!handler.isAvailable())
+        if (!handler.isHooked())
             return false;
 
         return handler.getNumberOfCompletedQuests(uuid) >= completedQuests;
@@ -52,7 +52,7 @@ public class QuestsAlternativeCompletedQuestsRequirement extends AbstractRequire
             return false;
         }
 
-        if (handler == null || !handler.isAvailable()) {
+        if (handler == null || !handler.isHooked()) {
             this.registerWarningMessage("Quests is not available!");
             return false;
         }

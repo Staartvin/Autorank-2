@@ -29,7 +29,7 @@ public class JobsLevelRequirement extends AbstractRequirement {
 
         double points = -1;
 
-        if (jobsHandler == null || !jobsHandler.isAvailable()) {
+        if (jobsHandler == null || !jobsHandler.isHooked()) {
             points = -1;
         } else {
             points = jobsHandler.getCurrentLevel(player, jobName);
@@ -43,7 +43,7 @@ public class JobsLevelRequirement extends AbstractRequirement {
 
         double points = -1;
 
-        if (jobsHandler == null || !jobsHandler.isAvailable()) {
+        if (jobsHandler == null || !jobsHandler.isHooked()) {
             points = -1;
         } else {
             points = jobsHandler.getCurrentLevel(player, jobName);
@@ -76,7 +76,7 @@ public class JobsLevelRequirement extends AbstractRequirement {
             return false;
         }
 
-        if (jobsHandler == null || !jobsHandler.isAvailable()) {
+        if (jobsHandler == null || !jobsHandler.isHooked()) {
             this.registerWarningMessage("Jobs is not available");
             return false;
         }

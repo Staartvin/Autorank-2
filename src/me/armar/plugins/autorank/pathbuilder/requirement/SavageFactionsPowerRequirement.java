@@ -60,7 +60,7 @@ public class SavageFactionsPowerRequirement extends AbstractRequirement {
             return false;
         }
 
-        if (handler == null || !handler.isAvailable()) {
+        if (handler == null || !handler.isHooked()) {
             this.registerWarningMessage("SavageFactions is not available");
             return false;
         }

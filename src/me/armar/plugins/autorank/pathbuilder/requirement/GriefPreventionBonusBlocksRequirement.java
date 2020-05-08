@@ -24,7 +24,7 @@ public class GriefPreventionBonusBlocksRequirement extends AbstractRequirement {
     @Override
     protected boolean meetsRequirement(UUID uuid) {
 
-        if (!handler.isAvailable())
+        if (!handler.isHooked())
             return false;
 
         return handler.getNumberOfBonusBlocks(uuid) >= bonusBlocks;
@@ -53,7 +53,7 @@ public class GriefPreventionBonusBlocksRequirement extends AbstractRequirement {
             return false;
         }
 
-        if (handler == null || !handler.isAvailable()) {
+        if (handler == null || !handler.isHooked()) {
             this.registerWarningMessage("GriefPrevention is not available");
             return false;
         }

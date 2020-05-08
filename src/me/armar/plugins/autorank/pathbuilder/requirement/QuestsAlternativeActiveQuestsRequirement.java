@@ -24,7 +24,7 @@ public class QuestsAlternativeActiveQuestsRequirement extends AbstractRequiremen
     @Override
     protected boolean meetsRequirement(UUID uuid) {
 
-        if (!handler.isAvailable())
+        if (!handler.isHooked())
             return false;
 
         return handler.getNumberOfActiveQuests(uuid) >= activeQuests;

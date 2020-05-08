@@ -93,7 +93,7 @@ public class StatsHandler extends StatsPlugin {
             return false;
         }
 
-        if (!statsApi.isAvailable()) {
+        if (!statsApi.isHooked()) {
             plugin.getLogger().info("Stats (by Lolmewn) is not enabled!");
             return false;
         }

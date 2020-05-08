@@ -32,7 +32,7 @@ public class VaultPermissionsHandler extends PermissionsHandler {
     public boolean addGroup(final Player player, final String world, final String group) {
         LibraryHook hook = getPlugin().getDependencyManager().getLibraryHook(Library.VAULT);
 
-        if (hook == null || !hook.isAvailable())
+        if (hook == null || !hook.isHooked())
             return false;
 
         if (VaultHook.getPermissions() == null) {
@@ -47,7 +47,7 @@ public class VaultPermissionsHandler extends PermissionsHandler {
 
         LibraryHook hook = getPlugin().getDependencyManager().getLibraryHook(Library.VAULT);
 
-        if (hook == null || !hook.isAvailable())
+        if (hook == null || !hook.isHooked())
             return false;
 
         if (VaultHook.getPermissions() == null) {
@@ -100,7 +100,7 @@ public class VaultPermissionsHandler extends PermissionsHandler {
 
         LibraryHook hook = getPlugin().getDependencyManager().getLibraryHook(Library.VAULT);
 
-        if (hook == null || !hook.isAvailable())
+        if (hook == null || !hook.isHooked())
             return Collections.unmodifiableCollection(groups);
 
         if (VaultHook.getPermissions() == null) {
@@ -128,7 +128,7 @@ public class VaultPermissionsHandler extends PermissionsHandler {
 
         LibraryHook hook = getPlugin().getDependencyManager().getLibraryHook(Library.VAULT);
 
-        if (hook == null || !hook.isAvailable())
+        if (hook == null || !hook.isHooked())
             return Collections.unmodifiableCollection(groups);
 
         if (VaultHook.getPermissions() == null) {
@@ -152,7 +152,7 @@ public class VaultPermissionsHandler extends PermissionsHandler {
 
         LibraryHook hook = getPlugin().getDependencyManager().getLibraryHook(Library.VAULT);
 
-        if (hook == null || !hook.isAvailable())
+        if (hook == null || !hook.isHooked())
             return Collections.unmodifiableCollection(groups);
 
         if (VaultHook.getPermissions() == null) {
@@ -176,7 +176,7 @@ public class VaultPermissionsHandler extends PermissionsHandler {
 
         LibraryHook hook = getPlugin().getDependencyManager().getLibraryHook(Library.VAULT);
 
-        if (hook == null || !hook.isAvailable())
+        if (hook == null || !hook.isHooked())
             return false;
 
         if (VaultHook.getPermissions() == null) {
@@ -192,7 +192,7 @@ public class VaultPermissionsHandler extends PermissionsHandler {
 
         LibraryHook hook = getPlugin().getDependencyManager().getLibraryHook(Library.VAULT);
 
-        if (hook == null || !hook.isAvailable())
+        if (hook == null || !hook.isHooked())
             return false;
 
         if (VaultHook.getPermissions() == null) {
@@ -276,6 +276,6 @@ public class VaultPermissionsHandler extends PermissionsHandler {
 
     @Override
     public boolean setupPermissionsHandler() {
-        return getPlugin().getDependencyManager().getLibraryHook(Library.VAULT).isAvailable();
+        return getPlugin().getDependencyManager().getLibraryHook(Library.VAULT).isHooked();
     }
 }

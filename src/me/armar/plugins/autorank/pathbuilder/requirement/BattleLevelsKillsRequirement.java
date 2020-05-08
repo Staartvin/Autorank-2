@@ -25,7 +25,7 @@ public class BattleLevelsKillsRequirement extends AbstractRequirement {
     @Override
     protected boolean meetsRequirement(UUID uuid) {
 
-        if (!handler.isAvailable())
+        if (!handler.isHooked())
             return false;
 
         return handler.getKills(uuid) >= numberOfKills;

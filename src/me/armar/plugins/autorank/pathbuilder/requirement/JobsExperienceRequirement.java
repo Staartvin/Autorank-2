@@ -29,7 +29,7 @@ public class JobsExperienceRequirement extends AbstractRequirement {
 
         double points = 0;
 
-        if (jobsHandler != null && jobsHandler.isAvailable()) {
+        if (jobsHandler != null && jobsHandler.isHooked()) {
             points = jobsHandler.getCurrentXP(player, jobName);
         }
 
@@ -41,7 +41,7 @@ public class JobsExperienceRequirement extends AbstractRequirement {
 
         double points = -1;
 
-        if (jobsHandler == null || !jobsHandler.isAvailable()) {
+        if (jobsHandler == null || !jobsHandler.isHooked()) {
             points = -1;
         } else {
             points = jobsHandler.getCurrentXP(player, jobName);
@@ -74,7 +74,7 @@ public class JobsExperienceRequirement extends AbstractRequirement {
             return false;
         }
 
-        if (jobsHandler == null || !jobsHandler.isAvailable()) {
+        if (jobsHandler == null || !jobsHandler.isHooked()) {
             this.registerWarningMessage("Jobs is not available");
             return false;
         }

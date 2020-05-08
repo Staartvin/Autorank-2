@@ -37,7 +37,7 @@ public class RPGMeSkillLevelRequirement extends AbstractRequirement {
     @Override
     public boolean meetsRequirement(final Player player) {
 
-        if (!handler.isAvailable())
+        if (!handler.isHooked())
             return false;
 
         if (skillName.equalsIgnoreCase("all")) {

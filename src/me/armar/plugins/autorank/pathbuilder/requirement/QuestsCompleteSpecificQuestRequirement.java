@@ -24,7 +24,7 @@ public class QuestsCompleteSpecificQuestRequirement extends AbstractRequirement 
     @Override
     protected boolean meetsRequirement(UUID uuid) {
 
-        if (!handler.isAvailable())
+        if (!handler.isHooked())
             return false;
 
         return handler.isQuestCompleted(uuid, questName);
@@ -45,7 +45,7 @@ public class QuestsCompleteSpecificQuestRequirement extends AbstractRequirement 
             return false;
         }
 
-        if (handler == null || !handler.isAvailable()) {
+        if (handler == null || !handler.isHooked()) {
             this.registerWarningMessage("Quests is not available!");
             return false;
         }

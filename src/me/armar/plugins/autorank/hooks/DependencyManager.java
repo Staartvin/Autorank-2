@@ -101,7 +101,7 @@ public class DependencyManager {
             if (!(libraryHook instanceof AFKManager)) continue;
 
             // Check if the library is available.
-            if (!libraryHook.isAvailable()) continue;
+            if (!libraryHook.isHooked()) continue;
 
             plugin.debugMessage("Using " + library.getHumanPluginName() + " for AFK");
 
@@ -199,7 +199,7 @@ public class DependencyManager {
             return false;
         }
 
-        return hook.isAvailable() && LibraryHook.isPluginAvailable(library);
+        return hook.isAvailable() && LibraryHook.isPluginAvailable(library) && hook.isHooked();
     }
 
     private boolean loadPluginLibrary() {

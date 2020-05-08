@@ -65,7 +65,7 @@ public class WorldGuardRegionRequirement extends AbstractRequirement {
             return false;
         }
 
-        if (handler == null || !handler.isAvailable()) {
+        if (handler == null || !handler.isHooked()) {
             this.registerWarningMessage("WorldGuard is not available");
             return false;
         }

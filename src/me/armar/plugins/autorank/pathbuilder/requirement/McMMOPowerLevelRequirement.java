@@ -25,7 +25,7 @@ public class McMMOPowerLevelRequirement extends AbstractRequirement {
     @Override
     public boolean meetsRequirement(final Player player) {
 
-        if (!handler.isAvailable())
+        if (!handler.isHooked())
             return false;
 
         final int level = handler.getPowerLevel(player);
@@ -50,7 +50,7 @@ public class McMMOPowerLevelRequirement extends AbstractRequirement {
             return false;
         }
 
-        if (handler == null || !handler.isAvailable()) {
+        if (handler == null || !handler.isHooked()) {
             this.registerWarningMessage("mcMMO is not available");
             return false;
         }

@@ -29,7 +29,7 @@ public class RPGMeCombatLevelRequirement extends AbstractRequirement {
     @Override
     public boolean meetsRequirement(final Player player) {
 
-        if (!handler.isAvailable())
+        if (!handler.isHooked())
             return false;
 
         return handler.getCombatLevel(player) >= skillLevel;

@@ -29,7 +29,7 @@ public class JobsCurrentPointsRequirement extends AbstractRequirement {
 
         double points = -1;
 
-        if (jobsHandler == null || !jobsHandler.isAvailable()) {
+        if (jobsHandler == null || !jobsHandler.isHooked()) {
             points = -1;
         } else {
             points = jobsHandler.getCurrentPoints(uuid);
@@ -43,7 +43,7 @@ public class JobsCurrentPointsRequirement extends AbstractRequirement {
 
         double points = -1;
 
-        if (jobsHandler == null || !jobsHandler.isAvailable()) {
+        if (jobsHandler == null || !jobsHandler.isHooked()) {
             points = -1;
         } else {
             points = jobsHandler.getCurrentPoints(uuid);
@@ -72,7 +72,7 @@ public class JobsCurrentPointsRequirement extends AbstractRequirement {
             return false;
         }
 
-        if (jobsHandler == null || !jobsHandler.isAvailable()) {
+        if (jobsHandler == null || !jobsHandler.isHooked()) {
             this.registerWarningMessage("Jobs is not available");
             return false;
         }
@@ -84,7 +84,7 @@ public class JobsCurrentPointsRequirement extends AbstractRequirement {
     public double getProgressPercentage(UUID uuid) {
         double points = 0;
 
-        if (jobsHandler != null && jobsHandler.isAvailable()) {
+        if (jobsHandler != null && jobsHandler.isHooked()) {
             points = jobsHandler.getCurrentPoints(uuid);
         }
 

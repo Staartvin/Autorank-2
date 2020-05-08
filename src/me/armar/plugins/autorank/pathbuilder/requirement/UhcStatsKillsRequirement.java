@@ -24,7 +24,7 @@ public class UhcStatsKillsRequirement extends AbstractRequirement {
     @Override
     protected boolean meetsRequirement(UUID uuid) {
 
-        if (!handler.isAvailable())
+        if (!handler.isHooked())
             return false;
 
         return handler.getNumberOfKills(uuid) >= requiredKills;

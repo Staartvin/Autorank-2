@@ -50,7 +50,7 @@ public class EssentialsGeoIPRequirement extends AbstractRequirement {
             return false;
         }
 
-        if (essHandler == null || !essHandler.isAvailable()) {
+        if (essHandler == null || !essHandler.isHooked()) {
             this.registerWarningMessage("EssentialsX is not available");
             return false;
         }
