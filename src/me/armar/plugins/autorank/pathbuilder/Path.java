@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -65,6 +66,10 @@ public class Path {
 
     // Whether Autorank should store progress of a player's path when he deactivates this path.
     private boolean storeProgressOnDeactivation = false;
+
+    // Store the cooldown (in minutes)
+    // A cooldown makes sure that players can't repeat a path immediately.
+    private long cooldown = 0;
 
     public Path(final Autorank plugin) {
         this.plugin = plugin;
@@ -682,6 +687,23 @@ public class Path {
     }
 
     /**
+     * Check how much time is left (on the cooldown) for the given player. This method returns 0 if the player is not
+     * on cooldown.
+     *
+     * @param uuid UUID of the player.
+     * @return cooldown time left (in minutes) or zero if player is not on a cooldown.
+     */
+    public long getTimeLeftForCooldown(UUID uuid) {
+        if (!this.isOnCooldown(uuid)) return 0;
+
+        long timeSinceCompletion =
+                plugin.getPlayerDataManager().getPrimaryDataStorage().flatMap(primaryDataStorage -> primaryDataStorage
+                        .getTimeSinceCompletionOfPath(uuid, this.getInternalName())).orElse((long) 0);
+
+        return this.getCooldown() - timeSinceCompletion;
+    }
+
+    /**
      * Check if a player has deactivated this path. A path is considered to be de-activated if there is progress on the
      * path, but the status of the path is not 'active'.
      *
@@ -694,10 +716,29 @@ public class Path {
     }
 
     /**
+     * Check whether the given player is on cooldown for this path. If the player has completed the cooldown, this
+     * method will return false. If the player is still on the cooldown, it will return true. If no cooldown is
+     * applied to this path, this will return false.
+     *
+     * @param uuid UUID of the player.
+     * @return Whether the player is on cooldown.
+     */
+    public boolean isOnCooldown(UUID uuid) {
+        if (!this.hasCooldown()) return false;
+
+        Optional<Long> timePathIsCompleted =
+                plugin.getPlayerDataManager().getPrimaryDataStorage().flatMap(s -> s.getTimeSinceCompletionOfPath(uuid,
+                        this.getInternalName()));
+
+        // Check whether the player has completed the path sufficiently long ago.
+        return timePathIsCompleted.filter(timeSinceCompletion -> timeSinceCompletion < this.getCooldown()).isPresent();
+    }
+
+    /**
      * Check whether this path is eligible for a player. A path is eligible for a player if all of the following apply:
      * <ul>
      * <li>The path is not active for the player.</li>
-     * <li>The player has not completed the path yet, or the path is repeatable.</li>
+     * <li>The player has not completed the path yet OR the path is repeatable and there is no cooldown left.</li>
      * <li>The player meets the prerequisites of the path.</li>
      * <li>The player has not deactivated the path manually.</li>
      * </ul>
@@ -708,6 +749,11 @@ public class Path {
     public boolean isEligible(UUID uuid) {
         // A path is not eligible when a player has already has it as active.
         if (isActive(uuid)) {
+            return false;
+        }
+
+        // If this path has a cooldown (and the player has not yet passed it), they are not allowed to join again.
+        if (isOnCooldown(uuid)) {
             return false;
         }
 
@@ -729,5 +775,37 @@ public class Path {
     public CompositeRequirement getRequirement(int id) {
         return this.getRequirements().stream().filter(compositeRequirement ->
                 compositeRequirement.getRequirementId() == id).findFirst().orElse(null);
+    }
+
+    /**
+     * Check whether this path has a cooldown applied. A cooldown prevents players from immediately rejoining a path
+     * after they've completed it.
+     *
+     * @return true if this path has a cooldown, false otherwise.
+     */
+    public boolean hasCooldown() {
+        return cooldown > 0;
+    }
+
+    /**
+     * Get the cooldown of this path. The cooldown is in minutes.
+     *
+     * @return cooldown in minutes (or 0 if no cooldown is applied)
+     */
+    public long getCooldown() {
+        return cooldown;
+    }
+
+    /**
+     * Set the cooldown of this path. Cooldowns can only be non-negative.
+     *
+     * @param cooldown Cooldown value (in minutes).
+     */
+    public void setCooldown(long cooldown) {
+        if (cooldown < 0) {
+            cooldown = 0;
+        }
+
+        this.cooldown = cooldown;
     }
 }

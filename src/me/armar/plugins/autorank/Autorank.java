@@ -650,8 +650,6 @@ public class Autorank extends JavaPlugin {
         getServer().getPluginManager().enablePlugin(this);
     }
 
-    // TODO: add requirement that checks for how many times you completed a path.
-
     // ---------- GETTERS & SETTERS ---------- \\
     //
     //

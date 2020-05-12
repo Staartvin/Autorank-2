@@ -5,9 +5,11 @@ import me.armar.plugins.autorank.pathbuilder.Path;
 import me.armar.plugins.autorank.pathbuilder.holders.CompositeRequirement;
 import me.armar.plugins.autorank.pathbuilder.requirement.AbstractRequirement;
 import me.armar.plugins.autorank.pathbuilder.result.AbstractResult;
+import me.armar.plugins.autorank.util.AutorankTools;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * This class builds all the paths from the paths.yml. <br>
@@ -85,6 +87,10 @@ public class PathBuilder {
 
             // Set whether the progress for this path should be stored.
             path.setStoreProgressOnDeactivation(plugin.getPathsConfig().shouldStoreProgressOnDeactivation(pathName));
+
+            // Set the cooldown of the path (if there is any).
+            plugin.getPathsConfig().getCooldownOfPath(pathName)
+                    .ifPresent(cooldown -> path.setCooldown(AutorankTools.stringToTime(cooldown, TimeUnit.MINUTES)));
 
             // Add path to list of paths
             paths.add(path);

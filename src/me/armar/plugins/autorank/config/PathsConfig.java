@@ -5,10 +5,7 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.pathbuilder.result.AbstractResult;
 import org.bukkit.configuration.ConfigurationSection;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * This class is used to talk to the Paths.yml file. It allows creation,
@@ -61,6 +58,17 @@ public class PathsConfig extends AbstractConfig {
      */
     public String getDisplayName(final String pathName) {
         return this.getConfig().getString(pathName + ".options.display name", pathName);
+    }
+
+    public Optional<String> getCooldownOfPath(String pathName) {
+
+        String cooldown = this.getConfig().getString(pathName + ".options.cooldown", null);
+
+        if (cooldown == null) {
+            return Optional.empty();
+        } else {
+            return Optional.of(cooldown);
+        }
     }
 
     /**

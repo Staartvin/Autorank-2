@@ -3,6 +3,7 @@ package me.armar.plugins.autorank.pathbuilder.playerdata;
 import io.reactivex.annotations.NonNull;
 
 import java.util.Collection;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -274,6 +275,17 @@ public interface PlayerDataStorage {
      * @return number of times a path has been completed, or zero if it hasn't been completed before.
      */
     int getTimesCompletedPath(@NonNull UUID uuid, @NonNull String pathName);
+
+
+    /**
+     * Get the time (in minutes) since the given player has completed the given path. If the path has not been
+     * completed, the result will be empty.
+     *
+     * @param uuid     UUID of the player
+     * @param pathName Name of the path
+     * @return time in minutes since this path has been completed, or empty if it hasn't been completed yet.
+     */
+    Optional<Long> getTimeSinceCompletionOfPath(UUID uuid, String pathName);
 
     // --------- Completed paths where results are not performed yet ---------
 

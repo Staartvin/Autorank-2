@@ -10,10 +10,7 @@ import me.armar.plugins.autorank.util.uuid.UUIDManager;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -301,6 +298,9 @@ public class LocalPlayerDataStorage extends AbstractConfig implements PlayerData
         } else {
             completedPathSection.set("completed", completedPathSection.getInt("completed", 0) + 1);
         }
+
+        // Store when the player completed path.
+        getCompletedPathSection(uuid, pathName).set("completed at", System.currentTimeMillis());
     }
 
     public void removeCompletedPath(final UUID uuid, String pathName) {
@@ -335,6 +335,22 @@ public class LocalPlayerDataStorage extends AbstractConfig implements PlayerData
         } else {
             return 0;
         }
+    }
+
+    @Override
+    public Optional<Long> getTimeSinceCompletionOfPath(UUID uuid, String pathName) {
+        ConfigurationSection completedPathSection = getCompletedPathSection(uuid, pathName);
+
+        // The player has not completed the path yet
+        if (completedPathSection == null) {
+            return Optional.empty();
+        }
+
+        // Get the time that the path was completed
+        long completionTime = completedPathSection.getLong("completed at");
+
+        // Find the difference and divide by 60000 to convert to minutes.
+        return Optional.of((System.currentTimeMillis() - completionTime) / 60000);
     }
 
     // ------------ COMPLETED PATHS WHERE RESULTS ARE NOT PERFORMED YET ------------

@@ -5,12 +5,14 @@ import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.pathbuilder.Path;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
+import me.armar.plugins.autorank.util.AutorankTools;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -72,6 +74,15 @@ public class ChooseCommand extends AutorankCommand {
             sender.sendMessage(ChatColor.RED + "You do not meet the prerequisites of this path!");
             sender.sendMessage(ChatColor.RED + "Type " + ChatColor.GOLD + "/ar view "
                     + targetPath.getDisplayName() + ChatColor.RED + " to see a list of prerequisites.");
+            return true;
+        }
+
+        // Check if the player is on cooldown.
+        if (targetPath.isOnCooldown(player.getUniqueId())) {
+            sender.sendMessage(ChatColor.RED + "You are on cooldown for this path!");
+            sender.sendMessage(ChatColor.RED + "You need to wait " + ChatColor.GOLD +
+                    AutorankTools.timeToString((int) targetPath.getTimeLeftForCooldown(player.getUniqueId()),
+                            TimeUnit.MINUTES));
             return true;
         }
 

@@ -15,19 +15,20 @@ import org.jetbrains.annotations.NotNull;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 public class GlobalPlayerDataStorage implements PlayerDataStorage {
 
-    private String tablePlayerdataStorageCompletedPaths;
-    private String tableServerRegister;
+    private final String tablePlayerdataStorageCompletedPaths;
+    private final String tableServerRegister;
 
-    private Autorank plugin;
+    private final Autorank plugin;
     private SQLConnection connection;
 
-    private PlayerDataCache playerDataCache = new PlayerDataCache();
+    private final PlayerDataCache playerDataCache = new PlayerDataCache();
 
     public GlobalPlayerDataStorage(Autorank instance) {
         this.plugin = instance;
@@ -329,6 +330,11 @@ public class GlobalPlayerDataStorage implements PlayerDataStorage {
     @Override
     public int getTimesCompletedPath(UUID uuid, String pathName) {
         return hasCompletedPath(uuid, pathName) ? 1 : 0;
+    }
+
+    @Override
+    public Optional<Long> getTimeSinceCompletionOfPath(UUID uuid, String pathName) {
+        return Optional.empty();
     }
 
     @Override
