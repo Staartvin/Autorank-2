@@ -4,7 +4,7 @@ url: http://dev.bukkit.org/bukkit-plugins/autorank/
 version: ${project.version}
 authors: [Staartvin, Armarr]
 softdepend: [PluginLibrary, Vault, GroupManager, Privileges, bPermissions, PermissionsEx, PermissionsBukkit, DroxPerms,
-             PowerfulPerms, Statz, mcMMO, Factions, afkTerminator, OnTime, RoyalCommands, UltimateCore, Statz,
+             PowerfulPerms, mcMMO, Factions, afkTerminator, OnTime, RoyalCommands, UltimateCore, Statz,
              AdvancedAchievements, BattleLevels, Jobs, RPGme, Statz, uSkyBlock, Vault, WorldEdit, WorldGuard, AcidIsland,
              ASkyBlock, GriefPrevention, Essentials, Quests, PlayerPoints, Votifier, CMI, UhcStats]
 description: Reward players based on their stats.
