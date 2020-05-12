@@ -131,12 +131,16 @@ public class Autorank extends JavaPlugin {
         // Make sure all tasks are cancelled after shutdown. This seems obvious,
         // but when a player /reloads, the server creates an instance of the
         // plugin which causes duplicate tasks to run.
+        this.debugMessage("Shutting down all pending tasks.");
         getServer().getScheduler().cancelTasks(this);
+
 
         // ------------- Save files and databases -------------
 
+        this.debugMessage("Saving storage files of play time");
         this.getPlayTimeStorageManager().saveAllStorageProviders();
 
+        this.debugMessage("Saving storage files of UUIDs");
         getUUIDStorage().saveAllFiles();
 
         // ------------- Say bye-bye -------------
