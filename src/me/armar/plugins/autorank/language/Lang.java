@@ -574,6 +574,14 @@ public enum Lang {
      * Need to have at least {0} town blocks.
      */
     TOWNY_NEED_NUMBER_OF_TOWN_BLOCKS("Need to have at least {0} town blocks."),
+    /**
+     * Have at least power level {0}.
+     */
+    MCRPG_POWER_LEVEL_REQUIREMENT("Have at least power level {0}"),
+    /**
+     * Have at least level {0} in {1}.
+     */
+    MCRPG_SKILL_LEVEL_REQUIREMENT("Have at least level {0} in {1}"),
     ;
 
     private static FileConfiguration LANG;
