@@ -388,6 +388,13 @@
             <scope>provided</scope>
         </dependency>
 
+
+        <dependency>
+            <groupId>com.palmergames.bukkit.towny</groupId>
+            <artifactId>Towny</artifactId>
+            <version>0.96.1.10</version>
+        </dependency>
+
         <!-- Test dependencies -->
 
         <dependency>

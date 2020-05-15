@@ -554,6 +554,26 @@ public enum Lang {
      * Get at least {0} wins
      */
     UHC_STATS_WINS_REQUIREMENT("Get at least {0} wins."),
+    /**
+     * Need to be part of a town.
+     */
+    TOWNY_HAS_TOWN_REQUIREMENT("Need to be part of a town."),
+    /**
+     * Need to be part of a nation.
+     */
+    TOWNY_HAS_NATION_REQUIREMENT("Need to be part of a nation."),
+    /**
+     * Need to be mayor of a town
+     */
+    TOWNY_IS_MAYOR_REQUIREMENT("Need to be mayor of a town."),
+    /**
+     * Need to be king of a nation
+     */
+    TOWNY_IS_KING_REQUIREMENT("Need to be king of a nation."),
+    /**
+     * Need to have at least {0} town blocks.
+     */
+    TOWNY_NEED_NUMBER_OF_TOWN_BLOCKS("Need to have at least {0} town blocks."),
     ;
 
     private static FileConfiguration LANG;

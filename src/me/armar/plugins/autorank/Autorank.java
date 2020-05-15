@@ -583,6 +583,13 @@ public class Autorank extends JavaPlugin {
         RequirementBuilder.registerRequirement("uhcstats deaths", UhcStatsDeathsRequirement.class);
         RequirementBuilder.registerRequirement("uhcstats wins", UhcStatsWinsRequirement.class);
 
+        // Towny Advanced
+        RequirementBuilder.registerRequirement("towny has town", TownyHasATownRequirement.class);
+        RequirementBuilder.registerRequirement("towny has nation", TownyHasANationRequirement.class);
+        RequirementBuilder.registerRequirement("towny is mayor", TownyIsMayorRequirement.class);
+        RequirementBuilder.registerRequirement("towny is king", TownyIsKingRequirement.class);
+        RequirementBuilder.registerRequirement("towny number of town blocks", TownyNumberOfTownBlocksRequirement.class);
+
 
         // Register 'main' results
         ResultBuilder.registerResult("command", CommandResult.class);
