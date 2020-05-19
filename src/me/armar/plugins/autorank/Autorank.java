@@ -591,7 +591,7 @@ public class Autorank extends JavaPlugin {
         RequirementBuilder.registerRequirement("towny town blocks", TownyNumberOfTownBlocksRequirement.class);
 
         // McRPG
-        RequirementBuilder.registerRequirement("mcprg skill level", McRPGSkillLevelRequirement.class);
+        RequirementBuilder.registerRequirement("mcrpg skill level", McRPGSkillLevelRequirement.class);
         RequirementBuilder.registerRequirement("mcrpg power level", McRPGPowerLevelRequirement.class);
 
 
