@@ -36,6 +36,7 @@ check command layout: "&p has played for &time and is on path ''&path''. Require
 
 sql:
     enabled: false
+    usessl: false
     hostname: localhost:3306
     username: root
     password: ''

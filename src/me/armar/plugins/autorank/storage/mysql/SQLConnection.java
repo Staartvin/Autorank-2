@@ -23,6 +23,7 @@ public class SQLConnection {
     private final String hostname;
     private final String password;
     private final String username;
+    private final String useSSL;
 
     private HikariDataSource dataSource = null;
 
@@ -33,12 +34,14 @@ public class SQLConnection {
      * @param username Username
      * @param password Password
      * @param database Database
+     * @param useSSL useSSL
      */
-    private SQLConnection(final String hostname, final String username, final String password, final String database) {
+    private SQLConnection(final String hostname, final String username, final String password, final String database, final String useSSL) {
         this.hostname = hostname;
         this.username = username;
         this.password = password;
         this.database = database;
+        this.useSSL = useSSL;
     }
 
     /**
@@ -52,8 +55,9 @@ public class SQLConnection {
             String username = configHandler.getMySQLSetting(SettingsConfig.MySQLSettings.USERNAME);
             String password = configHandler.getMySQLSetting(SettingsConfig.MySQLSettings.PASSWORD);
             String database = configHandler.getMySQLSetting(SettingsConfig.MySQLSettings.DATABASE);
+            String useSSL   = configHandler.getMySQLSetting(SettingsConfig.MySQLSettings.USESSL);
 
-            instance = new SQLConnection(hostname, username, password, database);
+            instance = new SQLConnection(hostname, username, password, database, useSSL);
         }
 
         return instance;
@@ -78,7 +82,7 @@ public class SQLConnection {
         HikariConfig config = new HikariConfig();
 
         config.setPoolName("autorank-hikari");
-        config.setJdbcUrl("jdbc:mysql://" + this.hostname + "/" + this.database);
+        config.setJdbcUrl("jdbc:mysql://" + this.hostname + "/" + this.database + "?autoReconnect=true&useSSL=" + this.useSSL);
 //        config.setDriverClassName("com.mysql.jdbc.Driver");
         config.setUsername(this.username);
         config.setPassword(this.password);
