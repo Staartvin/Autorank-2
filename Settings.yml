@@ -22,7 +22,7 @@ multiplier: 1
 #Example: if you want to people get x2 time, change the value to 2
 
 use real time: false
-#if it is true, the plugin will compute the time between every update to add the time elapsed
+#if it is "true", the plugin will compute the time between every update to add the time elapsed
 
 leaderboard layout: '&6&r | &b&p - &7&d %day%, &h %hour% and &m %minute%.'
 leaderboard length: 5
