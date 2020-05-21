@@ -18,6 +18,8 @@ interval check: 5
 
 use real time: false
 #if it is "true", the plugin will compute the time between every update to add the time elapsed
+#and it will enable the multiplier command. It is useful if an there is an event or a special day/hour.
+#If the server is restarted the multiplier is lost.
 
 leaderboard layout: '&6&r | &b&p - &7&d %day%, &h %hour% and &m %minute%.'
 leaderboard length: 5

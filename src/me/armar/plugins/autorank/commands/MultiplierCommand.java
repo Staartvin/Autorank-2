@@ -52,7 +52,7 @@ public class MultiplierCommand extends AutorankCommand {
 
     @Override
     public String getDescription() {
-        return "Set multiplier's time to [value]. Example: if you want to get x2 time, set the value to 2";
+        return "Set multiplier's time to [value].";
     }
 
     @Override
@@ -62,6 +62,6 @@ public class MultiplierCommand extends AutorankCommand {
 
     @Override
     public String getUsage() {
-        return "/ar multiplier [value]";
+        return "/ar multiplier [value]  Example: if you want to get x2 time, set the value to 2. Remember to set [use real time] = true in settings file";
     }
 }
