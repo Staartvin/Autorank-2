@@ -17,7 +17,8 @@ interval check: 5
 # Lowering this number will increase accuracy but will also increase server lag.
 
 multiplier: 1
-#This is the multiplier value. The default value is 1.
+#This is the multiplier value. The default value is 1. ONLY USE INTEGERS
+#THIS WILL ONLY WORK IF "use real time" = true
 #Example: if you want to people get x2 time, change the value to 2
 
 use real time: false

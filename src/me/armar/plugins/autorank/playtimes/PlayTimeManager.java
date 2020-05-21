@@ -28,6 +28,8 @@ public class PlayTimeManager {
 
     // How often do we check whether a player is still online? (in minutes)
     public static int INTERVAL_MINUTES = 5;
+    //Mutiplier, only works if "use real time" is true
+    public static int MULTIPLIER = 1;
 
     private final Autorank plugin;
 
@@ -35,6 +37,7 @@ public class PlayTimeManager {
         this.plugin = plugin;
 
         INTERVAL_MINUTES = plugin.getSettingsConfig().getIntervalTime();
+        MULTIPLIER = plugin.getSettingsConfig().getMultiplier();
 
         plugin.getLogger().info("Interval check every " + INTERVAL_MINUTES + " minutes.");
     }

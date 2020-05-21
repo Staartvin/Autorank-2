@@ -58,7 +58,7 @@ public class UpdateTimePlayedTask implements Runnable {
             return;
         }
 
-        toc=(int)Math.round((System.currentTimeMillis()-tic)/60000f); //Get the difference between tic and toc 
+        toc=(int)Math.round((System.currentTimeMillis()-tic)/60000f*PlayTimeManager.MULTIPLIER); //Get the difference between tic and toc 
                                     //and then divide it by 60000 because there are 60000 milliseconds in a minute
         tic=System.currentTimeMillis(); //Update the tic value for the next time this task is runned
 

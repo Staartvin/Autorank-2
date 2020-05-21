@@ -31,10 +31,19 @@ public class TaskManager {
             return;
         }
 
-        BukkitTask task = plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin,
+        BukkitTask task;
+
+        if(plugin.getSettingsConfig().useRealTime()){
+            task = plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin,
+                new UpdateRealTimePlayedTask(plugin, uuid)
+                , PlayTimeManager.INTERVAL_MINUTES * AutorankTools.TICKS_PER_MINUTE, PlayTimeManager
+                        .INTERVAL_MINUTES * AutorankTools.TICKS_PER_MINUTE);
+        }else{
+            task = plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin,
                 new UpdateTimePlayedTask(plugin, uuid)
                 , PlayTimeManager.INTERVAL_MINUTES * AutorankTools.TICKS_PER_MINUTE, PlayTimeManager
                         .INTERVAL_MINUTES * AutorankTools.TICKS_PER_MINUTE);
+        }
 
         // Store taskID so we can refer to it later.
         updatePlayTimeTaskIds.put(uuid, task.getTaskId());

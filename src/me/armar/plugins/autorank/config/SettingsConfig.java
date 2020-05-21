@@ -89,6 +89,14 @@ public class SettingsConfig extends AbstractConfig {
         return this.getConfig().getInt("interval check", 5);
     }
 
+    public int getMultiplier() {
+        return this.getConfig().getInt("multiplier", 1);
+    }
+
+    public boolean useRealTime() {
+        return this.getConfig().getBoolean("use real time", false);
+    }
+
     /**
      * Get the layout of the leaderboards.
      *
