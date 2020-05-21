@@ -16,10 +16,13 @@ public class UpdateTimePlayedTask implements Runnable {
 
     // UUID of player to keep track of.
     private UUID uuid;
+    private long tic; //System.currentTimeMillis() returns long
+    private int toc; //PlayTimeStorageManager().addPlayerTime parameter receives int
 
     public UpdateTimePlayedTask(Autorank instance, UUID uuid) {
         this.plugin = instance;
         this.uuid = uuid;
+        this.tic=System.currentTimeMillis(); //here, we save the current time for the first time
     }
 
     @Override
@@ -55,9 +58,13 @@ public class UpdateTimePlayedTask implements Runnable {
             return;
         }
 
+        toc=(int)Math.round((System.currentTimeMillis()-tic)/60000f); //Get the difference between tic and toc 
+                                    //and then divide it by 60000 because there are 60000 milliseconds in a minute
+        tic=System.currentTimeMillis(); //Update the tic value for the next time this task is runned
+
         // Add time to a player's current time for all storage providers.
         for (final TimeType type : TimeType.values()) {
-            plugin.getPlayTimeStorageManager().addPlayerTime(type, uuid, PlayTimeManager.INTERVAL_MINUTES);
+            plugin.getPlayTimeStorageManager().addPlayerTime(type, uuid, toc); //Here we add the time elapsed
         }
 
         // Auto assign path (if possible)

@@ -16,6 +16,13 @@ interval check: 5
 # This is the interval between checks of Autorank (in minutes).
 # Lowering this number will increase accuracy but will also increase server lag.
 
+multiplier: 1
+#This is the multiplier value. The default value is 1.
+#Example: if you want to people get x2 time, change the value to 2
+
+use real time: false
+#if it is true, the plugin will compute the time between every update to add the time elapsed
+
 leaderboard layout: '&6&r | &b&p - &7&d %day%, &h %hour% and &m %minute%.'
 leaderboard length: 5
 # changes the appearance of the /ar leaderboard command
