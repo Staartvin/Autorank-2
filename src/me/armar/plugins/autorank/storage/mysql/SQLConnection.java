@@ -82,7 +82,7 @@ public class SQLConnection {
         HikariConfig config = new HikariConfig();
 
         config.setPoolName("autorank-hikari");
-        config.setJdbcUrl("jdbc:mysql://" + this.hostname + "/" + this.database + "?autoReconnect=true&useSSL=" + this.useSSL);
+        config.setJdbcUrl("jdbc:mysql://" + this.hostname + "/" + this.database);
 //        config.setDriverClassName("com.mysql.jdbc.Driver");
         config.setUsername(this.username);
         config.setPassword(this.password);
@@ -93,6 +93,8 @@ public class SQLConnection {
         config.addDataSourceProperty("useServerPrepStmts", "true");
         config.addDataSourceProperty("rewriteBatchedStatements", "true");
         config.addDataSourceProperty("maintainTimeStats", "false");
+        config.addDataSourceProperty("autoReconnect", "true");
+        config.addDataSourceProperty("useSSL", this.useSSL);
 
         config.setMaximumPoolSize(10);
         config.setMinimumIdle(10);

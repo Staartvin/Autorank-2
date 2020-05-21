@@ -34,7 +34,7 @@ public class SettingsConfig extends AbstractConfig {
                         .replace("%port%", getPlugin().getServer().getPort() + "")
                         .replace("%name%", getPlugin().getServer().getName());
             case USESSL:
-            	return this.getConfig().getString("sql.usessl");
+            	return String.valueOf(this.getConfig().getBoolean("sql.usessl", false));
             default:
                 throw new IllegalArgumentException(option + " is not a valid MySQL settings option");
         }
