@@ -73,6 +73,7 @@ public class CommandsManager implements TabExecutor {
         registeredCommands.put(Arrays.asList("info"), new InfoCommand(plugin));
         registeredCommands.put(Arrays.asList("editor"), new EditorCommand(plugin));
         registeredCommands.put(Arrays.asList("migrate"), new MigrateCommand(plugin));
+        registeredCommands.put(Arrays.asList("multiplier"), new MultiplierCommand(plugin));
     }
 
     /**
