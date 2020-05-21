@@ -10,7 +10,7 @@ import java.util.UUID;
 /**
  * This class is responsible for updating a player's play time every x minutes.
  */
-public class UpdateTimePlayedTask implements Runnable {
+public class UpdateRealTimePlayedTask implements Runnable {
 
     private Autorank plugin;
 
