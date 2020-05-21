@@ -52,7 +52,7 @@ public class MultiplierCommand extends AutorankCommand {
 
     @Override
     public String getDescription() {
-        return "Set multiplier's time to [value].";
+        return "Set multiplier's time to [value]. Example: if you want to get x2 time, set the value to 2";
     }
 
     @Override

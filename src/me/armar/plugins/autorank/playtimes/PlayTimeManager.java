@@ -37,7 +37,6 @@ public class PlayTimeManager {
         this.plugin = plugin;
 
         INTERVAL_MINUTES = plugin.getSettingsConfig().getIntervalTime();
-        MULTIPLIER = plugin.getSettingsConfig().getMultiplier();
 
         plugin.getLogger().info("Interval check every " + INTERVAL_MINUTES + " minutes.");
     }
