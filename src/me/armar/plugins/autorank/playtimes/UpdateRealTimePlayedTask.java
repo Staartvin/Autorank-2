@@ -19,7 +19,7 @@ public class UpdateRealTimePlayedTask implements Runnable {
     private long tic; //System.currentTimeMillis() returns long
     private int toc; //PlayTimeStorageManager().addPlayerTime parameter receives int
 
-    public UpdateTimePlayedTask(Autorank instance, UUID uuid) {
+    public UpdateRealTimePlayedTask(Autorank instance, UUID uuid) {
         this.plugin = instance;
         this.uuid = uuid;
         this.tic=System.currentTimeMillis(); //here, we save the current time for the first time

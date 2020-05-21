@@ -3,6 +3,7 @@ package me.armar.plugins.autorank.tasks;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.playtimes.PlayTimeManager;
 import me.armar.plugins.autorank.playtimes.UpdateTimePlayedTask;
+import me.armar.plugins.autorank.playtimes.UpdateRealTimePlayedTask;
 import me.armar.plugins.autorank.util.AutorankTools;
 import org.bukkit.scheduler.BukkitTask;
 
