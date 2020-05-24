@@ -37,12 +37,14 @@ public class MultiplierCommand extends AutorankCommand {
             if (!this.hasPermission(AutorankPermission.SET_LOCAL_TIME, sender)) {
                 return true;
             }
+
+            if(plugin.getSettingsConfig().multiplierCommandIsEnabled()){
+                PlayTimeManager.MULTIPLIER=value;
+                sender.sendMessage(ChatColor.AQUA + "MULTIPLIER = " + PlayTimeManager.MULTIPLIER);
+            }else{
+                sender.sendMessage(ChatColor.AQUA + "Multipler command is disabled in settings config.");
+            }
             
-            PlayTimeManager.MULTIPLIER=value;
-            sender.sendMessage(ChatColor.AQUA + "MULTIPLIER = " + ChatColor.GRAY + PlayTimeManager.MULTIPLIER);
-
-
-
         } else {
             AutorankTools.sendColoredMessage(sender, Lang.INVALID_FORMAT.getConfigValue(this.getUsage()));
         }
@@ -62,6 +64,6 @@ public class MultiplierCommand extends AutorankCommand {
 
     @Override
     public String getUsage() {
-        return "/ar multiplier [value]  Example: if you want to get x2 time, set the value to 2. Remember to set [use real time] = true in settings file";
+        return "/ar multiplier [value]";
     }
 }

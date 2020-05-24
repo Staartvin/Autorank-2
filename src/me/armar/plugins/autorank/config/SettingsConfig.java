@@ -89,8 +89,12 @@ public class SettingsConfig extends AbstractConfig {
         return this.getConfig().getInt("interval check", 5);
     }
 
-    public boolean useRealTime() {
-        return this.getConfig().getBoolean("use real time", false);
+    public boolean useMoreAccurateTimings() {
+        return this.getConfig().getBoolean("use more accurate timings", false);
+    }
+
+    public boolean multiplierCommandIsEnabled() {
+        return this.getConfig().getBoolean("enable multiplier command", false);
     }
 
     /**

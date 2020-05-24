@@ -16,9 +16,12 @@ interval check: 5
 # This is the interval between checks of Autorank (in minutes).
 # Lowering this number will increase accuracy but will also increase server lag.
 
-use real time: false
+use more accurate timings: false
 #if it is "true", the plugin will compute the time between every update to add the time elapsed
-#and it will enable the multiplier command. It is useful if an there is an event or a special day/hour.
+
+enable multiplier command: false
+#this will enable the multiplier command. It is useful if there is an event or a special day/hour.
+#Usage in game: if you want players to get x2 time, use "/ar multiplier 2".
 #If the server is restarted the multiplier is lost.
 
 leaderboard layout: '&6&r | &b&p - &7&d %day%, &h %hour% and &m %minute%.'

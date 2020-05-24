@@ -3,7 +3,6 @@ package me.armar.plugins.autorank.tasks;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.playtimes.PlayTimeManager;
 import me.armar.plugins.autorank.playtimes.UpdateTimePlayedTask;
-import me.armar.plugins.autorank.playtimes.UpdateRealTimePlayedTask;
 import me.armar.plugins.autorank.util.AutorankTools;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -32,19 +31,11 @@ public class TaskManager {
             return;
         }
 
-        BukkitTask task;
-
-        if(plugin.getSettingsConfig().useRealTime()){
-            task = plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin,
-                new UpdateRealTimePlayedTask(plugin, uuid)
-                , PlayTimeManager.INTERVAL_MINUTES * AutorankTools.TICKS_PER_MINUTE, PlayTimeManager
-                        .INTERVAL_MINUTES * AutorankTools.TICKS_PER_MINUTE);
-        }else{
-            task = plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin,
+        BukkitTask task = plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin,
                 new UpdateTimePlayedTask(plugin, uuid)
                 , PlayTimeManager.INTERVAL_MINUTES * AutorankTools.TICKS_PER_MINUTE, PlayTimeManager
                         .INTERVAL_MINUTES * AutorankTools.TICKS_PER_MINUTE);
-        }
+        
 
         // Store taskID so we can refer to it later.
         updatePlayTimeTaskIds.put(uuid, task.getTaskId());
