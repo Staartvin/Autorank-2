@@ -23,6 +23,7 @@ public class SQLConnection {
     private final String hostname;
     private final String password;
     private final String username;
+    private final String useSSL;
 
     private HikariDataSource dataSource = null;
 
@@ -33,12 +34,14 @@ public class SQLConnection {
      * @param username Username
      * @param password Password
      * @param database Database
+     * @param useSSL useSSL
      */
-    private SQLConnection(final String hostname, final String username, final String password, final String database) {
+    private SQLConnection(final String hostname, final String username, final String password, final String database, final String useSSL) {
         this.hostname = hostname;
         this.username = username;
         this.password = password;
         this.database = database;
+        this.useSSL = useSSL;
     }
 
     /**
@@ -52,8 +55,9 @@ public class SQLConnection {
             String username = configHandler.getMySQLSetting(SettingsConfig.MySQLSettings.USERNAME);
             String password = configHandler.getMySQLSetting(SettingsConfig.MySQLSettings.PASSWORD);
             String database = configHandler.getMySQLSetting(SettingsConfig.MySQLSettings.DATABASE);
+            String useSSL   = configHandler.getMySQLSetting(SettingsConfig.MySQLSettings.USESSL);
 
-            instance = new SQLConnection(hostname, username, password, database);
+            instance = new SQLConnection(hostname, username, password, database, useSSL);
         }
 
         return instance;
@@ -89,6 +93,8 @@ public class SQLConnection {
         config.addDataSourceProperty("useServerPrepStmts", "true");
         config.addDataSourceProperty("rewriteBatchedStatements", "true");
         config.addDataSourceProperty("maintainTimeStats", "false");
+        config.addDataSourceProperty("autoReconnect", "true");
+        config.addDataSourceProperty("useSSL", this.useSSL);
 
         config.setMaximumPoolSize(10);
         config.setMinimumIdle(10);

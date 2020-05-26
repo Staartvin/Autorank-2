@@ -33,6 +33,8 @@ public class SettingsConfig extends AbstractConfig {
                         .replace("%ip%", getPlugin().getServer().getIp())
                         .replace("%port%", getPlugin().getServer().getPort() + "")
                         .replace("%name%", getPlugin().getServer().getName());
+            case USESSL:
+            	return String.valueOf(this.getConfig().getBoolean("sql.usessl", false));
             default:
                 throw new IllegalArgumentException(option + " is not a valid MySQL settings option");
         }
@@ -143,7 +145,7 @@ public class SettingsConfig extends AbstractConfig {
      * database.
      */
     public enum MySQLSettings {
-        DATABASE, HOSTNAME, PASSWORD, SERVER_NAME, TABLE_PREFIX, USERNAME
+        DATABASE, HOSTNAME, PASSWORD, SERVER_NAME, TABLE_PREFIX, USERNAME, USESSL
     }
 
     /**
