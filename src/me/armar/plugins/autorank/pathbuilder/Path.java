@@ -747,23 +747,36 @@ public class Path {
      * @return true if the path is eligible for the given player.
      */
     public boolean isEligible(UUID uuid) {
+
+        plugin.debugMessage("Checking if '" + uuid + "' is eligible for path '" + this.getDisplayName() + "'.");
+
         // A path is not eligible when a player has already has it as active.
         if (isActive(uuid)) {
+            plugin.debugMessage("Path '" + this.getDisplayName() + "' is already active for '" + uuid + "'.");
             return false;
         }
 
         // If this path has a cooldown (and the player has not yet passed it), they are not allowed to join again.
         if (isOnCooldown(uuid)) {
+            plugin.debugMessage("Path '" + this.getDisplayName() + "' is on cooldown for '" + uuid + "'.");
             return false;
         }
 
         // If a path has been completed and cannot be repeated, the player cannot take this path again.
         if (this.hasCompletedPath(uuid) && !this.isRepeatable()) {
+            plugin.debugMessage("Path '" + this.getDisplayName() + "' is already completed for '" + uuid + "' and not" +
+                    " repeatable.");
             return false;
         }
 
         // If a path does not meet the prerequisites of a path, the player cannot take the path.
-        return this.meetsPrerequisites(uuid);
+        if (!this.meetsPrerequisites(uuid)) {
+            plugin.debugMessage("Player '" + uuid + "' does not meet all prerequisites of path '" + this.getDisplayName() + "'.");
+            return false;
+        }
+
+        plugin.debugMessage("Player '" + uuid + "' meets all prerequisites of path '" + this.getDisplayName() + "'.");
+        return true;
     }
 
     /**

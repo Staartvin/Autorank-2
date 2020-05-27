@@ -410,27 +410,38 @@ public class PathManager {
         List<Path> assignedPaths = new ArrayList<>();
 
         for (Path path : getAllPaths()) {
-            if (path.isEligible(uuid) && path.isAutomaticallyAssigned()) {
+            plugin.debugMessage("Trying to assign path " + path.getDisplayName() + " to " + uuid);
 
-                // If the path is deactivated, we will not automatically assign the path to the player again.
-                // If we did, the player would constantly need to deactivate the path again.
-                if (path.isDeactivated(uuid)) {
-                    continue;
-                }
-
-                assignPath(path, uuid, false);
-
-                Player onlinePlayer = Bukkit.getOfflinePlayer(uuid).getPlayer();
-
-                if (onlinePlayer != null) {
-                    plugin.debugMessage("Assigned " + path.getDisplayName() + " to " + onlinePlayer.getName());
-
-                    // Send message to player if they are online.
-                    onlinePlayer.sendMessage(Lang.AUTOMATICALLY_ASSIGNED_PATH.getConfigValue(path.getDisplayName()));
-                }
-
-                assignedPaths.add(path);
+            if (!path.isAutomaticallyAssigned()) {
+                plugin.debugMessage(String.format("Path %s is not automatically assigned", path.getDisplayName()));
+                continue;
             }
+
+            if (!path.isEligible(uuid)) {
+                plugin.debugMessage(String.format("Player '%s' is not eligible for path %s",
+                        uuid, path.getDisplayName()));
+                continue;
+            }
+
+            // If the path is deactivated, we will not automatically assign the path to the player again.
+            // If we did, the player would constantly need to deactivate the path again.
+            if (path.isDeactivated(uuid)) {
+                plugin.debugMessage(String.format("Path %s is deactivated", path.getDisplayName()));
+                continue;
+            }
+
+            assignPath(path, uuid, false);
+
+            Player onlinePlayer = Bukkit.getOfflinePlayer(uuid).getPlayer();
+
+            if (onlinePlayer != null) {
+                plugin.debugMessage("Assigned " + path.getDisplayName() + " to " + onlinePlayer.getName());
+
+                // Send message to player if they are online.
+                onlinePlayer.sendMessage(Lang.AUTOMATICALLY_ASSIGNED_PATH.getConfigValue(path.getDisplayName()));
+            }
+
+            assignedPaths.add(path);
         }
 
         return assignedPaths;
