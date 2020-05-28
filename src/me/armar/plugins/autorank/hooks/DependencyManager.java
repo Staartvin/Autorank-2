@@ -199,7 +199,7 @@ public class DependencyManager {
             return false;
         }
 
-        return hook.isAvailable() && LibraryHook.isPluginAvailable(library) && hook.isHooked();
+        return LibraryHook.isPluginAvailable(library) && hook.isHooked();
     }
 
     private boolean loadPluginLibrary() {
