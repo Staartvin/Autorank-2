@@ -17,6 +17,8 @@ public class WarningNoticeTask implements Runnable {
         // Get all players -> Check if they have a certain permission -> send
         // the most important warning
 
+        plugin.debugMessage("Run task to show warnings");
+
         // Show warnings in console!
         plugin.getWarningManager().sendWarnings(plugin.getServer().getConsoleSender());
 

@@ -78,6 +78,7 @@ public class LeaderboardHandler {
             plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
                 @Override
                 public void run() {
+                    plugin.debugMessage("Updating leaderboard because it's outdated");
                     updateLeaderboard(type);
 
                     // Send them afterwards, not at the same time.
@@ -266,6 +267,7 @@ public class LeaderboardHandler {
             plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
                 @Override
                 public void run() {
+                    plugin.debugMessage("Updating leaderboard because it's outdated");
                     updateLeaderboard(type);
 
                     // Send them afterwards, not at the same time.
@@ -311,6 +313,7 @@ public class LeaderboardHandler {
         plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
             @Override
             public void run() {
+                plugin.debugMessage("Updating all leaderboards forcefully");
                 for (final TimeType type : TimeType.values()) {
                     if (!shouldUpdateLeaderboard(type))
                         continue;

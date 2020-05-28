@@ -12,10 +12,10 @@ import java.util.UUID;
  */
 public class UpdateTimePlayedTask implements Runnable {
 
-    private Autorank plugin;
+    private final Autorank plugin;
 
     // UUID of player to keep track of.
-    private UUID uuid;
+    private final UUID uuid;
 
     public UpdateTimePlayedTask(Autorank instance, UUID uuid) {
         this.plugin = instance;
@@ -24,6 +24,8 @@ public class UpdateTimePlayedTask implements Runnable {
 
     @Override
     public void run() {
+
+        plugin.debugMessage("Run task to update play time of " + uuid);
 
         Player player = plugin.getServer().getPlayer(uuid);
 

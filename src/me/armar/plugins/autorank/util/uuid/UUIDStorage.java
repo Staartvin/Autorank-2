@@ -44,8 +44,13 @@ public class UUIDStorage {
         desFolder = plugin.getDataFolder() + "/uuids";
 
         // Run save task every 2 minutes
-        plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, this::saveAllFiles,
-                AutorankTools.TICKS_PER_MINUTE, AutorankTools.TICKS_PER_MINUTE * 2);
+        plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new Runnable() {
+            @Override
+            public void run() {
+                plugin.debugMessage("Periodically save all UUID files");
+                saveAllFiles();
+            }
+        }, AutorankTools.TICKS_PER_MINUTE, AutorankTools.TICKS_PER_MINUTE * 2);
     }
 
     public void loadStorageFiles() {
@@ -130,10 +135,11 @@ public class UUIDStorage {
     }
 
     private FileConfiguration getConfig(final String key) {
-        final FileConfiguration config = configs.get(key);
+        FileConfiguration config = configs.get(key);
 
         if (config == null) {
             this.reloadConfig(key);
+            config = configs.get(key);
         }
 
         return config;

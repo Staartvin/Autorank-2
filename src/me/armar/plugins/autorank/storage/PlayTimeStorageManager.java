@@ -321,6 +321,8 @@ public class PlayTimeStorageManager {
         plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
             LocalDate today = LocalDate.now();
 
+            plugin.debugMessage("Running check to see if data files are still up to date.");
+
             for (final TimeType type : TimeType.values()) {
                 // If data file is not outdated, leave it be.
                 if (!PlayTimeStorageManager.this.isDataFileOutdated(type)) {

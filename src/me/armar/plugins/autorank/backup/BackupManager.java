@@ -103,6 +103,9 @@ public class BackupManager {
         plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new Runnable() {
             @Override
             public void run() {
+
+                plugin.debugMessage("Running backup system to check if we need to backup the files.");
+
                 // Older than a day
                 if ((System.currentTimeMillis() - backupDataManager.getLatestBackup("storage")) > 1000 * 60 * 60 * 24
                     /* One day (in ms)*/) {

@@ -32,11 +32,22 @@ public class LocalPlayerDataStorage extends AbstractConfig implements PlayerData
 
         // Start requirement saver task
         // Run save task every 2 minutes
-        this.getPlugin().getServer().getScheduler().runTaskTimerAsynchronously(this.getPlugin(), this::saveConfig,
-                AutorankTools.TICKS_PER_SECOND * 30, AutorankTools.TICKS_PER_SECOND * 30);
+        this.getPlugin().getServer().getScheduler().runTaskTimerAsynchronously(this.getPlugin(),
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        getPlugin().debugMessage("Saving playerdata.yml file");
+                        saveConfig();
+                    }
+                }, AutorankTools.TICKS_PER_SECOND * 30, AutorankTools.TICKS_PER_SECOND * 30);
 
-        this.getPlugin().getServer().getScheduler().runTaskLaterAsynchronously(this.getPlugin(),
-                this::convertFormatToSupportMultiplePathsFormat, 20 * 10);
+        this.getPlugin().getServer().getScheduler().runTaskLaterAsynchronously(this.getPlugin(), new Runnable() {
+            @Override
+            public void run() {
+                getPlugin().debugMessage("Trying to convert paths file format (if it is outdated)");
+                convertFormatToSupportMultiplePathsFormat();
+            }
+        }, 20 * 10);
 
         // Load the config full of player data.
         this.loadConfig();
@@ -135,6 +146,8 @@ public class LocalPlayerDataStorage extends AbstractConfig implements PlayerData
             public void run() {
                 // Backup beforehand
                 getPlugin().getBackupManager().backupFile("/playerdata/playerdata.yml", null);
+
+                getPlugin().debugMessage("Trying to convert playernames to UUIDs");
 
                 for (final String name : getConfig().getKeys(false)) {
 

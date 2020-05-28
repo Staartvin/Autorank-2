@@ -364,8 +364,13 @@ public class FlatFileStorageProvider extends PlayTimeStorageProvider {
      */
     private void registerTasks() {
         // Run save task every 30 seconds
-        this.plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, this::saveData,
-                AutorankTools.TICKS_PER_SECOND, AutorankTools.TICKS_PER_MINUTE);
+        this.plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new Runnable() {
+            @Override
+            public void run() {
+                plugin.debugMessage("Periodically saving all flatfile storage files.");
+                saveData();
+            }
+        }, AutorankTools.TICKS_PER_SECOND, AutorankTools.TICKS_PER_MINUTE);
     }
 
     /**
