@@ -42,8 +42,6 @@ import me.armar.plugins.autorank.validations.ValidateHandler;
 import me.armar.plugins.autorank.warningmanager.WarningManager;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitTask;
-import org.bukkit.scheduler.BukkitWorker;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -130,21 +128,6 @@ public class Autorank extends JavaPlugin {
     @Override
     public void onDisable() {
 
-        System.out.println("Pending workers: " + this.getServer().getScheduler().getPendingTasks().size());
-
-        for (BukkitTask worker : this.getServer().getScheduler().getPendingTasks()) {
-            System.out.printf("Async task (%b) pending task %d from plugin %s%n", !worker.isSync(), worker.getTaskId(),
-                    worker.getOwner());
-        }
-
-        System.out.println("Active workers: " + this.getServer().getScheduler().getActiveWorkers().size());
-
-        for (BukkitWorker worker : this.getServer().getScheduler().getActiveWorkers()) {
-            System.out.printf("Active worker %d from plugin %s on thread %s%n", worker.getTaskId(), worker.getOwner(),
-                    worker.getThread());
-        }
-
-
         // Make sure all tasks are cancelled after shutdown. This seems obvious,
         // but when a player /reloads, the server creates an instance of the
         // plugin which causes duplicate tasks to run.
@@ -161,20 +144,6 @@ public class Autorank extends JavaPlugin {
         this.debugMessage("Saving storage files of UUIDs");
         if (getUUIDStorage() != null) {
             getUUIDStorage().saveAllFiles();
-        }
-
-        System.out.println("Pending workers: " + this.getServer().getScheduler().getPendingTasks().size());
-
-        for (BukkitTask worker : this.getServer().getScheduler().getPendingTasks()) {
-            System.out.printf("Async task (%b) pending task %d from plugin %s%n", !worker.isSync(), worker.getTaskId(),
-                    worker.getOwner());
-        }
-
-        System.out.println("Active workers: " + this.getServer().getScheduler().getActiveWorkers().size());
-
-        for (BukkitWorker worker : this.getServer().getScheduler().getActiveWorkers()) {
-            System.out.printf("Active worker %d from plugin %s on thread %s%n", worker.getTaskId(), worker.getOwner(),
-                    worker.getThread());
         }
 
         // ------------- Say bye-bye -------------
@@ -342,7 +311,6 @@ public class Autorank extends JavaPlugin {
                 // Only register the mysql storage provider if it is loaded.
                 if (loaded) {
                     debugMessage("Successfully loaded MySQL storage.");
-
 
                     // Register MySQL storage provider
                     getPlayTimeStorageManager().registerStorageProvider(mysqlStorageProvider);
