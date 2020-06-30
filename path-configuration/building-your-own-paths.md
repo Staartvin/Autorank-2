@@ -99,6 +99,10 @@ Now let's say we want players to be able to rank up to a new rank after the foll
 
 With your knowledge of paths, try to set it up using the path system! The answer is given below.
 
+{% hint style="success" %}
+The **&p** tag is used to indicate the player's name. Whenever it appears, Autorank will replace it with the corresponding name of the player.
+{% endhint %}
+
 {% tabs %}
 {% tab title="Newbie path" %}
 ```yaml
@@ -164,4 +168,143 @@ Elite Path:
 {% hint style="info" %}
 You can also combine time units in the **time** requirement. When you define '1d 1h', it's the same as '25h'.
 {% endhint %}
+
+When you're finished, the Paths file should look like this:
+
+```yaml
+Newbie Path:
+    prerequisites:
+        in group: 
+            value: 'Default' # Player is in the Default path to activate this path
+    requirements:
+        time: 
+            value: '2h'
+    results:
+        command: 
+            value: 'lp user &p parent set Newbie' # Set the player to Newbie rank
+
+Member Path:
+    prerequisites:
+        in group: 
+            value: 'Newbie'
+    requirements:
+        time: 
+            value: '1d'
+    results:
+        command: 
+            value: 'lp user &p parent set Member' # Set the player to Member rank
+
+Trusted Member Path:
+    prerequisites:
+        in group: 
+            value: 'Member'
+    requirements:
+        time: 
+            value: '7d' # 7 days is a week!
+    results:
+        command: 
+            value: 'lp user &p parent set Trusted Member'
+
+Elite Path:
+    prerequisites:
+        in group: 
+            value: 'Trusted Member'
+    requirements:
+        time: 
+            value: '365d' # 365 days is a year!
+    results:
+        command: 
+            value: 'lp user &p parent set Elite'
+```
+
+{% hint style="danger" %}
+If you're having trouble with Autorank recognizing your Paths file, make sure it is properly formatted. You can use [this tool](https://onlineyamltools.com/validate-yaml) to check whether your syntax is correct.
+{% endhint %}
+
+## Improvements to your paths
+
+Now that we've built our first path, we might want to improve it a bit. Let's look into a few improvements!
+
+### Multiple requirements
+
+Often you want players to fulfill more than one requirement to be able to complete a path. Let's take the example given above. You want a player to go from the Default rank to the Newbie rank when he's played for 2 hours **and** he's obtained at least 100 money. It's very easy to add additional requirements, see the example below.
+
+```yaml
+Newbie Path:
+    prerequisites:
+        in group: 
+            value: 'Default'
+    requirements:         # There are two requirements in this section
+        time: 
+            value: '2h'
+        money:
+            value: 100
+    results:
+        command: 
+            value: 'lp user &p parent set Newbie' 
+```
+
+### Multiple prerequisites
+
+Just like requirements, you can also use multiple prerequisites. Let's say we want a player to be in two groups at the same time before he is eligible for a path.
+
+```yaml
+Path with two prerequisites:
+    prerequisites:    # Player should be in the Default and Newbie group!
+        in group: 
+            value: 'Default'
+        in group2: 
+            value: 'Newbie'
+# Requirements and results are left out for brevity
+```
+
+{% hint style="warning" %}
+Whenever you want to use multiple of the same requirement \(or prerequisite\) you should give them a **unique name**, but still have the _type name._ The easiest way is to add a number at the end of the name, as Autorank will automatically remove the numbers. See the example above \(both prerequisites are of the type _in group_\).
+{% endhint %}
+
+### Run a result when activating a path
+
+Let's say you want to give the player something when they start a path; perhaps the path requires the player to walk a thousand blocks, so you surely want to give them some food before they embark on their long journey. To run results whenever a player activates a path, you'll need to add a new subsection to your path. See the example below.
+
+```yaml
+Travel across the world:
+    prerequisites:
+        in group:  # Only travellers can undertake such a long journey.
+            value: Travellers
+    upon choosing: # New section that performs results when the path is activated
+        command: 
+            value: "give &p bread 5" # Give the player some bread
+        message: 
+            value: "Good luck on your journey."
+    requirements:
+        blocks moved: 
+            value: 1000;0
+    results:
+        message:   # Tell the player they've done well.
+            value: "You've become a true traveller!"
+```
+
+{% hint style="info" %}
+The _upon choosing_ section can use the same results at the _results_ section; Autorank is smart enough to understand that these are just results performed at an earlier stage of the path.
+{% endhint %}
+
+The path will perform the results that are specified in the upon choosing section. Note that **the indentation matches that of the other sections**!
+
+### Set a different display name for a path
+
+Whenever a player activates a path or checks the progress on their path, they will have to use name of the path as specified in your Paths.yml file. If you want to show a different name, you should not adjust the name at the top of your paths declaration! If you do, Autorank will think that it is a completely new path \(and will kick players out of their current path\). Instead, you should add a display name to the path, like so:
+
+```yaml
+Very long and ugly path name: # DO NOT change this name
+    prerequisites:
+        # Some prerequisites here
+    requirements:
+        # Some requirements here
+    results:
+        # Some results here
+    options:
+        display name: "New path name" # Instead, add this to your path
+```
+
+The _options_ section is used to configure additional options for a path. Note that it has the same indentation as the other subsections!
 
