@@ -10,6 +10,7 @@
 ## Path Configuration
 
 * [Understanding the Paths system](path-configuration/untitled.md)
+* [Building your own Paths](path-configuration/building-your-own-paths.md)
 
 ## Configuration files
 
