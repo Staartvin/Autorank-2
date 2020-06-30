@@ -2,6 +2,7 @@ package me.armar.plugins.autorank.pathbuilder.result;
 
 import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.util.AutorankTools;
+import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 
@@ -20,7 +21,8 @@ public class CommandResult extends AbstractResult {
             // Run all commands using the console
             for (final String command : commands) {
                 final String cmd = command.replace("&p", player.getName());
-                server.dispatchCommand(server.getConsoleSender(), cmd);
+                Bukkit.getScheduler().callSyncMethod(this.getAutorank(),
+                        () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd));
             }
 
         }
