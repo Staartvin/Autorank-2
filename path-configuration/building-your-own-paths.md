@@ -105,7 +105,7 @@ With your knowledge of paths, try to set it up using the path system! The answer
 Newbie Path:
     prerequisites:
         in group: 
-            value: 'Default' # Players should be in the Default path to activate this path
+            value: 'Default' # Player is in the Default path to activate this path
     requirements:
         time: 
             value: '2h'
