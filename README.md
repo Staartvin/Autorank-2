@@ -7,7 +7,7 @@ description: >-
 
 # Home
 
-Use the sidebar on the left to navigate your way across this wiki!
+**Use the sidebar on the left to navigate your way across this wiki!**
 
 ## Features of Autorank
 
