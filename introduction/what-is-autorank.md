@@ -14,3 +14,5 @@ A player starts out as Guest. When he has played for more than 10 minutes and br
 
 To work with Autorank, you'll need to learn how to configure it. Internally, it works with 'paths'. Paths are a group of requirements that players need to complete. Once a path is completed, the player can be rewarded anything!
 
+Go to the next page to read more about how to configure Autorank!
+

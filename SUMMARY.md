@@ -7,13 +7,13 @@
 
 * [What is Autorank?](introduction/what-is-autorank.md)
 
+## Path Configuration
+
+* [Understanding the Paths system](path-configuration/untitled.md)
+
 ## Configuration files
 
 * [Untitled](configuration-files/untitled.md)
-
-## Path Configuration
-
-* [Untitled](path-configuration/untitled.md)
 
 ## Permissions & Commands
 
