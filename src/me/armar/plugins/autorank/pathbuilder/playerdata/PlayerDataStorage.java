@@ -287,6 +287,21 @@ public interface PlayerDataStorage {
      */
     Optional<Long> getTimeSinceCompletionOfPath(UUID uuid, String pathName);
 
+    /**
+     * Reset the progress of all paths of a player.
+     *
+     * @param uuid UUID of the player
+     */
+    void resetProgressOfAllPaths(UUID uuid);
+
+    /**
+     * Reset the progress of a path of a player
+     *
+     * @param uuid     UUID of the player
+     * @param pathName Path to reset the progress of.
+     */
+    void resetProgressOfPath(UUID uuid, String pathName);
+
     // --------- Completed paths where results are not performed yet ---------
 
     /**

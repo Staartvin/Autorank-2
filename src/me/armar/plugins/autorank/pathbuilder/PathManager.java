@@ -157,6 +157,16 @@ public class PathManager {
     }
 
     /**
+     * Reset the progress of all paths (active and completed) of a player. This method deletes all progress, while
+     * {@link #resetProgressOnActivePaths(UUID)} only removes progress on active paths.
+     *
+     * @param uuid UUID of the player
+     */
+    public void resetAllProgress(UUID uuid) {
+        plugin.getPlayerDataManager().getPrimaryDataStorage().ifPresent(s -> s.resetProgressOfAllPaths(uuid));
+    }
+
+    /**
      * Get the paths that a player has completed. A path has been completed when all requirements have been met by
      * the player. Note that completing a path does not mean that a player cannot do the path again, as some paths
      * are repeatable.

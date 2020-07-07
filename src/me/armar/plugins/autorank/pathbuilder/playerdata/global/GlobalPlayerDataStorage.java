@@ -338,6 +338,16 @@ public class GlobalPlayerDataStorage implements PlayerDataStorage {
     }
 
     @Override
+    public void resetProgressOfAllPaths(UUID uuid) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void resetProgressOfPath(UUID uuid, String pathName) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public Collection<String> getCompletedPathsWithMissingResults(UUID uuid) {
         throw new UnsupportedOperationException();
     }

@@ -366,6 +366,24 @@ public class LocalPlayerDataStorage extends AbstractConfig implements PlayerData
         return Optional.of((System.currentTimeMillis() - completionTime) / 60000);
     }
 
+    @Override
+    public void resetProgressOfAllPaths(UUID uuid) {
+        ConfigurationSection pathProgressSection = this.getProgressOnPathsSection(uuid);
+
+        for (String path : pathProgressSection.getKeys(false)) {
+            this.resetProgressOfPath(uuid, path);
+        }
+
+        saveConfig();
+    }
+
+    @Override
+    public void resetProgressOfPath(UUID uuid, String pathName) {
+        ConfigurationSection pathProgressSection = this.getProgressOnPathsSection(uuid);
+
+        pathProgressSection.set(pathName, null);
+    }
+
     // ------------ COMPLETED PATHS WHERE RESULTS ARE NOT PERFORMED YET ------------
 
 

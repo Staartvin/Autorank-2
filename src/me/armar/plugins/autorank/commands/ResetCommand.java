@@ -55,10 +55,10 @@ public class ResetCommand extends AutorankCommand {
                 return;
             }
 
-            if (resetType.equalsIgnoreCase(ResetConversationType.RESET_PROGRESS)) {
+            if (resetType.equalsIgnoreCase(ResetConversationType.RESET_ACTIVE_PROGRESS)) {
                 // Reset progress of active paths.
                 plugin.getPathManager().resetProgressOnActivePaths(uuid);
-                sender.sendMessage(ChatColor.GREEN + "Reset progress on all (active) paths of " + ChatColor.YELLOW +
+                sender.sendMessage(ChatColor.GREEN + "Reset progress on all active paths of " + ChatColor.YELLOW +
                         playerName);
             } else if (resetType.equalsIgnoreCase(ResetConversationType.RESET_ACTIVE_PATHS)) {
                 plugin.getPathManager().resetActivePaths(uuid);
@@ -66,6 +66,10 @@ public class ResetCommand extends AutorankCommand {
             } else if (resetType.equalsIgnoreCase(ResetConversationType.RESET_COMPLETED_PATHS)) {
                 plugin.getPathManager().resetCompletedPaths(uuid);
                 sender.sendMessage(ChatColor.GREEN + "Removed all completed paths of " + ChatColor.YELLOW + playerName);
+            } else if (resetType.equalsIgnoreCase(ResetConversationType.RESET_ALL_PROGRESS)) {
+                // Reset progress on all paths (even the completed ones)
+                plugin.getPathManager().resetAllProgress(uuid);
+                sender.sendMessage(ChatColor.GREEN + "Reset progress on all paths (active AND completed) of " + ChatColor.YELLOW + playerName);
             }
 
         });

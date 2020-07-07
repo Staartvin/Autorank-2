@@ -15,12 +15,13 @@ import org.jetbrains.annotations.Nullable;
 public class ResetConversationType extends FixedSetPrompt {
 
     public static String RESET_TYPE = "resetType";
-    public static String RESET_PROGRESS = "progress";
+    public static String RESET_ACTIVE_PROGRESS = "active progress";
+    public static String RESET_ALL_PROGRESS = "all progress";
     public static String RESET_COMPLETED_PATHS = "completed paths";
     public static String RESET_ACTIVE_PATHS = "active paths";
 
     public ResetConversationType() {
-        super(RESET_PROGRESS, RESET_COMPLETED_PATHS, RESET_ACTIVE_PATHS);
+        super(RESET_ACTIVE_PROGRESS, RESET_COMPLETED_PATHS, RESET_ACTIVE_PATHS, RESET_ALL_PROGRESS);
     }
 
     @Override
@@ -37,8 +38,10 @@ public class ResetConversationType extends FixedSetPrompt {
         } else if (s.equals(ResetConversationType.RESET_ACTIVE_PATHS)) {
             requestPlayerMessage = ChatColor.DARK_AQUA + "Of which player do you want to reset the " +
                     "active paths?";
+        } else if (s.equals(ResetConversationType.RESET_ALL_PROGRESS)) {
+            requestPlayerMessage = ChatColor.DARK_AQUA + "Of which player do you want to reset all progress?";
         } else {
-            requestPlayerMessage = ChatColor.DARK_AQUA + "Of which player do you want to reset the progress?";
+            requestPlayerMessage = ChatColor.DARK_AQUA + "Of which player do you want to reset the active progress?";
         }
 
         return new RequestPlayerNamePrompt(requestPlayerMessage, new ResetConfirmation());
@@ -66,8 +69,10 @@ class ResetConfirmation extends MessagePrompt {
             message = message.replace("%type%", "completed paths");
         } else if (resetType.equals(ResetConversationType.RESET_ACTIVE_PATHS)) {
             message = message.replace("%type%", "active paths");
+        } else if (resetType.equals(ResetConversationType.RESET_ALL_PROGRESS)) {
+            message = message.replace("%type%", "all progress");
         } else {
-            message = message.replace("%type%", "progress");
+            message = message.replace("%type%", "active progress");
         }
 
         return new ConfirmPrompt(message, new ConfirmPromptCallback() {
