@@ -105,14 +105,16 @@ public class InfoCommand extends AutorankCommand {
 
 
                 if (i == (activePaths.size() - 1)) {
-                    activePathsString.append(ChatColor.DARK_AQUA + activePaths.get(i).toString() + " (" + progressString +
-                            ChatColor.DARK_AQUA + "%)");
+                    activePathsString.append(ChatColor.DARK_AQUA).append(activePaths.get(i).toString())
+                            .append(" (").append(progressString).append(ChatColor.DARK_AQUA).append("%)");
                 } else if (i == (activePaths.size() - 2)) {
                     // Second last
-                    activePathsString.append(ChatColor.DARK_AQUA + activePaths.get(i).toString() + " (" + progressString + ChatColor.DARK_AQUA + "%)" + " and ");
+                    activePathsString.append(ChatColor.DARK_AQUA).append(activePaths.get(i).toString())
+                            .append(" (").append(progressString).append(ChatColor.DARK_AQUA).append("%)").append(" " +
+                            "and ");
                 } else {
-                    activePathsString.append(ChatColor.DARK_AQUA + activePaths.get(i).toString() + " (" + progressString + ChatColor.DARK_AQUA +
-                            "%), ");
+                    activePathsString.append(ChatColor.DARK_AQUA).append(activePaths.get(i).toString())
+                            .append(" (").append(progressString).append(ChatColor.DARK_AQUA).append("%), ");
                 }
             }
 
@@ -151,6 +153,8 @@ public class InfoCommand extends AutorankCommand {
                     (globalTotalTime <= 0 ? "none" : AutorankTools.timeToString(globalTotalTime, TimeUnit.MINUTES)));
 
         });
+
+        this.runCommandTask(task);
 
         return true;
     }

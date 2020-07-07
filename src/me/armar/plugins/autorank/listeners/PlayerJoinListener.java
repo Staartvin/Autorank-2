@@ -32,14 +32,13 @@ public class PlayerJoinListener implements Listener {
     public void onPlayerJoin(final PlayerJoinEvent event) {
         final Player player = event.getPlayer();
 
-        // Refresh uuid of the player if it is outdated
-        if (plugin.getUUIDStorage().isOutdated(player.getName())) {
-            try {
-                plugin.getUUIDStorage().storeUUID(player.getName(), player.getUniqueId()).get();
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
-            }
+        // Refresh uuid of the player
+        try {
+            plugin.getUUIDStorage().storeUUID(player.getName(), player.getUniqueId()).get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
         }
+
 
         // Save whether this player is exempted from the leaderboard.
         plugin.getPlayerChecker().doOfflineExemptionChecks(player);

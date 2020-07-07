@@ -28,8 +28,6 @@ import java.util.logging.Level;
  */
 public class UUIDStorage {
 
-    // Expiration date in hours
-    private static final int expirationDate = 24;
     private final HashMap<String, File> configFiles = new HashMap<String, File>();
     private final HashMap<String, FileConfiguration> configs = new HashMap<String, FileConfiguration>();
     private final String desFolder;
@@ -170,7 +168,7 @@ public class UUIDStorage {
 
         final long difference = System.currentTimeMillis() - lastUpdateTime;
 
-        return Math.round(difference / 3600000);
+        return Math.round(difference / 3600000f);
     }
 
     /**
@@ -282,12 +280,8 @@ public class UUIDStorage {
      * @return true if the playername is outdated, false otherwise.
      */
     public boolean isOutdated(String playerName) {
-
-        // Everything is now stored in lowercase.
-        playerName = playerName.toLowerCase();
-
-        final int time = getLastUpdateTime(playerName);
-        return (time > expirationDate || time < 0);
+        // Assume that the UUID can always be updated when needed, so it is always out of date.
+        return true;
     }
 
     public void loadConfig(final String key) {
@@ -356,6 +350,7 @@ public class UUIDStorage {
 
             // Don't look them up.
             if (!isOutdated(lowerCasePlayerName)) {
+                plugin.debugMessage("Do not store " + playerName + " because it's not outdated.");
                 return true;
             }
 
@@ -375,6 +370,8 @@ public class UUIDStorage {
                     if (oldUser.equalsIgnoreCase(lowerCasePlayerName)) {
                         // Don't do anything besides updating updateTime.
                         config.set(lowerCasePlayerName + ".updateTime", System.currentTimeMillis());
+
+                        plugin.debugMessage("Already stored " + oldUser + ", so only updating time.");
 
                         return true; // Do not do anything else.
                     }
