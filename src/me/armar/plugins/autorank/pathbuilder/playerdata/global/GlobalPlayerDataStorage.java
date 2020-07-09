@@ -129,13 +129,22 @@ public class GlobalPlayerDataStorage implements PlayerDataStorage {
     }
 
     private void updateCacheFromRemote() {
-        ResultSet resultSet =
+        Optional<ResultSet> resultSet =
                 getConnection().executeQuery("SELECT * FROM " + tablePlayerdataStorageCompletedPaths + " ORDER BY" +
                         " uuid");
 
+        if (!resultSet.isPresent()) {
+            plugin.debugMessage("Could not update cache of global player data storage because the connection is not " +
+                    "valid.");
+            return;
+        }
+
+        ResultSet result = resultSet.get();
+
         while (true) {
+
             try {
-                if (!resultSet.next()) break;
+                if (!result.next()) break;
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -144,9 +153,9 @@ public class GlobalPlayerDataStorage implements PlayerDataStorage {
             UUID uuid = null;
 
             try {
-                serverName = resultSet.getString("server_name");
-                uuid = UUID.fromString(resultSet.getString("uuid"));
-                completedPath = resultSet.getString("completed_path");
+                serverName = result.getString("server_name");
+                uuid = UUID.fromString(result.getString("uuid"));
+                completedPath = result.getString("completed_path");
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -160,7 +169,7 @@ public class GlobalPlayerDataStorage implements PlayerDataStorage {
             cachedPlayerData.addCachedEntry(completedPath, serverName);
         }
 
-        getConnection().close(null, null, resultSet);
+        getConnection().close(null, null, result);
     }
 
     @Override

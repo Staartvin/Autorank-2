@@ -2,6 +2,7 @@ package me.armar.plugins.autorank.storage.mysql;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 
@@ -38,15 +39,15 @@ public class GrabPlayerTimeTask implements Callable<Integer> {
         int time = -1;
 
         final String statement = "SELECT * FROM " + table + " WHERE uuid='" + uuid.toString() + "'";
-        final ResultSet rs = mysql.executeQuery(statement);
+        final Optional<ResultSet> rs = mysql.executeQuery(statement);
 
-        if (rs == null)
+        if (!rs.isPresent())
             return time;
 
         try {
-            if (rs.next()) {
-                time = rs.getInt(2);
-                rs.close();
+            if (rs.get().next()) {
+                time = rs.get().getInt(2);
+                rs.get().close();
             } else {
                 return time;
             }

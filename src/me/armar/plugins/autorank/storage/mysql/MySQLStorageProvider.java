@@ -30,10 +30,10 @@ public class MySQLStorageProvider extends PlayTimeStorageProvider {
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     // Store table names for different time types
     private final Map<TimeType, String> tableNames = new HashMap<>();
-    // Use library to handle connections to MySQL database.
-    private SQLConnection mysqlLibrary;
     // Use a cache manager to store the cached values.
     private final CacheManager cacheManager = new CacheManager();
+    // Use library to handle connections to MySQL database.
+    private SQLConnection mysqlLibrary;
     private boolean isLoaded = false;
 
     public MySQLStorageProvider(Autorank instance) {
@@ -221,14 +221,14 @@ public class MySQLStorageProvider extends PlayTimeStorageProvider {
 
             String statement = "SELECT COUNT(uuid) FROM " + tableName;
 
-            ResultSet rs = mysqlLibrary.executeQuery(statement);
+            Optional<ResultSet> rs = mysqlLibrary.executeQuery(statement);
 
-            if (rs == null)
+            if (!rs.isPresent())
                 return 0;
 
             try {
-                if (rs.next()) {
-                    return rs.getInt(1);
+                if (rs.get().next()) {
+                    return rs.get().getInt(1);
                 }
 
             } catch (final SQLException e) {
@@ -249,16 +249,16 @@ public class MySQLStorageProvider extends PlayTimeStorageProvider {
 
         String statement = "SELECT uuid FROM " + tableName;
 
-        ResultSet rs = mysqlLibrary.executeQuery(statement);
+        Optional<ResultSet> rs = mysqlLibrary.executeQuery(statement);
 
-        if (rs == null)
+        if (!rs.isPresent())
             return uuids;
 
         try {
 
             // Loop over all rows to get all UUIDs.
-            while (rs.next()) {
-                String uuidString = rs.getString("uuid");
+            while (rs.get().next()) {
+                String uuidString = rs.get().getString("uuid");
 
                 uuids.add(UUID.fromString(uuidString));
             }
@@ -320,10 +320,13 @@ public class MySQLStorageProvider extends PlayTimeStorageProvider {
 
         List<String> tablesToDelete = new ArrayList<>();
 
-        try (ResultSet resultSet =
-                     mysqlLibrary.executeQuery("SHOW TABLES;")) {
+        Optional<ResultSet> optionalResultSet = mysqlLibrary.executeQuery("SHOW TABLES;");
 
-            while (resultSet != null && resultSet.next()) {
+        if (!optionalResultSet.isPresent()) return 0;
+
+        try (ResultSet resultSet = optionalResultSet.get()) {
+
+            while (resultSet.next()) {
                 // Read all tables and delete the ones that are not needed.
 
                 String tableName = resultSet.getString(1);
@@ -446,10 +449,11 @@ public class MySQLStorageProvider extends PlayTimeStorageProvider {
 
             final String statement = "SELECT * FROM " + tableName + " WHERE uuid='" + uuid.toString() + "'";
 
-            try (ResultSet rs = this.mysqlLibrary.executeQuery(statement)) {
+            Optional<ResultSet> optionalResultSet = this.mysqlLibrary.executeQuery(statement);
 
-                if (rs == null)
-                    return time;
+            if (!optionalResultSet.isPresent()) return time;
+
+            try (ResultSet rs = optionalResultSet.get()) {
 
                 if (rs.next()) {
                     time = rs.getInt(2);

@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
+import java.util.Optional;
 
 /**
  * This class is used to create a connection between the MySQL database and
@@ -105,7 +106,8 @@ public class SQLConnection {
 
         try {
             this.dataSource = new HikariDataSource(config);
-            return true;
+
+            return isConnected();
         } catch (Exception e) {
             return false;
         }
@@ -121,7 +123,10 @@ public class SQLConnection {
 
         PreparedStatement stmt = null;
 
-        try (Connection connection = this.getConnection()) {
+        // Do not run a query when we have no connection.
+        if (!isConnected()) return;
+
+        try (Connection connection = this.getConnection().get()) {
 
             stmt = connection.prepareStatement(sql);
             stmt.executeUpdate();
@@ -154,16 +159,23 @@ public class SQLConnection {
      * Execute a query and returns a ResultSet. Query cannot be null.
      *
      * @param sql Query to execute
-     * @return ResultSet if successfully performed, null if an error occured.
+     * @return ResultSet if successfully performed, empty if no connection could be made or query did not perform
+     * correctly.
      */
-    public ResultSet executeQuery(final String sql) {
+    public Optional<ResultSet> executeQuery(final String sql) {
         ResultSet rs = null;
         PreparedStatement stmt = null;
 
-        try (Connection connection = this.getConnection()) {
+        if (!isConnected()) {
+            return Optional.empty();
+        }
+
+        try (Connection connection = this.getConnection().get()) {
 
             stmt = connection.prepareStatement(sql);
             rs = stmt.executeQuery();
+
+            return Optional.of(rs);
 
         } catch (final SQLException ex) {
             System.out.println("SQLDataStorage.execute");
@@ -172,7 +184,7 @@ public class SQLConnection {
             System.out.println("VendorError: " + ex.getErrorCode());
         }
 
-        return rs;
+        return Optional.empty();
     }
 
     /**
@@ -185,8 +197,55 @@ public class SQLConnection {
         return dataSource.isClosed();
     }
 
-    public Connection getConnection() throws SQLException {
-        return dataSource.getConnection();
+    /**
+     * Get the connection to be used to execute queries.
+     * Note that this method will not return a connection when it's not valid. Please make sure to check before using
+     * the connection.
+     *
+     * @return Connection object if there is a connection, or nothing if there is no connection.
+     */
+    public Optional<Connection> getConnection() {
+
+        try {
+            Connection connection = dataSource.getConnection();
+
+            if (connection == null) return Optional.empty();
+
+            if (connection.isValid(5)) {
+                return Optional.of(connection);
+            } else {
+                connection.close();
+                return Optional.empty();
+            }
+        } catch (SQLException throwables) {
+            return Optional.empty();
+        }
+    }
+
+    /**
+     * Check whether a connection is made to the database.
+     *
+     * @return true if the connection is made and valid, false otherwise.
+     */
+    public boolean isConnected() {
+
+        // Obtain connection
+        Optional<Connection> connection = getConnection();
+
+        // Check if it is valid
+        boolean isValid = connection.isPresent();
+
+        // Close connection if it is present
+        connection.ifPresent(c -> {
+            try {
+                c.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
+
+        // Return whether we retrieved a connection.
+        return isValid;
     }
 
     public void close(Connection conn, PreparedStatement ps, ResultSet res) {
