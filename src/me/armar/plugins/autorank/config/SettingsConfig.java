@@ -27,7 +27,7 @@ public class SettingsConfig extends AbstractConfig {
             case DATABASE:
                 return this.getConfig().getString("sql.database");
             case TABLE_PREFIX:
-                return this.getConfig().getString("sql.table prefix");
+                return this.getConfig().getString("sql.table prefix", "");
             case SERVER_NAME:
                 return this.getConfig().getString("sql.server name", "")
                         .replace("%ip%", getPlugin().getServer().getIp())
