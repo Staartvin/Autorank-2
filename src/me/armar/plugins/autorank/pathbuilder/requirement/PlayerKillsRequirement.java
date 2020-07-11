@@ -1,9 +1,6 @@
 package me.armar.plugins.autorank.pathbuilder.requirement;
 
 import me.armar.plugins.autorank.language.Lang;
-import me.armar.plugins.autorank.statsmanager.StatsPlugin;
-import me.armar.plugins.autorank.statsmanager.query.StatisticQuery;
-import me.armar.plugins.autorank.statsmanager.query.parameter.ParameterType;
 
 import java.util.UUID;
 
@@ -25,8 +22,7 @@ public class PlayerKillsRequirement extends AbstractRequirement {
 
     @Override
     public String getProgressString(UUID uuid) {
-        final int killed = getStatsPlugin().getNormalStat(StatsPlugin.StatType.PLAYERS_KILLED, uuid,
-                StatisticQuery.makeStatisticQuery(ParameterType.WORLD.getKey(), this.getWorld()));
+        final int killed = this.getStatsPlugin().getPlayersKilled(uuid, this.getWorld());
 
         return killed + "/" + totalPlayersKilled + " player(s)";
     }
@@ -36,8 +32,7 @@ public class PlayerKillsRequirement extends AbstractRequirement {
         if (!getStatsPlugin().isEnabled())
             return false;
 
-        final int killed = getStatsPlugin().getNormalStat(StatsPlugin.StatType.PLAYERS_KILLED, uuid,
-                StatisticQuery.makeStatisticQuery(ParameterType.WORLD.getKey(), this.getWorld()));
+        final int killed = this.getStatsPlugin().getPlayersKilled(uuid, this.getWorld());
 
         return killed >= totalPlayersKilled;
     }
@@ -61,8 +56,7 @@ public class PlayerKillsRequirement extends AbstractRequirement {
 
     @Override
     public double getProgressPercentage(UUID uuid) {
-        final int killed = getStatsPlugin().getNormalStat(StatsPlugin.StatType.PLAYERS_KILLED, uuid,
-                StatisticQuery.makeStatisticQuery(ParameterType.WORLD.getKey(), this.getWorld()));
+        final int killed = this.getStatsPlugin().getPlayersKilled(uuid, this.getWorld());
 
         return killed * 1.0d / this.totalPlayersKilled;
     }

@@ -3,8 +3,6 @@ package me.armar.plugins.autorank.commands;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.commands.manager.AutorankCommand;
 import me.armar.plugins.autorank.permissions.AutorankPermission;
-import me.armar.plugins.autorank.statsmanager.StatsPlugin;
-import me.armar.plugins.autorank.statsmanager.query.StatisticQuery;
 import me.armar.plugins.autorank.storage.TimeType;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -44,15 +42,14 @@ public class SyncStatsCommand extends AutorankCommand {
             final OfflinePlayer p = plugin.getServer().getOfflinePlayer(uuid);
 
             // Time is stored in seconds
-            final int statsPlayTime = plugin.getHookedStatsPlugin().getNormalStat(StatsPlugin.StatType.TIME_PLAYED,
-                    p.getUniqueId(), StatisticQuery.makeStatisticQuery());
+            final int statsPlayTime = plugin.getHookedStatsPlugin().getTimePlayed(uuid, null);
 
             if (statsPlayTime <= 0) {
                 continue;
             }
 
             // Update time
-            plugin.getPlayTimeStorageManager().setPlayerTime(TimeType.TOTAL_TIME, uuid, Math.round(statsPlayTime / 60));
+            plugin.getPlayTimeStorageManager().setPlayerTime(TimeType.TOTAL_TIME, uuid, statsPlayTime);
 
             // Increment count
             count++;

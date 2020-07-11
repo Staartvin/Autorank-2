@@ -1,9 +1,6 @@
 package me.armar.plugins.autorank.pathbuilder.requirement;
 
 import me.armar.plugins.autorank.language.Lang;
-import me.armar.plugins.autorank.statsmanager.StatsPlugin;
-import me.armar.plugins.autorank.statsmanager.query.StatisticQuery;
-import me.armar.plugins.autorank.statsmanager.query.parameter.ParameterType;
 
 import java.util.UUID;
 
@@ -26,8 +23,7 @@ public class ItemsCraftedRequirement extends AbstractRequirement {
 
     @Override
     public String getProgressString(UUID uuid) {
-        final int progressBar = this.getStatsPlugin().getNormalStat(StatsPlugin.StatType.ITEMS_CRAFTED,
-                uuid, StatisticQuery.makeStatisticQuery(ParameterType.WORLD.getKey(), this.getWorld()));
+        final int progressBar = this.getStatsPlugin().getItemsCrafted(uuid, this.getWorld(), null);
 
         return progressBar + "/" + itemsCrafted;
     }
@@ -38,8 +34,7 @@ public class ItemsCraftedRequirement extends AbstractRequirement {
         if (!getStatsPlugin().isEnabled())
             return false;
 
-        final int realItemsCrafted = this.getStatsPlugin().getNormalStat(StatsPlugin.StatType.ITEMS_CRAFTED,
-                uuid, StatisticQuery.makeStatisticQuery(ParameterType.WORLD.getKey(), this.getWorld()));
+        final int realItemsCrafted = this.getStatsPlugin().getItemsCrafted(uuid, this.getWorld(), null);
 
         return realItemsCrafted >= itemsCrafted;
     }
@@ -63,8 +58,7 @@ public class ItemsCraftedRequirement extends AbstractRequirement {
 
     @Override
     public double getProgressPercentage(UUID uuid) {
-        final int progressBar = this.getStatsPlugin().getNormalStat(StatsPlugin.StatType.ITEMS_CRAFTED,
-                uuid, StatisticQuery.makeStatisticQuery(ParameterType.WORLD.getKey(), this.getWorld()));
+        final int progressBar = this.getStatsPlugin().getItemsCrafted(uuid, this.getWorld(), null);
 
         return progressBar * 1.0d / this.itemsCrafted;
     }

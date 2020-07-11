@@ -1,9 +1,6 @@
 package me.armar.plugins.autorank.pathbuilder.requirement;
 
 import me.armar.plugins.autorank.language.Lang;
-import me.armar.plugins.autorank.statsmanager.StatsPlugin;
-import me.armar.plugins.autorank.statsmanager.query.StatisticQuery;
-import me.armar.plugins.autorank.statsmanager.query.parameter.ParameterType;
 import me.armar.plugins.autorank.statsmanager.query.parameter.implementation.MovementTypeParameter;
 
 import java.util.UUID;
@@ -29,10 +26,7 @@ public class BlocksMovedRequirement extends AbstractRequirement {
     @Override
     public String getProgressString(UUID uuid) {
 
-        final int progressBar = getStatsPlugin().getNormalStat(StatsPlugin.StatType.BLOCKS_MOVED,
-                uuid,
-                StatisticQuery.makeStatisticQuery(ParameterType.WORLD.getKey(), this.getWorld(),
-                        ParameterType.MOVEMENT_TYPE.getKey(), wrapper.getRawMovementType()));
+        final int progressBar = this.getStatsPlugin().getBlocksMoved(uuid, this.getWorld());
 
         return progressBar + "/" + wrapper.getBlocksMoved() + " (" + wrapper.getMovementType() + ")";
     }
@@ -44,9 +38,7 @@ public class BlocksMovedRequirement extends AbstractRequirement {
             return false;
         }
 
-        final int count = getStatsPlugin().getNormalStat(StatsPlugin.StatType.BLOCKS_MOVED, uuid,
-                StatisticQuery.makeStatisticQuery(ParameterType.WORLD.getKey(), this.getWorld(),
-                        ParameterType.MOVEMENT_TYPE.getKey(), wrapper.getRawMovementType()));
+        final int count = this.getStatsPlugin().getBlocksMoved(uuid, this.getWorld());
 
         return count >= wrapper.getBlocksMoved();
     }
@@ -76,10 +68,7 @@ public class BlocksMovedRequirement extends AbstractRequirement {
 
     @Override
     public double getProgressPercentage(UUID uuid) {
-        final int progressBar = getStatsPlugin().getNormalStat(StatsPlugin.StatType.BLOCKS_MOVED,
-                uuid,
-                StatisticQuery.makeStatisticQuery(ParameterType.WORLD.getKey(), this.getWorld(),
-                        ParameterType.MOVEMENT_TYPE.getKey(), wrapper.getRawMovementType()));
+        final int progressBar = this.getStatsPlugin().getBlocksMoved(uuid, this.getWorld());
 
         return progressBar * 1.0d / wrapper.getBlocksMoved();
     }

@@ -1,9 +1,6 @@
 package me.armar.plugins.autorank.pathbuilder.requirement;
 
 import me.armar.plugins.autorank.language.Lang;
-import me.armar.plugins.autorank.statsmanager.StatsPlugin;
-import me.armar.plugins.autorank.statsmanager.query.StatisticQuery;
-import me.armar.plugins.autorank.statsmanager.query.parameter.ParameterType;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -48,13 +45,9 @@ public class BlocksBrokenRequirement extends AbstractRequirement {
 
         if (wrapper.getItem() == null) {
             // No material was given, so only check the number of blocks broken.
-            progress = getStatsPlugin().getNormalStat(StatsPlugin.StatType.TOTAL_BLOCKS_BROKEN, uuid,
-                    StatisticQuery.makeStatisticQuery(ParameterType.WORLD.getKey(), this.getWorld()));
+            progress = this.getStatsPlugin().getBlocksBroken(uuid, this.getWorld(), null);
         } else {
-            progress = getStatsPlugin().getNormalStat(StatsPlugin.StatType.BLOCKS_BROKEN, uuid,
-                    StatisticQuery.makeStatisticQuery(ParameterType.WORLD.getKey(), this.getWorld(),
-                            ParameterType.BLOCK_TYPE.getKey(), wrapper.getItem().getType()
-                                    .name()));
+            progress = this.getStatsPlugin().getBlocksBroken(uuid, this.getWorld(), wrapper.getItem().getType());
         }
 
         return progress + "/" + wrapper.getBlocksBroken();
@@ -69,13 +62,9 @@ public class BlocksBrokenRequirement extends AbstractRequirement {
 
         if (wrapper.getItem() == null) {
             // No material was given, so only check the number of blocks broken.
-            progress = getStatsPlugin().getNormalStat(StatsPlugin.StatType.TOTAL_BLOCKS_BROKEN, uuid,
-                    StatisticQuery.makeStatisticQuery(ParameterType.WORLD.getKey(), this.getWorld()));
+            progress = this.getStatsPlugin().getBlocksBroken(uuid, this.getWorld(), null);
         } else {
-            progress = getStatsPlugin().getNormalStat(StatsPlugin.StatType.BLOCKS_BROKEN, uuid,
-                    StatisticQuery.makeStatisticQuery(ParameterType.WORLD.getKey(), this.getWorld(),
-                            ParameterType.BLOCK_TYPE.getKey(), wrapper.getItem().getType()
-                                    .name()));
+            progress = this.getStatsPlugin().getBlocksBroken(uuid, this.getWorld(), wrapper.getItem().getType());
         }
 
         return progress >= wrapper.getBlocksBroken();
@@ -145,13 +134,9 @@ public class BlocksBrokenRequirement extends AbstractRequirement {
 
         if (wrapper.getItem() == null) {
             // No material was given, so only check the number of blocks broken.
-            progress = getStatsPlugin().getNormalStat(StatsPlugin.StatType.TOTAL_BLOCKS_BROKEN, uuid,
-                    StatisticQuery.makeStatisticQuery(ParameterType.WORLD.getKey(), this.getWorld()));
+            progress = this.getStatsPlugin().getBlocksBroken(uuid, this.getWorld(), null);
         } else {
-            progress = getStatsPlugin().getNormalStat(StatsPlugin.StatType.BLOCKS_BROKEN, uuid,
-                    StatisticQuery.makeStatisticQuery(ParameterType.WORLD.getKey(), this.getWorld(),
-                            ParameterType.BLOCK_TYPE.getKey(), wrapper.getItem().getType()
-                                    .name()));
+            progress = this.getStatsPlugin().getBlocksBroken(uuid, this.getWorld(), wrapper.getItem().getType());
         }
 
         return progress * 1.0d / wrapper.getBlocksBroken();

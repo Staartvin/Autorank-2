@@ -1,9 +1,6 @@
 package me.armar.plugins.autorank.pathbuilder.requirement;
 
 import me.armar.plugins.autorank.language.Lang;
-import me.armar.plugins.autorank.statsmanager.StatsPlugin;
-import me.armar.plugins.autorank.statsmanager.query.StatisticQuery;
-import me.armar.plugins.autorank.statsmanager.query.parameter.ParameterType;
 
 import java.util.UUID;
 
@@ -26,8 +23,7 @@ public class DamageTakenRequirement extends AbstractRequirement {
 
     @Override
     public String getProgressString(UUID uuid) {
-        final int damTaken = getStatsPlugin().getNormalStat(StatsPlugin.StatType.DAMAGE_TAKEN, uuid,
-                StatisticQuery.makeStatisticQuery(ParameterType.WORLD.getKey(), this.getWorld()));
+        final int damTaken = this.getStatsPlugin().getDamageTaken(uuid, this.getWorld());
 
         return damTaken + "/" + damageTaken;
     }
@@ -38,8 +34,7 @@ public class DamageTakenRequirement extends AbstractRequirement {
         if (!getStatsPlugin().isEnabled())
             return false;
 
-        final int damTaken = getStatsPlugin().getNormalStat(StatsPlugin.StatType.DAMAGE_TAKEN, uuid,
-                StatisticQuery.makeStatisticQuery(ParameterType.WORLD.getKey(), this.getWorld()));
+        final int damTaken = this.getStatsPlugin().getDamageTaken(uuid, this.getWorld());
 
         return damTaken >= damageTaken;
     }
@@ -63,8 +58,7 @@ public class DamageTakenRequirement extends AbstractRequirement {
 
     @Override
     public double getProgressPercentage(UUID uuid) {
-        final int damTaken = getStatsPlugin().getNormalStat(StatsPlugin.StatType.DAMAGE_TAKEN, uuid,
-                StatisticQuery.makeStatisticQuery(ParameterType.WORLD.getKey(), this.getWorld()));
+        final int damTaken = this.getStatsPlugin().getDamageTaken(uuid, this.getWorld());
 
         return damTaken * 1.0d / this.damageTaken;
     }

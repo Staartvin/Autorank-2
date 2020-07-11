@@ -1,9 +1,6 @@
 package me.armar.plugins.autorank.pathbuilder.requirement;
 
 import me.armar.plugins.autorank.language.Lang;
-import me.armar.plugins.autorank.statsmanager.StatsPlugin;
-import me.armar.plugins.autorank.statsmanager.query.StatisticQuery;
-import me.armar.plugins.autorank.statsmanager.query.parameter.ParameterType;
 
 import java.util.UUID;
 
@@ -25,8 +22,7 @@ public class TimesShearedRequirement extends AbstractRequirement {
 
     @Override
     public String getProgressString(UUID uuid) {
-        final int progressBar = this.getStatsPlugin().getNormalStat(StatsPlugin.StatType.TIMES_SHEARED,
-                uuid, StatisticQuery.makeStatisticQuery(ParameterType.WORLD.getKey(), this.getWorld()));
+        final int progressBar = this.getStatsPlugin().getSheepShorn(uuid, this.getWorld());
 
         return progressBar + "/" + timesShorn;
     }
@@ -36,8 +32,7 @@ public class TimesShearedRequirement extends AbstractRequirement {
         if (!getStatsPlugin().isEnabled())
             return false;
 
-        return this.getStatsPlugin().getNormalStat(StatsPlugin.StatType.TIMES_SHEARED, uuid,
-                StatisticQuery.makeStatisticQuery(ParameterType.WORLD.getKey(), this.getWorld())) >= timesShorn;
+        return this.getStatsPlugin().getSheepShorn(uuid, this.getWorld()) >= timesShorn;
     }
 
     @Override
@@ -61,7 +56,6 @@ public class TimesShearedRequirement extends AbstractRequirement {
 
     @Override
     public double getProgressPercentage(UUID uuid) {
-        return this.getStatsPlugin().getNormalStat(StatsPlugin.StatType.TIMES_SHEARED, uuid,
-                StatisticQuery.makeStatisticQuery(ParameterType.WORLD.getKey(), this.getWorld())) * 1.0d / timesShorn;
+        return this.getStatsPlugin().getSheepShorn(uuid, this.getWorld()) * 1.0d / timesShorn;
     }
 }
