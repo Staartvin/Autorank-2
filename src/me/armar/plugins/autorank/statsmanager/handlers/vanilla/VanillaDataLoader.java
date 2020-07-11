@@ -177,7 +177,8 @@ public class VanillaDataLoader {
 
         if (player == null) return 0;
 
-        return player.getStatistic(Statistic.PLAY_ONE_MINUTE);
+        // Despite it being called 'minute', it's actually in ticks.
+        return (int) (player.getStatistic(Statistic.PLAY_ONE_MINUTE) / 20.0d / 60);
     }
 
     public int getTimesShearsUsed(UUID uuid) {
