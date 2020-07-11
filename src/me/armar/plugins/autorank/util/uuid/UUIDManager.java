@@ -26,7 +26,7 @@ public class UUIDManager {
     //    private static Map<UUID, String> playerNameCache = new HashMap<UUID, String>(); // Store names that were
     //    looked up
 //    private static Map<String, UUID> uuidCache = new HashMap<String, UUID>(); // Store UUIDs that were looked up.
-    private static Autorank plugin;
+    private static final Autorank plugin;
 
     static {
         plugin = (Autorank) Bukkit.getPluginManager().getPlugin("Autorank");
@@ -120,7 +120,7 @@ public class UUIDManager {
             //uuidCache.putAll(cachedData);
 
             // Store retrieved data in UUID storage so we can re-use it.
-            cachedData.forEach((key, value) -> plugin.getUUIDStorage().storeUUID(value, key));
+//            cachedData.forEach((key, value) -> plugin.getUUIDStorage().storeUUID(value, key));
 
             return cachedData;
         });
@@ -215,7 +215,7 @@ public class UUIDManager {
             //uuidCache.putAll(cachedData);
 
             // Store retrieved data in UUID storage so we can re-use it.
-            cachedData.forEach((key, value) -> plugin.getUUIDStorage().storeUUID(key, value));
+//            cachedData.forEach((key, value) -> plugin.getUUIDStorage().storeUUID(key, value));
 
             return cachedData;
         });
