@@ -4,7 +4,6 @@ import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.armar.plugins.autorank.statsmanager.query.StatisticQuery;
 import me.armar.plugins.autorank.statsmanager.query.parameter.ParameterType;
-import me.staartvin.utils.pluginlibrary.Library;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -81,10 +80,6 @@ public class FoodEatenRequirement extends AbstractRequirement {
 
     @Override
     public boolean initRequirement(final String[] options) {
-
-        // Add dependency
-        addDependency(Library.STATZ);
-
         final int total = Integer.parseInt(options[0]);
         String foodType = "";
 

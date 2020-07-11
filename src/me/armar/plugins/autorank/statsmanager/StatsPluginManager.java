@@ -3,9 +3,9 @@ package me.armar.plugins.autorank.statsmanager;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.DependencyManager.AutorankDependency;
 import me.armar.plugins.autorank.hooks.statzapi.StatzAPIHandler;
-import me.armar.plugins.autorank.statsmanager.handlers.FallbackHandler;
 import me.armar.plugins.autorank.statsmanager.handlers.StatsHandler;
 import me.armar.plugins.autorank.statsmanager.handlers.StatzHandler;
+import me.armar.plugins.autorank.statsmanager.handlers.vanilla.VanillaHandler;
 import me.staartvin.utils.pluginlibrary.Library;
 import me.staartvin.utils.pluginlibrary.hooks.StatsHook;
 import org.bukkit.Bukkit;
@@ -82,9 +82,9 @@ public class StatsPluginManager {
             plugin.getLogger().info("Hooked into Statz (by Staartvin)");
         } else {
             // Use dummy handler if no stats plugin was found
-            statsPlugin = new FallbackHandler();
+            statsPlugin = new VanillaHandler(plugin);
 
-            plugin.getLogger().info("No stats plugin found! Most requirements cannot be used!");
+            plugin.getLogger().info("No stats plugin found! Using statistics of vanilla Minecraft!");
 
         }
     }

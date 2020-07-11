@@ -5,7 +5,6 @@ import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.armar.plugins.autorank.statsmanager.query.StatisticQuery;
 import me.armar.plugins.autorank.statsmanager.query.parameter.ParameterType;
 import me.armar.plugins.autorank.statsmanager.query.parameter.implementation.MovementTypeParameter;
-import me.staartvin.utils.pluginlibrary.Library;
 
 import java.util.UUID;
 
@@ -54,9 +53,6 @@ public class BlocksMovedRequirement extends AbstractRequirement {
 
     @Override
     public boolean initRequirement(final String[] options) {
-
-        // Add dependency
-        addDependency(Library.STATZ);
 
         int blocksMoved = 0;
         int movementType = 0;

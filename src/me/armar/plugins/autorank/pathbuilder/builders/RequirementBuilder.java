@@ -125,7 +125,8 @@ public class RequirementBuilder {
         if (requirementType == null) {
             Autorank.getInstance().getWarningManager()
                     .registerWarning(String.format(
-                            "You are using a '%s' requirement in path '%s', but that requirement doesn't exist!", originalReqType,
+                            "You are using a '%s' requirement in path '%s', but that requirement doesn't exist!",
+                            originalReqType,
                             pathName), 10);
             return this;
         }
@@ -170,7 +171,8 @@ public class RequirementBuilder {
             return this;
         }
 
-        String dependencyNotFoundMessage = "Requirement '%s' relies on a third-party plugin being installed, but that plugin is not installed!";
+        String dependencyNotFoundMessage = "Requirement '%s' relies on a third-party plugin being installed, but that" +
+                " plugin is not installed!";
         try {
             // Initialize the result with options.
             if (!requirement.initRequirement(options)) {
@@ -190,13 +192,15 @@ public class RequirementBuilder {
             }
         } catch (NoClassDefFoundError e) {
             Autorank.getInstance().getServer().getConsoleSender().sendMessage(ChatColor.RED + String.format(dependencyNotFoundMessage, requirementType));
-            Autorank.getInstance().getWarningManager().registerWarning(String.format(dependencyNotFoundMessage, requirementType), 10);
+            Autorank.getInstance().getWarningManager().registerWarning(String.format(dependencyNotFoundMessage,
+                    requirementType), 10);
             return this;
         }
 
 
         // Set whether requirement is optional or not.
-        requirement.setOptional(Autorank.getInstance().getPathsConfig().isOptionalRequirement(pathName, requirementType, isPreRequisite));
+        requirement.setOptional(Autorank.getInstance().getPathsConfig().isOptionalRequirement(pathName,
+                requirementType, isPreRequisite));
 
         // Set whether this requirement is a prerequisite
         requirement.setPreRequisite(isPreRequisite);
@@ -206,7 +210,8 @@ public class RequirementBuilder {
         for (String resultType : Autorank.getInstance().getPathsConfig().getResultsOfRequirement(pathName,
                 requirementType, isPreRequisite)) {
             AbstractResult abstractResult = ResultBuilder.createResult(pathName, resultType,
-                    Autorank.getInstance().getPathsConfig().getResultOfRequirement(pathName, requirementType, resultType, isPreRequisite));
+                    Autorank.getInstance().getPathsConfig().getResultOfRequirement(pathName, requirementType,
+                            resultType, isPreRequisite));
 
             if (abstractResult == null) {
                 continue;
@@ -219,7 +224,8 @@ public class RequirementBuilder {
         requirement.setAbstractResults(abstractResultList);
 
         // Set whether this requirement should auto complete.
-        requirement.setAutoComplete(Autorank.getInstance().getPathsConfig().useAutoCompletion(pathName, requirementType, isPreRequisite));
+        requirement.setAutoComplete(Autorank.getInstance().getPathsConfig().useAutoCompletion(pathName,
+                requirementType, isPreRequisite));
 
         int requirementId = Autorank.getInstance().getPathsConfig().getRequirementId(pathName, requirementType,
                 isPreRequisite);
@@ -281,8 +287,8 @@ public class RequirementBuilder {
      */
     public AbstractRequirement finish() throws IllegalStateException {
         if (!isValid || requirement == null) {
-            throw new IllegalStateException("Result '" + requirementType + "' of '" + pathName + "' was not valid" +
-                    " and could not be finished.");
+            throw new IllegalStateException("Requirement '" + requirementType + "' of '" + pathName + "' was not " +
+                    "valid and could not be finished.");
         }
 
         return requirement;

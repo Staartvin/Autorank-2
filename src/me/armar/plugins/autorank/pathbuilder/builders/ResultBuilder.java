@@ -25,10 +25,6 @@ public class ResultBuilder {
     // Extra metadata for the associated abstractResult.
     private String pathName, resultName, originalResultString;
 
-    public final Autorank getAutorank() {
-        return Autorank.getInstance();
-    }
-
     /**
      * Add a new type of AbstractResult that can be used in the Paths.yml file.
      *
@@ -94,9 +90,12 @@ public class ResultBuilder {
         }
 
         // Get abstractResult of ResultBuilder.
-        final AbstractResult abstractResult = builder.finish();
 
-        return abstractResult;
+        return builder.finish();
+    }
+
+    public final Autorank getAutorank() {
+        return Autorank.getInstance();
     }
 
     /**
@@ -183,8 +182,7 @@ public class ResultBuilder {
     public AbstractResult finish() throws IllegalStateException {
         if (!isValid || abstractResult == null) {
             throw new IllegalStateException("Result '" + originalResultString + "' of '" + pathName + "' was not " +
-                    "valid" +
-                    " and could not be finished.");
+                    "valid and could not be finished.");
         }
 
         return abstractResult;

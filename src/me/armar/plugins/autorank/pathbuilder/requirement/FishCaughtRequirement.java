@@ -4,7 +4,6 @@ import me.armar.plugins.autorank.language.Lang;
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
 import me.armar.plugins.autorank.statsmanager.query.StatisticQuery;
 import me.armar.plugins.autorank.statsmanager.query.parameter.ParameterType;
-import me.staartvin.utils.pluginlibrary.Library;
 
 import java.util.UUID;
 
@@ -47,9 +46,6 @@ public class FishCaughtRequirement extends AbstractRequirement {
 
     @Override
     public boolean initRequirement(final String[] options) {
-
-        // Add dependency
-        addDependency(Library.STATZ);
 
         try {
             fishCaught = Integer.parseInt(options[0]);
