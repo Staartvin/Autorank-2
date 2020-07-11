@@ -98,12 +98,6 @@ public class StatzAPIHandler extends DependencyHandler {
             case TIMES_SHEARED:
                 value = statz.getStatzAPI().getSpecificData(PlayerStat.TIMES_SHORN, uuid, conditions);
                 break;
-            case TOTAL_BLOCKS_BROKEN:
-                value = statz.getStatzAPI().getSpecificData(PlayerStat.BLOCKS_BROKEN, uuid, conditions);
-                break;
-            case TOTAL_BLOCKS_PLACED:
-                value = statz.getStatzAPI().getSpecificData(PlayerStat.BLOCKS_PLACED, uuid, conditions);
-                break;
             case FOOD_EATEN:
                 value = statz.getStatzAPI().getSpecificData(PlayerStat.FOOD_EATEN, uuid, conditions);
                 break;

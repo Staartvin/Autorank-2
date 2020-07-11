@@ -1,7 +1,8 @@
 package me.armar.plugins.autorank.statsmanager.handlers;
 
 import me.armar.plugins.autorank.statsmanager.StatsPlugin;
-import me.armar.plugins.autorank.statsmanager.query.StatisticQuery;
+import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
 
 import java.util.UUID;
 
@@ -14,7 +15,62 @@ import java.util.UUID;
 public class FallbackHandler extends StatsPlugin {
 
     @Override
-    public int getNormalStat(StatType statType, UUID uuid, StatisticQuery query) {
+    public int getBlocksBroken(UUID uuid, String worldName, Material block) throws UnsupportedOperationException {
+        return 0;
+    }
+
+    @Override
+    public int getBlocksMoved(UUID uuid, String worldName) throws UnsupportedOperationException {
+        return 0;
+    }
+
+    @Override
+    public int getBlocksPlaced(UUID uuid, String worldName, Material block) throws UnsupportedOperationException {
+        return 0;
+    }
+
+    @Override
+    public int getDamageTaken(UUID uuid, String worldName) throws UnsupportedOperationException {
+        return 0;
+    }
+
+    @Override
+    public int getFishCaught(UUID uuid, String worldName) throws UnsupportedOperationException {
+        return 0;
+    }
+
+    @Override
+    public int getFoodEaten(UUID uuid, String worldName, Material food) throws UnsupportedOperationException {
+        return 0;
+    }
+
+    @Override
+    public int getItemsCrafted(UUID uuid, String worldName, Material item) throws UnsupportedOperationException {
+        return 0;
+    }
+
+    @Override
+    public int getMobsKilled(UUID uuid, String worldName, EntityType mob) throws UnsupportedOperationException {
+        return 0;
+    }
+
+    @Override
+    public int getPlayersKilled(UUID uuid, String worldName) throws UnsupportedOperationException {
+        return 0;
+    }
+
+    @Override
+    public int getTimePlayed(UUID uuid, String worldName) throws UnsupportedOperationException {
+        return 0;
+    }
+
+    @Override
+    public int getSheepShorn(UUID uuid, String worldName) throws UnsupportedOperationException {
+        return 0;
+    }
+
+    @Override
+    public int getTimesVoted(UUID uuid) throws UnsupportedOperationException {
         return 0;
     }
 

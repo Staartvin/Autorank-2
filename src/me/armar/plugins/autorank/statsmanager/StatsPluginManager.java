@@ -3,11 +3,8 @@ package me.armar.plugins.autorank.statsmanager;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.DependencyManager.AutorankDependency;
 import me.armar.plugins.autorank.hooks.statzapi.StatzAPIHandler;
-import me.armar.plugins.autorank.statsmanager.handlers.StatsHandler;
 import me.armar.plugins.autorank.statsmanager.handlers.StatzHandler;
 import me.armar.plugins.autorank.statsmanager.handlers.vanilla.VanillaHandler;
-import me.staartvin.utils.pluginlibrary.Library;
-import me.staartvin.utils.pluginlibrary.hooks.StatsHook;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
@@ -42,27 +39,7 @@ public class StatsPluginManager {
     }
 
     public void searchStatsPlugin() {
-        if (isPluginAvailable("Stats")) {
-
-            plugin.getLogger().info("Found Stats plugin: Stats (by Lolmewn)");
-
-            statsPlugin = new StatsHandler(plugin,
-                    (StatsHook) plugin.getDependencyManager().getLibraryHook(Library.STATS));
-
-            if (statsPlugin == null) {
-                plugin.getLogger().info("Couldn't hook into Stats! StatsHandler was unable to hook.");
-                return;
-            }
-
-            if (!statsPlugin.isEnabled()) {
-                plugin.getLogger().info(
-                        "Couldn't hook into Stats! Make sure the version is correct and Stats properly connects to " +
-                                "your MySQL database.");
-                return;
-            }
-
-            plugin.getLogger().info("Hooked into Stats (by Lolmewn)");
-        } else if (isPluginAvailable("Statz")) {
+        if (isPluginAvailable("Statz")) {
 
             plugin.getLogger().info("Found Statz plugin: Statz (by Staartvin)");
 
@@ -81,7 +58,7 @@ public class StatsPluginManager {
 
             plugin.getLogger().info("Hooked into Statz (by Staartvin)");
         } else {
-            // Use dummy handler if no stats plugin was found
+            // Use statistics of vanilla MC.
             statsPlugin = new VanillaHandler(plugin);
 
             plugin.getLogger().info("No stats plugin found! Using statistics of vanilla Minecraft!");
