@@ -24,19 +24,14 @@ public class TotalVotesRequirement extends AbstractRequirement {
 
     @Override
     public String getProgressString(UUID uuid) {
-        final int votes = this.getStatsPlugin().getTimesVoted(uuid);
+        final int votes = this.getStatisticsManager().getTimesVoted(uuid);
 
         return votes + "/" + totalVotes;
     }
 
     @Override
     protected boolean meetsRequirement(UUID uuid) {
-        if (!getStatsPlugin().isEnabled())
-            return false;
-
-        final int votes = this.getStatsPlugin().getTimesVoted(uuid);
-
-        return votes >= totalVotes;
+        return this.getStatisticsManager().getTimesVoted(uuid) >= totalVotes;
     }
 
     @Override
@@ -63,7 +58,7 @@ public class TotalVotesRequirement extends AbstractRequirement {
 
     @Override
     public double getProgressPercentage(UUID uuid) {
-        final int votes = this.getStatsPlugin().getTimesVoted(uuid);
+        final int votes = this.getStatisticsManager().getTimesVoted(uuid);
 
         return votes * 1.0d / totalVotes;
     }

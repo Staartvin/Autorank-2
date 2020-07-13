@@ -40,11 +40,11 @@ public class MobKillsRequirement extends AbstractRequirement {
         try {
             type = EntityType.valueOf(this.mobType);
         } catch (Exception e) {
-            killed = this.getStatsPlugin().getMobsKilled(uuid, this.getWorld(), null);
+            killed = this.getStatisticsManager().getMobsKilled(uuid, this.getWorld(), null);
         }
 
         if (type != null) {
-            killed = this.getStatsPlugin().getMobsKilled(uuid, this.getWorld(), type);
+            killed = this.getStatisticsManager().getMobsKilled(uuid, this.getWorld(), type);
         }
 
         String entityType = mobType;
@@ -59,9 +59,6 @@ public class MobKillsRequirement extends AbstractRequirement {
     @Override
     protected boolean meetsRequirement(UUID uuid) {
 
-        if (!this.getStatsPlugin().isEnabled())
-            return false;
-
         EntityType type = null;
 
         int killed = 0;
@@ -69,11 +66,11 @@ public class MobKillsRequirement extends AbstractRequirement {
         try {
             type = EntityType.valueOf(this.mobType);
         } catch (Exception e) {
-            killed = this.getStatsPlugin().getMobsKilled(uuid, this.getWorld(), null);
+            killed = this.getStatisticsManager().getMobsKilled(uuid, this.getWorld(), null);
         }
 
         if (type != null) {
-            killed = this.getStatsPlugin().getMobsKilled(uuid, this.getWorld(), type);
+            killed = this.getStatisticsManager().getMobsKilled(uuid, this.getWorld(), type);
         }
 
         return killed >= totalMobsKilled;
@@ -116,11 +113,11 @@ public class MobKillsRequirement extends AbstractRequirement {
         try {
             type = EntityType.valueOf(this.mobType);
         } catch (Exception e) {
-            killed = this.getStatsPlugin().getMobsKilled(uuid, this.getWorld(), null);
+            killed = this.getStatisticsManager().getMobsKilled(uuid, this.getWorld(), null);
         }
 
         if (type != null) {
-            killed = this.getStatsPlugin().getMobsKilled(uuid, this.getWorld(), type);
+            killed = this.getStatisticsManager().getMobsKilled(uuid, this.getWorld(), type);
         }
 
         return killed * 1.0d / this.totalMobsKilled;

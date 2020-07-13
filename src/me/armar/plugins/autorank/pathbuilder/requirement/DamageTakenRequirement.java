@@ -23,20 +23,14 @@ public class DamageTakenRequirement extends AbstractRequirement {
 
     @Override
     public String getProgressString(UUID uuid) {
-        final int damTaken = this.getStatsPlugin().getDamageTaken(uuid, this.getWorld());
+        final int damTaken = this.getStatisticsManager().getDamageTaken(uuid, this.getWorld());
 
         return damTaken + "/" + damageTaken;
     }
 
     @Override
     protected boolean meetsRequirement(UUID uuid) {
-
-        if (!getStatsPlugin().isEnabled())
-            return false;
-
-        final int damTaken = this.getStatsPlugin().getDamageTaken(uuid, this.getWorld());
-
-        return damTaken >= damageTaken;
+        return this.getStatisticsManager().getDamageTaken(uuid, this.getWorld()) >= damageTaken;
     }
 
     @Override
@@ -58,7 +52,7 @@ public class DamageTakenRequirement extends AbstractRequirement {
 
     @Override
     public double getProgressPercentage(UUID uuid) {
-        final int damTaken = this.getStatsPlugin().getDamageTaken(uuid, this.getWorld());
+        final int damTaken = this.getStatisticsManager().getDamageTaken(uuid, this.getWorld());
 
         return damTaken * 1.0d / this.damageTaken;
     }

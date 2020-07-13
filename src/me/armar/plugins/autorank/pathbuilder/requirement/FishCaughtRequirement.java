@@ -23,20 +23,14 @@ public class FishCaughtRequirement extends AbstractRequirement {
 
     @Override
     public String getProgressString(UUID uuid) {
-        final int progressBar = this.getStatsPlugin().getFishCaught(uuid, this.getWorld());
+        final int progressBar = this.getStatisticsManager().getFishCaught(uuid, this.getWorld());
 
         return progressBar + "/" + fishCaught;
     }
 
     @Override
     protected boolean meetsRequirement(UUID uuid) {
-
-        if (!getStatsPlugin().isEnabled())
-            return false;
-
-        final int fish = this.getStatsPlugin().getFishCaught(uuid, this.getWorld());
-
-        return fish >= fishCaught;
+        return this.getStatisticsManager().getFishCaught(uuid, this.getWorld()) >= fishCaught;
     }
 
     @Override
@@ -59,7 +53,7 @@ public class FishCaughtRequirement extends AbstractRequirement {
 
     @Override
     public double getProgressPercentage(UUID uuid) {
-        final int progressBar = this.getStatsPlugin().getFishCaught(uuid, this.getWorld());
+        final int progressBar = this.getStatisticsManager().getFishCaught(uuid, this.getWorld());
 
         return progressBar * 1.0d / this.fishCaught;
     }

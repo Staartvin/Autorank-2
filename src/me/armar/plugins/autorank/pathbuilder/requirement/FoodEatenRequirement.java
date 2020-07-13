@@ -44,11 +44,11 @@ public class FoodEatenRequirement extends AbstractRequirement {
         int totalFoodEaten = 0;
 
         if (foodType != null) {
-            totalFoodEaten = this.getStatsPlugin().getFoodEaten(uuid, this.getWorld(),
+            totalFoodEaten = this.getStatisticsManager().getFoodEaten(uuid, this.getWorld(),
                     Material.getMaterial(foodType));
             foodType = foodType.toLowerCase();
         } else {
-            totalFoodEaten = this.getStatsPlugin().getFoodEaten(uuid, this.getWorld(),
+            totalFoodEaten = this.getStatisticsManager().getFoodEaten(uuid, this.getWorld(),
                     null);
             foodType = "food";
         }
@@ -60,19 +60,16 @@ public class FoodEatenRequirement extends AbstractRequirement {
 
     @Override
     protected boolean meetsRequirement(UUID uuid) {
-
-        if (!this.getStatsPlugin().isEnabled())
-            return false;
-
         final int amount = foodEaten.getAmount();
         final String foodType = foodEaten.getFoodName();
 
         int totalFoodEaten = 0;
 
         if (foodType == null) {
-            totalFoodEaten = this.getStatsPlugin().getFoodEaten(uuid, this.getWorld(), null);
+            totalFoodEaten = this.getStatisticsManager().getFoodEaten(uuid, this.getWorld(), null);
         } else {
-            totalFoodEaten = this.getStatsPlugin().getFoodEaten(uuid, this.getWorld(), Material.getMaterial(foodType));
+            totalFoodEaten = this.getStatisticsManager().getFoodEaten(uuid, this.getWorld(),
+                    Material.getMaterial(foodType));
         }
 
         return totalFoodEaten >= amount;
@@ -106,9 +103,9 @@ public class FoodEatenRequirement extends AbstractRequirement {
         String foodType = foodEaten.getFoodName();
 
         if (foodType == null) {
-            totalFoodEaten = this.getStatsPlugin().getFoodEaten(uuid, this.getWorld(), null);
+            totalFoodEaten = this.getStatisticsManager().getFoodEaten(uuid, this.getWorld(), null);
         } else {
-            totalFoodEaten = this.getStatsPlugin().getFoodEaten(uuid, this.getWorld(), Material.getMaterial(foodType));
+            totalFoodEaten = this.getStatisticsManager().getFoodEaten(uuid, this.getWorld(), Material.getMaterial(foodType));
         }
 
         return totalFoodEaten * 1.0d / foodEaten.getAmount();

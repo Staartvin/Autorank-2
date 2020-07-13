@@ -45,9 +45,9 @@ public class BlocksPlacedRequirement extends AbstractRequirement {
 
         if (wrapper.getItem() == null) {
             // No material was given, so only check the number of blocks broken.
-            progress = this.getStatsPlugin().getBlocksPlaced(uuid, this.getWorld(), null);
+            progress = this.getStatisticsManager().getBlocksPlaced(uuid, this.getWorld(), null);
         } else {
-            progress = this.getStatsPlugin().getBlocksPlaced(uuid, this.getWorld(), wrapper.getItem().getType());
+            progress = this.getStatisticsManager().getBlocksPlaced(uuid, this.getWorld(), wrapper.getItem().getType());
         }
 
         return progress + "/" + wrapper.getBlocksPlaced();
@@ -55,16 +55,13 @@ public class BlocksPlacedRequirement extends AbstractRequirement {
 
     @Override
     protected boolean meetsRequirement(UUID uuid) {
-        if (!getStatsPlugin().isEnabled())
-            return false;
-
         int progress = 0;
 
         if (wrapper.getItem() == null) {
             // No material was given, so only check the number of blocks broken.
-            progress = this.getStatsPlugin().getBlocksPlaced(uuid, this.getWorld(), null);
+            progress = this.getStatisticsManager().getBlocksPlaced(uuid, this.getWorld(), null);
         } else {
-            progress = this.getStatsPlugin().getBlocksPlaced(uuid, this.getWorld(), wrapper.getItem().getType());
+            progress = this.getStatisticsManager().getBlocksPlaced(uuid, this.getWorld(), wrapper.getItem().getType());
         }
 
         return progress >= wrapper.getBlocksPlaced();
@@ -134,9 +131,9 @@ public class BlocksPlacedRequirement extends AbstractRequirement {
 
         if (wrapper.getItem() == null) {
             // No material was given, so only check the number of blocks broken.
-            progress = this.getStatsPlugin().getBlocksPlaced(uuid, this.getWorld(), null);
+            progress = this.getStatisticsManager().getBlocksPlaced(uuid, this.getWorld(), null);
         } else {
-            progress = this.getStatsPlugin().getBlocksPlaced(uuid, this.getWorld(), wrapper.getItem().getType());
+            progress = this.getStatisticsManager().getBlocksPlaced(uuid, this.getWorld(), wrapper.getItem().getType());
         }
 
         return progress * 1.0d / wrapper.getBlocksPlaced();

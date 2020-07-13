@@ -4,7 +4,7 @@ import io.reactivex.annotations.NonNull;
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.DependencyManager;
 import me.armar.plugins.autorank.pathbuilder.result.AbstractResult;
-import me.armar.plugins.autorank.statsmanager.StatsPlugin;
+import me.armar.plugins.autorank.statsmanager.StatisticsManager;
 import me.staartvin.utils.pluginlibrary.Library;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -125,8 +125,8 @@ public abstract class AbstractRequirement {
      *
      * @return stats plugin that Autorank uses for stat storage
      */
-    public StatsPlugin getStatsPlugin() {
-        return getAutorank().getHookedStatsPlugin();
+    public StatisticsManager getStatisticsManager() {
+        return getAutorank().getStatisticsManager();
     }
 
     /**

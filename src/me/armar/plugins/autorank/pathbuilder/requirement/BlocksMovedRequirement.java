@@ -26,21 +26,14 @@ public class BlocksMovedRequirement extends AbstractRequirement {
     @Override
     public String getProgressString(UUID uuid) {
 
-        final int progressBar = this.getStatsPlugin().getBlocksMoved(uuid, this.getWorld());
+        final int progressBar = this.getStatisticsManager().getBlocksMoved(uuid, this.getWorld());
 
         return progressBar + "/" + wrapper.getBlocksMoved() + " (" + wrapper.getMovementType() + ")";
     }
 
     @Override
     protected boolean meetsRequirement(UUID uuid) {
-
-        if (!getStatsPlugin().isEnabled()) {
-            return false;
-        }
-
-        final int count = this.getStatsPlugin().getBlocksMoved(uuid, this.getWorld());
-
-        return count >= wrapper.getBlocksMoved();
+        return this.getStatisticsManager().getBlocksMoved(uuid, this.getWorld()) >= wrapper.getBlocksMoved();
     }
 
     @Override
@@ -68,7 +61,7 @@ public class BlocksMovedRequirement extends AbstractRequirement {
 
     @Override
     public double getProgressPercentage(UUID uuid) {
-        final int progressBar = this.getStatsPlugin().getBlocksMoved(uuid, this.getWorld());
+        final int progressBar = this.getStatisticsManager().getBlocksMoved(uuid, this.getWorld());
 
         return progressBar * 1.0d / wrapper.getBlocksMoved();
     }

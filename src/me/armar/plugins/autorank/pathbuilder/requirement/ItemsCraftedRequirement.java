@@ -23,20 +23,14 @@ public class ItemsCraftedRequirement extends AbstractRequirement {
 
     @Override
     public String getProgressString(UUID uuid) {
-        final int progressBar = this.getStatsPlugin().getItemsCrafted(uuid, this.getWorld(), null);
+        final int progressBar = this.getStatisticsManager().getItemsCrafted(uuid, this.getWorld(), null);
 
         return progressBar + "/" + itemsCrafted;
     }
 
     @Override
     protected boolean meetsRequirement(UUID uuid) {
-
-        if (!getStatsPlugin().isEnabled())
-            return false;
-
-        final int realItemsCrafted = this.getStatsPlugin().getItemsCrafted(uuid, this.getWorld(), null);
-
-        return realItemsCrafted >= itemsCrafted;
+        return this.getStatisticsManager().getItemsCrafted(uuid, this.getWorld(), null) >= itemsCrafted;
     }
 
     @Override
@@ -58,7 +52,7 @@ public class ItemsCraftedRequirement extends AbstractRequirement {
 
     @Override
     public double getProgressPercentage(UUID uuid) {
-        final int progressBar = this.getStatsPlugin().getItemsCrafted(uuid, this.getWorld(), null);
+        final int progressBar = this.getStatisticsManager().getItemsCrafted(uuid, this.getWorld(), null);
 
         return progressBar * 1.0d / this.itemsCrafted;
     }
