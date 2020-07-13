@@ -582,6 +582,30 @@ public enum Lang {
      * Have at least level {0} in {1}.
      */
     MCRPG_SKILL_LEVEL_REQUIREMENT("Have at least level {0} in {1}"),
+    /**
+     * Breed at least {0} animals
+     */
+    ANIMALS_BRED_REQUIREMENT("Breed at least {0} animals"),
+    /**
+     * Eat at least {0} slices of cake
+     */
+    CAKESLICES_EATEN_REQUIREMENT("Eat at least {0} slices of cake"),
+    /**
+     * Enchant at least {0} items
+     */
+    ITEMS_ENCHANTED_REQUIREMENT("Enchant at least {0} items"),
+    /**
+     * Die at least {0} times
+     */
+    TIMES_DIED_REQUIREMENT("Die at least {0} times"),
+    /**
+     * Pot at least {0} plants
+     */
+    PLANTS_POTTED_REQUIREMENT("Pot at least {0} plants"),
+    /**
+     * Trade at least {0} with villagers
+     */
+    TIMES_TRADED_WITH_VILLAGERS_REQUIREMENT("Trade at least {0} with villagers"),
     ;
 
     private static FileConfiguration LANG;

@@ -28,11 +28,6 @@ public class SyncStatsCommand extends AutorankCommand {
         if (!this.hasPermission(AutorankPermission.SYNC_STATS_DATA, sender))
             return true;
 
-        if (!plugin.getHookedStatsPlugin().isEnabled()) {
-            sender.sendMessage(ChatColor.RED + "Stats is not enabled!");
-            return true;
-        }
-
         int count = 0;
 
         // Sync playtime of every player
@@ -41,8 +36,8 @@ public class SyncStatsCommand extends AutorankCommand {
 
             final OfflinePlayer p = plugin.getServer().getOfflinePlayer(uuid);
 
-            // Time is stored in seconds
-            final int statsPlayTime = plugin.getHookedStatsPlugin().getTimePlayed(uuid, null);
+            // Time is stored in minutes
+            final int statsPlayTime = plugin.getStatisticsManager().getTimePlayed(uuid, null);
 
             if (statsPlayTime <= 0) {
                 continue;

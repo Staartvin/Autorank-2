@@ -143,6 +143,60 @@ public abstract class StatsPlugin {
     public abstract int getTimesVoted(UUID uuid) throws UnsupportedOperationException;
 
     /**
+     * Get the number of animals a player has bred.
+     *
+     * @param uuid UUID of the player
+     * @return number of animals bred
+     * @throws UnsupportedOperationException When this statistic is not supported by this statistics plugin.
+     */
+    public abstract int getAnimalsBred(UUID uuid) throws UnsupportedOperationException;
+
+    /**
+     * Get the number of cake slices a player has eaten
+     *
+     * @param uuid UUID of the player
+     * @return number of cake slices added
+     * @throws UnsupportedOperationException When this statistic is not supported by this statistics plugin.
+     */
+    public abstract int getCakeSlicesEaten(UUID uuid) throws UnsupportedOperationException;
+
+    /**
+     * Get the number of items that a player has enchanted
+     *
+     * @param uuid UUID of the player
+     * @return number of enchanted items
+     * @throws UnsupportedOperationException When this statistic is not supported by this statistics plugin.
+     */
+    public abstract int getItemsEnchanted(UUID uuid) throws UnsupportedOperationException;
+
+    /**
+     * Get the number of deaths a player has had.
+     *
+     * @param uuid UUID of the player
+     * @return how often the player has died
+     * @throws UnsupportedOperationException When this statistic is not supported by this statistics plugin.
+     */
+    public abstract int getTimesDied(UUID uuid) throws UnsupportedOperationException;
+
+    /**
+     * Get the number of plants a player has potted.
+     *
+     * @param uuid UUID of the player
+     * @return number of plants potted
+     * @throws UnsupportedOperationException When this statistic is not supported by this statistics plugin.
+     */
+    public abstract int getPlantsPotted(UUID uuid) throws UnsupportedOperationException;
+
+    /**
+     * Get the number of trades a player has made with a villager
+     *
+     * @param uuid UUID of the player
+     * @return number of trades with a villager
+     * @throws UnsupportedOperationException When this statistic is not supported by this statistics plugin.
+     */
+    public abstract int getTimesTradedWithVillagers(UUID uuid) throws UnsupportedOperationException;
+
+    /**
      * Check whether the current stats plugin is enabled or not.
      *
      * @return true if enabled; false otherwise

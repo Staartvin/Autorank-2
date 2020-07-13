@@ -28,8 +28,7 @@ import me.armar.plugins.autorank.pathbuilder.result.*;
 import me.armar.plugins.autorank.permissions.PermissionsPluginManager;
 import me.armar.plugins.autorank.playerchecker.PlayerChecker;
 import me.armar.plugins.autorank.playtimes.PlayTimeManager;
-import me.armar.plugins.autorank.statsmanager.StatsPlugin;
-import me.armar.plugins.autorank.statsmanager.handlers.FallbackHandler;
+import me.armar.plugins.autorank.statsmanager.StatisticsManager;
 import me.armar.plugins.autorank.storage.PlayTimeStorageManager;
 import me.armar.plugins.autorank.storage.PlayTimeStorageProvider;
 import me.armar.plugins.autorank.storage.flatfile.FlatFileStorageProvider;
@@ -89,6 +88,7 @@ public class Autorank extends JavaPlugin {
     private PlayTimeManager playTimeManager;
     private DataConverter dataConverter;
     private MigrationManager migrationManager;
+    private StatisticsManager statisticsManager;
     // UUID storage
     private UUIDStorage uuidStorage;
     private PlayTimeStorageManager playTimeStorageManager;
@@ -218,6 +218,9 @@ public class Autorank extends JavaPlugin {
 
         // Create Task Manager so we can schedule tasks.
         setTaskManager(new TaskManager(this));
+
+        // Create statistics manager so we can gather statistics from third-party plugins.
+        setStatisticsManager(new StatisticsManager(this));
 
         // ------------- Initialize handlers -------------
 
@@ -659,16 +662,6 @@ public class Autorank extends JavaPlugin {
     }
 
     /**
-     * Get the current {@linkplain StatsPlugin} that is hooked.
-     *
-     * @return current {@linkplain StatsPlugin} that is hooked or
-     * {@linkplain FallbackHandler} if no stats plugin is found.
-     */
-    public StatsPlugin getHookedStatsPlugin() {
-        return getDependencyManager().getStatsPlugin();
-    }
-
-    /**
      * Checks whether the current version of Autorank is a DEV version.
      *
      * @return true if is, false otherwise.
@@ -902,5 +895,13 @@ public class Autorank extends JavaPlugin {
 
     public void setLoggerManager(LoggerManager loggerManager) {
         this.loggerManager = loggerManager;
+    }
+
+    public StatisticsManager getStatisticsManager() {
+        return statisticsManager;
+    }
+
+    public void setStatisticsManager(StatisticsManager statisticsManager) {
+        this.statisticsManager = statisticsManager;
     }
 }

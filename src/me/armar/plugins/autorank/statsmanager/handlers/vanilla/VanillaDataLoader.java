@@ -189,5 +189,53 @@ public class VanillaDataLoader {
         return player.getStatistic(Statistic.USE_ITEM, Material.SHEARS);
     }
 
+    public int getAnimalsBred(UUID uuid) {
+        Player player = Bukkit.getServer().getPlayer(uuid);
+
+        if (player == null) return 0;
+
+        return player.getStatistic(Statistic.ANIMALS_BRED);
+    }
+
+    public int getCakeSlicesEaten(UUID uuid) {
+        Player player = Bukkit.getServer().getPlayer(uuid);
+
+        if (player == null) return 0;
+
+        return player.getStatistic(Statistic.ANIMALS_BRED);
+    }
+
+    public int getItemsEnchanted(UUID uuid) {
+        Player player = Bukkit.getServer().getPlayer(uuid);
+
+        if (player == null) return 0;
+
+        return player.getStatistic(Statistic.ITEM_ENCHANTED);
+    }
+
+    public int getTimesDied(UUID uuid) {
+        Player player = Bukkit.getServer().getPlayer(uuid);
+
+        if (player == null) return 0;
+
+        return player.getStatistic(Statistic.DEATHS);
+    }
+
+    public int getPlantsPotted(UUID uuid) {
+        Player player = Bukkit.getServer().getPlayer(uuid);
+
+        if (player == null) return 0;
+
+        return player.getStatistic(Statistic.FLOWER_POTTED);
+    }
+
+    public int getTimesTradedWithVillages(UUID uuid) {
+        Player player = Bukkit.getServer().getPlayer(uuid);
+
+        if (player == null) return 0;
+
+        return player.getStatistic(Statistic.TRADED_WITH_VILLAGER);
+    }
+
 
 }

@@ -179,6 +179,36 @@ public class StatzHandler extends StatsPlugin {
     }
 
     @Override
+    public int getAnimalsBred(UUID uuid) throws UnsupportedOperationException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public int getCakeSlicesEaten(UUID uuid) throws UnsupportedOperationException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public int getItemsEnchanted(UUID uuid) throws UnsupportedOperationException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public int getTimesDied(UUID uuid) throws UnsupportedOperationException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public int getPlantsPotted(UUID uuid) throws UnsupportedOperationException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public int getTimesTradedWithVillagers(UUID uuid) throws UnsupportedOperationException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public boolean isEnabled() {
         if (statzApi == null) {
             plugin.getLogger().info("Statz (by Staartvin) api library was not found!");

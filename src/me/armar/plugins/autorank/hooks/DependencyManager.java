@@ -2,8 +2,6 @@ package me.armar.plugins.autorank.hooks;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.statzapi.StatzAPIHandler;
-import me.armar.plugins.autorank.statsmanager.StatsPlugin;
-import me.armar.plugins.autorank.statsmanager.StatsPluginManager;
 import me.staartvin.utils.pluginlibrary.Library;
 import me.staartvin.utils.pluginlibrary.PluginLibrary;
 import me.staartvin.utils.pluginlibrary.hooks.LibraryHook;
@@ -41,8 +39,6 @@ public class DependencyManager {
 
     private final Autorank plugin;
 
-    private final StatsPluginManager statsPluginManager;
-
     private PluginLibrary pluginLibrary;
 
     public DependencyManager(final Autorank instance) {
@@ -52,8 +48,6 @@ public class DependencyManager {
         handlers.put(AutorankDependency.STATZ, new StatzAPIHandler(instance));
 
         this.loadPluginLibrary();
-
-        statsPluginManager = new StatsPluginManager(instance);
     }
 
     /**
@@ -70,13 +64,6 @@ public class DependencyManager {
         } else {
             return handlers.get(dep);
         }
-    }
-
-    /**
-     * Get the installed Stats plugin that Autorank uses.
-     */
-    public StatsPlugin getStatsPlugin() {
-        return statsPluginManager.getStatsPlugin();
     }
 
     /**
@@ -139,7 +126,7 @@ public class DependencyManager {
         }
 
         // Search a stats plugin.
-        statsPluginManager.searchStatsPlugin();
+        this.plugin.getStatisticsManager().loadAvailableStatsPlugins();
 
         if (plugin.getSettingsConfig().useAdvancedDependencyLogs()) {
             // Make seperate stop loading bar

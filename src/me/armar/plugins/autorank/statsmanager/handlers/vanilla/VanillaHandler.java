@@ -102,6 +102,36 @@ public class VanillaHandler extends StatsPlugin {
     }
 
     @Override
+    public int getAnimalsBred(UUID uuid) throws UnsupportedOperationException {
+        return this.dataLoader.getAnimalsBred(uuid);
+    }
+
+    @Override
+    public int getCakeSlicesEaten(UUID uuid) throws UnsupportedOperationException {
+        return this.dataLoader.getCakeSlicesEaten(uuid);
+    }
+
+    @Override
+    public int getItemsEnchanted(UUID uuid) throws UnsupportedOperationException {
+        return this.dataLoader.getItemsEnchanted(uuid);
+    }
+
+    @Override
+    public int getTimesDied(UUID uuid) throws UnsupportedOperationException {
+        return this.dataLoader.getTimesDied(uuid);
+    }
+
+    @Override
+    public int getPlantsPotted(UUID uuid) throws UnsupportedOperationException {
+        return this.dataLoader.getPlantsPotted(uuid);
+    }
+
+    @Override
+    public int getTimesTradedWithVillagers(UUID uuid) throws UnsupportedOperationException {
+        return this.dataLoader.getTimesTradedWithVillages(uuid);
+    }
+
+    @Override
     public boolean isEnabled() {
         return true;
     }
