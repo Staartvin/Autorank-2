@@ -132,6 +132,11 @@ public class VanillaHandler extends StatsPlugin {
     }
 
     @Override
+    public int getItemThrown(UUID uuid, Material material) throws UnsupportedOperationException {
+        return this.dataLoader.getItemThrown(uuid, material);
+    }
+
+    @Override
     public boolean isEnabled() {
         return true;
     }

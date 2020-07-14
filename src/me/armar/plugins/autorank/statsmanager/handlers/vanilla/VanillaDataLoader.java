@@ -13,27 +13,6 @@ import java.util.UUID;
  */
 public class VanillaDataLoader {
 
-
-//    /**
-//     * Get (fresh) vanilla data of a player for a given world. This may return an empty optional if there is no data
-//     * for the given player or the given world doesn't exist.
-//     * @param uuid UUID of the player
-//     * @param worldName Name of the world
-//     * @return vanilla data of the player for the given world.
-//     */
-//    public Optional<VanillaData> getVanillaData(UUID uuid, String worldName) {
-//        Bukkit.getServer().getPlayer('test').getStatistic()
-//    }
-
-//    /**
-//     * Get (fresh) vanilla data of a player for all worlds. Data of all world is aggregated.
-//     * @param uuid UUID of the player
-//     * @return aggregated vanilla data of the given player.
-//     */
-//    public Optional<VanillaData> getVanillaData(UUID uuid) {
-//
-//    }
-
     public int getTotalBlocksBroken(UUID uuid) {
         Player player = Bukkit.getServer().getPlayer(uuid);
 
@@ -235,6 +214,14 @@ public class VanillaDataLoader {
         if (player == null) return 0;
 
         return player.getStatistic(Statistic.TRADED_WITH_VILLAGER);
+    }
+
+    public int getItemThrown(UUID uuid, Material item) {
+        Player player = Bukkit.getServer().getPlayer(uuid);
+
+        if (player == null) return 0;
+
+        return player.getStatistic(Statistic.USE_ITEM, item);
     }
 
 

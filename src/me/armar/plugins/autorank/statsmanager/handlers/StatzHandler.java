@@ -209,6 +209,11 @@ public class StatzHandler extends StatsPlugin {
     }
 
     @Override
+    public int getItemThrown(UUID uuid, Material material) throws UnsupportedOperationException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public boolean isEnabled() {
         if (statzApi == null) {
             plugin.getLogger().info("Statz (by Staartvin) api library was not found!");
