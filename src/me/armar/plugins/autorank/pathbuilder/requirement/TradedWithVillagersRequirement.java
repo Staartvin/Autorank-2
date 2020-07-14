@@ -4,7 +4,7 @@ import me.armar.plugins.autorank.language.Lang;
 
 import java.util.UUID;
 
-public class TradedWithVillagers extends AbstractRequirement {
+public class TradedWithVillagersRequirement extends AbstractRequirement {
 
     int tradedWithVillagers = -1;
 

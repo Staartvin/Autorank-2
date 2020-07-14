@@ -524,7 +524,7 @@ public class Autorank extends JavaPlugin {
         // Vault related
         RequirementBuilder.registerRequirement("money", MoneyRequirement.class);
 
-        // Statz related
+        // Statistics related
         RequirementBuilder.registerRequirement("blocks broken", BlocksBrokenRequirement.class);
         RequirementBuilder.registerRequirement("blocks placed", BlocksPlacedRequirement.class);
         RequirementBuilder.registerRequirement("blocks moved", BlocksMovedRequirement.class);
@@ -533,9 +533,17 @@ public class Autorank extends JavaPlugin {
         RequirementBuilder.registerRequirement("mobs killed", MobKillsRequirement.class);
         RequirementBuilder.registerRequirement("players killed", PlayerKillsRequirement.class);
         RequirementBuilder.registerRequirement("fish caught", FishCaughtRequirement.class);
-        RequirementBuilder.registerRequirement("items crafted", ItemsCraftedRequirement.class);
+        RequirementBuilder.registerRequirement("items crafted", TotalItemsCraftedRequirement.class);
         RequirementBuilder.registerRequirement("times sheared", TimesShearedRequirement.class);
         RequirementBuilder.registerRequirement("food eaten", FoodEatenRequirement.class);
+        RequirementBuilder.registerRequirement("item crafted", ItemCraftedRequirement.class);
+        RequirementBuilder.registerRequirement("animals bred", AnimalsBredRequirement.class);
+        RequirementBuilder.registerRequirement("cake slices eaten", CakeSlicesEatenRequirement.class);
+        RequirementBuilder.registerRequirement("items enchanted", ItemsEnchantedRequirement.class);
+        RequirementBuilder.registerRequirement("plants potted", PlantsPottedRequirement.class);
+        RequirementBuilder.registerRequirement("times died", TimesDiedRequirement.class);
+        RequirementBuilder.registerRequirement("traded with villagers", TradedWithVillagersRequirement.class);
+        RequirementBuilder.registerRequirement("item thrown", ItemThrownRequirement.class);
 
         // Faction related
         RequirementBuilder.registerRequirement("faction power", FactionPowerRequirement.class);

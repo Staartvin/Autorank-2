@@ -606,6 +606,14 @@ public enum Lang {
      * Trade at least {0} with villagers
      */
     TIMES_TRADED_WITH_VILLAGERS_REQUIREMENT("Trade at least {0} with villagers"),
+    /**
+     * Throw at least {0} {1}.
+     */
+    ITEM_THROWN_REQUIREMENT("Throw at least {0} {1}."),
+    /**
+     * Craft at least {0} {1}.
+     */
+    ITEM_CRAFTED_REQUIREMENT("Craft at least {0} {1}."),
     ;
 
     private static FileConfiguration LANG;

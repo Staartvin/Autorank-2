@@ -1,17 +1,19 @@
 package me.armar.plugins.autorank.pathbuilder.requirement;
 
 import me.armar.plugins.autorank.language.Lang;
+import org.bukkit.Material;
 
 import java.util.UUID;
 
-public class ItemsCraftedRequirement extends AbstractRequirement {
+public class ItemCraftedRequirement extends AbstractRequirement {
 
-    int itemsCrafted = -1;
+    int timesCrafted = -1;
+    Material itemCrafted = null;
 
     @Override
     public String getDescription() {
 
-        String lang = Lang.ITEMS_CRAFTED_REQUIREMENT.getConfigValue(itemsCrafted + "");
+        String lang = Lang.ITEM_CRAFTED_REQUIREMENT.getConfigValue(timesCrafted, itemCrafted);
 
         // Check if this requirement is world-specific
         if (this.isWorldSpecific()) {
@@ -23,37 +25,35 @@ public class ItemsCraftedRequirement extends AbstractRequirement {
 
     @Override
     public String getProgressString(UUID uuid) {
-        final int progressBar = this.getStatisticsManager().getItemsCrafted(uuid, this.getWorld(), null);
-
-        return progressBar + "/" + itemsCrafted;
+        return this.getStatisticsManager().getItemsCrafted(uuid, this.getWorld(), itemCrafted) + "/" + this.timesCrafted;
     }
 
     @Override
     protected boolean meetsRequirement(UUID uuid) {
-        return this.getStatisticsManager().getItemsCrafted(uuid, this.getWorld(), null) >= itemsCrafted;
+        return this.getStatisticsManager().getItemsCrafted(uuid, this.getWorld(), itemCrafted) >= this.timesCrafted;
     }
 
     @Override
     public boolean initRequirement(final String[] options) {
+
         try {
-            itemsCrafted = Integer.parseInt(options[0]);
-        } catch (NumberFormatException e) {
+            this.itemCrafted = Material.getMaterial(options[0].trim().toUpperCase());
+            this.timesCrafted = Integer.parseInt(options[1]);
+        } catch (final Exception e) {
             this.registerWarningMessage("An invalid number is provided");
             return false;
         }
 
-        if (itemsCrafted < 0) {
+        if (timesCrafted < 0) {
             this.registerWarningMessage("No number is provided or smaller than 0.");
             return false;
         }
 
-        return true;
+        return timesCrafted > 0 && this.itemCrafted != null;
     }
 
     @Override
     public double getProgressPercentage(UUID uuid) {
-        final int progressBar = this.getStatisticsManager().getItemsCrafted(uuid, this.getWorld(), null);
-
-        return progressBar * 1.0d / this.itemsCrafted;
+        return this.getStatisticsManager().getItemsCrafted(uuid, this.getWorld(), itemCrafted) * 1.0d / this.timesCrafted;
     }
 }

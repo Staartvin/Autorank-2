@@ -426,4 +426,24 @@ public class StatisticsManager {
         // Return zero if no plugin available
         return 0;
     }
+
+    /**
+     * Get the number of times a specific item was thrown
+     *
+     * @param uuid UUID of the player
+     * @param item Item to be thrown. Cannot be null.
+     * @return number of times a specific item was thrown.
+     */
+    public int getItemThrown(UUID uuid, Material item) {
+        for (StatsPlugin availableStatsPlugin : this.availableStatsPlugins) {
+            try {
+                return availableStatsPlugin.getItemThrown(uuid, item);
+            } catch (UnsupportedOperationException e) {
+                // Continue to the next available plugin.
+            }
+        }
+
+        // Return zero if no plugin available
+        return 0;
+    }
 }

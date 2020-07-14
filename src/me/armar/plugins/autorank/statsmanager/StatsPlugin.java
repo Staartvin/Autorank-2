@@ -197,6 +197,16 @@ public abstract class StatsPlugin {
     public abstract int getTimesTradedWithVillagers(UUID uuid) throws UnsupportedOperationException;
 
     /**
+     * Get the number of times a player has thrown a certain item.
+     *
+     * @param uuid     UUID of the player
+     * @param material Material that should be thrown.
+     * @return number of times an item has been thrown
+     * @throws UnsupportedOperationException When this statistic is not supported by this statistics plugin.
+     */
+    public abstract int getItemThrown(UUID uuid, Material material) throws UnsupportedOperationException;
+
+    /**
      * Check whether the current stats plugin is enabled or not.
      *
      * @return true if enabled; false otherwise
