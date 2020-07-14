@@ -528,7 +528,7 @@ public class Autorank extends JavaPlugin {
         RequirementBuilder.registerRequirement("blocks broken", BlocksBrokenRequirement.class);
         RequirementBuilder.registerRequirement("blocks placed", BlocksPlacedRequirement.class);
         RequirementBuilder.registerRequirement("blocks moved", BlocksMovedRequirement.class);
-        RequirementBuilder.registerRequirement("votes", TotalVotesRequirement.class);
+        RequirementBuilder.registerRequirement("votes", TotalVotesRequirement.class); // REQUIRES STATZ
         RequirementBuilder.registerRequirement("damage taken", DamageTakenRequirement.class);
         RequirementBuilder.registerRequirement("mobs killed", MobKillsRequirement.class);
         RequirementBuilder.registerRequirement("players killed", PlayerKillsRequirement.class);
