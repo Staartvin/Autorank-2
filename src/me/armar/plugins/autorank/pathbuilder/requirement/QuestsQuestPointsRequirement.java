@@ -36,7 +36,7 @@ public class QuestsQuestPointsRequirement extends AbstractRequirement {
         // Add dependency
         addDependency(Library.QUESTS);
 
-        handler = (QuestsHook) this.getDependencyManager().getLibraryHook(Library.QUESTS);
+        handler = (QuestsHook) this.getDependencyManager().getLibraryHook(Library.QUESTS).orElse(null);
 
         if (options.length > 0) {
             try {
@@ -52,7 +52,7 @@ public class QuestsQuestPointsRequirement extends AbstractRequirement {
             return false;
         }
 
-        return true;
+        return handler != null;
     }
 
     @Override

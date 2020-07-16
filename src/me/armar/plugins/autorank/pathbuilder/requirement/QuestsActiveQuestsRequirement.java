@@ -1,14 +1,14 @@
 package me.armar.plugins.autorank.pathbuilder.requirement;
 
+import me.armar.plugins.autorank.hooks.quests.QuestsPlugin;
 import me.armar.plugins.autorank.language.Lang;
 import me.staartvin.utils.pluginlibrary.Library;
-import me.staartvin.utils.pluginlibrary.hooks.QuestsHook;
 
 import java.util.UUID;
 
 public class QuestsActiveQuestsRequirement extends AbstractRequirement {
 
-    private QuestsHook handler = null;
+    private QuestsPlugin handler = null;
     private int activeQuests = -1;
 
     @Override
@@ -23,10 +23,6 @@ public class QuestsActiveQuestsRequirement extends AbstractRequirement {
 
     @Override
     protected boolean meetsRequirement(UUID uuid) {
-
-        if (!handler.isHooked())
-            return false;
-
         return handler.getNumberOfActiveQuests(uuid) >= activeQuests;
     }
 
@@ -35,8 +31,9 @@ public class QuestsActiveQuestsRequirement extends AbstractRequirement {
 
         // Add dependency
         addDependency(Library.QUESTS);
+        addDependency(Library.QUESTS_ALTERNATIVE);
 
-        handler = (QuestsHook) this.getDependencyManager().getLibraryHook(Library.QUESTS);
+        handler = this.getDependencyManager().getQuestsPlugin().orElse(null);
 
         if (options.length > 0) {
             try {
@@ -52,7 +49,7 @@ public class QuestsActiveQuestsRequirement extends AbstractRequirement {
             return false;
         }
 
-        return true;
+        return handler != null;
     }
 
     @Override
