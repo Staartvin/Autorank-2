@@ -12,8 +12,8 @@ import java.util.Optional;
  */
 public class PlayerDataManager {
 
-    private Autorank plugin;
-    private List<PlayerDataStorage> activeDataStorage = new ArrayList<>();
+    private final Autorank plugin;
+    private final List<PlayerDataStorage> activeDataStorage = new ArrayList<>();
 
     public PlayerDataManager(Autorank instance) {
         this.plugin = instance;

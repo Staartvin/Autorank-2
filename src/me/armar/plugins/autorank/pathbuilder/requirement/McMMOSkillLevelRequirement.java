@@ -50,7 +50,7 @@ public class McMMOSkillLevelRequirement extends AbstractRequirement {
         // Add dependency
         addDependency(Library.MCMMO);
 
-        handler = (McMMOHook) this.getDependencyManager().getLibraryHook(Library.MCMMO);
+        handler = (McMMOHook) this.getDependencyManager().getLibraryHook(Library.MCMMO).orElse(null);
 
         if (options.length > 0) {
             skillLevel = Integer.parseInt(options[0]);

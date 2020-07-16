@@ -17,10 +17,10 @@ import java.net.URLConnection;
 
 public class SpigotUpdater {
 
-    private int project;
+    private final int project;
     private URL checkURL;
     private String newVersion;
-    private JavaPlugin plugin;
+    private final JavaPlugin plugin;
 
     public SpigotUpdater(JavaPlugin plugin, int projectID) {
         this.plugin = plugin;

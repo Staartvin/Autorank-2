@@ -36,7 +36,7 @@ public class PlayerPointsPointsRequirement extends AbstractRequirement {
         // Add dependency
         addDependency(Library.PLAYERPOINTS);
 
-        handler = (PlayerPointsHook) this.getDependencyManager().getLibraryHook(Library.PLAYERPOINTS);
+        handler = (PlayerPointsHook) this.getDependencyManager().getLibraryHook(Library.PLAYERPOINTS).orElse(null);
 
         if (options.length > 0) {
             try {
@@ -52,7 +52,7 @@ public class PlayerPointsPointsRequirement extends AbstractRequirement {
             return false;
         }
 
-        return true;
+        return handler != null;
     }
 
     @Override

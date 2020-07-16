@@ -29,7 +29,7 @@ public class AutorankConversation {
 
     // A static map to register who's already in a conversation. You can't start a new conversation with a player if
     // they are already in one.
-    private static Map<UUID, Boolean> isInConversation = new HashMap<>();
+    private static final Map<UUID, Boolean> isInConversation = new HashMap<>();
 
     private ConversationCallback callback; // Store callback to call when conversation has ended.
     private ConversationFactory factory; // Store factory to start it.

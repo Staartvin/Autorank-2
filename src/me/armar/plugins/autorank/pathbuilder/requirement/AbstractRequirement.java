@@ -331,7 +331,8 @@ public abstract class AbstractRequirement {
 
 
     /**
-     * Get a list of dependencies (third-party plugins) this requirement uses.
+     * Get a list of dependencies (third-party plugins) this requirement uses. The semantics of this list indicate
+     * that at least one of these dependencies should be available, not necessarily all of them.
      *
      * @return a list of dependencies of this requirement.
      */

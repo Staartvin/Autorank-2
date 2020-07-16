@@ -15,10 +15,10 @@ import java.util.UUID;
  */
 public class TaskManager {
 
-    private Autorank plugin;
+    private final Autorank plugin;
 
-    private Map<UUID, Integer> updatePlayTimeTaskIds = new HashMap<>();
-    private Map<UUID, Long> lastPlayTimeUpdate = new HashMap<>();
+    private final Map<UUID, Integer> updatePlayTimeTaskIds = new HashMap<>();
+    private final Map<UUID, Long> lastPlayTimeUpdate = new HashMap<>();
 
     public TaskManager(Autorank plugin) {
         this.plugin = plugin;

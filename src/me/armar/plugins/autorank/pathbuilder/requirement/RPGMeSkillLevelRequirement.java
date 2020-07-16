@@ -53,7 +53,7 @@ public class RPGMeSkillLevelRequirement extends AbstractRequirement {
         // Add dependency
         addDependency(Library.RPGME);
 
-        handler = (RPGmeHook) this.getDependencyManager().getLibraryHook(Library.RPGME);
+        handler = (RPGmeHook) this.getDependencyManager().getLibraryHook(Library.RPGME).orElse(null);
 
         if (options.length > 0) {
             skillLevel = Integer.parseInt(options[0]);
@@ -67,7 +67,7 @@ public class RPGMeSkillLevelRequirement extends AbstractRequirement {
             return false;
         }
 
-        return true;
+        return handler != null;
     }
 
     @Override

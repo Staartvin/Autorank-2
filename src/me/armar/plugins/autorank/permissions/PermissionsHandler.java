@@ -12,7 +12,7 @@ import java.util.Collection;
  */
 public abstract class PermissionsHandler {
 
-    private Autorank plugin;
+    private final Autorank plugin;
 
     public PermissionsHandler(Autorank plugin) {
         this.plugin = plugin;

@@ -37,7 +37,7 @@ public class BattleLevelsTopKillStreakRequirement extends AbstractRequirement {
         // Add dependency
         addDependency(Library.BATTLELEVELS);
 
-        handler = (BattleLevelsHook) this.getDependencyManager().getLibraryHook(Library.BATTLELEVELS);
+        handler = (BattleLevelsHook) this.getDependencyManager().getLibraryHook(Library.BATTLELEVELS).orElse(null);
 
         if (options.length > 0) {
             try {
@@ -53,7 +53,7 @@ public class BattleLevelsTopKillStreakRequirement extends AbstractRequirement {
             return false;
         }
 
-        return true;
+        return handler != null;
     }
 
     @Override

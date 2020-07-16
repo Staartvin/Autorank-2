@@ -36,7 +36,7 @@ public class BattleLevelsKDRRequirement extends AbstractRequirement {
         // Add dependency
         addDependency(Library.BATTLELEVELS);
 
-        handler = (BattleLevelsHook) this.getDependencyManager().getLibraryHook(Library.BATTLELEVELS);
+        handler = (BattleLevelsHook) this.getDependencyManager().getLibraryHook(Library.BATTLELEVELS).orElse(null);
 
         if (options.length > 0) {
             try {
@@ -52,7 +52,7 @@ public class BattleLevelsKDRRequirement extends AbstractRequirement {
             return false;
         }
 
-        return true;
+        return handler != null;
     }
 
 

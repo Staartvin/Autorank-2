@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public class StatisticQuery {
 
-    private List<StatisticParameter> parameters = new ArrayList<>();
+    private final List<StatisticParameter> parameters = new ArrayList<>();
 
     public static StatisticQuery makeStatisticQuery(Object... strings) {
         StatisticQuery query = new StatisticQuery();

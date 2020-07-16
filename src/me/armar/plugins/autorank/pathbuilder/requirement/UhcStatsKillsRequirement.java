@@ -36,8 +36,8 @@ public class UhcStatsKillsRequirement extends AbstractRequirement {
         // Add dependency
         addDependency(Library.UHCSTATS);
 
-        handler =
-                (me.staartvin.utils.pluginlibrary.hooks.UHCStatsHook) this.getDependencyManager().getLibraryHook(Library.UHCSTATS);
+        handler = (me.staartvin.utils.pluginlibrary.hooks.UHCStatsHook) this.getDependencyManager()
+                .getLibraryHook(Library.UHCSTATS).orElse(null);
 
         if (options.length > 0) {
             try {
@@ -53,7 +53,7 @@ public class UhcStatsKillsRequirement extends AbstractRequirement {
             return false;
         }
 
-        return true;
+        return handler != null;
     }
 
     @Override

@@ -41,7 +41,7 @@ public class RPGMeCombatLevelRequirement extends AbstractRequirement {
         // Add dependency
         addDependency(Library.RPGME);
 
-        handler = (RPGmeHook) this.getDependencyManager().getLibraryHook(Library.RPGME);
+        handler = (RPGmeHook) this.getDependencyManager().getLibraryHook(Library.RPGME).orElse(null);
 
         if (options.length > 0) {
             try {
@@ -57,7 +57,7 @@ public class RPGMeCombatLevelRequirement extends AbstractRequirement {
             return false;
         }
 
-        return true;
+        return handler != null;
     }
 
     @Override

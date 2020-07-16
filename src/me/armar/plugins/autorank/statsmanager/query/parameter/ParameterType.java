@@ -14,7 +14,7 @@ public enum ParameterType {
     MOVEMENT_TYPE(MovementTypeParameter.class),
     FOOD_TYPE(FoodTypeParameter.class);
 
-    private Class<? extends StatisticParameter> matchingParameter;
+    private final Class<? extends StatisticParameter> matchingParameter;
 
     ParameterType(Class<? extends StatisticParameter> parameter) {
         this.matchingParameter = parameter;

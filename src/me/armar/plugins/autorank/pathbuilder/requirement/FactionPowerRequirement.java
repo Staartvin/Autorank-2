@@ -54,7 +54,8 @@ public class FactionPowerRequirement extends AbstractRequirement {
         // Add dependency
         addDependency(Library.FACTIONS);
 
-        handler = (FactionsHook) this.getAutorank().getDependencyManager().getLibraryHook(Library.FACTIONS);
+        handler =
+                (FactionsHook) this.getAutorank().getDependencyManager().getLibraryHook(Library.FACTIONS).orElse(null);
 
         try {
             factionPower = Double.parseDouble(options[0]);

@@ -34,7 +34,10 @@ public class StatzMigration extends MigrationablePlugin {
 
             int playersImported = 0;
 
-            StatzHook statzHook = (StatzHook) getPlugin().getDependencyManager().getLibraryHook(Library.STATZ);
+            StatzHook statzHook =
+                    (StatzHook) getPlugin().getDependencyManager().getLibraryHook(Library.STATZ).orElse(null);
+
+            if (statzHook == null) return playersImported;
 
             for (UUID uuid : uuids) {
                 double minutesPlayed = statzHook.getSpecificStatistics(PlayerStat.TIME_PLAYED, uuid);

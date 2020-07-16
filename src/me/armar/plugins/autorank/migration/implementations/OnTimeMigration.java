@@ -5,6 +5,7 @@ import me.armar.plugins.autorank.migration.MigrationablePlugin;
 import me.armar.plugins.autorank.storage.TimeType;
 import me.armar.plugins.autorank.util.uuid.UUIDManager;
 import me.staartvin.utils.pluginlibrary.Library;
+import me.staartvin.utils.pluginlibrary.hooks.LibraryHook;
 import me.staartvin.utils.pluginlibrary.hooks.OnTimeHook;
 
 import java.util.List;
@@ -20,7 +21,8 @@ public class OnTimeMigration extends MigrationablePlugin {
 
     @Override
     public boolean isReady() {
-        return getPlugin().getDependencyManager().getLibraryHook(Library.ONTIME).isHooked();
+        return getPlugin().getDependencyManager().getLibraryHook(Library.ONTIME).map(LibraryHook::isHooked).orElse(false);
+
     }
 
     @Override
@@ -32,7 +34,13 @@ public class OnTimeMigration extends MigrationablePlugin {
 
         return CompletableFuture.supplyAsync(() -> {
 
-            OnTimeHook onTimeHook = (OnTimeHook) getPlugin().getDependencyManager().getLibraryHook(Library.ONTIME);
+            OnTimeHook onTimeHook =
+                    (OnTimeHook) getPlugin().getDependencyManager().getLibraryHook(Library.ONTIME).orElse(null);
+
+            if (onTimeHook == null) {
+                getPlugin().debugMessage("Tried migrating player data from OnTime, but could not obtain hook.");
+                return 0;
+            }
 
             getPlugin().debugMessage("Migrating player data from OnTime!");
 

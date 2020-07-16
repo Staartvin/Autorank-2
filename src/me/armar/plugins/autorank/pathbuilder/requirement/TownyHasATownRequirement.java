@@ -44,7 +44,7 @@ public class TownyHasATownRequirement extends AbstractRequirement {
         addDependency(Library.TOWNY_ADVANCED);
 
         this.hook =
-                (TownyAdvancedHook) this.getAutorank().getDependencyManager().getLibraryHook(Library.TOWNY_ADVANCED);
+                (TownyAdvancedHook) this.getAutorank().getDependencyManager().getLibraryHook(Library.TOWNY_ADVANCED).orElse(null);
 
         try {
             shouldHaveATown = Boolean.parseBoolean(options[0]);
@@ -58,7 +58,7 @@ public class TownyHasATownRequirement extends AbstractRequirement {
             return false;
         }
 
-        return true;
+        return hook != null;
     }
 
     @Override

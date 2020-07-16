@@ -14,14 +14,14 @@ import static org.junit.Assert.assertThat;
  */
 public class AutorankToolsTest {
 
-    private static int SECONDS_IN_MINUTE = 60;
-    private static int MINUTES_IN_HOUR = 60;
-    private static int HOURS_IN_DAY = 24;
+    private static final int SECONDS_IN_MINUTE = 60;
+    private static final int MINUTES_IN_HOUR = 60;
+    private static final int HOURS_IN_DAY = 24;
 
-    private static int SECONDS_IN_HOUR = SECONDS_IN_MINUTE * MINUTES_IN_HOUR;
-    private static int SECONDS_IN_DAY = SECONDS_IN_HOUR * 24;
+    private static final int SECONDS_IN_HOUR = SECONDS_IN_MINUTE * MINUTES_IN_HOUR;
+    private static final int SECONDS_IN_DAY = SECONDS_IN_HOUR * 24;
 
-    private static int MINUTES_IN_DAY = MINUTES_IN_HOUR * 24;
+    private static final int MINUTES_IN_DAY = MINUTES_IN_HOUR * 24;
 
     @Test
     public void shouldHandleInvalidTimeString() {

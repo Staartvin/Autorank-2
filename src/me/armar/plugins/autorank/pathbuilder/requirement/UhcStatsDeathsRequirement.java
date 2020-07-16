@@ -36,7 +36,7 @@ public class UhcStatsDeathsRequirement extends AbstractRequirement {
         // Add dependency
         addDependency(Library.UHCSTATS);
 
-        handler = (UHCStatsHook) this.getDependencyManager().getLibraryHook(Library.UHCSTATS);
+        handler = (UHCStatsHook) this.getDependencyManager().getLibraryHook(Library.UHCSTATS).orElse(null);
 
         if (options.length > 0) {
             try {
@@ -52,7 +52,7 @@ public class UhcStatsDeathsRequirement extends AbstractRequirement {
             return false;
         }
 
-        return true;
+        return handler != null;
     }
 
     @Override

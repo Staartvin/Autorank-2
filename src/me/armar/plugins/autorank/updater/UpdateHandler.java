@@ -6,7 +6,7 @@ public class UpdateHandler {
 
     private final Autorank plugin;
     private long latestCheck = 0;
-    private SpigotUpdater updater;
+    private final SpigotUpdater updater;
 
     private boolean lastResult;
 

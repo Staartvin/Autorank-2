@@ -44,7 +44,7 @@ public class TownyNumberOfTownBlocksRequirement extends AbstractRequirement {
         addDependency(Library.TOWNY_ADVANCED);
 
         this.hook =
-                (TownyAdvancedHook) this.getAutorank().getDependencyManager().getLibraryHook(Library.TOWNY_ADVANCED);
+                (TownyAdvancedHook) this.getAutorank().getDependencyManager().getLibraryHook(Library.TOWNY_ADVANCED).orElse(null);
 
         try {
             numberOfTownBlocks = Integer.parseInt(options[0]);

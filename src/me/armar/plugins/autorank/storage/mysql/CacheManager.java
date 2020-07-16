@@ -12,7 +12,7 @@ import java.util.*;
 public class CacheManager {
 
     // Store cached values in map
-    private Map<UUID, CachedEntry> cachedTimeValues = new HashMap<>();
+    private final Map<UUID, CachedEntry> cachedTimeValues = new HashMap<>();
 
     /**
      * Register a new cached value for a player.
@@ -84,8 +84,8 @@ public class CacheManager {
 }
 
 class CachedEntry {
-    private Map<TimeType, Integer> timePerTimeType = new HashMap<>();
-    private Map<TimeType, Long> lastUpdatedPerTimeType = new HashMap<>();
+    private final Map<TimeType, Integer> timePerTimeType = new HashMap<>();
+    private final Map<TimeType, Long> lastUpdatedPerTimeType = new HashMap<>();
 
     public CachedEntry() {
     }

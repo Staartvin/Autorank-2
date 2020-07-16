@@ -36,9 +36,9 @@ public class HooksCommand extends AutorankCommand {
         for (final Library dep : Library.values()) {
 
             final LibraryHook handler = plugin.getDependencyManager()
-                    .getLibraryHook(dep);
+                    .getLibraryHook(dep).orElse(null);
 
-            if (handler.isHooked() && !(handler instanceof AutorankHook)) {
+            if (handler != null && handler.isHooked() && !(handler instanceof AutorankHook)) {
                 sender.sendMessage(org.bukkit.ChatColor.GRAY + "- " + org.bukkit.ChatColor.GREEN + dep
                         .getHumanPluginName());
             }

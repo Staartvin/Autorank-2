@@ -37,7 +37,7 @@ public class GriefPreventionBonusBlocksRequirement extends AbstractRequirement {
         addDependency(Library.GRIEFPREVENTION);
 
         handler = (GriefPreventionHook) this.getDependencyManager()
-                .getLibraryHook(Library.GRIEFPREVENTION);
+                .getLibraryHook(Library.GRIEFPREVENTION).orElse(null);
 
         if (options.length > 0) {
             try {

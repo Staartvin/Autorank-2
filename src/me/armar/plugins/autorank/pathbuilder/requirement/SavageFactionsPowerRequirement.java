@@ -46,7 +46,7 @@ public class SavageFactionsPowerRequirement extends AbstractRequirement {
         addDependency(Library.SAVAGE_FACTIONS);
 
         handler = (SavageFactionsHook) this.getAutorank().getDependencyManager().getLibraryHook(Library
-                .SAVAGE_FACTIONS);
+                .SAVAGE_FACTIONS).orElse(null);
 
         try {
             factionPower = Double.parseDouble(options[0]);

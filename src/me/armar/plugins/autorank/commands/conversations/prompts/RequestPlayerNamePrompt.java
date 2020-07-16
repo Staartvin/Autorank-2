@@ -13,9 +13,9 @@ import org.jetbrains.annotations.Nullable;
  */
 public class RequestPlayerNamePrompt extends ValidatingPrompt {
 
-    private String message;
+    private final String message;
     private String PLAYERNAME_KEY = "playerName";
-    private Prompt nextPrompt;
+    private final Prompt nextPrompt;
 
     /**
      * Request a player name with given request message and store it in the {@link ConversationContext} using the

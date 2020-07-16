@@ -58,7 +58,7 @@ public class JobsCurrentPointsRequirement extends AbstractRequirement {
         // Add dependency
         addDependency(Library.JOBS);
 
-        jobsHandler = (JobsHook) this.getAutorank().getDependencyManager().getLibraryHook(Library.JOBS);
+        jobsHandler = (JobsHook) this.getAutorank().getDependencyManager().getLibraryHook(Library.JOBS).orElse(null);
 
         try {
             currentPoints = Integer.parseInt(options[0]);

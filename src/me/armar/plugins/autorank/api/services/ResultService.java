@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public class ResultService implements ResultManager {
 
-    private Autorank plugin;
+    private final Autorank plugin;
 
     public ResultService(Autorank instance) {
         this.plugin = instance;

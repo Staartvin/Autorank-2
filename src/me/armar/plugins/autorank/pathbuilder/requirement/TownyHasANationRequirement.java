@@ -44,7 +44,7 @@ public class TownyHasANationRequirement extends AbstractRequirement {
         addDependency(Library.TOWNY_ADVANCED);
 
         this.hook =
-                (TownyAdvancedHook) this.getAutorank().getDependencyManager().getLibraryHook(Library.TOWNY_ADVANCED);
+                (TownyAdvancedHook) this.getAutorank().getDependencyManager().getLibraryHook(Library.TOWNY_ADVANCED).orElse(null);
 
         try {
             shouldHaveANation = Boolean.parseBoolean(options[0]);

@@ -24,15 +24,14 @@ public class ConfirmPrompt extends FixedSetPrompt {
 
     private String message = ChatColor.GOLD + "Are you sure you want to perform this action? Type " + ChatColor.GREEN +
             "yes" + ChatColor.GOLD + " or " + ChatColor.RED + "no" + ChatColor.GOLD + ".";
-    private Prompt confirmPrompt;
-    private Prompt denyPrompt;
-
-    private static List<String> confirmWords = Arrays.asList("yes", "confirm", "allow");
-    private List<String> denyWords = Arrays.asList("no", "deny", "disallow");
+    private static final List<String> confirmWords = Arrays.asList("yes", "confirm", "allow");
+    private final Prompt confirmPrompt;
+    private final Prompt denyPrompt;
+    private final List<String> denyWords = Arrays.asList("no", "deny", "disallow");
 
 
     // A callback that should be performed when the prompt has finished.
-    private ConfirmPromptCallback callback;
+    private final ConfirmPromptCallback callback;
 
     /**
      * Create a confirmation prompt with the given message.

@@ -595,22 +595,13 @@ public class Autorank extends JavaPlugin {
         RequirementBuilder.registerRequirement("battlelevels level", BattleLevelsLevelRequirement.class);
         RequirementBuilder.registerRequirement("battlelevels score", BattleLevelsScoreRequirement.class);
 
-        // Quests (HappyPikachu)
+        // Quests (HappyPikachu or LMBishop)
         RequirementBuilder.registerRequirement("quests quest points", QuestsQuestPointsRequirement.class);
         RequirementBuilder.registerRequirement("quests complete quest",
                 QuestsCompleteSpecificQuestRequirement.class);
         RequirementBuilder.registerRequirement("quests active quests", QuestsActiveQuestsRequirement.class);
         RequirementBuilder.registerRequirement("quests completed quests", QuestsCompletedQuestsRequirement
                 .class);
-
-        // Quests (fatpigsarefat)
-        RequirementBuilder.registerRequirement("quests fatpigsarefat complete quest",
-                QuestsAlternativeCompleteSpecificQuestRequirement.class);
-        RequirementBuilder.registerRequirement("quests fatpigsarefat completed quests",
-                QuestsAlternativeCompletedQuestsRequirement.class);
-        RequirementBuilder.registerRequirement("quests fatpigsarefat active quests",
-                QuestsAlternativeActiveQuestsRequirement
-                        .class);
 
         // SavageFactions
         RequirementBuilder.registerRequirement("savagefactions faction power",

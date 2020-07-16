@@ -8,7 +8,7 @@ import java.util.concurrent.CompletableFuture;
 
 public abstract class MigrationablePlugin {
 
-    private Autorank plugin;
+    private final Autorank plugin;
 
     public MigrationablePlugin(Autorank instance) {
         this.plugin = instance;

@@ -41,7 +41,7 @@ public class ASkyBlockLevelRequirement extends AbstractRequirement {
         addDependency(Library.ASKYBLOCK);
 
         handler = (ASkyBlockHook) this.getAutorank().getDependencyManager()
-                .getLibraryHook(Library.ASKYBLOCK);
+                .getLibraryHook(Library.ASKYBLOCK).orElse(null);
 
         try {
             islandLevel = Integer.parseInt(options[0]);

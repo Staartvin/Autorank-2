@@ -56,7 +56,7 @@ public class JobsTotalPointsRequirement extends AbstractRequirement {
     @Override
     public boolean initRequirement(final String[] options) {
 
-        jobsHandler = (JobsHook) this.getAutorank().getDependencyManager().getLibraryHook(Library.JOBS);
+        jobsHandler = (JobsHook) this.getAutorank().getDependencyManager().getLibraryHook(Library.JOBS).orElse(null);
 
         try {
             totalPoints = Integer.parseInt(options[0]);

@@ -54,7 +54,7 @@ public class WorldGuardRegionRequirement extends AbstractRequirement {
         addDependency(Library.WORLDGUARD);
 
         handler = (WorldGuardHook) this.getAutorank().getDependencyManager()
-                .getLibraryHook(Library.WORLDGUARD);
+                .getLibraryHook(Library.WORLDGUARD).orElse(null);
 
         if (options.length > 0) {
             regionName = options[0].trim();

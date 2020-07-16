@@ -37,7 +37,7 @@ public class EssentialsGeoIPRequirement extends AbstractRequirement {
         // Add dependency
         addDependency(Library.ESSENTIALSX);
 
-        essHandler = (EssentialsXHook) this.getDependencyManager().getLibraryHook(Library.ESSENTIALSX);
+        essHandler = (EssentialsXHook) this.getDependencyManager().getLibraryHook(Library.ESSENTIALSX).orElse(null);
 
         if (options.length != 1) {
             return false;

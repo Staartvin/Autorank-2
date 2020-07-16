@@ -30,7 +30,7 @@ public class VaultPermissionsHandler extends PermissionsHandler {
      * @return true if done, false if failed
      */
     public boolean addGroup(final Player player, final String world, final String group) {
-        LibraryHook hook = getPlugin().getDependencyManager().getLibraryHook(Library.VAULT);
+        LibraryHook hook = getPlugin().getDependencyManager().getLibraryHook(Library.VAULT).orElse(null);
 
         if (hook == null || !hook.isHooked())
             return false;
@@ -45,7 +45,7 @@ public class VaultPermissionsHandler extends PermissionsHandler {
 
     public boolean demotePlayer(final Player player, String world, final String groupFrom, final String groupTo) {
 
-        LibraryHook hook = getPlugin().getDependencyManager().getLibraryHook(Library.VAULT);
+        LibraryHook hook = getPlugin().getDependencyManager().getLibraryHook(Library.VAULT).orElse(null);
 
         if (hook == null || !hook.isHooked())
             return false;
@@ -98,7 +98,7 @@ public class VaultPermissionsHandler extends PermissionsHandler {
     public Collection<String> getGroups() {
         List<String> groups = new ArrayList<>();
 
-        LibraryHook hook = getPlugin().getDependencyManager().getLibraryHook(Library.VAULT);
+        LibraryHook hook = getPlugin().getDependencyManager().getLibraryHook(Library.VAULT).orElse(null);
 
         if (hook == null || !hook.isHooked())
             return Collections.unmodifiableCollection(groups);
@@ -126,7 +126,7 @@ public class VaultPermissionsHandler extends PermissionsHandler {
     public Collection<String> getPlayerGroups(final Player player) {
         List<String> groups = new ArrayList<>();
 
-        LibraryHook hook = getPlugin().getDependencyManager().getLibraryHook(Library.VAULT);
+        LibraryHook hook = getPlugin().getDependencyManager().getLibraryHook(Library.VAULT).orElse(null);
 
         if (hook == null || !hook.isHooked())
             return Collections.unmodifiableCollection(groups);
@@ -150,7 +150,7 @@ public class VaultPermissionsHandler extends PermissionsHandler {
     public Collection<String> getWorldGroups(final Player player, final String world) {
         List<String> groups = new ArrayList<>();
 
-        LibraryHook hook = getPlugin().getDependencyManager().getLibraryHook(Library.VAULT);
+        LibraryHook hook = getPlugin().getDependencyManager().getLibraryHook(Library.VAULT).orElse(null);
 
         if (hook == null || !hook.isHooked())
             return Collections.unmodifiableCollection(groups);
@@ -174,7 +174,7 @@ public class VaultPermissionsHandler extends PermissionsHandler {
      */
     public boolean removeGroup(final Player player, final String world, final String group) {
 
-        LibraryHook hook = getPlugin().getDependencyManager().getLibraryHook(Library.VAULT);
+        LibraryHook hook = getPlugin().getDependencyManager().getLibraryHook(Library.VAULT).orElse(null);
 
         if (hook == null || !hook.isHooked())
             return false;
@@ -190,14 +190,10 @@ public class VaultPermissionsHandler extends PermissionsHandler {
     @Override
     public boolean replaceGroup(final Player player, String world, final String oldGroup, final String newGroup) {
 
-        LibraryHook hook = getPlugin().getDependencyManager().getLibraryHook(Library.VAULT);
+        LibraryHook hook = getPlugin().getDependencyManager().getLibraryHook(Library.VAULT).orElse(null);
 
         if (hook == null || !hook.isHooked())
             return false;
-
-        if (VaultHook.getPermissions() == null) {
-            return false;
-        }
 
         if (VaultHook.getPermissions() == null) {
             return false;
@@ -276,6 +272,6 @@ public class VaultPermissionsHandler extends PermissionsHandler {
 
     @Override
     public boolean setupPermissionsHandler() {
-        return getPlugin().getDependencyManager().getLibraryHook(Library.VAULT).isHooked();
+        return getPlugin().getDependencyManager().getLibraryHook(Library.VAULT).map(LibraryHook::isHooked).orElse(false);
     }
 }

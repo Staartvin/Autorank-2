@@ -12,36 +12,36 @@ import java.util.*;
  */
 public class PlayerData {
 
-    private UUID uuid = null;
+    private final UUID uuid = null;
 
     // Store which paths are completed
-    private Collection<Path> completedPaths = new ArrayList<>();
+    private final Collection<Path> completedPaths = new ArrayList<>();
 
-    private Collection<Path> activePaths = new ArrayList<>();
+    private final Collection<Path> activePaths = new ArrayList<>();
 
     // For each path, stores what requirements are completed.
-    private Map<Path, Collection<CompositeRequirement>> completedRequirements = new HashMap<>();
+    private final Map<Path, Collection<CompositeRequirement>> completedRequirements = new HashMap<>();
 
     // For each path, store which requirements are completed but where the results have not been performed yet.
-    private Map<Path, Collection<CompositeRequirement>> completedRequirementsWithoutResults = new HashMap<>();
+    private final Map<Path, Collection<CompositeRequirement>> completedRequirementsWithoutResults = new HashMap<>();
 
     // For each path, store which prerequisites have been completed
-    private Map<Path, Collection<CompositeRequirement>> completedPrerequisites = new HashMap<>();
+    private final Map<Path, Collection<CompositeRequirement>> completedPrerequisites = new HashMap<>();
 
     // Store which paths have been chosen, but where the results have not been performed yet.
-    private Collection<Path> chosenPathsWithoutResults = new ArrayList<>();
+    private final Collection<Path> chosenPathsWithoutResults = new ArrayList<>();
 
     // Store which paths have been completed, but where the results have not been performed yet.
-    private Collection<Path> completedPathsWithoutResults = new ArrayList<>();
+    private final Collection<Path> completedPathsWithoutResults = new ArrayList<>();
 
     // Whether a player should be hidden from the leaderboard
-    private boolean isExemptedFromLeaderboard = false;
+    private final boolean isExemptedFromLeaderboard = false;
 
     // Whether we should not automatically check the player for paths
-    private boolean isAutoCheckingDisabled = false;
+    private final boolean isAutoCheckingDisabled = false;
 
     // Whether a player will not get any time added.
-    private boolean isExemptedFromTimeAddition = false;
+    private final boolean isExemptedFromTimeAddition = false;
 
 
 }

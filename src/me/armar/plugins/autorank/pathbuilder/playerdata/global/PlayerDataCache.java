@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 public class PlayerDataCache {
 
-    private Map<UUID, CachedPlayerData> cache = new HashMap<>();
+    private final Map<UUID, CachedPlayerData> cache = new HashMap<>();
 
     public CachedPlayerData getCachedPlayerData(@NonNull UUID uuid) {
 

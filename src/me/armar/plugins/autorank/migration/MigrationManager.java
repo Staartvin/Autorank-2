@@ -11,9 +11,9 @@ import java.util.Optional;
 
 public class MigrationManager {
 
-    private Autorank plugin;
+    private final Autorank plugin;
 
-    private Map<Migrationable, MigrationablePlugin> migrationablePlugins = new HashMap<>();
+    private final Map<Migrationable, MigrationablePlugin> migrationablePlugins = new HashMap<>();
 
     public MigrationManager(Autorank instance) {
         this.plugin = instance;

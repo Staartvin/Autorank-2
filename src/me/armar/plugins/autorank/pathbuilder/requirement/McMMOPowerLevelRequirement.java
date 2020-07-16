@@ -39,7 +39,7 @@ public class McMMOPowerLevelRequirement extends AbstractRequirement {
         // Add dependency
         addDependency(Library.MCMMO);
 
-        handler = (McMMOHook) this.getDependencyManager().getLibraryHook(Library.MCMMO);
+        handler = (McMMOHook) this.getDependencyManager().getLibraryHook(Library.MCMMO).orElse(null);
 
         if (options.length > 0) {
             powerLevel = Integer.parseInt(options[0]);
@@ -55,7 +55,7 @@ public class McMMOPowerLevelRequirement extends AbstractRequirement {
             return false;
         }
 
-        return true;
+        return handler != null;
     }
 
     @Override

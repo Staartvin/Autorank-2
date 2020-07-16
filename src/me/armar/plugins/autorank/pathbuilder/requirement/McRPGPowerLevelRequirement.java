@@ -36,7 +36,7 @@ public class McRPGPowerLevelRequirement extends AbstractRequirement {
         // Add dependency
         addDependency(Library.MCRPG);
 
-        hook = (McRPGHook) this.getDependencyManager().getLibraryHook(Library.MCRPG);
+        hook = (McRPGHook) this.getDependencyManager().getLibraryHook(Library.MCRPG).orElse(null);
 
         if (options.length > 0) {
             powerLevel = Integer.parseInt(options[0]);

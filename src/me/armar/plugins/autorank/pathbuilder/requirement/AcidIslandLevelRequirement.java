@@ -41,7 +41,7 @@ public class AcidIslandLevelRequirement extends AbstractRequirement {
         addDependency(Library.ACIDISLAND);
 
         handler = (AcidIslandHook) this.getAutorank().getDependencyManager()
-                .getLibraryHook(Library.ACIDISLAND);
+                .getLibraryHook(Library.ACIDISLAND).orElse(null);
 
         try {
             islandLevel = Integer.parseInt(options[0]);

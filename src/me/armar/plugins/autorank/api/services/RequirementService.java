@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public class RequirementService implements RequirementManager {
 
-    private Autorank plugin;
+    private final Autorank plugin;
 
     public RequirementService(Autorank instance) {
         this.plugin = instance;

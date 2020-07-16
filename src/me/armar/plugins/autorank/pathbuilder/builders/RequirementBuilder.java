@@ -259,16 +259,24 @@ public class RequirementBuilder {
         // Check if all dependencies are available for this requirement.
         DependencyManager dependencyManager = Autorank.getInstance().getDependencyManager();
 
+        List<Library> missingDependencies = new ArrayList<>();
+
+        // Look for missing dependencies.
         for (Library dependency : requirement.getDependencies()) {
             if (!dependencyManager.isAvailable(dependency)) {
-                Autorank.getInstance().getLogger().severe(String.format("Requirement '%s' relies on '%s' " +
-                        "being installed, but that plugin is not installed!", requirementType, dependency
-                        .getHumanPluginName()));
-                Autorank.getInstance().getWarningManager().registerWarning(String.format("Requirement '%s' " +
-                                "relies on '%s' being installed, but that plugin is not installed!", requirementType,
-                        dependency.getHumanPluginName()), 10);
-                return this;
+                missingDependencies.add(dependency);
             }
+        }
+
+        // Check to see if we are missing all dependencies (and not just one).
+        if (missingDependencies.size() > 0 && missingDependencies.size() == requirement.getDependencies().size()) {
+            Autorank.getInstance().getLogger().severe(String.format("Requirement '%s' relies on '%s' " +
+                    "being installed, but that plugin is not installed!", requirementType, missingDependencies.get(0)
+                    .getHumanPluginName()));
+            Autorank.getInstance().getWarningManager().registerWarning(String.format("Requirement '%s' " +
+                            "relies on '%s' being installed, but that plugin is not installed!", requirementType,
+                    missingDependencies.get(0).getHumanPluginName()), 10);
+            return this;
         }
 
         // ---- All checks are cleared!

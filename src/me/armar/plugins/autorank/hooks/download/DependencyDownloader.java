@@ -12,7 +12,7 @@ import java.net.URL;
 
 public class DependencyDownloader {
 
-    private Autorank plugin;
+    private final Autorank plugin;
     private boolean hasLoaded;
 
     public DependencyDownloader(Autorank plugin) {
