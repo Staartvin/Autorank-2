@@ -84,7 +84,7 @@ public abstract class AbstractRequirement {
 
     /**
      * Get the id of this requirement. This should get assigned automatically at
-     * setOptions(). The id should always be dynamic.
+     * {@link #initRequirement(String[])}. The id should always be dynamic.
      *
      * @return id
      */
