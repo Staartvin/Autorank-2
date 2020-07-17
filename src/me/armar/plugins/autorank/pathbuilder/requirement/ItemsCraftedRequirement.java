@@ -5,7 +5,7 @@ import org.bukkit.Material;
 
 import java.util.UUID;
 
-public class ItemCraftedRequirement extends AbstractRequirement {
+public class ItemsCraftedRequirement extends AbstractRequirement {
 
     int timesCrafted = -1;
     Material itemCrafted = null;
@@ -13,7 +13,8 @@ public class ItemCraftedRequirement extends AbstractRequirement {
     @Override
     public String getDescription() {
 
-        String lang = Lang.ITEM_CRAFTED_REQUIREMENT.getConfigValue(timesCrafted, itemCrafted);
+        String lang = itemCrafted == null ? Lang.ITEMS_CRAFTED_REQUIREMENT.getConfigValue(timesCrafted) :
+                Lang.ITEM_CRAFTED_REQUIREMENT.getConfigValue(timesCrafted, itemCrafted);
 
         // Check if this requirement is world-specific
         if (this.isWorldSpecific()) {
@@ -36,12 +37,31 @@ public class ItemCraftedRequirement extends AbstractRequirement {
     @Override
     public boolean initRequirement(final String[] options) {
 
-        try {
-            this.itemCrafted = Material.getMaterial(options[0].trim().toUpperCase());
-            this.timesCrafted = Integer.parseInt(options[1]);
-        } catch (final Exception e) {
-            this.registerWarningMessage("An invalid number is provided");
+        if (options.length == 0) {
             return false;
+        }
+
+        if (options.length == 1) {
+            // Only specified a number, so no specific item.
+
+            try {
+                this.timesCrafted = Integer.parseInt(options[0]);
+            } catch (final Exception e) {
+                this.registerWarningMessage("An invalid number is provided");
+                return false;
+            }
+
+        } else {
+
+            // Specified both a number and a material.
+
+            try {
+                this.itemCrafted = Material.getMaterial(options[0].trim().toUpperCase());
+                this.timesCrafted = Integer.parseInt(options[1]);
+            } catch (final Exception e) {
+                this.registerWarningMessage("An invalid number is provided");
+                return false;
+            }
         }
 
         if (timesCrafted < 0) {
@@ -49,7 +69,7 @@ public class ItemCraftedRequirement extends AbstractRequirement {
             return false;
         }
 
-        return timesCrafted > 0 && this.itemCrafted != null;
+        return true;
     }
 
     @Override

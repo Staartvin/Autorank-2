@@ -533,10 +533,9 @@ public class Autorank extends JavaPlugin {
         RequirementBuilder.registerRequirement("mobs killed", MobKillsRequirement.class);
         RequirementBuilder.registerRequirement("players killed", PlayerKillsRequirement.class);
         RequirementBuilder.registerRequirement("fish caught", FishCaughtRequirement.class);
-        RequirementBuilder.registerRequirement("items crafted", TotalItemsCraftedRequirement.class);
+        RequirementBuilder.registerRequirement("items crafted", ItemsCraftedRequirement.class);
         RequirementBuilder.registerRequirement("times sheared", TimesShearedRequirement.class);
         RequirementBuilder.registerRequirement("food eaten", FoodEatenRequirement.class);
-        RequirementBuilder.registerRequirement("item crafted", ItemCraftedRequirement.class);
         RequirementBuilder.registerRequirement("animals bred", AnimalsBredRequirement.class);
         RequirementBuilder.registerRequirement("cake slices eaten", CakeSlicesEatenRequirement.class);
         RequirementBuilder.registerRequirement("items enchanted", ItemsEnchantedRequirement.class);
