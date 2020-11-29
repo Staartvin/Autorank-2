@@ -154,7 +154,7 @@ public class DependencyManager {
 
         if (!this.isPluginLibraryLoaded()) return Optional.empty();
 
-        return Optional.of(PluginLibrary.getLibrary(library));
+        return PluginLibrary.getLibrary(library);
     }
 
     /**
@@ -187,10 +187,22 @@ public class DependencyManager {
 
     public Optional<QuestsPlugin> getQuestsPlugin() {
         if (isAvailable(Library.QUESTS)) {
-            return Optional.of(new Quests((QuestsHook) PluginLibrary.getLibrary(Library.QUESTS)));
+            Optional<LibraryHook> questsPlugin = PluginLibrary.getLibrary(Library.QUESTS);
+
+            if (questsPlugin.isPresent()) {
+                return Optional.of(new Quests((QuestsHook) questsPlugin.get()));
+            }
+
         } else if (isAvailable(Library.QUESTS_ALTERNATIVE)) {
-            return Optional.of(new me.armar.plugins.autorank.hooks.quests.QuestsAlternative((QuestsAlternative)
-                    PluginLibrary.getLibrary(Library.QUESTS_ALTERNATIVE)));
+
+            Optional<LibraryHook> questsPlugin = PluginLibrary.getLibrary(Library.QUESTS_ALTERNATIVE);
+
+            if (questsPlugin.isPresent()) {
+                return Optional.of(new me.armar.plugins.autorank.hooks.quests.QuestsAlternative((QuestsAlternative)
+                        questsPlugin.get()));
+            }
+
+
         }
 
         return Optional.empty();
