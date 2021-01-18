@@ -26,6 +26,7 @@ import me.armar.plugins.autorank.pathbuilder.playerdata.local.LocalPlayerDataSto
 import me.armar.plugins.autorank.pathbuilder.requirement.*;
 import me.armar.plugins.autorank.pathbuilder.result.*;
 import me.armar.plugins.autorank.permissions.PermissionsPluginManager;
+import me.armar.plugins.autorank.placeholders.AutorankPlaceholder;
 import me.armar.plugins.autorank.playerchecker.PlayerChecker;
 import me.armar.plugins.autorank.playtimes.PlayTimeManager;
 import me.armar.plugins.autorank.statsmanager.StatisticsManager;
@@ -489,6 +490,12 @@ public class Autorank extends JavaPlugin {
 //                System.out.println("Loaded PluginLibrary!");
 //            }
 //        });
+
+        // Register placeholder extension
+        new AutorankPlaceholder(this).register();
+
+        this.getLoggerManager().logMessage("Exposed Autorank placeholder extension.");
+        getLogger().info("Exposed Autorank placeholder extension.");
 
         this.getLoggerManager().logMessage("Started Autorank");
     }

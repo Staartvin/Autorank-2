@@ -3,10 +3,11 @@ name: Autorank
 url: http://dev.bukkit.org/bukkit-plugins/autorank/
 version: ${project.version}
 authors: [Staartvin, Armarr]
-softdepend: [Vault, GroupManager, Privileges, bPermissions, PermissionsEx, PermissionsBukkit, DroxPerms,
-             PowerfulPerms, mcMMO, Factions, afkTerminator, OnTime, RoyalCommands, UltimateCore, Statz,
-             AdvancedAchievements, BattleLevels, Jobs, RPGme, uSkyBlock, WorldEdit, WorldGuard, AcidIsland,
-             ASkyBlock, GriefPrevention, Essentials, Quests, PlayerPoints, Votifier, CMI, UhcStats, Towny, McRPG]
+softdepend: [ Vault, GroupManager, Privileges, bPermissions, PermissionsEx, PermissionsBukkit, DroxPerms,
+              PowerfulPerms, mcMMO, Factions, afkTerminator, OnTime, RoyalCommands, UltimateCore, Statz,
+              AdvancedAchievements, BattleLevels, Jobs, RPGme, uSkyBlock, WorldEdit, WorldGuard, AcidIsland,
+              ASkyBlock, GriefPrevention, Essentials, Quests, PlayerPoints, Votifier, CMI, UhcStats, Towny, McRPG,
+              PlaceholderAPI ]
 description: Reward players based on their stats.
 api-version: 1.13
 commands:
