@@ -100,3 +100,8 @@ automatically update this file with new options: true
 # also automatically remove options if they are not relevant anymore.
 # You should leave this on to have the latest options available. If you're having trouble with this file overwriting
 # your changes, you can try turning this feature off.
+
+enable logging: true
+# It is recommended to let Autorank log messages when you run into trouble or can't understand what it is doing.
+# You can find the logs in the Autorank folder (under logging)
+# If you want to disable logging, set this to false.

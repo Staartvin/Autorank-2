@@ -271,4 +271,13 @@ public class SettingsConfig extends AbstractConfig {
         return this.getConfig().getBoolean("automatically update this file with new options", true);
     }
 
+    /**
+     * Check whether Autorank is allowed to log.
+     *
+     * @return true if it is, false if it is not.
+     */
+    public boolean isLoggingEnabled() {
+        return this.getConfig().getBoolean("enable logging", true);
+    }
+
 }

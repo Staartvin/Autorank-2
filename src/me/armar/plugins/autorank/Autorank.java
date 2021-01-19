@@ -199,6 +199,10 @@ public class Autorank extends JavaPlugin {
                     "Check the wiki if all the options are present.");
         }
 
+        if (!autorank.getSettingsConfig().isLoggingEnabled()) {
+            autorank.getLogger().info("Logging is not enabled.");
+        }
+
 
         this.getInternalPropertiesConfig().loadConfig();
 
@@ -502,8 +506,8 @@ public class Autorank extends JavaPlugin {
         // Register placeholder extension
         new AutorankPlaceholder(this).register();
 
-        this.getLoggerManager().logMessage("Registered placeholders, so you can use them!");
-        getLogger().info("Exposed Autorank placeholder extension.");
+        this.getLoggerManager().logMessage("Exposed Autorank placeholder extension.");
+        getLogger().info("Registered placeholders, so you can use them!");
 
         this.getLoggerManager().logMessage("Started Autorank");
     }

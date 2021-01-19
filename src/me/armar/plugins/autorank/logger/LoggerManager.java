@@ -25,6 +25,9 @@ public class LoggerManager {
     public void logMessage(String message) {
         if (message == null) return;
 
+        // Don't log messages when we're not allowed to!
+        if (!this.autorank.getSettingsConfig().isLoggingEnabled()) return;
+
         LogFile currentLogFile = getCurrentLogFile();
 
         if (currentLogFile == null) {
@@ -61,6 +64,9 @@ public class LoggerManager {
 
         logFile = new LogFile(autorank.getDataFolder().getAbsolutePath() + File.separator
                 + "logging" + File.separator + "log-" + dateFormat.format(logFileDate) + ".txt");
+
+        // Notify user that a new log file is created.
+        this.autorank.getLogger().info("Generated new log file: " + "log-" + dateFormat.format(logFileDate) + ".txt");
 
         logFile.loadFile();
     }
