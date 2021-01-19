@@ -97,26 +97,26 @@ public class AutorankPlaceholder extends PlaceholderExpansion {
             }
         } else if (params.equalsIgnoreCase("local_time")) {
             try {
-                return plugin.getPlayTimeManager().getLocalPlayTime(TimeType.DAILY_TIME, player.getUniqueId()).get() + "";
+                return plugin.getPlayTimeManager().getLocalPlayTime(TimeType.TOTAL_TIME, player.getUniqueId()).get() + "";
             } catch (InterruptedException | ExecutionException e) {
                 return "Couldn't obtain local time of " + player.getName();
             }
         } else if (params.equalsIgnoreCase("local_time_formatted")) {
             try {
-                return AutorankTools.timeToString(Math.toIntExact(plugin.getPlayTimeManager().getLocalPlayTime(TimeType.DAILY_TIME,
+                return AutorankTools.timeToString(Math.toIntExact(plugin.getPlayTimeManager().getLocalPlayTime(TimeType.TOTAL_TIME,
                         player.getUniqueId()).get()), TimeUnit.MINUTES);
             } catch (InterruptedException | ExecutionException e) {
                 return "Couldn't obtain local time (formatted) of " + player.getName();
             }
         } else if (params.equalsIgnoreCase("global_time")) {
             try {
-                return plugin.getPlayTimeManager().getGlobalPlayTime(TimeType.DAILY_TIME, player.getUniqueId()).get() + "";
+                return plugin.getPlayTimeManager().getGlobalPlayTime(TimeType.TOTAL_TIME, player.getUniqueId()).get() + "";
             } catch (InterruptedException | ExecutionException e) {
                 return "Couldn't obtain global time of " + player.getName();
             }
         } else if (params.equalsIgnoreCase("global_time_formatted")) {
             try {
-                return AutorankTools.timeToString(Math.toIntExact(plugin.getPlayTimeManager().getGlobalPlayTime(TimeType.DAILY_TIME,
+                return AutorankTools.timeToString(Math.toIntExact(plugin.getPlayTimeManager().getGlobalPlayTime(TimeType.TOTAL_TIME,
                         player.getUniqueId()).get()), TimeUnit.MINUTES);
             } catch (InterruptedException | ExecutionException e) {
                 return "Couldn't obtain global time (formatted) of " + player.getName();
