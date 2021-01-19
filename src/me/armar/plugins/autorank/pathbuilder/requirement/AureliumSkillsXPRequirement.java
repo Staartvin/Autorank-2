@@ -51,7 +51,7 @@ public class AureliumSkillsXPRequirement extends AbstractRequirement {
             }
 
             try {
-                skill = Skill.valueOf(options[0].trim().toUpperCase(Locale.ROOT)).getDescription(Locale.ENGLISH);
+                skill = Skill.valueOf(options[0].trim().toUpperCase(Locale.ROOT)).getDisplayName(Locale.ENGLISH);
             } catch (Exception e) {
                 this.registerWarningMessage("The skill '" + options[0].trim() + "' does not exist!");
                 return false;
