@@ -143,6 +143,11 @@
             <name>jenkins-artifactory-releases</name>
             <url>http://staartvin.com:8081/artifactory/libs-release-local</url>
         </repository>
+
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
     </repositories>
 
 
@@ -409,6 +414,21 @@
             <scope>provided</scope>
         </dependency>
 
+        <dependency>
+            <groupId>me.clip</groupId>
+            <artifactId>placeholderapi</artifactId>
+            <version>2.10.9</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.Archy-x</groupId>
+            <artifactId>AureliumSkills</artifactId>
+            <version>Alpha1.6.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+
         <!-- Test dependencies -->
 
         <dependency>
@@ -438,11 +458,6 @@
             </exclusions>
         </dependency>
 
-        <dependency>
-            <groupId>me.clip</groupId>
-            <artifactId>placeholderapi</artifactId>
-            <version>2.10.9</version>
-            <scope>provided</scope>
-        </dependency>
+
     </dependencies>
 </project>

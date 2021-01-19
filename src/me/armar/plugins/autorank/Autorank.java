@@ -644,6 +644,12 @@ public class Autorank extends JavaPlugin {
         RequirementBuilder.registerRequirement("mcrpg skill level", McRPGSkillLevelRequirement.class);
         RequirementBuilder.registerRequirement("mcrpg power level", McRPGPowerLevelRequirement.class);
 
+        // AureliumSkills
+        RequirementBuilder.registerRequirement("aurelium skills skill level", AureliumSkillsSkillRequirement.class);
+        RequirementBuilder.registerRequirement("aurelium skills stat level", AureliumSkillsStatRequirement.class);
+        RequirementBuilder.registerRequirement("aurelium skills xp", AureliumSkillsXPRequirement.class);
+        RequirementBuilder.registerRequirement("aurelium skills mana", AureliumSkillsManaRequirement.class);
+
 
         // Register 'main' results
         ResultBuilder.registerResult("command", CommandResult.class);

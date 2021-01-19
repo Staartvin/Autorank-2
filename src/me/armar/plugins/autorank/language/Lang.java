@@ -614,6 +614,22 @@ public enum Lang {
      * Craft at least {0} {1}.
      */
     ITEM_CRAFTED_REQUIREMENT("Craft at least {0} {1}."),
+    /**
+     * Have at least {0} mana.
+     */
+    AURELIUM_SKILLS_MANA_REQUIREMENT("Have at least {0} mana."),
+    /**
+     * Reach level {0} in {1}.
+     */
+    AURELIUM_SKILLS_STAT_REQUIREMENT("Reach level {0} in {1}."),
+    /**
+     * Reach level {0} in {1}.
+     */
+    AURELIUM_SKILLS_SKILL_REQUIREMENT("Reach level {0} in {1}."),
+    /**
+     * Have {0} xp in {1}.
+     */
+    AURELIUM_SKILLS_XP_REQUIREMENT("Have {0} xp in {1}."),
     ;
 
     private static FileConfiguration LANG;
