@@ -94,3 +94,9 @@ primary storage provider: flatfile
 
 automatically remove backups if older than: 14
 # Set how old a backup must be before it will be removed (in days).
+
+automatically update this file with new options: true
+# Whether Autorank should automatically update this file with new options (when they are introduced). This will
+# also automatically remove options if they are not relevant anymore.
+# You should leave this on to have the latest options available. If you're having trouble with this file overwriting
+# your changes, you can try turning this feature off.

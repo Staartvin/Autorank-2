@@ -2,6 +2,10 @@ package me.armar.plugins.autorank.config;
 
 import me.armar.plugins.autorank.Autorank;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Collections;
+
 /**
  * This class is used to access the properties of the Settings.yml file. All
  * global configurations options can be accessed via this clas..
@@ -34,7 +38,7 @@ public class SettingsConfig extends AbstractConfig {
                         .replace("%port%", getPlugin().getServer().getPort() + "")
                         .replace("%name%", getPlugin().getServer().getName());
             case USESSL:
-            	return String.valueOf(this.getConfig().getBoolean("sql.usessl", false));
+                return String.valueOf(this.getConfig().getBoolean("sql.usessl", false));
             default:
                 throw new IllegalArgumentException(option + " is not a valid MySQL settings option");
         }
@@ -43,6 +47,30 @@ public class SettingsConfig extends AbstractConfig {
     public SettingsConfig(final Autorank instance) {
         this.setFileName("Settings.yml");
         this.setPlugin(instance);
+    }
+
+    /**
+     * This method will check if the file (in the JAR) has options that are not present in the file on disk. If so,
+     * it will add those values while preserving the comments of the file on disk.
+     *
+     * @return true if the file was succesfully checked (and optionally updated), false otherwise.
+     */
+    public boolean updateConfigWithNewOptions() {
+
+        // Do not update this file if we are not allowed to.
+        if (!this.shouldAutoUpdateConfig()) return false;
+
+        File settingsFile = new File(this.getPlugin().getDataFolder(), "Settings.yml");
+
+        try {
+            ConfigUpdater.update(this.getPlugin(), "Settings.yml", settingsFile, Collections.emptyList());
+            this.reloadConfig();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
     }
 
     @Override
@@ -231,6 +259,16 @@ public class SettingsConfig extends AbstractConfig {
      */
     public int getBackupRemovalTime() {
         return this.getConfig().getInt("automatically remove backups if older than", 14);
+    }
+
+    /**
+     * Check whether Autorank should automatically remove and add options from the Settings.yml if they are
+     * introduced or deprecated.
+     *
+     * @return true if Autorank should automatically update the config, false if it should not do so.
+     */
+    public boolean shouldAutoUpdateConfig() {
+        return this.getConfig().getBoolean("automatically update this file with new options", true);
     }
 
 }

@@ -177,7 +177,6 @@ public class Autorank extends JavaPlugin {
         setSettingsConfig(new SettingsConfig(this));
         setInternalPropertiesConfig(new InternalPropertiesConfig(this));
         setDefaultBehaviorConfig(new DefaultBehaviorConfig((this)));
-
         setPlayerDataManager(new PlayerDataManager(this));
 
         // Create new configs
@@ -191,6 +190,15 @@ public class Autorank extends JavaPlugin {
             this.getWarningManager().registerWarning("Settings.yml file could not be loaded! Please check your syntax.",
                     WarningManager.HIGH_PRIORITY_WARNING);
         }
+
+        // Check if there are updates for the Settings.yml file.
+        if (this.getSettingsConfig().updateConfigWithNewOptions()) {
+            getLogger().info("The settings.yml is up-to-date");
+        } else {
+            getLogger().info("Your settings.yml file might be outdated. " +
+                    "Check the wiki if all the options are present.");
+        }
+
 
         this.getInternalPropertiesConfig().loadConfig();
 
@@ -494,7 +502,7 @@ public class Autorank extends JavaPlugin {
         // Register placeholder extension
         new AutorankPlaceholder(this).register();
 
-        this.getLoggerManager().logMessage("Exposed Autorank placeholder extension.");
+        this.getLoggerManager().logMessage("Registered placeholders, so you can use them!");
         getLogger().info("Exposed Autorank placeholder extension.");
 
         this.getLoggerManager().logMessage("Started Autorank");
@@ -508,7 +516,7 @@ public class Autorank extends JavaPlugin {
     private void initializeReqsAndRes() {
         // Register 'main' requirements
 
-        // Autorank related
+        // Autoraank related
         RequirementBuilder.registerRequirement("exp", ExpRequirement.class);
         RequirementBuilder.registerRequirement("gamemode", GamemodeRequirement.class);
         RequirementBuilder.registerRequirement("has item", HasItemRequirement.class);
