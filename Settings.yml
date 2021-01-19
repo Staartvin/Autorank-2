@@ -12,7 +12,7 @@ afk integration: true
 # If a compatible AFK plugin is found Autorank will not count online time for AFK players
 # Autorank automatically chooses what plugin to use for AFK integration.
 
-interval check: 5
+interval check: 1
 # This is the interval between checks of Autorank (in minutes).
 # Lowering this number will increase accuracy but will also increase server lag.
 
