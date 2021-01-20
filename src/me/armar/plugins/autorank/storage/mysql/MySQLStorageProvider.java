@@ -498,4 +498,169 @@ public class MySQLStorageProvider extends PlayTimeStorageProvider {
             mysqlLibrary.closeConnection();
         }
     }
+
+    // In an older version of Autorank, some tables had 'null' in the name (due to some error).
+    // This method looks for such tables and tries to fix it by:
+    // - Checking if there are such tables
+    // - Retrieving the playerdata from those tables
+    // - Putting it into the correct table.
+    public void updateFromOldTables() {
+
+        // Generate a task so we run this async.
+        this.plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+            @Override
+            public void run() {
+                List<String> adjustedTables = new ArrayList<>();
+
+                String statement = "SHOW TABLES LIKE 'null%'";
+
+                Optional<ResultSet> rs = mysqlLibrary.executeQuery(statement);
+
+                plugin.debugMessage("Looking for old data in MySQL database that might be useful.");
+
+                // Nothing to do.
+                if (!rs.isPresent()) {
+                    return;
+                }
+
+
+                try {
+                    while (rs.get().next()) {
+                        ResultSet set = rs.get();
+
+                        String foundTableName = null;
+
+                        try {
+                            foundTableName = set.getString(1);
+                        } catch (SQLException e) {
+                            // Could not read the first column
+                            continue;
+                        }
+
+                        if (foundTableName == null) continue;
+
+                        plugin.debugMessage("Found table " + foundTableName + " that might have old data.");
+
+                        Optional<ResultSet> innerResult;
+
+                        String readOldTableStatement = "SELECT * FROM `" + foundTableName + "`";
+
+                        // Data from the old table
+                        ResultSet oldTableData = null;
+
+                        // Check for the IMPORTED keyword. If that's present, we now Autorank already looked at it.
+                        if (foundTableName.contains("imported")) continue;
+
+                        // We found a table with old time data in it.
+                        // We receive the data and add it to the player's time.
+                        if (foundTableName.contains("daily") || foundTableName.contains("weekly")
+                                || foundTableName.contains("monthly") || foundTableName.contains("total")) {
+
+                            innerResult = mysqlLibrary.executeQuery(readOldTableStatement);
+
+                            plugin.debugMessage("Loading old data of " + foundTableName);
+
+                            // We couldn't receive any data.
+                            if (!innerResult.isPresent()) continue;
+
+                            oldTableData = innerResult.get();
+                        } else {
+                            plugin.debugMessage("Skipping table " + foundTableName + ".");
+                        }
+
+                        if (oldTableData == null) continue;
+
+                        // We are going to read this table, so we better mark it for adjustment.
+                        adjustedTables.add(foundTableName);
+
+                        int count = 0;
+
+                        // Loop over all the old data rows and read their times
+                        while (oldTableData.next()) {
+                            // Get the uuid of this row
+                            String uuidString = null;
+
+                            try {
+                                uuidString = oldTableData.getString("uuid");
+                            } catch (SQLException e) {
+                                // Could not read the data from this column.
+                                continue;
+                            }
+
+                            // Check if this is indeed a valid string
+                            if (uuidString == null) continue;
+
+                            UUID uuid;
+
+                            try {
+                                // Try loading UUID
+                                uuid = UUID.fromString(uuidString);
+                            } catch (IllegalArgumentException e) {
+                                // Skip this name since it isn't a valid UUID.
+                                continue;
+                            }
+
+                            int minutes = 0;
+
+                            try {
+                                // Read the minutes from this player
+                                minutes = oldTableData.getInt("time");
+                            } catch (SQLException e) {
+                                // Could not read the data from this column.
+                                continue;
+                            }
+
+                            count++;
+
+                            // Add the data to the player, based on the name of the table.
+                            if (foundTableName.contains("daily")) {
+                                plugin.getPlayTimeManager().addGlobalPlayTime(TimeType.DAILY_TIME, uuid, minutes);
+                                plugin.getPlayTimeManager().addLocalPlayTime(TimeType.DAILY_TIME, uuid, minutes);
+                            } else if (foundTableName.contains("weekly")) {
+                                plugin.getPlayTimeManager().addGlobalPlayTime(TimeType.WEEKLY_TIME, uuid, minutes);
+                                plugin.getPlayTimeManager().addLocalPlayTime(TimeType.WEEKLY_TIME, uuid, minutes);
+                            } else if (foundTableName.contains("monthly")) {
+                                plugin.getPlayTimeManager().addGlobalPlayTime(TimeType.MONTHLY_TIME, uuid, minutes);
+                                plugin.getPlayTimeManager().addLocalPlayTime(TimeType.MONTHLY_TIME, uuid, minutes);
+                            } else {
+                                plugin.getPlayTimeManager().addGlobalPlayTime(TimeType.TOTAL_TIME, uuid, minutes);
+                                plugin.getPlayTimeManager().addLocalPlayTime(TimeType.TOTAL_TIME, uuid, minutes);
+                            }
+
+                        }
+
+                        plugin.debugMessage("Restored " + count + " rows of player time for table " + foundTableName);
+                        plugin.getLoggerManager().logMessage("Restored " + count + " rows of player time for table " + foundTableName);
+
+                        // Close resultset after using it.
+                        oldTableData.close();
+                    }
+
+
+                    // After all tables have been adjusted, rename them.
+                    for (String tableName : adjustedTables) {
+                        plugin.debugMessage("Renaming table " + tableName + " to " + "IMPORTED_" + tableName + " so " +
+                                "it's not imported again.");
+                        plugin.getLoggerManager().logMessage("Renaming table " + tableName + " to " + "IMPORTED_" + tableName +
+                                " so it's not imported again.");
+
+
+                        mysqlLibrary.execute("RENAME TABLE " + tableName + " TO " + "IMPORTED_" + tableName);
+                    }
+
+                } catch (final SQLException e) {
+                    System.out.println("SQLException: " + e.getMessage());
+                    System.out.println("SQLState: " + e.getSQLState());
+                    System.out.println("VendorError: " + e.getErrorCode());
+                } finally {
+                    try {
+                        rs.get().close();
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
+                }
+
+            }
+        });
+    }
 }

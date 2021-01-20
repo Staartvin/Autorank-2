@@ -218,6 +218,7 @@ public class SQLConnection {
                 return Optional.empty();
             }
         } catch (SQLException throwables) {
+            throwables.printStackTrace();
             return Optional.empty();
         }
     }

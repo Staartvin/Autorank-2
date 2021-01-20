@@ -31,7 +31,6 @@ import me.armar.plugins.autorank.playerchecker.PlayerChecker;
 import me.armar.plugins.autorank.playtimes.PlayTimeManager;
 import me.armar.plugins.autorank.statsmanager.StatisticsManager;
 import me.armar.plugins.autorank.storage.PlayTimeStorageManager;
-import me.armar.plugins.autorank.storage.PlayTimeStorageProvider;
 import me.armar.plugins.autorank.storage.flatfile.FlatFileStorageProvider;
 import me.armar.plugins.autorank.storage.mysql.MySQLStorageProvider;
 import me.armar.plugins.autorank.tasks.TaskManager;
@@ -318,7 +317,7 @@ public class Autorank extends JavaPlugin {
 
         // Load MySQL database if needed.
         if (this.getSettingsConfig().useMySQL()) {
-            PlayTimeStorageProvider mysqlStorageProvider = new MySQLStorageProvider(this);
+            MySQLStorageProvider mysqlStorageProvider = new MySQLStorageProvider(this);
 
             // Enable global player data storage.
             getPlayerDataManager().addDataStorage(new GlobalPlayerDataStorage(this));
@@ -335,6 +334,9 @@ public class Autorank extends JavaPlugin {
                     if (this.getSettingsConfig().getPrimaryStorageProvider().equalsIgnoreCase("mysql")) {
                         getPlayTimeStorageManager().setPrimaryStorageProvider(mysqlStorageProvider);
                     }
+
+                    debugMessage("Checking for old data in exotic databases...");
+                    mysqlStorageProvider.updateFromOldTables();
                 } else {
                     debugMessage("Could not load MySQL storage.");
 
