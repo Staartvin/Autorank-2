@@ -5,7 +5,7 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.DependencyManager;
 import me.armar.plugins.autorank.pathbuilder.result.AbstractResult;
 import me.armar.plugins.autorank.statsmanager.StatisticsManager;
-import me.staartvin.utils.pluginlibrary.Library;
+import me.staartvin.utils.pluginlibrary.autorank.Library;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;

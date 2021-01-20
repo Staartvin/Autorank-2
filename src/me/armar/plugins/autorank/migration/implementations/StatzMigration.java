@@ -4,8 +4,8 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.migration.MigrationablePlugin;
 import me.armar.plugins.autorank.storage.TimeType;
 import me.staartvin.statz.datamanager.player.PlayerStat;
-import me.staartvin.utils.pluginlibrary.Library;
-import me.staartvin.utils.pluginlibrary.hooks.StatzHook;
+import me.staartvin.utils.pluginlibrary.autorank.Library;
+import me.staartvin.utils.pluginlibrary.autorank.hooks.StatzHook;
 
 import java.util.List;
 import java.util.UUID;

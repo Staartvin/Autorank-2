@@ -5,7 +5,7 @@ import me.armar.plugins.autorank.hooks.DependencyManager;
 import me.armar.plugins.autorank.pathbuilder.requirement.AbstractRequirement;
 import me.armar.plugins.autorank.pathbuilder.result.AbstractResult;
 import me.armar.plugins.autorank.util.AutorankTools;
-import me.staartvin.utils.pluginlibrary.Library;
+import me.staartvin.utils.pluginlibrary.autorank.Library;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 

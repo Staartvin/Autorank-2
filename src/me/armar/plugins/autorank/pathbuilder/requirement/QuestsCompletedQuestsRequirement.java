@@ -2,7 +2,7 @@ package me.armar.plugins.autorank.pathbuilder.requirement;
 
 import me.armar.plugins.autorank.hooks.quests.QuestsPlugin;
 import me.armar.plugins.autorank.language.Lang;
-import me.staartvin.utils.pluginlibrary.Library;
+import me.staartvin.utils.pluginlibrary.autorank.Library;
 
 import java.util.UUID;
 

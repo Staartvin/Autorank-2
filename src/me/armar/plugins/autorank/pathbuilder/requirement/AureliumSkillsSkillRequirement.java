@@ -2,8 +2,8 @@ package me.armar.plugins.autorank.pathbuilder.requirement;
 
 import com.archyx.aureliumskills.skills.Skill;
 import me.armar.plugins.autorank.language.Lang;
-import me.staartvin.utils.pluginlibrary.Library;
-import me.staartvin.utils.pluginlibrary.hooks.AureliumSkillsHook;
+import me.staartvin.utils.pluginlibrary.autorank.Library;
+import me.staartvin.utils.pluginlibrary.autorank.hooks.AureliumSkillsHook;
 
 import java.util.Locale;
 import java.util.UUID;

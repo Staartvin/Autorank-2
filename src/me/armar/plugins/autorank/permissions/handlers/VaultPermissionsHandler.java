@@ -2,9 +2,9 @@ package me.armar.plugins.autorank.permissions.handlers;
 
 import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.permissions.PermissionsHandler;
-import me.staartvin.utils.pluginlibrary.Library;
-import me.staartvin.utils.pluginlibrary.hooks.LibraryHook;
-import me.staartvin.utils.pluginlibrary.hooks.VaultHook;
+import me.staartvin.utils.pluginlibrary.autorank.Library;
+import me.staartvin.utils.pluginlibrary.autorank.hooks.LibraryHook;
+import me.staartvin.utils.pluginlibrary.autorank.hooks.VaultHook;
 import org.bukkit.entity.Player;
 
 import java.util.*;

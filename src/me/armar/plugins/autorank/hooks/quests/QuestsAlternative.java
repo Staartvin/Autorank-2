@@ -4,9 +4,9 @@ import java.util.UUID;
 
 public class QuestsAlternative implements QuestsPlugin {
 
-    private final me.staartvin.utils.pluginlibrary.hooks.QuestsAlternative questsHook;
+    private final me.staartvin.utils.pluginlibrary.autorank.hooks.QuestsAlternative questsHook;
 
-    public QuestsAlternative(me.staartvin.utils.pluginlibrary.hooks.QuestsAlternative hook) {
+    public QuestsAlternative(me.staartvin.utils.pluginlibrary.autorank.hooks.QuestsAlternative hook) {
         this.questsHook = hook;
     }
 

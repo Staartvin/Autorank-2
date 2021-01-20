@@ -4,12 +4,12 @@ import me.armar.plugins.autorank.Autorank;
 import me.armar.plugins.autorank.hooks.quests.Quests;
 import me.armar.plugins.autorank.hooks.quests.QuestsPlugin;
 import me.armar.plugins.autorank.hooks.statzapi.StatzAPIHandler;
-import me.staartvin.utils.pluginlibrary.Library;
-import me.staartvin.utils.pluginlibrary.PluginLibrary;
-import me.staartvin.utils.pluginlibrary.hooks.LibraryHook;
-import me.staartvin.utils.pluginlibrary.hooks.QuestsAlternative;
-import me.staartvin.utils.pluginlibrary.hooks.QuestsHook;
-import me.staartvin.utils.pluginlibrary.hooks.afkmanager.AFKManager;
+import me.staartvin.utils.pluginlibrary.autorank.Library;
+import me.staartvin.utils.pluginlibrary.autorank.PluginLibrary;
+import me.staartvin.utils.pluginlibrary.autorank.hooks.LibraryHook;
+import me.staartvin.utils.pluginlibrary.autorank.hooks.QuestsAlternative;
+import me.staartvin.utils.pluginlibrary.autorank.hooks.QuestsHook;
+import me.staartvin.utils.pluginlibrary.autorank.hooks.afkmanager.AFKManager;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;

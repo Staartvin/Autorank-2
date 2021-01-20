@@ -1,8 +1,8 @@
 package me.armar.plugins.autorank.pathbuilder.result;
 
 import me.armar.plugins.autorank.language.Lang;
-import me.staartvin.utils.pluginlibrary.Library;
-import me.staartvin.utils.pluginlibrary.hooks.VaultHook;
+import me.staartvin.utils.pluginlibrary.autorank.Library;
+import me.staartvin.utils.pluginlibrary.autorank.hooks.VaultHook;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.entity.Player;
 

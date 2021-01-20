@@ -1,6 +1,6 @@
 package me.armar.plugins.autorank.hooks.quests;
 
-import me.staartvin.utils.pluginlibrary.hooks.QuestsHook;
+import me.staartvin.utils.pluginlibrary.autorank.hooks.QuestsHook;
 
 import java.util.UUID;
 

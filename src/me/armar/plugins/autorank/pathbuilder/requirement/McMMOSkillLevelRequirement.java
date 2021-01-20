@@ -1,8 +1,8 @@
 package me.armar.plugins.autorank.pathbuilder.requirement;
 
 import me.armar.plugins.autorank.language.Lang;
-import me.staartvin.utils.pluginlibrary.Library;
-import me.staartvin.utils.pluginlibrary.hooks.McMMOHook;
+import me.staartvin.utils.pluginlibrary.autorank.Library;
+import me.staartvin.utils.pluginlibrary.autorank.hooks.McMMOHook;
 import org.bukkit.entity.Player;
 
 public class McMMOSkillLevelRequirement extends AbstractRequirement {
