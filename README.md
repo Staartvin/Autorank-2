@@ -1,13 +1,3 @@
----
-description: >-
-  The aim of this wiki is to provide with you a detailed understanding of the
-  plugin. It explains how to configure your files, what 'paths' are and what
-  commands and permissions there are.
----
-
-# Home
-
-**Use the sidebar on the left to navigate your way across this wiki!**
 
 ## Features of Autorank
 
