@@ -549,12 +549,16 @@ public class MySQLStorageProvider extends PlayTimeStorageProvider {
                         ResultSet oldTableData = null;
 
                         // Check for the IMPORTED keyword. If that's present, we now Autorank already looked at it.
-                        if (foundTableName.contains("imported")) continue;
+                        if (foundTableName.toLowerCase(Locale.ROOT).contains("imported")) continue;
+
+                        // Check for the BACKUP keyword. If that's present, we know it's a backup database.
+                        if (foundTableName.toLowerCase(Locale.ROOT).contains("backup")) continue;
 
                         // We found a table with old time data in it.
                         // We receive the data and add it to the player's time.
-                        if (foundTableName.contains("daily") || foundTableName.contains("weekly")
-                                || foundTableName.contains("monthly") || foundTableName.contains("total")) {
+                        if (foundTableName.equalsIgnoreCase("nulldailyTime") || foundTableName.equalsIgnoreCase(
+                                "nullweeklyTime")
+                                || foundTableName.equalsIgnoreCase("nullmonthlyTime") || foundTableName.equalsIgnoreCase("nulltotalTime")) {
 
                             innerResult = mysqlLibrary.executeQuery(readOldTableStatement);
 
@@ -613,13 +617,13 @@ public class MySQLStorageProvider extends PlayTimeStorageProvider {
                             count++;
 
                             // Add the data to the player, based on the name of the table.
-                            if (foundTableName.contains("daily")) {
+                            if (foundTableName.toLowerCase(Locale.ROOT).contains("daily")) {
                                 plugin.getPlayTimeManager().addGlobalPlayTime(TimeType.DAILY_TIME, uuid, minutes);
                                 plugin.getPlayTimeManager().addLocalPlayTime(TimeType.DAILY_TIME, uuid, minutes);
-                            } else if (foundTableName.contains("weekly")) {
+                            } else if (foundTableName.toLowerCase(Locale.ROOT).contains("weekly")) {
                                 plugin.getPlayTimeManager().addGlobalPlayTime(TimeType.WEEKLY_TIME, uuid, minutes);
                                 plugin.getPlayTimeManager().addLocalPlayTime(TimeType.WEEKLY_TIME, uuid, minutes);
-                            } else if (foundTableName.contains("monthly")) {
+                            } else if (foundTableName.toLowerCase(Locale.ROOT).contains("monthly")) {
                                 plugin.getPlayTimeManager().addGlobalPlayTime(TimeType.MONTHLY_TIME, uuid, minutes);
                                 plugin.getPlayTimeManager().addLocalPlayTime(TimeType.MONTHLY_TIME, uuid, minutes);
                             } else {
