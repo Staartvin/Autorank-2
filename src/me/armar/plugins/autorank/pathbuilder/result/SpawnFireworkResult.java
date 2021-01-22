@@ -26,16 +26,20 @@ public class SpawnFireworkResult extends AbstractResult {
 
         final Location loc = (target.equals("player")) ? player.getLocation() : player.getWorld().getSpawnLocation();
 
-        final Firework fw = (Firework) loc.getWorld().spawnEntity(loc, EntityType.FIREWORK);
-        final FireworkMeta fwm = fw.getFireworkMeta();
-        final FireworkEffect effect = FireworkEffect.builder().withColor(colour).with(type).build();
+        // Spawn entity on main thread.
+        this.getAutorank().getServer().getScheduler().runTask(this.getAutorank(), () -> {
+            final Firework fw = (Firework) loc.getWorld().spawnEntity(loc, EntityType.FIREWORK);
+            final FireworkMeta fwm = fw.getFireworkMeta();
+            final FireworkEffect effect = FireworkEffect.builder().withColor(colour).with(type).build();
 
-        fwm.addEffect(effect);
-        fwm.setPower(power);
+            fwm.addEffect(effect);
+            fwm.setPower(power);
 
-        fw.setFireworkMeta(fwm);
+            fw.setFireworkMeta(fwm);
 
-        fw.detonate();
+            fw.detonate();
+        });
+
 
         return location != null;
     }
