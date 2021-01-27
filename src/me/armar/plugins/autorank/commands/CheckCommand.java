@@ -157,7 +157,15 @@ public class CheckCommand extends AutorankCommand {
                         Lang.HAS_PLAYED_FOR.getConfigValue(player.getName(), AutorankTools.timeToString(playTime,
                                 TimeUnit.MINUTES)));
 
-                this.showPathsOverview(sender, player.getName(), player.getUniqueId());
+                List<Path> activePaths = plugin.getPathManager().getActivePaths(player.getUniqueId());
+
+                // If the player has only one active path we can show them that progress instead
+                if (activePaths.size() == 1 && plugin.getSettingsConfig().showDetailsOfPathWithOneActivePath()) {
+                    this.showSpecificPath(sender, player.getName(), player.getUniqueId(), activePaths.get(0));
+                } else {
+                    // Otherwise, show him a general overview.
+                    this.showPathsOverview(sender, player.getName(), player.getUniqueId());
+                }
             });
 
             this.runCommandTask(task);

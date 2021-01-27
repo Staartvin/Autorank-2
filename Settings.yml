@@ -105,3 +105,10 @@ enable logging: true
 # It is recommended to let Autorank log messages when you run into trouble or can't understand what it is doing.
 # You can find the logs in the Autorank folder (under logging)
 # If you want to disable logging, set this to false.
+
+show detailed path when only one active path: false
+# If this is true, Autorank will do the following when /ar check:
+# It will check if the player has only one active path. If that's the case, it will show the details of that specific
+# path. However, if this settings is false, Autorank will always show an overview of all active paths when doing
+# /ar check. You can experiment with this setting and see the difference! This setting is mostly useful when you are
+# sure that players will never have more than one path at the same time.

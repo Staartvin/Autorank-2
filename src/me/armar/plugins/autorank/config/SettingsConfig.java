@@ -280,4 +280,17 @@ public class SettingsConfig extends AbstractConfig {
         return this.getConfig().getBoolean("enable logging", true);
     }
 
+
+    /**
+     * Check whether Autorank should show an overview of all active paths when a player performs /ar check. If this
+     * returns true, Autorank will show the progress of the only active path (if there is only one active path). If
+     * there are multiple active paths, Autorank will always show an overview of active paths. If this returns false,
+     * Autorank will always show the overview of paths when doing /ar check.
+     *
+     * @return true or false indicating what /ar check should show.
+     */
+    public boolean showDetailsOfPathWithOneActivePath() {
+        return this.getConfig().getBoolean("show detailed path when only one active path", false);
+    }
+
 }
