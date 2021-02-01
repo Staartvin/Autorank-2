@@ -505,11 +505,13 @@ public class Autorank extends JavaPlugin {
 //            }
 //        });
 
-        // Register placeholder extension
-        new AutorankPlaceholder(this).register();
+        if (this.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            // Register placeholder extension
+            new AutorankPlaceholder(this).register();
 
-        this.getLoggerManager().logMessage("Exposed Autorank placeholder extension.");
-        getLogger().info("Registered placeholders, so you can use them!");
+            this.getLoggerManager().logMessage("Exposed Autorank placeholder extension.");
+            getLogger().info("Registered placeholders, so you can use them!");
+        }
 
         this.getLoggerManager().logMessage("Started Autorank");
     }
