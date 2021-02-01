@@ -124,6 +124,11 @@
     <repositories>
 
         <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+
+        <repository>
             <id>Spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
         </repository>
@@ -144,10 +149,7 @@
             <url>http://staartvin.com:8081/artifactory/libs-release-local</url>
         </repository>
 
-        <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
+
     </repositories>
 
 
@@ -401,9 +403,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.palmergames.bukkit.towny</groupId>
+            <groupId>com.github.TownyAdvanced</groupId>
             <artifactId>Towny</artifactId>
-            <version>0.96.1.10</version>
+            <version>0.96.7.0</version>
             <scope>provided</scope>
         </dependency>
 
