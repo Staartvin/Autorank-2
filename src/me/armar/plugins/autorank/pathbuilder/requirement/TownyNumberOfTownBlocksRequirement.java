@@ -13,7 +13,7 @@ public class TownyNumberOfTownBlocksRequirement extends AbstractRequirement {
     @Override
     public String getDescription() {
 
-        String lang = Lang.TOWNY_IS_MAYOR_REQUIREMENT.getConfigValue(numberOfTownBlocks);
+        String lang = Lang.TOWNY_NEED_NUMBER_OF_TOWN_BLOCKS.getConfigValue(numberOfTownBlocks);
 
         // Check if this requirement is world-specific
         if (this.isWorldSpecific()) {
