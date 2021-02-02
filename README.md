@@ -10,6 +10,7 @@ A player starts out as Guest. When he has played for more than 10 minutes and br
 ------------------
 
 Outdated wiki: [https://github.com/Staartvin/Autorank-2/wiki](https://github.com/Staartvin/Autorank-2/wiki)
+
 New wiki: [https://autorank.staartvin.com/](https://autorank.staartvin.com/)
 
 Get the latest bleeding-edge builds here \(development server\): [http://ci.staartvin.com/job/Autorank/](http://ci.staartvin.com/job/Autorank/)
