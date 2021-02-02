@@ -1,4 +1,6 @@
 
+[![Build Status](http://staartvin.com:8080/buildStatus/icon?job=Autorank)](http://staartvin.com:8080/job/Autorank/)
+
 ## Features of Autorank
 
 Autorank is an automatic ranking plugin that allows you to set rank-ups that have requirements. You can create requirements that make certain a player has at least x amount of money or x minutes played.
