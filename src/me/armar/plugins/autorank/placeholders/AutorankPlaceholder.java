@@ -135,4 +135,9 @@ public class AutorankPlaceholder extends PlaceholderExpansion {
         // Return null as default because it does not seem to be a valid placeholder.
         return null;
     }
+
+    @Override
+    public boolean persist() {
+        return true;
+    }
 }
