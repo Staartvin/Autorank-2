@@ -180,13 +180,15 @@ public class Autorank extends JavaPlugin {
 
         // Create new configs
         this.getDefaultBehaviorConfig().loadConfig();
-        if (!this.getPathsConfig().loadConfig()) {
-            this.getWarningManager().registerWarning("Paths.yml file could not be loaded! Please check your syntax.",
+
+        // Load the Settings config before any other config
+        if (!this.getSettingsConfig().loadConfig()) {
+            this.getWarningManager().registerWarning("Settings.yml file could not be loaded! Please check your syntax.",
                     WarningManager.HIGH_PRIORITY_WARNING);
         }
 
-        if (!this.getSettingsConfig().loadConfig()) {
-            this.getWarningManager().registerWarning("Settings.yml file could not be loaded! Please check your syntax.",
+        if (!this.getPathsConfig().loadConfig()) {
+            this.getWarningManager().registerWarning("Paths.yml file could not be loaded! Please check your syntax.",
                     WarningManager.HIGH_PRIORITY_WARNING);
         }
 
