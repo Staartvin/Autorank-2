@@ -28,6 +28,8 @@ public class UpdateTimePlayedTask implements Runnable {
         plugin.debugMessage("Run task to update play time of " + uuid);
 
         Player player = plugin.getServer().getPlayer(uuid);
+        long lastPlayTimeUpdate=plugin.getTaskManager().getLastPlayTimeUpdate(uuid);
+        int timeToAdd;
 
         // Cancel task as player is not online anymore.
         if (player == null || !player.isOnline()) {
@@ -57,9 +59,18 @@ public class UpdateTimePlayedTask implements Runnable {
             return;
         }
 
+
+        if(plugin.getSettingsConfig().useMoreAccurateTimings()){
+            //This compute the time elapsed between the last update and the current update.
+            timeToAdd=(int)Math.round((System.currentTimeMillis()-lastPlayTimeUpdate)/60000f*PlayTimeManager.MULTIPLIER);
+        }else{
+            //Multiply by 1 doesn't affect the performance
+            timeToAdd=PlayTimeManager.INTERVAL_MINUTES*PlayTimeManager.MULTIPLIER;
+        }
+        
         // Add time to a player's current time for all storage providers.
         for (final TimeType type : TimeType.values()) {
-            plugin.getPlayTimeStorageManager().addPlayerTime(type, uuid, PlayTimeManager.INTERVAL_MINUTES);
+            plugin.getPlayTimeStorageManager().addPlayerTime(type, uuid, timeToAdd);
         }
 
         // Auto assign path (if possible)

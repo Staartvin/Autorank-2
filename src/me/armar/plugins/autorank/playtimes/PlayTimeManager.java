@@ -28,6 +28,8 @@ public class PlayTimeManager {
 
     // How often do we check whether a player is still online? (in minutes)
     public static int INTERVAL_MINUTES = 5;
+    //Mutiplier, can be changed in game by command if "enable multiplier command" is true
+    public static int MULTIPLIER = 1;
 
     private final Autorank plugin;
 
